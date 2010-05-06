@@ -1,0 +1,55 @@
+/*
+ * Copyright 2009-2010 Marcelo Varella Barca Guimarães
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *           http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.sf.trugger.bind.impl;
+
+import java.lang.reflect.Field;
+
+import net.sf.trugger.Transformer;
+import net.sf.trugger.bind.BindableElement;
+import net.sf.trugger.element.Element;
+import net.sf.trugger.element.impl.FieldElement;
+import net.sf.trugger.element.impl.TruggerBindableElement;
+
+/**
+ * A transformer that allows conversion of {@link Element} and {@link Field}
+ * objects into a {@link BindableElement} object.
+ *
+ * @author Marcelo Varella Barca Guimarães
+ */
+public class BindableElementTransformer implements Transformer<BindableElement, Object> {
+
+  private final Object target;
+
+  /**
+   * Craetes a new transformer using the give target as the one that will
+   * receive the values.
+   */
+  public BindableElementTransformer(Object target) {
+    this.target = target;
+  }
+
+  public BindableElement transform(Object object) {
+    if (object instanceof BindableElement) {
+      return (BindableElement) object;
+    } else if (object instanceof Element) {
+      return new TruggerBindableElement((Element) object, target);
+    } else if (object instanceof Field) {
+      return new TruggerBindableElement(new FieldElement((Field) object), target);
+    }
+    return null;
+  }
+}
