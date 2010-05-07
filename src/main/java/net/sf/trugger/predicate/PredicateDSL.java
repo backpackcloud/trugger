@@ -23,67 +23,73 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.trugger.interception.InterceptionContext;
-import net.sf.trugger.interception.Interceptor;
+import net.sf.trugger.interception.InvocationTrackerInterceptor;
 import net.sf.trugger.util.Utils;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  * @since 2.5
- *
- * @todo chain methods
  */
 public class PredicateDSL<E> implements Predicate<E> {
 
   private final Class<E> clazz;
   protected final E obj;
 
-  private _Interceptor interceptor = new _Interceptor();
+  private InvocationTrackerInterceptor tracker = new InvocationTrackerInterceptor();
   private List<Predicate> evals = new LinkedList<Predicate>();
 
   public PredicateDSL() {
     clazz = reflect().genericType("E").in(this);
-    if(clazz.isInterface()) {
-      obj = interceptor.createProxy().implementing(clazz).withoutTarget();
-    } else {
-      obj = interceptor.createProxy().extending(clazz);
-    }
+    obj = tracker.createProxy().over(clazz);
   }
 
   public E obj() {
     return obj;
   }
 
+  /**
+   * Defines
+   *
+   * @param <V>
+   * @param value
+   * @return
+   */
   public <V> Criteria<E, V> expect(V value) {
     return new Criteria<E, V>() {
 
-      public PredicateDSL<E> equal(V value) {
-        evals.add(new Evaluation(EvalType.EQUAL, interceptor.currentContext, value));
-        return PredicateDSL.this;
+      public void equal(V value) {
+        evals.add(new Evaluation(EvalType.EQUAL, tracker.trackedContexts(), value));
+        tracker.track();
       }
 
-      public PredicateDSL<E> differ(V value) {
-        evals.add(new Evaluation(EvalType.DIFFER, interceptor.currentContext, value));
-        return PredicateDSL.this;
+      public void differ(V value) {
+        evals.add(new Evaluation(EvalType.DIFFER, tracker.trackedContexts(), value));
+        tracker.track();
       }
 
-      public PredicateDSL<E> greaterThan(V value) {
-        evals.add(new Evaluation(EvalType.GREATER, interceptor.currentContext, value));
-        return PredicateDSL.this;
+      public void greaterThan(V value) {
+        evals.add(new Evaluation(EvalType.GREATER, tracker.trackedContexts(), value));
+        tracker.track();
       }
 
-      public PredicateDSL<E> greaterThanOrEqual(V value) {
-        evals.add(new Evaluation(EvalType.GREATER_OR_EQUAL, interceptor.currentContext, value));
-        return PredicateDSL.this;
+      public void greaterThanOrEqual(V value) {
+        evals.add(new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value));
+        tracker.track();
       }
 
-      public PredicateDSL<E> lessThan(V value) {
-        evals.add(new Evaluation(EvalType.LESS, interceptor.currentContext, value));
-        return PredicateDSL.this;
+      public void lessThan(V value) {
+        evals.add(new Evaluation(EvalType.LESS, tracker.trackedContexts(), value));
+        tracker.track();
       }
 
-      public PredicateDSL<E> lessThanOrEqual(V value) {
-        evals.add(new Evaluation(EvalType.LESS_OR_EQUAL, interceptor.currentContext, value));
-        return PredicateDSL.this;
+      public void lessThanOrEqual(V value) {
+        evals.add(new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value));
+        tracker.track();
+      }
+
+      public void matches(String pattern) {
+        evals.add(new Evaluation(EvalType.PATTERN, tracker.trackedContexts(), pattern));
+        tracker.track();
       }
 
     };
@@ -91,57 +97,52 @@ public class PredicateDSL<E> implements Predicate<E> {
 
   public boolean evaluate(E element) {
     for (Predicate predicate : evals) {
-      if(!predicate.evaluate(element)) {
+      if (!predicate.evaluate(element)) {
         return false;
       }
     }
     return true;
   };
 
-  private class _Interceptor extends Interceptor {
-
-    private InterceptionContext currentContext;
-
-    @Override
-    protected Object intercept() throws Throwable {
-      currentContext = context();
-      return null;
-    }
-  }
-
   public interface Criteria<E, V> {
 
-    PredicateDSL<E> equal(V value);
+    void equal(V value);
 
-    PredicateDSL<E> differ(V value);
+    void differ(V value);
 
-    PredicateDSL<E> lessThan(V value);
+    void lessThan(V value);
 
-    PredicateDSL<E> lessThanOrEqual(V value);
+    void lessThanOrEqual(V value);
 
-    PredicateDSL<E> greaterThan(V value);
+    void greaterThan(V value);
 
-    PredicateDSL<E> greaterThanOrEqual(V value);
+    void greaterThanOrEqual(V value);
+
+    void matches(String pattern);
 
   }
 
   private enum EvalType {
-    EQUAL, DIFFER, LESS, LESS_OR_EQUAL, GREATER, GREATER_OR_EQUAL
+    EQUAL, DIFFER, LESS, LESS_OR_EQUAL, GREATER, GREATER_OR_EQUAL, PATTERN
   }
 
   private class Evaluation implements Predicate {
-    InterceptionContext context;
+
+    List<InterceptionContext> contexts;
     Object referenceValue;
     EvalType eval;
 
-    public Evaluation(EvalType eval, InterceptionContext context, Object value) {
-      this.context = context;
+    public Evaluation(EvalType eval, List<InterceptionContext> contexts, Object value) {
+      this.contexts = contexts;
       this.referenceValue = value;
       this.eval = eval;
     }
 
     public boolean evaluate(Object object) {
-      Object objValue = invoke(context.method).in(object).withArgs(context.args);
+      Object objValue = object;
+      for (InterceptionContext context : contexts) {
+        objValue = invoke(context.method).in(objValue).withArgs(context.args);
+      }
       switch (eval) {
         case EQUAL:
           return Utils.areEquals(objValue, referenceValue);
@@ -155,6 +156,8 @@ public class PredicateDSL<E> implements Predicate<E> {
           return ((Comparable) objValue).compareTo(referenceValue) > 0;
         case GREATER_OR_EQUAL:
           return ((Comparable) objValue).compareTo(referenceValue) >= 0;
+        case PATTERN:
+          return String.valueOf(objValue).matches((String) referenceValue);
       }
       throw new Error();
     }

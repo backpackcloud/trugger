@@ -213,6 +213,13 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
       this.computeTargetInterfaces = true;
       return this;
     }
+    
+    public <E> E over(Class<?> clazz) {
+      if(clazz.isInterface()) {
+        return createProxy().implementing(clazz).withoutTarget();
+      }
+      return createProxy().extending(clazz);
+    }
 
     public <E> E withTarget(Object target) {
       Interceptor.this.target = target;

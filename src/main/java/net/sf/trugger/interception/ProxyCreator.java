@@ -18,12 +18,12 @@ package net.sf.trugger.interception;
 
 /**
  * Interface that defines a class capable of configure a Proxy.
- *
+ * 
  * @author Marcelo Varella Barca Guimarães
  * @since 2.1
  */
 public interface ProxyCreator {
-
+  
   /**
    * @param classLoader
    *          the ClassLoader to create the proxy.
@@ -31,47 +31,59 @@ public interface ProxyCreator {
    * @since 2.3
    */
   ProxyCreator withClassLoader(ClassLoader classLoader);
-
+  
   /**
    * Configures the proxy to encapsulate the given target.
-   *
+   * 
    * @param target
    *          the target to encapsulate.
    * @return the created proxy.
    */
   <E> E withTarget(Object target);
-
+  
   /**
    * Configures the proxy to not encapsulate a target.
-   *
+   * 
    * @return the created proxy.
    */
   <E> E withoutTarget();
-
+  
   /**
    * Configures the proxy to subclass the specified class.
-   *
+   * 
    * @param subclass
    *          the type to subclass.
    * @return the created proxy.
    */
   <E> E extending(Class<?> subclass);
-
+  
+  /**
+   * Configures the proxy to extend or implement the given type.
+   * <p>
+   * If the type is a class, the proxy should extend it. If the type is an
+   * interface, the proxy should implement it.
+   * 
+   * @param subclassOrInterface a class or interface.
+   * @return the created proxy
+   * @since 2.5
+   */
+  <E> E over(Class<?> subclassOrInterface);
+  
   /**
    * Configures the proxy to implement all the target interfaces, the explicitly
    * (declared interfaces) and implicitly (subclasses' interfaces).
-   *
+   * 
    * @return a reference to this object.
    */
   ProxyCreator forAllInterfaces();
-
+  
   /**
    * Configures the proxy to implement these interfaces.
-   *
+   * 
    * @param interfaces
    *          the interfaces that the proxy must implement.
    * @return a reference to this object.
    */
   ProxyCreator implementing(Class<?>... interfaces);
-
+  
 }

@@ -3,6 +3,7 @@ Version 2.5.0
   - New Element selection without specifying a name.
   - Created a package for holding annotations for general use.
   - Reverted method genericTypeFor to genericType (the shortest name is better [IMHO]).
+  - New invocation tracker interceptor.
   - New DSL for predicates.
 Version 2.4.0
 - New modules:

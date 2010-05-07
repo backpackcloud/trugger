@@ -139,4 +139,48 @@ public class PredicateDSLTest {
     assertFalse(p.evaluate(new TestObject(1)));
   }
 
+  @Test
+  public void testPattern() throws Exception {
+    Predicate<TestObject> p = new PredicateDSL<TestObject>(){{
+      expect(obj.attr()).matches("\\d+");
+    }};
+    assertTrue(p.evaluate(new TestObject("1424652")));
+    assertFalse(p.evaluate(new TestObject("424652a1")));
+  }
+
+  private static class Person {
+    private String name;
+    private Person parent;
+
+    public Person() {}
+
+    public Person(String name, Person parent) {
+      this.name = name;
+      this.parent = parent;
+    }
+
+    public Person parent() {
+      return parent;
+    }
+
+    public String name() {
+      return name;
+    }
+  }
+
+  @Test
+  public void testChainMethods() throws Exception {
+    Predicate<Person> p = new PredicateDSL<Person>(){{
+      expect(obj.parent().name()).equal("David");
+    }};
+    Person charles = new Person("Charles", null);
+    Person david = new Person("David", null);
+
+    Person cesar = new Person("Cesar", charles);
+    Person john = new Person("John", david);
+
+    assertTrue(p.evaluate(john));
+    assertFalse(p.evaluate(cesar));
+  }
+
 }

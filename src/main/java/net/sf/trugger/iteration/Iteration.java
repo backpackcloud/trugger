@@ -45,7 +45,7 @@ public final class Iteration {
    * @return the component for using.
    */
   public static <E> SrcIteration<E> retainFrom(Collection<? extends E> collection) {
-    return factory.createRetainOperation(collection.iterator());
+    return retainFrom(collection.iterator());
   }
 
   /**
@@ -56,7 +56,7 @@ public final class Iteration {
    * @return the component for using.
    */
   public static <E> SrcIteration<E> removeFrom(Collection<? extends E> collection) {
-    return factory.createRemoveOperation(collection.iterator());
+    return removeFrom(collection.iterator());
   }
 
   /**
@@ -67,7 +67,7 @@ public final class Iteration {
    * @return the component for using.
    */
   public static <E> SrcIteration<E> countIn(Collection<? extends E> collection) {
-    return factory.createCountOperation(collection.iterator());
+    return countIn(collection.iterator());
   }
 
   /**
@@ -95,14 +95,13 @@ public final class Iteration {
   }
 
   /**
-   * Search for specific elements in the given collection.
-   *
-   * A {@link IterationFactory} is used to create the component.
+   * Search for specific elements in the given collection. A
+   * {@link IterationFactory} is used to create the component.
    *
    * @return the component for using.
    */
   public static <E> IterationSearchOperation<E> selectFrom(Collection<E> collection) {
-    return factory.createSearchOperation(collection.iterator());
+    return selectFrom(collection.iterator());
   }
 
   /**
@@ -139,9 +138,8 @@ public final class Iteration {
   }
 
   /**
-   * Search for specific elements using the given iterator.
-   *
-   * A {@link IterationFactory} is used to create the component.
+   * Search for specific elements using the given iterator. A
+   * {@link IterationFactory} is used to create the component.
    *
    * @return the component for using.
    */
