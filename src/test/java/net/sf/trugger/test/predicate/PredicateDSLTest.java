@@ -112,7 +112,7 @@ public class PredicateDSLTest {
   @Test
   public void testLessThanOrEqual() throws Exception {
     Predicate<TestObject> p = new PredicateDSL<TestObject>(){{
-      expect(obj.i()).lessThanOrEqual(2);
+      expect(obj.i()).equalOrLessThan(2);
     }};
     assertTrue(p.evaluate(new TestObject(1)));
     assertTrue(p.evaluate(new TestObject(2)));
@@ -132,7 +132,7 @@ public class PredicateDSLTest {
   @Test
   public void testGreaterThanOrEqual() throws Exception {
     Predicate<TestObject> p = new PredicateDSL<TestObject>(){{
-      expect(obj.i()).greaterThanOrEqual(2);
+      expect(obj.i()).equalOrGreaterThan(2);
     }};
     assertTrue(p.evaluate(new TestObject(3)));
     assertTrue(p.evaluate(new TestObject(2)));
@@ -181,6 +181,16 @@ public class PredicateDSLTest {
 
     assertTrue(p.evaluate(john));
     assertFalse(p.evaluate(cesar));
+  }
+
+  @Test
+  public void testMultipleStatements() throws Exception {
+    Predicate<Element> predicate = new PredicateDSL<Element>() {{
+      expect(obj.name()).matches("element.*");
+      expect(obj.type()).equal(String.class);
+    }};
+    assertTrue(predicate.evaluate(mock(element().named("elementA").ofType(String.class))));
+    assertFalse(predicate.evaluate(mock(element().named("elementB").ofType(Integer.class))));
   }
 
 }

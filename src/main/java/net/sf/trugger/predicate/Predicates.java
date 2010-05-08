@@ -16,23 +16,26 @@
  */
 package net.sf.trugger.predicate;
 
+import net.sf.trugger.Result;
 import net.sf.trugger.loader.ImplementationLoader;
+import net.sf.trugger.validation.Validation;
+import net.sf.trugger.validation.ValidationResult;
 
 /**
  * An utility class to handle {@link Predicate} objects.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class Predicates {
-  
+
   private static PredicateFactory factory;
-  
+
   private Predicates() {}
-  
+
   static {
     factory = ImplementationLoader.getInstance().get(PredicateFactory.class);
   }
-  
+
   /**
    * A predicate that always returns <code>true</code>.
    */
@@ -41,27 +44,27 @@ public final class Predicates {
    * A predicate that always returns <code>false</code>.
    */
   public static final CompositePredicate ALWAYS_FALSE = newComposition(new ConstantPredicate(false));
-  
+
   /**
    * Note: This method returns the {@link #ALWAYS_TRUE} field, but with type
    * safety.
-   * 
+   *
    * @return A predicate that always returns <code>true</code>.
    */
   public static <T> CompositePredicate<T> alwaysTrue() {
     return ALWAYS_TRUE;
   }
-  
+
   /**
    * Note: This method returns the {@link #ALWAYS_FALSE} field, but with type
    * safety.
-   * 
+   *
    * @return A predicate that always returns <code>false</code>.
    */
   public static <T> CompositePredicate<T> alwaysFalse() {
     return ALWAYS_FALSE;
   }
-  
+
   /**
    * @param value
    *          the value that must be returned by the predicate.
@@ -70,25 +73,25 @@ public final class Predicates {
   public static <T> CompositePredicate<T> valueOf(boolean value) {
     return value ? ALWAYS_TRUE : ALWAYS_FALSE;
   }
-  
+
   /**
    * @return a predicate that returns the negation of the given one.
    */
   public static <T> CompositePredicate<T> not(Predicate<? super T> predicate) {
     return Predicates.<T> newComposition(predicate).negate();
   }
-  
+
   /**
    * @return a predicate that returns the negation of the given one.
    */
   public static <T> CompositePredicate<T> not(CompositePredicate<T> predicate) {
     return predicate.negate();
   }
-  
+
   /**
    * Creates a new {@link CompositePredicate} using a {@link PredicateFactory}
    * to create the instance.
-   * 
+   *
    * @param predicate
    *          the initial predicate of the composition.
    * @return the created predicate.
@@ -96,24 +99,68 @@ public final class Predicates {
   public static <T> CompositePredicate<T> newComposition(Predicate<? super T> predicate) {
     return factory.createCompositePredicate(predicate);
   }
-  
+
+  /**
+   * A predicate that returns <code>true</code> if an object is valid based on
+   * all of its elements.
+   *
+   * @since 2.5
+   */
+  public static CompositePredicate<Object> VALID = validUsing(new Validation().validate().allElements());
+
+  /**
+   * A predicate that returns <code>true</code> if an object is invalid based on
+   * all of its elements.
+   *
+   * @since 2.5
+   */
+  public static CompositePredicate<Object> INVALID = invalidUsing(new Validation().validate().allElements());
+
+  /**
+   * @return a predicate that returns <code>true</code> if an object is valid
+   *         based on the given validation result.
+   * @since 2.5
+   */
+  public static CompositePredicate<Object> validUsing(final Result<ValidationResult, Object> result) {
+    return newComposition(new Predicate<Object>() {
+
+      public boolean evaluate(Object element) {
+        return result.in(element).isValid();
+      }
+    });
+  }
+
+  /**
+   * @return a predicate that returns <code>true</code> if an object is invalid
+   *         based on the given validation result.
+   * @since 2.5
+   */
+  public static CompositePredicate<Object> invalidUsing(final Result<ValidationResult, Object> result) {
+    return newComposition(new Predicate<Object>() {
+
+      public boolean evaluate(Object element) {
+        return result.in(element).isInvalid();
+      }
+    });
+  }
+
   private static class ConstantPredicate implements Predicate<Object> {
-    
+
     private final boolean returnValue;
-    
+
     public ConstantPredicate(boolean returnValue) {
       super();
       this.returnValue = returnValue;
     }
-    
+
     public boolean evaluate(Object element) {
       return returnValue;
     }
-    
+
     @Override
     public String toString() {
       return String.valueOf(returnValue);
     }
   }
-  
+
 }

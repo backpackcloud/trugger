@@ -34,7 +34,7 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
    * @return the Class object representing the class or interface that declares
    *         the element.
    */
-  Class<?> declaringClass();
+  Class declaringClass();
 
   /**
    * @return the element name
@@ -44,7 +44,7 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
   /**
    * @return the element type
    */
-  Class<?> type();
+  Class type();
 
   /**
    * @return <code>true</code> if the value of this element can be read.

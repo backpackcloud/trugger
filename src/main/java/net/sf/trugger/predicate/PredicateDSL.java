@@ -22,37 +22,77 @@ import static net.sf.trugger.reflection.Reflection.reflect;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sf.trugger.Result;
 import net.sf.trugger.interception.InterceptionContext;
 import net.sf.trugger.interception.InvocationTrackerInterceptor;
 import net.sf.trugger.util.Utils;
+import net.sf.trugger.validation.Validation;
+import net.sf.trugger.validation.ValidationResult;
 
 /**
+ * This class represents a DSL for using to build a predicate.
+ * <p>
+ * The DSL may also be created insite of an initializer (using an anonymous
+ * class).
+ * <p>
+ * Example:
+ *
+ * <pre>
+ * Predicate&lt;Element&gt; predicate = new PredicateDSL&lt;Element&gt;() {{
+ *     expect(obj.name()).matches(&quot;\\w+\\d{1,2}&quot;);
+ *     expect(obj.type()).equals(String.class);
+ *     expect(obj.value()).differ(null);
+ *   }};
+ * Iteration.retainFrom(elementsCollection).elementsMatching(predicate);
+ * </pre>
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.5
+ * @param <E>
+ *          The object type.
  */
 public class PredicateDSL<E> implements Predicate<E> {
 
-  private final Class<E> clazz;
+  /**
+   * The proxy object for calling the methods while creating the DSL.
+   */
   protected final E obj;
 
+  private final Class<E> clazz;
   private InvocationTrackerInterceptor tracker = new InvocationTrackerInterceptor();
   private List<Predicate> evals = new LinkedList<Predicate>();
 
-  public PredicateDSL() {
+  /**
+   * Creates a new instance of this class using the specified generic type. Make
+   * sure you define the generic type when using this constructor.
+   */
+  protected PredicateDSL() {
     clazz = reflect().genericType("E").in(this);
     obj = tracker.createProxy().over(clazz);
   }
 
-  public E obj() {
+  /**
+   * Creates a new instance of this class using the given class as the type.
+   *
+   * @param clazz
+   *          the type
+   */
+  public PredicateDSL(Class<E> clazz) {
+    this.clazz = clazz;
+    obj = tracker.createProxy().over(clazz);
+  }
+
+  /**
+   * @return the proxy used for calling the methods while creating the DSL.
+   */
+  public final E obj() {
     return obj;
   }
 
   /**
-   * Defines
+   * Defines an expression for this predicate.
    *
-   * @param <V>
-   * @param value
-   * @return
+   * @return the component for making the restriction.
    */
   public <V> Criteria<E, V> expect(V value) {
     return new Criteria<E, V>() {
@@ -72,7 +112,7 @@ public class PredicateDSL<E> implements Predicate<E> {
         tracker.track();
       }
 
-      public void greaterThanOrEqual(V value) {
+      public void equalOrGreaterThan(V value) {
         evals.add(new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value));
         tracker.track();
       }
@@ -82,7 +122,7 @@ public class PredicateDSL<E> implements Predicate<E> {
         tracker.track();
       }
 
-      public void lessThanOrEqual(V value) {
+      public void equalOrLessThan(V value) {
         evals.add(new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value));
         tracker.track();
       }
@@ -90,6 +130,29 @@ public class PredicateDSL<E> implements Predicate<E> {
       public void matches(String pattern) {
         evals.add(new Evaluation(EvalType.PATTERN, tracker.trackedContexts(), pattern));
         tracker.track();
+      }
+
+      public void invalid() {
+        using(new Validation().validate().allElements()).invalid();
+      }
+
+      public void valid() {
+        using(new Validation().validate().allElements()).valid();
+      }
+
+      public ValidationCriteria using(final Result<ValidationResult, Object> result) {
+        return new ValidationCriteria() {
+
+          public void invalid() {
+            evals.add(new Evaluation(EvalType.INVALID, tracker.trackedContexts(), result));
+            tracker.track();
+          }
+
+          public void valid() {
+            evals.add(new Evaluation(EvalType.VALID, tracker.trackedContexts(), result));
+            tracker.track();
+          }
+        };
       }
 
     };
@@ -104,26 +167,54 @@ public class PredicateDSL<E> implements Predicate<E> {
     return true;
   };
 
-  public interface Criteria<E, V> {
-
-    void equal(V value);
-
-    void differ(V value);
-
-    void lessThan(V value);
-
-    void lessThanOrEqual(V value);
-
-    void greaterThan(V value);
-
-    void greaterThanOrEqual(V value);
-
-    void matches(String pattern);
-
-  }
-
   private enum EvalType {
-    EQUAL, DIFFER, LESS, LESS_OR_EQUAL, GREATER, GREATER_OR_EQUAL, PATTERN
+    EQUAL {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return Utils.areEquals(objectValue, referenceValue);
+      }
+    },
+    DIFFER {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return !Utils.areEquals(objectValue, referenceValue);
+      }
+    },
+    LESS {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return ((Comparable) objectValue).compareTo(referenceValue) < 0;
+      }
+    },
+    LESS_OR_EQUAL {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return ((Comparable) objectValue).compareTo(referenceValue) <= 0;
+      }
+    },
+    GREATER {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return ((Comparable) objectValue).compareTo(referenceValue) > 0;
+      }
+    },
+    GREATER_OR_EQUAL {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return ((Comparable) objectValue).compareTo(referenceValue) >= 0;
+      }
+    },
+    PATTERN {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return objectValue != null ? objectValue.toString().matches((String) referenceValue) : false;
+      }
+    },
+    VALID {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return Predicates.validUsing((Result<ValidationResult, Object>) referenceValue).evaluate(objectValue);
+      }
+    },
+    INVALID {
+      public boolean eval(Object referenceValue, Object objectValue) {
+        return Predicates.invalidUsing((Result<ValidationResult, Object>) referenceValue).evaluate(objectValue);
+      }
+    };
+
+    abstract boolean eval(Object referenceValue, Object objectValue);
   }
 
   private class Evaluation implements Predicate {
@@ -139,27 +230,11 @@ public class PredicateDSL<E> implements Predicate<E> {
     }
 
     public boolean evaluate(Object object) {
-      Object objValue = object;
+      Object objectValue = object;
       for (InterceptionContext context : contexts) {
-        objValue = invoke(context.method).in(objValue).withArgs(context.args);
+        objectValue = invoke(context.method).in(objectValue).withArgs(context.args);
       }
-      switch (eval) {
-        case EQUAL:
-          return Utils.areEquals(objValue, referenceValue);
-        case DIFFER:
-          return !Utils.areEquals(objValue, referenceValue);
-        case LESS:
-          return ((Comparable) objValue).compareTo(referenceValue) < 0;
-        case LESS_OR_EQUAL:
-          return ((Comparable) objValue).compareTo(referenceValue) <= 0;
-        case GREATER:
-          return ((Comparable) objValue).compareTo(referenceValue) > 0;
-        case GREATER_OR_EQUAL:
-          return ((Comparable) objValue).compareTo(referenceValue) >= 0;
-        case PATTERN:
-          return String.valueOf(objValue).matches((String) referenceValue);
-      }
-      throw new Error();
+      return eval.eval(referenceValue, objectValue);
     }
   }
 
