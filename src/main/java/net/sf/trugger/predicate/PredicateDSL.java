@@ -75,7 +75,7 @@ public class PredicateDSL<E> implements Predicate<E> {
    * Creates a new instance of this class using the given class as the type.
    *
    * @param clazz
-   *          the type
+   *          the type.
    */
   public PredicateDSL(Class<E> clazz) {
     this.clazz = clazz;

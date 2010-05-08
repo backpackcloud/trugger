@@ -212,7 +212,7 @@ public class ClassScanTest {
 
   @Test
   public void testAnnotationScanSubPacakgeInFile() {
-    Set<Class<?>> set = findAnnotations().recursively().in(filePackageName);
+    Set<Class<?>> set = findAnnotations().recursively().fromHere();
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyAnnotation.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyAnnotation2.class));
@@ -222,7 +222,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassEnumSubPacakgeInFile() {
-    Set<Class<?>> set = findEnums().recursively().in(filePackageName);
+    Set<Class<?>> set = findEnums().recursively().fromHere();
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyEnum.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyEnum2.class));
@@ -232,7 +232,7 @@ public class ClassScanTest {
 
   @Test
   public void testInterfaceScanSubPacakgeInFile() {
-    Set<Class<?>> set = findInterfaces().recursively().in(filePackageName);
+    Set<Class<?>> set = findInterfaces().recursively().fromHere();
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyInterface.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyInterface2.class));

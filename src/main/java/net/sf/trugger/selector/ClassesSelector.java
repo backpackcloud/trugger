@@ -17,36 +17,38 @@
 package net.sf.trugger.selector;
 
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.reflection.Access;
 import net.sf.trugger.scan.ClassScanResult;
 
 /**
- * Interface that defines a selector for a single {@link Class} objects.
+ * Interface that defines a selector for {@link Class} objects.
  *
  * @author Marcelo Varella Barca Guimarães
- * @since 2.5
+ * @since 2.3
  */
-public interface ClassSelector extends ClassSpecifier, ClassScanResult<Class<?>> {
+public interface ClassesSelector extends ClassSpecifier, ClassScanResult<Set<Class<?>>> {
 
-  ClassSelector withAccess(Access access);
+  ClassesSelector withAccess(Access access);
 
-  ClassSelector thatMatches(Predicate<? super Class<?>> predicate);
+  ClassesSelector thatMatches(Predicate<? super Class<?>> predicate);
 
-  ClassSelector annotatedWith(Class<? extends Annotation> type);
+  ClassesSelector annotatedWith(Class<? extends Annotation> type);
 
-  ClassSelector notAnnotatedWith(Class<? extends Annotation> type);
+  ClassesSelector notAnnotatedWith(Class<? extends Annotation> type);
 
-  ClassSelector annotated();
+  ClassesSelector annotated();
 
-  ClassSelector notAnnotated();
+  ClassesSelector notAnnotated();
 
-  ClassSelector anonymous();
+  ClassesSelector anonymous();
 
-  ClassSelector nonAnonymous();
+  ClassesSelector nonAnonymous();
 
-  ClassSelector recursively();
+  ClassesSelector recursively();
 
-  ClassSelector assignableTo(Class<?> type);
+  ClassesSelector assignableTo(Class<?> type);
+
 }

@@ -17,6 +17,7 @@
 package net.sf.trugger.scan;
 
 import net.sf.trugger.selector.ClassSelector;
+import net.sf.trugger.selector.ClassesSelector;
 
 /**
  * Interface that defines a class capable of scanning other classes in the
@@ -32,41 +33,48 @@ public interface ClassScanner {
    *
    * @return a selector for the operation.
    */
-  ClassSelector findClasses();
+  ClassesSelector findClasses();
+
+  /**
+   * Finds only one class that matches with the given restrictions.
+   *
+   * @return a selector for the operation.
+   */
+  ClassSelector findClass();
 
   /**
    * Finds only interfaces, but not annotations.
    *
    * @return a selector for the operation.
    */
-  ClassSelector findInterfaces();
+  ClassesSelector findInterfaces();
 
   /**
    * Finds only annotations.
    *
    * @return a selector for the operation.
    */
-  ClassSelector findAnnotations();
+  ClassesSelector findAnnotations();
 
   /**
    * Finds only enums.
    *
    * @return a selector for the operation.
    */
-  ClassSelector findEnums();
+  ClassesSelector findEnums();
 
   /**
    * Finds all the types (classes, enums, annotations and interfaces).
    *
    * @return a selector for the operation.
    */
-  ClassSelector findAll();
+  ClassesSelector findAll();
 
   /**
    * Sets the class loader to use.
    *
    * @param classLoader
-   *            the class loader to use.
+   *          the class loader to use.
    */
   void setClassLoader(ClassLoader classLoader);
 

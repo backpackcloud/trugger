@@ -34,8 +34,8 @@ import net.sf.trugger.reflection.Access;
 import net.sf.trugger.scan.PackageScan;
 import net.sf.trugger.scan.ScanLevel;
 import net.sf.trugger.scan.impl.Scanner;
-import net.sf.trugger.scan.impl.TruggerClassSelector;
-import net.sf.trugger.selector.ClassSelector;
+import net.sf.trugger.scan.impl.TruggerClassesSelector;
+import net.sf.trugger.selector.ClassesSelector;
 import net.sf.trugger.test.Flag;
 import net.sf.trugger.test.SelectionTest;
 
@@ -56,7 +56,7 @@ public class ClassSelectorTest {
   class DefaultClass {}
   private class PrivateClass{}
 
-  private ClassSelector initializeForAnnotationTest() {
+  private ClassesSelector initializeForAnnotationTest() {
     Set<Class<?>> classes = new HashSet<Class<?>>(){{
       add(FlagAnnotated.class);
       add(ResourceAnnotated.class);
@@ -65,7 +65,7 @@ public class ClassSelectorTest {
     return initialize(classes);
   }
 
-  private ClassSelector initializeForAnonymousTest() {
+  private ClassesSelector initializeForAnonymousTest() {
     Set<Class<?>> classes = new HashSet<Class<?>>(){{
       add(String.class);
       add(Object.class);
@@ -75,7 +75,7 @@ public class ClassSelectorTest {
     return initialize(classes);
   }
 
-  private ClassSelector initializeForAccessTest() {
+  private ClassesSelector initializeForAccessTest() {
     Set<Class<?>> classes = new HashSet<Class<?>>(){{
       add(PublicClass.class);
       add(ProtectedClass.class);
@@ -85,7 +85,7 @@ public class ClassSelectorTest {
     return initialize(classes);
   }
 
-  private ClassSelector initialize(Set<Class<?>> classesToReturn) {
+  private ClassesSelector initialize(Set<Class<?>> classesToReturn) {
     Scanner scanner = createMock(Scanner.class);
     try {
       expect(scanner.scanPackage(packageScan)).andReturn(classesToReturn).anyTimes();
@@ -93,18 +93,18 @@ public class ClassSelectorTest {
       throw new Error(e);
     }
     replay(scanner);
-    return new TruggerClassSelector(scanner);
+    return new TruggerClassesSelector(scanner);
   }
 
   private PackageScan packageScan = ScanLevel.PACKAGE.createScanPackage("test.package");
 
   @Test
   public void testAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Set<Class<?>>>() {
-      public ClassSelector createSelector() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+      public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassSelector selector) {
+      public void makeSelections(ClassesSelector selector) {
         selector.annotated();
       }
       public void assertions(Set<Class<?>> set) {
@@ -117,11 +117,11 @@ public class ClassSelectorTest {
 
   @Test
   public void testAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Set<Class<?>>>() {
-      public ClassSelector createSelector() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+      public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassSelector selector) {
+      public void makeSelections(ClassesSelector selector) {
         selector.annotatedWith(Flag.class);
       }
       public void assertions(Set<Class<?>> set) {
@@ -133,11 +133,11 @@ public class ClassSelectorTest {
 
   @Test
   public void testNotAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Set<Class<?>>>() {
-      public ClassSelector createSelector() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+      public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassSelector selector) {
+      public void makeSelections(ClassesSelector selector) {
         selector.notAnnotated();
       }
       public void assertions(Set<Class<?>> set) {
@@ -149,11 +149,11 @@ public class ClassSelectorTest {
 
   @Test
   public void testNotAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Set<Class<?>>>() {
-      public ClassSelector createSelector() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+      public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassSelector selector) {
+      public void makeSelections(ClassesSelector selector) {
         selector.notAnnotatedWith(Flag.class);
       }
       public void assertions(Set<Class<?>> set) {
@@ -166,11 +166,11 @@ public class ClassSelectorTest {
 
   @Test
   public void testAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Set<Class<?>>>() {
-      public ClassSelector createSelector() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+      public ClassesSelector createSelector() {
         return initializeForAnonymousTest();
       }
-      public void makeSelections(ClassSelector selector) {
+      public void makeSelections(ClassesSelector selector) {
         selector.anonymous();
       }
       public void assertions(Set<Class<?>> set) {
@@ -184,11 +184,11 @@ public class ClassSelectorTest {
 
   @Test
   public void testNonAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Set<Class<?>>>() {
-      public ClassSelector createSelector() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+      public ClassesSelector createSelector() {
         return initializeForAnonymousTest();
       }
-      public void makeSelections(ClassSelector selector) {
+      public void makeSelections(ClassesSelector selector) {
         selector.nonAnonymous();
       }
       public void assertions(Set<Class<?>> set) {

@@ -19,6 +19,7 @@ package net.sf.trugger.scan;
 import net.sf.trugger.loader.ImplementationLoader;
 import net.sf.trugger.registry.Registry;
 import net.sf.trugger.selector.ClassSelector;
+import net.sf.trugger.selector.ClassesSelector;
 
 /**
  * A helper class for finding classes.
@@ -57,8 +58,19 @@ public class ClassScan {
    * newScan().findClasses();
    * </pre>
    */
-  public static ClassSelector findClasses() {
+  public static ClassesSelector findClasses() {
     return newScan().findClasses();
+  }
+
+  /**
+   * This method has the same effect as:
+   *
+   * <pre>
+   * newScan().findClass();
+   * </pre>
+   */
+  public static ClassSelector findClass() {
+    return newScan().findClass();
   }
 
   /**
@@ -68,7 +80,7 @@ public class ClassScan {
    * newScan().findInterfaces();
    * </pre>
    */
-  public static ClassSelector findInterfaces() {
+  public static ClassesSelector findInterfaces() {
     return newScan().findInterfaces();
   }
 
@@ -79,7 +91,7 @@ public class ClassScan {
    * newScan().findEnums();
    * </pre>
    */
-  public static ClassSelector findEnums() {
+  public static ClassesSelector findEnums() {
     return newScan().findEnums();
   }
 
@@ -90,7 +102,7 @@ public class ClassScan {
    * newScan().findAnnotations();
    * </pre>
    */
-  public static ClassSelector findAnnotations() {
+  public static ClassesSelector findAnnotations() {
     return newScan().findAnnotations();
   }
 
@@ -101,7 +113,7 @@ public class ClassScan {
    * newScan().findAll();
    * </pre>
    */
-  public static ClassSelector findAll() {
+  public static ClassesSelector findAll() {
     return newScan().findAll();
   }
 

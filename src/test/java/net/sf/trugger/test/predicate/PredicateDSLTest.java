@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.PredicateDSL;
+import net.sf.trugger.validation.validator.NotNull;
 
 import org.junit.Test;
 
@@ -149,6 +150,7 @@ public class PredicateDSLTest {
   }
 
   private static class Person {
+    @NotNull
     private String name;
     private Person parent;
 
@@ -181,6 +183,42 @@ public class PredicateDSLTest {
 
     assertTrue(p.evaluate(john));
     assertFalse(p.evaluate(cesar));
+  }
+
+  @Test
+  public void testValidRestriction() throws Exception {
+    Predicate<Person> p = new PredicateDSL<Person>(){{
+      expect(obj.parent()).valid();
+    }};
+
+    Person charles = new Person("Charles", null);
+    Person david = new Person("David", null);
+
+    Person cesar = new Person("Cesar", charles);
+    Person john = new Person("John", david);
+
+    assertTrue(p.evaluate(john));
+    assertTrue(p.evaluate(cesar));
+
+    assertFalse(p.evaluate(new Person(null, new Person(null, null))));
+  }
+
+  @Test
+  public void testInvalidRestriction() throws Exception {
+    Predicate<Person> p = new PredicateDSL<Person>(){{
+      expect(obj.parent()).invalid();
+    }};
+
+    Person charles = new Person("Charles", null);
+    Person david = new Person("David", null);
+
+    Person cesar = new Person("Cesar", charles);
+    Person john = new Person("John", david);
+
+    assertFalse(p.evaluate(john));
+    assertFalse(p.evaluate(cesar));
+
+    assertTrue(p.evaluate(new Person(null, new Person(null, null))));
   }
 
   @Test

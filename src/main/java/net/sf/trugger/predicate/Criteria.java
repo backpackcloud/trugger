@@ -111,6 +111,8 @@ public interface Criteria<E, V> {
   void valid();
 
   /**
+   * Interface for defining the validation criteria.
+   *
    * @author Marcelo Varella Barca Guimarães
    * @since 2.5
    */

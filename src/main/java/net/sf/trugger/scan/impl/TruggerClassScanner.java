@@ -22,6 +22,7 @@ import net.sf.trugger.scan.ClassScannerFactory;
 import net.sf.trugger.scan.ResourceFinder;
 import net.sf.trugger.scan.ScanLevel;
 import net.sf.trugger.selector.ClassSelector;
+import net.sf.trugger.selector.ClassesSelector;
 
 /**
  * A default class finder.
@@ -55,24 +56,28 @@ public class TruggerClassScanner implements ClassScanner {
     this.scanner.setClassLoader(classLoader);
   }
 
-  public ClassSelector findAnnotations() {
-    return new TruggerClassSelector(scanner).thatMatches(ReflectionPredicates.ANNOTATION);
+  public ClassesSelector findAnnotations() {
+    return new TruggerClassesSelector(scanner).thatMatches(ReflectionPredicates.ANNOTATION);
   }
 
-  public ClassSelector findEnums() {
-    return new TruggerClassSelector(scanner).thatMatches(ReflectionPredicates.ENUM);
+  public ClassesSelector findEnums() {
+    return new TruggerClassesSelector(scanner).thatMatches(ReflectionPredicates.ENUM);
   }
 
-  public ClassSelector findClasses() {
+  public ClassesSelector findClasses() {
+    return new TruggerClassesSelector(scanner).thatMatches(ReflectionPredicates.CLASS);
+  }
+
+  public ClassesSelector findInterfaces() {
+    return new TruggerClassesSelector(scanner).thatMatches(ReflectionPredicates.INTERFACE);
+  }
+
+  public ClassesSelector findAll() {
+    return new TruggerClassesSelector(scanner);
+  }
+
+  public ClassSelector findClass() {
     return new TruggerClassSelector(scanner).thatMatches(ReflectionPredicates.CLASS);
-  }
-
-  public ClassSelector findInterfaces() {
-    return new TruggerClassSelector(scanner).thatMatches(ReflectionPredicates.INTERFACE);
-  }
-
-  public ClassSelector findAll() {
-    return new TruggerClassSelector(scanner);
   }
 
 }

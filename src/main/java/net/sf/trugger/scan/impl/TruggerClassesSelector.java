@@ -24,84 +24,81 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.sf.trugger.iteration.Iteration;
-import net.sf.trugger.iteration.SearchException;
 import net.sf.trugger.predicate.Predicate;
-import net.sf.trugger.predicate.PredicateBuilder;
 import net.sf.trugger.reflection.Access;
 import net.sf.trugger.scan.ClassScanningException;
 import net.sf.trugger.scan.PackageScan;
-import net.sf.trugger.selector.ClassSelector;
+import net.sf.trugger.selector.ClassesSelector;
 import net.sf.trugger.util.Utils;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class TruggerClassSelector extends AbstractClassSelector implements ClassSelector {
+public class TruggerClassesSelector extends AbstractClassSelector implements ClassesSelector {
 
-  public TruggerClassSelector(Scanner scanner) {
+  public TruggerClassesSelector(Scanner scanner) {
     super(scanner);
-    builder = new PredicateBuilder<Class<?>>();
   }
 
-  public ClassSelector annotated() {
+  public ClassesSelector annotated() {
     super.annotated();
     return this;
   }
 
-  public ClassSelector annotatedWith(Class<? extends Annotation> annotationType) {
+  public ClassesSelector annotatedWith(Class<? extends Annotation> annotationType) {
     super.annotatedWith(annotationType);
     return this;
   }
 
-  public ClassSelector anonymous() {
+  public ClassesSelector anonymous() {
     super.anonymous();
     return this;
   }
 
-  public ClassSelector assignableTo(Class<?> type) {
+  public ClassesSelector assignableTo(Class<?> type) {
     super.assignableTo(type);
     return this;
   }
 
-  public ClassSelector nonAnonymous() {
+  public ClassesSelector nonAnonymous() {
     super.nonAnonymous();
     return this;
   }
 
-  public ClassSelector notAnnotated() {
+  public ClassesSelector notAnnotated() {
     super.notAnnotated();
     return this;
   }
 
-  public ClassSelector notAnnotatedWith(Class<? extends Annotation> annotationType) {
+  public ClassesSelector notAnnotatedWith(Class<? extends Annotation> annotationType) {
     super.notAnnotatedWith(annotationType);
     return this;
   }
 
-  public ClassSelector recursively() {
+  public ClassesSelector recursively() {
     super.recursively();
     return this;
   }
 
-  public ClassSelector thatMatches(Predicate<? super Class<?>> predicate) {
+  public ClassesSelector thatMatches(Predicate<? super Class<?>> predicate) {
     super.thatMatches(predicate);
     return this;
   }
 
-  public ClassSelector withAccess(Access access) {
+  public ClassesSelector withAccess(Access access) {
     super.withAccess(access);
     return this;
   }
 
-  public Class<?> in(String... packageNames) throws ClassScanningException {
+  public Set<Class<?>> in(String... packageNames) throws ClassScanningException {
     return in(level.createScanPackages(packageNames));
   }
 
-  public Class<?> in(PackageScan packageToScan) throws ClassScanningException {
+  public Set<Class<?>> in(PackageScan packageToScan) throws ClassScanningException {
     return in(Arrays.asList(packageToScan));
   }
 
-  public Class<?> in(Collection<PackageScan> packagesToScan) throws ClassScanningException {
+  public Set<Class<?>> in(Collection<PackageScan> packagesToScan) throws ClassScanningException {
     Set<Class<?>> classes = new HashSet<Class<?>>(40);
     try {
       for (PackageScan entry : packagesToScan) {
@@ -112,14 +109,14 @@ public class TruggerClassSelector extends AbstractClassSelector implements Class
     } catch (ClassNotFoundException e) {
       throw new ClassScanningException(e);
     }
-    try {
-      return Iteration.selectFrom(classes).elementMatching(builder.predicate());
-    } catch (SearchException e) {
-      throw new ClassScanningException(e);
+    Predicate<Class<?>> predicate = builder.predicate();
+    if (predicate != null) {
+      Iteration.retainFrom(classes).elementsMatching(predicate);
     }
+    return classes;
   }
 
-  public Class<?> fromHere() throws ClassScanningException {
+  public Set<Class<?>> fromHere() throws ClassScanningException {
     return in(Utils.classAtStackTrace(4).getPackage().getName());
   }
 
