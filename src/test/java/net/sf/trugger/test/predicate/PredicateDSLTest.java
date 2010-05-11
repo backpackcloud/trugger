@@ -39,6 +39,18 @@ public class PredicateDSLTest {
       }};
     assertTrue(predicate.evaluate(mock(element().named("elementA"))));
     assertFalse(predicate.evaluate(mock(element().named("elementB"))));
+
+    predicate = new PredicateDSL<Element>() {{
+      expect(obj.name()).equal(null);
+    }};
+    assertFalse(predicate.evaluate(mock(element().named("element"))));
+    assertTrue(predicate.evaluate(mock(element().named(null))));
+
+    predicate = new PredicateDSL<Element>() {{
+      expect(obj.name()).differ(null);
+    }};
+    assertTrue(predicate.evaluate(mock(element().named("element"))));
+    assertFalse(predicate.evaluate(mock(element().named(null))));
   }
 
   static class TestObject {

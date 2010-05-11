@@ -167,19 +167,4 @@ public final class Utils {
     return arg0 == arg1;
   }
 
-  /**
-   * @param stackTraceIndex
-   *          stack trace position.
-   * @return the class in the stack trace at the given position.
-   * @since 2.5
-   */
-  public static Class<?> classAtStackTrace(int stackTraceIndex) {
-    try {
-      return Class.forName(Thread.currentThread().getStackTrace()[stackTraceIndex].getClassName());
-    } catch (ClassNotFoundException e) {
-      //should not happen
-      throw new Error(e);
-    }
-  }
-
 }

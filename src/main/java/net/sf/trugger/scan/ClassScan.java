@@ -68,6 +68,8 @@ public class ClassScan {
    * <pre>
    * newScan().findClass();
    * </pre>
+   *
+   * @since 2.5
    */
   public static ClassSelector findClass() {
     return newScan().findClass();

@@ -29,7 +29,6 @@ import net.sf.trugger.reflection.Access;
 import net.sf.trugger.scan.ClassScanningException;
 import net.sf.trugger.scan.PackageScan;
 import net.sf.trugger.selector.ClassesSelector;
-import net.sf.trugger.util.Utils;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -114,10 +113,6 @@ public class TruggerClassesSelector extends AbstractClassSelector implements Cla
       Iteration.retainFrom(classes).elementsMatching(predicate);
     }
     return classes;
-  }
-
-  public Set<Class<?>> fromHere() throws ClassScanningException {
-    return in(Utils.classAtStackTrace(4).getPackage().getName());
   }
 
 }

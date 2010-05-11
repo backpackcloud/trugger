@@ -65,12 +65,4 @@ public interface ClassScanResult<E> extends Result<E, PackageScan> {
    */
   E in(String... packageNames) throws ClassScanningException;
 
-  /**
-   * Uses the caller package for defining the package to search.
-   *
-   * @return the search result.
-   * @throws ClassScanningException
-   */
-  E fromHere() throws ClassScanningException;
-
 }

@@ -18,19 +18,23 @@ package net.sf.trugger.test.scan;
 
 import static net.sf.trugger.scan.ClassScan.findAll;
 import static net.sf.trugger.scan.ClassScan.findAnnotations;
+import static net.sf.trugger.scan.ClassScan.findClass;
 import static net.sf.trugger.scan.ClassScan.findClasses;
 import static net.sf.trugger.scan.ClassScan.findEnums;
 import static net.sf.trugger.scan.ClassScan.findInterfaces;
 import static net.sf.trugger.test.TruggerTest.assertMatch;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.reflection.Access;
+import net.sf.trugger.reflection.ReflectionFactory;
 import net.sf.trugger.reflection.ReflectionPredicates;
+import net.sf.trugger.scan.ClassScanningException;
 import net.sf.trugger.scan.PackageScan;
 import net.sf.trugger.scan.ScanLevel;
 import net.sf.trugger.test.Flag;
@@ -212,7 +216,7 @@ public class ClassScanTest {
 
   @Test
   public void testAnnotationScanSubPacakgeInFile() {
-    Set<Class<?>> set = findAnnotations().recursively().fromHere();
+    Set<Class<?>> set = findAnnotations().recursively().in(filePackageName);
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyAnnotation.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyAnnotation2.class));
@@ -222,7 +226,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassEnumSubPacakgeInFile() {
-    Set<Class<?>> set = findEnums().recursively().fromHere();
+    Set<Class<?>> set = findEnums().recursively().in(filePackageName);
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyEnum.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyEnum2.class));
@@ -232,7 +236,7 @@ public class ClassScanTest {
 
   @Test
   public void testInterfaceScanSubPacakgeInFile() {
-    Set<Class<?>> set = findInterfaces().recursively().fromHere();
+    Set<Class<?>> set = findInterfaces().recursively().in(filePackageName);
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyInterface.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyInterface2.class));
@@ -473,6 +477,16 @@ public class ClassScanTest {
 
     assertTrue(set.contains(org.easymock.CaptureType.class));
     assertTrue(set.contains(org.easymock.LogicalOperator.class));
+  }
+
+  @Test
+  public void testSingleClassScan() throws Exception {
+    assertNotNull(findClass().assignableTo(ReflectionFactory.class).recursively().in("net.sf.trugger"));
+  }
+
+  @Test(expected = ClassScanningException.class)
+  public void testSingleClassScanFail() throws Exception {
+    findClass().annotated().recursively().in("net.sf.trugger");
   }
 
 }
