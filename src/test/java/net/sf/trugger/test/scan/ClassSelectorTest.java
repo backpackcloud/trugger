@@ -34,8 +34,8 @@ import net.sf.trugger.reflection.Access;
 import net.sf.trugger.scan.PackageScan;
 import net.sf.trugger.scan.ScanLevel;
 import net.sf.trugger.scan.impl.Scanner;
-import net.sf.trugger.scan.impl.TruggerClassesSelector;
-import net.sf.trugger.selector.ClassesSelector;
+import net.sf.trugger.scan.impl.TruggerClassSelector;
+import net.sf.trugger.selector.ClassSelector;
 import net.sf.trugger.test.Flag;
 import net.sf.trugger.test.SelectionTest;
 
@@ -56,26 +56,23 @@ public class ClassSelectorTest {
   class DefaultClass {}
   private class PrivateClass{}
 
-  private ClassesSelector initializeForAnnotationTest() {
+  private ClassSelector initializeForAnnotationTest() {
     Set<Class<?>> classes = new HashSet<Class<?>>(){{
       add(FlagAnnotated.class);
-      add(ResourceAnnotated.class);
       add(ClassSelectorTest.class);
     }};
     return initialize(classes);
   }
 
-  private ClassesSelector initializeForAnonymousTest() {
+  private ClassSelector initializeForAnonymousTest() {
     Set<Class<?>> classes = new HashSet<Class<?>>(){{
       add(String.class);
-      add(Object.class);
-      add(ClassSelectorTest.class);
       add(getClass());
     }};
     return initialize(classes);
   }
 
-  private ClassesSelector initializeForAccessTest() {
+  private ClassSelector initializeForAccessTest() {
     Set<Class<?>> classes = new HashSet<Class<?>>(){{
       add(PublicClass.class);
       add(ProtectedClass.class);
@@ -85,7 +82,7 @@ public class ClassSelectorTest {
     return initialize(classes);
   }
 
-  private ClassesSelector initialize(Set<Class<?>> classesToReturn) {
+  private ClassSelector initialize(Set<Class<?>> classesToReturn) {
     Scanner scanner = createMock(Scanner.class);
     try {
       expect(scanner.scanPackage(packageScan)).andReturn(classesToReturn).anyTimes();
@@ -93,159 +90,125 @@ public class ClassSelectorTest {
       throw new Error(e);
     }
     replay(scanner);
-    return new TruggerClassesSelector(scanner);
+    return new TruggerClassSelector(scanner);
   }
 
   private PackageScan packageScan = ScanLevel.PACKAGE.createScanPackage("test.package");
 
   @Test
   public void testAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
-      public ClassesSelector createSelector() {
+    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+      public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassesSelector selector) {
+      public void makeSelections(ClassSelector selector) {
         selector.annotated();
       }
-      public void assertions(Set<Class<?>> set) {
-        assertEquals(2, set.size());
-        assertTrue(set.contains(FlagAnnotated.class));
-        assertTrue(set.contains(ResourceAnnotated.class));
+      public void assertions(Class<?> c) {
+        assertEquals(FlagAnnotated.class, c);
       }
     }, packageScan);
   }
 
   @Test
   public void testAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
-      public ClassesSelector createSelector() {
+    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+      public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassesSelector selector) {
+      public void makeSelections(ClassSelector selector) {
         selector.annotatedWith(Flag.class);
       }
-      public void assertions(Set<Class<?>> set) {
-        assertEquals(1, set.size());
-        assertTrue(set.contains(FlagAnnotated.class));
+      public void assertions(Class<?> c) {
+        assertEquals(FlagAnnotated.class, c);
       }
     }, packageScan);
   }
 
   @Test
   public void testNotAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
-      public ClassesSelector createSelector() {
+    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+      public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassesSelector selector) {
+      public void makeSelections(ClassSelector selector) {
         selector.notAnnotated();
       }
-      public void assertions(Set<Class<?>> set) {
-        assertEquals(1, set.size());
-        assertTrue(set.contains(ClassSelectorTest.class));
+      public void assertions(Class<?> c) {
+        assertEquals(ClassSelectorTest.class, c);
       }
     }, packageScan);
   }
 
   @Test
   public void testNotAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
-      public ClassesSelector createSelector() {
+    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+      public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
-      public void makeSelections(ClassesSelector selector) {
+      public void makeSelections(ClassSelector selector) {
         selector.notAnnotatedWith(Flag.class);
       }
-      public void assertions(Set<Class<?>> set) {
-        assertEquals(2, set.size());
-        assertTrue(set.contains(ClassSelectorTest.class));
-        assertTrue(set.contains(ResourceAnnotated.class));
+      public void assertions(Class<?> c) {
+        assertEquals(ClassSelectorTest.class, c);
       }
     }, packageScan);
   }
 
   @Test
   public void testAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
-      public ClassesSelector createSelector() {
+    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+      public ClassSelector createSelector() {
         return initializeForAnonymousTest();
       }
-      public void makeSelections(ClassesSelector selector) {
+      public void makeSelections(ClassSelector selector) {
         selector.anonymous();
       }
-      public void assertions(Set<Class<?>> set) {
-        assertEquals(1, set.size());
-        assertFalse(set.contains(String.class));
-        assertFalse(set.contains(Object.class));
-        assertFalse(set.contains(ClassSelectorTest.class));
+      public void assertions(Class<?> c) {
+        assertTrue(c.isAnonymousClass());
       }
     }, packageScan);
   }
 
   @Test
   public void testNonAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
-      public ClassesSelector createSelector() {
+    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+      public ClassSelector createSelector() {
         return initializeForAnonymousTest();
       }
-      public void makeSelections(ClassesSelector selector) {
+      public void makeSelections(ClassSelector selector) {
         selector.nonAnonymous();
       }
-      public void assertions(Set<Class<?>> set) {
-        assertEquals(3, set.size());
-        assertTrue(set.contains(String.class));
-        assertTrue(set.contains(Object.class));
-        assertTrue(set.contains(ClassSelectorTest.class));
+      public void assertions(Class<?> c) {
+        assertFalse(c.isAnonymousClass());
       }
     }, packageScan);
   }
 
   @Test
   public void testAccessSelector() throws Exception {
-    Set<Class<?>> set = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(PublicClass.class));
+    Class<?> c = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
+    assertEquals(PublicClass.class, c);
 
-    set = initializeForAccessTest().withAccess(Access.PROTECTED).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(ProtectedClass.class));
+    c = initializeForAccessTest().withAccess(Access.PROTECTED).in(packageScan);
+    assertEquals(ProtectedClass.class, c);
 
-    set = initializeForAccessTest().withAccess(Access.DEFAULT).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(DefaultClass.class));
+    c = initializeForAccessTest().withAccess(Access.DEFAULT).in(packageScan);
+    assertEquals(DefaultClass.class, c);
 
-    set = initializeForAccessTest().withAccess(Access.PRIVATE).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(PrivateClass.class));
-
-    set = initializeForAccessTest().withAccess(Access.LIKE_PROTECTED).in(packageScan);
-    assertEquals(2, set.size());
-    assertTrue(set.contains(PublicClass.class));
-    assertTrue(set.contains(ProtectedClass.class));
-
-    set = initializeForAccessTest().withAccess(Access.LIKE_DEFAULT).in(packageScan);
-    assertEquals(3, set.size());
-    assertTrue(set.contains(PublicClass.class));
-    assertTrue(set.contains(ProtectedClass.class));
-    assertTrue(set.contains(DefaultClass.class));
+    c = initializeForAccessTest().withAccess(Access.PRIVATE).in(packageScan);
+    assertEquals(PrivateClass.class, c);
   }
 
   @Test
   public void testAssignableToSelector() throws Exception {
-    Set<Class<?>> set = initialize(new HashSet<Class<?>>(){{
+    Class<?> c = initialize(new HashSet<Class<?>>(){{
       add(String.class);
-      add(StringBuilder.class);
-      add(StringBuffer.class);
       add(Object.class);
       add(Map.class);
-      add(CharSequence.class);
     }}).assignableTo(CharSequence.class).in(packageScan);
 
-    assertEquals(4, set.size());
-    assertTrue(set.contains(String.class));
-    assertTrue(set.contains(StringBuilder.class));
-    assertTrue(set.contains(StringBuffer.class));
-    assertTrue(set.contains(CharSequence.class));
+    assertEquals(String.class, c);
   }
 
 }

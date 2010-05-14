@@ -38,15 +38,15 @@ import net.sf.trugger.util.Utils;
  * <li>Summary - the String used to get the message in the ResourceBundle
  * <li>Detail - an empty String
  * <ul>
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public class TruggerMessageResolver implements MessageResolver {
-  
+
   private final String summarySuffix;
   private final String detailSuffix;
   private final String name;
-  
+
   /**
    * Creates a new MessageResolver using the following parameters:
    * <ul>
@@ -58,10 +58,10 @@ public class TruggerMessageResolver implements MessageResolver {
   public TruggerMessageResolver() {
     this("", "_detail", "message");
   }
-  
+
   /**
    * Creates a new MessageResolver using the specified parameters.
-   * 
+   *
    * @param summarySuffix
    *          the suffix for getting the summary.
    * @param detailSuffix
@@ -70,31 +70,30 @@ public class TruggerMessageResolver implements MessageResolver {
    *          the name of the element for getting the message.
    */
   public TruggerMessageResolver(String summarySuffix, String detailSuffix, String name) {
-    super();
     this.summarySuffix = summarySuffix;
     this.detailSuffix = detailSuffix;
     this.name = name;
   }
-  
+
   public String getDetail(Object reference, ResourceBundle bundle) {
     return getString(reference, bundle, detailSuffix, false);
   }
-  
+
   public String getSummary(Object reference, ResourceBundle bundle) {
     return getString(reference, bundle, summarySuffix, true);
   }
-  
+
   private String getString(Object reference, ResourceBundle bundle, String suffix, boolean returnValueIfNoFound) {
     Class<?> type = Utils.resolveType(reference);
     String value = null;
     Element element = Elements.element(name).in(type);
-    
+
     if (element != null) {
       value = element.in(reference).value();
     } else {
       value = type.getName();
     }
-    
+
     try {
       return bundle.getString(Utils.isEmpty(suffix) ? value : value + suffix);
     } catch (MissingResourceException e) {

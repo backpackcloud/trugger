@@ -17,10 +17,11 @@
 package net.sf.trugger.factory;
 
 import net.sf.trugger.CreateException;
+import net.sf.trugger.reflection.Reflection;
 
 /**
  * This class provides a default implementation for a factory.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  * @param <K>
  *          the key type
@@ -28,7 +29,7 @@ import net.sf.trugger.CreateException;
  *          the object type
  */
 public abstract class BaseFactory<K, E> implements Factory<K, E> {
-  
+
   /**
    * Tests if the object can be created by calling the method
    * {@link #canCreate(Object)}, if the return is <code>true</code>, the
@@ -49,10 +50,10 @@ public abstract class BaseFactory<K, E> implements Factory<K, E> {
     }
     return object;
   }
-  
+
   /**
    * Instantiates the class of the given type.
-   * 
+   *
    * @param key
    *          the key passed to this factory.
    * @param classToCreate
@@ -62,15 +63,15 @@ public abstract class BaseFactory<K, E> implements Factory<K, E> {
    *           if an error occurs.
    */
   protected E instantiate(K key, Class<? extends E> classToCreate) throws Throwable {
-    return classToCreate.newInstance();
+    return Reflection.newInstanceOf(classToCreate);
   }
-  
+
   /**
    * This method is call when a object cannot be created (if the method
    * {@link #canCreate(Object)} returned <code>false</code>).
    * <p>
    * This implementation throws a {@link CreateException}
-   * 
+   *
    * @param key
    *          the key passed to create the object
    * @return the default object to return if no one can be created.
@@ -78,14 +79,14 @@ public abstract class BaseFactory<K, E> implements Factory<K, E> {
   protected E defaultReturn(K key) {
     throw new CreateException("The object cannot be created");
   }
-  
+
   /**
    * Returns the object class that must be created.
-   * 
+   *
    * @param key
    *          the key passed to the method {@link #create(Object)}
    * @return the object class that must be created.
    */
   protected abstract Class<? extends E> resolveClassForCreation(K key);
-  
+
 }

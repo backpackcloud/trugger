@@ -28,6 +28,8 @@ import net.sf.trugger.element.Element;
 import net.sf.trugger.element.impl.ElementDecorator;
 import net.sf.trugger.message.Message;
 import net.sf.trugger.message.MessagePart;
+import net.sf.trugger.reflection.Reflection;
+import net.sf.trugger.reflection.ReflectionException;
 import net.sf.trugger.util.Utils;
 import net.sf.trugger.validation.InvalidElement;
 import net.sf.trugger.validation.Validation;
@@ -62,10 +64,8 @@ public class ValidValidator implements Validator<Object> {
       strategy = defaultValidationStrategy;
     } else {
       try {
-        strategy = annotation.strategy().newInstance();
-      } catch (InstantiationException e) {
-        throw new ValidationException(new CreateException(e));
-      } catch (IllegalAccessException e) {
+        strategy = Reflection.newInstanceOf(annotation.strategy());
+      } catch (ReflectionException e) {
         throw new ValidationException(new CreateException(e));
       }
     }

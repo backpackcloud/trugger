@@ -16,8 +16,17 @@
  */
 package net.sf.trugger.test.reflection;
 
+import static net.sf.trugger.reflection.Reflection.newInstanceOf;
 import static net.sf.trugger.reflection.Reflection.wrapperFor;
+import static net.sf.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import net.sf.trugger.reflection.ReflectionException;
 
 import org.junit.Test;
 
@@ -36,6 +45,34 @@ public class ReflectionTests {
     assertEquals(Long.class, wrapperFor(long.class));
     assertEquals(Float.class, wrapperFor(float.class));
     assertEquals(Double.class, wrapperFor(double.class));
+  }
+
+  private static class TestObject {
+
+    public TestObject(Collection c) {}
+    public TestObject(int i) {}
+    public TestObject() {}
+
+  }
+
+  @Test
+  public void testNewInstanceOf() throws Exception {
+    String string = newInstanceOf(String.class, "test");
+    assertEquals("test", string);
+    assertNotSame("test", string);
+    assertThrow(new Runnable(){
+      public void run() {
+        newInstanceOf(String.class, null, 1, 1);
+      }
+    }, ReflectionException.class);
+    assertNotNull(newInstanceOf(TestObject.class));
+    assertNotNull(newInstanceOf(TestObject.class, Collections.EMPTY_LIST));
+    assertNotNull(newInstanceOf(TestObject.class, 15));
+    assertThrow(new Runnable(){
+      public void run() {
+        newInstanceOf(String.class, 1, 2, 3);
+      }
+    }, ReflectionException.class);
   }
 
 }

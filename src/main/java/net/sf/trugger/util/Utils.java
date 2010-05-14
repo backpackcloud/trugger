@@ -161,7 +161,7 @@ public final class Utils {
    * @since 2.5
    */
   public static boolean areEquals(Object arg0, Object arg1) {
-    if (arg0 != null) {
+    if (arg0 != null && arg1 != null) {
       return arg0.equals(arg1);
     }
     return arg0 == arg1;

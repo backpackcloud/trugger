@@ -17,6 +17,8 @@
 package net.sf.trugger.validation.adapter;
 
 import net.sf.trugger.CreateException;
+import net.sf.trugger.reflection.Reflection;
+import net.sf.trugger.reflection.ReflectionException;
 import net.sf.trugger.validation.ValidationEngine;
 import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorContext;
@@ -39,8 +41,8 @@ public class HibernateValidatorFactory implements ValidatorFactory {
     Class<? extends org.hibernate.validator.Validator> validatorClass =
         key.annotation().annotationType().getAnnotation(org.hibernate.validator.ValidatorClass.class).value();
     try {
-      return new HibernateValidatorAdapter(validatorClass.newInstance());
-    } catch (Exception e) {
+      return new HibernateValidatorAdapter(Reflection.newInstanceOf(validatorClass));
+    } catch (ReflectionException e) {
       throw new CreateException(e);
     }
   }

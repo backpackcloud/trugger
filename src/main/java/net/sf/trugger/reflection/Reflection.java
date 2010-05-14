@@ -29,10 +29,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.trugger.Invoker;
 import net.sf.trugger.ValueHandler;
+import net.sf.trugger.iteration.Iteration;
+import net.sf.trugger.iteration.SearchException;
 import net.sf.trugger.loader.ImplementationLoader;
+import net.sf.trugger.predicate.Predicate;
+import net.sf.trugger.util.Utils;
 
 /**
  * An utility class for help the use of Reflection.
@@ -256,4 +261,60 @@ public final class Reflection {
       };
     };
   }
+
+  /**
+   * Creates a new instance of the given type by locating the proper constructor
+   * based on the given arguments.
+   *
+   * @param type
+   *          the instance type
+   * @param constructorArguments
+   *          the arguments to call the constructor.
+   * @return a new instance of the give type
+   * @since 2.5
+   */
+  public static <E> E newInstanceOf(final Class<E> type, final Object... constructorArguments) {
+    try {
+      if (constructorArguments.length == 0) {
+        Constructor<?> constructor = reflect().constructor().withoutParameters().in(type);
+        return invoke(constructor).withoutArgs();
+      }
+      final Class<?>[] parameters = new Class[constructorArguments.length];
+      for (int i = 0 ; i < constructorArguments.length ; i++) {
+        Object parameter = constructorArguments[i];
+        if(parameter != null) {
+          parameters[i] = parameter.getClass();
+        }
+      }
+      Constructor<?> foundConstructor = reflect().constructor().withParameters(parameters).in(type);
+      if (foundConstructor != null) {
+        return invoke(foundConstructor).withArgs(constructorArguments);
+      }
+      Set<Constructor<?>> constructors = reflect().constructors().in(type);
+      Predicate<Constructor<?>> predicate = new Predicate<Constructor<?>>() {
+
+        public boolean evaluate(Constructor<?> constructor) {
+          Class<?>[] parameterTypes = constructor.getParameterTypes();
+          if(parameterTypes.length != parameters.length) {
+            return false;
+          }
+          for (int i = 0 ; i < parameters.length ; i++) {
+            Class<?> param = parameters[i];
+            if (param != null && !Utils.areAssignable(parameterTypes[i], param)) {
+              return false;
+            }
+          }
+          return true;
+        }
+      };
+      foundConstructor = Iteration.selectFrom(constructors).elementMatching(predicate);
+      if (foundConstructor != null) {
+        return invoke(foundConstructor).withArgs(constructorArguments);
+      }
+      throw new ReflectionException("No constructor found");
+    } catch (SearchException e) {
+      throw new ReflectionException(e);
+    }
+  }
+
 }

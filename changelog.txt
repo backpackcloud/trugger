@@ -6,6 +6,7 @@ Version 2.5.0
   - New invocation tracker interceptor.
   - New DSL for predicates.
   - Scan for one single class.
+  - New method newInstanceOf in Reflection class.
 Version 2.4.0
 - New modules:
   - DSL for iterations
