@@ -17,6 +17,7 @@
 package net.sf.trugger.selector;
 
 import net.sf.trugger.predicate.Predicable;
+import net.sf.trugger.scan.ClassScanResult;
 import net.sf.trugger.scan.ScanLevel;
 
 /**
@@ -45,7 +46,8 @@ public interface ClassSpecifier extends AccessSelector, PredicateSelector<Class<
   /**
    * Searchs recursively in the packages (sets the scan level to
    * {@link ScanLevel#SUBPACKAGES}). Is a common way to scan packages and its
-   * subpackages but only take effect if using with {@link #in(String...)} .
+   * subpackages but only take effect if using with
+   * {@link ClassScanResult#in(String...)} .
    */
   ClassSpecifier recursively();
 
