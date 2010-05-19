@@ -16,6 +16,7 @@
  */
 package net.sf.trugger.predicate;
 
+import static net.sf.trugger.predicate.Predicates.newComposition;
 import static net.sf.trugger.reflection.Reflection.invoke;
 import static net.sf.trugger.reflection.Reflection.reflect;
 
@@ -90,6 +91,38 @@ public class PredicateDSL<E> implements Predicate<E> {
   }
 
   /**
+   * Defines a boolean expression that must be <code>true</code>.
+   */
+  public void expect(Boolean value) {
+    evals.add(new Evaluation(EvalType.EQUAL, tracker.trackedContexts(), true));
+    tracker.track();
+  }
+
+  /**
+   * Defines a boolean expression that must be <code>true</code>.
+   */
+  public void expect(boolean value) {
+    evals.add(new Evaluation(EvalType.EQUAL, tracker.trackedContexts(), true));
+    tracker.track();
+  }
+
+  /**
+   * Defines a boolean expression that must be <code>false</code>.
+   */
+  public void dontExpect(boolean value) {
+    evals.add(new Evaluation(EvalType.EQUAL, tracker.trackedContexts(), false));
+    tracker.track();
+  }
+
+  /**
+   * Defines a boolean expression that must be <code>false</code>.
+   */
+  public void dontExpect(Boolean value) {
+    evals.add(new Evaluation(EvalType.EQUAL, tracker.trackedContexts(), false));
+    tracker.track();
+  }
+
+  /**
    * Defines an expression for this predicate.
    *
    * @return the component for making the restriction.
@@ -150,6 +183,84 @@ public class PredicateDSL<E> implements Predicate<E> {
 
           public void valid() {
             evals.add(new Evaluation(EvalType.VALID, tracker.trackedContexts(), result));
+            tracker.track();
+          }
+        };
+      }
+
+    };
+  }
+
+  /**
+   * Defines an expression for this predicate.
+   *
+   * @return the component for making the restriction.
+   */
+  public <V> Criteria<E, V> dontExpect(V value) {
+    return new Criteria<E, V>() {
+
+      public void equal(V value) {
+        Evaluation evaluation = new Evaluation(EvalType.EQUAL, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
+      }
+
+      public void differ(V value) {
+        Evaluation evaluation = new Evaluation(EvalType.DIFFER, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
+      }
+
+      public void greaterThan(V value) {
+        Evaluation evaluation = new Evaluation(EvalType.GREATER, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
+      }
+
+      public void equalOrGreaterThan(V value) {
+        Evaluation evaluation = new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
+      }
+
+      public void lessThan(V value) {
+        Evaluation evaluation = new Evaluation(EvalType.LESS, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
+      }
+
+      public void equalOrLessThan(V value) {
+        Evaluation evaluation = new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
+      }
+
+      public void matches(String pattern) {
+        Evaluation evaluation = new Evaluation(EvalType.PATTERN, tracker.trackedContexts(), pattern);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
+      }
+
+      public void invalid() {
+        using(new Validation().validate().allElements()).invalid();
+      }
+
+      public void valid() {
+        using(new Validation().validate().allElements()).valid();
+      }
+
+      public ValidationCriteria using(final Result<ValidationResult, Object> result) {
+        return new ValidationCriteria() {
+
+          public void invalid() {
+            Evaluation evaluation = new Evaluation(EvalType.INVALID, tracker.trackedContexts(), result);
+            evals.add(newComposition(evaluation).negate());
+            tracker.track();
+          }
+
+          public void valid() {
+            Evaluation evaluation = new Evaluation(EvalType.VALID, tracker.trackedContexts(), result);
+            evals.add(newComposition(evaluation).negate());
             tracker.track();
           }
         };
