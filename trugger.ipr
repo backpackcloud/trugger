@@ -222,11 +222,6 @@
         <option value="$PROJECT_DIR$/validator/pom.xml" />
       </list>
     </option>
-    <option name="activeProfiles">
-      <list>
-        <option value="default" />
-      </list>
-    </option>
   </component>
   <component name="Palette2">
     <group name="Swing">

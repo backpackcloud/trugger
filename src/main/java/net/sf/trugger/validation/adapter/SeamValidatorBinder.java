@@ -31,7 +31,7 @@ import org.jboss.seam.annotations.In;
  * A binder that allows the use of any Seam component inside of a validator.
  *
  * @author Marcelo Varella Barca Guimarães
- * @since 2.5
+ * @since 2.6
  */
 public class SeamValidatorBinder implements ValidatorBinder {
 
