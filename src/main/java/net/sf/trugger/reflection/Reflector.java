@@ -86,7 +86,6 @@ import net.sf.trugger.selector.SetterMethodSelector;
  * Method method = {@link Reflection#reflect()}.getterFor(&quot;myProperty&quot;).in(MyClass.class);
  * Set&lt;Field&gt; fields = {@link Reflection#reflect()}.allFields().in(MyClass.class);
  * </pre>
- *
  * </ul>
  *
  * @see Predicates#newComposition(net.sf.trugger.predicate.Predicate)
@@ -245,7 +244,6 @@ public interface Reflector {
    *   //... fields and methods
    * }
    * </pre>
-   *
    * The code bellow will print <code>MyType</code>:
    *
    * <pre>
@@ -258,6 +256,17 @@ public interface Reflector {
    * @return the component used for selecting the target.
    */
   Result<Class, Object> genericType(String parameterName);
+
+  /**
+   * Reflects the generic type parameter declared in a target.
+   * <p>
+   * This method should be used only if the target has only one generic
+   * parameter.
+   *
+   * @return the component used for selecting the target.
+   * @see Reflector#genericType(String)
+   */
+  Result<Class, Object> genericType();
 
   /**
    * Reflects the bridged method of a given {@link Method#isBridge() bridge}

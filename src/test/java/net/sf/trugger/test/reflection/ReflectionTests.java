@@ -17,6 +17,7 @@
 package net.sf.trugger.test.reflection;
 
 import static net.sf.trugger.reflection.Reflection.newInstanceOf;
+import static net.sf.trugger.reflection.Reflection.reflect;
 import static net.sf.trugger.reflection.Reflection.wrapperFor;
 import static net.sf.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
@@ -25,6 +26,8 @@ import static org.junit.Assert.assertNotSame;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.trugger.reflection.ReflectionException;
 
@@ -71,6 +74,31 @@ public class ReflectionTests {
     assertThrow(new Runnable(){
       public void run() {
         newInstanceOf(String.class, 1, 2, 3);
+      }
+    }, ReflectionException.class);
+  }
+
+  private class GenericClass<E> {}
+
+  @Test
+  public void testGenericTypeResolver() throws Exception {
+    final Map<String, Integer> map = new HashMap<String, Integer>(){};
+    assertEquals(String.class, reflect().genericType("K").in(map));
+    assertEquals(Integer.class, reflect().genericType("V").in(map));
+
+    GenericClass<String> genericClass = new GenericClass<String>(){};
+    assertEquals(String.class, reflect().genericType("E").in(genericClass));
+    assertEquals(String.class, reflect().genericType().in(genericClass));
+
+    assertThrow(new Runnable(){
+      public void run() {
+        reflect().genericType().in(map);
+      }
+    }, ReflectionException.class);
+
+    assertThrow(new Runnable(){
+      public void run() {
+        reflect().genericType().in(Object.class);
       }
     }, ReflectionException.class);
   }

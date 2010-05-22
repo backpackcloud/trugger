@@ -18,10 +18,13 @@ package net.sf.trugger.reflection.impl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.trugger.Result;
+import net.sf.trugger.reflection.ReflectionException;
 import net.sf.trugger.reflection.Reflector;
 import net.sf.trugger.selector.ConstructorSelector;
 import net.sf.trugger.selector.ConstructorsSelector;
@@ -118,6 +121,27 @@ public class TruggerReflector implements Reflector {
 
       public Class in(Object target) {
         return TruggerGenericTypeResolver.resolveParameterName(parameterName, Utils.resolveType(target));
+      }
+    };
+  }
+
+  public Result<Class, Object> genericType() {
+    return new Result<Class, Object>() {
+
+      public Class in(Object target) {
+        Map<Type, Type> typeVariableMap = TruggerGenericTypeResolver.getTypeVariableMap(Utils.resolveType(target));
+        Set<Type> keySet = typeVariableMap.keySet();
+        Set<String> paramNames = new HashSet<String>(keySet.size());
+        for (Type type : keySet) {
+          paramNames.add(type.toString());
+        }
+        if(paramNames.isEmpty()) {
+          throw new ReflectionException("No generic type found.");
+        } else if(paramNames.size() > 1) {
+          throw new ReflectionException("More than one generic type found.");
+        }
+        String name = paramNames.iterator().next();
+        return genericType(name).in(target);
       }
     };
   }
