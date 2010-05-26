@@ -2,7 +2,8 @@ Version 2.6.0
 - Major changes:
   - Validation Binder for using Seam Components inside of a validator.
   - Generic type reflection without specifying the generic parameter name.
-  - Additions to PredicateDSL
+  - Additions to PredicateDSL.
+  - Renamed the bind(Resolver) method to use(Resolver).
 Version 2.5.0
 - Major changes:
   - New Element selection without specifying a name.

@@ -34,7 +34,7 @@ import net.sf.trugger.element.Element;
  * A default implementation for binding operations.
  * <p>
  * The binds are applied in order they are registered with the
- * {@link #bind(Object)} and {@link #bind(Resolver)} methods.
+ * {@link #bind(Object)} and {@link #use(Resolver)} methods.
  * 
  * @author Marcelo Varella Barca Guimarães
  */
@@ -49,7 +49,7 @@ public final class TruggerBinder implements Binder {
     return new ValueBinder(value, binds);
   }
   
-  public BindSelector bind(Resolver<Object, Element> resolver) {
+  public BindSelector use(Resolver<Object, Element> resolver) {
     return new ResolverBinder(resolver, binds);
   }
   

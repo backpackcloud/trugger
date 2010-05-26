@@ -28,29 +28,59 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 
 /**
- * A binder that allows the use of any Seam component inside of a validator.
+ * A binder that allows the use of any Seam component in a validator.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.6
  */
-public class SeamValidatorBinder implements ValidatorBinder {
+public class SeamValidatorBinder implements ValidatorBinder, Resolver<Object, Element> {
 
   @Override
   public void configureBinds(Validator validator, ValidatorContext context, Binder binder) {
-    binder.bind(new InResolver()).toElements().annotatedWith(In.class);
+    binder.use(this).toElements().annotatedWith(In.class);
   }
 
-  private class InResolver implements Resolver<Object, Element> {
+  @Override
+  public Object resolve(Element target) {
+    In annotation = target.getAnnotation(In.class);
+    String name = resolveComponentName(target, annotation);
+    return resolveComponent(name, annotation);
+  }
 
-    public Object resolve(Element target) {
-      In annotation = target.getAnnotation(In.class);
-      String name = annotation.value();
-      if (Utils.isEmpty(name)) {
-        name = target.name();
-      }
-      return Component.getInstance(name, annotation.create());
+  /**
+   * Resolves the named component for the given annotation.
+   * <p>
+   * This implementation uses the {@link Component#getInstance(String, boolean)}
+   * method.
+   *
+   * @param name
+   *          the component name
+   * @param annotation
+   *          the annotation for resolving the component
+   * @return the component to bind
+   */
+  protected Object resolveComponent(String name, In annotation) {
+    return Component.getInstance(name, annotation.create());
+  }
+
+  /**
+   * Resolves the component name based on the given annotation.
+   * <p>
+   * This implementation uses the {@link In#value()} property as the name or the
+   * {@link Element#name() element name} if the property is empty.
+   *
+   * @param element
+   *          the element annotated with {@link In}.
+   * @param annotation
+   *          the element annotation.
+   * @return the component name.
+   */
+  protected String resolveComponentName(Element element, In annotation) {
+    String name = annotation.value();
+    if (Utils.isEmpty(name)) {
+      name = element.name();
     }
-
+    return name;
   }
 
 }

@@ -69,7 +69,7 @@ public class PredicateDSL<E> implements Predicate<E> {
    */
   protected PredicateDSL() {
     clazz = reflect().genericType("E").in(this);
-    obj = tracker.createProxy().over(clazz);
+    obj = (E) tracker.createProxy().over(clazz);
   }
 
   /**
@@ -80,7 +80,7 @@ public class PredicateDSL<E> implements Predicate<E> {
    */
   public PredicateDSL(Class<E> clazz) {
     this.clazz = clazz;
-    obj = tracker.createProxy().over(clazz);
+    obj = (E) tracker.createProxy().over(clazz);
   }
 
   /**

@@ -23,7 +23,7 @@ import net.sf.trugger.selector.FieldSpecifier;
 
 /**
  * Interface for the bind configuration for a {@link Binder#bind(Object) value}
- * or {@link Binder#bind(net.sf.trugger.Resolver) resolver}.
+ * or {@link Binder#use(net.sf.trugger.Resolver) resolver}.
  * <p>
  * There are some conventions for keeping compatibility against the binds:
  * <ul>

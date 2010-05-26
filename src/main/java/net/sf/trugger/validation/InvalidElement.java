@@ -24,40 +24,40 @@ import net.sf.trugger.message.MessagePart;
 
 /**
  * Interface that defines a element that has an invalid value.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface InvalidElement extends Element {
-  
+
   /**
    * @return the full path of this element if it is a nested property. Else,
    *         returns the {@link #name() name}.
    */
   String path();
-  
+
   /**
    * Returns the invalid value.
    * <p>
    * Note that this method may not return the same value as {@link #value()}
    * because the element value may change.
-   * 
+   *
    * @return the invalid value of the element
    */
   Object invalidValue();
-  
+
   /**
    * Returns a collection of the messages for this invalid element.
    * <p>
    * This method should not return a <code>null</code> value.
-   * 
+   *
    * @return the messages for this invalid element.
    */
   List<Message> messages();
-  
+
   /**
    * Returns the {@link #messages()} joined by the
    * <code>messageSeparator</code>.
-   * 
+   *
    * @param separator
    *          the separator to join the messages.
    * @param type
@@ -65,5 +65,12 @@ public interface InvalidElement extends Element {
    * @return the joined message.
    */
   String joinMessages(String separator, MessagePart type);
-  
+
+  /**
+   * @return the validated target.
+   *
+   * @since 2.6
+   */
+  Object target();
+
 }

@@ -358,7 +358,7 @@
       <module fileurl="file://$PROJECT_DIR$/trugger.iml" filepath="$PROJECT_DIR$/trugger.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="JDK 1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
@@ -490,6 +490,39 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/osgi/3.5.0.v20090520/osgi-3.5.0.v20090520-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jboss.seam:jboss-seam:2.1.2">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/seam/jboss-seam/2.1.2/jboss-seam-2.1.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/seam/jboss-seam/2.1.2/jboss-seam-2.1.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/seam/jboss-seam/2.1.2/jboss-seam-2.1.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jboss.el:jboss-el:1.0_02.CR4">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/el/jboss-el/1.0_02.CR4/jboss-el-1.0_02.CR4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/el/jboss-el/1.0_02.CR4/jboss-el-1.0_02.CR4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/el/jboss-el/1.0_02.CR4/jboss-el-1.0_02.CR4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.el:el-api:1.0">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/el/el-api/1.0/el-api-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/el/el-api/1.0/el-api-1.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/el/el-api/1.0/el-api-1.0-sources.jar!/" />
       </SOURCES>
     </library>
   </component>

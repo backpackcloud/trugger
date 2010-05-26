@@ -17,6 +17,9 @@
     <orderEntry type="library" name="Maven: org.easymock:easymock:2.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-validator:3.0.0.ga" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse:osgi:3.5.0.v20090520" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.seam:jboss-seam:2.1.2" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.jboss.el:jboss-el:1.0_02.CR4" level="project" />
+    <orderEntry type="library" exported="" name="Maven: javax.el:el-api:1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">

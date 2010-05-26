@@ -53,11 +53,11 @@ public class BinderTest {
   public void testSelectors() {
     // these selectors are tested in another test class
     // just check the types to ensure they will work
-    assertEquals(TruggerElementsSelector.class, newBind().bind(null).toElements().getClass());
-    assertEquals(TruggerElementSelector.class, newBind().bind(null).toElement("name").getClass());
+    assertEquals(TruggerElementsSelector.class, newBind().use(null).toElements().getClass());
+    assertEquals(TruggerElementSelector.class, newBind().use(null).toElement("name").getClass());
 
-    assertEquals(TruggerFieldSelector.class, newBind().bind(null).toField("name").getClass());
-    assertEquals(TruggerFieldsSelector.class, newBind().bind(null).toFields().getClass());
+    assertEquals(TruggerFieldSelector.class, newBind().use(null).toField("name").getClass());
+    assertEquals(TruggerFieldsSelector.class, newBind().use(null).toFields().getClass());
   }
 
   @Test

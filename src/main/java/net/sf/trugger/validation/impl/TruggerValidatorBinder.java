@@ -49,7 +49,7 @@ public class TruggerValidatorBinder implements ValidatorBinder {
     binder.bind(annotation).toElements().ofType(annotationType);
     binder.bind(annotation).toElements().annotatedWith(TargetAnnotation.class);
     binder.bind(context.target()).toElements().annotatedWith(TargetObject.class);
-    binder.bind(new TargetElementResolver(context)).toElements().annotatedWith(TargetElement.class);
+    binder.use(new TargetElementResolver(context)).toElements().annotatedWith(TargetElement.class);
     binder.bind(context.validationContext()).toElements().annotatedWith(ValidationContext.class);
     bindReferences(context, binder, validator);
   }
