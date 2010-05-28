@@ -16,6 +16,7 @@
  */
 package net.sf.trugger.element.impl;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,7 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.trugger.Finder;
+import net.sf.trugger.HandlingException;
 import net.sf.trugger.Result;
+import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.property.Properties;
 import net.sf.trugger.reflection.Reflection;
@@ -48,12 +51,12 @@ public class DefaultElementFinder implements Finder<Element> {
         if (property != null) {
           propertyElement = specific ? new SpecificElement(property, target) : property;
         }
-        Field field = null;
-        if (property == null) {
-          field = Reflection.reflect().field(name).recursively().in(target);
-          if (field != null) {
-            fieldElement = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
-          }
+        Field field = Reflection.reflect().field(name).recursively().in(target);
+        if (field != null) {
+          fieldElement = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
+        }
+        if(property != null && field != null) {
+          return new MergedElement(fieldElement, propertyElement);
         }
         return propertyElement != null ? propertyElement : fieldElement;
       }
@@ -76,15 +79,113 @@ public class DefaultElementFinder implements Finder<Element> {
           map.put(property.name(), element);
         }
         for (Field field : fields) {
+          Element element = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
           if (!map.containsKey(field.getName())) {
-            Element element = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
             map.put(field.getName(), element);
+          } else {
+            map.put(field.getName(), new MergedElement(element, map.get(field.getName())));
           }
         }
         return new HashSet<Element>(map.values());
       }
 
     };
+  }
+
+  private static class MergedElement implements Element {
+
+    private final Element forRead;
+    private final Element forWrite;
+    private final Element decorated;
+
+    private MergedElement(Element field, Element property) {
+      this.decorated = property;
+      this.forRead = property.isReadable() ? property : field;
+      this.forWrite = property.isWritable() ? property : field;
+    }
+
+    public boolean isReadable() {
+      return forRead.isReadable();
+    }
+
+    public boolean isWritable() {
+      return forWrite.isWritable();
+    }
+
+    public ValueHandler in(final Object target) {
+      return new ValueHandler() {
+
+        public void value(Object value) throws HandlingException {
+          forWrite.in(target).value(value);
+        }
+
+        public <E> E value() throws HandlingException {
+          return forRead.in(target).value();
+        }
+      };
+    }
+
+    public <E> E value() throws HandlingException {
+      return forRead.value();
+    }
+
+    public void value(Object value) throws HandlingException {
+      forWrite.value(value);
+    }
+
+    public Class declaringClass() {
+      return decorated.declaringClass();
+    }
+
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+      return decorated.getAnnotation(annotationClass);
+    }
+
+    public Annotation[] getAnnotations() {
+      return decorated.getAnnotations();
+    }
+
+    public Annotation[] getDeclaredAnnotations() {
+      return decorated.getDeclaredAnnotations();
+    }
+
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+      return decorated.isAnnotationPresent(annotationClass);
+    }
+
+    public boolean isSpecific() {
+      return decorated.isSpecific();
+    }
+
+    public String name() {
+      return decorated.name();
+    }
+
+    public Class type() {
+      return decorated.type();
+    }
+
+    public String toString() {
+      return decorated.toString();
+    }
+
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if(obj instanceof DefaultElementFinder.MergedElement) {
+        return ((DefaultElementFinder.MergedElement) obj).decorated.equals(decorated);
+      }
+      return decorated.equals(obj);
+    }
+
+    public int hashCode() {
+      return decorated.hashCode();
+    }
+
   }
 
 }

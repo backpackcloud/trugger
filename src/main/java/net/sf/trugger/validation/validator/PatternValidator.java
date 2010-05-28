@@ -20,16 +20,20 @@ import net.sf.trugger.validation.Validator;
 
 /**
  * Implementation of the {@link Pattern} validation.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.1
  */
 public class PatternValidator implements Validator<CharSequence> {
-  
+
   private Pattern annotation;
-  
+
   public boolean isValid(@NotEmpty CharSequence value) {
-    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(annotation.value(), annotation.flags());
+    java.util.regex.Pattern pattern =
+      java.util.regex.Pattern.compile(
+        annotation.value(),
+        annotation.flags()
+    );
     return pattern.matcher(value).matches();
   }
 }

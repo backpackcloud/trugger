@@ -4,6 +4,7 @@ Version 2.6.0
   - Generic type reflection without specifying the generic parameter name.
   - Additions to PredicateDSL.
   - Renamed the bind(Resolver) method to use(Resolver).
+  - Merged Field elements and Property elements.
 Version 2.5.0
 - Major changes:
   - New Element selection without specifying a name.

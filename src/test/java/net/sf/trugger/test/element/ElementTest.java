@@ -122,4 +122,76 @@ public class ElementTest {
     assertNull(el);
   }
 
+  private static class ForMergedTest {
+
+    private int i;
+    private final int j = 10;
+    private int k;
+
+    public int getI() {
+      return i + 5;
+    }
+
+    public int getJ() {
+      return j + 10;
+    }
+
+    public void setK(int k) {
+      this.k = k + 15;
+    }
+
+  }
+
+  @Test
+  public void testMergedElement() throws Exception {
+    ForMergedTest o = new ForMergedTest();
+    Element element = element("i").in(ForMergedTest.class);
+    assertFalse(element.isSpecific());
+    assertTrue(element.isWritable());
+    assertTrue(element.isReadable());
+    assertEquals(5, element.in(o).value());
+    element.in(o).value(5);
+    assertEquals(10, element.in(o).value());
+
+    element = element("i").in(o);
+    assertTrue(element.isSpecific());
+    assertTrue(element.isWritable());
+    assertTrue(element.isReadable());
+    assertEquals(10, element.value());
+    element.value(10);
+    assertEquals(15, element.value());
+
+    //------------------------------------------//
+
+    element = element("j").in(ForMergedTest.class);
+    assertFalse(element.isSpecific());
+    assertFalse(element.isWritable());
+    assertTrue(element.isReadable());
+    assertEquals(20, element.in(o).value());
+
+    element = element("j").in(o);
+    assertTrue(element.isSpecific());
+    assertFalse(element.isWritable());
+    assertTrue(element.isReadable());
+    assertEquals(20, element.value());
+
+    //------------------------------------------//
+
+    element = element("k").in(ForMergedTest.class);
+    assertFalse(element.isSpecific());
+    assertTrue(element.isWritable());
+    assertTrue(element.isReadable());
+    assertEquals(0, element.in(o).value());
+    element.in(o).value(15);
+    assertEquals(30, element.in(o).value());
+
+    element = element("k").in(o);
+    assertTrue(element.isSpecific());
+    assertTrue(element.isWritable());
+    assertTrue(element.isReadable());
+    assertEquals(30, element.value());
+    element.value(40);
+    assertEquals(55, element.value());
+  }
+
 }

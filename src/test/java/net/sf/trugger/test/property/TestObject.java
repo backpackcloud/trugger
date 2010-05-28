@@ -22,26 +22,24 @@ import net.sf.trugger.test.Flag;
  * @author Marcelo Varella Barca Guimarães
  */
 public class TestObject {
-  
+
   @Flag
   private final String name;
-  
+
   int age;
-  
+
   boolean active;
-  
+
   final double price;
-  
+
   final String readable;
-  
-  String writable;
-  
+
   Object allAccess;
-  
+
   long fieldProp;
-  
+
   long otherFieldProp = 10;
-  
+
   public TestObject(String name, int age, double price, boolean active, String readable) {
     this.name = name;
     this.age = age;
@@ -49,57 +47,53 @@ public class TestObject {
     this.price = price;
     this.readable = readable;
   }
-  
+
   public void setName(char[] name) {
 
   }
-  
+
   public void setActive(double active) {
 
   }
-  
+
   public Object getAllAccess() {
     return allAccess;
   }
-  
+
   public void setAllAccess(Object allAccess) {
     this.allAccess = allAccess;
   }
-  
-  public void setWritable(String writable) {
-    this.writable = writable;
-  }
-  
+
   public String getReadable() {
     return readable;
   }
-  
+
   public void setActive(boolean active) {
     this.active = active;
   }
-  
+
   public boolean isActive() {
     return active;
   }
-  
+
   public String getName() {
     return name;
   }
-  
+
   public double getPrice() {
     return price;
   }
-  
+
   public long getFieldProp() {
     return fieldProp;
   }
-  
+
   public void setFieldProp(long fieldProp) {
     this.fieldProp = fieldProp;
   }
-  
+
   public long getOtherFieldProp() {
     return otherFieldProp;
   }
-  
+
 }
