@@ -4,7 +4,8 @@ Version 2.6.0
   - Generic type reflection without specifying the generic parameter name.
   - Additions to PredicateDSL.
   - Renamed the bind(Resolver) method to use(Resolver).
-  - Merged Field elements and Property elements.
+  - Merged Field elements and Property elements, so, if you want a property behaviour use the Properties class instead
+    of Elements.
 Version 2.5.0
 - Major changes:
   - New Element selection without specifying a name.
@@ -17,7 +18,8 @@ Version 2.5.0
 Version 2.4.0
 - New modules:
   - DSL for iterations
-    - Refactoring in Collection module to Iteration module. Now the iterations are made using an iterator rather than a collection.
+    - Refactoring in Collection module to Iteration module. Now the iterations are made using an iterator rather than
+      a collection.
 - Major changes:
   - New ValidatorBinder component for customize binds.
   - Exceptions for validation module.

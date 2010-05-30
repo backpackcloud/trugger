@@ -706,7 +706,7 @@ public class ReflectionPredicates {
   /**
    * A predicate that returns <code>true</code> if a class is anonymous.
    */
-  public static CompositePredicate<Class<?>> ANONYMOUS = newComposition(new Predicate<Class<?>>() {
+  public static final CompositePredicate<Class<?>> ANONYMOUS = newComposition(new Predicate<Class<?>>() {
 
     public boolean evaluate(Class<?> element) {
       return element.isAnonymousClass();
@@ -721,6 +721,6 @@ public class ReflectionPredicates {
   /**
    * A predicate that returns <code>true</code> if a class is not anonymous.
    */
-  public static CompositePredicate<Class<?>> NON_ANONYMOUS = ANONYMOUS.negate();
+  public static final CompositePredicate<Class<?>> NON_ANONYMOUS = ANONYMOUS.negate();
 
 }
