@@ -19,11 +19,11 @@ package net.sf.trugger.iteration.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.iteration.IterationSourceSelector;
 import net.sf.trugger.iteration.SrcToDestIteration;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.Predicates;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * @author Marcelo Varella Barca Guimarães

@@ -24,9 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.element.ElementCopy;
 import net.sf.trugger.predicate.Predicate;
+import net.sf.trugger.transformer.Transformer;
 
 import org.junit.Before;
 import org.junit.Test;

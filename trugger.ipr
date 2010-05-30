@@ -422,7 +422,7 @@
     </columns>
   </component>
   <component name="VcsDirectoryMappings">
-    <mapping directory="" vcs="svn" />
+    <mapping directory="" vcs="Git" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="libraryTable">
@@ -501,28 +501,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/jboss/seam/jboss-seam/2.1.2/jboss-seam-2.1.2-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.jboss.el:jboss-el:1.0_02.CR4">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/el/jboss-el/1.0_02.CR4/jboss-el-1.0_02.CR4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/el/jboss-el/1.0_02.CR4/jboss-el-1.0_02.CR4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/el/jboss-el/1.0_02.CR4/jboss-el-1.0_02.CR4-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: javax.el:el-api:1.0">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/javax/el/el-api/1.0/el-api-1.0.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/javax/el/el-api/1.0/el-api-1.0-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/javax/el/el-api/1.0/el-api-1.0-sources.jar!/" />
       </SOURCES>
     </library>
   </component>

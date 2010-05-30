@@ -20,9 +20,9 @@ import java.util.Set;
 
 import net.sf.trugger.Resolver;
 import net.sf.trugger.Result;
-import net.sf.trugger.Transformer;
 import net.sf.trugger.bind.BindableElement;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * BindApplier for a selection of elements.

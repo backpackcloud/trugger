@@ -18,11 +18,11 @@ package net.sf.trugger.bind.impl;
 
 import java.lang.reflect.Field;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.bind.BindableElement;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.impl.FieldElement;
 import net.sf.trugger.element.impl.TruggerBindableElement;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * A transformer that allows conversion of {@link Element} and {@link Field}

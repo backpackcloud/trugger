@@ -25,7 +25,7 @@ package net.sf.trugger.element;
 public interface ElementCopy {
 
   /**
-   * @return the value of the source element.
+   * @return the source element value.
    */
   Object value();
 

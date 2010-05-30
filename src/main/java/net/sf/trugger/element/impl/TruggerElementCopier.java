@@ -18,7 +18,6 @@ package net.sf.trugger.element.impl;
 
 import java.util.Set;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.ElementCopier;
 import net.sf.trugger.element.ElementCopy;
@@ -27,6 +26,7 @@ import net.sf.trugger.predicate.CompositePredicate;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.PredicateBuilder;
 import net.sf.trugger.selector.ElementsSelector;
+import net.sf.trugger.transformer.Transformer;
 import net.sf.trugger.util.Utils;
 
 /**

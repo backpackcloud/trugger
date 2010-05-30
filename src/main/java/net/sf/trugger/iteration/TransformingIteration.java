@@ -16,7 +16,7 @@
  */
 package net.sf.trugger.iteration;
 
-import net.sf.trugger.Transformer;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * Interface that defines an iteration that can transform elements.

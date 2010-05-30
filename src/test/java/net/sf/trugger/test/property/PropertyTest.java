@@ -141,11 +141,6 @@ public class PropertyTest {
     assertEqualsAndHash(property1, property2);
   }
 
-  @Test(expected = UnreadableElementException.class)
-  public void unreadablePropertyTest() {
-    getProperty("writable").in(test).value();
-  }
-
   @Test(expected = UnwritableElementException.class)
   public void unwritablePropertyTest() {
     getProperty("readable").in(test).value(new Object());
@@ -195,14 +190,7 @@ public class PropertyTest {
         TestObject.class));
 
     props = Properties.properties().writable().in(TestObject.class);
-    assertElements(props, "active", "allAccess", "writable", "fieldProp");
-    assertNotNull(Properties.property("writable").thatMatches(
-        Properties.property("writable").nonReadable().toPredicate()).in(TestObject.class));
-
-    props = Properties.properties().writable().thatMatches(ElementPredicates.NON_READABLE).in(TestObject.class);
-    assertElements(props, "writable");
-    props = Properties.properties().writable().nonReadable().in(TestObject.class);
-    assertElements(props, "writable");
+    assertElements(props, "active", "allAccess", "fieldProp");
   }
 
 }

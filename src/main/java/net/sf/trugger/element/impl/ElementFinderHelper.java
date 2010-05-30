@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.iteration.Iteration;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * A helper class for element finders.

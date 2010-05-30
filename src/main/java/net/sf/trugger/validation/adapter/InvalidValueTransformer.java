@@ -16,8 +16,8 @@
  */
 package net.sf.trugger.validation.adapter;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.message.MessagePart;
+import net.sf.trugger.transformer.Transformer;
 import net.sf.trugger.validation.InvalidElement;
 
 import org.hibernate.validator.InvalidValue;

@@ -16,8 +16,8 @@
  */
 package net.sf.trugger.element.impl;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * A transformer for element to specific element.
