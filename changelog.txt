@@ -6,6 +6,7 @@ Version 2.6.0
   - Renamed the bind(Resolver) method to use(Resolver).
   - Merged Field elements and Property elements, so, if you want a property behaviour use the Properties class instead
     of Elements.
+  - New DSL for transform operations.
 Version 2.5.0
 - Major changes:
   - New Element selection without specifying a name.

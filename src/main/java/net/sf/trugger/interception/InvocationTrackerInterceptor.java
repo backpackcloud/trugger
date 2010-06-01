@@ -16,6 +16,7 @@
  */
 package net.sf.trugger.interception;
 
+import static net.sf.trugger.reflection.Reflection.invoke;
 import static net.sf.trugger.reflection.Reflection.reflect;
 
 import java.lang.reflect.Constructor;
@@ -67,6 +68,28 @@ public class InvocationTrackerInterceptor extends Interceptor {
    */
   public List<InterceptionContext> trackedContexts() {
     return new ArrayList<InterceptionContext>(contexts);
+  }
+
+  /**
+   * Resolves the value by invoking the tracked methods on the given target.
+   *
+   * @since 2.6
+   */
+  public <E> E resolveFor(Object target) {
+    return (E) resolve(target, contexts);
+  }
+
+  /**
+   * Resolves the value by invoking the tracked methods on the given target.
+   *
+   * @since 2.6
+   */
+  public static <E> E resolve(Object target, List<InterceptionContext> contexts) {
+    Object objectValue = target;
+    for (InterceptionContext context : contexts) {
+      objectValue = invoke(context.method).in(objectValue).withArgs(context.args);
+    }
+    return (E) objectValue;
   }
 
 }

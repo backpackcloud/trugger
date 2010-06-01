@@ -17,7 +17,6 @@
 package net.sf.trugger.predicate;
 
 import static net.sf.trugger.predicate.Predicates.newComposition;
-import static net.sf.trugger.reflection.Reflection.invoke;
 import static net.sf.trugger.reflection.Reflection.reflect;
 
 import java.util.LinkedList;
@@ -31,7 +30,7 @@ import net.sf.trugger.validation.Validation;
 import net.sf.trugger.validation.ValidationResult;
 
 /**
- * This class represents a DSL for using to build a predicate.
+ * This class represents a DSL to build a {@link Predicate}.
  * <p>
  * The DSL may also be created insite of an initializer (using an anonymous
  * class).
@@ -341,12 +340,10 @@ public class PredicateDSL<E> implements Predicate<E> {
     }
 
     public boolean evaluate(Object object) {
-      Object objectValue = object;
-      for (InterceptionContext context : contexts) {
-        objectValue = invoke(context.method).in(objectValue).withArgs(context.args);
-      }
+      Object objectValue = InvocationTrackerInterceptor.resolve(object, contexts);
       return eval.eval(referenceValue, objectValue);
     }
+
   }
 
 }
