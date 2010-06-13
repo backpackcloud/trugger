@@ -112,9 +112,9 @@ public final class TruggerElementCopier implements ElementCopier {
     CompositePredicate<ElementCopy> predicate = builder.predicate();
     if (transform) {
       value = transformer.transform(copy);
-      if (value != null) {
-        predicate = predicate.and(new AssignablePredicate(value));
-      }
+    }
+    if (value != null) {
+      predicate = predicate.and(new AssignablePredicate(value));
     }
     if (predicate.evaluate(copy)) {
       destProperty.in(dest).value(value);

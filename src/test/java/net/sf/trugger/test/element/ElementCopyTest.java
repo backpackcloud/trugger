@@ -72,6 +72,7 @@ public class ElementCopyTest {
   }
 
   private static class ToStringTransformer implements Transformer<String, ElementCopy> {
+
     public String transform(ElementCopy object) {
       return String.valueOf(object.value());
     }
@@ -111,4 +112,44 @@ public class ElementCopyTest {
     assertEquals("1.9", props.getProperty("height"));
     assertEquals("80.2", props.getProperty("weight"));
   }
+
+  static class Object1 {
+
+    private String name;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+  }
+
+  static class Object2 {
+
+    private int name;
+
+    public void setName(int name) {
+      this.name = name;
+    }
+
+    public int getName() {
+      return name;
+    }
+  }
+
+  @Test
+  public void testCopyWithSameNameButDifferentTypes() throws Exception {
+    Object1 object1 = new Object1();
+    Object2 object2 = new Object2();
+
+    object1.setName("name");
+
+    copyTo(object2).from(object1);
+
+    assertEquals(0, object2.getName());
+  }
+
 }

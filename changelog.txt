@@ -7,6 +7,8 @@ Version 2.6.0
   - Merged Field elements and Property elements, so, if you want a property behaviour use the Properties class instead
     of Elements.
   - New DSL for transform operations.
+- Bug fixes:
+  - Element type check on element copies.
 Version 2.5.0
 - Major changes:
   - New Element selection without specifying a name.
