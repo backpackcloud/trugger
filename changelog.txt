@@ -9,6 +9,7 @@ Version 2.6.0
   - New DSL for transform operations.
 - Bug fixes:
   - Element type check on element copies.
+
 Version 2.5.0
 - Major changes:
   - New Element selection without specifying a name.
@@ -18,6 +19,7 @@ Version 2.5.0
   - New DSL for predicates.
   - Scan for one single class.
   - New method newInstanceOf in Reflection class.
+
 Version 2.4.0
 - New modules:
   - DSL for iterations
@@ -35,6 +37,7 @@ Version 2.4.0
 Version 2.3.1
 - Major changes:
   - Added a method to remove a registry entry (included in a minor release since its a useful method).
+
 Version 2.3.0
 - New modules:
   - DSL for class scan.
@@ -50,9 +53,11 @@ Version 2.3.0
   - Moved the ClassLoader option to ProxyCreator.
 - Minor changes:
   - Source encode changed to UTF-8.
+
 Version 2.2.1
 - Minor changes:
   - Maven support.
+
 Version 2.2.0
 - Major changes:
   - ValidatorFactory now receives a context for doing the binds without the ValidationEngine.
@@ -60,6 +65,7 @@ Version 2.2.0
 - Bug fixes:
   - Valid annotation doesn't validate the mapped context.
   - NumberFormatException if "min" or "max" of Range is not defined.
+
 Version 2.1.0
 - New modules:
   - DSL for creating proxies.
@@ -81,6 +87,7 @@ Version 2.1.0
     - The annotations added will be returned by getDeclaredAnnotations and getAnnotations.
 - Bug fixes:
   - Fixed a bug in TruggerElementsSelector that returns a null predicate if no selection is made.
+
 Version 2.0.0
 - New modules:
   - DSL for date operations.
