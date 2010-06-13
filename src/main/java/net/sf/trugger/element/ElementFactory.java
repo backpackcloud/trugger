@@ -50,8 +50,6 @@ public interface ElementFactory {
    * Creates a selector for an {@link Element} object without specifying the
    * name.
    *
-   * @param name
-   *          the element name.
    * @return the selector.
    * @since 2.5
    */

@@ -54,8 +54,7 @@ public interface ClassScanResult<E> extends Result<E, PackageScan> {
 
   /**
    * Uses the scan level {@link ScanLevel#PACKAGE} for doing the search. If the
-   * scan is {@link #recursively() recursively}, then the scan level will be
-   * {@link ScanLevel#SUBPACKAGES}.
+   * scan is recursively, then the scan level will be {@link ScanLevel#SUBPACKAGES}.
    *
    * @param packageNames
    *          the packages to scan.
