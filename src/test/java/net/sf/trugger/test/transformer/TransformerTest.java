@@ -129,7 +129,7 @@ public class TransformerTest {
       }
     };
     TransformerDSL<Element> dsl = new TransformerDSL<Element>(){{
-      use(TO_STRING).on(obj.name()).when(obj.name()).equal("el");
+      use(TO_STRING).on(obj.name()).whenNot(obj.name()).equal("element");
       use(transformer).on(obj);
     }};
     assertEquals("element", dsl.transform(element));

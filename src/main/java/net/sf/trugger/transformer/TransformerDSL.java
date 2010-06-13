@@ -163,6 +163,10 @@ public class TransformerDSL<E> implements Transformer<Object, E> {
       return predicate.expect(value);
     }
 
+    public <V> Criteria<E,V> whenNot(V value) {
+      return predicate.dontExpect(value);
+    }
+
     public void when(Boolean value) {
       predicate.expect(value.booleanValue());
     }

@@ -34,6 +34,13 @@ public interface TransformerCriteria<E> {
   <V> Criteria<E, V> when(V value);
 
   /**
+   * Uses the transformer if the value don't match a condition.
+   *
+   * @return a component for defining the condition.
+   */
+  <V> Criteria<E, V> whenNot(V value);
+
+  /**
    * Uses the transformer if the value is <code>true</code>.
    */
   void when(Boolean value);
