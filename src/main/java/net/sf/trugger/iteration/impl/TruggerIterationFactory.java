@@ -19,12 +19,12 @@ package net.sf.trugger.iteration.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.iteration.IterationFactory;
 import net.sf.trugger.iteration.IterationSearchOperation;
 import net.sf.trugger.iteration.SrcIteration;
 import net.sf.trugger.iteration.SrcToDestIteration;
 import net.sf.trugger.iteration.TransformingIteration;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * The default implementation for {@link IterationFactory}.

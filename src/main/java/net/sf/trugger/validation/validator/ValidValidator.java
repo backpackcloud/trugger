@@ -168,6 +168,10 @@ public class ValidValidator implements Validator<Object> {
       return element.toString();
     }
 
+    public Object target() {
+      return element.target();
+    }
+
     @Override
     public int hashCode() {
       final int prime = 31;

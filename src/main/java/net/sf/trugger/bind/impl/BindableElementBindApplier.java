@@ -18,9 +18,9 @@ package net.sf.trugger.bind.impl;
 
 import net.sf.trugger.Resolver;
 import net.sf.trugger.Result;
-import net.sf.trugger.Transformer;
 import net.sf.trugger.bind.BindableElement;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * BindApplier for a single element selection.

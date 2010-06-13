@@ -277,7 +277,7 @@ public final class Reflection {
     try {
       if (constructorArguments.length == 0) {
         Constructor<?> constructor = reflect().constructor().withoutParameters().in(type);
-        return invoke(constructor).withoutArgs();
+        return (E) invoke(constructor).withoutArgs();
       }
       final Class<?>[] parameters = new Class[constructorArguments.length];
       for (int i = 0 ; i < constructorArguments.length ; i++) {
@@ -288,7 +288,7 @@ public final class Reflection {
       }
       Constructor<?> foundConstructor = reflect().constructor().withParameters(parameters).in(type);
       if (foundConstructor != null) {
-        return invoke(foundConstructor).withArgs(constructorArguments);
+        return (E) invoke(foundConstructor).withArgs(constructorArguments);
       }
       Set<Constructor<?>> constructors = reflect().constructors().in(type);
       Predicate<Constructor<?>> predicate = new Predicate<Constructor<?>>() {
@@ -309,7 +309,7 @@ public final class Reflection {
       };
       foundConstructor = Iteration.selectFrom(constructors).elementMatching(predicate);
       if (foundConstructor != null) {
-        return invoke(foundConstructor).withArgs(constructorArguments);
+        return (E) invoke(foundConstructor).withArgs(constructorArguments);
       }
       throw new ReflectionException("No constructor found");
     } catch (SearchException e) {

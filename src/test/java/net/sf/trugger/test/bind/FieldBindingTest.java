@@ -42,7 +42,7 @@ public class FieldBindingTest {
     Binder binder = newBind();
     binder.bind(10).toFields().ofType(int.class);
     binder.bind(true).toField("booleanField");
-    binder.bind(new Resolver<Object, Element>() {
+    binder.use(new Resolver<Object, Element>() {
       public Object resolve(Element target) {
         return target.name();
       }

@@ -185,8 +185,8 @@ public class Validation {
 
   /**
    * Creates a new ValidatorFactory based on the
-   * {@link ValidationFactory#createValidatorFactory(ValidatorBinder)
-   * implementation} and the {@link #plug(ValidatorFactory) pluggeds}.
+   * {@link ValidationFactory#createValidatorFactory(ValidatorBinder) implementation} and the
+   * {@link #plug(ValidatorFactory) pluggeds}.
    * <p>
    * Every factory plugged after will be used by the returning ValidatorFactory.
    *

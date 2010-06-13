@@ -14,23 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.iteration;
-
-import net.sf.trugger.transformer.Transformer;
+package net.sf.trugger.transformer;
 
 /**
- * Interface that defines an iteration that can transform elements.
+ * Interface that defines a selector for the value used in a transformer.
  *
  * @author Marcelo Varella Barca Guimarães
+ * @since 2.6
  */
-public interface TransformingIteration<To> extends SrcToDestIteration<To> {
+public interface TransformerTargetSelector<E> {
 
   /**
-   * Executes iteration transforming the elements using the given transformer.
+   * Defines the target for using a transformer.
    *
-   * @param transformer
-   *          the transformer to use.
-   * @return the component for defining the elements.
+   * @return a component for defining criterions.
    */
-  <From> SrcToDestIteration<From> transformingWith(Transformer<To, From> transformer);
+  TransformerCriteria<E> on(Object value);
+
 }

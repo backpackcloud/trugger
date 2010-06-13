@@ -19,7 +19,7 @@ package net.sf.trugger.iteration.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.sf.trugger.Transformer;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * @author Marcelo Varella Barca Guimarães.

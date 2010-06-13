@@ -61,7 +61,7 @@ public class ElementBindingTest {
   public void initialize() {
     binder = newBind();
     binder.bind(10).toElements().ofType(int.class);
-    binder.bind(new Resolver<Object, Element>() {
+    binder.use(new Resolver<Object, Element>() {
       public Object resolve(Element target) {
         return target.name();
       }

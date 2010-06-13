@@ -17,6 +17,7 @@
 package net.sf.trugger.reflection.impl;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -26,7 +27,7 @@ public class ConstructorFinder implements MemberFinder<Constructor> {
   private final Class[] parameterTypes;
   
   public ConstructorFinder(Class[] parameterTypes) {
-    this.parameterTypes = parameterTypes;
+    this.parameterTypes = Arrays.copyOf(parameterTypes, parameterTypes.length);
   }
   
   @Override

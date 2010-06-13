@@ -31,12 +31,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.iteration.Iteration;
 import net.sf.trugger.iteration.SearchException;
 import net.sf.trugger.predicate.CompositePredicate;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.Predicates;
+import net.sf.trugger.transformer.Transformer;
 
 import org.junit.Before;
 import org.junit.Test;

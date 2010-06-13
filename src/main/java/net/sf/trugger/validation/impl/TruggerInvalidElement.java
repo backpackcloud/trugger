@@ -29,19 +29,19 @@ import net.sf.trugger.validation.InvalidElement;
 
 /**
  * This class represents an invalid element.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 final class TruggerInvalidElement extends SpecificElement implements InvalidElement {
-  
+
   private final Object value;
-  
+
   /** the messages associated with this property */
   private final Collection<Message> messages;
-  
+
   /**
    * Creates a new invalid element.
-   * 
+   *
    * @param element
    *          the analyzed element
    * @param value
@@ -56,11 +56,11 @@ final class TruggerInvalidElement extends SpecificElement implements InvalidElem
     this.messages = messages;
     this.value = value;
   }
-  
+
   public List<Message> messages() {
     return new ArrayList<Message>(this.messages);
   }
-  
+
   public String joinMessages(String messageSeparator, MessagePart type) {
     StringBuilder builder = new StringBuilder();
     String part;
@@ -75,15 +75,19 @@ final class TruggerInvalidElement extends SpecificElement implements InvalidElem
     }
     return builder.toString();
   }
-  
+
   public Object invalidValue() {
     return value;
   }
-  
+
   public String path() {
     return element.name();
   }
-  
+
+  public Object target() {
+    return target;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -92,7 +96,7 @@ final class TruggerInvalidElement extends SpecificElement implements InvalidElem
     result = prime * result + ((value == null) ? 0 : value.hashCode());
     return result;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -121,5 +125,5 @@ final class TruggerInvalidElement extends SpecificElement implements InvalidElem
     }
     return true;
   }
-  
+
 }

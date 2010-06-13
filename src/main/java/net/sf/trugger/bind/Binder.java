@@ -46,8 +46,9 @@ public interface Binder {
    * @param resolver
    *          the resolver for the bind.
    * @return the component used for specifying the bind type.
+   * @since 2.6
    */
-  BindSelector bind(Resolver<Object, Element> resolver);
+  BindSelector use(Resolver<Object, Element> resolver);
 
   /**
    * Applies the bindings in the given object.

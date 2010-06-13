@@ -16,9 +16,9 @@
  */
 package net.sf.trugger.element;
 
-import net.sf.trugger.Transformer;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.selector.ElementsSelector;
+import net.sf.trugger.transformer.Transformer;
 
 /**
  * Interface that defines a class that copies elements from a target to another.

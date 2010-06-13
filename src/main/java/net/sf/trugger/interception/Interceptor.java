@@ -216,9 +216,9 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
     
     public <E> E over(Class<?> clazz) {
       if(clazz.isInterface()) {
-        return createProxy().implementing(clazz).withoutTarget();
+        return (E) createProxy().implementing(clazz).withoutTarget();
       }
-      return createProxy().extending(clazz);
+      return (E) createProxy().extending(clazz);
     }
 
     public <E> E withTarget(Object target) {
