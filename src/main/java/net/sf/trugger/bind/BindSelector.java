@@ -57,6 +57,16 @@ public interface BindSelector {
   FieldSpecifier toFields();
 
   /**
+   * Binds to a field selection.
+   * <p>
+   * This bind applies only to non-final fields and uses the target hierarchy.
+   *
+   * @return a component for make the selection.
+   * @since 2.7
+   */
+  FieldSpecifier toField();
+
+  /**
    * Binds to a selection of bindable elements.
    *
    * @return a component for make the selection.
@@ -71,5 +81,13 @@ public interface BindSelector {
    * @return a component for make the selection.
    */
   ElementSpecifier toElement(String name);
+
+  /**
+   * Binds to a bindable element selection.
+   *
+   * @return a component for make the selection.
+   * @since 2.7
+   */
+  ElementSpecifier toElement();
 
 }

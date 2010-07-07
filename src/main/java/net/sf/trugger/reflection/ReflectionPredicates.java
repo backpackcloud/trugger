@@ -335,6 +335,12 @@ public class ReflectionPredicates {
    */
   public static final CompositePredicate<Class<?>> ABSTRACT_CLASS = classWithModifiers(Modifier.ABSTRACT);
   /**
+   * Predicate that returns <code>true</code> if a class is not <i>abstract</i>.
+   *
+   * @since 2.7
+   */
+  public static final CompositePredicate<Class<?>> NON_ABSTRACT_CLASS = ABSTRACT_CLASS.negate();
+  /**
    * Predicate that returns <code>true</code> if a class is an <i>interface</i>
    * and is not an <i>annotation</i>.
    */
@@ -722,5 +728,20 @@ public class ReflectionPredicates {
    * A predicate that returns <code>true</code> if a class is not anonymous.
    */
   public static final CompositePredicate<Class<?>> NON_ANONYMOUS = ANONYMOUS.negate();
+
+  public static final CompositePredicate<Method> methodDeclaredIn(final Class type) {
+    return newComposition(new Predicate<Method>() {
+
+      public boolean evaluate(Method element) {
+        Class<?> declaringClass = element.getDeclaringClass();
+        return type.isAssignableFrom(declaringClass);
+      }
+
+      public String toString() {
+        return String.format("Declared in %s", type);
+      }
+
+    });
+  }
 
 }

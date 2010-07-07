@@ -27,9 +27,9 @@ import net.sf.trugger.bind.BindableElement;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
-import net.sf.trugger.validation.ValidationContext;
 import net.sf.trugger.validation.InvalidReferenceException;
 import net.sf.trugger.validation.Validation;
+import net.sf.trugger.validation.ValidationContext;
 import net.sf.trugger.validation.ValidationException;
 import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorBinder;
@@ -46,11 +46,11 @@ public class TruggerValidatorBinder implements ValidatorBinder {
   public void configureBinds(Validator validator, ValidatorContext context, Binder binder) {
     Annotation annotation = context.annotation();
     Class<? extends Annotation> annotationType = annotation.annotationType();
-    binder.bind(annotation).toElements().ofType(annotationType);
-    binder.bind(annotation).toElements().annotatedWith(TargetAnnotation.class);
-    binder.bind(context.target()).toElements().annotatedWith(TargetObject.class);
+    binder.bind(annotation).toElement().ofType(annotationType);
+    binder.bind(annotation).toElement().annotatedWith(TargetAnnotation.class);
+    binder.bind(context.target()).toElement().annotatedWith(TargetObject.class);
     binder.use(new TargetElementResolver(context)).toElements().annotatedWith(TargetElement.class);
-    binder.bind(context.validationContext()).toElements().annotatedWith(ValidationContext.class);
+    binder.bind(context.validationContext()).toElement().annotatedWith(ValidationContext.class);
     bindReferences(context, binder, validator);
   }
 

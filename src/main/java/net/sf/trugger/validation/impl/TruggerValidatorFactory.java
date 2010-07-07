@@ -58,15 +58,18 @@ public class TruggerValidatorFactory implements ValidatorFactory {
         @Override
         protected Validator instantiate(AnnotatedElement key, Class<? extends Validator> classToCreate)
             throws Throwable {
+          Validator validator;
           //don't try to subclass final classes
           if (ReflectionPredicates.FINAL_CLASS.evaluate(classToCreate)) {
             /*
              * The proxy for interface is not useful because the binds will not work.
              * So, the validator itself is returned.
              */
-            return super.instantiate(key, classToCreate);
+            validator = super.instantiate(key, classToCreate);
+          } else {
+            validator = new TruggerValidatorInterceptor().createProxy().implementing(Validator.class).extending(classToCreate);
           }
-          return new TruggerValidatorInterceptor().createProxy().implementing(Validator.class).extending(classToCreate);
+          return bindAnnotation(key, validator);
         }
       };
 

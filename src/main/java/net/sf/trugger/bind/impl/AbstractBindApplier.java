@@ -59,7 +59,7 @@ public abstract class AbstractBindApplier implements BindApplier {
     if ((value == null) && (resolver != null)) {
       bindValue = resolver.resolve(element);
     }
-    if ((bindValue != null) && Utils.areAssignable(element.type(), bindValue.getClass())) {
+    if ((bindValue == null) || Utils.areAssignable(element.type(), bindValue.getClass())) {
       element.bind(bindValue);
     }
   }

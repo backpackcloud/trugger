@@ -22,8 +22,10 @@ import net.sf.trugger.bind.BindSelector;
 import net.sf.trugger.element.Elements;
 import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.selector.ElementSelector;
+import net.sf.trugger.selector.ElementSpecifier;
 import net.sf.trugger.selector.ElementsSelector;
 import net.sf.trugger.selector.FieldSelector;
+import net.sf.trugger.selector.FieldSpecifier;
 import net.sf.trugger.selector.FieldsSelector;
 
 /**
@@ -59,6 +61,12 @@ public class ValueBinder implements BindSelector {
     return selector;
   }
 
+  public FieldSpecifier toField() {
+    FieldSelector selector = Reflection.reflect().field().nonFinal().recursively();
+    binds.add(new BindableElementsBindApplier(selector, value));
+    return selector;
+  }
+
   public ElementsSelector toElements() {
     ElementsSelector selector = Elements.elements();
     binds.add(new BindableElementsBindApplier(selector.forBind(), value));
@@ -67,6 +75,12 @@ public class ValueBinder implements BindSelector {
 
   public ElementSelector toElement(String name) {
     ElementSelector selector = Elements.element(name);
+    binds.add(new BindableElementBindApplier(selector.forBind(), value));
+    return selector;
+  }
+
+  public ElementSpecifier toElement() {
+    ElementSelector selector = Elements.element();
     binds.add(new BindableElementBindApplier(selector.forBind(), value));
     return selector;
   }

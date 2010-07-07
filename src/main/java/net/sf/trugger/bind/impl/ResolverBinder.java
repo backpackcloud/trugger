@@ -57,6 +57,12 @@ public class ResolverBinder implements BindSelector {
     return selector;
   }
 
+  public FieldSpecifier toField() {
+    FieldSelector selector = Reflection.reflect().field().nonFinal().recursively();
+    binds.add(new BindableElementBindApplier(selector, resolver));
+    return selector;
+  }
+
   public FieldSpecifier toFields() {
     FieldsSelector selector = Reflection.reflect().fields().nonFinal().recursively();
     binds.add(new BindableElementsBindApplier(selector, resolver));
@@ -71,6 +77,12 @@ public class ResolverBinder implements BindSelector {
 
   public ElementSpecifier toElement(String name) {
     ElementSelector selector = Elements.element(name);
+    binds.add(new BindableElementBindApplier(selector.forBind(), resolver));
+    return selector;
+  }
+
+  public ElementSpecifier toElement() {
+    ElementSelector selector = Elements.element();
     binds.add(new BindableElementBindApplier(selector.forBind(), resolver));
     return selector;
   }

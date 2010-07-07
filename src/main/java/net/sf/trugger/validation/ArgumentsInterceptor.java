@@ -28,6 +28,7 @@ import net.sf.trugger.factory.Factory;
 import net.sf.trugger.interception.Interceptor;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.reflection.Reflection;
+import net.sf.trugger.reflection.ReflectionPredicates;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
 
 /**
@@ -47,19 +48,41 @@ public class ArgumentsInterceptor extends Interceptor {
 
   private final List<GenericTypeMapper> mappers = new LinkedList<GenericTypeMapper>();
 
+  /**
+   * Indicates to filter every method call for check against wrong type
+   * arguments.
+   *
+   * @return the component for defining the argument indexes.
+   */
+  protected final ArgumentIndexSelector ifAnyMethodOf(Class<?> declaringClass) {
+    return ifMethodMatches(ReflectionPredicates.methodDeclaredIn(declaringClass));
+  }
+
+  /**
+   * Indicates to filter a method call for check against wrong type arguments.
+   *
+   * @param predicate
+   *          the predicate for filtering the method.
+   * @return the component for defining the argument indexes.
+   */
   protected final ArgumentIndexSelector ifMethodMatches(final Predicate<Method> predicate) {
     final GenericTypeMapper mapper = new GenericTypeMapper();
     mapper.predicate = predicate;
     return new ArgumentIndexSelector() {
 
-      public GenericTypeSelector useArgument(int index) {
-        mapper.argumentIndex = index;
+      public GenericTypeSelector useArguments(int... indexes) {
+        mapper.argumentIndexes = indexes;
         return new GenericTypeSelector() {
+
           public void andCheckGenericType(String genericType) {
             mapper.genericParam = genericType;
             mappers.add(mapper);
           }
         };
+      }
+
+      public GenericTypeSelector useArgument(int index) {
+        return useArguments(index);
       }
 
     };
@@ -70,13 +93,16 @@ public class ArgumentsInterceptor extends Interceptor {
     Method method = method();
     for (GenericTypeMapper mapper : mappers) {
       if (mapper.predicate.evaluate(method())) {
-        Object value = arg(mapper.argumentIndex);
-        Class<?> genericType = Reflection.reflect().genericType(mapper.genericParam).in(target);
-        if (value != null) {
-          boolean generic = !genericType.equals(Object.class);
-          if (generic ? !genericType.isAssignableFrom(value.getClass()) : !isTypeAccepted(value.getClass(), resolveType(target))) {
-            throw new IllegalArgumentException(String.format(
-                "The type %s is not compatible with any type defined in the validator.", value.getClass()));
+        for (int i : mapper.argumentIndexes) {
+          Object value = arg(i);
+          Class<?> genericType = Reflection.reflect().genericType(mapper.genericParam).in(target);
+          if (value != null) {
+            boolean generic = !genericType.equals(Object.class);
+            if (generic ? !genericType.isAssignableFrom(value.getClass()) : !isTypeAccepted(value.getClass(),
+                resolveType(target))) {
+              throw new IllegalArgumentException(String.format(
+                  "The type %s is not compatible with any type defined in the validator.", value.getClass()));
+            }
           }
         }
       }
@@ -127,14 +153,17 @@ public class ArgumentsInterceptor extends Interceptor {
   }
 
   private static class GenericTypeMapper {
+
     Predicate<Method> predicate;
     String genericParam;
-    int argumentIndex;
+    int[] argumentIndexes;
   }
 
   public interface ArgumentIndexSelector {
 
     GenericTypeSelector useArgument(int index);
+
+    GenericTypeSelector useArguments(int... indexes);
 
   }
 

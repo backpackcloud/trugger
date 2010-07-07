@@ -20,6 +20,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 
 import net.sf.trugger.CreateException;
+import net.sf.trugger.bind.Bind;
+import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
 import net.sf.trugger.reflection.Reflection;
@@ -109,14 +111,17 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    *          the key passed to create the object.
    * @return the found element
    */
-  private Class<? extends Annotation> deepSearch(AnnotatedElement key) {
+  protected Annotation deepSearch(AnnotatedElement key) {
     Annotation[] annotations = key.getAnnotations();
     for (Annotation annotation : annotations) {
       Class<? extends Annotation> type = annotation.annotationType();
       if (type.isAnnotationPresent(annotationType)) {
-        return type;
-      } else if(!type.getPackage().getName().equals("java.lang.annotation")) {
-        deepSearch(type);
+        return annotation;
+      } else if (!type.getPackage().getName().equals("java.lang.annotation")) {
+        Annotation deeper = deepSearch(type);
+        if (deeper != null) {
+          return deeper;
+        }
       }
     }
     return null;
@@ -125,7 +130,7 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
   @Override
   protected final Class<? extends E> resolveClassForCreation(AnnotatedElement key) {
     if (!key.isAnnotationPresent(annotationType)) {
-      key = deepSearch(key);
+      key = deepSearch(key).annotationType();
     }
     Annotation classIdentifier = key.getAnnotation(annotationType);
     Element element = Elements.element(elementName).in(annotationType);
@@ -133,6 +138,43 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
       throw new CreateException("Cannot find property " + elementName + " in " + annotationType.getName());
     }
     return element.in(classIdentifier).value();
+  }
+
+  /**
+   * Binds the annotation that contains the annotation used to create an
+   * instance.
+   *
+   * @param key
+   *          the key passed to this factory.
+   * @param instance
+   *          the instance to bind the annotation.
+   * @return the given instance
+   * @since 2.7
+   */
+  protected E bindAnnotation(AnnotatedElement key, E instance) {
+    if (!key.isAnnotationPresent(annotationType)) {
+      Binder binder = Bind.newBind();
+      registerAnnotation(binder, key);
+      binder.applyBinds(instance);
+    }
+    return instance;
+  }
+
+  /**
+   * Registers the annotation that contains the annotation used to create an
+   * instance in the given binder.
+   *
+   * @param binder
+   *          the binder for registering the bind.
+   * @param key
+   *          the key passed to this factory.
+   * @since 2.7
+   */
+  protected void registerAnnotation(Binder binder, AnnotatedElement key) {
+    if (!key.isAnnotationPresent(annotationType)) {
+      Annotation annotation = deepSearch(key);
+      binder.bind(annotation).toElement().ofType(annotation.annotationType());
+    }
   }
 
 }
