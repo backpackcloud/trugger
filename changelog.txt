@@ -1,7 +1,12 @@
 Version 2.7.0
+- New Modules:
+  - Swing bind module
+  - Formatters
 - Major changes:
   - Reformulated DSL Criteria.
   - AnnotationBased factory now searchs in the entire annotation levels.
+  - Element representations for swing components
+
 Version 2.6.0
 - Major changes:
   - Validation Binder for using Seam Components inside of a validator.
