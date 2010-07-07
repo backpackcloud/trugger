@@ -16,11 +16,18 @@
  */
 package net.sf.trugger.validation;
 
+import static net.sf.trugger.util.Utils.isTypeAccepted;
+import static net.sf.trugger.util.Utils.resolveType;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.sf.trugger.factory.Factory;
 import net.sf.trugger.interception.Interceptor;
+import net.sf.trugger.predicate.Predicate;
+import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
 
 /**
@@ -38,10 +45,44 @@ public class ArgumentsInterceptor extends Interceptor {
 
   private final Factory<ValidatorContext, Validator> factory = Validation.newValidatorFactory();
 
+  private final List<GenericTypeMapper> mappers = new LinkedList<GenericTypeMapper>();
+
+  protected final ArgumentIndexSelector ifMethodMatches(final Predicate<Method> predicate) {
+    final GenericTypeMapper mapper = new GenericTypeMapper();
+    mapper.predicate = predicate;
+    return new ArgumentIndexSelector() {
+
+      public GenericTypeSelector useArgument(int index) {
+        mapper.argumentIndex = index;
+        return new GenericTypeSelector() {
+          public void andCheckGenericType(String genericType) {
+            mapper.genericParam = genericType;
+            mappers.add(mapper);
+          }
+        };
+      }
+
+    };
+  }
+
   @Override
   protected Object intercept() throws Throwable {
+    Method method = method();
+    for (GenericTypeMapper mapper : mappers) {
+      if (mapper.predicate.evaluate(method())) {
+        Object value = arg(mapper.argumentIndex);
+        Class<?> genericType = Reflection.reflect().genericType(mapper.genericParam).in(target);
+        if (value != null) {
+          boolean generic = !genericType.equals(Object.class);
+          if (generic ? !genericType.isAssignableFrom(value.getClass()) : !isTypeAccepted(value.getClass(), resolveType(target))) {
+            throw new IllegalArgumentException(String.format(
+                "The type %s is not compatible with any type defined in the validator.", value.getClass()));
+          }
+        }
+      }
+    }
     try {
-      test(method());
+      test(method);
       test(getTargetMethod());
     } catch (InvalidArgumentException e) {
       return onInvalidArgument(e.getArgument());
@@ -83,6 +124,24 @@ public class ArgumentsInterceptor extends Interceptor {
    */
   protected Object onInvalidArgument(Object argument) {
     throw new IllegalArgumentException("Invalid argument passed: " + String.valueOf(argument));
+  }
+
+  private static class GenericTypeMapper {
+    Predicate<Method> predicate;
+    String genericParam;
+    int argumentIndex;
+  }
+
+  public interface ArgumentIndexSelector {
+
+    GenericTypeSelector useArgument(int index);
+
+  }
+
+  public interface GenericTypeSelector {
+
+    void andCheckGenericType(String genericType);
+
   }
 
 }

@@ -26,11 +26,11 @@ import net.sf.trugger.util.Null;
 
 /**
  * A common abstraction for an Element.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public abstract class AbstractElement implements Element {
-  
+
   /**
    * The element for retrieving annotation metadata.
    */
@@ -46,55 +46,60 @@ public abstract class AbstractElement implements Element {
   public AbstractElement(String name) {
     this.name = name;
   }
-  
+
   @Override
   public String name() {
     return name;
   }
-  
+
   @Override
   public Class<?> type() {
     return Object.class;
   }
-  
+
   @Override
   public final <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
     return annotatedElement.getAnnotation(annotationClass);
   }
-  
+
   @Override
   public final Annotation[] getAnnotations() {
     return annotatedElement.getAnnotations();
   }
-  
+
   @Override
   public final Annotation[] getDeclaredAnnotations() {
     return annotatedElement.getDeclaredAnnotations();
   }
-  
+
   @Override
   public final boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
     return annotatedElement.isAnnotationPresent(annotationClass);
   }
-  
+
   @Override
   public boolean isSpecific() {
     return false;
   }
-  
+
+  @Override
+  public <E> E target() {
+    return null;
+  }
+
   @Override
   public Object value() throws HandlingException {
     throw new NonSpecificElementException();
   }
-  
+
   @Override
   public void value(Object value) throws HandlingException {
     throw new NonSpecificElementException();
   }
-  
+
   @Override
   public String toString() {
     return name + " : " + type().getName();
   }
-  
+
 }

@@ -44,6 +44,10 @@ public class SpecificElement extends ElementDecorator implements Element {
     return true;
   }
 
+  public <E> E target() {
+    return (E) target;
+  }
+
   @Override
   public Object value() throws HandlingException {
     return in(target).value();

@@ -157,6 +157,10 @@ public class DefaultElementFinder implements Finder<Element> {
       return decorated.isSpecific();
     }
 
+    public <E> E target() {
+      return (E) decorated.target();
+    }
+
     public String name() {
       return decorated.name();
     }

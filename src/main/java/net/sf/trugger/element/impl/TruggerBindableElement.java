@@ -22,13 +22,13 @@ import net.sf.trugger.element.Element;
 
 /**
  * An {@link BindableElement} composed by an {@link Element}.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class TruggerBindableElement extends ElementDecorator implements BindableElement {
-  
+
   private final Object target;
-  
+
   /**
    * Creates a new FieldElement based on the given field and target.
    */
@@ -36,30 +36,35 @@ public final class TruggerBindableElement extends ElementDecorator implements Bi
 	  super(element);
     this.target = target;
   }
-  
+
   public <E> E getTarget() {
     return (E) target;
   }
-  
+
   public void bind(Object value) {
     value(value);
   }
-  
+
   @Override
   public boolean isSpecific() {
     return true;
   }
-  
+
+  @Override
+  public <E> E target() {
+    return (E) target;
+  }
+
   @Override
   public <E> E value() throws HandlingException {
     return (E) element.in(target).value();
   }
-  
+
   @Override
   public void value(Object value) throws HandlingException {
     element.in(target).value(value);
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -67,7 +72,7 @@ public final class TruggerBindableElement extends ElementDecorator implements Bi
     result = prime * result + ((target == null) ? 0 : target.hashCode());
     return result;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -93,5 +98,5 @@ public final class TruggerBindableElement extends ElementDecorator implements Bi
     }
     return false;
   }
-  
+
 }

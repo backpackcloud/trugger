@@ -31,7 +31,7 @@ import net.sf.trugger.reflection.Reflection;
  * <p>
  * This class also supports nested annotations by scanning the annotations of
  * the key.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  * @param <A>
  *          the annotation type
@@ -40,7 +40,7 @@ import net.sf.trugger.reflection.Reflection;
  */
 public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory<AnnotatedElement, E> implements
     Factory<AnnotatedElement, E> {
-  
+
   /**
    * The annotation type.
    */
@@ -49,20 +49,20 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    * The property to extract the class for instantiation.
    */
   private final String elementName;
-  
+
   /**
    * Creates a new AnnotationBasedFactory based on the specified arguments.
-   * 
+   *
    * @param annotationType
    *          the annotation type that contains the object class
    */
   public AnnotationBasedFactory(Class<A> annotationType) {
     this(annotationType, "value");
   }
-  
+
   /**
    * Creates a new AnnotationBasedFactory based on the specified arguments.
-   * 
+   *
    * @param annotationType
    *          the annotation type that contains the object class
    * @param elementName
@@ -72,7 +72,7 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
     this.annotationType = annotationType;
     this.elementName = elementName;
   }
-  
+
   /**
    * Creates a new AnnotationBasedFactory.
    * <p>
@@ -82,13 +82,13 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
   protected AnnotationBasedFactory() {
     this("value");
   }
-  
+
   /**
    * Creates a new AnnotationBasedFactory based on the specified arguments.
    * <p>
    * The use of this constructor indicates that the generic parameter that
    * defines the annotation type is defined.
-   * 
+   *
    * @param elementName
    *          the element name to get the class.
    */
@@ -96,15 +96,15 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
     this.annotationType = Reflection.reflect().genericType("A").in(this);
     this.elementName = elementName;
   }
-  
+
   public boolean canCreate(AnnotatedElement key) {
     return key.isAnnotationPresent(annotationType) || (deepSearch(key) != null);
   }
-  
+
   /**
    * Searches in the key annotations for an annotation that has the
    * {@link #annotationType defined annotation}.
-   * 
+   *
    * @param key
    *          the key passed to create the object.
    * @return the found element
@@ -115,11 +115,13 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
       Class<? extends Annotation> type = annotation.annotationType();
       if (type.isAnnotationPresent(annotationType)) {
         return type;
+      } else if(!type.getPackage().getName().equals("java.lang.annotation")) {
+        deepSearch(type);
       }
     }
     return null;
   }
-  
+
   @Override
   protected final Class<? extends E> resolveClassForCreation(AnnotatedElement key) {
     if (!key.isAnnotationPresent(annotationType)) {
@@ -132,5 +134,5 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
     }
     return element.in(classIdentifier).value();
   }
-  
+
 }

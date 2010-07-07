@@ -40,6 +40,10 @@ class TruggerValidatorInterceptor extends ArgumentsInterceptor {
   private static final Predicate<Method> predicate =
       ofReturnType(boolean.class).and(named("isValid")).and(withParameters(Object.class));
 
+  public TruggerValidatorInterceptor() {
+    ifMethodMatches(predicate).useArgument(0).andCheckGenericType("T");
+  }
+  
   @Override
   protected Object intercept() throws Throwable {
     if (predicate.evaluate(method())) {

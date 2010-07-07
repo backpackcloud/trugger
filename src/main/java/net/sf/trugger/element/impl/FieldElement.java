@@ -26,13 +26,13 @@ import net.sf.trugger.reflection.Reflection;
 
 /**
  * An {@link Element} originated from a {@link Field}.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class FieldElement extends AbstractElement implements Element {
-  
+
   private final Field field;
-  
+
   /**
    * Creates a new FieldElement based on the given field.
    */
@@ -41,17 +41,17 @@ public final class FieldElement extends AbstractElement implements Element {
     this.field = field;
     this.annotatedElement = field;
   }
-  
+
   @Override
   public Class<?> declaringClass() {
     return field.getDeclaringClass();
   }
-  
+
   @Override
   public Class<?> type() {
     return field.getType();
   }
-  
+
   @Override
   public Object value() throws HandlingException {
     if(isSpecific()) {
@@ -59,7 +59,7 @@ public final class FieldElement extends AbstractElement implements Element {
     }
     throw new NonSpecificElementException();
   }
-  
+
   @Override
   public void value(Object value) throws HandlingException {
     if (isSpecific()) {
@@ -68,24 +68,24 @@ public final class FieldElement extends AbstractElement implements Element {
       throw new NonSpecificElementException();
     }
   }
-  
+
   public ValueHandler in(Object target) {
     return Reflection.handle(this.field).in(target);
   }
-  
+
   public boolean isReadable() {
     return true; // the invoker will set the field accessible before accessing it
   }
-  
+
   public boolean isWritable() {
     return !Reflection.isFinal(field);
   }
-  
+
   @Override
   public boolean isSpecific() {
     return Reflection.isStatic(field);
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -93,7 +93,7 @@ public final class FieldElement extends AbstractElement implements Element {
     result = prime * result + ((field == null) ? 0 : field.hashCode());
     return result;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -115,5 +115,5 @@ public final class FieldElement extends AbstractElement implements Element {
     }
     return true;
   }
-  
+
 }

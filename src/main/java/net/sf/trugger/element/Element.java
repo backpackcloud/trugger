@@ -80,6 +80,15 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
   boolean isSpecific();
 
   /**
+   * Returns the target for this element in case of a {@link #isSpecific()
+   * specific} one.
+   *
+   * @return the target for this element if it is {@link #isSpecific() specific}
+   *         or <code>null</code> if not.
+   */
+  <E> E target();
+
+  /**
    * Returns the value if this element is {@link #isSpecific() specific}.
    */
   @Override
