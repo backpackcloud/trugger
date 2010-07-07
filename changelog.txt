@@ -1,3 +1,6 @@
+Version 2.7.0
+- Major changes:
+  - Reformulated DSL Criteria.
 Version 2.6.0
 - Major changes:
   - Validation Binder for using Seam Components inside of a validator.

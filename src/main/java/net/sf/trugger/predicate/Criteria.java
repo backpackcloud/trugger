@@ -40,12 +40,30 @@ public interface Criteria<E, V> {
   void equal(V value);
 
   /**
+   * The expected value should be equal than the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void eq(V value);
+
+  /**
    * The expected value should be different from the given value.
    *
    * @param value
    *          the restriction value.
    */
   void differ(V value);
+
+  /**
+   * The expected value should be different from the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void diff(V value);
 
   /**
    * The expected value should be less than the given value.
@@ -56,12 +74,39 @@ public interface Criteria<E, V> {
   void lessThan(V value);
 
   /**
+   * The expected value should be less than the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void lt(V value);
+
+  /**
    * The expected value should be equal or less than the given value.
    *
    * @param value
    *          the restriction value.
    */
   void equalOrLessThan(V value);
+
+  /**
+   * The expected value should be equal or less than the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void lessOrEqual(V value);
+
+  /**
+   * The expected value should be equal or less than the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void le(V value);
 
   /**
    * The expected value should be greater than the given value.
@@ -72,12 +117,39 @@ public interface Criteria<E, V> {
   void greaterThan(V value);
 
   /**
+   * The expected value should be greater than the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void gt(V value);
+
+  /**
    * The expected value should be equal or greater than the given value.
    *
    * @param value
    *          the restriction value.
    */
   void equalOrGreaterThan(V value);
+
+  /**
+   * The expected value should be equal or greater than the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void greaterOrEqual(V value);
+
+  /**
+   * The expected value should be equal or greater than the given value.
+   *
+   * @param value
+   *          the restriction value.
+   * @since 2.7
+   */
+  void ge(V value);
 
   /**
    * The expected value should match the given value.

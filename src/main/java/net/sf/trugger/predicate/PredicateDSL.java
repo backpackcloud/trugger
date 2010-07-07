@@ -126,7 +126,7 @@ public class PredicateDSL<E> implements Predicate<E> {
    *
    * @return the component for making the restriction.
    */
-  public <V> Criteria<E, V> expect(V value) {
+  public <V> Criteria<E, V> expect(V obj) {
     return new Criteria<E, V>() {
 
       public void equal(V value) {
@@ -187,6 +187,38 @@ public class PredicateDSL<E> implements Predicate<E> {
         };
       }
 
+      public void diff(V value) {
+        differ(value);
+      }
+
+      public void eq(V value) {
+        equal(value);
+      }
+
+      public void ge(V value) {
+        greaterOrEqual(value);
+      }
+
+      public void greaterOrEqual(V value) {
+        equalOrGreaterThan(value);
+      }
+
+      public void gt(V value) {
+        greaterThan(value);
+      }
+
+      public void le(V value) {
+        lessOrEqual(value);
+      }
+
+      public void lessOrEqual(V value) {
+        equalOrLessThan(value);
+      }
+
+      public void lt(V value) {
+        lessThan(value);
+      }
+
     };
   }
 
@@ -195,7 +227,7 @@ public class PredicateDSL<E> implements Predicate<E> {
    *
    * @return the component for making the restriction.
    */
-  public <V> Criteria<E, V> dontExpect(V value) {
+  public <V> Criteria<E, V> dontExpect(V obj) {
     return new Criteria<E, V>() {
 
       public void equal(V value) {
@@ -263,6 +295,38 @@ public class PredicateDSL<E> implements Predicate<E> {
             tracker.track();
           }
         };
+      }
+
+      public void diff(V value) {
+        differ(value);
+      }
+
+      public void eq(V value) {
+        equal(value);
+      }
+
+      public void ge(V value) {
+        greaterOrEqual(value);
+      }
+
+      public void greaterOrEqual(V value) {
+        equalOrGreaterThan(value);
+      }
+
+      public void gt(V value) {
+        greaterThan(value);
+      }
+
+      public void le(V value) {
+        lessOrEqual(value);
+      }
+
+      public void lessOrEqual(V value) {
+        equalOrLessThan(value);
+      }
+
+      public void lt(V value) {
+        lessThan(value);
       }
 
     };
