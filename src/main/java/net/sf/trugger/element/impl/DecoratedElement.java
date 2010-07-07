@@ -62,7 +62,7 @@ public class DecoratedElement implements Element {
   }
 
   public <E> E target() {
-    return element.target();
+    return (E) element.target();
   }
 
   public String name() {

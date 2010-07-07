@@ -54,13 +54,13 @@ public abstract class ComponentElement<T> extends DecoratedElement {
 
       @Override
       public void value(Object value) throws HandlingException {
-        T component = element.in(target).value();
+        T component = (T) element.in(target).value();
         setComponentValue(component, value);
       }
 
       @Override
       public <E> E value() throws HandlingException {
-        T component = element.in(target).value();
+        T component = (T) element.in(target).value();
         return (E) getComponentValue(component);
       }
 
