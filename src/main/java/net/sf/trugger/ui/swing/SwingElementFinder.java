@@ -46,11 +46,11 @@ public class SwingElementFinder extends DefaultElementFinder implements Finder<E
 
     @Override
     public Element transform(Element element) {
-      Class componentElementType = getElementClass(element.type());
+      Class<? extends Element> componentElementType = getElementClass(element.type());
       if (componentElementType == null) {
         return element;
       }
-      return (Element) Reflection.newInstanceOf(componentElementType, element);
+      return Reflection.newInstanceOf(componentElementType, element);
     }
   };
 
