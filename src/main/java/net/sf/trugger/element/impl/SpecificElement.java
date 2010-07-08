@@ -24,7 +24,7 @@ import net.sf.trugger.element.Element;
  *
  * @author Marcelo Varella Barca Guimarães
  */
-public class SpecificElement extends ElementDecorator implements Element {
+public class SpecificElement extends DecoratedElement implements Element {
 
   protected final Object target;
 

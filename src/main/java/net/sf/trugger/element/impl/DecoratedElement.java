@@ -21,13 +21,11 @@ import java.lang.annotation.Annotation;
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.NonSpecificElementException;
 
 /**
  * Base class for all decorated elements.
  *
  * @author Marcelo Varella Barca Guimarães
- * @since 2.7
  */
 public class DecoratedElement implements Element {
 
@@ -75,19 +73,12 @@ public class DecoratedElement implements Element {
 
   @Override
   public void value(Object value) throws HandlingException {
-    if(isSpecific()) {
-      in(target()).value(value);
-    } else {
-      throw new NonSpecificElementException();
-    }
+    in(target()).value(value);
   }
 
   @Override
   public <E> E value() throws HandlingException {
-    if (isSpecific()) {
-      return (E) in(target()).value();
-    }
-    throw new NonSpecificElementException();
+    return (E) in(target()).value();
   }
 
   @Override
@@ -101,6 +92,21 @@ public class DecoratedElement implements Element {
 
   public boolean isWritable() {
     return element.isWritable();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return element.equals(obj);
+  }
+
+  @Override
+  public int hashCode() {
+    return element.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return element.toString();
   }
 
 }

@@ -88,12 +88,19 @@ public abstract class AbstractElement implements Element {
   }
 
   @Override
-  public Object value() throws HandlingException {
-    throw new NonSpecificElementException();
+  public void value(Object value) throws HandlingException {
+    if(isSpecific()) {
+      in(target()).value(value);
+    } else {
+      throw new NonSpecificElementException();
+    }
   }
 
   @Override
-  public void value(Object value) throws HandlingException {
+  public <E> E value() throws HandlingException {
+    if (isSpecific()) {
+      return (E) in(target()).value();
+    }
     throw new NonSpecificElementException();
   }
 

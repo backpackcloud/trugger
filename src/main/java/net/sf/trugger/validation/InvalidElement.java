@@ -66,11 +66,4 @@ public interface InvalidElement extends Element {
    */
   String joinMessages(String separator, MessagePart type);
 
-  /**
-   * @return the validated target.
-   *
-   * @since 2.6
-   */
-  Object target();
-
 }

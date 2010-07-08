@@ -25,7 +25,7 @@ import net.sf.trugger.element.Element;
  *
  * @author Marcelo Varella Barca Guimarães
  */
-public final class TruggerBindableElement extends ElementDecorator implements BindableElement {
+public final class TruggerBindableElement extends DecoratedElement implements BindableElement {
 
   private final Object target;
 

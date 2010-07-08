@@ -25,7 +25,7 @@ import net.sf.trugger.CreateException;
 import net.sf.trugger.annotation.TargetElement;
 import net.sf.trugger.bind.PostBind;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.impl.ElementDecorator;
+import net.sf.trugger.element.impl.DecoratedElement;
 import net.sf.trugger.message.Message;
 import net.sf.trugger.message.MessagePart;
 import net.sf.trugger.reflection.Reflection;
@@ -131,7 +131,7 @@ public class ValidValidator implements Validator<Object> {
     defaultValidationStrategy = strategy;
   }
 
-  private static class NestedInvalidElement extends ElementDecorator implements InvalidElement {
+  private static class NestedInvalidElement extends DecoratedElement implements InvalidElement {
 
     private final InvalidElement element;
     private final Element root;
@@ -162,14 +162,6 @@ public class ValidValidator implements Validator<Object> {
 
     public Object invalidValue() {
       return element.invalidValue();
-    }
-
-    public String toString() {
-      return element.toString();
-    }
-
-    public Object target() {
-      return element.target();
     }
 
     @Override

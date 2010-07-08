@@ -23,36 +23,35 @@ import net.sf.trugger.HandlingException;
 import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
-import net.sf.trugger.element.NonSpecificElementException;
 
 /**
  * A class to handle a path of {@link Element properties}.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class NestedElement extends AbstractElement implements Element {
-  
+
   /** the access path */
   private final List<Element> path;
   private final Object target;
-  
+
   NestedElement(String name, List<Element> path, Object target) {
     super(name);
     this.path = path;
     this.target = target;
     this.annotatedElement = getLast();
   }
-  
+
   @Override
   public Class<?> declaringClass() {
     return getFirst().declaringClass();
   }
-  
+
   @Override
   public Class<?> type() {
     return getLast().type();
   }
-  
+
   public boolean isReadable() {
     for (Element property : getPath()) {
       if (!property.isReadable()) {
@@ -61,7 +60,7 @@ public final class NestedElement extends AbstractElement implements Element {
     }
     return true;
   }
-  
+
   public boolean isWritable() {
     if (path.size() > 1) {
       for (Element property : getPath().subList(0, path.size() - 1)) {
@@ -72,41 +71,31 @@ public final class NestedElement extends AbstractElement implements Element {
     }
     return getLast().isWritable();
   }
-  
+
   @Override
-  public Object value() throws HandlingException {
-    if(isSpecific()) {
-      return in(target).value();
-    }
-    throw new NonSpecificElementException();
+  public <E> E target() {
+    return (E) target;
   }
-  
+
   @Override
-  public void value(Object value) throws HandlingException {
-    if(isSpecific()) {
-      in(target).value(value);
-    }
-    throw new NonSpecificElementException();
-  }
-  
   public ValueHandler in(Object target) {
     return new NestedElementHandler(target);
   }
-  
+
   /**
    * @return the path
    */
   public final List<Element> getPath() {
     return path;
   }
-  
+
   /**
    * @return the first property in the path
    */
   public final Element getFirst() {
     return getPath().get(0);
   }
-  
+
   /**
    * @param index
    *          the index
@@ -115,19 +104,19 @@ public final class NestedElement extends AbstractElement implements Element {
   public final Element get(int index) {
     return getPath().get(index);
   }
-  
+
   /**
    * @return the last property in the path
    */
   public final Element getLast() {
     return getPath().get(path.size() - 1);
   }
-  
+
   @Override
   public boolean isSpecific() {
     return getLast().isSpecific();
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -135,7 +124,7 @@ public final class NestedElement extends AbstractElement implements Element {
     result = prime * result + path.hashCode();
     return result;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -153,16 +142,16 @@ public final class NestedElement extends AbstractElement implements Element {
     }
     return true;
   }
-  
+
   private class NestedElementHandler implements ValueHandler {
-    
+
     private final Object source;
-    
+
     public NestedElementHandler(Object source) {
       super();
       this.source = source;
     }
-    
+
     public <E> E value() throws HandlingException {
       Object value = source;
       for (Element property : getPath()) {
@@ -170,7 +159,7 @@ public final class NestedElement extends AbstractElement implements Element {
       }
       return (E) value;
     }
-    
+
     public void value(Object value) throws HandlingException {
       Object _source = source;
       Element p = null;
@@ -184,9 +173,9 @@ public final class NestedElement extends AbstractElement implements Element {
         }
       }
     }
-    
+
   }
-  
+
   static NestedElement createNestedElement(Object source, String elementsPath) {
     String[] names = elementsPath.split("\\.");
     List<Element> path = new ArrayList<Element>(names.length);
@@ -203,5 +192,5 @@ public final class NestedElement extends AbstractElement implements Element {
     }
     return new NestedElement(elementsPath, path, source);
   }
-  
+
 }
