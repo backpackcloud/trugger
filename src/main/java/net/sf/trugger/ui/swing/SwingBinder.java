@@ -23,6 +23,7 @@ import net.sf.trugger.annotation.Bind;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
+import net.sf.trugger.util.Utils;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -33,18 +34,26 @@ public abstract class SwingBinder {
   protected final Object swingComponent;
   protected final Object target;
 
-  protected SwingBinder(Object swingComponent, Object target) {
+  private SwingBinder(Object swingComponent, Object target) {
     this.swingComponent = swingComponent;
     this.target = target;
   }
 
   public Binder newBinder() {
+    Class<?> type = Utils.resolveType(swingComponent);
+    if (!type.isAnnotationPresent(SwingBind.class)) {
+      throw new IllegalArgumentException("The swing component does not have a SwingBind annotation.");
+    }
+    SwingBind annotation = type.getAnnotation(SwingBind.class);
     Binder binder = net.sf.trugger.bind.Bind.newBind();
     Set<Element> elements = Elements.elements().annotatedWith(Bind.class).in(swingComponent);
     for (Element element : elements) {
       String elementName = element.getAnnotation(Bind.class).to();
       if (elementName.isEmpty()) {
         elementName = element.name();
+      }
+      if(!annotation.to().isEmpty()) {
+        elementName = String.format("%s.%s", annotation.to(), elementName);
       }
       configureBind(binder, element, elementName);
     }
@@ -80,6 +89,14 @@ public abstract class SwingBinder {
         binder.use(element(swingComponentElement.name(), swingComponent)).toElement(elementNameToBind);
       }
     }.newBinder();
+  }
+
+  public static void bindToUI(Object swingComponent, Object target) {
+    newBinderForUI(swingComponent, target).applyBinds(swingComponent);
+  }
+
+  public static void bindToTarget(Object swingComponent, Object target) {
+    newBinderForTarget(swingComponent, target).applyBinds(target);
   }
 
 }

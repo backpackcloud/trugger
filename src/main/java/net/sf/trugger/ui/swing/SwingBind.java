@@ -36,4 +36,12 @@ import net.sf.trugger.element.ElementFinderClass;
 @ElementFinderClass(SwingElementFinder.class)
 public @interface SwingBind {
 
+  /**
+   * Specifies which element should be the root of binds mapped in the child UI
+   * elements.
+   * <p>
+   * Defaults to the object itself.
+   */
+  String to() default "";
+
 }
