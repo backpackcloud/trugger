@@ -17,19 +17,25 @@
 package net.sf.trugger.test.ui.swing;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import net.sf.trugger.annotation.Bind;
 import net.sf.trugger.bind.Binder;
-import net.sf.trugger.formatter.formatters.DateFormat;
+import net.sf.trugger.formatter.formatters.Date;
+import net.sf.trugger.formatter.formatters.Number;
+import net.sf.trugger.formatter.formatters.NumberType;
 import net.sf.trugger.ui.swing.SwingBind;
 import net.sf.trugger.ui.swing.SwingBinder;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -48,19 +54,40 @@ public class SwingBindTest {
   @Bind
   private JComboBox sex = new JComboBox(new Sex[] { Sex.MALE, Sex.FEMALE });
 
+  @Bind
+  @Number
   private JTextField age = new JTextField();
 
   @Bind
-  @DateFormat("dd/MM/yyyy")
+  @Number(type = NumberType.DOUBLE, pattern = "#,##0.00;(#,##0.00)", locale = "pt_BR")
+  private JTextField salary = new JTextField();
+
+  @Bind
+  private JCheckBox married = new JCheckBox();
+
+  @Bind
+  @Date("dd/MM/yyyy")
   private JTextField birth = new JTextField();
 
   static class Person {
 
     String name;
     Sex sex;
-    int age;
-    Date birth;
+    Integer age;
+    Double salary;
+    java.util.Date birth;
+    Boolean married;
 
+  }
+
+  @Before
+  public void reset() {
+    txtName.setText("");
+    age.setText("");
+    salary.setText("");
+    birth.setText("");
+    married.setSelected(false);
+    sex.setSelectedItem(null);
   }
 
   @Test
@@ -68,22 +95,66 @@ public class SwingBindTest {
     Person person = new Person();
     person.name = "John";
     person.sex = Sex.MALE;
-    person.birth = new GregorianCalendar(2010, 0, 1).getTime();
+    person.birth = new GregorianCalendar(1980, 0, 1).getTime();
+    person.age = 25;
+    person.salary = 3800.50;
+    person.married = false;
+
     Binder binder = SwingBinder.newBinderForUI(this, person);
     binder.applyBinds(this);
 
     assertEquals("John", txtName.getText());
     assertEquals(Sex.MALE, sex.getSelectedItem());
-    assertEquals("01/01/2010", birth.getText());
+    assertEquals("01/01/1980", birth.getText());
+    assertEquals("25", age.getText());
+    assertEquals("3.800,50", salary.getText());
+    assertFalse(married.isSelected());
 
     person.name = null;
+    person.age = null;
+    person.birth = null;
+    person.salary = null;
+    person.sex = null;
+
     binder.applyBinds(this);
+
     assertEquals("", txtName.getText());
+    assertEquals(null, sex.getSelectedItem());
+    assertEquals("", birth.getText());
+    assertEquals("", age.getText());
+    assertEquals("", salary.getText());
   }
 
   @Test
   public void testBindToObject() throws Exception {
+    txtName.setText("Rosie");
+    sex.setSelectedItem(Sex.FEMALE);
+    age.setText("24");
+    salary.setText("5.480,60");
+    married.setSelected(true);
+    birth.setText("05/10/1972");
 
+    Person person = new Person();
+
+    Binder binder = SwingBinder.newBinderForTarget(this, person);
+    binder.applyBinds(person);
+
+    assertEquals("Rosie", person.name);
+    assertEquals(Sex.FEMALE, person.sex);
+    assertEquals(24, person.age.intValue());
+    assertEquals(5480.60, person.salary, 1e-4);
+    assertTrue(person.married);
+    assertEquals(new GregorianCalendar(1972, 9, 5).getTime(), person.birth);
+
+    reset();
+
+    binder.applyBinds(person);
+
+    assertNull(person.age);
+    assertNull(person.birth);
+    assertNull(person.name);
+    assertNull(person.salary);
+    assertNull(person.sex);
   }
 
 }

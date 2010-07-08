@@ -52,6 +52,8 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    */
   private final String elementName;
 
+  private ThreadLocal<Annotation> parent = new ThreadLocal<Annotation>();
+
   /**
    * Creates a new AnnotationBasedFactory based on the specified arguments.
    *
@@ -100,7 +102,15 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
   }
 
   public boolean canCreate(AnnotatedElement key) {
-    return key.isAnnotationPresent(annotationType) || (deepSearch(key) != null);
+    return key.isAnnotationPresent(annotationType) || search(key) != null;
+  }
+
+  public E create(AnnotatedElement key) throws CreateException {
+    try {
+      return super.create(key);
+    } finally {
+      parent.remove();
+    }
   }
 
   /**
@@ -111,26 +121,42 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    *          the key passed to create the object.
    * @return the found element
    */
-  protected Annotation deepSearch(AnnotatedElement key) {
+  protected Annotation search(AnnotatedElement key) {
+    Annotation found = null;
     Annotation[] annotations = key.getAnnotations();
     for (Annotation annotation : annotations) {
       Class<? extends Annotation> type = annotation.annotationType();
       if (type.isAnnotationPresent(annotationType)) {
-        return annotation;
+        found = annotation;
+        break;
       } else if (!type.getPackage().getName().equals("java.lang.annotation")) {
-        Annotation deeper = deepSearch(type);
+        Annotation deeper = search(type);
         if (deeper != null) {
-          return deeper;
+          found = deeper;
+          break;
         }
       }
     }
-    return null;
+    parent.set(found);
+    return found;
+  }
+
+  /**
+   * Returns the annotation that has the desired annotation type or
+   * <code>null</code> if the key itself has the annotation type present.
+   * <p>
+   * This method is only avaiable after
+   *
+   * @return the found annotation
+   */
+  protected final Annotation parentAnnotation() {
+    return parent.get();
   }
 
   @Override
   protected final Class<? extends E> resolveClassForCreation(AnnotatedElement key) {
     if (!key.isAnnotationPresent(annotationType)) {
-      key = deepSearch(key).annotationType();
+      key = search(key).annotationType();
     }
     Annotation classIdentifier = key.getAnnotation(annotationType);
     Element element = Elements.element(elementName).in(annotationType);
@@ -172,7 +198,7 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    */
   protected void registerAnnotation(Binder binder, AnnotatedElement key) {
     if (!key.isAnnotationPresent(annotationType)) {
-      Annotation annotation = deepSearch(key);
+      Annotation annotation = parentAnnotation();
       binder.bind(annotation).toElement().ofType(annotation.annotationType());
     }
   }

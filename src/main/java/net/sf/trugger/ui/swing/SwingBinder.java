@@ -24,17 +24,38 @@ import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
 
-
 /**
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public class SwingBinder {
+public abstract class SwingBinder {
 
-  private SwingBinder() {}
+  protected final Object swingComponent;
+  protected final Object target;
+
+  protected SwingBinder(Object swingComponent, Object target) {
+    this.swingComponent = swingComponent;
+    this.target = target;
+  }
+
+  public Binder newBinder() {
+    Binder binder = net.sf.trugger.bind.Bind.newBind();
+    Set<Element> elements = Elements.elements().annotatedWith(Bind.class).in(swingComponent);
+    for (Element element : elements) {
+      String elementName = element.getAnnotation(Bind.class).to();
+      if (elementName.isEmpty()) {
+        elementName = element.name();
+      }
+      configureBind(binder, element, elementName);
+    }
+    return binder;
+  }
+
+  protected abstract void configureBind(Binder binder, Element swingComponentElement, String elementNameToBind);
 
   private static Resolver<Object, Element> element(final String name, final Object target) {
     return new Resolver<Object, Element>() {
+
       public Object resolve(Element element) {
         return Elements.element(name).in(target).value();
       }
@@ -42,16 +63,23 @@ public class SwingBinder {
   }
 
   public static Binder newBinderForUI(Object swingComponent, Object target) {
-    Binder binder = net.sf.trugger.bind.Bind.newBind();
-    Set<Element> elements = Elements.elements().annotatedWith(Bind.class).in(swingComponent);
-    for (Element element : elements) {
-      String elementName = element.getAnnotation(Bind.class).to();
-      if(elementName.isEmpty()) {
-        elementName = element.name();
+    return new SwingBinder(swingComponent, target) {
+
+      @Override
+      protected void configureBind(Binder binder, Element swingComponentElement, String elementNameToBind) {
+        binder.use(element(elementNameToBind, target)).toElement(swingComponentElement.name());
       }
-      binder.use(element(elementName, target)).toElement(element.name());
-    }
-    return binder;
+    }.newBinder();
+  }
+
+  public static Binder newBinderForTarget(Object swingComponent, Object target) {
+    return new SwingBinder(swingComponent, target) {
+
+      @Override
+      protected void configureBind(Binder binder, Element swingComponentElement, String elementNameToBind) {
+        binder.use(element(swingComponentElement.name(), swingComponent)).toElement(elementNameToBind);
+      }
+    }.newBinder();
   }
 
 }

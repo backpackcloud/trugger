@@ -37,7 +37,7 @@ public abstract class BaseFactory<K, E> implements Factory<K, E> {
    * object, if the return is <code>false</code>, the method calls the method
    * {@link #defaultReturn(Object)}.
    */
-  public final E create(K key) throws CreateException {
+  public E create(K key) throws CreateException {
     E object;
     if (!canCreate(key)) {
       object = defaultReturn(key);

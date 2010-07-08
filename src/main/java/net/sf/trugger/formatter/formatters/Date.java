@@ -31,7 +31,7 @@ import net.sf.trugger.formatter.FormatterClass;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @FormatterClass(DateFormatter.class)
-public @interface DateFormat {
+public @interface Date {
 
   /**
    * The date format.

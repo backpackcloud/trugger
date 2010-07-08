@@ -21,6 +21,7 @@ import static net.sf.trugger.util.Utils.resolveType;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -95,13 +96,15 @@ public class ArgumentsInterceptor extends Interceptor {
       if (mapper.predicate.evaluate(method())) {
         for (int i : mapper.argumentIndexes) {
           Object value = arg(i);
-          Class<?> genericType = Reflection.reflect().genericType(mapper.genericParam).in(target);
-          if (value != null) {
-            boolean generic = !genericType.equals(Object.class);
-            if (generic ? !genericType.isAssignableFrom(value.getClass()) : !isTypeAccepted(value.getClass(),
-                resolveType(target))) {
-              throw new IllegalArgumentException(String.format(
-                  "The type %s is not compatible with any type defined in the validator.", value.getClass()));
+          if(method.getGenericParameterTypes()[i] instanceof ParameterizedType) {
+            Class<?> genericType = Reflection.reflect().genericType(mapper.genericParam).in(target);
+            if (value != null) {
+              boolean generic = !genericType.equals(Object.class);
+              if (generic ? !genericType.isAssignableFrom(value.getClass()) : !isTypeAccepted(value.getClass(),
+                  resolveType(target))) {
+                throw new IllegalArgumentException(String.format(
+                    "The type %s is not compatible with any type defined in %s.", value.getClass(), resolveType(target)));
+              }
             }
           }
         }

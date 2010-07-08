@@ -18,7 +18,6 @@ package net.sf.trugger.formatter.formatters;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import net.sf.trugger.bind.PostBind;
 import net.sf.trugger.formatter.Formatter;
@@ -26,14 +25,14 @@ import net.sf.trugger.validation.validator.NotEmpty;
 import net.sf.trugger.validation.validator.NotNull;
 
 /**
- * Implementation for {@link DateFormat} format.
+ * Formatter for {@link Date}.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public class DateFormatter implements Formatter<Date> {
+public class DateFormatter implements Formatter<java.util.Date> {
 
-  private DateFormat annotation;
+  private Date annotation;
   private SimpleDateFormat dateFormat;
 
   @PostBind
@@ -42,12 +41,12 @@ public class DateFormatter implements Formatter<Date> {
   }
 
   @Override
-  public String format(@NotNull Date value) {
+  public String format(@NotNull java.util.Date value) {
     return dateFormat.format(value);
   }
 
   @Override
-  public Date parse(@NotEmpty String value) {
+  public java.util.Date parse(@NotEmpty String value) {
     try {
       return dateFormat.parse(value);
     } catch (ParseException e) {

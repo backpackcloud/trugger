@@ -34,7 +34,7 @@ public class FormatterFactory extends AnnotationBasedFactory<FormatterClass, For
       }
 
       public Object parse(String value) {
-        return value;
+        return value == null || value.isEmpty() ? null : value ;
       }
 
     };
