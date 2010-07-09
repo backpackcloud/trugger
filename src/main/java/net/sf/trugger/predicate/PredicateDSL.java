@@ -144,18 +144,8 @@ public class PredicateDSL<E> implements Predicate<E> {
         tracker.track();
       }
 
-      public void equalOrGreaterThan(V value) {
-        evals.add(new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value));
-        tracker.track();
-      }
-
       public void lessThan(V value) {
         evals.add(new Evaluation(EvalType.LESS, tracker.trackedContexts(), value));
-        tracker.track();
-      }
-
-      public void equalOrLessThan(V value) {
-        evals.add(new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value));
         tracker.track();
       }
 
@@ -200,7 +190,8 @@ public class PredicateDSL<E> implements Predicate<E> {
       }
 
       public void greaterOrEqual(V value) {
-        equalOrGreaterThan(value);
+        evals.add(new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value));
+        tracker.track();
       }
 
       public void gt(V value) {
@@ -212,7 +203,8 @@ public class PredicateDSL<E> implements Predicate<E> {
       }
 
       public void lessOrEqual(V value) {
-        equalOrLessThan(value);
+        evals.add(new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value));
+        tracker.track();
       }
 
       public void lt(V value) {
@@ -248,20 +240,8 @@ public class PredicateDSL<E> implements Predicate<E> {
         tracker.track();
       }
 
-      public void equalOrGreaterThan(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
-      }
-
       public void lessThan(V value) {
         Evaluation evaluation = new Evaluation(EvalType.LESS, tracker.trackedContexts(), value);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
-      }
-
-      public void equalOrLessThan(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value);
         evals.add(newComposition(evaluation).negate());
         tracker.track();
       }
@@ -310,7 +290,9 @@ public class PredicateDSL<E> implements Predicate<E> {
       }
 
       public void greaterOrEqual(V value) {
-        equalOrGreaterThan(value);
+        Evaluation evaluation = new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
       }
 
       public void gt(V value) {
@@ -322,7 +304,9 @@ public class PredicateDSL<E> implements Predicate<E> {
       }
 
       public void lessOrEqual(V value) {
-        equalOrLessThan(value);
+        Evaluation evaluation = new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value);
+        evals.add(newComposition(evaluation).negate());
+        tracker.track();
       }
 
       public void lt(V value) {

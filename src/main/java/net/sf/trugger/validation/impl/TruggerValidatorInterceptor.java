@@ -24,9 +24,9 @@ import static net.sf.trugger.util.Utils.resolveType;
 
 import java.lang.reflect.Method;
 
+import net.sf.trugger.interception.ArgumentsInterceptor;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.reflection.Reflection;
-import net.sf.trugger.validation.ArgumentsInterceptor;
 import net.sf.trugger.validation.Validator;
 
 /**

@@ -87,14 +87,6 @@ public interface Criteria<E, V> {
    *
    * @param value
    *          the restriction value.
-   */
-  void equalOrLessThan(V value);
-
-  /**
-   * The expected value should be equal or less than the given value.
-   *
-   * @param value
-   *          the restriction value.
    * @since 2.7
    */
   void lessOrEqual(V value);
@@ -124,14 +116,6 @@ public interface Criteria<E, V> {
    * @since 2.7
    */
   void gt(V value);
-
-  /**
-   * The expected value should be equal or greater than the given value.
-   *
-   * @param value
-   *          the restriction value.
-   */
-  void equalOrGreaterThan(V value);
 
   /**
    * The expected value should be equal or greater than the given value.

@@ -114,7 +114,7 @@ public class PredicateDSLTestExcept {
   @Test
   public void testLessThanOrEqual() throws Exception {
     Predicate<TestObject> p = new PredicateDSL<TestObject>(){{
-      expect(obj.i()).equalOrLessThan(2);
+      expect(obj.i()).lessOrEqual(2);
     }};
     assertTrue(p.evaluate(new TestObject(1)));
     assertTrue(p.evaluate(new TestObject(2)));
@@ -134,7 +134,7 @@ public class PredicateDSLTestExcept {
   @Test
   public void testGreaterThanOrEqual() throws Exception {
     Predicate<TestObject> p = new PredicateDSL<TestObject>(){{
-      expect(obj.i()).equalOrGreaterThan(2);
+      expect(obj.i()).greaterOrEqual(2);
     }};
     assertTrue(p.evaluate(new TestObject(3)));
     assertTrue(p.evaluate(new TestObject(2)));

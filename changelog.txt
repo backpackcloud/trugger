@@ -3,8 +3,9 @@ Version 2.7.0
   - Formatters
 - Major changes:
   - Reformulated DSL Criteria.
+  - Refactor in Interception module
+  - Non-named element and field selector for bind operations.
   - AnnotationBased factory now searchs in the entire annotation levels.
-  - Element representations for swing components
 - Bug fixes:
   - Binder can now bind null values.
 

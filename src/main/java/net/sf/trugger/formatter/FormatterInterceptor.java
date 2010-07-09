@@ -18,7 +18,7 @@ package net.sf.trugger.formatter;
 
 import java.lang.reflect.Method;
 
-import net.sf.trugger.validation.ArgumentsInterceptor;
+import net.sf.trugger.interception.ArgumentsInterceptor;
 
 /**
  * Interceptor for handling the formatter calls to prevent type erros and
