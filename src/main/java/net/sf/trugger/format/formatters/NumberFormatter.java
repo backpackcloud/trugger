@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter.formatters;
+package net.sf.trugger.format.formatters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -23,7 +25,7 @@ import java.util.Locale;
 
 import net.sf.trugger.ParseException;
 import net.sf.trugger.bind.PostBind;
-import net.sf.trugger.formatter.Formatter;
+import net.sf.trugger.format.Formatter;
 import net.sf.trugger.validation.validator.NotEmpty;
 import net.sf.trugger.validation.validator.NotNull;
 
@@ -80,8 +82,12 @@ public class NumberFormatter implements Formatter<java.lang.Number> {
           return number.floatValue();
         case DOUBLE:
           return number.doubleValue();
+        case BIG_INT:
+          return BigInteger.valueOf(number.longValue());
+        case BIG_DECIMAL:
+          return BigDecimal.valueOf(number.doubleValue());
         default:
-          return null;
+          throw new IllegalArgumentException();
       }
     } catch (java.text.ParseException e) {
       throw new ParseException(e);

@@ -14,17 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter;
+package net.sf.trugger.format.impl;
 
 import java.lang.reflect.AnnotatedElement;
 
 import net.sf.trugger.factory.AnnotationBasedFactory;
+import net.sf.trugger.format.Formatter;
+import net.sf.trugger.format.FormatterClass;
+import net.sf.trugger.format.FormatterFactory;
+import net.sf.trugger.format.FormatterInterceptor;
 import net.sf.trugger.reflection.ReflectionPredicates;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class FormatterFactory extends AnnotationBasedFactory<FormatterClass, Formatter> {
+public class TruggerFormatterFactory extends AnnotationBasedFactory<FormatterClass, Formatter> implements
+    FormatterFactory {
 
   protected Formatter defaultReturn(AnnotatedElement key) {
     return new Formatter() {
@@ -34,7 +39,7 @@ public class FormatterFactory extends AnnotationBasedFactory<FormatterClass, For
       }
 
       public Object parse(String value) {
-        return value == null || value.isEmpty() ? null : value ;
+        return value == null || value.isEmpty() ? null : value;
       }
 
     };

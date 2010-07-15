@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter.formatters;
+package net.sf.trugger.format.formatters;
 
 import net.sf.trugger.ParseException;
 import net.sf.trugger.bind.PostBind;
-import net.sf.trugger.formatter.Formatter;
+import net.sf.trugger.format.Formatter;
 
 /**
  * @author Marcelo Varella Barca Guimarães

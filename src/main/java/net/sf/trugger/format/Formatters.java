@@ -14,33 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter;
+package net.sf.trugger.format;
 
-import net.sf.trugger.ParseException;
+import java.lang.reflect.AnnotatedElement;
+
+import net.sf.trugger.factory.Factory;
+import net.sf.trugger.loader.ImplementationLoader;
 
 /**
- * Interface that defines a value formatter.
+ * Class for handling format operations.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public interface Formatter<T> {
+public class Formatters {
+
+  private static final FormatterFactory factory;
+
+  static {
+    factory = ImplementationLoader.getInstance().get(FormatterFactory.class);
+  }
+
+  private Formatters() {}
 
   /**
-   * Formats a value.
-   *
-   * @param value
-   * @return the formatted value.
+   * @return the shared factory.
    */
-  String format(T value);
+  public static Factory<AnnotatedElement, Formatter> factory() {
+    return factory;
+  }
 
   /**
-   * Parses a formatted value.
-   *
-   * @param value
-   *          the formatted value.
-   * @return the parsed object.
+   * @return a new formatter factory.
    */
-  T parse(String value) throws ParseException;
+  public static Factory<AnnotatedElement, Formatter> newFactory() {
+    return ImplementationLoader.getInstance().get(FormatterFactory.class);
+  }
 
 }

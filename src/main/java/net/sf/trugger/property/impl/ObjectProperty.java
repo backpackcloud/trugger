@@ -25,10 +25,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
+import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.UnreadableElementException;
 import net.sf.trugger.element.UnwritableElementException;
 import net.sf.trugger.element.impl.AbstractElement;
+import net.sf.trugger.element.impl.AbstractElementValueHandler;
 import net.sf.trugger.reflection.ReflectionException;
 
 /**
@@ -44,11 +45,11 @@ import net.sf.trugger.reflection.ReflectionException;
  * </ol>
  * <p>
  * For value manipulations (write and read), the methods are used all the time.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 final class ObjectProperty extends AbstractElement {
-  
+
   private Field field;
   private Method getter;
   private Method setter;
@@ -56,7 +57,7 @@ final class ObjectProperty extends AbstractElement {
   private Class<?> declaringClass;
   private boolean readable;
   private boolean writable;
-  
+
   /**
    * Creates a new ObjectProperty based on the specified method. Only a getter
    * or a setter.
@@ -78,7 +79,7 @@ final class ObjectProperty extends AbstractElement {
     searchForAnnotatedElement();
     initialize();
   }
-  
+
   ObjectProperty(Field field, Method getter, Method setter) {
     super(field.getName());
     this.field = field;
@@ -89,38 +90,38 @@ final class ObjectProperty extends AbstractElement {
     searchForAnnotatedElement();
     initialize();
   }
-  
+
   private void initialize() {
     readable = getter != null;
     writable = setter != null;
   }
-  
-  public ValueHandler in(Object target) {
+
+  public ElementValueHandler in(Object target) {
     return new Handler(target);
   }
-  
+
   public boolean isReadable() {
     return readable;
   }
-  
+
   public boolean isWritable() {
     return writable;
   }
-  
+
   public Class<?> declaringClass() {
     return declaringClass;
   }
-  
+
   @Override
   public String name() {
     return name;
   }
-  
+
   @Override
   public Class<?> type() {
     return type;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -133,7 +134,7 @@ final class ObjectProperty extends AbstractElement {
     result = prime * result + i;
     return result;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -148,15 +149,15 @@ final class ObjectProperty extends AbstractElement {
     final ObjectProperty other = (ObjectProperty) obj;
     return declaringClass.equals(other.declaringClass) && name.equals(other.name);
   }
-  
+
   private void searchForSetter() {
     setter = reflect().setterFor(name).recursively().forType(type).in(declaringClass);
   }
-  
+
   private void searchForGetter() {
     getter = reflect().getterFor(name).thatMatches(ofReturnType(type)).recursively().in(declaringClass);
   }
-  
+
   private void searchForAnnotatedElement() {
     if (isAnyAnnotationPresent(getter)) {
       annotatedElement = getter;
@@ -166,20 +167,20 @@ final class ObjectProperty extends AbstractElement {
       annotatedElement = setter;
     }
   }
-  
+
   private boolean isAnyAnnotationPresent(AnnotatedElement element) {
     return (element != null) && (element.getAnnotations().length > 0);
   }
-  
-  private class Handler implements ValueHandler {
-    
+
+  private class Handler extends AbstractElementValueHandler {
+
     private final Object source;
-    
+
     private Handler(Object source) {
-      super();
+      super(annotatedElement);
       this.source = source;
     }
-    
+
     public <E> E value() throws HandlingException {
       if (!isReadable()) {
         throw new UnreadableElementException(name);
@@ -190,7 +191,7 @@ final class ObjectProperty extends AbstractElement {
         throw new HandlingException(e.getCause());
       }
     }
-    
+
     public void value(Object value) throws HandlingException {
       if (!isWritable()) {
         throw new UnwritableElementException(name);
@@ -201,7 +202,7 @@ final class ObjectProperty extends AbstractElement {
         throw new HandlingException(e.getCause());
       }
     }
-    
+
   }
-  
+
 }

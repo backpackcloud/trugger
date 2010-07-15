@@ -19,9 +19,10 @@ package net.sf.trugger.element.impl;
 import java.util.ResourceBundle;
 
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.UnwritableElementException;
+import net.sf.trugger.util.Null;
 
 /**
  * A class that represents a ResourceBundle element. It uses the mapped keys
@@ -30,22 +31,22 @@ import net.sf.trugger.element.UnwritableElementException;
  * @author Marcelo Varella Barca Guimarães
  */
 public final class ResourceBundleElement extends AbstractElement implements Element {
-  
+
   public ResourceBundleElement(String name) {
     super(name);
   }
-  
+
   @Override
-  public ValueHandler in(Object target) {
+  public ElementValueHandler in(Object target) {
     if (target instanceof ResourceBundle) {
       final ResourceBundle bundle = (ResourceBundle) target;
-      return new ValueHandler() {
-        
+      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT) {
+
         @Override
         public void value(Object value) throws HandlingException {
           throw new UnwritableElementException("Cannot change a ResourceBundle property.");
         }
-        
+
         @Override
         public <E> E value() throws HandlingException {
           if (bundle.containsKey(name)) {
@@ -57,22 +58,22 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
     }
     throw new IllegalArgumentException("Target is not a " + ResourceBundle.class);
   }
-  
+
   @Override
   public Class<?> declaringClass() {
     return ResourceBundle.class;
   }
-  
+
   @Override
   public boolean isReadable() {
     return true;
   }
-  
+
   @Override
   public boolean isWritable() {
     return false;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -80,7 +81,7 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -102,5 +103,5 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
     }
     return true;
   }
-  
+
 }

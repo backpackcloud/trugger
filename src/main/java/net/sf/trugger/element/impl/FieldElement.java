@@ -19,8 +19,8 @@ package net.sf.trugger.element.impl;
 import java.lang.reflect.Field;
 
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.NonSpecificElementException;
 import net.sf.trugger.reflection.Reflection;
 
@@ -69,8 +69,8 @@ public final class FieldElement extends AbstractElement implements Element {
     }
   }
 
-  public ValueHandler in(Object target) {
-    return Reflection.handle(this.field).in(target);
+  public ElementValueHandler in(Object target) {
+    return new DefaultElementValueHandler(field, Reflection.handle(this.field).in(target));
   }
 
   public boolean isReadable() {

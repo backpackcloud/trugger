@@ -14,15 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter.formatters;
+package net.sf.trugger.element;
 
+import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 
 /**
+ * A value handler for {@link Element} objects.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public enum NumberType {
+public interface ElementValueHandler extends ValueHandler {
 
-  INT, LONG, FLOAT, DOUBLE
+  /**
+   * @return the element value formatted for displaying.
+   * @throws HandlingException
+   *           if anything go wrong.
+   */
+  String formattedValue() throws HandlingException;
+
+  /**
+   * Sets the value by parsing the formatted value given.
+   *
+   * @param value
+   * @throws HandlingException
+   *           if anything go wrong.
+   */
+  void formattedValue(String value) throws HandlingException;
 
 }

@@ -25,8 +25,8 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
 
 import org.easymock.IAnswer;
 
@@ -190,7 +190,7 @@ public class ElementMockBuilder implements MockBuilder<Element> {
    *          the handler for the given target.
    * @return a reference to this object.
    */
-  public ElementMockBuilder withHandler(Object target, ValueHandler handler) {
+  public ElementMockBuilder withHandler(Object target, ElementValueHandler handler) {
     expect(element.in(target)).andReturn(handler).anyTimes();
     return this;
   }

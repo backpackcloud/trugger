@@ -14,28 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter.formatters;
+package net.sf.trugger.element.impl;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.AnnotatedElement;
 
-import net.sf.trugger.formatter.FormatterClass;
+import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 
 /**
- * Sets a date format.
- *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@FormatterClass(DateFormatter.class)
-public @interface Date {
+public class DefaultElementValueHandler extends AbstractElementValueHandler {
 
-  /**
-   * The date format.
-   */
-  String value();
+  private final ValueHandler valueHandler;
+
+  public DefaultElementValueHandler(AnnotatedElement annotatedElement, ValueHandler valueHandler) {
+    super(annotatedElement);
+    this.valueHandler = valueHandler;
+  }
+
+  @Override
+  public <E> E value() throws HandlingException {
+    return (E) valueHandler.value();
+  }
+
+  @Override
+  public void value(Object value) throws HandlingException {
+    valueHandler.value(value);
+  }
 
 }

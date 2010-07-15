@@ -16,55 +16,35 @@
  */
 package net.sf.trugger.element.impl;
 
+import java.lang.reflect.AnnotatedElement;
+
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
-import net.sf.trugger.element.Element;
-import net.sf.trugger.formatter.Formatter;
-import net.sf.trugger.formatter.FormatterFactory;
+import net.sf.trugger.element.ElementValueHandler;
+import net.sf.trugger.format.Formatter;
+import net.sf.trugger.format.Formatters;
 
 /**
- * The element for a component such as visual component (Swing, AWT or SWT) or
- * predefined ones.
+ * Base class for ElementValueHandler.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public abstract class ComponentElement<T> extends DecoratedElement {
+public abstract class AbstractElementValueHandler implements ElementValueHandler {
 
-  protected final FormatterFactory factory;
+  private final AnnotatedElement annotatedElement;
 
-  public ComponentElement(Element decorated) {
-    super(decorated);
-    factory = new FormatterFactory();
+  public AbstractElementValueHandler(AnnotatedElement annotatedElement) {
+    this.annotatedElement = annotatedElement;
   }
 
   @Override
-  public boolean isWritable() {
-    return true;
+  public String formattedValue() throws HandlingException {
+    return format(value());
   }
 
   @Override
-  public boolean isReadable() {
-    return true;
-  }
-
-  @Override
-  public ValueHandler in(final Object target) {
-    return new ValueHandler() {
-
-      @Override
-      public void value(Object value) throws HandlingException {
-        T component = (T) element.in(target).value();
-        setComponentValue(component, value);
-      }
-
-      @Override
-      public <E> E value() throws HandlingException {
-        T component = (T) element.in(target).value();
-        return (E) getComponentValue(component);
-      }
-
-    };
+  public void formattedValue(String value) throws HandlingException {
+    value(parse(value));
   }
 
   /**
@@ -75,7 +55,7 @@ public abstract class ComponentElement<T> extends DecoratedElement {
    * @return the formatted value.
    */
   protected String format(Object value) {
-    Formatter formatter = factory.create(element);
+    Formatter formatter = Formatters.factory().create(annotatedElement);
     return formatter.format(value);
   }
 
@@ -87,12 +67,7 @@ public abstract class ComponentElement<T> extends DecoratedElement {
    * @return the parsed value.
    */
   protected Object parse(String value) {
-    Formatter formatter = factory.create(element);
+    Formatter formatter = Formatters.factory().create(annotatedElement);
     return formatter.parse(value);
   }
-
-  protected abstract Object getComponentValue(T component);
-
-  protected abstract void setComponentValue(T component, Object value);
-
 }

@@ -26,8 +26,8 @@ import java.util.Set;
 import net.sf.trugger.Finder;
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.Result;
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.property.Properties;
 import net.sf.trugger.reflection.Reflection;
 
@@ -112,8 +112,8 @@ public class DefaultElementFinder implements Finder<Element> {
       return forWrite.isWritable();
     }
 
-    public ValueHandler in(final Object target) {
-      return new ValueHandler() {
+    public ElementValueHandler in(final Object target) {
+      return new AbstractElementValueHandler(decorated) {
 
         public void value(Object value) throws HandlingException {
           forWrite.in(target).value(value);
@@ -167,6 +167,14 @@ public class DefaultElementFinder implements Finder<Element> {
 
     public Class type() {
       return decorated.type();
+    }
+
+    public String formattedValue() throws HandlingException {
+      return forRead.formattedValue();
+    }
+
+    public void formattedValue(String value) throws HandlingException {
+      forWrite.formattedValue(value);
     }
 
     public String toString() {

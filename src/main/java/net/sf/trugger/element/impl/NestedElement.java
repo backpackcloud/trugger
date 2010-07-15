@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.Elements;
 
 /**
@@ -78,7 +78,7 @@ public final class NestedElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(Object target) {
+  public ElementValueHandler in(Object target) {
     return new NestedElementHandler(target);
   }
 
@@ -143,12 +143,12 @@ public final class NestedElement extends AbstractElement implements Element {
     return true;
   }
 
-  private class NestedElementHandler implements ValueHandler {
+  private class NestedElementHandler extends AbstractElementValueHandler {
 
     private final Object source;
 
     public NestedElementHandler(Object source) {
-      super();
+      super(getLast());
       this.source = source;
     }
 

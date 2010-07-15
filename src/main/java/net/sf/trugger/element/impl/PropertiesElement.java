@@ -19,24 +19,25 @@ package net.sf.trugger.element.impl;
 import java.util.Properties;
 
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
+import net.sf.trugger.util.Null;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class PropertiesElement extends AbstractElement implements Element {
-  
+
   public PropertiesElement(String name) {
     super(name);
   }
-  
+
   @Override
-  public ValueHandler in(Object target) {
+  public ElementValueHandler in(Object target) {
     if (target instanceof Properties) {
       final Properties props = (Properties) target;
-      return new ValueHandler() {
-        
+      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT) {
+
         @Override
         public void value(Object value) throws HandlingException {
           if (value != null) {
@@ -47,7 +48,7 @@ public class PropertiesElement extends AbstractElement implements Element {
             }
           }
         }
-        
+
         @Override
         public <E> E value() throws HandlingException {
           return (E) props.getProperty(name);
@@ -56,25 +57,25 @@ public class PropertiesElement extends AbstractElement implements Element {
     }
     throw new IllegalArgumentException("Target is not a " + Properties.class);
   }
-  
+
   @Override
   public Class<?> declaringClass() {
     return Properties.class;
   }
-  
+
   @Override
   public Class<?> type() {
     return String.class;
   }
-  
+
   @Override
   public boolean isReadable() {
     return true;
   }
-  
+
   @Override
   public boolean isWritable() {
     return true;
   }
-  
+
 }

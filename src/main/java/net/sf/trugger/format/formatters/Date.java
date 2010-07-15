@@ -14,25 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter;
+package net.sf.trugger.format.formatters;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+
+import net.sf.trugger.format.FormatterClass;
 
 /**
- * Indicates a formatter for using with the annotated element.
+ * Sets a date format.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface FormatterClass {
+@FormatterClass(DateFormatter.class)
+public @interface Date {
 
-  Class<? extends Formatter> value();
+  /**
+   * The date format.
+   */
+  String value();
 
 }

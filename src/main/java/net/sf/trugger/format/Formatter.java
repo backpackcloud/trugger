@@ -14,23 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter.formatters;
+package net.sf.trugger.format;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import net.sf.trugger.formatter.FormatterClass;
+import net.sf.trugger.ParseException;
 
 /**
+ * Interface that defines a value formatter.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@FormatterClass(MaskFormatter.class)
-public @interface Mask {
+public interface Formatter<T> {
 
-  String value();
+  /**
+   * Formats a value.
+   *
+   * @param value
+   * @return the formatted value.
+   */
+  String format(T value);
+
+  /**
+   * Parses a formatted value.
+   *
+   * @param value
+   *          the formatted value.
+   * @return the parsed object.
+   */
+  T parse(String value) throws ParseException;
 
 }

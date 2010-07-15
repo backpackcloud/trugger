@@ -19,24 +19,25 @@ package net.sf.trugger.element.impl;
 import java.util.Map;
 
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
+import net.sf.trugger.util.Null;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class MapElement extends AbstractElement implements Element {
-  
+
   public MapElement(String name) {
     super(name);
   }
-  
+
   @Override
-  public ValueHandler in(Object target) {
+  public ElementValueHandler in(Object target) {
     if (target instanceof Map<?, ?>) {
       final Map map = (Map) target;
-      return new ValueHandler() {
-        
+      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT) {
+
         @Override
         public void value(Object value) throws HandlingException {
           try {
@@ -45,7 +46,7 @@ public class MapElement extends AbstractElement implements Element {
             throw new HandlingException(e);
           }
         }
-        
+
         @Override
         public <E> E value() throws HandlingException {
           if (map.containsKey(name)) {
@@ -57,20 +58,20 @@ public class MapElement extends AbstractElement implements Element {
     }
     throw new IllegalArgumentException("Target is not a " + Map.class);
   }
-  
+
   @Override
   public Class<?> declaringClass() {
     return Map.class;
   }
-  
+
   @Override
   public boolean isReadable() {
     return true;
   }
-  
+
   @Override
   public boolean isWritable() {
     return true;
   }
-  
+
 }

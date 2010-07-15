@@ -14,32 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter;
+package net.sf.trugger.format.formatters;
 
-import java.lang.reflect.Method;
-
-import net.sf.trugger.interception.ArgumentsInterceptor;
 
 /**
- * Interceptor for handling the formatter calls to prevent type erros and
- * validating arguments.
- *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public class FormatterInterceptor extends ArgumentsInterceptor {
+public enum NumberType {
 
-  public FormatterInterceptor() {
-    ifAnyMethodOf(Formatter.class).useArgument(0).andCheckGenericType("T");
-  }
-
-  @Override
-  protected Object onInvalidArgument(Object argument) {
-    Method method = method();
-    if (method.getName().equals("format")) {
-      return "";
-    }
-    return null;
-  }
+  INT, LONG, FLOAT, DOUBLE, BIG_INT, BIG_DECIMAL
 
 }

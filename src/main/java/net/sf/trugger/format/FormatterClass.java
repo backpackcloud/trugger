@@ -14,40 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.formatter.formatters;
+package net.sf.trugger.format;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.Locale;
-
-import net.sf.trugger.formatter.FormatterClass;
+import java.lang.annotation.Target;
 
 /**
+ * Indicates a formatter for using with the annotated element.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@FormatterClass(NumberFormatter.class)
-public @interface Number {
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface FormatterClass {
 
-  /**
-   * Indicates the number type.
-   */
-  NumberType type() default NumberType.INT;
-
-  /**
-   * Indicates the pattern to use.
-   */
-  String pattern() default "";
-
-  /**
-   * Indicates the locale to use. Default to {@link Locale#getDefault()}.
-   * <p>
-   * To set the default locale, use
-   * {@link NumberFormatter#setDefaultLocale(java.util.Locale)}.
-   */
-  String locale() default "";
+  Class<? extends Formatter> value();
 
 }

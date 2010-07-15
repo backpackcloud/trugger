@@ -22,65 +22,65 @@ import net.sf.trugger.test.Flag;
  * @author Marcelo Varella Barca Guimarães
  */
 public class TestObject {
-  
+
   static double staticValue;
-  
+
   @Flag
   private final String name;
   private final String lastName;
-  
+
   private String nickName;
-  
+
   @Flag
   private double height;
   private double weight;
-  
+
   @Flag
   int age;
-  
+
   public TestObject(String name, String lastName) {
     this.name = name;
     this.lastName = lastName;
   }
-  
+
   public String getNickName() {
     return nickName;
   }
-  
+
   public void setNickName(String nickName) {
     this.nickName = nickName;
   }
-  
+
   public int getAge() {
     return age;
   }
-  
+
   public void setAge(int age) {
     this.age = age;
   }
-  
+
   public double getHeight() {
     return height;
   }
-  
+
   public void setHeight(double height) {
     this.height = height;
   }
-  
+
   public double getWeight() {
     return weight;
   }
-  
+
   public void setWeight(double weight) {
     this.weight = weight;
   }
-  
+
   public String getName() {
     return name;
   }
-  
+
   public String getLastName() {
     return lastName;
   }
-  
+
 }

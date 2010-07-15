@@ -20,22 +20,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import net.sf.trugger.HandlingException;
-import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.UnwritableElementException;
 
 /**
  * Class that represents an Annotation property.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class AnnotationElement extends AbstractElement implements Element {
-  
+
   private Method method;
-  
+
   /**
    * Creates a new AnnotationProperty based on the given method.
-   * 
+   *
    * @param method
    *          the method that allows access to the property.
    */
@@ -44,28 +44,28 @@ public final class AnnotationElement extends AbstractElement implements Element 
     this.method = method;
     this.annotatedElement = method;
   }
-  
+
   @Override
   public Class<?> type() {
     return method.getReturnType();
   }
-  
-  public ValueHandler in(Object target) {
+
+  public ElementValueHandler in(Object target) {
     return new Handler(target);
   }
-  
+
   public Class<?> declaringClass() {
     return method.getDeclaringClass();
   }
-  
+
   public boolean isReadable() {
     return true;
   }
-  
+
   public boolean isWritable() {
     return false;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -73,7 +73,7 @@ public final class AnnotationElement extends AbstractElement implements Element 
     result = prime * result + method.hashCode();
     return result;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -91,16 +91,16 @@ public final class AnnotationElement extends AbstractElement implements Element 
     }
     return true;
   }
-  
-  private class Handler implements ValueHandler {
-    
+
+  private class Handler extends AbstractElementValueHandler {
+
     private final Object annotation;
-    
+
     public Handler(Object annotation) {
-      super();
+      super(annotatedElement);
       this.annotation = annotation;
     }
-    
+
     public <E> E value() throws HandlingException {
       try {
         return (E) method.invoke(annotation);
@@ -110,11 +110,11 @@ public final class AnnotationElement extends AbstractElement implements Element 
         throw new HandlingException(e);
       }
     }
-    
+
     public void value(Object value) throws HandlingException {
       throw new UnwritableElementException(name());
     }
-    
+
   }
-  
+
 }

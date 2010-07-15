@@ -105,6 +105,23 @@ public abstract class AbstractElement implements Element {
   }
 
   @Override
+  public String formattedValue() throws HandlingException {
+    if (isSpecific()) {
+      return in(target()).formattedValue();
+    }
+    throw new NonSpecificElementException();
+  }
+
+  @Override
+  public void formattedValue(String value) throws HandlingException {
+    if(isSpecific()) {
+      in(target()).formattedValue(value);
+    } else {
+      throw new NonSpecificElementException();
+    }
+  }
+
+  @Override
   public String toString() {
     return name + " : " + type().getName();
   }
