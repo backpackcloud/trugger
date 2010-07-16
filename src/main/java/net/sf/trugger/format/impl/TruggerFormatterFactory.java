@@ -37,38 +37,40 @@ import net.sf.trugger.reflection.ReflectionPredicates;
  */
 public class TruggerFormatterFactory implements FormatterFactory {
 
-  private AnnotationBasedFactory<FormatterClass, Formatter> factory = new AnnotationBasedFactory<FormatterClass, Formatter>() {
+  private AnnotationBasedFactory<FormatterClass, Formatter> factory =
+      new AnnotationBasedFactory<FormatterClass, Formatter>() {
 
-    protected Formatter defaultReturn(AnnotatedElement key) {
-      return new Formatter() {
+        protected Formatter defaultReturn(AnnotatedElement key) {
+          return new Formatter() {
 
-        public String format(Object value) {
-          return value != null ? value.toString() : "";
+            public String format(Object value) {
+              return value != null ? value.toString() : "";
+            }
+
+            public Object parse(String value) {
+              return value == null || value.isEmpty() ? null : value;
+            }
+
+          };
         }
 
-        public Object parse(String value) {
-          return value == null || value.isEmpty() ? null : value;
+        @Override
+        protected Formatter instantiate(AnnotatedElement key, Class<? extends Formatter> classToCreate)
+            throws Throwable {
+          Formatter formatter;
+          //don't try to subclass final classes
+          if (ReflectionPredicates.FINAL_CLASS.evaluate(classToCreate)) {
+            /*
+             * The proxy for interface is not useful because the binds will not work.
+             * So, the validator itself is returned.
+             */
+            formatter = super.instantiate(key, classToCreate);
+          } else {
+            formatter = new FormatterInterceptor().createProxy().implementing(Formatter.class).extending(classToCreate);
+          }
+          return bindAnnotation(key, formatter);
         }
-
       };
-    }
-
-    @Override
-    protected Formatter instantiate(AnnotatedElement key, Class<? extends Formatter> classToCreate) throws Throwable {
-      Formatter formatter;
-      //don't try to subclass final classes
-      if (ReflectionPredicates.FINAL_CLASS.evaluate(classToCreate)) {
-        /*
-         * The proxy for interface is not useful because the binds will not work.
-         * So, the validator itself is returned.
-         */
-        formatter = super.instantiate(key, classToCreate);
-      } else {
-        formatter = new FormatterInterceptor().createProxy().implementing(Formatter.class).extending(classToCreate);
-      }
-      return bindAnnotation(key, formatter);
-    }
-  };
 
   @Override
   public boolean canCreate(AnnotationFactoryContext key) {
@@ -77,11 +79,16 @@ public class TruggerFormatterFactory implements FormatterFactory {
 
   @Override
   public Formatter create(AnnotationFactoryContext key) throws CreateException {
-    Class<? extends Annotation> annotationType = key.annotation().annotationType();
-    Formatter formatter = factory.create(annotationType);
     Binder binder = Bind.newBinder();
-    binder.bind(key.annotation()).toElement().ofType(annotationType);
-    if(key.target() != null) {
+    Annotation annotation = key.annotation();
+    Formatter formatter;
+    if (annotation != null) {
+      formatter = factory.create(annotation.annotationType());
+      binder.bind(annotation).toElement().ofType(annotation.annotationType());
+    } else {
+      formatter = factory.create(key.annotatedElement());
+    }
+    if (key.target() != null) {
       binder.use(new TargetElementResolver(key)).toElements().annotatedWith(TargetElement.class);
     }
     binder.applyBinds(formatter);

@@ -64,6 +64,11 @@ public class AnnotationFactoryContextImpl implements AnnotationFactoryContext {
     this.annotatedElement = annotatedElement;
   }
 
+  public AnnotationFactoryContextImpl(AnnotatedElement annotatedElement, Object target) {
+    this.annotatedElement = annotatedElement;
+    this.target = target;
+  }
+
   /* (non-Javadoc)
    * @see net.sf.trugger.factory.AnnotationFactoryContext#annotatedElement()
    */

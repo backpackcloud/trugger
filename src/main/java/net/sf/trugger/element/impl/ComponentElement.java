@@ -73,7 +73,7 @@ public abstract class ComponentElement<T> extends DecoratedElement {
    * @return the formatted value.
    */
   protected String format(Object value) {
-    Formatter formatter = Formatters.factory().create(new AnnotationFactoryContextImpl(element));
+    Formatter formatter = Formatters.factory().create(new AnnotationFactoryContextImpl(element, element.target()));
     return formatter.format(value);
   }
 
@@ -85,10 +85,9 @@ public abstract class ComponentElement<T> extends DecoratedElement {
    * @return the parsed value.
    */
   protected Object parse(String value) {
-    Formatter formatter = Formatters.factory().create(new AnnotationFactoryContextImpl(element));
+    Formatter formatter = Formatters.factory().create(new AnnotationFactoryContextImpl(element, element.target()));
     return formatter.parse(value);
   }
-
 
   protected abstract Object getComponentValue(T component);
 
