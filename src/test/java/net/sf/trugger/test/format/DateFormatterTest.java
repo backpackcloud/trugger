@@ -22,18 +22,24 @@ import net.sf.trugger.format.formatters.Date;
 
 import org.junit.Test;
 
-
 /**
  * @author Marcelo Varella Barca Guimarães
- *
  */
 public class DateFormatterTest extends FormatterTest<Date> {
-
+  
   @Test
   public void testFormat() throws Exception {
     builder.map("dd/MM/yyyy").to(annotation.value());
-
+    
     assertFormat("10/05/2010", new GregorianCalendar(2010, 4, 10).getTime());
   }
-
+  
+  @Test
+  public void testParse() throws Exception {
+    builder.map("dd/MM/yyyy").to(annotation.value());
+    
+    assertParse(new GregorianCalendar(2010, 4, 10).getTime(), "10/05/2010");
+    assertParseError("201/06");
+  }
+  
 }
