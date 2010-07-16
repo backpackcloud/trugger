@@ -16,9 +16,6 @@
  */
 package net.sf.trugger.format;
 
-import java.lang.reflect.AnnotatedElement;
-
-import net.sf.trugger.factory.Factory;
 import net.sf.trugger.loader.ImplementationLoader;
 
 /**
@@ -40,14 +37,14 @@ public class Formatters {
   /**
    * @return the shared factory.
    */
-  public static Factory<AnnotatedElement, Formatter> factory() {
+  public static FormatterFactory factory() {
     return factory;
   }
 
   /**
    * @return a new formatter factory.
    */
-  public static Factory<AnnotatedElement, Formatter> newFactory() {
+  public static FormatterFactory newFactory() {
     return ImplementationLoader.getInstance().get(FormatterFactory.class);
   }
 

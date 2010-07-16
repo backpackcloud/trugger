@@ -39,7 +39,7 @@ public final class Bind {
    *
    * @return the component for this operation.
    */
-  public static Binder newBind() {
+  public static Binder newBinder() {
     return factory.createBinder();
   }
 

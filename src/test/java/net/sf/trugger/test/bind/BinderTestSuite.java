@@ -31,6 +31,6 @@ import org.junit.runners.Suite.SuiteClasses;
   FieldBindingTest.class,
   ElementBindingTest.class
 })
-public class BinderTestSuite {
-  
+public interface BinderTestSuite {
+
 }

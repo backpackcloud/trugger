@@ -30,6 +30,6 @@ import org.junit.runners.Suite.SuiteClasses;
   ClassSelectorTest.class,
   ClassesSelectorTest.class
 })
-public class ClassScanTestSuite {
+public interface ClassScanTestSuite {
 
 }

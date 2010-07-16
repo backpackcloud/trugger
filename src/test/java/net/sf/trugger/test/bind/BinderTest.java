@@ -16,7 +16,7 @@
  */
 package net.sf.trugger.test.bind;
 
-import static net.sf.trugger.bind.Bind.newBind;
+import static net.sf.trugger.bind.Bind.newBinder;
 import static org.junit.Assert.assertEquals;
 import net.sf.trugger.bind.PostBind;
 import net.sf.trugger.element.impl.TruggerElementSelector;
@@ -53,17 +53,17 @@ public class BinderTest {
   public void testSelectors() {
     // these selectors are tested in another test class
     // just check the types to ensure they will work
-    assertEquals(TruggerElementsSelector.class, newBind().use(null).toElements().getClass());
-    assertEquals(TruggerElementSelector.class, newBind().use(null).toElement("name").getClass());
+    assertEquals(TruggerElementsSelector.class, newBinder().use(null).toElements().getClass());
+    assertEquals(TruggerElementSelector.class, newBinder().use(null).toElement("name").getClass());
 
-    assertEquals(TruggerFieldSelector.class, newBind().use(null).toField("name").getClass());
-    assertEquals(TruggerFieldsSelector.class, newBind().use(null).toFields().getClass());
+    assertEquals(TruggerFieldSelector.class, newBinder().use(null).toField("name").getClass());
+    assertEquals(TruggerFieldsSelector.class, newBinder().use(null).toFields().getClass());
   }
 
   @Test
   public void testPostBind() {
     PostBindTest object = new PostBindTest(){};
-    newBind().applyBinds(object);
+    newBinder().applyBinds(object);
     assertEquals(1, object.count);
   }
 

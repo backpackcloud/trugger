@@ -46,6 +46,6 @@ import org.junit.runners.Suite.SuiteClasses;
   FieldGetterMethodSelectorTest.class,
   FieldSetterMethodSelectorTest.class
 })
-public class ReflectionTestSuite {
+public interface ReflectionTestSuite {
 
 }

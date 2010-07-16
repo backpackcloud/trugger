@@ -16,9 +16,7 @@
  */
 package net.sf.trugger.validation;
 
-import java.lang.annotation.Annotation;
-
-import net.sf.trugger.element.Element;
+import net.sf.trugger.factory.AnnotationFactoryContext;
 
 /**
  * An interface that represents a context for a validator.
@@ -26,22 +24,7 @@ import net.sf.trugger.element.Element;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.2
  */
-public interface ValidatorContext {
-
-  /**
-   * @return the annotation for creating the validator.
-   */
-  Annotation annotation();
-
-  /**
-   * @return the element being validated.
-   */
-  Element element();
-
-  /**
-   * @return the target for processing the binds.
-   */
-  Object target();
+public interface ValidatorContext extends AnnotationFactoryContext {
 
   /**
    * @return the {@link ValidationEngine#forContext(String) validation context}.

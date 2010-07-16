@@ -32,6 +32,6 @@ import org.junit.runners.Suite.SuiteClasses;
   ValidatorTestSuite.class,
   ContextValidationTest.class
 })
-public class ValidationTestSuite {
+public interface ValidationTestSuite {
 
 }

@@ -50,7 +50,7 @@ public class DateFormatter implements Formatter<java.util.Date> {
     try {
       return dateFormat.parse(value);
     } catch (ParseException e) {
-      throw new net.sf.trugger.ParseException(e);
+      throw new net.sf.trugger.format.ParseException(e);
     }
   }
 

@@ -112,15 +112,15 @@ public class DefaultElementFinder implements Finder<Element> {
       return forWrite.isWritable();
     }
 
-    public ElementValueHandler in(final Object target) {
-      return new AbstractElementValueHandler(decorated) {
+    public ElementValueHandler in(Object target) {
+      return new AbstractElementValueHandler(decorated, target) {
 
         public void value(Object value) throws HandlingException {
-          forWrite.in(target).value(value);
+          forWrite.in(target()).value(value);
         }
 
         public <E> E value() throws HandlingException {
-          return (E) forRead.in(target).value();
+          return (E) forRead.in(target()).value();
         }
       };
     }

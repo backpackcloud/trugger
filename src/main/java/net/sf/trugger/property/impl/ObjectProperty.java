@@ -174,11 +174,8 @@ final class ObjectProperty extends AbstractElement {
 
   private class Handler extends AbstractElementValueHandler {
 
-    private final Object source;
-
     private Handler(Object source) {
-      super(annotatedElement);
-      this.source = source;
+      super(annotatedElement, source);
     }
 
     public <E> E value() throws HandlingException {
@@ -186,7 +183,7 @@ final class ObjectProperty extends AbstractElement {
         throw new UnreadableElementException(name);
       }
       try {
-        return (E) invoke(getter).in(source).withoutArgs();
+        return (E) invoke(getter).in(target()).withoutArgs();
       } catch (ReflectionException e) {
         throw new HandlingException(e.getCause());
       }
@@ -197,7 +194,7 @@ final class ObjectProperty extends AbstractElement {
         throw new UnwritableElementException(name);
       }
       try {
-        invoke(setter).in(source).withArgs(value);
+        invoke(setter).in(target()).withArgs(value);
       } catch (ReflectionException e) {
         throw new HandlingException(e.getCause());
       }

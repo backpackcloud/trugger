@@ -17,6 +17,7 @@
 package net.sf.trugger.validation.impl;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 import net.sf.trugger.element.Element;
 import net.sf.trugger.validation.ValidatorContext;
@@ -72,6 +73,10 @@ public class ValidatorContextImpl implements ValidatorContext {
 
   public Object target() {
     return target;
+  }
+
+  public AnnotatedElement annotatedElement() {
+    return element;
   }
 
   public Element element() {

@@ -87,7 +87,7 @@ public class TruggerValidatorFactory implements ValidatorFactory {
     Annotation annotation = key.annotation();
     Class<? extends Annotation> annotationType = annotation.annotationType();
     Validator validator = factory.create(annotationType);
-    Binder binder = Bind.newBind();
+    Binder binder = Bind.newBinder();
     try {
       validatorBinder.configureBinds(validator, key, binder);
     } catch (InvalidReferenceException e) {

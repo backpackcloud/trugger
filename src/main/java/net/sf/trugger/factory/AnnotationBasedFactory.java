@@ -179,7 +179,7 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    */
   protected E bindAnnotation(AnnotatedElement key, E instance) {
     if (!key.isAnnotationPresent(annotationType)) {
-      Binder binder = Bind.newBind();
+      Binder binder = Bind.newBinder();
       registerAnnotation(binder, key);
       binder.applyBinds(instance);
     }

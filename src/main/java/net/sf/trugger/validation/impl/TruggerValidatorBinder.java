@@ -23,6 +23,7 @@ import net.sf.trugger.annotation.Reference;
 import net.sf.trugger.annotation.TargetAnnotation;
 import net.sf.trugger.annotation.TargetElement;
 import net.sf.trugger.annotation.TargetObject;
+import net.sf.trugger.annotation.processors.TargetElementResolver;
 import net.sf.trugger.bind.BindableElement;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;

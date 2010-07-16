@@ -36,7 +36,7 @@ public class PropertiesElement extends AbstractElement implements Element {
   public ElementValueHandler in(Object target) {
     if (target instanceof Properties) {
       final Properties props = (Properties) target;
-      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT) {
+      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT, target) {
 
         @Override
         public void value(Object value) throws HandlingException {

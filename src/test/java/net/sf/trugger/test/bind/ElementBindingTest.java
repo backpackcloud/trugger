@@ -16,7 +16,7 @@
  */
 package net.sf.trugger.test.bind;
 
-import static net.sf.trugger.bind.Bind.newBind;
+import static net.sf.trugger.bind.Bind.newBinder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
@@ -59,7 +59,7 @@ public class ElementBindingTest {
 
   @Before
   public void initialize() {
-    binder = newBind();
+    binder = newBinder();
     binder.bind(10).toElements().ofType(int.class);
     binder.use(new Resolver<Object, Element>() {
       public Object resolve(Element target) {

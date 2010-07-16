@@ -34,7 +34,7 @@ import net.sf.trugger.validation.impl.ValidatorContextImpl;
 import org.junit.Before;
 
 /**
- * A base class for testing the validators that don't use bindings.
+ * A base class for testing the validators.
  *
  * @author Marcelo Varella Barca Guimarães
  */

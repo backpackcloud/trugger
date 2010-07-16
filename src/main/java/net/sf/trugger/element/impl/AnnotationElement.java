@@ -94,16 +94,13 @@ public final class AnnotationElement extends AbstractElement implements Element 
 
   private class Handler extends AbstractElementValueHandler {
 
-    private final Object annotation;
-
     public Handler(Object annotation) {
-      super(annotatedElement);
-      this.annotation = annotation;
+      super(annotatedElement, annotation);
     }
 
     public <E> E value() throws HandlingException {
       try {
-        return (E) method.invoke(annotation);
+        return (E) method.invoke(target());
       } catch (InvocationTargetException e) {
         throw new HandlingException(e.getCause());
       } catch (IllegalAccessException e) {

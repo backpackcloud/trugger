@@ -45,6 +45,7 @@ import net.sf.trugger.test.bind.BinderTestSuite;
 import net.sf.trugger.test.date.DateTestSuite;
 import net.sf.trugger.test.element.ElementTestSuite;
 import net.sf.trugger.test.factory.FactoryTest;
+import net.sf.trugger.test.format.FormatterTestSuite;
 import net.sf.trugger.test.general.AcceptedTypesTest;
 import net.sf.trugger.test.general.GeneralTestSuite;
 import net.sf.trugger.test.general.UtilsTest;
@@ -92,6 +93,7 @@ import org.junit.runners.Suite.SuiteClasses;
   BinderTestSuite.class,
   GeneralTestSuite.class,
   ElementTestSuite.class,
+  FormatterTestSuite.class,
   ClassScanTestSuite.class,
   ReflectionTestSuite.class,
   ValidationTestSuite.class

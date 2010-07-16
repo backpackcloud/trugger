@@ -16,8 +16,7 @@
  */
 package net.sf.trugger.format;
 
-import java.lang.reflect.AnnotatedElement;
-
+import net.sf.trugger.factory.AnnotationFactoryContext;
 import net.sf.trugger.factory.Factory;
 
 /**
@@ -26,6 +25,6 @@ import net.sf.trugger.factory.Factory;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public interface FormatterFactory extends Factory<AnnotatedElement, Formatter> {
+public interface FormatterFactory extends Factory<AnnotationFactoryContext, Formatter> {
 
 }

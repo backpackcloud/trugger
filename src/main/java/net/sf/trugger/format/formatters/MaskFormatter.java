@@ -16,9 +16,10 @@
  */
 package net.sf.trugger.format.formatters;
 
-import net.sf.trugger.ParseException;
 import net.sf.trugger.bind.PostBind;
+import net.sf.trugger.format.FormatException;
 import net.sf.trugger.format.Formatter;
+import net.sf.trugger.format.ParseException;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -40,11 +41,11 @@ public class MaskFormatter implements Formatter<Object> {
   }
 
   @Override
-  public String format(Object value) {
+  public String format(Object value) throws FormatException {
     try {
       return formatter.valueToString(value);
     } catch (java.text.ParseException e) {
-      throw new ParseException(e);
+      throw new FormatException(e);
     }
   }
 

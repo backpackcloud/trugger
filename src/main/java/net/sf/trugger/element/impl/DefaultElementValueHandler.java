@@ -29,8 +29,8 @@ public class DefaultElementValueHandler extends AbstractElementValueHandler {
 
   private final ValueHandler valueHandler;
 
-  public DefaultElementValueHandler(AnnotatedElement annotatedElement, ValueHandler valueHandler) {
-    super(annotatedElement);
+  public DefaultElementValueHandler(AnnotatedElement annotatedElement, ValueHandler valueHandler, Object target) {
+    super(annotatedElement, target);
     this.valueHandler = valueHandler;
   }
 

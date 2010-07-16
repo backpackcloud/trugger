@@ -70,7 +70,7 @@ public final class FieldElement extends AbstractElement implements Element {
   }
 
   public ElementValueHandler in(Object target) {
-    return new DefaultElementValueHandler(field, Reflection.handle(this.field).in(target));
+    return new DefaultElementValueHandler(field, Reflection.handle(this.field).in(target), this);
   }
 
   public boolean isReadable() {

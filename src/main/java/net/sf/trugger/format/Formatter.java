@@ -16,8 +16,6 @@
  */
 package net.sf.trugger.format;
 
-import net.sf.trugger.ParseException;
-
 /**
  * Interface that defines a value formatter.
  *
@@ -32,7 +30,7 @@ public interface Formatter<T> {
    * @param value
    * @return the formatted value.
    */
-  String format(T value);
+  String format(T value) throws FormatException;
 
   /**
    * Parses a formatted value.

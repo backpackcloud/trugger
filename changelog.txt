@@ -6,6 +6,7 @@ Version 2.7.0
   - Refactor in Interception module
   - Non-named element and field selector for bind operations.
   - AnnotationBased factory now searchs in the entire annotation levels.
+  - Renamed method newBind to newBinder (Bind class).
 - Bug fixes:
   - Binder can now bind null values.
 
@@ -45,6 +46,7 @@ Version 2.4.0
   - Removed the Trugger class (since the project grows, it became very large).
 - Bug fixes:
   - Non-null return if the element is not found in the annotation and the target is not a class.
+
 Version 2.3.1
 - Major changes:
   - Added a method to remove a registry entry (included in a minor release since its a useful method).

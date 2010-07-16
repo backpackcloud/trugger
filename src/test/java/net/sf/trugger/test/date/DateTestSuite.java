@@ -24,7 +24,11 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Marcelo Varella Barca Guimarães
  */
 @RunWith(Suite.class)
-@SuiteClasses( { DateTypeTest.class, DateOperationsTest.class, DateHandlerTest.class })
-public class DateTestSuite {
+@SuiteClasses({
+  DateTypeTest.class,
+  DateOperationsTest.class,
+  DateHandlerTest.class
+})
+public interface DateTestSuite {
 
 }

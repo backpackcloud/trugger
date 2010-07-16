@@ -16,7 +16,7 @@
  */
 package net.sf.trugger.test.bind;
 
-import static net.sf.trugger.bind.Bind.newBind;
+import static net.sf.trugger.bind.Bind.newBinder;
 import static org.junit.Assert.assertEquals;
 import net.sf.trugger.Resolver;
 import net.sf.trugger.bind.Binder;
@@ -39,7 +39,7 @@ public class FieldBindingTest {
 
   @Test
   public void testFieldBinding() {
-    Binder binder = newBind();
+    Binder binder = newBinder();
     binder.bind(10).toFields().ofType(int.class);
     binder.bind(true).toField("booleanField");
     binder.use(new Resolver<Object, Element>() {

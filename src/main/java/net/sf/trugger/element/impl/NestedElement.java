@@ -145,15 +145,12 @@ public final class NestedElement extends AbstractElement implements Element {
 
   private class NestedElementHandler extends AbstractElementValueHandler {
 
-    private final Object source;
-
     public NestedElementHandler(Object source) {
-      super(getLast());
-      this.source = source;
+      super(getLast(), source);
     }
 
     public <E> E value() throws HandlingException {
-      Object value = source;
+      Object value = target();
       for (Element property : getPath()) {
         value = property.in(value).value();
       }
@@ -161,7 +158,7 @@ public final class NestedElement extends AbstractElement implements Element {
     }
 
     public void value(Object value) throws HandlingException {
-      Object _source = source;
+      Object _source = target();
       Element p = null;
       for (int i = 0 ; ;) {
         p = NestedElement.this.get(i);

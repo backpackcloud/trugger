@@ -24,7 +24,10 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Marcelo Varella Barca Guimarães
  */
 @RunWith(Suite.class)
-@SuiteClasses({MultiResourceBundleTest.class, NullObjectsTest.class})
-public class GeneralTestSuite {
+@SuiteClasses({
+  MultiResourceBundleTest.class,
+  NullObjectsTest.class
+})
+public interface GeneralTestSuite {
 
 }

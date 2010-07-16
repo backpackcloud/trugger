@@ -242,7 +242,7 @@ public final class TruggerValidationEngine implements ValidationEngine {
 
   private Validator newValidator(ValidationParameter parameter, ValidatorContext context) {
     Validator validator = validatorFactory.create(context);
-    Binder binder = Bind.newBind();
+    Binder binder = Bind.newBinder();
     Bridge bridge = new Bridge(parameter);
     binder.use(new ValidatorReferenceResolver(bridge)).toElements().ofType(Validator.class);
     binder.bind(bridge).toElements().ofType(ValidationBridge.class);

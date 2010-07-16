@@ -20,6 +20,8 @@ import java.lang.reflect.AnnotatedElement;
 
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.element.ElementValueHandler;
+import net.sf.trugger.factory.AnnotationFactoryContext;
+import net.sf.trugger.factory.AnnotationFactoryContextImpl;
 import net.sf.trugger.format.Formatter;
 import net.sf.trugger.format.Formatters;
 
@@ -32,9 +34,11 @@ import net.sf.trugger.format.Formatters;
 public abstract class AbstractElementValueHandler implements ElementValueHandler {
 
   private final AnnotatedElement annotatedElement;
+  private final Object target;
 
-  public AbstractElementValueHandler(AnnotatedElement annotatedElement) {
+  public AbstractElementValueHandler(AnnotatedElement annotatedElement, Object target) {
     this.annotatedElement = annotatedElement;
+    this.target = target;
   }
 
   @Override
@@ -55,7 +59,7 @@ public abstract class AbstractElementValueHandler implements ElementValueHandler
    * @return the formatted value.
    */
   protected String format(Object value) {
-    Formatter formatter = Formatters.factory().create(annotatedElement);
+    Formatter formatter = Formatters.factory().create(createContext());
     return formatter.format(value);
   }
 
@@ -67,7 +71,19 @@ public abstract class AbstractElementValueHandler implements ElementValueHandler
    * @return the parsed value.
    */
   protected Object parse(String value) {
-    Formatter formatter = Formatters.factory().create(annotatedElement);
+    Formatter formatter = Formatters.factory().create(createContext());
     return formatter.parse(value);
   }
+
+  private AnnotationFactoryContext createContext() {
+    AnnotationFactoryContextImpl context = new AnnotationFactoryContextImpl();
+    context.setAnnotatedElement(annotatedElement);
+    context.setTarget(target());
+    return context;
+  }
+
+  protected Object target() {
+    return target;
+  }
+
 }

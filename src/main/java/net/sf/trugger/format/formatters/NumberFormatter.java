@@ -16,6 +16,14 @@
  */
 package net.sf.trugger.format.formatters;
 
+import static net.sf.trugger.format.formatters.NumberType.BIG_DECIMAL;
+import static net.sf.trugger.format.formatters.NumberType.BIG_INT;
+import static net.sf.trugger.format.formatters.NumberType.DOUBLE;
+import static net.sf.trugger.format.formatters.NumberType.FLOAT;
+import static net.sf.trugger.format.formatters.NumberType.INT;
+import static net.sf.trugger.format.formatters.NumberType.LONG;
+import static net.sf.trugger.util.Utils.areAssignable;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
@@ -23,9 +31,11 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import net.sf.trugger.ParseException;
+import net.sf.trugger.annotation.TargetElement;
 import net.sf.trugger.bind.PostBind;
+import net.sf.trugger.element.Element;
 import net.sf.trugger.format.Formatter;
+import net.sf.trugger.format.ParseException;
 import net.sf.trugger.validation.validator.NotEmpty;
 import net.sf.trugger.validation.validator.NotNull;
 
@@ -41,6 +51,9 @@ public class NumberFormatter implements Formatter<java.lang.Number> {
 
   private Number annotation;
   private NumberFormat numberFormat;
+
+  @TargetElement
+  private Element element;
 
   @PostBind
   private void init() {
@@ -73,7 +86,24 @@ public class NumberFormatter implements Formatter<java.lang.Number> {
   public java.lang.Number parse(@NotEmpty String value) throws ParseException {
     try {
       java.lang.Number number = numberFormat.parse(value);
-      switch (annotation.type()) {
+      NumberType type = annotation.type();
+      if (element != null) {
+        Class<? extends Number> elementType = element.type();
+        if (areAssignable(Integer.class, elementType)) {
+          type = INT;
+        } else if (areAssignable(Long.class, elementType)) {
+          type = LONG;
+        } else if (areAssignable(Float.class, elementType)) {
+          type = FLOAT;
+        } else if (areAssignable(Double.class, elementType)) {
+          type = DOUBLE;
+        } else if (areAssignable(BigInteger.class, elementType)) {
+          type = BIG_INT;
+        } else if (areAssignable(BigDecimal.class, elementType)) {
+          type = BIG_DECIMAL;
+        }
+      }
+      switch (type) {
         case INT:
           return number.intValue();
         case LONG:

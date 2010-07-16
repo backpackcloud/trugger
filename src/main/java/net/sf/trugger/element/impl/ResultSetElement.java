@@ -41,15 +41,15 @@ public final class ResultSetElement extends AbstractElement implements Element {
 
   @Override
   public ElementValueHandler in(final Object target) {
-    return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT) {
+    if (target instanceof ResultSet) {
+      final ResultSet resultSet = (ResultSet) target;
+      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT, resultSet) {
 
-      public void value(Object value) throws HandlingException {
-        throw new UnwritableElementException("Cannot write a value in a ResultSet");
-      }
+        public void value(Object value) throws HandlingException {
+          throw new UnwritableElementException("Cannot write a value in a ResultSet");
+        }
 
-      public <E> E value() throws HandlingException {
-        if (target instanceof ResultSet) {
-          ResultSet resultSet = (ResultSet) target;
+        public <E> E value() throws HandlingException {
           try {
             if (name.matches("\\d+")) { //if the name is the column index
               return (E) resultSet.getObject(Integer.parseInt(name));
@@ -59,9 +59,9 @@ public final class ResultSetElement extends AbstractElement implements Element {
             throw new HandlingException(e);
           }
         }
-        throw new HandlingException("Target is not a " + ResultSet.class);
-      }
-    };
+      };
+    }
+    throw new HandlingException("Target is not a " + ResultSet.class);
   }
 
   @Override

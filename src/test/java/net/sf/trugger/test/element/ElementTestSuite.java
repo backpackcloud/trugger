@@ -42,6 +42,6 @@ import org.junit.runners.Suite.SuiteClasses;
   PropertiesElementTest.class,
   ResourceBundleElementTest.class
 })
-public class ElementTestSuite {
+public interface ElementTestSuite {
 
 }

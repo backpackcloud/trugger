@@ -40,7 +40,7 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
   public ElementValueHandler in(Object target) {
     if (target instanceof ResourceBundle) {
       final ResourceBundle bundle = (ResourceBundle) target;
-      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT) {
+      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT, bundle) {
 
         @Override
         public void value(Object value) throws HandlingException {
