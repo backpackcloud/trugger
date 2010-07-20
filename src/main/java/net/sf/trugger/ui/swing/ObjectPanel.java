@@ -14,22 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.test.format;
+package net.sf.trugger.ui.swing;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import javax.swing.JPanel;
 
+import net.sf.trugger.reflection.Reflection;
 
 /**
  * @author Marcelo Varella Barca Guimarães
+ * @since 2.7
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-  DateFormatterTest.class,
-  MaskFormatterTest.class,
-  NumberFormatterTest.class
-})
-public interface FormatterTestSuite {
+public class ObjectPanel<T> extends JPanel {
+
+  private static final long serialVersionUID = -3307046282000514145L;
+
+  protected final Class<T> objectType;
+
+  protected ObjectPanel() {
+    objectType = Reflection.reflect().genericType("T").in(this);
+  }
+
+  public T getObject() {
+    T object = Reflection.newInstanceOf(objectType);
+    SwingBinder.bindToTarget(this, object);
+    return object;
+  }
+
+  public void setObject(T object) {
+    SwingBinder.bindToUI(this, object);
+  }
 
 }

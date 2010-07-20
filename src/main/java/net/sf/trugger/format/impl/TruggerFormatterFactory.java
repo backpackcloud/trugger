@@ -88,7 +88,7 @@ public class TruggerFormatterFactory implements FormatterFactory {
     } else {
       formatter = factory.create(key.annotatedElement());
     }
-    if (key.target() != null) {
+    if (key.target() != null || key.element() != null) {
       binder.use(new TargetElementResolver(key)).toElements().annotatedWith(TargetElement.class);
     }
     binder.applyBinds(formatter);

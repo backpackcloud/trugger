@@ -14,22 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.test.format;
+package net.sf.trugger.test.ui.swing;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import net.sf.trugger.annotation.Bind;
+import net.sf.trugger.ui.swing.SwingBind;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-  DateFormatterTest.class,
-  MaskFormatterTest.class,
-  NumberFormatterTest.class
-})
-public interface FormatterTestSuite {
+@SwingBind
+public class AddressPanel extends JPanel {
+
+  @Bind
+  JTextField street = new JTextField();
+
+  @Bind
+  JTextField city = new JTextField();
+
+  @Bind
+  JTextField state = new JTextField();
+
+  public void reset() {
+    street.setText("");
+    city.setText("");
+    state.setText("");
+  }
 
 }

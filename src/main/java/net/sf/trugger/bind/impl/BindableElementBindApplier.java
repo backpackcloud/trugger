@@ -24,13 +24,13 @@ import net.sf.trugger.transformer.Transformer;
 
 /**
  * BindApplier for a single element selection.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class BindableElementBindApplier extends AbstractBindApplier implements BindApplier {
-  
+
   private final Result selection;
-  
+
   /**
    * Creates an instance for binding a value.
    */
@@ -38,7 +38,7 @@ public final class BindableElementBindApplier extends AbstractBindApplier implem
     super(value);
     this.selection = selector;
   }
-  
+
   /**
    * Creates an instance for binding a resolved value.
    */
@@ -46,13 +46,13 @@ public final class BindableElementBindApplier extends AbstractBindApplier implem
     super(resolver);
     this.selection = selector;
   }
-  
+
   public void applyBind(Object target) {
     Object element = selection.in(target);
-    Transformer<BindableElement, Object> transformer = new BindableElementTransformer(target);
     if (element != null) {
+      Transformer<BindableElement, Object> transformer = new BindableElementTransformer(target);
       applyBindInElement(transformer.transform(element));
     }
   }
-  
+
 }

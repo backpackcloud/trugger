@@ -14,22 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.test.format;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
-
+package net.sf.trugger.test.ui.swing;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-  DateFormatterTest.class,
-  MaskFormatterTest.class,
-  NumberFormatterTest.class
-})
-public interface FormatterTestSuite {
+public class Person {
+
+  enum Sex {
+    MALE, FEMALE
+  }
+
+  String name;
+  Sex sex;
+  Integer age;
+  Double salary;
+  java.util.Date birth;
+  Boolean married;
+  Address address;
 
 }

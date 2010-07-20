@@ -23,16 +23,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.GregorianCalendar;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-
-import net.sf.trugger.annotation.Bind;
 import net.sf.trugger.bind.Binder;
-import net.sf.trugger.format.formatters.Date;
-import net.sf.trugger.format.formatters.Number;
-import net.sf.trugger.format.formatters.NumberType;
-import net.sf.trugger.ui.swing.SwingBind;
+import net.sf.trugger.test.ui.swing.Person.Sex;
 import net.sf.trugger.ui.swing.SwingBinder;
 
 import org.junit.Before;
@@ -41,53 +33,13 @@ import org.junit.Test;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-@SwingBind
 public class SwingBindTest {
 
-  enum Sex {
-    MALE, FEMALE
-  }
-
-  @Bind(to = "name")
-  private JTextField txtName = new JTextField();
-
-  @Bind
-  private JComboBox sex = new JComboBox(new Sex[] { Sex.MALE, Sex.FEMALE });
-
-  @Bind
-  @Number
-  private JTextField age = new JTextField();
-
-  @Bind
-  @Number(type = NumberType.DOUBLE, pattern = "#,##0.00;(#,##0.00)", locale = "pt_BR")
-  private JTextField salary = new JTextField();
-
-  @Bind
-  private JCheckBox married = new JCheckBox();
-
-  @Bind
-  @Date("dd/MM/yyyy")
-  private JTextField birth = new JTextField();
-
-  static class Person {
-
-    String name;
-    Sex sex;
-    Integer age;
-    Double salary;
-    java.util.Date birth;
-    Boolean married;
-
-  }
+  private PersonPanel personPanel = new PersonPanel();
 
   @Before
   public void reset() {
-    txtName.setText("");
-    age.setText("");
-    salary.setText("");
-    birth.setText("");
-    married.setSelected(false);
-    sex.setSelectedItem(null);
+    personPanel.reset();
   }
 
   @Test
@@ -99,16 +51,23 @@ public class SwingBindTest {
     person.age = 25;
     person.salary = 3800.50;
     person.married = false;
+    Address address = new Address();
+    address.street = "My Street";
+    address.city = "My City";
+    address.state = "My State";
+    person.address = address;
 
-    Binder binder = SwingBinder.newBinderForUI(this, person);
-    binder.applyBinds(this);
+    personPanel.setObject(person);
 
-    assertEquals("John", txtName.getText());
-    assertEquals(Sex.MALE, sex.getSelectedItem());
-    assertEquals("01/01/1980", birth.getText());
-    assertEquals("25", age.getText());
-    assertEquals("3.800,50", salary.getText());
-    assertFalse(married.isSelected());
+    assertEquals("John", personPanel.txtName.getText());
+    assertEquals(Sex.MALE, personPanel.sex.getSelectedItem());
+    assertEquals("01/01/1980", personPanel.birth.getText());
+    assertEquals("25", personPanel.age.getText());
+    assertEquals("3.800,50", personPanel.salary.getText());
+    assertFalse(personPanel.married.isSelected());
+    assertEquals("My Street", personPanel.addressPanel.street);
+    assertEquals("My City", personPanel.addressPanel.city);
+    assertEquals("My State", personPanel.addressPanel.state);
 
     person.name = null;
     person.age = null;
@@ -116,27 +75,27 @@ public class SwingBindTest {
     person.salary = null;
     person.sex = null;
 
-    binder.applyBinds(this);
+    personPanel.setObject(person);
 
-    assertEquals("", txtName.getText());
-    assertEquals(null, sex.getSelectedItem());
-    assertEquals("", birth.getText());
-    assertEquals("", age.getText());
-    assertEquals("", salary.getText());
+    assertEquals("", personPanel.txtName.getText());
+    assertEquals(null, personPanel.sex.getSelectedItem());
+    assertEquals("", personPanel.birth.getText());
+    assertEquals("", personPanel.age.getText());
+    assertEquals("", personPanel.salary.getText());
   }
 
   @Test
   public void testBindToObject() throws Exception {
-    txtName.setText("Rosie");
-    sex.setSelectedItem(Sex.FEMALE);
-    age.setText("24");
-    salary.setText("5.480,60");
-    married.setSelected(true);
-    birth.setText("05/10/1972");
+    personPanel.txtName.setText("Rosie");
+    personPanel.sex.setSelectedItem(Sex.FEMALE);
+    personPanel.age.setText("24");
+    personPanel.salary.setText("5.480,60");
+    personPanel.married.setSelected(true);
+    personPanel.birth.setText("05/10/1972");
 
     Person person = new Person();
 
-    Binder binder = SwingBinder.newBinderForTarget(this, person);
+    Binder binder = SwingBinder.newBinderForTarget(personPanel, person);
     binder.applyBinds(person);
 
     assertEquals("Rosie", person.name);
