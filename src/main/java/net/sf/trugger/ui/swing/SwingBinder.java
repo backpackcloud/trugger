@@ -16,17 +16,13 @@
  */
 package net.sf.trugger.ui.swing;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 
 import net.sf.trugger.Resolver;
 import net.sf.trugger.annotation.Bind;
-import net.sf.trugger.bind.BindSelector;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
-import net.sf.trugger.util.Utils;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -34,81 +30,76 @@ import net.sf.trugger.util.Utils;
  */
 public class SwingBinder {
 
+  /**
+   * @author Marcelo Varella Barca Guimarães
+   * @since 2.7
+   */
+  public interface UIComponentSpecifier {
+    public void toUIComponent(Object uiComponent);
+  }
+
+  /**
+   * @author Marcelo Varella Barca Guimarães
+   * @since 2.7
+   */
+  public interface ObjectSpecifier {
+    public void toObject(Object object);
+  }
+
   enum Mode {
     UI_TO_OBJECT, OBJECT_TO_UI
   }
 
-  private final Object swingComponent;
-  private final Object target;
   private final Mode mode;
+  private final Object target;
+  private final Object uiTarget;
+  private final String rootElement;
+  private final String uiRootElement;
 
-  private SwingBinder(Mode mode, Object swingComponent, Object target) {
+  private SwingBinder(Mode mode, Object target, Object uiTarget, String rootElement, String uiRootElement) {
     this.mode = mode;
-    this.swingComponent = swingComponent;
     this.target = target;
+    this.uiTarget = uiTarget;
+    this.rootElement = rootElement;
+    this.uiRootElement = uiRootElement;
   }
 
-  public Binder newBinder() {
-    Class<?> type = Utils.resolveType(swingComponent);
-    if (!type.isAnnotationPresent(SwingBind.class)) {
-      throw new IllegalArgumentException("The swing component does not have a SwingBind annotation.");
-    }
-    SwingBind annotation = type.getAnnotation(SwingBind.class);
-    String parentElementName = annotation.to();
-    final Collection<Binder> binders = initializeBinder(parentElementName, swingComponent);
-    return new Binder() {
-
-      Binder _binder = net.sf.trugger.bind.Bind.newBinder();
-
-      @Override
-      public BindSelector use(Resolver<Object, Element> resolver) {
-        return _binder.use(resolver);
-      }
-
-      @Override
-      public BindSelector bind(Object value) {
-        return _binder.bind(value);
-      }
-
-      @Override
-      public <E> E applyBinds(E object) {
-        _binder.applyBinds(object);
-        for (Binder binder : binders) {
-          binder.applyBinds(object);
-        }
-        return object;
-      }
-    };
+  public SwingBinder(Mode mode, Object target, Object uiComponent) {
+    this(mode, target, uiComponent, null, null);
   }
 
-  protected Collection<Binder> initializeBinder(String parentElementName, Object component) {
-    Collection<Binder> binders = new ArrayList<Binder>();
-    Binder binder = net.sf.trugger.bind.Bind.newBinder();
-    binders.add(binder);
-    boolean nested = !parentElementName.isEmpty();
-    Set<Element> elements = Elements.elements().annotatedWith(Bind.class).in(component);
+  protected void configureBinder(Binder binder, Object uiComponent) {
+    Set<Element> elements = Elements.elements().annotatedWith(Bind.class).in(uiComponent);
+
     for (Element element : elements) {
-      String elementName = element.getAnnotation(Bind.class).to();
-      if (elementName.isEmpty()) {
-        elementName = element.name();
+      String targetElementName = element.getAnnotation(Bind.class).to();
+      String uiElementName = element.name();
+      if (targetElementName.isEmpty()) {
+        targetElementName = element.name();
       }
-      if (nested) {
-        elementName = String.format("%s.%s", parentElementName, elementName);
+      if (rootElement != null) {
+        targetElementName = rootElement + "." + targetElementName;
+      }
+      if (uiRootElement != null) {
+        uiElementName = uiRootElement + "." + uiElementName;
       }
       if (element.type().isAnnotationPresent(SwingBind.class)) {
-        binders.addAll(new SwingBinder(mode, element.type(), target).initializeBinder(elementName, element.type()));
+        SwingBinder swingBinder = new SwingBinder(mode, target, uiTarget, targetElementName, uiElementName);
+        swingBinder.configureBinder(binder, element.type());
       } else {
-        configureBind(binder, element, elementName);
+        configureBind(binder, uiElementName, targetElementName);
       }
     }
-    return binders;
   }
 
-  protected void configureBind(Binder binder, Element swingComponentElement, String elementNameToBind) {
-    if (mode == Mode.OBJECT_TO_UI) {
-      binder.use(element(elementNameToBind, target)).toElement(swingComponentElement.name());
-    } else {
-      binder.use(element(swingComponentElement.name(), swingComponent)).toElement(elementNameToBind);
+  private void configureBind(Binder binder, String uiComponentPath, String targetPath) {
+    switch (mode) {
+      case OBJECT_TO_UI:
+        binder.use(element(targetPath, target)).toElement(uiComponentPath);
+        break;
+      case UI_TO_OBJECT:
+        binder.use(element(uiComponentPath, uiTarget)).toElement(targetPath);
+        break;
     }
   }
 
@@ -116,25 +107,34 @@ public class SwingBinder {
     return new Resolver<Object, Element>() {
 
       public Object resolve(Element element) {
-        return Elements.element(name).in(target).value();
+        Object resolved = Elements.element(name).in(target).value();
+        return resolved;
       }
     };
   }
 
-  public static Binder newBinderForUI(Object swingComponent, Object target) {
-    return new SwingBinder(Mode.OBJECT_TO_UI, swingComponent, target).newBinder();
+  public static UIComponentSpecifier bindObject(final Object object) {
+    return new UIComponentSpecifier() {
+
+      @Override
+      public void toUIComponent(Object uiComponent) {
+        Binder binder = net.sf.trugger.bind.Bind.newBinder();
+        new SwingBinder(Mode.OBJECT_TO_UI, object, uiComponent).configureBinder(binder, uiComponent);
+        binder.applyBinds(uiComponent);
+      }
+    };
   }
 
-  public static Binder newBinderForTarget(Object swingComponent, Object target) {
-    return new SwingBinder(Mode.UI_TO_OBJECT, swingComponent, target).newBinder();
-  }
+  public static ObjectSpecifier bindUIComponent(final Object uiComponent) {
+    return new ObjectSpecifier() {
 
-  public static void bindToUI(Object swingComponent, Object target) {
-    newBinderForUI(swingComponent, target).applyBinds(swingComponent);
-  }
-
-  public static void bindToTarget(Object swingComponent, Object target) {
-    newBinderForTarget(swingComponent, target).applyBinds(target);
+      @Override
+      public void toObject(Object object) {
+        Binder binder = net.sf.trugger.bind.Bind.newBinder();
+        new SwingBinder(Mode.UI_TO_OBJECT, object, uiComponent).configureBinder(binder, uiComponent);
+        binder.applyBinds(object);
+      }
+    };
   }
 
 }

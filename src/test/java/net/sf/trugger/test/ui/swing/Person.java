@@ -31,6 +31,6 @@ public class Person {
   Double salary;
   java.util.Date birth;
   Boolean married;
-  Address address;
+  Address address = new Address();
 
 }

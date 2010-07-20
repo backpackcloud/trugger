@@ -23,9 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.GregorianCalendar;
 
-import net.sf.trugger.bind.Binder;
 import net.sf.trugger.test.ui.swing.Person.Sex;
-import net.sf.trugger.ui.swing.SwingBinder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -65,9 +63,9 @@ public class SwingBindTest {
     assertEquals("25", personPanel.age.getText());
     assertEquals("3.800,50", personPanel.salary.getText());
     assertFalse(personPanel.married.isSelected());
-    assertEquals("My Street", personPanel.addressPanel.street);
-    assertEquals("My City", personPanel.addressPanel.city);
-    assertEquals("My State", personPanel.addressPanel.state);
+    assertEquals("My Street", personPanel.addressPanel.street.getText());
+    assertEquals("My City", personPanel.addressPanel.city.getText());
+    assertEquals("My State", personPanel.addressPanel.state.getText());
 
     person.name = null;
     person.age = null;
@@ -92,11 +90,11 @@ public class SwingBindTest {
     personPanel.salary.setText("5.480,60");
     personPanel.married.setSelected(true);
     personPanel.birth.setText("05/10/1972");
+    personPanel.addressPanel.city.setText("My City");
+    personPanel.addressPanel.state.setText("My State");
+    personPanel.addressPanel.street.setText("My Street");
 
-    Person person = new Person();
-
-    Binder binder = SwingBinder.newBinderForTarget(personPanel, person);
-    binder.applyBinds(person);
+    Person person = personPanel.getObject();
 
     assertEquals("Rosie", person.name);
     assertEquals(Sex.FEMALE, person.sex);
@@ -107,7 +105,7 @@ public class SwingBindTest {
 
     reset();
 
-    binder.applyBinds(person);
+    person = personPanel.getObject();
 
     assertNull(person.age);
     assertNull(person.birth);

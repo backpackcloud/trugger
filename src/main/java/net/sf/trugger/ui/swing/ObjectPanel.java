@@ -36,12 +36,12 @@ public class ObjectPanel<T> extends JPanel {
 
   public T getObject() {
     T object = Reflection.newInstanceOf(objectType);
-    SwingBinder.bindToTarget(this, object);
+    SwingBinder.bindUIComponent(this).toObject(object);
     return object;
   }
 
   public void setObject(T object) {
-    SwingBinder.bindToUI(this, object);
+    SwingBinder.bindObject(object).toUIComponent(this);
   }
 
 }
