@@ -40,7 +40,7 @@ import net.sf.trugger.ui.swing.element.SwingComponentElement;
  */
 public class SwingElementFinder extends DefaultElementFinder implements Finder<Element> {
 
-  private Registry<Class, Class<? extends Element>> registry;
+  private static Registry<Class, Class<? extends Element>> registry;
 
   private Transformer<Element, Element> transformer = new Transformer<Element, Element>() {
 
@@ -56,10 +56,13 @@ public class SwingElementFinder extends DefaultElementFinder implements Finder<E
 
   public SwingElementFinder() {
     registry = new MapRegistry<Class, Class<? extends Element>>();
-    Set<Class<?>> classes =
-        ClassScan.findClasses().recursively().assignableTo(SwingComponentElement.class)
-          .nonAnonymous().thatMatches(ReflectionPredicates.NON_ABSTRACT_CLASS).withAccess(Access.PUBLIC)
-          .in(SwingComponentElement.class.getPackage().getName());
+    Set<Class<?>> classes = ClassScan.findClasses()
+      .recursively()
+      .assignableTo(SwingComponentElement.class)
+      .nonAnonymous()
+      .thatMatches(ReflectionPredicates.NON_ABSTRACT_CLASS)
+      .withAccess(Access.PUBLIC)
+    .in(SwingComponentElement.class.getPackage().getName());
     for (Class elementClass : classes) {
       Class type = Reflection.reflect().genericType("T").in(elementClass);
       registry.register(elementClass).to(type);
@@ -106,10 +109,17 @@ public class SwingElementFinder extends DefaultElementFinder implements Finder<E
       public Set<Element> in(Object target) {
         Set<Element> elements = result.in(target);
         Set<Element> transformed = new HashSet<Element>(elements.size());
-        Iteration.copyTo(transformed).transformingWith(transformer).allElements().from(elements);
+        Iteration.copyTo(transformed)
+          .transformingWith(transformer)
+          .allElements()
+        .from(elements);
         return transformed;
       }
     };
+  }
+
+  public static Registry<Class, Class<? extends Element>> registry() {
+    return registry;
   }
 
 }

@@ -18,6 +18,7 @@ package net.sf.trugger.ui.swing;
 
 import javax.swing.JPanel;
 
+import net.sf.trugger.annotation.processors.BindProcessor;
 import net.sf.trugger.reflection.Reflection;
 
 /**
@@ -36,12 +37,12 @@ public class ObjectPanel<T> extends JPanel {
 
   public T getObject() {
     T object = Reflection.newInstanceOf(objectType);
-    SwingBinder.bindUIComponent(this).toObject(object);
+    new BindProcessor(SwingBind.class).bindContext(this).toObject(object);
     return object;
   }
 
   public void setObject(T object) {
-    SwingBinder.bindObject(object).toUIComponent(this);
+    new BindProcessor(SwingBind.class).bindObject(object).toContext(this);
   }
 
 }
