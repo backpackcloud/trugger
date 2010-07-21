@@ -16,11 +16,14 @@
  */
 package net.sf.trugger.test.ui.swing;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 
 import net.sf.trugger.test.ui.swing.Person.Sex;
@@ -54,18 +57,22 @@ public class SwingBindTest {
     address.city = "My City";
     address.state = "My State";
     person.address = address;
+    person.resume = new File("paper.pdf");
+    person.papers = Arrays.asList(new File("resume1.pdf"), new File("resume2.pdf"));
 
     personPanel.setObject(person);
 
-    assertEquals("John", personPanel.txtName.getText());
+    assertEquals(person.name, personPanel.txtName.getText());
     assertEquals(Sex.MALE, personPanel.sex.getSelectedItem());
     assertEquals("01/01/1980", personPanel.birth.getText());
     assertEquals("25", personPanel.age.getText());
     assertEquals("3.800,50", personPanel.salary.getText());
     assertFalse(personPanel.married.isSelected());
-    assertEquals("My Street", personPanel.addressPanel.street.getText());
-    assertEquals("My City", personPanel.addressPanel.city.getText());
-    assertEquals("My State", personPanel.addressPanel.state.getText());
+    assertEquals(person.address.street, personPanel.addressPanel.street.getText());
+    assertEquals(person.address.city, personPanel.addressPanel.city.getText());
+    assertEquals(person.address.state, personPanel.addressPanel.state.getText());
+    assertEquals(person.resume, personPanel.resume.getSelectedFile());
+    assertArrayEquals(person.papers.toArray(), personPanel.papers.getSelectedFiles());
 
     person.name = null;
     person.age = null;
@@ -93,6 +100,8 @@ public class SwingBindTest {
     personPanel.addressPanel.city.setText("My City");
     personPanel.addressPanel.state.setText("My State");
     personPanel.addressPanel.street.setText("My Street");
+    personPanel.resume.setSelectedFile(new File("paper.pdf"));
+    personPanel.papers.setSelectedFiles(new File[] { new File("resume1.pdf"), new File("resume2.pdf") });
 
     Person person = personPanel.getObject();
 
@@ -102,6 +111,8 @@ public class SwingBindTest {
     assertEquals(5480.60, person.salary, 1e-4);
     assertTrue(person.married);
     assertEquals(new GregorianCalendar(1972, 9, 5).getTime(), person.birth);
+    assertEquals(personPanel.resume.getSelectedFile(), person.resume);
+    assertArrayEquals(personPanel.papers.getSelectedFiles(), person.papers.toArray());
 
     reset();
 

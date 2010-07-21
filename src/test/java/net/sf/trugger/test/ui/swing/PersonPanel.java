@@ -16,8 +16,11 @@
  */
 package net.sf.trugger.test.ui.swing;
 
+import java.io.File;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
 import net.sf.trugger.annotation.Bind;
@@ -25,6 +28,7 @@ import net.sf.trugger.format.formatters.Date;
 import net.sf.trugger.format.formatters.Number;
 import net.sf.trugger.format.formatters.NumberType;
 import net.sf.trugger.test.ui.swing.Person.Sex;
+import net.sf.trugger.transformer.transformers.Collection;
 import net.sf.trugger.ui.swing.ObjectPanel;
 import net.sf.trugger.ui.swing.SwingBind;
 
@@ -58,6 +62,19 @@ public class PersonPanel extends ObjectPanel<Person> {
   @Bind(to = "address")
   AddressPanel addressPanel = new AddressPanel();
 
+  @Bind
+  JFileChooser resume = new JFileChooser();
+
+  @Bind
+  @Collection(arrayType = File.class)
+  JFileChooser papers = new JFileChooser();
+
+
+  public PersonPanel() {
+    resume.setMultiSelectionEnabled(false);
+    papers.setMultiSelectionEnabled(true);
+  }
+
   public void reset() {
     txtName.setText("");
     age.setText("");
@@ -65,6 +82,8 @@ public class PersonPanel extends ObjectPanel<Person> {
     birth.setText("");
     married.setSelected(false);
     sex.setSelectedItem(null);
+    resume.setSelectedFile(null);
+    papers.setSelectedFiles(null);
     addressPanel.reset();
   }
 

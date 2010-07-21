@@ -14,30 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.ui.swing.element;
-
-import javax.swing.JComboBox;
-
-import net.sf.trugger.element.Element;
+package net.sf.trugger.transformer;
 
 /**
+ * Interface that defines a two-way transformer.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
+public interface BidirectionalTransformer<To, From> extends Transformer<To, From> {
 
-  public JComboBoxElement(Element decorated) {
-    super(decorated);
-  }
+  To transform(From object);
 
-  @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
-  }
-
-  @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
-  }
+  /**
+   * Produces the object that, if passed to {@link #transform(Object)}, results
+   * in the given object.
+   *
+   * @param object
+   *          the object to transform.
+   * @return the transformed object.
+   */
+  From inverse(To object);
 
 }

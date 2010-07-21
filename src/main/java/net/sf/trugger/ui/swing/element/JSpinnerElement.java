@@ -16,28 +16,27 @@
  */
 package net.sf.trugger.ui.swing.element;
 
-import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 
 import net.sf.trugger.element.Element;
 
 /**
  * @author Marcelo Varella Barca Guimarães
- * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
+public class JSpinnerElement extends SwingComponentElement<JSpinner> {
 
-  public JComboBoxElement(Element decorated) {
+  public JSpinnerElement(Element decorated) {
     super(decorated);
   }
 
   @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
+  protected Object getComponentValue(JSpinner component) {
+    return component.getValue();
   }
 
   @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
+  protected void setComponentValue(JSpinner component, Object value) {
+    component.setValue(value);
   }
 
 }

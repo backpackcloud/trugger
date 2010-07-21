@@ -16,28 +16,29 @@
  */
 package net.sf.trugger.ui.swing.element;
 
-import javax.swing.JComboBox;
+import java.awt.Color;
+
+import javax.swing.JColorChooser;
 
 import net.sf.trugger.element.Element;
 
 /**
  * @author Marcelo Varella Barca Guimarães
- * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
+public class JColorChooserElement extends SwingComponentElement<JColorChooser> {
 
-  public JComboBoxElement(Element decorated) {
+  public JColorChooserElement(Element decorated) {
     super(decorated);
   }
 
   @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
+  protected Object getComponentValue(JColorChooser component) {
+    return component.getColor();
   }
 
   @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
+  protected void setComponentValue(JColorChooser component, Object value) {
+    component.setColor((Color) value);
   }
 
 }

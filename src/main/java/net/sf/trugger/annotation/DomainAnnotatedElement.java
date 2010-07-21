@@ -18,7 +18,9 @@ package net.sf.trugger.annotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.trugger.annotation.impl.DomainAnnotationImpl;
@@ -30,6 +32,9 @@ import net.sf.trugger.annotation.impl.DomainAnnotationImpl;
 public class DomainAnnotatedElement implements AnnotatedElement {
 
   private final AnnotatedElement annotatedElement;
+
+  private Map<Class<? extends Annotation>, DomainAnnotation> map =
+      new HashMap<Class<? extends Annotation>, DomainAnnotation>();
 
   public DomainAnnotatedElement(AnnotatedElement annotatedElement) {
     this.annotatedElement = annotatedElement;
@@ -55,6 +60,9 @@ public class DomainAnnotatedElement implements AnnotatedElement {
     if (annotatedElement.isAnnotationPresent(annotationType)) {
       return new DomainAnnotationImpl(getAnnotation(annotationType));
     }
+    if (map.containsKey(annotationType)) {
+      return map.get(annotationType);
+    }
     Set<Class<? extends Annotation>> annotations = new HashSet<Class<? extends Annotation>>();
     DomainAnnotation found = null;
     for (Annotation annotation : getDeclaredAnnotations()) {
@@ -67,6 +75,7 @@ public class DomainAnnotatedElement implements AnnotatedElement {
         found = search(annotations, parent, annotation, annotationType);
         annotations.add(type);
         if (found != null) {
+          map.put(annotationType, found);
           return found;
         }
       }
@@ -95,6 +104,10 @@ public class DomainAnnotatedElement implements AnnotatedElement {
 
   public boolean isDomainAnnotationPresent(Class<? extends Annotation> annotationType) {
     return getDomainAnnotation(annotationType) != null;
+  }
+
+  public AnnotatedElement annotatedElement() {
+    return annotatedElement;
   }
 
   public static DomainAnnotatedElement wrap(AnnotatedElement annotatedElement) {

@@ -22,6 +22,8 @@ import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.factory.AnnotationFactoryContextImpl;
 import net.sf.trugger.format.Formatter;
 import net.sf.trugger.format.Formatters;
+import net.sf.trugger.transformer.BidirectionalTransformer;
+import net.sf.trugger.transformer.Transformers;
 
 /**
  * The element for a component such as visual component (Swing, AWT or SWT) or
@@ -53,13 +55,13 @@ public abstract class ComponentElement<T> extends DecoratedElement {
       @Override
       public void value(Object value) throws HandlingException {
         T component = (T) element.in(target()).value();
-        setComponentValue(component, value);
+        setComponentValue(component, transformForComponent(value));
       }
 
       @Override
       public <E> E value() throws HandlingException {
         T component = (T) element.in(target()).value();
-        return (E) getComponentValue(component);
+        return (E) transformForObject(getComponentValue(component));
       }
 
     };
@@ -73,7 +75,7 @@ public abstract class ComponentElement<T> extends DecoratedElement {
    * @return the formatted value.
    */
   protected String format(Object value) {
-    Formatter formatter = Formatters.factory().create(new AnnotationFactoryContextImpl(element, element.target()));
+    Formatter formatter = Formatters.factory().create(createContext());
     return formatter.format(value);
   }
 
@@ -85,8 +87,22 @@ public abstract class ComponentElement<T> extends DecoratedElement {
    * @return the parsed value.
    */
   protected Object parse(String value) {
-    Formatter formatter = Formatters.factory().create(new AnnotationFactoryContextImpl(element, element.target()));
+    Formatter formatter = Formatters.factory().create(createContext());
     return formatter.parse(value);
+  }
+
+  protected Object transformForComponent(Object value) {
+    BidirectionalTransformer transformer = Transformers.factory().create(createContext());
+    return transformer.inverse(value);
+  }
+
+  protected Object transformForObject(Object value) {
+    BidirectionalTransformer transformer = Transformers.factory().create(createContext());
+    return transformer.transform(value);
+  }
+
+  protected AnnotationFactoryContextImpl createContext() {
+    return new AnnotationFactoryContextImpl(element, element.target());
   }
 
   protected abstract Object getComponentValue(T component);

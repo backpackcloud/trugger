@@ -14,30 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.ui.swing.element;
+package net.sf.trugger.transformer;
 
-import javax.swing.JComboBox;
-
-import net.sf.trugger.element.Element;
+import static net.sf.trugger.reflection.ReflectionPredicates.methodNamed;
+import net.sf.trugger.interception.ArgumentsInterceptor;
 
 /**
  * @author Marcelo Varella Barca Guimarães
- * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
+public class TransformerInterceptor extends ArgumentsInterceptor {
 
-  public JComboBoxElement(Element decorated) {
-    super(decorated);
+  public TransformerInterceptor() {
+    ifMethodMatches(methodNamed("transform")).useArgument(0).andCheckGenericType("From");
+    ifMethodMatches(methodNamed("inverse")).useArgument(0).andCheckGenericType("To");
   }
 
-  @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
-  }
-
-  @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
+  protected Object onInvalidArgument(Object argument) {
+    return null;
   }
 
 }

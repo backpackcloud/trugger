@@ -14,30 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.ui.swing.element;
+package net.sf.trugger.transformer.transformers;
 
-import javax.swing.JComboBox;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import net.sf.trugger.element.Element;
+import net.sf.trugger.transformer.TransformerClass;
 
 /**
+ * Indicates that an element is backed by an Array and must be transformed to a
+ * {@link java.util.Collection}.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
+@Retention(RetentionPolicy.RUNTIME)
+@TransformerClass(CollectionTransformer.class)
+public @interface Collection {
 
-  public JComboBoxElement(Element decorated) {
-    super(decorated);
-  }
-
-  @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
-  }
-
-  @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
-  }
+  Class arrayType() default Object.class;
 
 }

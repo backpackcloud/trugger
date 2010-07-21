@@ -485,20 +485,38 @@ public class ReflectionPredicates {
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated element
-   *         a name that is present in the specified ones.
+   * @return a predicate that returns <code>true</code> if the evaluated element has
+   *         a name that with the given one.
    */
-  public static <T extends Member> CompositePredicate<T> named(final String... names) {
-    Arrays.sort(names);
+  public static <T extends Member> CompositePredicate<T> named(final String name) {
     return newComposition(new Predicate<Member>() {
 
       public boolean evaluate(Member element) {
-        return Arrays.binarySearch(names, element.getName()) >= 0;
+        return element.getName().equals(name);
       }
 
       @Override
       public String toString() {
-        return "Named " + Arrays.toString(names);
+        return "Named " + name;
+      }
+    });
+  }
+
+  /**
+   * @return a predicate that returns <code>true</code> if the evaluated method has
+   *         a name that matches with the given one.
+   * @since 2.7
+   */
+  public static <T extends Method> CompositePredicate<T> methodNamed(final String name) {
+    return newComposition(new Predicate<Method>() {
+
+      public boolean evaluate(Method element) {
+        return element.getName().equals(name);
+      }
+
+      @Override
+      public String toString() {
+        return "Named " + name;
       }
     });
   }

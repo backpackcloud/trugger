@@ -14,30 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.ui.swing.element;
+package net.sf.trugger.transformer;
 
-import javax.swing.JComboBox;
-
-import net.sf.trugger.element.Element;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Indicates which class implements the transformation described by an
+ * Annotation.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface TransformerClass {
 
-  public JComboBoxElement(Element decorated) {
-    super(decorated);
-  }
-
-  @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
-  }
-
-  @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
-  }
+  /**
+   * The transformer that implements this transformation.
+   */
+  Class<? extends BidirectionalTransformer> value();
 
 }

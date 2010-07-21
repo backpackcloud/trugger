@@ -103,18 +103,29 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
   }
 
   public boolean canCreate(AnnotatedElement key) {
-    return DomainAnnotatedElement.wrap(key).isAnnotationPresent(annotationType);
+    initialize(key);
+    return domainAnnotatedElement().isAnnotationPresent(annotationType);
+  }
+
+  private void initialize(AnnotatedElement key) {
+    DomainAnnotatedElement element = domainAnnotatedElement.get();
+    if(element == null || !element.annotatedElement().equals(key)) {
+      domainAnnotatedElement.set(DomainAnnotatedElement.wrap(key));
+    }
   }
 
   public E create(AnnotatedElement key) throws CreateException {
     try {
-      domainAnnotatedElement.set(DomainAnnotatedElement.wrap(key));
+      initialize(key);
       return super.create(key);
     } finally {
       domainAnnotatedElement.remove();
     }
   }
 
+  /**
+   * @return the wrapped DomainAnnotatedElement for the key
+   */
   protected final DomainAnnotatedElement domainAnnotatedElement() {
     return domainAnnotatedElement.get();
   }

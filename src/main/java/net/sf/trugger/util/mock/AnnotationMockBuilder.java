@@ -142,9 +142,36 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
 
   @Override
   public T mock() {
-    CompositePredicate<Member> unused = named(defined.toArray(new String[defined.size()])).negate(); //finds the not used methods
-    Set<Method> undefined = reflect().methods().withoutParameters().thatMatches(withDefaultValue().and(unused)).in(annotationType);
-    for (Method method : undefined) {
+    Set<Method> methods;
+    if(defined.isEmpty()) {
+      methods = reflect()
+                  .methods()
+                  .withoutParameters()
+                  .thatMatches
+                  (
+                    withDefaultValue()
+                  )
+                .in(annotationType);
+    } else {
+      String[] names = defined.toArray(new String[defined.size()]);
+      CompositePredicate<Member> predicate = named(names[0]);
+      for (int i = 1 ; i < names.length ; i++) {
+        String name = names[i];
+        predicate = predicate.or(named(name));
+      }
+      CompositePredicate<Member> unused = predicate.negate();
+      methods = reflect()
+                  .methods()
+                  .withoutParameters()
+                  .thatMatches
+                  (
+                    withDefaultValue()
+                    .and(unused)
+                  )
+                .in(annotationType);
+    }
+
+    for (Method method : methods) {
       invoke(method).in(mockedAnnotation).withoutArgs();
       expectLastCall().andReturn(method.getDefaultValue()).anyTimes();
     }

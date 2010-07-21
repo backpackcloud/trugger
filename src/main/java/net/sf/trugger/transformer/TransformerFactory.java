@@ -14,30 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.ui.swing.element;
+package net.sf.trugger.transformer;
 
-import javax.swing.JComboBox;
-
-import net.sf.trugger.element.Element;
+import net.sf.trugger.factory.AnnotationFactoryContext;
+import net.sf.trugger.factory.Factory;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
-
-  public JComboBoxElement(Element decorated) {
-    super(decorated);
-  }
-
-  @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
-  }
-
-  @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
-  }
+public interface TransformerFactory extends Factory<AnnotationFactoryContext, BidirectionalTransformer> {
 
 }

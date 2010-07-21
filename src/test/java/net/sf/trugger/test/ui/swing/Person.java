@@ -16,6 +16,9 @@
  */
 package net.sf.trugger.test.ui.swing;
 
+import java.io.File;
+import java.util.Collection;
+
 /**
  * @author Marcelo Varella Barca Guimarães
  */
@@ -32,5 +35,8 @@ public class Person {
   java.util.Date birth;
   Boolean married;
   Address address = new Address();
+
+  File resume;
+  Collection<File> papers;
 
 }

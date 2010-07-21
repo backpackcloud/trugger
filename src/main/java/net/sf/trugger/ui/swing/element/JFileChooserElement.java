@@ -16,28 +16,33 @@
  */
 package net.sf.trugger.ui.swing.element;
 
-import javax.swing.JComboBox;
+import java.io.File;
+
+import javax.swing.JFileChooser;
 
 import net.sf.trugger.element.Element;
 
 /**
  * @author Marcelo Varella Barca Guimarães
- * @since 2.7
  */
-public class JComboBoxElement extends SwingComponentElement<JComboBox> {
+public class JFileChooserElement extends SwingComponentElement<JFileChooser> {
 
-  public JComboBoxElement(Element decorated) {
+  public JFileChooserElement(Element decorated) {
     super(decorated);
   }
 
   @Override
-  protected Object getComponentValue(JComboBox component) {
-    return component.getSelectedItem();
+  protected Object getComponentValue(JFileChooser component) {
+    return component.isMultiSelectionEnabled() ? component.getSelectedFiles() : component.getSelectedFile();
   }
 
   @Override
-  protected void setComponentValue(JComboBox component, Object value) {
-    component.setSelectedItem(value);
+  protected void setComponentValue(JFileChooser component, Object value) {
+    if(component.isMultiSelectionEnabled()) {
+      component.setSelectedFiles((File[]) value);
+    } else {
+      component.setSelectedFile((File) value);
+    }
   }
 
 }
