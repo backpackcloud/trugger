@@ -20,6 +20,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 
 import net.sf.trugger.CreateException;
+import net.sf.trugger.annotation.DomainAnnotatedElement;
 import net.sf.trugger.bind.Bind;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
@@ -52,7 +53,7 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    */
   private final String elementName;
 
-  private ThreadLocal<Annotation> parent = new ThreadLocal<Annotation>();
+  private ThreadLocal<DomainAnnotatedElement> domainAnnotatedElement = new ThreadLocal<DomainAnnotatedElement>();
 
   /**
    * Creates a new AnnotationBasedFactory based on the specified arguments.
@@ -102,61 +103,26 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
   }
 
   public boolean canCreate(AnnotatedElement key) {
-    return key.isAnnotationPresent(annotationType) || search(key) != null;
+    return DomainAnnotatedElement.wrap(key).isAnnotationPresent(annotationType);
   }
 
   public E create(AnnotatedElement key) throws CreateException {
     try {
+      domainAnnotatedElement.set(DomainAnnotatedElement.wrap(key));
       return super.create(key);
     } finally {
-      parent.remove();
+      domainAnnotatedElement.remove();
     }
   }
 
-  /**
-   * Searches in the key annotations for an annotation that has the
-   * {@link #annotationType defined annotation}.
-   *
-   * @param key
-   *          the key passed to create the object.
-   * @return the found element
-   */
-  protected Annotation search(AnnotatedElement key) {
-    Annotation found = null;
-    Annotation[] annotations = key.getAnnotations();
-    for (Annotation annotation : annotations) {
-      Class<? extends Annotation> type = annotation.annotationType();
-      if (type.isAnnotationPresent(annotationType)) {
-        found = annotation;
-        break;
-      } else if (!type.getPackage().getName().equals("java.lang.annotation")) {
-        Annotation deeper = search(type);
-        if (deeper != null) {
-          found = deeper;
-          break;
-        }
-      }
-    }
-    parent.set(found);
-    return found;
-  }
-
-  /**
-   * Returns the annotation that has the desired annotation type or
-   * <code>null</code> if the key itself has the annotation type present.
-   * <p>
-   * This method is only avaiable after
-   *
-   * @return the found annotation
-   */
-  protected final Annotation parentAnnotation() {
-    return parent.get();
+  protected final DomainAnnotatedElement domainAnnotatedElement() {
+    return domainAnnotatedElement.get();
   }
 
   @Override
   protected final Class<? extends E> resolveClassForCreation(AnnotatedElement key) {
     if (!key.isAnnotationPresent(annotationType)) {
-      key = search(key).annotationType();
+      key = domainAnnotatedElement();
     }
     Annotation classIdentifier = key.getAnnotation(annotationType);
     Element element = Elements.element(elementName).in(annotationType);
@@ -198,7 +164,7 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    */
   protected void registerAnnotation(Binder binder, AnnotatedElement key) {
     if (!key.isAnnotationPresent(annotationType)) {
-      Annotation annotation = parentAnnotation();
+      Annotation annotation = domainAnnotatedElement().getDomainAnnotation(annotationType).parent().annotation();
       binder.bind(annotation).toElement().ofType(annotation.annotationType());
     }
   }

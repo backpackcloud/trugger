@@ -35,13 +35,14 @@ public abstract class AbstractElement implements Element {
    * The element for retrieving annotation metadata.
    */
   protected AnnotatedElement annotatedElement = Null.NULL_ANNOTATED_ELEMENT;
-	/**
-	 * The element name
-	 */
-	protected final String name;
+  /**
+   * The element name
+   */
+  protected final String name;
 
   /**
-   * @param name the element name
+   * @param name
+   *          the element name
    */
   public AbstractElement(String name) {
     this.name = name;
@@ -89,7 +90,7 @@ public abstract class AbstractElement implements Element {
 
   @Override
   public void value(Object value) throws HandlingException {
-    if(isSpecific()) {
+    if (isSpecific()) {
       in(target()).value(value);
     } else {
       throw new NonSpecificElementException();
@@ -114,7 +115,7 @@ public abstract class AbstractElement implements Element {
 
   @Override
   public void formattedValue(String value) throws HandlingException {
-    if(isSpecific()) {
+    if (isSpecific()) {
       in(target()).formattedValue(value);
     } else {
       throw new NonSpecificElementException();

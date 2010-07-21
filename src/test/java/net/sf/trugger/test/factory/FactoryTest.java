@@ -20,6 +20,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.AnnotatedElement;
 
 import net.sf.trugger.CreateException;
@@ -62,6 +64,9 @@ public class FactoryTest {
   public void testNestedAnnotation() {
     Object o = factory.create(Nested.class);
     assertEquals(Object.class, o.getClass());
+
+    o = factory.create(Deep.class);
+    assertEquals(Object.class, o.getClass());
   }
 
   @Test(expected = CreateException.class)
@@ -92,6 +97,15 @@ public class FactoryTest {
   public class Nested {
 
   }
+
+  @MyAnnotation
+  public class Deep {
+
+  }
+
+  @ObjectComponent
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MyAnnotation{}
 
   public class NotAnnotated {
 

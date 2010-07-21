@@ -103,14 +103,18 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
   /**
    * Returns the formatted value if this element is {@link #isSpecific()
    * specific}.
+   *
+   * @since 2.7
    */
   @Override
-  public String formattedValue() throws HandlingException;
+  String formattedValue() throws HandlingException;
 
   /**
    * Sets the value if this element is {@link #isSpecific() specific}.
+   *
+   * @since 2.7
    */
   @Override
-  public void formattedValue(String value) throws HandlingException;
+  void formattedValue(String value) throws HandlingException;
 
 }
