@@ -19,13 +19,25 @@ package net.sf.trugger.annotation;
 import java.lang.annotation.Annotation;
 
 /**
+ * Interface that defines an Annotation obtained using a
+ * {@link DomainAnnotatedElement}.
+ *
  * @author Marcelo Varella Barca Guimarães
+ * @param <T>
+ *          The annotation type.
  * @since 2.7
  */
 public interface DomainAnnotation<T extends Annotation> {
 
+  /**
+   * @return the annotation itself
+   */
   T annotation();
 
+  /**
+   * @return the annotation that declares {@link #annotation() this annotation}
+   *         (if applies).
+   */
   DomainAnnotation parent();
 
 }

@@ -20,8 +20,6 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import net.sf.trugger.validation.Validator;
-
 /**
  * This annotation indicates that an annotation's property is a name of a
  * target's property that this annotation depends.
@@ -34,8 +32,7 @@ import net.sf.trugger.validation.Validator;
 public @interface Reference {
 
   /**
-   * The name of the property on the component. The name is used for binding the
-   * value in the {@link Validator}.
+   * The name of the component element.
    */
   String value() default "reference";
 

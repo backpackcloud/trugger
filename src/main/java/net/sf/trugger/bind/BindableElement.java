@@ -35,7 +35,13 @@ public interface BindableElement extends Element {
   void bind(Object value);
 
   /**
-   * @return the target which the value can be binded.
+   * Should always return <code>true</code>.
    */
-  <E> E getTarget();
+  boolean isSpecific();
+
+  /**
+   * Returns the target which the value can be binded.
+   */
+  <E> E target();
+
 }

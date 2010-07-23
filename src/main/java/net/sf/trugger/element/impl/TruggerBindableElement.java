@@ -37,10 +37,6 @@ public final class TruggerBindableElement extends DecoratedElement implements Bi
     this.target = target;
   }
 
-  public <E> E getTarget() {
-    return (E) target;
-  }
-
   public void bind(Object value) {
     value(value);
   }
