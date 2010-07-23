@@ -16,6 +16,8 @@
  */
 package net.sf.trugger.reflection.impl;
 
+import static net.sf.trugger.reflection.ReflectionPredicates.STATIC;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -148,6 +150,36 @@ public class TruggerReflector implements Reflector {
 
   public Method bridgedMethodFor(Method bridgeMethod) {
     return new TruggerBridgeMethodResolver(bridgeMethod).findBridgedMethod();
+  }
+
+  @Override
+  public FieldSelector staticField() {
+    return field().thatMatches(STATIC);
+  }
+
+  @Override
+  public FieldSelector staticField(String name) {
+    return field(name).thatMatches(STATIC);
+  }
+
+  @Override
+  public FieldsSelector staticFields() {
+    return fields().thatMatches(STATIC);
+  }
+
+  @Override
+  public MethodSelector staticMethod() {
+    return method().thatMatches(STATIC);
+  }
+
+  @Override
+  public MethodSelector staticMethod(String name) {
+    return method(name).thatMatches(STATIC);
+  }
+
+  @Override
+  public MethodsSelector staticMethods() {
+    return methods().thatMatches(STATIC);
   }
 
 }

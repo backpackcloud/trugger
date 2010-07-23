@@ -9,7 +9,7 @@ Version 2.7.0
   - Non-named element and field selector for bind operations.
   - AnnotationBased factory now searchs in the entire annotation levels.
   - Renamed method newBind to newBinder (Bind class).
-  - Custom ElementFinder for swing components (for using with BindProcessor).
+  - More operations in Reflector.
 - Bug fixes:
   - Binder can now bind null values.
 

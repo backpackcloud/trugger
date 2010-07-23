@@ -16,6 +16,8 @@
  */
 package net.sf.trugger.annotation.processors;
 
+import static net.sf.trugger.element.Elements.elements;
+
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
@@ -24,32 +26,57 @@ import net.sf.trugger.annotation.Bind;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
+import net.sf.trugger.format.Formatter;
+import net.sf.trugger.transformer.BidirectionalTransformer;
+import net.sf.trugger.util.Utils;
 
 /**
+ * A class that process {@link Bind} annotations.
+ * <p>
+ * The object annotated with {@link Bind} will be the context object. The
+ * annotated elements may have annotations for {@link Formatter formatter}
+ * and/or {@link BidirectionalTransformer transformer}.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
 public class BindProcessor {
 
   /**
+   * Interface for specifying the context object.
+   *
    * @author Marcelo Varella Barca Guimarães
    * @since 2.7
    */
   public interface ContextSpecifier {
 
+    /**
+     * Defines the context object for injecting values.
+     *
+     * @param context
+     *          the context object
+     */
     public void toContext(Object context);
   }
 
   /**
+   * Interface for specifying the target object.
+   *
    * @author Marcelo Varella Barca Guimarães
    * @since 2.7
    */
   public interface ObjectSpecifier {
 
+    /**
+     * Defines the target object.
+     *
+     * @param object
+     *          the target object.
+     */
     public void toObject(Object object);
   }
 
-  enum Mode {
+  private enum Mode {
     CONTEXT_TO_OBJECT, OBJECT_TO_CONTEXT
   }
 
@@ -60,19 +87,39 @@ public class BindProcessor {
   private String contextRootElement;
   private Class<? extends Annotation> annotationType;
 
+  /**
+   * Creates a new BindProcessor
+   */
   public BindProcessor() {
 
   }
 
+  /**
+   * Creates a new BindProcessor that makes deep searchs for binds in all
+   * elements annotated with the given annotation type.
+   *
+   * @param annotationType
+   *          the annotation type that defines a deep search.
+   */
   public BindProcessor(Class<? extends Annotation> annotationType) {
     this.annotationType = annotationType;
   }
 
   private void configureBinder(Binder binder, Object context) {
-    Set<Element> elements = Elements.elements().annotatedWith(Bind.class).in(context);
+    Bind contextAnnotation = Utils.resolveType(context).getAnnotation(Bind.class);
+    Set<Element> elements;
+    if (contextAnnotation == null) {
+      elements = elements().annotatedWith(Bind.class).in(context);
+    } else {
+      elements = elements().in(context);
+    }
 
     for (Element element : elements) {
-      String targetElementName = element.getAnnotation(Bind.class).to();
+      Bind annotation = element.getAnnotation(Bind.class);
+      if (annotation == null) {
+        annotation = contextAnnotation;
+      }
+      String targetElementName = annotation.to();
       String contextElementName = element.name();
       if (targetElementName.isEmpty()) {
         targetElementName = element.name();
@@ -118,6 +165,13 @@ public class BindProcessor {
     };
   }
 
+  /**
+   * Binds object contents to the context object.
+   *
+   * @param object
+   *          the object to use.
+   * @return a component to select the context object.
+   */
   public ContextSpecifier bindObject(final Object object) {
     return new ContextSpecifier() {
 
@@ -133,6 +187,13 @@ public class BindProcessor {
     };
   }
 
+  /**
+   * Binds context object contents to a target object.
+   *
+   * @param contextObject
+   *          the context object to use.
+   * @return a component to select the target object.
+   */
   public ObjectSpecifier bindContext(final Object contextObject) {
     return new ObjectSpecifier() {
 

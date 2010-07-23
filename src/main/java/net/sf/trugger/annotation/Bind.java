@@ -17,21 +17,26 @@
 package net.sf.trugger.annotation;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Configures an element name for binding the annotated value.
+ * Denotes a bind to the annotated element. If it is a class, the bind must be
+ * done for all elements.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
+@Inherited
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Bind {
 
   /**
    * The element name for bind. Defauls to the annotated element name.
+   * <p>
+   * Don't use this property if the annotated element is a class.
    */
   String to() default "";
 

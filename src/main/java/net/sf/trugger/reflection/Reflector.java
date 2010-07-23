@@ -103,6 +103,16 @@ public interface Reflector {
   FieldsSelector fields();
 
   /**
+   * Reflects all static fields in a target.
+   * <p>
+   * Use this method for selecting a set of fields.
+   *
+   * @return the component used for selection.
+   * @since 2.7
+   */
+  FieldsSelector staticFields();
+
+  /**
    * Reflects a field with the specified name in a target.
    * <p>
    * Use this method for selecting a single field.
@@ -114,6 +124,16 @@ public interface Reflector {
   FieldSelector field(String name);
 
   /**
+   * Reflects a static field with the specified name.
+   *
+   * @param name
+   *          the field name.
+   * @return the component used for selection.
+   * @since 2.7
+   */
+  FieldSelector staticField(String name);
+
+  /**
    * Reflects a field based on the further selection.
    * <p>
    * This method should be used only if the selection matches a single field.
@@ -122,6 +142,16 @@ public interface Reflector {
    * @since 2.3
    */
   FieldSelector field();
+
+  /**
+   * Reflects a static field based on the further selection.
+   * <p>
+   * This method should be used only if the selection matches a single field.
+   *
+   * @return the component used for selection.
+   * @since 2.7
+   */
+  FieldSelector staticField();
 
   /**
    * Reflects all methods in a target.
@@ -155,6 +185,41 @@ public interface Reflector {
    * @since 2.3
    */
   MethodSelector method();
+
+  /**
+   * Reflects all static methods in a target.
+   * <p>
+   * Use this method for selecting a set of methods.
+   *
+   * @return the component used for selection.
+   * @since 2.7
+   */
+  MethodsSelector staticMethods();
+
+  /**
+   * Reflects a static method with the specified name and parameters in a target.
+   * <p>
+   * Use this method for selecting a single method.
+   * <p>
+   * <i>The method parameters in question must be informed in the returned
+   * object.</i>
+   *
+   * @param name
+   *          the method name.
+   * @return the component used for selection.
+   * @since 2.7
+   */
+  MethodSelector staticMethod(String name);
+
+  /**
+   * Reflects a static method based on the further selection.
+   * <p>
+   * This method should be used only if the selection matches a single method.
+   *
+   * @return the component used for selection.
+   * @since 2.7
+   */
+  MethodSelector staticMethod();
 
   /**
    * Reflects a getter method for a specified property.

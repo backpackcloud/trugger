@@ -57,8 +57,8 @@ public class SwingBindTest {
     address.city = "My City";
     address.state = "My State";
     person.address = address;
-    person.resume = new File("paper.pdf");
-    person.papers = Arrays.asList(new File("resume1.pdf"), new File("resume2.pdf"));
+    person.resume = new File("resume.pdf");
+    person.papers = Arrays.asList(new File("paper1.pdf"), new File("paper2.pdf"));
 
     personPanel.setObject(person);
 
@@ -100,8 +100,8 @@ public class SwingBindTest {
     personPanel.addressPanel.city.setText("My City");
     personPanel.addressPanel.state.setText("My State");
     personPanel.addressPanel.street.setText("My Street");
-    personPanel.resume.setSelectedFile(new File("paper.pdf"));
-    personPanel.papers.setSelectedFiles(new File[] { new File("resume1.pdf"), new File("resume2.pdf") });
+    personPanel.resume.setSelectedFile(new File("resume.pdf"));
+    personPanel.papers.setSelectedFiles(new File[] { new File("paper1.pdf"), new File("paper2.pdf") });
 
     Person person = personPanel.getObject();
 

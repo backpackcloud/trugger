@@ -24,8 +24,20 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.trugger.annotation.impl.DomainAnnotationImpl;
+import net.sf.trugger.transformer.BidirectionalTransformer;
 
 /**
+ * A class that defines an {@link AnnotatedElement} that can search in its
+ * Annotation hierarchy.
+ * <p>
+ * This is usefull to create domain annotations. Supose you have a set of
+ * annotations that represents something if they are together in the same
+ * annotated element. You can put it all in a new annotation that refers to the
+ * meaning of the annotations and, if the annotated element is
+ * {@link #wrap(AnnotatedElement) wrapped} by this class, the methods
+ * {@link #isAnnotationPresent(Class)} and {@link #getAnnotation(Class)} will
+ * return that annotations.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.7
  */
@@ -36,7 +48,7 @@ public class DomainAnnotatedElement implements AnnotatedElement {
   private Map<Class<? extends Annotation>, DomainAnnotation> map =
       new HashMap<Class<? extends Annotation>, DomainAnnotation>();
 
-  public DomainAnnotatedElement(AnnotatedElement annotatedElement) {
+  private DomainAnnotatedElement(AnnotatedElement annotatedElement) {
     this.annotatedElement = annotatedElement;
   }
 
@@ -56,9 +68,17 @@ public class DomainAnnotatedElement implements AnnotatedElement {
     return annotatedElement.isAnnotationPresent(annotationClass) || isDomainAnnotationPresent(annotationClass);
   }
 
+  /**
+   * Returns this element's domain annotation for the specified type if such an
+   * annotation is present, else null.
+   *
+   * @param annotationType
+   *          the annotation type
+   * @return the domain annotation present on this element.
+   */
   public <T extends Annotation> DomainAnnotation<T> getDomainAnnotation(Class<T> annotationType) {
     if (annotatedElement.isAnnotationPresent(annotationType)) {
-      return new DomainAnnotationImpl(getAnnotation(annotationType));
+      return new DomainAnnotationImpl<T>(getAnnotation(annotationType));
     }
     if (map.containsKey(annotationType)) {
       return map.get(annotationType);
@@ -109,6 +129,19 @@ public class DomainAnnotatedElement implements AnnotatedElement {
   public AnnotatedElement annotatedElement() {
     return annotatedElement;
   }
+
+  public static BidirectionalTransformer<DomainAnnotatedElement, AnnotatedElement> TRANSFORMER = new BidirectionalTransformer<DomainAnnotatedElement, AnnotatedElement>() {
+
+    @Override
+    public DomainAnnotatedElement transform(AnnotatedElement object) {
+      return wrap(object);
+    }
+
+    @Override
+    public AnnotatedElement inverse(DomainAnnotatedElement object) {
+      return object.annotatedElement();
+    }
+  };
 
   public static DomainAnnotatedElement wrap(AnnotatedElement annotatedElement) {
     return new DomainAnnotatedElement(annotatedElement);

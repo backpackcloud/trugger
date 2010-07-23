@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.maven.ide.eclipse.Maven2LaunchConfigurationType">
+<booleanAttribute key="M2_DEBUG_OUTPUT" value="false"/>
+<stringAttribute key="M2_GOALS" value="clean resources:resources resources:testResources compiler:compile compiler:testCompile jar:jar surefire:test javadoc:jar source:jar source:test-jar"/>
+<booleanAttribute key="M2_NON_RECURSIVE" value="false"/>
+<booleanAttribute key="M2_OFFLINE" value="false"/>
+<stringAttribute key="M2_PROFILES" value=""/>
+<listAttribute key="M2_PROPERTIES"/>
+<stringAttribute key="M2_RUNTIME" value="D:\dev\apache-maven-2.2.1"/>
+<booleanAttribute key="M2_SKIP_TESTS" value="false"/>
+<booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="false"/>
+<booleanAttribute key="M2_WORKSPACE_RESOLUTION" value="false"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="D:/dev/workspace/trugger"/>
+</launchConfiguration>

@@ -14,23 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.trugger.transformer;
+package net.sf.trugger.ui.swing.element;
 
-import static net.sf.trugger.reflection.ReflectionPredicates.named;
-import net.sf.trugger.interception.ArgumentsInterceptor;
+import javax.swing.JSlider;
+
+import net.sf.trugger.element.Element;
 
 /**
  * @author Marcelo Varella Barca Guimarães
+ * @since 2.7
  */
-public class TransformerInterceptor extends ArgumentsInterceptor {
+public class JSliderElement extends SwingComponentElement<JSlider> {
 
-  public TransformerInterceptor() {
-    ifMethodMatches(named("transform")).useArgument(0).andCheckGenericType("From");
-    ifMethodMatches(named("inverse")).useArgument(0).andCheckGenericType("To");
+  public JSliderElement(Element decorated) {
+    super(decorated);
   }
 
-  protected Object onInvalidArgument(Object argument) {
-    return null;
+  @Override
+  protected Object getComponentValue(JSlider component) {
+    return component.getValue();
+  }
+
+  @Override
+  protected void setComponentValue(JSlider component, Object value) {
+    if (value != null) {
+      component.setValue((Integer) value);
+    }
   }
 
 }

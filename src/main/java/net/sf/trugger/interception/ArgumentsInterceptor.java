@@ -68,7 +68,7 @@ public class ArgumentsInterceptor extends Interceptor {
    *          the predicate for filtering the method.
    * @return the component for defining the argument indexes.
    */
-  protected final ArgumentIndexSelector ifMethodMatches(final Predicate<Method> predicate) {
+  protected final ArgumentIndexSelector ifMethodMatches(final Predicate<? super Method> predicate) {
     final GenericTypeMapper mapper = new GenericTypeMapper();
     mapper.predicate = predicate;
     return new ArgumentIndexSelector() {
@@ -159,7 +159,7 @@ public class ArgumentsInterceptor extends Interceptor {
 
   private static class GenericTypeMapper {
 
-    Predicate<Method> predicate;
+    Predicate<? super Method> predicate;
     String genericParam;
     int[] argumentIndexes;
   }

@@ -16,6 +16,9 @@
  */
 package net.sf.trugger.ui.swing.element;
 
+import java.lang.reflect.Array;
+import java.util.Collection;
+
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
@@ -32,7 +35,7 @@ public class JListElement extends SwingComponentElement<JList> {
 
   @Override
   protected Object getComponentValue(JList component) {
-    if(component.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION){
+    if (component.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION) {
       return component.getSelectedValue();
     }
     return component.getSelectedValues();
@@ -40,8 +43,18 @@ public class JListElement extends SwingComponentElement<JList> {
 
   @Override
   protected void setComponentValue(JList component, Object value) {
-    if(component.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION){
+    if (component.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION) {
       component.setSelectedValue(value, true);
+    }
+    if (value instanceof Collection) {
+      for (Object obj : (Collection) value) {
+        component.setSelectedValue(obj, true);
+      }
+    } else {
+      int length = Array.getLength(value);
+      for (int i = 0 ; i < length ; i++) {
+        component.setSelectedValue(Array.get(value, i), true);
+      }
     }
     //TODO multiselection set
   }
