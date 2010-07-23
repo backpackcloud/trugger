@@ -61,7 +61,6 @@ import net.sf.trugger.test.reflection.ReflectionTestSuite;
 import net.sf.trugger.test.registry.RegistryTest;
 import net.sf.trugger.test.scan.ClassScanTestSuite;
 import net.sf.trugger.test.transformer.TransformerTest;
-import net.sf.trugger.test.ui.swing.SwingBindTest;
 import net.sf.trugger.test.validation.ValidationTestSuite;
 
 import org.junit.runner.RunWith;
@@ -87,7 +86,6 @@ import org.junit.runners.Suite.SuiteClasses;
   AcceptedTypesTest.class,
   AnnotationMockTest.class,
   PredicateDSLTest.class,
-  SwingBindTest.class,
   TransformerTest.class,
   ReflectionPredicatesTest.class,
 
