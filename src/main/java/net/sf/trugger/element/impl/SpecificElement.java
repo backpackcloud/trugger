@@ -18,6 +18,7 @@ package net.sf.trugger.element.impl;
 
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.util.HashBuilder;
 
 /**
  * A class that represents a {@link Element#isSpecific() specific} element.
@@ -60,11 +61,7 @@ public class SpecificElement extends DecoratedElement implements Element {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((element == null) ? 0 : element.hashCode());
-    result = prime * result + ((target == null) ? 0 : target.hashCode());
-    return result;
+    return new HashBuilder(element).add(target).hashCode();
   }
 
   @Override

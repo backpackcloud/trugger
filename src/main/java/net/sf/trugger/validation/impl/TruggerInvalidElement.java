@@ -24,6 +24,7 @@ import net.sf.trugger.element.Element;
 import net.sf.trugger.element.impl.SpecificElement;
 import net.sf.trugger.message.Message;
 import net.sf.trugger.message.MessagePart;
+import net.sf.trugger.util.HashBuilder;
 import net.sf.trugger.util.Utils;
 import net.sf.trugger.validation.InvalidElement;
 
@@ -86,11 +87,7 @@ final class TruggerInvalidElement extends SpecificElement implements InvalidElem
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = super.hashCode();
-    result = prime * result + ((messages == null) ? 0 : messages.hashCode());
-    result = prime * result + ((value == null) ? 0 : value.hashCode());
-    return result;
+    return new HashBuilder(super.hashCode()).add(messages).add(value).hashCode();
   }
 
   @Override

@@ -22,6 +22,7 @@ import net.sf.trugger.HandlingException;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.UnwritableElementException;
+import net.sf.trugger.util.HashBuilder;
 import net.sf.trugger.util.Null;
 
 /**
@@ -76,10 +77,7 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    return result;
+    return new HashBuilder(name).hashCode();
   }
 
   @Override

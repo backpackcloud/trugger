@@ -19,6 +19,7 @@ package net.sf.trugger.element.impl;
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.bind.BindableElement;
 import net.sf.trugger.element.Element;
+import net.sf.trugger.util.HashBuilder;
 
 /**
  * An {@link BindableElement} composed by an {@link Element}.
@@ -63,10 +64,7 @@ public final class TruggerBindableElement extends DecoratedElement implements Bi
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = super.hashCode();
-    result = prime * result + ((target == null) ? 0 : target.hashCode());
-    return result;
+    return new HashBuilder(super.hashCode()).add(target).hashCode();
   }
 
   @Override

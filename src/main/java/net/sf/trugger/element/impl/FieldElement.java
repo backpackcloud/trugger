@@ -23,6 +23,7 @@ import net.sf.trugger.element.Element;
 import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.NonSpecificElementException;
 import net.sf.trugger.reflection.Reflection;
+import net.sf.trugger.util.HashBuilder;
 
 /**
  * An {@link Element} originated from a {@link Field}.
@@ -88,10 +89,7 @@ public final class FieldElement extends AbstractElement implements Element {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((field == null) ? 0 : field.hashCode());
-    return result;
+    return new HashBuilder(field).hashCode();
   }
 
   @Override

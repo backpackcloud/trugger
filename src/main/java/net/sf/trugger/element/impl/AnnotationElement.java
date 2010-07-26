@@ -23,6 +23,7 @@ import net.sf.trugger.HandlingException;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.UnwritableElementException;
+import net.sf.trugger.util.HashBuilder;
 
 /**
  * Class that represents an Annotation property.
@@ -68,10 +69,7 @@ public final class AnnotationElement extends AbstractElement implements Element 
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + method.hashCode();
-    return result;
+    return new HashBuilder(method).hashCode();
   }
 
   @Override

@@ -31,6 +31,7 @@ import net.sf.trugger.element.UnwritableElementException;
 import net.sf.trugger.element.impl.AbstractElement;
 import net.sf.trugger.element.impl.AbstractElementValueHandler;
 import net.sf.trugger.reflection.ReflectionException;
+import net.sf.trugger.util.HashBuilder;
 
 /**
  * This class represents an object property.
@@ -124,15 +125,7 @@ final class ObjectProperty extends AbstractElement {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    int i;
-    Class<?> declaringClass = declaringClass();
-    i = declaringClass.hashCode();
-    result = prime * result + i;
-    i = name.hashCode();
-    result = prime * result + i;
-    return result;
+    return new HashBuilder(declaringClass).add(name()).hashCode();
   }
 
   @Override

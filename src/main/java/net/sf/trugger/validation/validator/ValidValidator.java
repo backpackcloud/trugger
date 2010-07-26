@@ -30,6 +30,7 @@ import net.sf.trugger.message.Message;
 import net.sf.trugger.message.MessagePart;
 import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.reflection.ReflectionException;
+import net.sf.trugger.util.HashBuilder;
 import net.sf.trugger.util.Utils;
 import net.sf.trugger.validation.InvalidElement;
 import net.sf.trugger.validation.Validation;
@@ -166,12 +167,7 @@ public class ValidValidator implements Validator<Object> {
 
     @Override
     public int hashCode() {
-      final int prime = 31;
-      int result = super.hashCode();
-      result = prime * result + ((element == null) ? 0 : element.hashCode());
-      result = prime * result + ((path == null) ? 0 : path.hashCode());
-      result = prime * result + ((root == null) ? 0 : root.hashCode());
-      return result;
+      return new HashBuilder(element).add(path).add(root).hashCode();
     }
 
     @Override

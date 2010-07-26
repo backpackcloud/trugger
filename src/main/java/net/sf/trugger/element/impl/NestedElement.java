@@ -23,6 +23,7 @@ import net.sf.trugger.HandlingException;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.Elements;
+import net.sf.trugger.util.HashBuilder;
 
 /**
  * A class to handle a path of {@link Element properties}.
@@ -119,10 +120,7 @@ public final class NestedElement extends AbstractElement implements Element {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + path.hashCode();
-    return result;
+    return new HashBuilder(path).hashCode();
   }
 
   @Override
