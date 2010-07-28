@@ -1,0 +1,41 @@
+1 - Validation
+
+1.1 - Validating an Object
+
+To validate an object, you can simply use the Validation class and the provided DSL:
+
+ValidationResult result = new Validation().validate().allElements().in(object);
+
+The result will give all information needed to integrate the validation to almost all
+frameworks and architectures. (You can access messages, values and use reflection and other
+DSLs using the invalid elements.)
+
+1.2 - Basic Validators
+
+The validation constraints are defined using two components: an Annotation for defining
+the constraint and a Validator to implement it.
+
+Example: A basic validator for null objects.
+
+@Retention(RetentionPolicy.RUNTIME)
+@ValidatorClass(NotNullValidator.class)
+public @interface NotNull { }
+
+public class NotNullValidator implements Validator<Object> {
+
+  public boolean isValid(Object object) {
+    return object != null;
+  }
+
+}
+
+You can now annotate a field or a getter method:
+
+public class Person {
+
+  @NotNull
+  private Address address;
+
+  //...
+
+}
