@@ -2,6 +2,8 @@
 
 1.1 - Validating an Object
 
+1.1.1 - Basic Validation
+
 To validate an object, you can simply use the Validation class and the provided DSL:
 
 ValidationResult result = new Validation().validate().allElements().in(object);
@@ -9,6 +11,10 @@ ValidationResult result = new Validation().validate().allElements().in(object);
 The result will give all information needed to integrate the validation to almost all
 frameworks and architectures. (You can access messages, values and use reflection and other
 DSLs using the invalid elements.)
+
+1.1.2 - Validation using Element selectors
+
+1.1.3 - Validation using context
 
 1.2 - Creating Validators
 
@@ -146,7 +152,8 @@ public class AfterValidator implements Validator<Date> {
 
 }
 
-Notice that the references can be validated as well as the arguments in validator.
+Notice that the references can be validated as well as the arguments in validator. If the reference is invalid the validation
+will not be processed.
 
 The class will now looks like this:
 
@@ -165,7 +172,12 @@ public class Ticket {
 
 1.2.4.2 - Target bind
 
+You can bind the target object in validator using the annotation @TargetObject.
+
 1.2.4.3 - Elements bind
+
+You can bind any element (fields, properties, ...) from the target object using @TargetElement annotation. If you don't define
+the element name, the current element being validated will be injected.
 
 1.2.4.4 - Bridge bind
 
