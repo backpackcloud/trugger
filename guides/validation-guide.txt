@@ -108,6 +108,8 @@ and they cannot be used here) and as much as needed.
 
 1.2.4 - Binds
 
+1.2.4.1 - Reference binds
+
 Supose you have two dates and one must be after the other.
 
 public class Ticket {
@@ -135,14 +137,37 @@ public @interface After {
 
 public class AfterValidator implements Validator<Date> {
 
-  private Date referenceValue; //note the same name as declared in @After
-  private After annotation; //
+  private Date referenceValue; //same name as declared in @After "value" property
+  private After annotation; //injected automatically
 
   public boolean isValid(@NotNull Date value) {
     return value.after(referenceValue);
   }
 
 }
+
+Notice that the references can be validated as well as the arguments in validator.
+
+The class will now looks like this:
+
+public class Ticket {
+
+  @NotNull
+  private Date leaving;
+
+  @NotNull
+  @After("leaving")
+  private Date arrival;
+
+  //...
+
+}
+
+1.2.4.2 - Target bind
+
+1.2.4.3 - Elements bind
+
+1.2.4.4 - Bridge bind
 
 1.3 - Validation Messages
 
