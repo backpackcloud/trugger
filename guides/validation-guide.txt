@@ -36,7 +36,7 @@ You can now annotate a field or a getter method:
 public class Person {
 
   @NotNull
-  private Address address;
+  private String name;
 
   //...
 
@@ -110,13 +110,13 @@ the annotation doesn't have a message property, then its name will be used
 The message can be a ResourceBundle key (and the ResourceBundle used will be the one passed to the Validation instance)
 or a literal message.
 
-  @NotNull(message = "Address required!")
-  private Address address;
+  @NotNull(message = "Name required!")
+  private String name;
 
   or
 
-  @NotNull(message = "address.required")
-  private Address address;
+  @NotNull(message = "name.required")
+  private String name;
 
 The annotation now has a String property:
 
