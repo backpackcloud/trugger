@@ -1,0 +1,133 @@
+1 - Validation
+
+1.1 - Validating an Object
+
+To validate an object, you can simply use the Validation class and the provided DSL:
+
+ValidationResult result = new Validation().validate().allElements().in(object);
+
+The result will give all information needed to integrate the validation to almost all
+frameworks and architectures. (You can access messages, values and use reflection and other
+DSLs using the invalid elements.)
+
+1.2 - Creating Validators
+
+1.2.1 - Basic Validators
+
+The validation constraints are defined using two components: an Annotation for defining
+the constraint and a Validator to implement it.
+
+Example: A basic validator for null objects.
+
+@Retention(RetentionPolicy.RUNTIME)
+@ValidatorClass(NotNullValidator.class)
+public @interface NotNull { }
+
+public class NotNullValidator implements Validator<Object> {
+
+  public boolean isValid(Object object) {
+    return object != null;
+  }
+
+}
+
+You can now annotate a field or a getter method:
+
+public class Person {
+
+  @NotNull
+  private Address address;
+
+  //...
+
+}
+
+1.2.2 - Type Validators
+
+You can create validators for a specific type or a set of types using the validator generic type or the annotations
+@AcceptedTypes, @AcceptedArrayTypes or @AcceptArrays.
+
+Example: a regex validator.
+
+@Retention(RetentionPolicy.RUNTIME)
+@ValidatorClass(PatternValidator.class)
+public @interface Pattern {
+
+  String value();
+
+}
+
+public class PatternValidator implements Validator<CharSequence> {
+
+  private Pattern annotation;
+
+  public boolean isValid(CharSequence value) {
+    if(value != null) {
+      return true;
+    }
+    java.util.regex.Pattern pattern =
+      java.util.regex.Pattern.compile(annotation.value());
+    return pattern.matcher(value).matches();
+  }
+}
+
+In this example, everything that is a CharSequence can be validated with @Pattern. The same effect can be reached using
+@AcceptedTypes:
+
+@AcceptedTypes(CharSequence.class)
+public class PatternValidator implements Validator<Object> {
+
+or
+
+@AcceptedTypes({String.class, StringBuilder.class})
+public class PatternValidator implements Validator<Object> {
+
+The second form will work only for String and StringBuilder objects. The same restriction can be used for arrays with
+@AcceptedArrayTypes for explicity defining the array types or @AcceptArrays to accept every array type.
+
+1.2.3 - Validation of arguments
+
+Take a look at the first instruction in the validation method of PatternValidator. That check can be a pain if you are
+going to create a extensive set of validators. To avoid that you can use validations in parameter declared in "isValid"
+method.
+
+  public boolean isValid(@NotNull CharSequence value) {
+    java.util.regex.Pattern pattern =
+      java.util.regex.Pattern.compile(annotation.value());
+    return pattern.matcher(value).matches();
+  }
+
+Much more elegant!
+
+You can use almost all validations in there (almost all because there is a special type of validators that use binds,
+and they cannot be used here).
+
+1.3 - Validation Messages
+
+By default, every Validator can have a validation message mapped in the annotation with the property named "message". If
+the annotation doesn't have a message property, then its name will be used
+
+The message can be a ResourceBundle key (and the ResourceBundle used will be the one passed to the Validation instance)
+or a literal message.
+
+  @NotNull(message = "Address required!")
+  private Address address;
+
+  or
+
+  @NotNull(message = "address.required")
+  private Address address;
+
+The annotation now has a String property:
+
+@Retention(RetentionPolicy.RUNTIME)
+@ValidatorClass(NotNullValidator.class)
+public @interface NotNull {
+  String message() default "";
+}
+
+1.4 - Validation Contexts
+
+
+
+1.5 - Domain Validations

@@ -85,7 +85,7 @@ public class TruggerMessageResolver implements MessageResolver {
 
   private String getString(Object reference, ResourceBundle bundle, String suffix, boolean returnValueIfNoFound) {
     Class<?> type = Utils.resolveType(reference);
-    String value = null;
+    String value;
     Element element = Elements.element(name).in(type);
 
     if (element != null) {

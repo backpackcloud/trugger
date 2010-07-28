@@ -12,8 +12,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Maven: cglib:cglib:2.2" level="project" />
-    <orderEntry type="library" exported="" name="Maven: asm:asm:3.1" level="project" />
+    <orderEntry type="library" name="Maven: cglib:cglib:2.2" level="project" />
+    <orderEntry type="library" name="Maven: asm:asm:3.1" level="project" />
     <orderEntry type="library" name="Maven: org.easymock:easymock:2.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-validator:3.0.0.ga" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse:osgi:3.5.0.v20090520" level="project" />
