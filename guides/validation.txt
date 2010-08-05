@@ -12,9 +12,26 @@ The result will give all information needed to integrate the validation to almos
 frameworks and architectures. (You can access messages, values and use reflection and other
 DSLs using the invalid elements.)
 
+You can also give a resource bundle to the Validation constructor for externalize the validation messages.
+The provided constraints uses a key following the pattern "validation." plus the Annotation name (validation.NotNull for
+NotNull constraint).
+
 1.1.2 - Validation using Element selectors
 
+You can pass a selector for restrict the elements to validate:
+
+ElementsSelector selector = Elements.elements().ofType(String.class);
+ValidationResult result = new Validation().validate().selection(selector).in(object);
+
 1.1.3 - Validation using context
+
+Context are useful for defining different validations for the same object (like simple and
+full validations). You can define a context using "forContext" method:
+
+ValidationResult result = new Validation().validate().forContext("context_name").allElements().in(object);
+
+The contexts can be defined using the "context" property in the constraint annotations. All constraints without
+explicity contexts will be used no matter what context was defined.
 
 1.2 - Creating Validators
 
@@ -152,8 +169,8 @@ public class AfterValidator implements Validator<Date> {
 
 }
 
-Notice that the references can be validated as well as the arguments in validator. If the reference is invalid the validation
-will not be processed.
+Notice that the references can be validated as well as the arguments in validator. If the reference is invalid the
+validation will not be processed.
 
 The class will now looks like this:
 
@@ -176,14 +193,65 @@ You can bind the target object in validator using the annotation @TargetObject.
 
 1.2.4.3 - Elements bind
 
-You can bind any element (fields, properties, ...) from the target object using @TargetElement annotation. If you don't define
-the element name, the current element being validated will be injected.
+You can bind any element (fields, properties, ...) from the target object using @TargetElement annotation. If you don't
+define the element name, the current element being validated will be injected.
 
 1.2.4.4 - Bridge bind
 
+If you need a way to interact with the ValidationEngine, just declare an element of type ValidationBridge and the bridge
+will be injected here. A ValidationBridge is useful for recursive validations (you can create validators using the same
+configurations and add invalid elements).
+
 1.2.4.5 - Context bind
 
+The current context of the validation will be injected in elements annotated with ValidationContext.
+
 1.2.4.6 - Validator bind
+
+If you need a validation that depends on other validators, you can declare the contraints in elements of type Validator
+and a proper validator will be injected on it.
+
+Example:
+
+public class MyValidator implements Validator<Double> {
+
+  @Range(min = 5, max = 15, includeMin = false)
+  private Validator range;
+
+  public boolean isValid(@NotNull Double value) {
+    if(range.isValid(value) {
+      //do a proper validation
+    } else {
+      //do a proper validation
+    }
+  }
+
+}
+
+1.2.5 - Domain Validations
+
+Supose you have some properties that requires more than one validation. You can group then into a single constraint
+(a domain constraint) using the GroupValidator as the @ValidatorClass.
+
+Example:
+
+@NotNull
+@After("leaving")
+@Retention(RetentionPolicy.RUNTIME)
+@ValidatorClass(GroupValidator.class)
+public @interface ArrivalDate {}
+
+public class Ticket {
+
+  @NotNull
+  private Date leaving;
+
+  @ArrivalDate
+  private Date arrival;
+
+  //...
+
+}
 
 1.3 - Validation Messages
 
@@ -213,8 +281,41 @@ public @interface NotNull {
 
 1.3.2 - Message Formatting
 
-1.4 - Validation Contexts
+You can format a message using values from constraints and invalid elements.
+
+In case of an Element, you can use the following attributes:
+
+  * name - the name of the element
+  * type - the type of the element
+  * value - the value of the element
+
+To use a constraint value in the message, just put the desired name of the element between "${" and "}".
+You can also use the reference elements.
+
+There is a way to format the message using a java.util.Formatter. Just put the agruments between "@{" and "}"
+
+Examples:
+
+@After(reference = "date1", message = "Must be after ${reference.value}"
+private Date date2;
+
+Will use the date1 value in the message.
 
 
+@After(reference = "date1", message = "{value} is not after ${reference.value}"
+private Date date2;
 
-1.5 - Domain Validations
+Will use both date1 value and date2 value.
+
+
+@After(reference = "date1", message = "#{name} is not after #{reference.name}"
+private Date date2;
+
+Will search for keys "date2" and "date1" in the ResourceBundle passed to the Validation instance and their values will
+be used in the message.
+
+
+@Range(min = 0, max = 1, message = "@{%.3f,{value}} is out of range [@{%.3f,${min}} ; @{%.3f,${max}}]"
+private double rate;
+
+For a 6.789 value, the message will be "6.789 is out of range [0.000 ; 1.000]".
