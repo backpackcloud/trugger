@@ -28,7 +28,7 @@ import net.sf.trugger.ValueHandler;
  * @author Marcelo Varella Barca Guimarães
  * @since 1.2
  */
-public interface Element extends AnnotatedElement, Result<ValueHandler, Object>, ElementValueHandler {
+public interface Element extends AnnotatedElement, Result<ValueHandler, Object>, ValueHandler {
 
   /**
    * @return the Class object representing the class or interface that declares
@@ -57,7 +57,7 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
   boolean isWritable();
 
   /**
-   * Handles this element on the given target (if appies).
+   * Handles this element on the given target (if applies).
    * <p>
    * This method may throw exceptions in case of the element cannot be handled
    * or an error occurring while handling the element.
@@ -67,7 +67,7 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
    * @return a component for handling the value of this element in the given
    *         target.
    */
-  ElementValueHandler in(Object target);
+  ValueHandler in(Object target);
 
   /**
    * Checks if this element is specific for a target. If this method returns
@@ -99,22 +99,5 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
    */
   @Override
   void value(Object value) throws HandlingException;
-
-  /**
-   * Returns the formatted value if this element is {@link #isSpecific()
-   * specific}.
-   *
-   * @since 2.7
-   */
-  @Override
-  String formattedValue() throws HandlingException;
-
-  /**
-   * Sets the value if this element is {@link #isSpecific() specific}.
-   *
-   * @since 2.7
-   */
-  @Override
-  void formattedValue(String value) throws HandlingException;
 
 }

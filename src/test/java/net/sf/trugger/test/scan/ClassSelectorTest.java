@@ -16,20 +16,6 @@
  */
 package net.sf.trugger.test.scan;
 
-import static net.sf.trugger.test.TruggerTest.assertResult;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
 import net.sf.trugger.reflection.Access;
 import net.sf.trugger.scan.PackageScan;
 import net.sf.trugger.scan.ScanLevel;
@@ -38,8 +24,16 @@ import net.sf.trugger.scan.impl.TruggerClassSelector;
 import net.sf.trugger.selector.ClassSelector;
 import net.sf.trugger.test.Flag;
 import net.sf.trugger.test.SelectionTest;
-
 import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static net.sf.trugger.test.TruggerTest.assertResult;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -57,7 +51,7 @@ public class ClassSelectorTest {
   private class PrivateClass{}
 
   private ClassSelector initializeForAnnotationTest() {
-    Set<Class<?>> classes = new HashSet<Class<?>>(){{
+    Set<Class> classes = new HashSet<Class>(){{
       add(FlagAnnotated.class);
       add(ClassSelectorTest.class);
     }};
@@ -65,7 +59,7 @@ public class ClassSelectorTest {
   }
 
   private ClassSelector initializeForAnonymousTest() {
-    Set<Class<?>> classes = new HashSet<Class<?>>(){{
+    Set<Class> classes = new HashSet<Class>(){{
       add(String.class);
       add(getClass());
     }};
@@ -73,7 +67,7 @@ public class ClassSelectorTest {
   }
 
   private ClassSelector initializeForAccessTest() {
-    Set<Class<?>> classes = new HashSet<Class<?>>(){{
+    Set<Class> classes = new HashSet<Class>(){{
       add(PublicClass.class);
       add(ProtectedClass.class);
       add(DefaultClass.class);
@@ -82,7 +76,7 @@ public class ClassSelectorTest {
     return initialize(classes);
   }
 
-  private ClassSelector initialize(Set<Class<?>> classesToReturn) {
+  private ClassSelector initialize(Set<Class> classesToReturn) {
     Scanner scanner = createMock(Scanner.class);
     try {
       expect(scanner.scanPackage(packageScan)).andReturn(classesToReturn).anyTimes();
@@ -97,14 +91,14 @@ public class ClassSelectorTest {
 
   @Test
   public void testAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+    assertResult(new SelectionTest<ClassSelector, Class>() {
       public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassSelector selector) {
         selector.annotated();
       }
-      public void assertions(Class<?> c) {
+      public void assertions(Class c) {
         assertEquals(FlagAnnotated.class, c);
       }
     }, packageScan);
@@ -112,14 +106,14 @@ public class ClassSelectorTest {
 
   @Test
   public void testAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+    assertResult(new SelectionTest<ClassSelector, Class>() {
       public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassSelector selector) {
         selector.annotatedWith(Flag.class);
       }
-      public void assertions(Class<?> c) {
+      public void assertions(Class c) {
         assertEquals(FlagAnnotated.class, c);
       }
     }, packageScan);
@@ -127,14 +121,14 @@ public class ClassSelectorTest {
 
   @Test
   public void testNotAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+    assertResult(new SelectionTest<ClassSelector, Class>() {
       public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassSelector selector) {
         selector.notAnnotated();
       }
-      public void assertions(Class<?> c) {
+      public void assertions(Class c) {
         assertEquals(ClassSelectorTest.class, c);
       }
     }, packageScan);
@@ -142,14 +136,14 @@ public class ClassSelectorTest {
 
   @Test
   public void testNotAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+    assertResult(new SelectionTest<ClassSelector, Class>() {
       public ClassSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassSelector selector) {
         selector.notAnnotatedWith(Flag.class);
       }
-      public void assertions(Class<?> c) {
+      public void assertions(Class c) {
         assertEquals(ClassSelectorTest.class, c);
       }
     }, packageScan);
@@ -157,14 +151,14 @@ public class ClassSelectorTest {
 
   @Test
   public void testAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+    assertResult(new SelectionTest<ClassSelector, Class>() {
       public ClassSelector createSelector() {
         return initializeForAnonymousTest();
       }
       public void makeSelections(ClassSelector selector) {
         selector.anonymous();
       }
-      public void assertions(Class<?> c) {
+      public void assertions(Class c) {
         assertTrue(c.isAnonymousClass());
       }
     }, packageScan);
@@ -172,14 +166,14 @@ public class ClassSelectorTest {
 
   @Test
   public void testNonAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class<?>>() {
+    assertResult(new SelectionTest<ClassSelector, Class>() {
       public ClassSelector createSelector() {
         return initializeForAnonymousTest();
       }
       public void makeSelections(ClassSelector selector) {
         selector.nonAnonymous();
       }
-      public void assertions(Class<?> c) {
+      public void assertions(Class c) {
         assertFalse(c.isAnonymousClass());
       }
     }, packageScan);
@@ -187,7 +181,7 @@ public class ClassSelectorTest {
 
   @Test
   public void testAccessSelector() throws Exception {
-    Class<?> c = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
+    Class c = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
     assertEquals(PublicClass.class, c);
 
     c = initializeForAccessTest().withAccess(Access.PROTECTED).in(packageScan);
@@ -202,7 +196,7 @@ public class ClassSelectorTest {
 
   @Test
   public void testAssignableToSelector() throws Exception {
-    Class<?> c = initialize(new HashSet<Class<?>>(){{
+    Class c = initialize(new HashSet<Class>(){{
       add(String.class);
       add(Object.class);
       add(Map.class);

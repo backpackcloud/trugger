@@ -29,11 +29,11 @@ import net.sf.trugger.scan.ClassScanResult;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.3
  */
-public interface ClassesSelector extends ClassSpecifier, ClassScanResult<Set<Class<?>>> {
+public interface ClassesSelector extends ClassSpecifier, ClassScanResult<Set<Class>> {
 
   ClassesSelector withAccess(Access access);
 
-  ClassesSelector thatMatches(Predicate<? super Class<?>> predicate);
+  ClassesSelector thatMatches(Predicate<? super Class> predicate);
 
   ClassesSelector annotatedWith(Class<? extends Annotation> type);
 
@@ -49,6 +49,6 @@ public interface ClassesSelector extends ClassSpecifier, ClassScanResult<Set<Cla
 
   ClassesSelector recursively();
 
-  ClassesSelector assignableTo(Class<?> type);
+  ClassesSelector assignableTo(Class type);
 
 }

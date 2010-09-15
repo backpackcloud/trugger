@@ -16,15 +16,15 @@
  */
 package net.sf.trugger.scan.impl;
 
+import net.sf.trugger.scan.ClassScannerFactory;
+import net.sf.trugger.scan.PackageScan;
+import net.sf.trugger.scan.ResourceFinder;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.sf.trugger.scan.ClassScannerFactory;
-import net.sf.trugger.scan.PackageScan;
-import net.sf.trugger.scan.ResourceFinder;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -52,10 +52,10 @@ public class TruggerScanner implements Scanner {
    *          the package to scan.
    * @return the classes found in the package
    */
-  public Set<Class<?>> scanPackage(PackageScan packageEntry) throws IOException, ClassNotFoundException {
+  public Set<Class> scanPackage(PackageScan packageEntry) throws IOException, ClassNotFoundException {
     String path = packageEntry.packageName().replace('.', '/');
     Enumeration<URL> resources = classLoader.getResources(path);
-    Set<Class<?>> classes = new HashSet<Class<?>>(40);
+    Set<Class> classes = new HashSet<Class>(40);
     if (resources.hasMoreElements()) {
       while (resources.hasMoreElements()) {
         URL resource = resources.nextElement();

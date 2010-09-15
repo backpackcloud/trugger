@@ -16,20 +16,20 @@
  */
 package net.sf.trugger.element.impl;
 
+import net.sf.trugger.Finder;
+import net.sf.trugger.HandlingException;
+import net.sf.trugger.Result;
+import net.sf.trugger.ValueHandler;
+import net.sf.trugger.element.Element;
+import net.sf.trugger.property.Properties;
+import net.sf.trugger.reflection.Reflection;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.trugger.Finder;
-import net.sf.trugger.HandlingException;
-import net.sf.trugger.Result;
-import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
-import net.sf.trugger.property.Properties;
-import net.sf.trugger.reflection.Reflection;
 
 /**
  * A default finder for every type of objects. It uses the properties and fields
@@ -112,15 +112,15 @@ public class DefaultElementFinder implements Finder<Element> {
       return forWrite.isWritable();
     }
 
-    public ElementValueHandler in(Object target) {
-      return new AbstractElementValueHandler(decorated, target) {
+    public ValueHandler in(final Object target) {
+      return new ValueHandler() {
 
         public void value(Object value) throws HandlingException {
-          forWrite.in(target()).value(value);
+          forWrite.in(target).value(value);
         }
 
         public <E> E value() throws HandlingException {
-          return (E) forRead.in(target()).value();
+          return (E) forRead.in(target).value();
         }
       };
     }
@@ -167,14 +167,6 @@ public class DefaultElementFinder implements Finder<Element> {
 
     public Class type() {
       return decorated.type();
-    }
-
-    public String formattedValue() throws HandlingException {
-      return forRead.formattedValue();
-    }
-
-    public void formattedValue(String value) throws HandlingException {
-      forWrite.formattedValue(value);
     }
 
     public String toString() {

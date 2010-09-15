@@ -16,21 +16,16 @@
  */
 package net.sf.trugger.reflection;
 
-import static net.sf.trugger.predicate.Predicates.newComposition;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-
 import net.sf.trugger.predicate.CompositePredicate;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.Predicates;
 import net.sf.trugger.util.Utils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
+import java.util.Arrays;
+
+import static net.sf.trugger.predicate.Predicates.newComposition;
 
 /**
  * An utilitity class for helping the use of {@link Predicate} object that
@@ -159,7 +154,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if a method is a setter
    *         method for the specified property name and type.
    */
-  public static final CompositePredicate<Method> setterFor(String propertyName, final Class<?> type) {
+  public static final CompositePredicate<Method> setterFor(String propertyName, final Class type) {
     return setterFor(propertyName).and(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
@@ -258,65 +253,65 @@ public class ReflectionPredicates {
    * Predicate that returns <code>true</code> if a class has <i>default</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> DEFAULT_CLASS =
+  public static final CompositePredicate<Class> DEFAULT_CLASS =
       classWithoutModifiers(Modifier.PUBLIC, Modifier.PRIVATE, Modifier.PROTECTED);
   /**
    * Predicate that returns <code>true</code> if a class has <i>public</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> PUBLIC_CLASS = classWithModifiers(Modifier.PUBLIC);
+  public static final CompositePredicate<Class> PUBLIC_CLASS = classWithModifiers(Modifier.PUBLIC);
   /**
    * Predicate that returns <code>true</code> if a class has <i>protected</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> PROTECTED_CLASS = classWithModifiers(Modifier.PROTECTED);
+  public static final CompositePredicate<Class> PROTECTED_CLASS = classWithModifiers(Modifier.PROTECTED);
   /**
    * Predicate that returns <code>true</code> if a class has <i>private</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> PRIVATE_CLASS = classWithModifiers(Modifier.PRIVATE);
+  public static final CompositePredicate<Class> PRIVATE_CLASS = classWithModifiers(Modifier.PRIVATE);
   /**
    * Predicate that returns <code>false</code> if a class has <i>default</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> NON_DEFAULT_CLASS = DEFAULT_CLASS.negate();
+  public static final CompositePredicate<Class> NON_DEFAULT_CLASS = DEFAULT_CLASS.negate();
   /**
    * Predicate that returns <code>false</code> if a class has <i>public</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> NON_PUBLIC_CLASS = PUBLIC_CLASS.negate();
+  public static final CompositePredicate<Class> NON_PUBLIC_CLASS = PUBLIC_CLASS.negate();
   /**
    * Predicate that returns <code>false</code> if a class has <i>protected</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> NON_PROTECTED_CLASS = PROTECTED_CLASS.negate();
+  public static final CompositePredicate<Class> NON_PROTECTED_CLASS = PROTECTED_CLASS.negate();
   /**
    * Predicate that returns <code>false</code> if a class has <i>private</i>
    * access.
    */
-  public static final CompositePredicate<Class<?>> NON_PRIVATE_CLASS = PRIVATE_CLASS.negate();
+  public static final CompositePredicate<Class> NON_PRIVATE_CLASS = PRIVATE_CLASS.negate();
   /**
    * Predicate that returns <code>true</code> if a class is <i>static</i>.
    */
-  public static final CompositePredicate<Class<?>> STATIC_CLASS = classWithModifiers(Modifier.STATIC);
+  public static final CompositePredicate<Class> STATIC_CLASS = classWithModifiers(Modifier.STATIC);
   /**
    * Predicate that returns <code>true</code> if a class is not <i>static</i>.
    */
-  public static final CompositePredicate<Class<?>> NON_STATIC_CLASS = STATIC_CLASS.negate();
+  public static final CompositePredicate<Class> NON_STATIC_CLASS = STATIC_CLASS.negate();
   /**
    * Predicate that returns <code>true</code> if a class is <i>final</i>.
    */
-  public static final CompositePredicate<Class<?>> FINAL_CLASS = classWithModifiers(Modifier.FINAL);
+  public static final CompositePredicate<Class> FINAL_CLASS = classWithModifiers(Modifier.FINAL);
   /**
    * Predicate that returns <code>true</code> if a class is not <i>static</i>.
    */
-  public static final CompositePredicate<Class<?>> NON_FINAL_CLASS = FINAL_CLASS.negate();
+  public static final CompositePredicate<Class> NON_FINAL_CLASS = FINAL_CLASS.negate();
   /**
    * Predicate that returns <code>true</code> if a class is <i>synthetic</i>.
    */
-  public static final CompositePredicate<Class<?>> SYNTHETIC_CLASS = newComposition(new Predicate<Class<?>>() {
+  public static final CompositePredicate<Class> SYNTHETIC_CLASS = newComposition(new Predicate<Class>() {
 
-    public boolean evaluate(Class<?> element) {
+    public boolean evaluate(Class element) {
       return element.isSynthetic();
     }
 
@@ -329,33 +324,33 @@ public class ReflectionPredicates {
    * Predicate that returns <code>true</code> if a class is not
    * <i>synthetic</i>.
    */
-  public static final CompositePredicate<Class<?>> NON_SYNTHETIC_CLASS = SYNTHETIC_CLASS.negate();
+  public static final CompositePredicate<Class> NON_SYNTHETIC_CLASS = SYNTHETIC_CLASS.negate();
   /**
    * Predicate that returns <code>true</code> if a class is <i>abstract</i>.
    */
-  public static final CompositePredicate<Class<?>> ABSTRACT_CLASS = classWithModifiers(Modifier.ABSTRACT);
+  public static final CompositePredicate<Class> ABSTRACT_CLASS = classWithModifiers(Modifier.ABSTRACT);
   /**
    * Predicate that returns <code>true</code> if a class is not <i>abstract</i>.
    *
    * @since 2.7
    */
-  public static final CompositePredicate<Class<?>> NON_ABSTRACT_CLASS = ABSTRACT_CLASS.negate();
+  public static final CompositePredicate<Class> NON_ABSTRACT_CLASS = ABSTRACT_CLASS.negate();
   /**
    * Predicate that returns <code>true</code> if a class is an <i>interface</i>
    * and is not an <i>annotation</i>.
    */
-  public static final CompositePredicate<Class<?>> INTERFACE =
+  public static final CompositePredicate<Class> INTERFACE =
       classWithModifiers(Modifier.INTERFACE).and(notAssignableTo(Annotation.class));
   /**
    * The negation of the {@link #INTERFACE} predicate.
    */
-  public static final CompositePredicate<Class<?>> NON_INTERFACE = INTERFACE.negate();
+  public static final CompositePredicate<Class> NON_INTERFACE = INTERFACE.negate();
   /**
    * Predicate that returns <code>true</code> if a class is an <i>enum</i>.
    */
-  public static final CompositePredicate<Class<?>> ENUM = newComposition(new Predicate<Class<?>>() {
+  public static final CompositePredicate<Class> ENUM = newComposition(new Predicate<Class>() {
 
-    public boolean evaluate(Class<?> element) {
+    public boolean evaluate(Class element) {
       return element.isEnum();
     }
 
@@ -367,26 +362,26 @@ public class ReflectionPredicates {
   /**
    * The negation of the {@link #ENUM} predicate.
    */
-  public static final CompositePredicate<Class<?>> NON_ENUM = ENUM.negate();
+  public static final CompositePredicate<Class> NON_ENUM = ENUM.negate();
   /**
    * Predicate that returns <code>true</code> if a class is an
    * <i>annotation</i>.
    */
-  public static final CompositePredicate<Class<?>> ANNOTATION =
+  public static final CompositePredicate<Class> ANNOTATION =
       classWithModifiers(Modifier.INTERFACE).and(assignableTo(Annotation.class));
   /**
    * The negation of the {@link #ANNOTATION} predicate.
    */
-  public static final CompositePredicate<Class<?>> NON_ANNOTATION = ANNOTATION.negate();
+  public static final CompositePredicate<Class> NON_ANNOTATION = ANNOTATION.negate();
   /**
    * Predicate that returns <code>true</code> if a class is not an
    * <i>interface</i> and is not an <i>enum</i>.
    */
-  public static final CompositePredicate<Class<?>> CLASS = NON_INTERFACE.and(NON_ENUM).and(NON_ANNOTATION);
+  public static final CompositePredicate<Class> CLASS = NON_INTERFACE.and(NON_ENUM).and(NON_ANNOTATION);
   /**
    * The negation of the {@link #CLASS} predicate.
    */
-  public static final CompositePredicate<Class<?>> NON_CLASS = CLASS.negate();
+  public static final CompositePredicate<Class> NON_CLASS = CLASS.negate();
   /**
    * Predicate that returns <code>true</code> if a method is a bridge method.
    */
@@ -462,10 +457,10 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the specified Class
    *         is assignable from the evaluated element.
    */
-  public static CompositePredicate<Class<?>> assignableTo(final Class<?> clazz) {
-    return newComposition(new Predicate<Class<?>>() {
+  public static CompositePredicate<Class> assignableTo(final Class clazz) {
+    return newComposition(new Predicate<Class>() {
 
-      public boolean evaluate(Class<?> element) {
+      public boolean evaluate(Class element) {
         return clazz.isAssignableFrom(element);
       }
 
@@ -480,7 +475,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the specified Class
    *         is not assignable from the evaluated element.
    */
-  public static CompositePredicate<Class<?>> notAssignableTo(final Class<?> clazz) {
+  public static CompositePredicate<Class> notAssignableTo(final Class clazz) {
     return assignableTo(clazz).negate();
   }
 
@@ -554,7 +549,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated method
    *         has the specified type as the return type.
    */
-  public static CompositePredicate<Method> ofReturnType(final Class<?> returnType) {
+  public static CompositePredicate<Method> ofReturnType(final Class returnType) {
     return newComposition(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
@@ -572,7 +567,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated method
    *         has the return type assignable to the specified type.
    */
-  public static CompositePredicate<Method> ofReturnTypeAssignableTo(final Class<?> returnType) {
+  public static CompositePredicate<Method> ofReturnTypeAssignableTo(final Class returnType) {
     return newComposition(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
@@ -590,7 +585,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated field
    *         is of an assignable type of the given one.
    */
-  public static CompositePredicate<Field> ofType(final Class<?> type, final boolean assignable) {
+  public static CompositePredicate<Field> ofType(final Class type, final boolean assignable) {
     return newComposition(new Predicate<Field>() {
 
       public boolean evaluate(Field element) {
@@ -611,10 +606,10 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>false</code> if the evaluated class
    *         has the specified modifiers.
    */
-  public static CompositePredicate<Class<?>> classWithModifiers(final int... modifiers) {
-    return newComposition(new Predicate<Class<?>>() {
+  public static CompositePredicate<Class> classWithModifiers(final int... modifiers) {
+    return newComposition(new Predicate<Class>() {
 
-      public boolean evaluate(Class<?> element) {
+      public boolean evaluate(Class element) {
         int elModifiers = element.getModifiers();
         for (int mod : modifiers) {
           if ((elModifiers & mod) != 0) {
@@ -635,7 +630,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>false</code> if the evaluated class
    *         does not have the specified modifiers.
    */
-  public static CompositePredicate<Class<?>> classWithoutModifiers(int... modifiers) {
+  public static CompositePredicate<Class> classWithoutModifiers(int... modifiers) {
     return classWithModifiers(modifiers).negate();
   }
 
@@ -662,7 +657,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated method
    *         has the specified parameters.
    */
-  public static CompositePredicate<Method> withParameters(final Class<?>... parameterTypes) {
+  public static CompositePredicate<Method> withParameters(final Class... parameterTypes) {
     return newComposition(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
@@ -680,7 +675,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated
    *         constructor has the specified parameters.
    */
-  public static CompositePredicate<Constructor> constructorWithParameters(final Class<?>... parameterTypes) {
+  public static CompositePredicate<Constructor> constructorWithParameters(final Class... parameterTypes) {
     return newComposition(new Predicate<Constructor>() {
 
       public boolean evaluate(Constructor element) {
@@ -711,9 +706,9 @@ public class ReflectionPredicates {
   /**
    * A predicate that returns <code>true</code> if a class is anonymous.
    */
-  public static final CompositePredicate<Class<?>> ANONYMOUS = newComposition(new Predicate<Class<?>>() {
+  public static final CompositePredicate<Class> ANONYMOUS = newComposition(new Predicate<Class>() {
 
-    public boolean evaluate(Class<?> element) {
+    public boolean evaluate(Class element) {
       return element.isAnonymousClass();
     }
 
@@ -726,7 +721,7 @@ public class ReflectionPredicates {
   /**
    * A predicate that returns <code>true</code> if a class is not anonymous.
    */
-  public static final CompositePredicate<Class<?>> NON_ANONYMOUS = ANONYMOUS.negate();
+  public static final CompositePredicate<Class> NON_ANONYMOUS = ANONYMOUS.negate();
 
   public static final CompositePredicate<Method> methodDeclaredIn(final Class type) {
     return newComposition(new Predicate<Method>() {

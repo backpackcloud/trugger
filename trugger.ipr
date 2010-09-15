@@ -183,11 +183,47 @@
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
+        <inspection_tool class="CloneInNonCloneableClass" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ConfusingOctalEscape" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ConstructorCount" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="m_limit" value="5" />
+        </inspection_tool>
+        <inspection_tool class="ControlFlowStatementWithoutBraces" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="HardcodedFileSeparators" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="m_recognizeExampleMediaType" value="false" />
+        </inspection_tool>
+        <inspection_tool class="IntegerDivisionInFloatingPointContext" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="IntegerMultiplicationImplicitCastToLong" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="NonSerializableWithSerialVersionUIDField" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="NonSerializableWithSerializationMethods" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="RedundantMethodOverride" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="SerialVersionUIDNotStaticFinal" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="SerializableHasSerialVersionUIDField" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="superClassString" value="java.awt.Component" />
+        </inspection_tool>
+        <inspection_tool class="SerializableInnerClassHasSerialVersionUIDField" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="superClassString" value="java.awt.Component" />
+        </inspection_tool>
+        <inspection_tool class="SerializableInnerClassWithNonSerializableOuterClass" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="superClassString" value="java.awt.Component" />
+        </inspection_tool>
+        <inspection_tool class="SleepWhileHoldingLock" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
           <option name="processCode" value="true" />
           <option name="processLiterals" value="true" />
           <option name="processComments" value="true" />
         </inspection_tool>
+        <inspection_tool class="SystemRunFinalizersOnExit" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ThreadRun" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ThreadStartInConstruction" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ThreadStopSuspendResume" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ThreadYield" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ThrownExceptionsPerMethod" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="m_limit" value="3" />
+        </inspection_tool>
+        <inspection_tool class="TransientFieldInNonSerializableClass" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="UnaryPlus" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="UpperCaseFieldNameNotConstant" enabled="true" level="WARNING" enabled_by_default="true" />
       </profile>
     </profiles>
     <option name="PROJECT_PROFILE" value="Project Default" />

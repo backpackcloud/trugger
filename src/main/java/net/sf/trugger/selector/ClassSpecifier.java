@@ -17,7 +17,6 @@
 package net.sf.trugger.selector;
 
 import net.sf.trugger.predicate.Predicable;
-import net.sf.trugger.scan.ClassScanResult;
 import net.sf.trugger.scan.ScanLevel;
 
 /**
@@ -26,8 +25,8 @@ import net.sf.trugger.scan.ScanLevel;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.5
  */
-public interface ClassSpecifier extends AccessSelector, PredicateSelector<Class<?>>, AnnotatedElementSelector,
-    RecursionSelector, Predicable<Class<?>> {
+public interface ClassSpecifier extends AccessSelector, PredicateSelector<Class>, AnnotatedElementSelector,
+    RecursionSelector, Predicable<Class> {
 
   /**
    * Selects only the anonymous classes.
@@ -57,6 +56,6 @@ public interface ClassSpecifier extends AccessSelector, PredicateSelector<Class<
    *          the class that must be assignable from the found classes.
    * @return a reference to this object.
    */
-  ClassSpecifier assignableTo(Class<?> type);
+  ClassSpecifier assignableTo(Class type);
 
 }

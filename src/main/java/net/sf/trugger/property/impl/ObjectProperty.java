@@ -16,22 +16,21 @@
  */
 package net.sf.trugger.property.impl;
 
-import static net.sf.trugger.reflection.Reflection.invoke;
-import static net.sf.trugger.reflection.Reflection.reflect;
-import static net.sf.trugger.reflection.ReflectionPredicates.ofReturnType;
+import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
+import net.sf.trugger.element.UnreadableElementException;
+import net.sf.trugger.element.UnwritableElementException;
+import net.sf.trugger.element.impl.AbstractElement;
+import net.sf.trugger.reflection.ReflectionException;
+import net.sf.trugger.util.HashBuilder;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import net.sf.trugger.HandlingException;
-import net.sf.trugger.element.ElementValueHandler;
-import net.sf.trugger.element.UnreadableElementException;
-import net.sf.trugger.element.UnwritableElementException;
-import net.sf.trugger.element.impl.AbstractElement;
-import net.sf.trugger.element.impl.AbstractElementValueHandler;
-import net.sf.trugger.reflection.ReflectionException;
-import net.sf.trugger.util.HashBuilder;
+import static net.sf.trugger.reflection.Reflection.invoke;
+import static net.sf.trugger.reflection.Reflection.reflect;
+import static net.sf.trugger.reflection.ReflectionPredicates.ofReturnType;
 
 /**
  * This class represents an object property.
@@ -97,8 +96,31 @@ final class ObjectProperty extends AbstractElement {
     writable = setter != null;
   }
 
-  public ElementValueHandler in(Object target) {
-    return new Handler(target);
+  public ValueHandler in(final Object target) {
+    return new ValueHandler(){
+
+      public <E> E value() throws HandlingException {
+      if (!isReadable()) {
+        throw new UnreadableElementException(name);
+      }
+      try {
+        return (E) invoke(getter).in(target).withoutArgs();
+      } catch (ReflectionException e) {
+        throw new HandlingException(e.getCause());
+      }
+    }
+
+    public void value(Object value) throws HandlingException {
+      if (!isWritable()) {
+        throw new UnwritableElementException(name);
+      }
+      try {
+        invoke(setter).in(target).withArgs(value);
+      } catch (ReflectionException e) {
+        throw new HandlingException(e.getCause());
+      }
+    }
+    };
   }
 
   public boolean isReadable() {
@@ -163,36 +185,6 @@ final class ObjectProperty extends AbstractElement {
 
   private boolean isAnyAnnotationPresent(AnnotatedElement element) {
     return (element != null) && (element.getAnnotations().length > 0);
-  }
-
-  private class Handler extends AbstractElementValueHandler {
-
-    private Handler(Object source) {
-      super(annotatedElement, source);
-    }
-
-    public <E> E value() throws HandlingException {
-      if (!isReadable()) {
-        throw new UnreadableElementException(name);
-      }
-      try {
-        return (E) invoke(getter).in(target()).withoutArgs();
-      } catch (ReflectionException e) {
-        throw new HandlingException(e.getCause());
-      }
-    }
-
-    public void value(Object value) throws HandlingException {
-      if (!isWritable()) {
-        throw new UnwritableElementException(name);
-      }
-      try {
-        invoke(setter).in(target()).withArgs(value);
-      } catch (ReflectionException e) {
-        throw new HandlingException(e.getCause());
-      }
-    }
-
   }
 
 }

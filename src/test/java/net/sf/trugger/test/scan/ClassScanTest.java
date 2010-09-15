@@ -16,20 +16,6 @@
  */
 package net.sf.trugger.test.scan;
 
-import static net.sf.trugger.scan.ClassScan.findAll;
-import static net.sf.trugger.scan.ClassScan.findAnnotations;
-import static net.sf.trugger.scan.ClassScan.findClass;
-import static net.sf.trugger.scan.ClassScan.findClasses;
-import static net.sf.trugger.scan.ClassScan.findEnums;
-import static net.sf.trugger.scan.ClassScan.findInterfaces;
-import static net.sf.trugger.test.TruggerTest.assertMatch;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Set;
-
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.reflection.Access;
 import net.sf.trugger.reflection.ReflectionFactory;
@@ -39,8 +25,13 @@ import net.sf.trugger.scan.PackageScan;
 import net.sf.trugger.scan.ScanLevel;
 import net.sf.trugger.test.Flag;
 import net.sf.trugger.test.TruggerTest;
-
 import org.junit.Test;
+
+import java.util.Set;
+
+import static net.sf.trugger.scan.ClassScan.*;
+import static net.sf.trugger.test.TruggerTest.assertMatch;
+import static org.junit.Assert.*;
 
 /**
  * A class for testing the class finding.
@@ -53,51 +44,51 @@ public class ClassScanTest {
   private String filePackageName = "net.sf.trugger.test.scan.classes";
   private String[] jarPackageNames = new String[] { "org.junit.runner", "org.easymock" };
 
-  private Predicate<Class<?>> filePackagePredicate = new Predicate<Class<?>>() {
+  private Predicate<Class> filePackagePredicate = new Predicate<Class>() {
 
-    public boolean evaluate(Class<?> element) {
+    public boolean evaluate(Class element) {
       return element.getPackage().getName().startsWith(filePackageName);
     }
   };
 
-  private Predicate<Class<?>> jarPackagePredicate = new Predicate<Class<?>>() {
+  private Predicate<Class> jarPackagePredicate = new Predicate<Class>() {
 
-    public boolean evaluate(Class<?> element) {
+    public boolean evaluate(Class element) {
       String packageName = element.getPackage().getName();
       return packageName.startsWith(jarPackageNames[0]) || packageName.startsWith(jarPackageNames[1]);
     }
   };
 
   private int interfaceTest(String... packages) {
-    Set<Class<?>> interfaces =
+    Set<Class> interfaces =
         findInterfaces().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(interfaces, ReflectionPredicates.INTERFACE.and(Access.PUBLIC.classPredicate()));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
-    Set<Class<?>> classes =
+    Set<Class> classes =
         findClasses().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(classes, ReflectionPredicates.CLASS.and(Access.PUBLIC.classPredicate()));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
-    Set<Class<?>> annotations =
+    Set<Class> annotations =
         findAnnotations().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(annotations, ReflectionPredicates.ANNOTATION.and(Access.PUBLIC.classPredicate()));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
-    Set<Class<?>> enums =
+    Set<Class> enums =
         findEnums().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(enums, ReflectionPredicates.ENUM.and(Access.PUBLIC.classPredicate()));
     return enums.size();
   }
 
   private int allTest(String... packages) {
-    Set<Class<?>> classes =
+    Set<Class> classes =
         findAll().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(classes, Access.PUBLIC.classPredicate());
     assertFalse(classes.isEmpty());
@@ -134,8 +125,8 @@ public class ClassScanTest {
   }
 
   private void scanLevelTest(String packageName) {
-    Set<Class<?>> packageClasses = findAll().in(packageName);
-    Set<Class<?>> subpackageClasses = findAll().recursively().in(packageName);
+    Set<Class> packageClasses = findAll().in(packageName);
+    Set<Class> subpackageClasses = findAll().recursively().in(packageName);
 
     assertTrue(packageClasses.size() < subpackageClasses.size());
   }
@@ -162,7 +153,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassScanPacakgeInFile() {
-    Set<Class<?>> set = findClasses().in(filePackageName);
+    Set<Class> set = findClasses().in(filePackageName);
     assertEquals(1, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyClass.class));
     assertMatch(set, filePackagePredicate);
@@ -170,7 +161,7 @@ public class ClassScanTest {
 
   @Test
   public void testAnnotationScanPacakgeInFile() {
-    Set<Class<?>> set = findAnnotations().in(filePackageName);
+    Set<Class> set = findAnnotations().in(filePackageName);
     assertEquals(1, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyAnnotation.class));
     assertMatch(set, filePackagePredicate);
@@ -178,7 +169,7 @@ public class ClassScanTest {
 
   @Test
   public void testEnumScanPacakgeInFile() {
-    Set<Class<?>> set = findEnums().in(filePackageName);
+    Set<Class> set = findEnums().in(filePackageName);
     assertEquals(1, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyEnum.class));
     assertMatch(set, filePackagePredicate);
@@ -186,7 +177,7 @@ public class ClassScanTest {
 
   @Test
   public void testInterfaceScanPacakgeInFile() {
-    Set<Class<?>> set = findInterfaces().in(filePackageName);
+    Set<Class> set = findInterfaces().in(filePackageName);
     assertEquals(1, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyInterface.class));
     assertMatch(set, filePackagePredicate);
@@ -194,7 +185,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanPacakgeInFile() {
-    Set<Class<?>> set = findAll().in(filePackageName);
+    Set<Class> set = findAll().in(filePackageName);
     assertEquals(4, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyClass.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyAnnotation.class));
@@ -206,7 +197,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassScanSubPacakgeInFile() {
-    Set<Class<?>> set = findClasses().recursively().in(filePackageName);
+    Set<Class> set = findClasses().recursively().in(filePackageName);
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyClass.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyClass2.class));
@@ -216,7 +207,7 @@ public class ClassScanTest {
 
   @Test
   public void testAnnotationScanSubPacakgeInFile() {
-    Set<Class<?>> set = findAnnotations().recursively().in(filePackageName);
+    Set<Class> set = findAnnotations().recursively().in(filePackageName);
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyAnnotation.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyAnnotation2.class));
@@ -226,7 +217,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassEnumSubPacakgeInFile() {
-    Set<Class<?>> set = findEnums().recursively().in(filePackageName);
+    Set<Class> set = findEnums().recursively().in(filePackageName);
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyEnum.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyEnum2.class));
@@ -236,7 +227,7 @@ public class ClassScanTest {
 
   @Test
   public void testInterfaceScanSubPacakgeInFile() {
-    Set<Class<?>> set = findInterfaces().recursively().in(filePackageName);
+    Set<Class> set = findInterfaces().recursively().in(filePackageName);
     assertEquals(2, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyInterface.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyInterface2.class));
@@ -246,7 +237,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanSubPacakgeInFile() {
-    Set<Class<?>> set = findAll().recursively().in(filePackageName);
+    Set<Class> set = findAll().recursively().in(filePackageName);
     assertEquals(8, set.size());
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.MyClass.class));
     assertTrue(set.contains(net.sf.trugger.test.scan.classes.pack.MyClass2.class));
@@ -262,7 +253,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassScanSubPacakgeInJar() {
-    Set<Class<?>> set = findClasses().recursively().in(jarPackageNames);
+    Set<Class> set = findClasses().recursively().in(jarPackageNames);
 
     assertMatch(set, ReflectionPredicates.CLASS);
     assertMatch(set, jarPackagePredicate);
@@ -340,7 +331,7 @@ public class ClassScanTest {
 
   @Test
   public void testAnnotationScanSubPacakgeInJar() {
-    Set<Class<?>> set = findAnnotations().recursively().in(jarPackageNames);
+    Set<Class> set = findAnnotations().recursively().in(jarPackageNames);
 
     assertMatch(set, ReflectionPredicates.ANNOTATION);
     assertMatch(set, jarPackagePredicate);
@@ -350,7 +341,7 @@ public class ClassScanTest {
 
   @Test
   public void testInterfaceScanSubPacakgeInJar() {
-    Set<Class<?>> set = findInterfaces().recursively().in(jarPackageNames);
+    Set<Class> set = findInterfaces().recursively().in(jarPackageNames);
 
     assertMatch(set, ReflectionPredicates.INTERFACE);
     assertMatch(set, jarPackagePredicate);
@@ -373,7 +364,7 @@ public class ClassScanTest {
 
   @Test
   public void testEnumScanSubPacakgeInJar() {
-    Set<Class<?>> set = findEnums().recursively().in(jarPackageNames);
+    Set<Class> set = findEnums().recursively().in(jarPackageNames);
 
     assertMatch(set, ReflectionPredicates.ENUM);
     assertMatch(set, jarPackagePredicate);
@@ -384,7 +375,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanSubPacakgeInJar() {
-    Set<Class<?>> set = findAll().recursively().in(jarPackageNames);
+    Set<Class> set = findAll().recursively().in(jarPackageNames);
 
     assertMatch(set, jarPackagePredicate);
 

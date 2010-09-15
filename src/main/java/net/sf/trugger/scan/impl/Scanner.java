@@ -16,10 +16,10 @@
  */
 package net.sf.trugger.scan.impl;
 
+import net.sf.trugger.scan.PackageScan;
+
 import java.io.IOException;
 import java.util.Set;
-
-import net.sf.trugger.scan.PackageScan;
 
 /**
  * Interface that defines a scanner for a package entry.
@@ -43,6 +43,6 @@ public interface Scanner {
    *          the package to scan.
    * @return the classes found in the package
    */
-  Set<Class<?>> scanPackage(PackageScan packageEntry) throws IOException, ClassNotFoundException;
+  Set<Class> scanPackage(PackageScan packageEntry) throws IOException, ClassNotFoundException;
 
 }

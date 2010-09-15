@@ -16,14 +16,13 @@
  */
 package net.sf.trugger.element.impl;
 
+import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
+import net.sf.trugger.element.Element;
+import net.sf.trugger.element.UnwritableElementException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import net.sf.trugger.HandlingException;
-import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
-import net.sf.trugger.element.UnwritableElementException;
-import net.sf.trugger.util.Null;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -40,10 +39,10 @@ public final class ResultSetElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ElementValueHandler in(final Object target) {
+  public ValueHandler in(final Object target) {
     if (target instanceof ResultSet) {
       final ResultSet resultSet = (ResultSet) target;
-      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT, resultSet) {
+      return new ValueHandler() {
 
         public void value(Object value) throws HandlingException {
           throw new UnwritableElementException("Cannot write a value in a ResultSet");

@@ -57,7 +57,7 @@ public class ClassesSelectorTest {
   private class PrivateClass{}
 
   private ClassesSelector initializeForAnnotationTest() {
-    Set<Class<?>> classes = new HashSet<Class<?>>(){{
+    Set<Class> classes = new HashSet<Class>(){{
       add(FlagAnnotated.class);
       add(ResourceAnnotated.class);
       add(ClassesSelectorTest.class);
@@ -66,7 +66,7 @@ public class ClassesSelectorTest {
   }
 
   private ClassesSelector initializeForAnonymousTest() {
-    Set<Class<?>> classes = new HashSet<Class<?>>(){{
+    Set<Class> classes = new HashSet<Class>(){{
       add(String.class);
       add(Object.class);
       add(ClassesSelectorTest.class);
@@ -76,7 +76,7 @@ public class ClassesSelectorTest {
   }
 
   private ClassesSelector initializeForAccessTest() {
-    Set<Class<?>> classes = new HashSet<Class<?>>(){{
+    Set<Class> classes = new HashSet<Class>(){{
       add(PublicClass.class);
       add(ProtectedClass.class);
       add(DefaultClass.class);
@@ -85,7 +85,7 @@ public class ClassesSelectorTest {
     return initialize(classes);
   }
 
-  private ClassesSelector initialize(Set<Class<?>> classesToReturn) {
+  private ClassesSelector initialize(Set<Class> classesToReturn) {
     Scanner scanner = createMock(Scanner.class);
     try {
       expect(scanner.scanPackage(packageScan)).andReturn(classesToReturn).anyTimes();
@@ -100,14 +100,14 @@ public class ClassesSelectorTest {
 
   @Test
   public void testAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
       public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassesSelector selector) {
         selector.annotated();
       }
-      public void assertions(Set<Class<?>> set) {
+      public void assertions(Set<Class> set) {
         assertEquals(2, set.size());
         assertTrue(set.contains(FlagAnnotated.class));
         assertTrue(set.contains(ResourceAnnotated.class));
@@ -117,14 +117,14 @@ public class ClassesSelectorTest {
 
   @Test
   public void testAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
       public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassesSelector selector) {
         selector.annotatedWith(Flag.class);
       }
-      public void assertions(Set<Class<?>> set) {
+      public void assertions(Set<Class> set) {
         assertEquals(1, set.size());
         assertTrue(set.contains(FlagAnnotated.class));
       }
@@ -133,14 +133,14 @@ public class ClassesSelectorTest {
 
   @Test
   public void testNotAnnotatedSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
       public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassesSelector selector) {
         selector.notAnnotated();
       }
-      public void assertions(Set<Class<?>> set) {
+      public void assertions(Set<Class> set) {
         assertEquals(1, set.size());
         assertTrue(set.contains(ClassesSelectorTest.class));
       }
@@ -149,14 +149,14 @@ public class ClassesSelectorTest {
 
   @Test
   public void testNotAnnotatedWithSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
       public ClassesSelector createSelector() {
         return initializeForAnnotationTest();
       }
       public void makeSelections(ClassesSelector selector) {
         selector.notAnnotatedWith(Flag.class);
       }
-      public void assertions(Set<Class<?>> set) {
+      public void assertions(Set<Class> set) {
         assertEquals(2, set.size());
         assertTrue(set.contains(ClassesSelectorTest.class));
         assertTrue(set.contains(ResourceAnnotated.class));
@@ -166,14 +166,14 @@ public class ClassesSelectorTest {
 
   @Test
   public void testAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
       public ClassesSelector createSelector() {
         return initializeForAnonymousTest();
       }
       public void makeSelections(ClassesSelector selector) {
         selector.anonymous();
       }
-      public void assertions(Set<Class<?>> set) {
+      public void assertions(Set<Class> set) {
         assertEquals(1, set.size());
         assertFalse(set.contains(String.class));
         assertFalse(set.contains(Object.class));
@@ -184,14 +184,14 @@ public class ClassesSelectorTest {
 
   @Test
   public void testNonAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class<?>>>() {
+    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
       public ClassesSelector createSelector() {
         return initializeForAnonymousTest();
       }
       public void makeSelections(ClassesSelector selector) {
         selector.nonAnonymous();
       }
-      public void assertions(Set<Class<?>> set) {
+      public void assertions(Set<Class> set) {
         assertEquals(3, set.size());
         assertTrue(set.contains(String.class));
         assertTrue(set.contains(Object.class));
@@ -202,7 +202,7 @@ public class ClassesSelectorTest {
 
   @Test
   public void testAccessSelector() throws Exception {
-    Set<Class<?>> set = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
+    Set<Class> set = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
     assertEquals(1, set.size());
     assertTrue(set.contains(PublicClass.class));
 
@@ -232,7 +232,7 @@ public class ClassesSelectorTest {
 
   @Test
   public void testAssignableToSelector() throws Exception {
-    Set<Class<?>> set = initialize(new HashSet<Class<?>>(){{
+    Set<Class> set = initialize(new HashSet<Class>(){{
       add(String.class);
       add(StringBuilder.class);
       add(StringBuffer.class);

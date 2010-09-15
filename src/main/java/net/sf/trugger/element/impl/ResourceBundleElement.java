@@ -16,14 +16,13 @@
  */
 package net.sf.trugger.element.impl;
 
-import java.util.ResourceBundle;
-
 import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.UnwritableElementException;
 import net.sf.trugger.util.HashBuilder;
-import net.sf.trugger.util.Null;
+
+import java.util.ResourceBundle;
 
 /**
  * A class that represents a ResourceBundle element. It uses the mapped keys
@@ -38,10 +37,10 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
   }
 
   @Override
-  public ElementValueHandler in(Object target) {
+  public ValueHandler in(Object target) {
     if (target instanceof ResourceBundle) {
       final ResourceBundle bundle = (ResourceBundle) target;
-      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT, bundle) {
+      return new ValueHandler() {
 
         @Override
         public void value(Object value) throws HandlingException {

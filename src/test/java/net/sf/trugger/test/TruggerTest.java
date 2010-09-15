@@ -16,23 +16,6 @@
  */
 package net.sf.trugger.test;
 
-import static net.sf.trugger.reflection.Access.DEFAULT;
-import static net.sf.trugger.reflection.Access.LIKE_DEFAULT;
-import static net.sf.trugger.reflection.Access.LIKE_PROTECTED;
-import static net.sf.trugger.reflection.Access.PRIVATE;
-import static net.sf.trugger.reflection.Access.PROTECTED;
-import static net.sf.trugger.reflection.Access.PUBLIC;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Member;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import junit.framework.AssertionFailedError;
 import net.sf.trugger.Result;
 import net.sf.trugger.element.Element;
@@ -45,7 +28,6 @@ import net.sf.trugger.test.bind.BinderTestSuite;
 import net.sf.trugger.test.date.DateTestSuite;
 import net.sf.trugger.test.element.ElementTestSuite;
 import net.sf.trugger.test.factory.FactoryTest;
-import net.sf.trugger.test.format.FormatterTestSuite;
 import net.sf.trugger.test.general.AcceptedTypesTest;
 import net.sf.trugger.test.general.GeneralTestSuite;
 import net.sf.trugger.test.general.UtilsTest;
@@ -62,10 +44,17 @@ import net.sf.trugger.test.registry.RegistryTest;
 import net.sf.trugger.test.scan.ClassScanTestSuite;
 import net.sf.trugger.test.transformer.TransformerTest;
 import net.sf.trugger.test.validation.ValidationTestSuite;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
+
+import java.lang.reflect.Member;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static net.sf.trugger.reflection.Access.*;
+import static org.junit.Assert.*;
 
 /**
  * This is the main test of the entire API. It includes all the separated tests
@@ -93,7 +82,6 @@ import org.junit.runners.Suite.SuiteClasses;
   BinderTestSuite.class,
   GeneralTestSuite.class,
   ElementTestSuite.class,
-  FormatterTestSuite.class,
   ClassScanTestSuite.class,
   ReflectionTestSuite.class,
   ValidationTestSuite.class

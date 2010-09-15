@@ -16,8 +16,6 @@
  */
 package net.sf.trugger.scan.impl;
 
-import java.lang.annotation.Annotation;
-
 import net.sf.trugger.predicate.CompositePredicate;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.PredicateBuilder;
@@ -27,12 +25,14 @@ import net.sf.trugger.reflection.ReflectionPredicates;
 import net.sf.trugger.scan.ScanLevel;
 import net.sf.trugger.selector.ClassSpecifier;
 
+import java.lang.annotation.Annotation;
+
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class AbstractClassSelector implements ClassSpecifier {
 
-  protected PredicateBuilder<Class<?>> builder = new PredicateBuilder<Class<?>>(null);
+  protected PredicateBuilder<Class> builder = new PredicateBuilder<Class>(null);
   protected ScanLevel level = ScanLevel.PACKAGE;
   protected final Scanner scanner;
 
@@ -40,7 +40,7 @@ public class AbstractClassSelector implements ClassSpecifier {
     this.scanner = scanner;
   }
 
-  public ClassSpecifier assignableTo(Class<?> type) {
+  public ClassSpecifier assignableTo(Class type) {
     this.builder.add(ReflectionPredicates.assignableTo(type));
     return this;
   }
@@ -50,7 +50,7 @@ public class AbstractClassSelector implements ClassSpecifier {
     return this;
   }
 
-  public ClassSpecifier thatMatches(Predicate<? super Class<?>> predicate) {
+  public ClassSpecifier thatMatches(Predicate<? super Class> predicate) {
     this.builder.add(predicate);
     return this;
   }
@@ -90,8 +90,8 @@ public class AbstractClassSelector implements ClassSpecifier {
     return this;
   }
 
-  public CompositePredicate<Class<?>> toPredicate() {
-    CompositePredicate<Class<?>> predicate = builder.predicate();
+  public CompositePredicate<Class> toPredicate() {
+    CompositePredicate<Class> predicate = builder.predicate();
     return predicate == null ? Predicates.ALWAYS_TRUE : predicate;
   }
 

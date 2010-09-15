@@ -16,13 +16,13 @@
  */
 package net.sf.trugger.element.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.NonSpecificElementException;
 import net.sf.trugger.util.Null;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 /**
  * A common abstraction for an Element.
@@ -103,23 +103,6 @@ public abstract class AbstractElement implements Element {
       return (E) in(target()).value();
     }
     throw new NonSpecificElementException();
-  }
-
-  @Override
-  public String formattedValue() throws HandlingException {
-    if (isSpecific()) {
-      return in(target()).formattedValue();
-    }
-    throw new NonSpecificElementException();
-  }
-
-  @Override
-  public void formattedValue(String value) throws HandlingException {
-    if (isSpecific()) {
-      in(target()).formattedValue(value);
-    } else {
-      throw new NonSpecificElementException();
-    }
   }
 
   @Override

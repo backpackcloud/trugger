@@ -16,12 +16,11 @@
  */
 package net.sf.trugger.element.impl;
 
-import java.util.Map;
-
 import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
-import net.sf.trugger.util.Null;
+
+import java.util.Map;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -33,10 +32,10 @@ public class MapElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ElementValueHandler in(Object target) {
+  public ValueHandler in(Object target) {
     if (target instanceof Map<?, ?>) {
       final Map map = (Map) target;
-      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT, target) {
+      return new ValueHandler() {
 
         @Override
         public void value(Object value) throws HandlingException {

@@ -16,19 +16,16 @@
  */
 package net.sf.trugger.util.mock;
 
-import static net.sf.trugger.util.mock.Mock.annotation;
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import net.sf.trugger.ValueHandler;
+import net.sf.trugger.element.Element;
+import org.easymock.IAnswer;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
-
-import org.easymock.IAnswer;
+import static net.sf.trugger.util.mock.Mock.annotation;
+import static org.easymock.EasyMock.*;
 
 /**
  * A class for helping creation of simple {@link Element} mocks.
@@ -190,7 +187,7 @@ public class ElementMockBuilder implements MockBuilder<Element> {
    *          the handler for the given target.
    * @return a reference to this object.
    */
-  public ElementMockBuilder withHandler(Object target, ElementValueHandler handler) {
+  public ElementMockBuilder withHandler(Object target, ValueHandler handler) {
     expect(element.in(target)).andReturn(handler).anyTimes();
     return this;
   }

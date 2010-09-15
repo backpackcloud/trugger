@@ -16,14 +16,14 @@
  */
 package net.sf.trugger.element.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.UnwritableElementException;
 import net.sf.trugger.util.HashBuilder;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Class that represents an Annotation property.
@@ -51,8 +51,24 @@ public final class AnnotationElement extends AbstractElement implements Element 
     return method.getReturnType();
   }
 
-  public ElementValueHandler in(Object target) {
-    return new Handler(target);
+  public ValueHandler in(final Object target) {
+    return new ValueHandler() {
+
+      public <E> E value() throws HandlingException {
+        try {
+          return (E) method.invoke(target);
+        } catch (InvocationTargetException e) {
+          throw new HandlingException(e.getCause());
+        } catch (IllegalAccessException e) {
+          throw new HandlingException(e);
+        }
+      }
+
+      public void value(Object value) throws HandlingException {
+        throw new UnwritableElementException(name());
+      }
+
+    };
   }
 
   public Class<?> declaringClass() {
@@ -88,28 +104,6 @@ public final class AnnotationElement extends AbstractElement implements Element 
       return false;
     }
     return true;
-  }
-
-  private class Handler extends AbstractElementValueHandler {
-
-    public Handler(Object annotation) {
-      super(annotatedElement, annotation);
-    }
-
-    public <E> E value() throws HandlingException {
-      try {
-        return (E) method.invoke(target());
-      } catch (InvocationTargetException e) {
-        throw new HandlingException(e.getCause());
-      } catch (IllegalAccessException e) {
-        throw new HandlingException(e);
-      }
-    }
-
-    public void value(Object value) throws HandlingException {
-      throw new UnwritableElementException(name());
-    }
-
   }
 
 }

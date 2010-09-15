@@ -16,11 +16,11 @@
  */
 package net.sf.trugger.element.impl;
 
-import java.lang.annotation.Annotation;
-
 import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Base class for all decorated elements.
@@ -81,16 +81,8 @@ public class DecoratedElement implements Element {
     return (E) in(target()).value();
   }
 
-  public String formattedValue() throws HandlingException {
-    return element.formattedValue();
-  }
-
-  public void formattedValue(String value) throws HandlingException {
-    element.formattedValue(value);
-  }
-
   @Override
-  public ElementValueHandler in(Object target) {
+  public ValueHandler in(Object target) {
     return element.in(target);
   }
 

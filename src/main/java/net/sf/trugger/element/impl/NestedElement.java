@@ -16,14 +16,14 @@
  */
 package net.sf.trugger.element.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
 import net.sf.trugger.element.Elements;
 import net.sf.trugger.util.HashBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class to handle a path of {@link Element properties}.
@@ -79,8 +79,31 @@ public final class NestedElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ElementValueHandler in(Object target) {
-    return new NestedElementHandler(target);
+  public ValueHandler in(final Object target) {
+    return new ValueHandler(){
+
+      public <E> E value() throws HandlingException {
+      Object value = target;
+      for (Element property : getPath()) {
+        value = property.in(value).value();
+      }
+      return (E) value;
+    }
+
+    public void value(Object value) throws HandlingException {
+      Object _source = target;
+      Element p = null;
+      for (int i = 0 ; ;) {
+        p = NestedElement.this.get(i);
+        if (++i < getPath().size()) {
+          _source = p.in(_source).value();
+        } else {
+          p.in(_source).value(value);
+          break;
+        }
+      }
+    }
+    };
   }
 
   /**
@@ -139,36 +162,6 @@ public final class NestedElement extends AbstractElement implements Element {
       return false;
     }
     return true;
-  }
-
-  private class NestedElementHandler extends AbstractElementValueHandler {
-
-    public NestedElementHandler(Object source) {
-      super(getLast(), source);
-    }
-
-    public <E> E value() throws HandlingException {
-      Object value = target();
-      for (Element property : getPath()) {
-        value = property.in(value).value();
-      }
-      return (E) value;
-    }
-
-    public void value(Object value) throws HandlingException {
-      Object _source = target();
-      Element p = null;
-      for (int i = 0 ; ;) {
-        p = NestedElement.this.get(i);
-        if (++i < getPath().size()) {
-          _source = p.in(_source).value();
-        } else {
-          p.in(_source).value(value);
-          break;
-        }
-      }
-    }
-
   }
 
   static NestedElement createNestedElement(Object source, String elementsPath) {

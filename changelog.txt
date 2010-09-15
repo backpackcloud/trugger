@@ -1,7 +1,5 @@
 Version 2.7.0
 - New Modules:
-  - Formatters
-  - Bind processor
   - Domain Annotations
 - Major changes:
   - Reformulated DSL Criteria.
@@ -11,6 +9,7 @@ Version 2.7.0
   - Renamed method newBind to newBinder (Bind class).
   - More operations in Reflector.
   - Renamed getTarget method to target (BindableElement).
+  - Removed generic type "?" from ReflectionPredicates and ClassScanner.
 - Bug fixes:
   - Binder can now bind null values.
 

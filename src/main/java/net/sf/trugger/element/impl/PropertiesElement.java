@@ -16,12 +16,11 @@
  */
 package net.sf.trugger.element.impl;
 
-import java.util.Properties;
-
 import net.sf.trugger.HandlingException;
+import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.ElementValueHandler;
-import net.sf.trugger.util.Null;
+
+import java.util.Properties;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -33,10 +32,10 @@ public class PropertiesElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ElementValueHandler in(Object target) {
+  public ValueHandler in(Object target) {
     if (target instanceof Properties) {
       final Properties props = (Properties) target;
-      return new AbstractElementValueHandler(Null.NULL_ANNOTATED_ELEMENT, target) {
+      return new ValueHandler() {
 
         @Override
         public void value(Object value) throws HandlingException {

@@ -16,13 +16,6 @@
  */
 package net.sf.trugger.scan.impl;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import net.sf.trugger.iteration.Iteration;
 import net.sf.trugger.iteration.SearchException;
 import net.sf.trugger.predicate.Predicate;
@@ -32,6 +25,13 @@ import net.sf.trugger.scan.ClassScanningException;
 import net.sf.trugger.scan.PackageScan;
 import net.sf.trugger.selector.ClassSelector;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Marcelo Varella Barca Guimarães
  */
@@ -39,7 +39,7 @@ public class TruggerClassSelector extends AbstractClassSelector implements Class
 
   public TruggerClassSelector(Scanner scanner) {
     super(scanner);
-    builder = new PredicateBuilder<Class<?>>();
+    builder = new PredicateBuilder<Class>();
   }
 
   public ClassSelector annotated() {
@@ -57,7 +57,7 @@ public class TruggerClassSelector extends AbstractClassSelector implements Class
     return this;
   }
 
-  public ClassSelector assignableTo(Class<?> type) {
+  public ClassSelector assignableTo(Class type) {
     super.assignableTo(type);
     return this;
   }
@@ -82,7 +82,7 @@ public class TruggerClassSelector extends AbstractClassSelector implements Class
     return this;
   }
 
-  public ClassSelector thatMatches(Predicate<? super Class<?>> predicate) {
+  public ClassSelector thatMatches(Predicate<? super Class> predicate) {
     super.thatMatches(predicate);
     return this;
   }
@@ -92,16 +92,16 @@ public class TruggerClassSelector extends AbstractClassSelector implements Class
     return this;
   }
 
-  public Class<?> in(String... packageNames) throws ClassScanningException {
+  public Class in(String... packageNames) throws ClassScanningException {
     return in(level.createScanPackages(packageNames));
   }
 
-  public Class<?> in(PackageScan packageToScan) throws ClassScanningException {
+  public Class in(PackageScan packageToScan) throws ClassScanningException {
     return in(Arrays.asList(packageToScan));
   }
 
-  public Class<?> in(Collection<PackageScan> packagesToScan) throws ClassScanningException {
-    Set<Class<?>> classes = new HashSet<Class<?>>(40);
+  public Class in(Collection<PackageScan> packagesToScan) throws ClassScanningException {
+    Set<Class> classes = new HashSet<Class>(40);
     try {
       for (PackageScan entry : packagesToScan) {
         classes.addAll(scanner.scanPackage(entry));

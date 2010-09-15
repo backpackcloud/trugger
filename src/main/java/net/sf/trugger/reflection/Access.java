@@ -38,7 +38,7 @@ public enum Access {
     }
     
     @Override
-    public CompositePredicate<Class<?>> classPredicate() {
+    public CompositePredicate<Class> classPredicate() {
       return ReflectionPredicates.PUBLIC_CLASS;
     }
   },
@@ -53,7 +53,7 @@ public enum Access {
     }
     
     @Override
-    public CompositePredicate<Class<?>> classPredicate() {
+    public CompositePredicate<Class> classPredicate() {
       return ReflectionPredicates.DEFAULT_CLASS;
     }
     
@@ -69,7 +69,7 @@ public enum Access {
     }
     
     @Override
-    public CompositePredicate<Class<?>> classPredicate() {
+    public CompositePredicate<Class> classPredicate() {
       return ReflectionPredicates.PROTECTED_CLASS;
     }
   },
@@ -84,7 +84,7 @@ public enum Access {
     }
     
     @Override
-    public CompositePredicate<Class<?>> classPredicate() {
+    public CompositePredicate<Class> classPredicate() {
       return ReflectionPredicates.PRIVATE_CLASS;
     }
   },
@@ -94,7 +94,7 @@ public enum Access {
   LIKE_PROTECTED {
     
     @Override
-    public CompositePredicate<Class<?>> classPredicate() {
+    public CompositePredicate<Class> classPredicate() {
       return PUBLIC.classPredicate().or(PROTECTED.classPredicate());
     }
     
@@ -110,7 +110,7 @@ public enum Access {
   LIKE_DEFAULT {
     
     @Override
-    public CompositePredicate<Class<?>> classPredicate() {
+    public CompositePredicate<Class> classPredicate() {
       return PRIVATE.classPredicate().negate();
     }
     
@@ -131,5 +131,5 @@ public enum Access {
    * @return a predicate that returns <code>true</code> if the evaluated
    *         {@link Class} has this access.
    */
-  public abstract CompositePredicate<Class<?>> classPredicate();
+  public abstract CompositePredicate<Class> classPredicate();
 }

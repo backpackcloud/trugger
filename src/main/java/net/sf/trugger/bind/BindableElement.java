@@ -28,6 +28,8 @@ public interface BindableElement extends Element {
 
   /**
    * Binds the given value to this element.
+   * <p>
+   * This has the same effect as method {@link #value(Object)}.
    *
    * @param value
    *          the value to bind.
