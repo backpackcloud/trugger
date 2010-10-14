@@ -16,19 +16,17 @@
  */
 package net.sf.trugger.bind.impl;
 
-import static net.sf.trugger.reflection.Reflection.invoke;
-import static net.sf.trugger.reflection.Reflection.reflect;
-
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Set;
-
 import net.sf.trugger.Resolver;
 import net.sf.trugger.bind.BindSelector;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.bind.PostBind;
 import net.sf.trugger.element.Element;
+
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static net.sf.trugger.reflection.Reflection.invoke;
+import static net.sf.trugger.reflection.Reflection.methods;
 
 /**
  * A default implementation for binding operations.
@@ -57,9 +55,11 @@ public final class TruggerBinder implements Binder {
     for (BindApplier bind : binds) {
       bind.applyBind(object);
     }
-    Set<Method> methods =
-        reflect().methods().recursively().annotatedWith(PostBind.class).withoutParameters().in(object);
-    invoke(methods).in(object).withoutArgs();
+    invoke(
+      methods().recursively()
+        .annotatedWith(PostBind.class)
+      .withoutParameters()
+    ).in(object).withoutArgs();
     return object;
   }
   

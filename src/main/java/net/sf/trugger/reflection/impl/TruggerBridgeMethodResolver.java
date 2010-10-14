@@ -16,6 +16,11 @@
  */
 package net.sf.trugger.reflection.impl;
 
+import net.sf.trugger.iteration.Iteration;
+import net.sf.trugger.predicate.Predicate;
+import net.sf.trugger.reflection.Reflection;
+import net.sf.trugger.reflection.ReflectionException;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -23,10 +28,8 @@ import java.lang.reflect.TypeVariable;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.trugger.iteration.Iteration;
-import net.sf.trugger.predicate.Predicate;
-import net.sf.trugger.reflection.Reflection;
-import net.sf.trugger.reflection.ReflectionException;
+import static net.sf.trugger.reflection.Reflection.method;
+import static net.sf.trugger.reflection.Reflection.methods;
 
 /**
  * Helper for resolving synthetic {@link Method#isBridge bridge Methods} to the
@@ -77,9 +80,9 @@ final class TruggerBridgeMethodResolver {
       return bridgeMethod;
     }
     // Gather all methods with matching name and parameter size.
-    Set<Method> candidateMethods =
-      Reflection.reflect().methods().thatMatches(new SimpleBridgeCandidatePredicate()).recursively().in(
-          bridgeMethod.getDeclaringClass());
+    Set<Method> candidateMethods = methods().recursively()
+      .thatMatches(new SimpleBridgeCandidatePredicate())
+    .in(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + "'");
@@ -168,7 +171,9 @@ final class TruggerBridgeMethodResolver {
      * {@link Method} is returned, otherwise <code>null</code> is returned.
      */
     private Method searchForMatch(Class type) {
-      return Reflection.reflect().method(bridgeMethod.getName()).withParameters(bridgeMethod.getParameterTypes()).in(type);
+      return method(bridgeMethod.getName())
+        .withParameters(bridgeMethod.getParameterTypes())
+      .in(type);
     }
 
     public boolean evaluate(Method candidateMethod) {

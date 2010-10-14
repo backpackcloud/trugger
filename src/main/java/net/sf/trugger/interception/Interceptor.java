@@ -16,17 +16,19 @@
  */
 package net.sf.trugger.interception;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+import net.sf.trugger.reflection.Reflection;
+import net.sf.trugger.util.Utils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-import net.sf.trugger.reflection.Reflection;
-import net.sf.trugger.util.Utils;
+import static net.sf.trugger.reflection.Reflection.reflect;
 
 /**
  * A base class to create Proxies to other classes using the CGLib.
@@ -183,9 +185,9 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
     Method method = method();
     String name = method.getName();
     Class<?>[] parameterTypes = method.getParameterTypes();
-    Method targetMethod = Reflection.reflect().method(name).recursively().withParameters(parameterTypes).in(target);
+    Method targetMethod = reflect().method(name).recursively().withParameters(parameterTypes).in(target);
     if (targetMethod.isBridge()) {
-      return Reflection.reflect().bridgedMethodFor(targetMethod);
+      return reflect().bridgedMethodFor(targetMethod);
     }
     return targetMethod;
   }
@@ -253,7 +255,7 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
         }
       }
       if (computeTargetInterfaces) {
-        interfaces.addAll(Reflection.reflect().interfaces().in(target));
+        interfaces.addAll(reflect().interfaces().in(target));
       }
       Enhancer enhancer = new Enhancer();
       Class<?> targetClass = Utils.resolveType(target);

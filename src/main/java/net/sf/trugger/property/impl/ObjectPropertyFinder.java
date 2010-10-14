@@ -16,9 +16,12 @@
  */
 package net.sf.trugger.property.impl;
 
-import static net.sf.trugger.reflection.ReflectionPredicates.GETTER;
-import static net.sf.trugger.reflection.ReflectionPredicates.PUBLIC;
-import static net.sf.trugger.reflection.ReflectionPredicates.SETTER;
+import net.sf.trugger.Finder;
+import net.sf.trugger.Result;
+import net.sf.trugger.element.Element;
+import net.sf.trugger.element.impl.ElementFinderHelper;
+import net.sf.trugger.reflection.ClassHierarchyFinder;
+import net.sf.trugger.reflection.ClassHierarchyIteration;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -30,13 +33,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import net.sf.trugger.Finder;
-import net.sf.trugger.Result;
-import net.sf.trugger.element.Element;
-import net.sf.trugger.element.impl.ElementFinderHelper;
-import net.sf.trugger.reflection.ClassHierarchyFinder;
-import net.sf.trugger.reflection.ClassHierarchyIteration;
-import net.sf.trugger.reflection.Reflection;
+import static net.sf.trugger.reflection.Reflection.fields;
+import static net.sf.trugger.reflection.Reflection.methods;
+import static net.sf.trugger.reflection.Reflection.reflect;
+import static net.sf.trugger.reflection.ReflectionPredicates.GETTER;
+import static net.sf.trugger.reflection.ReflectionPredicates.PUBLIC;
+import static net.sf.trugger.reflection.ReflectionPredicates.SETTER;
 
 /**
  * A default class for finding properties in objects.
@@ -108,8 +110,9 @@ public final class ObjectPropertyFinder implements Finder<Element> {
     Map<String, Element> map = cache.get(type);
     if (map == null) {
       map = new HashMap<String, Element>(20);
-      Set<Method> declaredMethods =
-          Reflection.reflect().methods().nonStatic().thatMatches(GETTER.or(SETTER)).in(type);
+      Set<Method> declaredMethods = methods().nonStatic()
+        .thatMatches(GETTER.or(SETTER))
+      .in(type);
       for (Method method : declaredMethods) {
         String name = resolvePropertyName(method);
         if(!map.containsKey(name)) {
@@ -117,12 +120,13 @@ public final class ObjectPropertyFinder implements Finder<Element> {
           map.put(prop.name(), prop);
         }
       }
-      Set<Field> fields =
-        Reflection.reflect().fields().nonStatic().thatMatches(PUBLIC.negate()).in(type);
+      Set<Field> fields = fields().nonStatic()
+        .thatMatches(PUBLIC.negate())
+      .in(type);
       for (Field field : fields) {
         if(!map.containsKey(field.getName())) {
-          Method getter = Reflection.reflect().getterFor(field).in(type);
-          Method setter = Reflection.reflect().setterFor(field).in(type);
+          Method getter = reflect().getterFor(field).in(type);
+          Method setter = reflect().setterFor(field).in(type);
           if((getter != null) || (setter != null)) {
             ObjectProperty prop = new ObjectProperty(field, getter, setter);
             map.put(prop.name(), prop);

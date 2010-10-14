@@ -16,14 +16,8 @@
  */
 package net.sf.trugger.util.mock;
 
-import static net.sf.trugger.reflection.Reflection.invoke;
-import static net.sf.trugger.reflection.Reflection.reflect;
-import static net.sf.trugger.reflection.ReflectionPredicates.named;
-import static net.sf.trugger.reflection.ReflectionPredicates.withDefaultValue;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
+import net.sf.trugger.interception.Interceptor;
+import net.sf.trugger.predicate.CompositePredicate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
@@ -31,8 +25,15 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.trugger.interception.Interceptor;
-import net.sf.trugger.predicate.CompositePredicate;
+import static net.sf.trugger.reflection.Reflection.invoke;
+import static net.sf.trugger.reflection.Reflection.methods;
+import static net.sf.trugger.reflection.Reflection.reflect;
+import static net.sf.trugger.reflection.ReflectionPredicates.named;
+import static net.sf.trugger.reflection.ReflectionPredicates.withDefaultValue;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
 
 /**
  * A builder for creating mock {@link Annotation annotations}.
@@ -136,7 +137,7 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
       public AnnotationMockBuilder<T> to(E expected) {
         expectLastCall().andReturn(value).anyTimes();
         return AnnotationMockBuilder.this;
-      };
+      }
     };
   }
 
@@ -144,14 +145,10 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
   public T mock() {
     Set<Method> methods;
     if(defined.isEmpty()) {
-      methods = reflect()
-                  .methods()
-                  .withoutParameters()
-                  .thatMatches
-                  (
-                    withDefaultValue()
-                  )
-                .in(annotationType);
+      methods = methods()
+        .withoutParameters()
+        .thatMatches(withDefaultValue())
+      .in(annotationType);
     } else {
       String[] names = defined.toArray(new String[defined.size()]);
       CompositePredicate<Member> predicate = named(names[0]);
@@ -160,15 +157,12 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
         predicate = predicate.or(named(name));
       }
       CompositePredicate<Member> unused = predicate.negate();
-      methods = reflect()
-                  .methods()
-                  .withoutParameters()
-                  .thatMatches
-                  (
-                    withDefaultValue()
-                    .and(unused)
-                  )
-                .in(annotationType);
+      methods = methods()
+        .withoutParameters()
+        .thatMatches(
+          withDefaultValue()
+          .and(unused))
+      .in(annotationType);
     }
 
     for (Method method : methods) {

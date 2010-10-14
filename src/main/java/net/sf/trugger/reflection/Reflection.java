@@ -16,6 +16,22 @@
  */
 package net.sf.trugger.reflection;
 
+import net.sf.trugger.HandlingException;
+import net.sf.trugger.Invoker;
+import net.sf.trugger.Result;
+import net.sf.trugger.ValueHandler;
+import net.sf.trugger.iteration.Iteration;
+import net.sf.trugger.iteration.SearchException;
+import net.sf.trugger.loader.ImplementationLoader;
+import net.sf.trugger.predicate.Predicate;
+import net.sf.trugger.selector.ConstructorSelector;
+import net.sf.trugger.selector.ConstructorsSelector;
+import net.sf.trugger.selector.FieldSelector;
+import net.sf.trugger.selector.FieldsSelector;
+import net.sf.trugger.selector.MethodSelector;
+import net.sf.trugger.selector.MethodsSelector;
+import net.sf.trugger.util.Utils;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -30,14 +46,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.trugger.Invoker;
-import net.sf.trugger.ValueHandler;
-import net.sf.trugger.iteration.Iteration;
-import net.sf.trugger.iteration.SearchException;
-import net.sf.trugger.loader.ImplementationLoader;
-import net.sf.trugger.predicate.Predicate;
-import net.sf.trugger.util.Utils;
 
 /**
  * An utility class for help the use of Reflection.
@@ -56,19 +64,16 @@ public final class Reflection {
 
   static {
     factory = ImplementationLoader.getInstance().get(ReflectionFactory.class);
-    wrappers = Collections.unmodifiableMap(new HashMap<Class<?>, Class<?>>() {
-
-      {
-        put(byte.class, Byte.class);
-        put(short.class, Short.class);
-        put(int.class, Integer.class);
-        put(long.class, Long.class);
-        put(char.class, Character.class);
-        put(float.class, Float.class);
-        put(double.class, Double.class);
-        put(boolean.class, Boolean.class);
-      }
-    });
+    wrappers = Collections.unmodifiableMap(new HashMap<Class<?>, Class<?>>() {{
+      put(byte.class, Byte.class);
+      put(short.class, Short.class);
+      put(int.class, Integer.class);
+      put(long.class, Long.class);
+      put(char.class, Character.class);
+      put(float.class, Float.class);
+      put(double.class, Double.class);
+      put(boolean.class, Boolean.class);
+    }});
   }
 
   /**
@@ -153,6 +158,24 @@ public final class Reflection {
   }
 
   /**
+   * The same as <code>reflect().constructor()</code>
+   *
+   * @since 2.8
+   */
+  public static ConstructorSelector constructor() {
+    return reflect().constructor();
+  }
+
+  /**
+   * The same as <code>reflect().constructors()</code>
+   *
+   * @since 2.8
+   */
+  public static ConstructorsSelector constructors() {
+    return reflect().constructors();
+  }
+
+  /**
    * Uses the {@link ReflectionFactory} for creating a
    * {@link ConstructorInvoker} instance.
    *
@@ -174,6 +197,104 @@ public final class Reflection {
    */
   public static FieldHandler handle(Field field) {
     return factory.createHandler(field);
+  }
+
+  /**
+   * The same as <code>reflect().field()</code>
+   *
+   * @since 2.8
+   */
+  public static FieldSelector field() {
+    return reflect().field();
+  }
+
+  /**
+   * The same as <code>reflect().field(String)</code>
+   *
+   * @since 2.8
+   */
+  public static FieldSelector field(String name) {
+    return reflect().field(name);
+  }
+
+  /**
+   * The same as <code>reflect().fields()</code>
+   *
+   * @since 2.8
+   */
+  public static FieldsSelector fields() {
+    return reflect().fields();
+  }
+
+  /**
+   * Handles the field selected by the given selector.
+   *
+   * @param selector
+   *          the selector for getting the field.
+   * @return the handler.
+   *
+   * @since 2.8
+   */
+  public static Result<ValueHandler, Object> handle(final FieldSelector selector) {
+    return new FieldHandler() {
+
+      private Object target;
+
+      @Override
+      public <E> E value() throws HandlingException {
+        Field field = selector.in(target);
+        if(field != null) {
+          return handle(field).in(target).value();
+        }
+        return null;
+      }
+
+      @Override
+      public void value(Object value) throws HandlingException {
+        Field field = selector.in(target);
+        if(field != null) {
+          handle(field).in(target).value(value);
+        }
+      }
+
+      @Override
+      public ValueHandler in(Object source) {
+        this.target = source;
+        return this;
+      }
+    };
+  }
+
+  /**
+   * Handles the field selected by the given selector.
+   *
+   * @param selector
+   *          the selector for getting the field.
+   * @return the handler.
+   *
+   * @since 2.8
+   */
+  public static Result<ValueHandler, Object> handle(final FieldsSelector selector) {
+    return new FieldHandler() {
+
+      private Object target;
+
+      @Override
+      public <E> E value() throws HandlingException {
+        return handle(selector.in(target)).in(target).value();
+      }
+
+      @Override
+      public void value(Object value) throws HandlingException {
+        handle(selector.in(target)).in(target).value(value);
+      }
+
+      @Override
+      public ValueHandler in(Object source) {
+        this.target = source;
+        return this;
+      }
+    };
   }
 
   /**
@@ -224,6 +345,103 @@ public final class Reflection {
   }
 
   /**
+   * The same as <code>reflect().method()</code>
+   *
+   * @since 2.8
+   */
+  public static MethodSelector method() {
+    return reflect().method();
+  }
+
+  /**
+   * The same as <code>reflect().method(String)</code>
+   *
+   * @since 2.8
+   */
+  public static MethodSelector method(String name) {
+    return reflect().method(name);
+  }
+
+  /**
+   * The same as <code>reflect().methods()</code>
+   *
+   * @since 2.8
+   */
+  public static MethodsSelector methods() {
+    return reflect().methods();
+  }
+
+  /**
+   * Invokes the method selected by the given selector.
+   * 
+   * @param selector
+   *          the selector for getting the method.
+   * @return the invoker
+   *
+   * @since 2.8
+   */
+  public static Result<Invoker, Object> invoke(final MethodSelector selector) {
+    return new MethodInvoker(){
+
+      private Object target;
+
+      @Override
+      public Invoker in(Object instance) {
+        this.target = instance;
+        return this;
+      }
+
+      @Override
+      public <E> E withArgs(Object... args) {
+        Method method = selector.in(target);
+        if(method != null) {
+          return invoke(method).in(target).withArgs(args);
+        }
+        return null;
+      }
+
+      @Override
+      public <E> E withoutArgs() {
+        return withArgs();
+      }
+
+    };
+  }
+
+  /**
+   * Invokes the methods selected by the given selector.
+   *
+   * @param selector
+   *          the selector for getting the methods.
+   * @return the invoker
+   *
+   * @since 2.8
+   */
+  public static Result<Invoker, Object> invoke(final MethodsSelector selector) {
+    return new MethodInvoker(){
+
+      private Object target;
+
+      @Override
+      public Invoker in(Object instance) {
+        this.target = instance;
+        return this;
+      }
+
+      @Override
+      public <E> E withArgs(Object... args) {
+        return invoke(selector.in(target)).in(target).withArgs(args);
+      }
+
+      @Override
+      public <E> E withoutArgs() {
+        return withArgs();
+      }
+
+    };
+  }
+
+  /**
    * Invokes a collection of methods that have the same parameters. The access
    * way (static or non-static) does not matter.
    * <p>
@@ -258,7 +476,7 @@ public final class Reflection {
 
       public <E> E withoutArgs() {
         return (E) withArgs();
-      };
+      }
     };
   }
 
@@ -318,3 +536,4 @@ public final class Reflection {
   }
 
 }
+

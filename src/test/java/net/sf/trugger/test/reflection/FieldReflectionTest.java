@@ -16,20 +16,18 @@
  */
 package net.sf.trugger.test.reflection;
 
-import static net.sf.trugger.reflection.Reflection.handle;
-import static net.sf.trugger.reflection.Reflection.reflect;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Set;
-
 import net.sf.trugger.ValueHandler;
 import net.sf.trugger.reflection.Reflector;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collection;
+
+import static net.sf.trugger.reflection.Reflection.field;
+import static net.sf.trugger.reflection.Reflection.fields;
+import static net.sf.trugger.reflection.Reflection.handle;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * A class for testing field reflection by the {@link Reflector}.
@@ -51,8 +49,7 @@ public class FieldReflectionTest {
 
   @Test
   public void testHandler() throws Exception {
-    Field field = reflect().field("a").in(this);
-    ValueHandler handler = handle(field).in(this);
+    ValueHandler handler = handle(field("a")).in(this);
     assertNull(handler.value());
     handler.value("string");
     assertEquals("string", a);
@@ -61,8 +58,7 @@ public class FieldReflectionTest {
 
   @Test
   public void testHandlerForCollection() {
-    Set<Field> fields = reflect().fields().in(this);
-    ValueHandler handler = handle(fields).in(this);
+    ValueHandler handler = handle(fields()).in(this);
     Collection values = handler.value();
     for (Object object : values) {
       assertNull(object);

@@ -16,19 +16,19 @@
  */
 package net.sf.trugger.test.reflection;
 
+import net.sf.trugger.reflection.Reflector;
+import net.sf.trugger.test.Flag;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import static net.sf.trugger.reflection.Reflection.invoke;
-import static net.sf.trugger.reflection.Reflection.reflect;
+import static net.sf.trugger.reflection.Reflection.method;
+import static net.sf.trugger.reflection.Reflection.methods;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-
-import java.lang.reflect.Method;
-import java.util.Set;
-
-import net.sf.trugger.reflection.Reflector;
-
-import org.junit.Test;
 
 /**
  * A class for testing method reflection by the {@link Reflector}.
@@ -43,20 +43,28 @@ public class MethodReflectionTest {
     void bar();
   }
 
-  @Test
-  public void invokerTest() {
-    TestInterface obj = createMock(TestInterface.class);
-    obj.doIt();
-    expectLastCall().once();
-    replay(obj);
-    Method method = reflect().method("doIt").in(TestInterface.class);
-    invoke(method).in(obj).withoutArgs();
+  private TestInterface obj;
+
+  @Before
+  public void before() {
+    obj = createMock(TestInterface.class);
+  }
+
+  @After
+  public void after() {
     verify(obj);
   }
 
   @Test
+  public void invokerTest() {
+    obj.doIt();
+    expectLastCall().once();
+    replay(obj);
+    invoke(method("doIt")).in(obj).withoutArgs();
+  }
+
+  @Test
   public void invokerForCollectionTest() {
-    TestInterface obj = createMock(TestInterface.class);
     obj.doIt();
     expectLastCall().once();
     obj.foo();
@@ -64,9 +72,14 @@ public class MethodReflectionTest {
     obj.bar();
     expectLastCall().once();
     replay(obj);
-    Set<Method> methods = reflect().methods().in(TestInterface.class);
-    invoke(methods).in(obj).withoutArgs();
-    verify(obj);
+    invoke(methods().in(TestInterface.class)).in(obj).withoutArgs();
+  }
+
+  @Test
+  public void invokerForNoMethodTest() {
+    replay(obj);
+    invoke(method("notDeclared")).in(obj).withoutArgs();
+    invoke(methods().annotatedWith(Flag.class)).in(TestInterface.class).withoutArgs();
   }
 
 }

@@ -16,15 +16,15 @@
  */
 package net.sf.trugger.interception;
 
-import static net.sf.trugger.reflection.Reflection.invoke;
-import static net.sf.trugger.reflection.Reflection.reflect;
+import net.sf.trugger.reflection.Access;
+import net.sf.trugger.reflection.ReflectionPredicates;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.trugger.reflection.Access;
-import net.sf.trugger.reflection.ReflectionPredicates;
+import static net.sf.trugger.reflection.Reflection.invoke;
+import static net.sf.trugger.reflection.Reflection.constructor;
 
 /**
  * This class is a proxy that can track method invocations.
@@ -49,7 +49,10 @@ public class InvocationTrackerInterceptor extends Interceptor {
     if (ReflectionPredicates.FINAL_CLASS.evaluate(returnType)) {
       return null;
     }
-    Constructor<?> constructor = reflect().constructor().withAccess(Access.PUBLIC).withoutParameters().in(returnType);
+    Constructor<?> constructor = constructor()
+      .withAccess(Access.PUBLIC)
+      .withoutParameters()
+    .in(returnType);
     if (constructor != null) {
       return createProxy().over(returnType);
     }

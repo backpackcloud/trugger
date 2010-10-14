@@ -16,24 +16,23 @@
  */
 package net.sf.trugger.test.reflection;
 
+import net.sf.trugger.predicate.Predicates;
+import net.sf.trugger.selector.FieldSetterMethodSelector;
+import net.sf.trugger.test.Flag;
+import net.sf.trugger.test.SelectionTestAdapter;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import static net.sf.trugger.reflection.Reflection.field;
 import static net.sf.trugger.reflection.Reflection.reflect;
 import static net.sf.trugger.test.TruggerTest.assertNoResult;
 import static net.sf.trugger.test.TruggerTest.assertResult;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import javax.annotation.Resource;
-
-import net.sf.trugger.predicate.Predicates;
-import net.sf.trugger.selector.FieldSetterMethodSelector;
-import net.sf.trugger.test.Flag;
-import net.sf.trugger.test.SelectionTestAdapter;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -65,9 +64,9 @@ public class FieldSetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = reflect().field("count").in(this);
-    fieldHits = reflect().field("hits").in(this);
-    fieldSize = reflect().field("size").in(this);
+    fieldCount = field("count").in(this);
+    fieldHits = field("hits").in(this);
+    fieldSize = field("size").in(this);
   }
 
   @Test

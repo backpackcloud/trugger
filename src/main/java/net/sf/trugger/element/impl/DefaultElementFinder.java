@@ -22,7 +22,6 @@ import net.sf.trugger.Result;
 import net.sf.trugger.ValueHandler;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.property.Properties;
-import net.sf.trugger.reflection.Reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -30,6 +29,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static net.sf.trugger.reflection.Reflection.field;
+import static net.sf.trugger.reflection.Reflection.fields;
 
 /**
  * A default finder for every type of objects. It uses the properties and fields
@@ -51,7 +53,7 @@ public class DefaultElementFinder implements Finder<Element> {
         if (property != null) {
           propertyElement = specific ? new SpecificElement(property, target) : property;
         }
-        Field field = Reflection.reflect().field(name).recursively().in(target);
+        Field field = field(name).recursively().in(target);
         if (field != null) {
           fieldElement = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
         }
@@ -72,7 +74,7 @@ public class DefaultElementFinder implements Finder<Element> {
         Map<String, Element> map = new HashMap<String, Element>();
         boolean specific = !(target instanceof Class);
         Set<Element> properties = Properties.properties().in(target);
-        Set<Field> fields = Reflection.reflect().fields().recursively().in(target);
+        Set<Field> fields = fields().recursively().in(target);
 
         for (Element property : properties) {
           Element element = specific ? new SpecificElement(property, target) : property;

@@ -16,6 +16,11 @@
  */
 package net.sf.trugger.element.impl;
 
+import net.sf.trugger.Finder;
+import net.sf.trugger.Result;
+import net.sf.trugger.element.Element;
+import net.sf.trugger.util.Utils;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,11 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import net.sf.trugger.Finder;
-import net.sf.trugger.Result;
-import net.sf.trugger.element.Element;
-import net.sf.trugger.reflection.Reflection;
-import net.sf.trugger.util.Utils;
+import static net.sf.trugger.reflection.Reflection.methods;
 
 /**
  * A default class for finding properties in annotations.
@@ -79,7 +80,7 @@ public final class AnnotationElementFinder implements Finder<Element> {
     if (map == null) {
       map = new HashMap<String, Element>(20);
       cache.put(annotationType, map);
-      Set<Method> declaredMethods = Reflection.reflect().methods().in(annotationType);
+      Set<Method> declaredMethods = methods().in(annotationType);
       for (Method method : declaredMethods) {
         AnnotationElement prop = new AnnotationElement(method);
         map.put(prop.name(), prop);

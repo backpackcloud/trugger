@@ -16,19 +16,22 @@
  */
 package net.sf.trugger.bind.impl;
 
-import java.util.Collection;
-
 import net.sf.trugger.Resolver;
 import net.sf.trugger.bind.BindSelector;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.element.Elements;
-import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.selector.ElementSelector;
 import net.sf.trugger.selector.ElementSpecifier;
 import net.sf.trugger.selector.ElementsSelector;
 import net.sf.trugger.selector.FieldSelector;
 import net.sf.trugger.selector.FieldSpecifier;
 import net.sf.trugger.selector.FieldsSelector;
+
+import java.util.Collection;
+
+import static net.sf.trugger.element.Elements.element;
+import static net.sf.trugger.element.Elements.elements;
+import static net.sf.trugger.reflection.Reflection.field;
+import static net.sf.trugger.reflection.Reflection.fields;
 
 /**
  * A class for binding resolved values.
@@ -52,37 +55,37 @@ public class ResolverBinder implements BindSelector {
   }
 
   public FieldSpecifier toField(String fieldName) {
-    FieldSelector selector = Reflection.reflect().field(fieldName).nonFinal().recursively();
+    FieldSelector selector = field(fieldName).nonFinal().recursively();
     binds.add(new BindableElementBindApplier(selector, resolver));
     return selector;
   }
 
   public FieldSpecifier toField() {
-    FieldSelector selector = Reflection.reflect().field().nonFinal().recursively();
+    FieldSelector selector = field().nonFinal().recursively();
     binds.add(new BindableElementBindApplier(selector, resolver));
     return selector;
   }
 
   public FieldSpecifier toFields() {
-    FieldsSelector selector = Reflection.reflect().fields().nonFinal().recursively();
+    FieldsSelector selector = fields().nonFinal().recursively();
     binds.add(new BindableElementsBindApplier(selector, resolver));
     return selector;
   }
 
   public ElementSpecifier toElements() {
-    ElementsSelector selector = Elements.elements();
+    ElementsSelector selector = elements();
     binds.add(new BindableElementsBindApplier(selector.forBind(), resolver));
     return selector;
   }
 
   public ElementSpecifier toElement(String name) {
-    ElementSelector selector = Elements.element(name);
+    ElementSelector selector = element(name);
     binds.add(new BindableElementBindApplier(selector.forBind(), resolver));
     return selector;
   }
 
   public ElementSpecifier toElement() {
-    ElementSelector selector = Elements.element();
+    ElementSelector selector = element();
     binds.add(new BindableElementBindApplier(selector.forBind(), resolver));
     return selector;
   }
