@@ -130,9 +130,8 @@ public final class Transformers {
    * <li>Boolean or boolean
    * </ul>
    */
-  public static final Transformer<Object, ElementCopy> PROPERTIES_PARSER = new TransformerDSL<ElementCopy>() {
-
-    {
+  public static TransformerDSL<ElementCopy> properties() {
+    return new TransformerDSL<ElementCopy>() {{
       use(TO_STRING).on(obj.value()).when(obj.destinationElement().type()).equal(String.class);
 
       use(TO_BOOLEAN).on(obj.value()).when(obj.destinationElement().type()).equal(Boolean.class);
@@ -149,7 +148,6 @@ public final class Transformers {
 
       use(TO_LONG).on(obj.value()).when(obj.destinationElement().type()).equal(Long.class);
       use(TO_LONG).on(obj.value()).when(obj.destinationElement().type()).equal(long.class);
-    }
-  };
-
+    }};
+  }
 }

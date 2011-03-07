@@ -16,13 +16,13 @@
  */
 package net.sf.trugger.test.transformer;
 
-import static net.sf.trugger.transformer.Transformers.PROPERTIES_PARSER;
 import static net.sf.trugger.transformer.Transformers.TO_BOOLEAN;
 import static net.sf.trugger.transformer.Transformers.TO_DOUBLE;
 import static net.sf.trugger.transformer.Transformers.TO_FLOAT;
 import static net.sf.trugger.transformer.Transformers.TO_INTEGER;
 import static net.sf.trugger.transformer.Transformers.TO_LONG;
 import static net.sf.trugger.transformer.Transformers.TO_STRING;
+import static net.sf.trugger.transformer.Transformers.properties;
 import static net.sf.trugger.util.mock.Mock.element;
 import static net.sf.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.assertEquals;
@@ -69,7 +69,7 @@ public class TransformerTest {
 
     MailConfig config = new MailConfig();
 
-    Elements.copyTo(config).transformingWith(PROPERTIES_PARSER).from(props);
+    Elements.copyTo(config).transformingWith(properties()).from(props);
 
     assertTrue(config.sendMail);
     assertFalse(config.checkMail);
