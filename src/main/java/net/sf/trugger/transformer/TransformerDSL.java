@@ -16,17 +16,17 @@
  */
 package net.sf.trugger.transformer;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
+import net.sf.trugger.AbstractDSL;
 import net.sf.trugger.interception.InterceptionContext;
 import net.sf.trugger.interception.InvocationTrackerInterceptor;
 import net.sf.trugger.predicate.Criteria;
 import net.sf.trugger.predicate.PredicateDSL;
-import net.sf.trugger.reflection.Reflection;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * This class represents a DSL to build a {@link Transformer}.
@@ -75,15 +75,7 @@ import net.sf.trugger.reflection.Reflection;
  *          The object type
  * @since 2.6
  */
-public class TransformerDSL<E> implements Transformer<Object, E> {
-
-  /**
-   * The proxy object for calling the methods while creating the DSL.
-   */
-  protected E obj;
-  private final Class<E> clazz;
-
-  private final InvocationTrackerInterceptor interceptor;
+public class TransformerDSL<E> extends AbstractDSL<E> implements Transformer<Object, E> {
 
   private final Map<PredicateDSL<E>, MapValue> map = new LinkedHashMap<PredicateDSL<E>, MapValue>();
 
@@ -100,9 +92,22 @@ public class TransformerDSL<E> implements Transformer<Object, E> {
 
   }
 
+  /**
+   * Creates a new instance of this class using the specified generic type. Make
+   * sure you define the generic type when using this constructor.
+   */
   protected TransformerDSL() {
-    clazz = Reflection.reflect().genericType("E").in(this);
-    interceptor = new InvocationTrackerInterceptor();
+    super();
+  }
+
+  /**
+   * Creates a new instance of this class using the given class as the type.
+   *
+   * @param clazz
+   *          the type.
+   */
+  public TransformerDSL(Class<E> clazz) {
+    super(clazz);
   }
 
   /**
@@ -113,11 +118,11 @@ public class TransformerDSL<E> implements Transformer<Object, E> {
    * @return a component for defining the target.
    */
   public TransformerTargetSelector<E> use(Transformer transformer) {
-    PredicateDSL<E> predicate = new PredicateDSL<E>(clazz);
-    obj = (E) interceptor.createProxy().over(clazz);
+    PredicateDSL<E> predicate = new PredicateDSL<E>(type);
+    obj = (E) tracker.createProxy().over(type);
     MapValue mapValue = new MapValue(transformer, predicate);
     map.put(predicate, mapValue);
-    interceptor.track();
+    tracker.track();
     return new TransformerTarget<E>(mapValue);
   }
 
@@ -144,7 +149,7 @@ public class TransformerDSL<E> implements Transformer<Object, E> {
     }
 
     public TransformerCriteria<E> on(Object value) {
-      mapValue.contexts = interceptor.trackedContexts();
+      mapValue.contexts = tracker.trackedContexts();
       obj = mapValue.predicate.obj();
       return new TransformerCriteriaImpl(mapValue.predicate);
     }

@@ -25,7 +25,7 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-  PredicateDSLTestExcept.class,
+  PredicateDSLTestExpect.class,
   PredicateDSLTestDontExcept.class
 })
 public class PredicateDSLTest {

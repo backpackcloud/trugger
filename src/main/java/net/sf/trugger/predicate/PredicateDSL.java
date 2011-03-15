@@ -16,18 +16,18 @@
  */
 package net.sf.trugger.predicate;
 
-import static net.sf.trugger.predicate.Predicates.newComposition;
-import static net.sf.trugger.reflection.Reflection.reflect;
-
-import java.util.LinkedList;
-import java.util.List;
-
+import net.sf.trugger.AbstractDSL;
 import net.sf.trugger.Result;
 import net.sf.trugger.interception.InterceptionContext;
 import net.sf.trugger.interception.InvocationTrackerInterceptor;
 import net.sf.trugger.util.Utils;
 import net.sf.trugger.validation.Validation;
 import net.sf.trugger.validation.ValidationResult;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static net.sf.trugger.predicate.Predicates.newComposition;
 
 /**
  * This class represents a DSL to build a {@link Predicate}.
@@ -51,15 +51,8 @@ import net.sf.trugger.validation.ValidationResult;
  * @param <E>
  *          The object type.
  */
-public class PredicateDSL<E> implements Predicate<E> {
+public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
 
-  /**
-   * The proxy object for calling the methods while creating the DSL.
-   */
-  protected final E obj;
-
-  private final Class<E> clazz;
-  private InvocationTrackerInterceptor tracker = new InvocationTrackerInterceptor();
   private List<Predicate> evals = new LinkedList<Predicate>();
 
   /**
@@ -67,8 +60,8 @@ public class PredicateDSL<E> implements Predicate<E> {
    * sure you define the generic type when using this constructor.
    */
   protected PredicateDSL() {
-    clazz = reflect().genericType("E").in(this);
-    obj = (E) tracker.createProxy().over(clazz);
+    super();
+    obj = (E) tracker.createProxy().over(type);
   }
 
   /**
@@ -78,15 +71,8 @@ public class PredicateDSL<E> implements Predicate<E> {
    *          the type.
    */
   public PredicateDSL(Class<E> clazz) {
-    this.clazz = clazz;
-    obj = (E) tracker.createProxy().over(clazz);
-  }
-
-  /**
-   * @return the proxy used for calling the methods while creating the DSL.
-   */
-  public final E obj() {
-    return obj;
+    super(clazz);
+    obj = (E) tracker.createProxy().over(type);
   }
 
   /**

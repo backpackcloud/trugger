@@ -16,23 +16,23 @@
  */
 package net.sf.trugger.test.predicate;
 
-import static net.sf.trugger.util.mock.Mock.element;
-import static net.sf.trugger.util.mock.Mock.mock;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.PredicateDSL;
 import net.sf.trugger.validation.validator.NotNull;
-
 import org.junit.Test;
+
+import static net.sf.trugger.util.mock.Mock.element;
+import static net.sf.trugger.util.mock.Mock.mock;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 /**
  * @author Marcelo Varella Barca Guimarães
  *
  */
-public class PredicateDSLTestExcept {
+public class PredicateDSLTestExpect {
   @Test
   public void interfaceTest() {
     Predicate<Element> predicate = new PredicateDSL<Element>() {{
