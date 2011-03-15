@@ -23,11 +23,10 @@ import net.sf.trugger.util.Utils;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.sf.trugger.reflection.Reflection.methods;
 
@@ -46,7 +45,7 @@ public final class AnnotationElementFinder implements Finder<Element> {
    * Creates a new finder
    */
   public AnnotationElementFinder() {
-    cache = Collections.synchronizedMap(new WeakHashMap<Class<?>, Map<String, Element>>(100));
+    cache = new ConcurrentHashMap<Class<?>, Map<String, Element>>(100);
   }
 
   public Result<Set<Element>, Object> findAll() {

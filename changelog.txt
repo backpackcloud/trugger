@@ -1,3 +1,8 @@
+Version 2.8.0
+- Major Changes
+  - Reformulated Reflection DSL
+  - Code improvements
+
 Version 2.7.0
 - New Modules:
   - Domain Annotations

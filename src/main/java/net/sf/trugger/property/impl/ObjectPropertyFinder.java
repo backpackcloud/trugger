@@ -25,20 +25,11 @@ import net.sf.trugger.reflection.ClassHierarchyIteration;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static net.sf.trugger.reflection.Reflection.fields;
-import static net.sf.trugger.reflection.Reflection.methods;
-import static net.sf.trugger.reflection.Reflection.reflect;
-import static net.sf.trugger.reflection.ReflectionPredicates.GETTER;
-import static net.sf.trugger.reflection.ReflectionPredicates.PUBLIC;
-import static net.sf.trugger.reflection.ReflectionPredicates.SETTER;
+import static net.sf.trugger.reflection.Reflection.*;
+import static net.sf.trugger.reflection.ReflectionPredicates.*;
 
 /**
  * A default class for finding properties in objects.
@@ -50,7 +41,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
   private final Map<Class<?>, Map<String, Element>> cache;
   
   public ObjectPropertyFinder() {
-    cache = Collections.synchronizedMap(new WeakHashMap<Class<?>, Map<String, Element>>(256));
+    cache = new ConcurrentHashMap<Class<?>, Map<String, Element>>(256);
   }
   
   public final Result<Element, Object> find(final String propertyName) {
