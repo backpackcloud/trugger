@@ -208,34 +208,30 @@ public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
   public <V> Criteria<E, V> dontExpect(V obj) {
     return new Criteria<E, V>() {
 
-      public void equal(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.EQUAL, tracker.trackedContexts(), value);
+      private void eval(EvalType type, Object value) {
+        Evaluation evaluation = new Evaluation(type, tracker.trackedContexts(), value);
         evals.add(newComposition(evaluation).negate());
         tracker.track();
+      }
+
+      public void equal(V value) {
+        eval(EvalType.EQUAL, value);
       }
 
       public void differ(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.DIFFER, tracker.trackedContexts(), value);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
+        eval(EvalType.DIFFER, value);
       }
 
       public void greaterThan(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.GREATER, tracker.trackedContexts(), value);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
+        eval(EvalType.GREATER, value);
       }
 
       public void lessThan(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.LESS, tracker.trackedContexts(), value);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
+        eval(EvalType.LESS, value);
       }
 
       public void matches(String pattern) {
-        Evaluation evaluation = new Evaluation(EvalType.PATTERN, tracker.trackedContexts(), pattern);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
+        eval(EvalType.PATTERN, pattern);
       }
 
       public void invalid() {
@@ -250,15 +246,11 @@ public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
         return new ValidationCriteria() {
 
           public void invalid() {
-            Evaluation evaluation = new Evaluation(EvalType.INVALID, tracker.trackedContexts(), result);
-            evals.add(newComposition(evaluation).negate());
-            tracker.track();
+            eval(EvalType.INVALID, result);
           }
 
           public void valid() {
-            Evaluation evaluation = new Evaluation(EvalType.VALID, tracker.trackedContexts(), result);
-            evals.add(newComposition(evaluation).negate());
-            tracker.track();
+            eval(EvalType.VALID, result);
           }
         };
       }
@@ -276,9 +268,7 @@ public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
       }
 
       public void greaterOrEqual(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.GREATER_OR_EQUAL, tracker.trackedContexts(), value);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
+        eval(EvalType.GREATER_OR_EQUAL, value);
       }
 
       public void gt(V value) {
@@ -290,9 +280,7 @@ public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
       }
 
       public void lessOrEqual(V value) {
-        Evaluation evaluation = new Evaluation(EvalType.LESS_OR_EQUAL, tracker.trackedContexts(), value);
-        evals.add(newComposition(evaluation).negate());
-        tracker.track();
+        eval(EvalType.LESS_OR_EQUAL, value);
       }
 
       public void lt(V value) {
@@ -309,7 +297,7 @@ public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
       }
     }
     return true;
-  };
+  }
 
   private enum EvalType {
     EQUAL {
@@ -344,7 +332,7 @@ public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
     },
     PATTERN {
       public boolean eval(Object referenceValue, Object objectValue) {
-        return objectValue != null ? objectValue.toString().matches((String) referenceValue) : false;
+        return objectValue != null && objectValue.toString().matches((String) referenceValue);
       }
     },
     VALID {
