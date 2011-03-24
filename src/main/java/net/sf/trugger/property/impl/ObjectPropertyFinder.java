@@ -22,11 +22,11 @@ import net.sf.trugger.element.Element;
 import net.sf.trugger.element.impl.ElementFinderHelper;
 import net.sf.trugger.reflection.ClassHierarchyFinder;
 import net.sf.trugger.reflection.ClassHierarchyIteration;
+import org.apache.commons.collections.map.LRUMap;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static net.sf.trugger.reflection.Reflection.*;
 import static net.sf.trugger.reflection.ReflectionPredicates.*;
@@ -41,7 +41,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
   private final Map<Class<?>, Map<String, Element>> cache;
   
   public ObjectPropertyFinder() {
-    cache = new ConcurrentHashMap<Class<?>, Map<String, Element>>(256);
+    cache = Collections.synchronizedMap(new LRUMap(300));
   }
   
   public final Result<Element, Object> find(final String propertyName) {

@@ -20,13 +20,10 @@ import net.sf.trugger.Finder;
 import net.sf.trugger.Result;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.util.Utils;
+import org.apache.commons.collections.map.LRUMap;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 import static net.sf.trugger.reflection.Reflection.methods;
 
@@ -45,7 +42,7 @@ public final class AnnotationElementFinder implements Finder<Element> {
    * Creates a new finder
    */
   public AnnotationElementFinder() {
-    cache = new ConcurrentHashMap<Class<?>, Map<String, Element>>(100);
+    cache = Collections.synchronizedMap(new LRUMap(300));
   }
 
   public Result<Set<Element>, Object> findAll() {
