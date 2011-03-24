@@ -16,12 +16,12 @@
  */
 package net.sf.trugger.element;
 
-import java.util.Arrays;
-
 import net.sf.trugger.predicate.CompositePredicate;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.Predicates;
 import net.sf.trugger.util.Utils;
+
+import java.util.Arrays;
 
 /**
  * An utility class for helping the use of {@link Predicate predicates} for
@@ -84,7 +84,7 @@ public final class ElementPredicates {
     @Override
     public String toString() {
       return "Writable";
-    };
+    }
   });
   
   /**
@@ -104,7 +104,7 @@ public final class ElementPredicates {
     @Override
     public String toString() {
       return "Readable";
-    };
+    }
   });
   
   /**
@@ -126,7 +126,7 @@ public final class ElementPredicates {
       @Override
       public String toString() {
         return "Assignable to " + type.getName();
-      };
+      }
     });
   }
   
@@ -143,8 +143,8 @@ public final class ElementPredicates {
     @Override
     public String toString() {
       return "Specific";
-    };
-    
+    }
+
   });
   
   /**

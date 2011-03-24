@@ -59,7 +59,7 @@ public class MapRegistry<K, V> implements Registry<K, V> {
       public Registry<K, V> to(K key) {
         map.put(key, value);
         return MapRegistry.this;
-      };
+      }
     };
   }
 

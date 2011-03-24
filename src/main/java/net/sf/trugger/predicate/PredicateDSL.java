@@ -349,7 +349,7 @@ public class PredicateDSL<E> extends AbstractDSL<E> implements Predicate<E> {
     abstract boolean eval(Object referenceValue, Object objectValue);
   }
 
-  private class Evaluation implements Predicate {
+  private static class Evaluation implements Predicate {
 
     List<InterceptionContext> contexts;
     Object referenceValue;

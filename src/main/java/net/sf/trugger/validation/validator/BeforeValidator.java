@@ -44,7 +44,7 @@ public class BeforeValidator implements Validator<Date> {
 
     boolean before = cal.before(referenceCal);
     if (!before && annotation.validIfEquals()) {
-      before |= cal.equals(referenceCal);
+      before = cal.equals(referenceCal);
     }
     return before;
   }

@@ -24,13 +24,16 @@ import net.sf.trugger.util.HashBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
- * A class to handle a path of {@link Element properties}.
+ * A class to handle a path of {@link net.sf.trugger.element.Element properties}.
  *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class NestedElement extends AbstractElement implements Element {
+
+  private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
 
   /** the access path */
   private final List<Element> path;
@@ -92,7 +95,7 @@ public final class NestedElement extends AbstractElement implements Element {
 
     public void value(Object value) throws HandlingException {
       Object _source = target;
-      Element p = null;
+      Element p;
       for (int i = 0 ; ;) {
         p = NestedElement.this.get(i);
         if (++i < getPath().size()) {
@@ -102,8 +105,7 @@ public final class NestedElement extends AbstractElement implements Element {
           break;
         }
       }
-    }
-    };
+    }};
   }
 
   /**
@@ -158,14 +160,11 @@ public final class NestedElement extends AbstractElement implements Element {
       return false;
     }
     final NestedElement other = (NestedElement) obj;
-    if (!path.equals(other.path)) {
-      return false;
-    }
-    return true;
+    return path.equals(other.path);
   }
 
   static NestedElement createNestedElement(Object source, String elementsPath) {
-    String[] names = elementsPath.split("\\.");
+    String[] names = DOT_PATTERN.split(elementsPath);
     List<Element> path = new ArrayList<Element>(names.length);
     Element property = null;
     Object _source = source;

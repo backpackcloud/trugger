@@ -16,14 +16,14 @@
  */
 package net.sf.trugger.iteration.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.sf.trugger.iteration.Iteration;
 import net.sf.trugger.iteration.IterationSearchOperation;
 import net.sf.trugger.iteration.SearchException;
 import net.sf.trugger.predicate.Predicate;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -38,7 +38,7 @@ public class TruggerSearchIteration<E> implements IterationSearchOperation<E> {
 
   public E elementMatching(Predicate<? super E> predicate) {
     E result = null;
-    E next = null;
+    E next;
     boolean found = false;
     while (iterator.hasNext()) {
       next = iterator.next();
@@ -54,7 +54,7 @@ public class TruggerSearchIteration<E> implements IterationSearchOperation<E> {
   }
 
   public E firstElementMatching(Predicate<? super E> predicate) {
-    E next = null;
+    E next;
     while (iterator.hasNext()) {
       next = iterator.next();
       if (predicate.evaluate(next)) {

@@ -16,13 +16,13 @@
  */
 package net.sf.trugger.util;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-
 import net.sf.trugger.annotation.AcceptArrays;
 import net.sf.trugger.annotation.AcceptedArrayTypes;
 import net.sf.trugger.annotation.AcceptedTypes;
 import net.sf.trugger.reflection.Reflection;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 /**
  * A class with general utility methods.
@@ -132,7 +132,7 @@ public final class Utils {
       AcceptedTypes annotation = element.getAnnotation(AcceptedTypes.class);
       return checkAcceptionWithWrapper(type, annotation.value());
     }
-    return !accTypes && !accArr && !accArrTypes;
+    return !accArr && !accArrTypes;
   }
 
   private static boolean checkAcception(Class<?> type, Class<?>[] classes) {

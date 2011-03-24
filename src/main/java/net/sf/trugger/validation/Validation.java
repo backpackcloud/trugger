@@ -178,7 +178,7 @@ public class Validation {
    * @since 2.4
    */
   public static void unplug(ValidatorBinder validatorBinder) {
-    synchronized (validatorBinder) {
+    synchronized (pluggedBinders) {
       pluggedBinders.remove(validatorBinder);
     }
   }

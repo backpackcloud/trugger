@@ -80,8 +80,9 @@ public final class AnnotationElementFinder implements Finder<Element> {
       map = new HashMap<String, Element>(20);
       cache.put(annotationType, map);
       Set<Method> declaredMethods = methods().in(annotationType);
+      AnnotationElement prop;
       for (Method method : declaredMethods) {
-        AnnotationElement prop = new AnnotationElement(method);
+        prop = new AnnotationElement(method);
         map.put(prop.name(), prop);
       }
     }

@@ -16,15 +16,15 @@
  */
 package net.sf.trugger.annotation;
 
+import net.sf.trugger.annotation.impl.DomainAnnotationImpl;
+import net.sf.trugger.transformer.BidirectionalTransformer;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.trugger.annotation.impl.DomainAnnotationImpl;
-import net.sf.trugger.transformer.BidirectionalTransformer;
 
 /**
  * A class that defines an {@link AnnotatedElement} that can search in its
@@ -84,11 +84,12 @@ public class DomainAnnotatedElement implements AnnotatedElement {
       return map.get(annotationType);
     }
     Set<Class<? extends Annotation>> annotations = new HashSet<Class<? extends Annotation>>();
-    DomainAnnotation found = null;
+    DomainAnnotation found;
     for (Annotation annotation : getDeclaredAnnotations()) {
       Class<? extends Annotation> type = annotation.annotationType();
+      DomainAnnotation parent;
       if (!annotations.contains(type)) {
-        DomainAnnotation parent = new DomainAnnotationImpl(annotation);
+        parent = new DomainAnnotationImpl(annotation);
         if (type.isAnnotationPresent(annotationType)) {
           return new DomainAnnotationImpl<T>(type.getAnnotation(annotationType), parent);
         }
@@ -103,8 +104,8 @@ public class DomainAnnotatedElement implements AnnotatedElement {
     return null;
   }
 
-  private <T extends Annotation> DomainAnnotation search(Set annotations, DomainAnnotation parent,
-      Annotation annotation, Class<T> annotationType) {
+  private static <T extends Annotation> DomainAnnotation search(Set annotations, DomainAnnotation parent,
+                                                                Annotation annotation, Class<T> annotationType) {
     if (!annotations.contains(annotation.annotationType())) {
       annotations.add(annotation.annotationType());
       parent = new DomainAnnotationImpl(annotation, parent);

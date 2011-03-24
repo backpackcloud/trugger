@@ -16,11 +16,11 @@
  */
 package net.sf.trugger.validation.validator;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import net.sf.trugger.date.DateType;
 import net.sf.trugger.validation.Validator;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * The implementation of the {@link After} validation.
@@ -46,7 +46,7 @@ public class AfterValidator implements Validator<Date> {
 
     boolean after = cal.after(referenceCal);
     if (!after && annotation.validIfEquals()) {
-      after |= cal.equals(referenceCal);
+      after = cal.equals(referenceCal);
     }
     return after;
   }

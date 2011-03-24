@@ -27,7 +27,7 @@ import net.sf.trugger.validation.Validator;
 public class AssertTrueValidator implements Validator<Boolean> {
 
   public boolean isValid(@NotNull Boolean value) {
-    return value.booleanValue();
+    return value;
   }
 
 }

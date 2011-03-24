@@ -183,7 +183,7 @@ final class ObjectProperty extends AbstractElement {
     }
   }
 
-  private boolean isAnyAnnotationPresent(AnnotatedElement element) {
+  private static boolean isAnyAnnotationPresent(AnnotatedElement element) {
     return (element != null) && (element.getAnnotations().length > 0);
   }
 

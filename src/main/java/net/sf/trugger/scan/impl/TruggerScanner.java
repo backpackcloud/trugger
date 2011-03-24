@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -32,6 +33,7 @@ import java.util.Set;
 public class TruggerScanner implements Scanner {
 
   private static final String CLASS_EXTENSION = ".class";
+  private static final Pattern SLASH_PATTERN = Pattern.compile("/");
 
   private final ClassScannerFactory factory;
   private ClassLoader classLoader;
@@ -65,7 +67,7 @@ public class TruggerScanner implements Scanner {
         for (String resourceName : resourcesName) {
           if (resourceName.endsWith(CLASS_EXTENSION)) {
             resourceName =
-                resourceName.replaceAll("/", ".").substring(0, resourceName.length() - CLASS_EXTENSION.length());
+                SLASH_PATTERN.matcher(resourceName).replaceAll(".").substring(0, resourceName.length() - CLASS_EXTENSION.length());
             classes.add(Class.forName(resourceName, true, classLoader));
           }
         }

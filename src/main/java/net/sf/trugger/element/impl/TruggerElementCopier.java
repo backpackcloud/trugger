@@ -159,10 +159,7 @@ public final class TruggerElementCopier implements ElementCopier {
 
     @Override
     public boolean evaluate(ElementCopy element) {
-      if (value == null) {
-        return true;
-      }
-      return Utils.areAssignable(element.destinationElement().type(), value.getClass());
+      return value == null || Utils.areAssignable(element.destinationElement().type(), value.getClass());
     }
 
   }

@@ -57,7 +57,7 @@ public class RangeValidator implements Validator<Number> {
     return result;
   }
 
-  private boolean areEquals(double x, double y, double delta) {
+  private static boolean areEquals(double x, double y, double delta) {
     return Math.abs(x - y) <= delta;
   }
 }

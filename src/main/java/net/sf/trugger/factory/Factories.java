@@ -79,11 +79,11 @@ public final class Factories {
 
       public synchronized boolean canCreate(K key) {
         return factory.canCreate(key);
-      };
+      }
 
       public synchronized E create(K key) throws CreateException {
         return factory.create(key);
-      };
+      }
     };
   }
 

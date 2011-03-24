@@ -45,7 +45,7 @@ public class TruggerClassScannerFactory implements ClassScannerFactory {
   public ResourceFinder finderFor(String protocol) {
     ResourceFinder finder = registry.registryFor(protocol.toLowerCase());
     if (finder == null) {
-      throw new ClassScanningException("No finder registered for protocol \"" + protocol + "\"");
+      throw new ClassScanningException("No finder registered for protocol \"" + protocol + '\"');
     }
     return finder;
   }

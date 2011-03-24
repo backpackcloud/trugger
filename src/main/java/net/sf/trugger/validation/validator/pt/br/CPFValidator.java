@@ -19,6 +19,8 @@ package net.sf.trugger.validation.validator.pt.br;
 import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.validator.NotEmpty;
 
+import java.util.regex.Pattern;
+
 /**
  * The implementation of the {@link CPF} validation.
  *
@@ -27,13 +29,17 @@ import net.sf.trugger.validation.validator.NotEmpty;
  */
 public class CPFValidator implements Validator<String> {
 
+  private static final Pattern DIGITS_PATTERN = Pattern.compile("^\\d{11}$");
+  private static final Pattern FORMAT_PATTERN = Pattern.compile("^\\d{3}(\\.\\d{3}){2}-\\d{2}$");
+  private static final Pattern NON_DIGITS_PATTERN = Pattern.compile("\\D");
+
   @Override
   public boolean isValid(@NotEmpty String value) {
-    if (!value.matches("^\\d{11}$")) {
-      if (!value.matches("^\\d{3}(\\.\\d{3}){2}-\\d{2}$")) {
+    if (!DIGITS_PATTERN.matcher(value).matches()) {
+      if (!FORMAT_PATTERN.matcher(value).matches()) {
         return false;
       }
-      value = value.replaceAll("\\D", "");
+      value = NON_DIGITS_PATTERN.matcher(value).replaceAll("");
     }
     if (value.length() != 11) {
       return false;
@@ -48,7 +54,7 @@ public class CPFValidator implements Validator<String> {
     return d2 == Integer.parseInt(value.substring(10, 11));
   }
 
-  private int calculateVerifierDigit(String digits) {
+  private static int calculateVerifierDigit(String digits) {
     int sum = 0;
     int length = digits.length();
     for (int i = 0 , j = length + 1 ; i < length ; i++ , j--) {

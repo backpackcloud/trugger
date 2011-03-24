@@ -88,7 +88,7 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
   /**
    * @return InterceptionContext#methodProxy
    */
-  private final MethodProxy methodProxy() {
+  private MethodProxy methodProxy() {
     return context().methodProxy;
   }
 

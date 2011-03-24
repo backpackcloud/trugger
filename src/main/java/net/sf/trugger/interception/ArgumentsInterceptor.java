@@ -16,15 +16,6 @@
  */
 package net.sf.trugger.interception;
 
-import static net.sf.trugger.util.Utils.isTypeAccepted;
-import static net.sf.trugger.util.Utils.resolveType;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.util.LinkedList;
-import java.util.List;
-
 import net.sf.trugger.factory.Factory;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.reflection.Reflection;
@@ -33,6 +24,15 @@ import net.sf.trugger.validation.Validation;
 import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorContext;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.LinkedList;
+import java.util.List;
+
+import static net.sf.trugger.util.Utils.isTypeAccepted;
+import static net.sf.trugger.util.Utils.resolveType;
 
 /**
  * An {@link Interceptor} that validates the method arguments based on their
@@ -133,8 +133,9 @@ public class ArgumentsInterceptor extends Interceptor {
     Object[] args = args();
     for (int i = 0 ; i < parameterAnnotations.length ; i++) {
       Annotation[] annotations = parameterAnnotations[i];
+      ValidatorContext context;
       for (Annotation annotation : annotations) {
-        ValidatorContext context = new ValidatorContextImpl(annotation);
+        context = new ValidatorContextImpl(annotation);
         if (factory.canCreate(context)) {
           Validator validator = factory.create(context);
           if (!validator.isValid(args[i])) {

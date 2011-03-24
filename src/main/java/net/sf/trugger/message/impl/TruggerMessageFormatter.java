@@ -16,23 +16,18 @@
  */
 package net.sf.trugger.message.impl;
 
-import java.util.Formatter;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import net.sf.trugger.annotation.Reference;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
 import net.sf.trugger.message.MessageFormatter;
 
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
+
 /**
  * The default MessageFormatter. This formatter allows the use of context and
- * {@link Reference} value and element info in the message.
+ * {@link net.sf.trugger.annotation.Reference} value and element info in the message.
  * <p>
  * To use a context value in the message, just put the desired name of the
  * element between <i>${</i> and <i>}</i>. To use an info, use the following
@@ -49,7 +44,7 @@ import net.sf.trugger.message.MessageFormatter;
  * <ul>
  * <li><i>#{ }</i> - searches for the content in the <i>ResourceBundle</i>.
  * <li><i>@{ , ...}</i> - the content will be formatted using a
- * {@link Formatter}, the first parameter is the format and the subsequent (if
+ * {@link java.util.Formatter}, the first parameter is the format and the subsequent (if
  * applies), the arguments.
  * </ul>
  * Note that the expressions only works in elements that exists in the context.
@@ -59,7 +54,9 @@ import net.sf.trugger.message.MessageFormatter;
  * @author Marcelo Varella Barca Guimarães
  */
 public final class TruggerMessageFormatter implements MessageFormatter {
-  
+
+  private static final Pattern SPLIT_PATTERN = Pattern.compile("\\s*,\\s*");
+
   public String format(String message, ResourceBundle bundle, Element targetElement, Object contextObject, Object target) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
     String elementName = targetElement.name();
@@ -74,11 +71,11 @@ public final class TruggerMessageFormatter implements MessageFormatter {
         String referenceName = referenceElement.name();
         Object referenceValue = referenceElement.in(target).value();
         
-        mapContextElementValue(map, bundle, "{" + contextElementName + ".name}", referenceName);
-        mapContextElementValue(map, bundle, "{" + contextElementName + ".type}", referenceElement.type().getName());
-        mapContextElementValue(map, bundle, "{" + contextElementName + ".value}", referenceValue);
+        mapContextElementValue(map, bundle, '{' + contextElementName + ".name}", referenceName);
+        mapContextElementValue(map, bundle, '{' + contextElementName + ".type}", referenceElement.type().getName());
+        mapContextElementValue(map, bundle, '{' + contextElementName + ".value}", referenceValue);
       }
-      mapContextElementValue(map, bundle, "{" + contextElement.name() + "}", elementValue);
+      mapContextElementValue(map, bundle, '{' + contextElement.name() + '}', elementValue);
     }
     mapElementValue(map, bundle, "{name}", elementName);
     mapElementValue(map, bundle, "{type}", targetElement.type().getName());
@@ -92,7 +89,7 @@ public final class TruggerMessageFormatter implements MessageFormatter {
   }
   
   private void mapContextElementValue(Map<String, Object> map, ResourceBundle bundle, String expression, Object value) {
-    map.put("$" + expression, value);
+    map.put('$' + expression, value);
     mapBundleValue(map, bundle, expression, value);
   }
   
@@ -102,7 +99,7 @@ public final class TruggerMessageFormatter implements MessageFormatter {
   }
   
   private void mapBundleValue(Map<String, Object> map, ResourceBundle bundle, String expression, Object value) {
-    map.put("#" + expression, getString(bundle, String.valueOf(value)));
+    map.put('#' + expression, getString(bundle, String.valueOf(value)));
   }
   
   private void format(Map<String, Object> map, StringBuilder buff, Locale locale) {
@@ -110,7 +107,7 @@ public final class TruggerMessageFormatter implements MessageFormatter {
     while ((pos = buff.indexOf("@{", pos)) != -1) {
       int index = indexOfClose(buff, '{', '}', pos);
       if (index > -1) {
-        String[] strings = buff.substring(pos + 2, index).split("\\s*,\\s*");
+        String[] strings = SPLIT_PATTERN.split(buff.substring(pos + 2, index));
         String pattern = strings[0];
         Object[] args = new Object[strings.length - 1];
         System.arraycopy(strings, 1, args, 0, args.length);
@@ -132,7 +129,7 @@ public final class TruggerMessageFormatter implements MessageFormatter {
   
   /**
    * Gets a string from the given bundle using a key, preventing a
-   * {@link MissingResourceException} by returning the given key.
+   * {@link java.util.MissingResourceException} by returning the given key.
    * 
    * @param bundle
    *          the bundle for getting the string.
@@ -141,7 +138,7 @@ public final class TruggerMessageFormatter implements MessageFormatter {
    * @return the string or the given name if a MissingResourceException is
    *         raised.
    */
-  private String getString(ResourceBundle bundle, String name) {
+  private static String getString(ResourceBundle bundle, String name) {
     try {
       return name != null ? bundle.getString(name) : null;
     } catch (MissingResourceException e) {
@@ -160,10 +157,9 @@ public final class TruggerMessageFormatter implements MessageFormatter {
    * @param value
    *          the value to replace
    */
-  private void replace(StringBuilder buff, String pattern, String value) {
-    for (int i = 0 ; (i = buff.indexOf(pattern)) != -1 ;) {
+  private static void replace(StringBuilder buff, String pattern, String value) {
+    for (int i ; (i = buff.indexOf(pattern)) != -1 ;) {
       buff.replace(i, i + pattern.length(), value);
-      i = buff.indexOf(pattern);
     }
   }
   
@@ -181,7 +177,7 @@ public final class TruggerMessageFormatter implements MessageFormatter {
    *          the offset for considering
    * @return the index of the char thats closes the sentence.
    */
-  private int indexOfClose(CharSequence sequence, char open, char close, int offset) {
+  private static int indexOfClose(CharSequence sequence, char open, char close, int offset) {
     int pos = offset;
     int opened = 0;
     //stops only if the end of the buffer is reached

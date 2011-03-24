@@ -54,7 +54,7 @@ public final class TruggerCompositePredicate<T> implements CompositePredicate<T>
 
       @Override
       public String toString() {
-        return "(" + compositePredicate.toString() + ") AND (" + predicate.toString() + ")";
+        return '(' + compositePredicate.toString() + ") AND (" + predicate.toString() + ')';
       }
     });
   }
@@ -68,7 +68,7 @@ public final class TruggerCompositePredicate<T> implements CompositePredicate<T>
 
       @Override
       public String toString() {
-        return "(" + compositePredicate.toString() + ") NAND (" + predicate.toString() + ")";
+        return '(' + compositePredicate.toString() + ") NAND (" + predicate.toString() + ')';
       }
     });
   }
@@ -82,7 +82,7 @@ public final class TruggerCompositePredicate<T> implements CompositePredicate<T>
 
       @Override
       public String toString() {
-        return "(" + compositePredicate.toString() + ") NOR (" + predicate.toString() + ")";
+        return '(' + compositePredicate.toString() + ") NOR (" + predicate.toString() + ')';
       }
     });
   }
@@ -96,7 +96,7 @@ public final class TruggerCompositePredicate<T> implements CompositePredicate<T>
 
       @Override
       public String toString() {
-        return "(" + compositePredicate.toString() + ") OR (" + predicate.toString() + ")";
+        return '(' + compositePredicate.toString() + ") OR (" + predicate.toString() + ')';
       }
     });
   }
@@ -111,7 +111,7 @@ public final class TruggerCompositePredicate<T> implements CompositePredicate<T>
 
       @Override
       public String toString() {
-        return "(" + compositePredicate.toString() + ") XAND (" + predicate.toString() + ")";
+        return '(' + compositePredicate.toString() + ") XAND (" + predicate.toString() + ')';
       }
     });
   }
@@ -125,7 +125,7 @@ public final class TruggerCompositePredicate<T> implements CompositePredicate<T>
 
       @Override
       public String toString() {
-        return "(" + compositePredicate.toString() + ") XOR (" + predicate.toString() + ")";
+        return '(' + compositePredicate.toString() + ") XOR (" + predicate.toString() + ')';
       }
     });
   }
@@ -139,7 +139,7 @@ public final class TruggerCompositePredicate<T> implements CompositePredicate<T>
 
       @Override
       public String toString() {
-        return "NOT(" + compositePredicate.toString() + ")";
+        return "NOT(" + compositePredicate.toString() + ')';
       }
     });
   }

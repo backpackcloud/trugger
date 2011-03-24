@@ -168,8 +168,7 @@ final class TruggerGenericTypeResolver {
   }
 
   private static void extractTypeVariablesFromGenericInterfaces(Type[] genericInterfaces, Map typeVariableMap) {
-    for (int i = 0 ; i < genericInterfaces.length ; i++) {
-      Type genericInterface = genericInterfaces[i];
+    for (Type genericInterface : genericInterfaces) {
       if (genericInterface instanceof ParameterizedType) {
         ParameterizedType pt = (ParameterizedType) genericInterface;
         populateTypeMapFromParameterizedType(pt, typeVariableMap);

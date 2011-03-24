@@ -16,16 +16,17 @@
  */
 package net.sf.trugger.scan.impl;
 
+import net.sf.trugger.scan.ClassScanningException;
+import net.sf.trugger.scan.ResourceFinder;
+import net.sf.trugger.scan.ScanLevel;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.sf.trugger.scan.ClassScanningException;
-import net.sf.trugger.scan.ResourceFinder;
-import net.sf.trugger.scan.ScanLevel;
+import java.util.regex.Pattern;
 
 /**
  * A class capable of search classes in a <tt>file/directory</tt> resource.
@@ -38,10 +39,11 @@ public class FileResourceFinder implements ResourceFinder {
 	 * The protocol that this finder should be registered.
 	 */
 	public static final String PROTOCOL = "file";
+  private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
 
-	public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
-		Set<String> resources = new HashSet<String>();
-		String packagePath = packageName.replaceAll("\\.", "/");
+  public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
+		Set<String> resources = new HashSet<String>(30);
+		String packagePath = DOT_PATTERN.matcher(packageName).replaceAll("/");
 		findInDirectory(resources, resource, packagePath, scanLevel);
 		return resources;
 	}
@@ -58,7 +60,7 @@ public class FileResourceFinder implements ResourceFinder {
 			if (canInclude(scanLevel, file)) {
 				if (file.isDirectory()) {
 					try {
-            findInDirectory(resources, file.toURI().toURL(), packagePath + "/" + file.getName(), scanLevel);
+            findInDirectory(resources, file.toURI().toURL(), packagePath + '/' + file.getName(), scanLevel);
           } catch (MalformedURLException e) {
             throw new ClassScanningException(e);
           }
@@ -78,16 +80,11 @@ public class FileResourceFinder implements ResourceFinder {
 	 *            the scan level for the package.
 	 * @param resourceFile
 	 *            the file that represents this resource.
-	 * @param packagePath
-	 *            the package name that is scanned for resources.
 	 * @return <code>true</code> if the specified resource can be included in
 	 *         the found resources.
 	 */
-	private boolean canInclude(ScanLevel scanLevel, File resourceFile) {
-		if(scanLevel == ScanLevel.PACKAGE) {
-			return !resourceFile.isDirectory();
-		}
-		return true;
-	}
+	private static boolean canInclude(ScanLevel scanLevel, File resourceFile) {
+    return scanLevel != ScanLevel.PACKAGE || !resourceFile.isDirectory();
+  }
 
 }

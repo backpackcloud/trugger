@@ -44,7 +44,7 @@ public class ElementMockBuilder implements MockBuilder<Element> {
     public Annotation[] answer() {
       return annotations.toArray(new Annotation[annotations.size()]);
     }
-  };
+  }
 
   public ElementMockBuilder() {
     element = createNiceMock(Element.class);

@@ -54,7 +54,7 @@ public abstract class AbstractBindApplier implements BindApplier {
    * @param element
    *          the element for receiving the value.
    */
-  protected void applyBindInElement(BindableElement element) {
+  protected final void applyBindInElement(BindableElement element) {
     Object bindValue = value;
     if ((value == null) && (resolver != null)) {
       bindValue = resolver.resolve(element);

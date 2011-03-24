@@ -100,10 +100,7 @@ public final class AnnotationElement extends AbstractElement implements Element 
       return false;
     }
     final AnnotationElement other = (AnnotationElement) obj;
-    if (!method.equals(other.method)) {
-      return false;
-    }
-    return true;
+    return method.equals(other.method);
   }
 
 }

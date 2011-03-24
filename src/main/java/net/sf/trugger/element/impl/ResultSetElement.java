@@ -23,11 +23,14 @@ import net.sf.trugger.element.UnwritableElementException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public final class ResultSetElement extends AbstractElement implements Element {
+
+  private static final Pattern DIGITS_PATTERN = Pattern.compile("\\d+");
 
   public ResultSetElement(String name) {
     super(name);
@@ -50,7 +53,7 @@ public final class ResultSetElement extends AbstractElement implements Element {
 
         public <E> E value() throws HandlingException {
           try {
-            if (name.matches("\\d+")) { //if the name is the column index
+            if (DIGITS_PATTERN.matcher(name).matches()) { //if the name is the column index
               return (E) resultSet.getObject(Integer.parseInt(name));
             }
             return (E) resultSet.getObject(name);

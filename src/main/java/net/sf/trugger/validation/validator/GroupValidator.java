@@ -16,18 +16,14 @@
  */
 package net.sf.trugger.validation.validator;
 
-import java.lang.annotation.Annotation;
-
 import net.sf.trugger.annotation.TargetAnnotation;
 import net.sf.trugger.annotation.TargetElement;
 import net.sf.trugger.annotation.TargetObject;
 import net.sf.trugger.element.Element;
-import net.sf.trugger.validation.Validation;
-import net.sf.trugger.validation.ValidationBridge;
-import net.sf.trugger.validation.Validator;
-import net.sf.trugger.validation.ValidatorContext;
-import net.sf.trugger.validation.ValidatorFactory;
+import net.sf.trugger.validation.*;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
+
+import java.lang.annotation.Annotation;
 
 /**
  * This is a common validator for grouping validations in a single annotation.
@@ -51,8 +47,9 @@ public class GroupValidator implements Validator<Object> {
     }
     ValidatorFactory factory = Validation.newValidatorFactory();
     Annotation[] declaredAnnotations = annotation.annotationType().getDeclaredAnnotations();
+    ValidatorContext context;
     for (Annotation an : declaredAnnotations) {
-      ValidatorContext context = new ValidatorContextImpl(an, element, target);
+      context = new ValidatorContextImpl(an, element, target);
       if (factory.canCreate(context)) {
         Validator validator = factory.create(context);
         if (!validator.isValid(value)) {

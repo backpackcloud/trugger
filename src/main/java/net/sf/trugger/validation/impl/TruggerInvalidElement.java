@@ -63,7 +63,7 @@ final class TruggerInvalidElement extends SpecificElement implements InvalidElem
   }
 
   public String joinMessages(String messageSeparator, MessagePart type) {
-    StringBuilder builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder(60);
     String part;
     for (Message message : messages) {
       part = type.getPart(message);

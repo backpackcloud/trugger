@@ -16,6 +16,9 @@
  */
 package net.sf.trugger.scan.impl;
 
+import net.sf.trugger.scan.ResourceFinder;
+import net.sf.trugger.scan.ScanLevel;
+
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -24,9 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import net.sf.trugger.scan.ResourceFinder;
-import net.sf.trugger.scan.ScanLevel;
+import java.util.regex.Pattern;
 
 /**
  * A class capable of search classes in a <tt>jar</tt> resource.
@@ -39,15 +40,16 @@ public class JarResourceFinder implements ResourceFinder {
    * The protocol that this finder should be registered.
    */
   public static final String PROTOCOL = "jar";
+  private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
 
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) throws IOException {
-    Set<String> resources = new HashSet<String>();
+    Set<String> resources = new HashSet<String>(30);
     findInJar(resources, resource, packageName, scanLevel);
     return resources;
   }
 
   private void findInJar(Set<String> resources, URL resource, String packageName, ScanLevel scanLevel) throws IOException {
-    packageName = packageName.replaceAll("\\.", "/");
+    packageName = DOT_PATTERN.matcher(packageName).replaceAll("/");
     JarURLConnection conn = (JarURLConnection) resource.openConnection();
     JarFile jarFile = conn.getJarFile();
     Enumeration<JarEntry> entries = jarFile.entries();
@@ -79,9 +81,8 @@ public class JarResourceFinder implements ResourceFinder {
    */
   private boolean canInclude(ScanLevel scanLevel, String resourcePath, String packagePath) {
     if(scanLevel == ScanLevel.PACKAGE) {
-      StringBuilder buff = new StringBuilder(resourcePath);
       int start = packagePath.length() + 1;
-      int end = buff.indexOf("/", start);
+      int end = resourcePath.indexOf('/', start);
       return resourcePath.startsWith(packagePath) && (end < 0);
     }
     return true;

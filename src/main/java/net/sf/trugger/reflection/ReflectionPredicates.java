@@ -70,7 +70,7 @@ public class ReflectionPredicates {
     @Override
     public String toString() {
       return "Getter";
-    };
+    }
   });
 
   /**
@@ -96,14 +96,14 @@ public class ReflectionPredicates {
     @Override
     public String toString() {
       return "Setter";
-    };
+    }
   });
 
   /**
    * @return a predicate that returns <code>true</code> if a method is a getter
    *         method for the specified property name.
    */
-  public static final CompositePredicate<Method> getterFor(final String propertyName) {
+  public static CompositePredicate<Method> getterFor(final String propertyName) {
     return newComposition(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
@@ -132,7 +132,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if a method is a setter
    *         method for the specified property name.
    */
-  public static final CompositePredicate<Method> setterFor(final String propertyName) {
+  public static CompositePredicate<Method> setterFor(final String propertyName) {
     return newComposition(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
@@ -154,7 +154,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if a method is a setter
    *         method for the specified property name and type.
    */
-  public static final CompositePredicate<Method> setterFor(String propertyName, final Class type) {
+  public static CompositePredicate<Method> setterFor(String propertyName, final Class type) {
     return setterFor(propertyName).and(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
@@ -318,7 +318,7 @@ public class ReflectionPredicates {
     @Override
     public String toString() {
       return "Synthetic class";
-    };
+    }
   });
   /**
    * Predicate that returns <code>true</code> if a class is not
@@ -357,7 +357,7 @@ public class ReflectionPredicates {
     @Override
     public String toString() {
       return "Enum";
-    };
+    }
   });
   /**
    * The negation of the {@link #ENUM} predicate.
@@ -439,7 +439,7 @@ public class ReflectionPredicates {
 
         public boolean evaluate(AnnotatedElement element) {
           return element.getDeclaredAnnotations().length > 0;
-        };
+        }
 
         @Override
         public String toString() {
@@ -723,7 +723,7 @@ public class ReflectionPredicates {
    */
   public static final CompositePredicate<Class> NON_ANONYMOUS = ANONYMOUS.negate();
 
-  public static final CompositePredicate<Method> methodDeclaredIn(final Class type) {
+  public static CompositePredicate<Method> methodDeclaredIn(final Class type) {
     return newComposition(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
