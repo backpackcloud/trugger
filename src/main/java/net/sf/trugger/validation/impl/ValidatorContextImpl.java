@@ -16,11 +16,11 @@
  */
 package net.sf.trugger.validation.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-
 import net.sf.trugger.element.Element;
 import net.sf.trugger.validation.ValidatorContext;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -40,24 +40,8 @@ public class ValidatorContextImpl implements ValidatorContext {
     this(annotation, null, target, null);
   }
 
-  public ValidatorContextImpl(Annotation annotation, Element element) {
-    this(annotation, element, null, null);
-  }
-
   public ValidatorContextImpl(Annotation annotation, Element element, Object target) {
     this(annotation, element, target, null);
-  }
-
-  public ValidatorContextImpl(Annotation annotation, String validationContext) {
-    this(annotation, null, null, validationContext);
-  }
-
-  public ValidatorContextImpl(Annotation annotation, Object target, String validationContext) {
-    this(annotation, null, target, validationContext);
-  }
-
-  public ValidatorContextImpl(Annotation annotation, Element element, String validationContext) {
-    this(annotation, element, null, validationContext);
   }
 
   public ValidatorContextImpl(Annotation annotation, Element element, Object target, String validationContext) {
