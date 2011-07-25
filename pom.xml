@@ -33,6 +33,9 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
+  <scm>
+    <url>git://github.com/ataxexe/trugger.git</url>
+  </scm>
   <developers>
     <developer>
       <id>ataxexe</id>
