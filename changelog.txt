@@ -3,6 +3,8 @@ Version 2.8.0
   - Reformulated Reflection DSL
   - Code improvements
   - Support for JBoss Virtual Filesystem (allows class scanning in JBoss AS 5.x and 6.x)
+- Bug fixes:
+  - ElementMockBuilder now supports call for getAnnotation method.
 
 Version 2.7.0
 - New Modules:

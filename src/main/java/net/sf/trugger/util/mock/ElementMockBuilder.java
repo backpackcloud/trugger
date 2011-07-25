@@ -16,16 +16,19 @@
  */
 package net.sf.trugger.util.mock;
 
-import net.sf.trugger.ValueHandler;
-import net.sf.trugger.element.Element;
-import org.easymock.IAnswer;
+import static net.sf.trugger.util.mock.Mock.annotation;
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.sf.trugger.util.mock.Mock.annotation;
-import static org.easymock.EasyMock.*;
+import net.sf.trugger.ValueHandler;
+import net.sf.trugger.element.Element;
+
+import org.easymock.IAnswer;
 
 /**
  * A class for helping creation of simple {@link Element} mocks.
@@ -75,8 +78,10 @@ public class ElementMockBuilder implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMockBuilder annotatedWith(Class<? extends Annotation> type) {
+    Annotation mock = Mock.mock(annotation(type));
     expect(element.isAnnotationPresent(type)).andReturn(true).anyTimes();
-    annotations.add(Mock.mock(annotation(type)));
+    expect((Annotation) element.getAnnotation(type)).andReturn(mock).anyTimes();
+    annotations.add(mock);
     return this;
   }
 
@@ -90,6 +95,7 @@ public class ElementMockBuilder implements MockBuilder<Element> {
    */
   public ElementMockBuilder annotatedWith(Annotation annotation) {
     expect(element.isAnnotationPresent(annotation.annotationType())).andReturn(true).anyTimes();
+    expect((Annotation) element.getAnnotation(annotation.annotationType())).andReturn(annotation).anyTimes();
     annotations.add(annotation);
     return this;
   }

@@ -16,15 +16,16 @@
  */
 package net.sf.trugger.interception;
 
-import net.sf.trugger.reflection.Access;
-import net.sf.trugger.reflection.ReflectionPredicates;
+import static net.sf.trugger.reflection.Reflection.constructor;
+import static net.sf.trugger.reflection.Reflection.invoke;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.sf.trugger.reflection.Reflection.invoke;
-import static net.sf.trugger.reflection.Reflection.constructor;
+import net.sf.trugger.reflection.Access;
+import net.sf.trugger.reflection.ReflectionPredicates;
 
 /**
  * This class is a proxy that can track method invocations.
@@ -43,16 +44,17 @@ public class InvocationTrackerInterceptor extends Interceptor {
     if (Void.TYPE.equals(returnType)) {
       return null;
     }
+    if ("getAnnotation".equals(method().getName())
+        && AnnotatedElement.class.isAssignableFrom(method().getDeclaringClass())) {
+      return createProxy().over((Class<?>) args()[0]);
+    }
     if (returnType.isInterface()) {
       return createProxy().over(returnType);
     }
     if (ReflectionPredicates.FINAL_CLASS.evaluate(returnType)) {
       return null;
     }
-    Constructor<?> constructor = constructor()
-      .withAccess(Access.PUBLIC)
-      .withoutParameters()
-    .in(returnType);
+    Constructor<?> constructor = constructor().withAccess(Access.PUBLIC).withoutParameters().in(returnType);
     if (constructor != null) {
       return createProxy().over(returnType);
     }

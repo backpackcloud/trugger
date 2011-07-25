@@ -23,6 +23,8 @@ import static org.junit.Assert.assertTrue;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.PredicateDSL;
+import net.sf.trugger.test.Flag;
+import net.sf.trugger.util.mock.AnnotationMockBuilder;
 import net.sf.trugger.validation.validator.NotNull;
 
 import org.junit.Test;
@@ -238,6 +240,21 @@ public class PredicateDSLTestDontExcept {
     }};
     assertFalse(predicate.evaluate(mock(element().writable())));
     assertTrue(predicate.evaluate(mock(element().nonWritable())));
+  }
+
+  @Test
+  public void testAnnotationStatement() throws Exception {
+    Predicate<Element> predicate = new PredicateDSL<Element>(){{
+      expect(obj.isAnnotationPresent(Flag.class));
+      dontExpect(obj.getAnnotation(Flag.class).value());
+      dontExpect(obj.getAnnotation(Flag.class).name()).equal("name");
+    }};
+    Flag flag = new AnnotationMockBuilder<Flag>(){{
+      map(false).to(annotation.value());
+      map("some name").to(annotation.name());
+    }}.mock();
+    assertTrue(predicate.evaluate(mock(element().annotatedWith(flag))));
+    assertFalse(predicate.evaluate(mock(element())));
   }
 
 }

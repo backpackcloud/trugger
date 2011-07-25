@@ -21,10 +21,13 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * A tag interface for testing the selectors.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Flag {
+
+  boolean value() default true;
+  String name() default "flag";
 
 }
