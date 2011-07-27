@@ -28,6 +28,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Flag {
 
   boolean value() default true;
-  String name() default "flag";
+  String title() default "flag";
 
 }

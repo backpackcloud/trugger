@@ -16,18 +16,18 @@
  */
 package net.sf.trugger.test.predicate;
 
-import static net.sf.trugger.util.mock.Mock.element;
-import static net.sf.trugger.util.mock.Mock.mock;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.predicate.Predicate;
 import net.sf.trugger.predicate.PredicateDSL;
 import net.sf.trugger.test.Flag;
 import net.sf.trugger.util.mock.AnnotationMockBuilder;
 import net.sf.trugger.validation.validator.NotNull;
-
 import org.junit.Test;
+
+import static net.sf.trugger.util.mock.Mock.element;
+import static net.sf.trugger.util.mock.Mock.mock;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -248,11 +248,11 @@ public class PredicateDSLTestExpect {
     Predicate<Element> predicate = new PredicateDSL<Element>(){{
       expect(obj.isAnnotationPresent(Flag.class));
       expect(obj.getAnnotation(Flag.class).value());
-      expect(obj.getAnnotation(Flag.class).name()).equal("name");
+      expect(obj.getAnnotation(Flag.class).title()).equal("name");
     }};
     Flag flag = new AnnotationMockBuilder<Flag>(){{
       map(true).to(annotation.value());
-      map("name").to(annotation.name());
+      map("name").to(annotation.title());
     }}.mock();
     assertTrue(predicate.evaluate(mock(element().annotatedWith(flag))));
     assertFalse(predicate.evaluate(mock(element())));
