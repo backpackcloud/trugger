@@ -16,12 +16,13 @@
  */
 package net.sf.trugger.scan.impl;
 
+import net.sf.trugger.scan.ClassScanningException;
+import net.sf.trugger.scan.ScanLevel;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
-
-import net.sf.trugger.scan.ClassScanningException;
-import net.sf.trugger.scan.ScanLevel;
+import java.util.regex.Pattern;
 
 /**
  * A finder for file resources inside a JBoss AS 5.x and 6.x
@@ -35,11 +36,12 @@ public class VfsFileResourceFinder extends FileResourceFinder {
    * The protocol that this finder should be registered.
    */
   public static final String PROTOCOL = "vfsfile";
+  private static final Pattern PATTERN = Pattern.compile("vfsfile");
 
   @Override
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
     try {
-      URL dirUrl = new URL(resource.toString().replaceFirst("vfsfile", "file"));
+      URL dirUrl = new URL(PATTERN.matcher(resource.toString()).replaceFirst("file"));
       return super.find(dirUrl, packageName, scanLevel);
     } catch (MalformedURLException e) {
       throw new ClassScanningException(e);

@@ -16,11 +16,12 @@
  */
 package net.sf.trugger.scan.impl;
 
-import java.net.URL;
-import java.util.Set;
-
 import net.sf.trugger.scan.ClassScanningException;
 import net.sf.trugger.scan.ScanLevel;
+
+import java.net.URL;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * A finder for zip resources (jar files) inside a JBoss AS 5.x and 6.x
@@ -34,13 +35,15 @@ public class VfsZipResourceFinder extends JarResourceFinder {
    * The protocol that this finder should be registered.
    */
   public static final String PROTOCOL = "vfszip";
+  private static final Pattern VSFZIP_PATTERN = Pattern.compile("vfszip");
+  private static final Pattern PACKAGE_PATTERN = Pattern.compile("\\.");
 
   @Override
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
     try {
-      String url = resource.toString().replaceFirst("vfszip", "jar:file");
-      String path = "/" + packageName.replaceAll("\\.", "/");
-      url = url.replaceFirst(path, "!" + path);
+      String url = VSFZIP_PATTERN.matcher(resource.toString()).replaceFirst("jar:file");
+      String path = '/' + PACKAGE_PATTERN.matcher(packageName).replaceAll("/");
+      url = url.replaceFirst(path, '!' + path);
       URL dirUrl = new URL(url);
       return super.find(dirUrl, packageName, scanLevel);
     } catch (Exception e) {
