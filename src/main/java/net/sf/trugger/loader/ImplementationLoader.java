@@ -17,7 +17,6 @@
 package net.sf.trugger.loader;
 
 import net.sf.trugger.loader.impl.TruggerRegistry;
-import net.sf.trugger.registry.MapRegistry;
 import net.sf.trugger.registry.Registry;
 
 /**
@@ -27,11 +26,6 @@ import net.sf.trugger.registry.Registry;
  * @author Marcelo Varella Barca Guimarães
  */
 public class ImplementationLoader {
-
-  /**
-   * The shared instance.
-   */
-  private static ImplementationLoader instance;
 
   private final Registry<Class<?>, Object> registry;
 
@@ -61,6 +55,10 @@ public class ImplementationLoader {
     return registry;
   }
 
+  private static class ImplementationLoaderHolder {
+    private static final ImplementationLoader instance = new ImplementationLoader(new TruggerRegistry());
+  }
+
   /**
    * Returns this class shared instance, which is used by the entire framework
    * to load implementations.
@@ -68,10 +66,7 @@ public class ImplementationLoader {
    * @return the shared instance.
    */
   public static ImplementationLoader getInstance() {
-    if (instance == null) {
-      instance = new ImplementationLoader(new TruggerRegistry(new MapRegistry<Class<?>, Object>()));
-    }
-    return instance;
+    return ImplementationLoaderHolder.instance;
   }
 
 }
