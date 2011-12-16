@@ -110,7 +110,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>3.1.0.GA</version>
-      <scope>provided</scope>
       <exclusions>
       	<exclusion>
       		<artifactId>antlr</artifactId>
