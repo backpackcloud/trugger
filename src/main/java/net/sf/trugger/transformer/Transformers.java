@@ -17,7 +17,10 @@
 package net.sf.trugger.transformer;
 
 import net.sf.trugger.element.ElementCopy;
+import net.sf.trugger.util.Utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -28,11 +31,12 @@ import java.util.Properties;
  */
 public final class Transformers {
 
-  private Transformers() {}
+  private Transformers() {
+  }
 
-  /**
-   * Transformer from Object to Boolean
-   */
+  private static final Map<Class, Transformer> TRANSFORMERS;
+
+  /** Transformer from Object to Boolean */
   public static final Transformer<Boolean, Object> TO_BOOLEAN = new Transformer<Boolean, Object>() {
 
     @Override
@@ -41,9 +45,7 @@ public final class Transformers {
     }
   };
 
-  /**
-   * Transformer from Object to Double
-   */
+  /** Transformer from Object to Double */
   public static final Transformer<Double, Object> TO_DOUBLE = new Transformer<Double, Object>() {
 
     @Override
@@ -52,9 +54,7 @@ public final class Transformers {
     }
   };
 
-  /**
-   * Transformer from Object to Float
-   */
+  /** Transformer from Object to Float */
   public static final Transformer<Float, Object> TO_FLOAT = new Transformer<Float, Object>() {
 
     @Override
@@ -63,9 +63,7 @@ public final class Transformers {
     }
   };
 
-  /**
-   * Transformer from Object to Integer
-   */
+  /** Transformer from Object to Integer */
   public static final Transformer<Integer, Object> TO_INTEGER = new Transformer<Integer, Object>() {
 
     @Override
@@ -74,9 +72,7 @@ public final class Transformers {
     }
   };
 
-  /**
-   * Transformer from Object to Long
-   */
+  /** Transformer from Object to Long */
   public static final Transformer<Long, Object> TO_LONG = new Transformer<Long, Object>() {
 
     @Override
@@ -85,9 +81,7 @@ public final class Transformers {
     }
   };
 
-  /**
-   * Transformer from Object to String
-   */
+  /** Transformer from Object to String */
   public static final Transformer<String, Object> TO_STRING = new Transformer<String, Object>() {
 
     @Override
@@ -96,37 +90,35 @@ public final class Transformers {
     }
   };
 
+  static {
+    TRANSFORMERS = new HashMap<Class, Transformer>();
+    TRANSFORMERS.put(Boolean.class, TO_BOOLEAN);
+    TRANSFORMERS.put(Integer.class, TO_INTEGER);
+    TRANSFORMERS.put(Long.class, TO_LONG);
+    TRANSFORMERS.put(Float.class, TO_FLOAT);
+    TRANSFORMERS.put(Double.class, TO_DOUBLE);
+    TRANSFORMERS.put(String.class, TO_STRING);
+  }
+
   /**
    * An useful transformer to copy {@link Properties} elements.
-   * <p>
-   * Elements of the types below will be converted automaticaly:
-   * <ul>
-   * <li>String
-   * <li>Integer or int
-   * <li>Long or long
-   * <li>Float or float
-   * <li>Double or double
-   * <li>Boolean or boolean
-   * </ul>
+   * <p/>
+   * Elements of the types below will be converted automaticaly: <ul> <li>String
+   * <li>Integer or int <li>Long or long <li>Float or float <li>Double or double
+   * <li>Boolean or boolean </ul>
    */
-  public static TransformerDSL<ElementCopy> properties() {
-    return new TransformerDSL<ElementCopy>() {{
-      use(TO_STRING).on(obj.value()).when(obj.destinationElement().type()).equal(String.class);
+  public static Transformer<Object, ElementCopy> properties() {
+    return new Transformer<Object, ElementCopy>() {
 
-      use(TO_BOOLEAN).on(obj.value()).when(obj.destinationElement().type()).equal(Boolean.class);
-      use(TO_BOOLEAN).on(obj.value()).when(obj.destinationElement().type()).equal(boolean.class);
+      @Override
+      public Object transform(ElementCopy object) {
+        Class type = Utils.objectClass(object.destinationElement().type());
+        if (TRANSFORMERS.containsKey(type)) {
+          return TRANSFORMERS.get(type).transform(object.value());
+        }
+        return object.value();
+      }
 
-      use(TO_DOUBLE).on(obj.value()).when(obj.destinationElement().type()).equal(Double.class);
-      use(TO_DOUBLE).on(obj.value()).when(obj.destinationElement().type()).equal(double.class);
-
-      use(TO_FLOAT).on(obj.value()).when(obj.destinationElement().type()).equal(Float.class);
-      use(TO_FLOAT).on(obj.value()).when(obj.destinationElement().type()).equal(float.class);
-
-      use(TO_INTEGER).on(obj.value()).when(obj.destinationElement().type()).equal(Integer.class);
-      use(TO_INTEGER).on(obj.value()).when(obj.destinationElement().type()).equal(int.class);
-
-      use(TO_LONG).on(obj.value()).when(obj.destinationElement().type()).equal(Long.class);
-      use(TO_LONG).on(obj.value()).when(obj.destinationElement().type()).equal(long.class);
-    }};
+    };
   }
 }
