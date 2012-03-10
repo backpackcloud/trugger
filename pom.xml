@@ -107,52 +107,9 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>3.1.0.GA</version>
-      <exclusions>
-      	<exclusion>
-      		<artifactId>antlr</artifactId>
-      		<groupId>antlr</groupId>
-      	</exclusion>
-      	<exclusion>
-      		<artifactId>dom4j</artifactId>
-      		<groupId>dom4j</groupId>
-      	</exclusion>
-      	<exclusion>
-      		<artifactId>hibernate-core</artifactId>
-      		<groupId>org.hibernate</groupId>
-      	</exclusion>
-      	<exclusion>
-      		<artifactId>slf4j-api</artifactId>
-      		<groupId>org.slf4j</groupId>
-      	</exclusion>
-      </exclusions>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>osgi</artifactId>
-      <version>3.5.0.v20090520</version>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.seam</groupId>
-      <artifactId>jboss-seam</artifactId>
-      <version>2.1.2</version>
-      <exclusions>
-      	<exclusion>
-      		<artifactId>jboss-el</artifactId>
-      		<groupId>org.jboss.el</groupId>
-      	</exclusion>
-      </exclusions>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.7</version>
+      <version>4.8</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
