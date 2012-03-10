@@ -34,8 +34,6 @@ public final class Transformers {
   private Transformers() {
   }
 
-  private static final Map<Class, Transformer> TRANSFORMERS;
-
   /** Transformer from Object to Boolean */
   public static final Transformer<Boolean, Object> TO_BOOLEAN = new Transformer<Boolean, Object>() {
 
@@ -89,6 +87,8 @@ public final class Transformers {
       return String.valueOf(object);
     }
   };
+
+  private static final Map<Class, Transformer> TRANSFORMERS;
 
   static {
     TRANSFORMERS = new HashMap<Class, Transformer>();
