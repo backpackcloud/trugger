@@ -28,6 +28,9 @@ import static net.sf.trugger.util.Utils.isTypeAccepted;
 import static net.sf.trugger.util.Utils.resolveType;
 
 /**
+ * An utility class to validate arguments passed to a method using generic types and
+ * {@link Validator} annotations.
+ *
  * @author Marcelo Varella Barca Guimarães
  * @since 3.0
  */
@@ -37,11 +40,22 @@ public class ArgumentValidator {
   private Method method;
   private String[] genericTypes;
 
+  /**
+   * Creates a new validator for a method.
+   *
+   * @param method       the method to obtain information about annotations and generic
+   *                     types
+   * @param genericTypes the generic string of each argument
+   */
   public ArgumentValidator(Method method, String... genericTypes) {
     this.method = method;
     this.genericTypes = genericTypes;
   }
 
+  /**
+   * Checks if the given arguments are valid using the method {@link Validator}
+   * annotations.
+   */
   public boolean areArgumentsValid(Object... args) {
     Annotation[][] parameterAnnotations = method.getParameterAnnotations();
     for (int i = 0; i < args.length; i++) {
@@ -54,6 +68,7 @@ public class ArgumentValidator {
     return true;
   }
 
+  /** Checks if the given arguments matches the defined generic types. */
   public boolean argumentsMatchesGenericTypes(Object... args) {
     for (int i = 0; i < args.length; i++) {
       Object value = args[i];
