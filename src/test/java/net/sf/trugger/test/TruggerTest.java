@@ -35,7 +35,6 @@ import net.sf.trugger.test.interception.InterceptorTest;
 import net.sf.trugger.test.iteration.IterationTest;
 import net.sf.trugger.test.message.MessagesTest;
 import net.sf.trugger.test.mock.AnnotationMockTest;
-import net.sf.trugger.test.predicate.PredicateDSLTest;
 import net.sf.trugger.test.predicate.PredicatesTest;
 import net.sf.trugger.test.predicate.ReflectionPredicatesTest;
 import net.sf.trugger.test.property.PropertyTest;
@@ -53,8 +52,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.sf.trugger.reflection.Access.*;
-import static org.junit.Assert.*;
+import static net.sf.trugger.reflection.Access.DEFAULT;
+import static net.sf.trugger.reflection.Access.LIKE_DEFAULT;
+import static net.sf.trugger.reflection.Access.LIKE_PROTECTED;
+import static net.sf.trugger.reflection.Access.PRIVATE;
+import static net.sf.trugger.reflection.Access.PROTECTED;
+import static net.sf.trugger.reflection.Access.PUBLIC;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This is the main test of the entire API. It includes all the separated tests
@@ -74,7 +82,6 @@ import static org.junit.Assert.*;
   InterceptorTest.class,
   AcceptedTypesTest.class,
   AnnotationMockTest.class,
-  PredicateDSLTest.class,
   TransformerTest.class,
   ReflectionPredicatesTest.class,
 

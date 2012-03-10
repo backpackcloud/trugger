@@ -16,6 +16,13 @@
  */
 package net.sf.trugger.test.transformer;
 
+import net.sf.trugger.element.Elements;
+import net.sf.trugger.transformer.Transformer;
+import org.junit.Test;
+
+import java.io.InputStream;
+import java.util.Properties;
+
 import static net.sf.trugger.transformer.Transformers.TO_BOOLEAN;
 import static net.sf.trugger.transformer.Transformers.TO_DOUBLE;
 import static net.sf.trugger.transformer.Transformers.TO_FLOAT;
@@ -23,22 +30,9 @@ import static net.sf.trugger.transformer.Transformers.TO_INTEGER;
 import static net.sf.trugger.transformer.Transformers.TO_LONG;
 import static net.sf.trugger.transformer.Transformers.TO_STRING;
 import static net.sf.trugger.transformer.Transformers.properties;
-import static net.sf.trugger.util.mock.Mock.element;
-import static net.sf.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-
-import java.io.InputStream;
-import java.util.Properties;
-
-import net.sf.trugger.element.Element;
-import net.sf.trugger.element.Elements;
-import net.sf.trugger.transformer.Transformer;
-import net.sf.trugger.transformer.TransformerDSL;
-
-import org.junit.Test;
 
 
 /**
@@ -105,34 +99,6 @@ public class TransformerTest {
       return returnValue;
     }
 
-  }
-
-  @Test
-  public void testDSLTransformer() throws Exception {
-    TransformerDSL<Element> dsl = new TransformerDSL<Element>(){{
-      use(new MockTransformer("name")).on(obj).when(obj.name()).equal("element");
-      use(new MockTransformer("readable")).on(obj).when(obj.isReadable());
-    }};
-    assertEquals("name", dsl.transform(mock(element().named("element"))));
-    assertEquals("readable", dsl.transform(mock(element().readable())));
-  }
-
-  @Test
-  public void testTargetSelection() throws Exception {
-    final Element element = mock(element().named("element"));
-    final Transformer<Object, Object> transformer = new Transformer<Object, Object>() {
-
-      @Override
-      public Object transform(Object object) {
-        assertSame(element, object);
-        return ((Element) object).name();
-      }
-    };
-    TransformerDSL<Element> dsl = new TransformerDSL<Element>(){{
-      use(TO_STRING).on(obj.name()).whenNot(obj.name()).equal("element");
-      use(transformer).on(obj);
-    }};
-    assertEquals("element", dsl.transform(element));
   }
 
 }
