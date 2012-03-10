@@ -27,8 +27,6 @@ import net.sf.trugger.validation.ValidatorInvoker;
 
 import java.lang.reflect.Method;
 
-import static net.sf.trugger.util.Utils.isTypeAccepted;
-
 /**
  * A base invoker class that checks if the argument can be validated.
  *
@@ -50,7 +48,7 @@ public class TruggerValidatorInvoker<T> implements ValidatorInvoker<T> {
       .withParameters(genericType)
       .returning(boolean.class)
       .in(validator);
-    this.argValidator = new ArgumentValidator(method);
+    this.argValidator = new ArgumentValidator(method, "T");
   }
 
   @Override
@@ -60,14 +58,9 @@ public class TruggerValidatorInvoker<T> implements ValidatorInvoker<T> {
   }
 
   private void checkArgumentType(T value) {
-    if (value != null) {
-      boolean generic = !genericType.equals(Object.class);
-      if (generic ?
-        !genericType.isAssignableFrom(value.getClass()) :
-        !isTypeAccepted(value.getClass(), validator.getClass())) {
-        throw new IllegalArgumentException(String.format(
-          "The type %s is not compatible with any type defined in the validator.", value.getClass()));
-      }
+    if (!argValidator.argumentsMatchesGenericTypes(value)) {
+      throw new IllegalArgumentException(String.format(
+        "The type %s is not compatible with any type defined in the validator.", value.getClass()));
     }
   }
 

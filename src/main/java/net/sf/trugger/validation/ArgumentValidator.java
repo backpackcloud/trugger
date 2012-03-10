@@ -18,31 +18,52 @@
 package net.sf.trugger.validation;
 
 import net.sf.trugger.factory.Factory;
+import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import static net.sf.trugger.util.Utils.isTypeAccepted;
+import static net.sf.trugger.util.Utils.resolveType;
+
 /**
  * @author Marcelo Varella Barca Guimarães
  * @since 3.0
-  */
+ */
 public class ArgumentValidator {
 
   private final Factory<ValidatorContext, ValidatorInvoker> factory = Validation.newValidatorFactory();
   private Method method;
+  private String[] genericTypes;
 
-  public ArgumentValidator(Method method) {
+  public ArgumentValidator(Method method, String... genericTypes) {
     this.method = method;
+    this.genericTypes = genericTypes;
   }
 
   public boolean areArgumentsValid(Object... args) {
     Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-    for(int i = 0 ; i < args.length ; i++) {
+    for (int i = 0; i < args.length; i++) {
       Annotation[] annotations = parameterAnnotations[i];
       Object value = args[i];
-      if(isArgumentInvalid(value, annotations)) {
+      if (isArgumentInvalid(value, annotations)) {
         return false;
+      }
+    }
+    return true;
+  }
+
+  public boolean argumentsMatchesGenericTypes(Object... args) {
+    for (int i = 0; i < args.length; i++) {
+      Object value = args[i];
+      Class<?> genericType = Reflection.reflect().genericType(genericTypes[i]).in(method.getDeclaringClass());
+      if (value != null) {
+        boolean generic = !genericType.equals(Object.class);
+        if (generic ? !genericType.isAssignableFrom(value.getClass()) : !isTypeAccepted(value.getClass(),
+          resolveType(method.getDeclaringClass()))) {
+          return false;
+        }
       }
     }
     return true;
