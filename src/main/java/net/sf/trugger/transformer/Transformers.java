@@ -16,10 +16,9 @@
  */
 package net.sf.trugger.transformer;
 
-import java.util.Properties;
-
 import net.sf.trugger.element.ElementCopy;
-import net.sf.trugger.loader.ImplementationLoader;
+
+import java.util.Properties;
 
 /**
  * A class that holds a set of useful transformers for common use.
@@ -29,27 +28,7 @@ import net.sf.trugger.loader.ImplementationLoader;
  */
 public final class Transformers {
 
-  private static final TransformerFactory factory;
-
-  static {
-    factory = ImplementationLoader.getInstance().get(TransformerFactory.class);
-  }
-
   private Transformers() {}
-
-  /**
-   * @return the shared factory.
-   */
-  public static TransformerFactory factory() {
-    return factory;
-  }
-
-  /**
-   * @return a new transformer factory.
-   */
-  public static TransformerFactory newFactory() {
-    return ImplementationLoader.getInstance().get(TransformerFactory.class);
-  }
 
   /**
    * Transformer from Object to Boolean
