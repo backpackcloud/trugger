@@ -51,7 +51,7 @@ public class GroupValidator implements Validator<Object> {
     for (Annotation an : declaredAnnotations) {
       context = new ValidatorContextImpl(an, element, target);
       if (factory.canCreate(context)) {
-        Validator validator = factory.create(context);
+        ValidatorInvoker validator = factory.create(context);
         if (!validator.isValid(value)) {
           return false;
         }

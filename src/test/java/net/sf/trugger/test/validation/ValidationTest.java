@@ -16,11 +16,13 @@
  */
 package net.sf.trugger.test.validation;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import net.sf.trugger.element.Element;
+import net.sf.trugger.element.Elements;
+import net.sf.trugger.selector.ElementSelector;
+import net.sf.trugger.validation.InvalidElement;
+import net.sf.trugger.validation.Validation;
+import net.sf.trugger.validation.ValidationResult;
+import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -30,36 +32,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.trugger.element.Element;
-import net.sf.trugger.element.Elements;
-import net.sf.trugger.selector.ElementSelector;
-import net.sf.trugger.validation.InvalidElement;
-import net.sf.trugger.validation.Validation;
-import net.sf.trugger.validation.ValidationResult;
-import net.sf.trugger.validation.ValidatorFactory;
-import net.sf.trugger.validation.adapter.HibernateValidatorFactory;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Varella Barca Guimarães.
  */
 public class ValidationTest {
-  
-  //For testing the HibernateValidator adapter.
-  private static ValidatorFactory factory = new HibernateValidatorFactory();
-  
-  @BeforeClass
-  public static void initialize() {
-    Validation.plug(factory);
-  }
-  
-  @AfterClass
-  public static void finish() {
-    Validation.unplug(factory);
-  }
   
   @Test
   public void validObjectTest() {

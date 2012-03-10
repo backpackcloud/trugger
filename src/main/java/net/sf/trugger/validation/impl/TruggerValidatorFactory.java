@@ -16,21 +16,20 @@
  */
 package net.sf.trugger.validation.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-
 import net.sf.trugger.CreateException;
 import net.sf.trugger.annotation.Reference;
 import net.sf.trugger.bind.Bind;
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.factory.AnnotationBasedFactory;
-import net.sf.trugger.reflection.ReflectionPredicates;
 import net.sf.trugger.validation.InvalidReferenceException;
 import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorBinder;
 import net.sf.trugger.validation.ValidatorClass;
 import net.sf.trugger.validation.ValidatorContext;
 import net.sf.trugger.validation.ValidatorFactory;
+import net.sf.trugger.validation.ValidatorInvoker;
+
+import java.lang.annotation.Annotation;
 
 /**
  * A default implementation for the validator factory.
@@ -52,26 +51,8 @@ public class TruggerValidatorFactory implements ValidatorFactory {
     }
   };
 
-  private final AnnotationBasedFactory<ValidatorClass, Validator> factory =
-      new AnnotationBasedFactory<ValidatorClass, Validator>() {
-
-        @Override
-        protected Validator instantiate(AnnotatedElement key, Class<? extends Validator> classToCreate)
-            throws Throwable {
-          Validator validator;
-          //don't try to subclass final classes
-          if (ReflectionPredicates.FINAL_CLASS.evaluate(classToCreate)) {
-            /*
-             * The proxy for interface is not useful because the binds will not work.
-             * So, the validator itself is returned.
-             */
-            validator = super.instantiate(key, classToCreate);
-          } else {
-            validator = new TruggerValidatorInterceptor().createProxy().implementing(Validator.class).extending(classToCreate);
-          }
-          return bindAnnotation(key, validator);
-        }
-      };
+  private final AnnotationBasedFactory<ValidatorClass, Validator> factory = 
+    new AnnotationBasedFactory<ValidatorClass, Validator>(ValidatorClass.class);
 
   private final ValidatorBinder validatorBinder;
 
@@ -83,7 +64,7 @@ public class TruggerValidatorFactory implements ValidatorFactory {
     return factory.canCreate(key.annotation().annotationType());
   }
 
-  public Validator create(ValidatorContext key) throws CreateException {
+  public ValidatorInvoker create(ValidatorContext key) throws CreateException {
     Annotation annotation = key.annotation();
     Class<? extends Annotation> annotationType = annotation.annotationType();
     Validator validator = factory.create(annotationType);
@@ -91,9 +72,10 @@ public class TruggerValidatorFactory implements ValidatorFactory {
     try {
       validatorBinder.configureBinds(validator, key, binder);
     } catch (InvalidReferenceException e) {
-      return NULL_VALIDATOR;
+      return new TruggerValidatorInvoker(NULL_VALIDATOR);
     }
-    return binder.applyBinds(validator);
+    binder.applyBinds(validator);
+    return new TruggerValidatorInvoker(validator);
   }
 
 }

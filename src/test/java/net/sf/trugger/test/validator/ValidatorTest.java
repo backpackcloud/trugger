@@ -16,22 +16,21 @@
  */
 package net.sf.trugger.test.validator;
 
-import static net.sf.trugger.util.mock.Mock.annotation;
-import static net.sf.trugger.util.mock.Mock.mock;
-
-import java.lang.annotation.Annotation;
-
 import junit.framework.Assert;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.util.mock.AnnotationMockBuilder;
 import net.sf.trugger.validation.Validation;
-import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorContext;
 import net.sf.trugger.validation.ValidatorFactory;
+import net.sf.trugger.validation.ValidatorInvoker;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
-
 import org.junit.Before;
+
+import java.lang.annotation.Annotation;
+
+import static net.sf.trugger.util.mock.Mock.annotation;
+import static net.sf.trugger.util.mock.Mock.mock;
 
 /**
  * A base class for testing the validators.
@@ -41,7 +40,7 @@ import org.junit.Before;
 public abstract class ValidatorTest<T extends Annotation> {
 
   protected final ValidatorFactory factory = Validation.newValidatorFactory();
-  protected Validator validator;
+  protected ValidatorInvoker validator;
   protected T annotation;
   protected AnnotationMockBuilder<T> builder;
   private final Class<T> annotationType;

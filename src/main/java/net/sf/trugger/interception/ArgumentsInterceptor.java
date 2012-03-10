@@ -23,6 +23,7 @@ import net.sf.trugger.reflection.ReflectionPredicates;
 import net.sf.trugger.validation.Validation;
 import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorContext;
+import net.sf.trugger.validation.ValidatorInvoker;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
 
 import java.lang.annotation.Annotation;
@@ -47,7 +48,7 @@ import static net.sf.trugger.util.Utils.resolveType;
  */
 public class ArgumentsInterceptor extends Interceptor {
 
-  private final Factory<ValidatorContext, Validator> factory = Validation.newValidatorFactory();
+  private final Factory<ValidatorContext, ValidatorInvoker> factory = Validation.newValidatorFactory();
 
   private final List<GenericTypeMapper> mappers = new LinkedList<GenericTypeMapper>();
 
@@ -137,7 +138,7 @@ public class ArgumentsInterceptor extends Interceptor {
       for (Annotation annotation : annotations) {
         context = new ValidatorContextImpl(annotation);
         if (factory.canCreate(context)) {
-          Validator validator = factory.create(context);
+          ValidatorInvoker validator = factory.create(context);
           if (!validator.isValid(args[i])) {
             throw new InvalidArgumentException(args[i]);
           }

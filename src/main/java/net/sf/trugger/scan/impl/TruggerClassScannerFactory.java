@@ -37,7 +37,6 @@ public class TruggerClassScannerFactory implements ClassScannerFactory {
     registry.register(new JarResourceFinder()).to(JarResourceFinder.PROTOCOL);
     registry.register(new VfsFileResourceFinder()).to(VfsFileResourceFinder.PROTOCOL);
     registry.register(new VfsZipResourceFinder()).to(VfsZipResourceFinder.PROTOCOL);
-    registry.register(new BundleResourceFinder(this)).to(BundleResourceFinder.PROTOCOL);
   }
 
   public Registry<String, ResourceFinder> registry() {

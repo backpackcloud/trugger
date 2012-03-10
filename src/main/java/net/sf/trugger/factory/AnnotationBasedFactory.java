@@ -16,16 +16,14 @@
  */
 package net.sf.trugger.factory;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-
 import net.sf.trugger.CreateException;
 import net.sf.trugger.annotation.DomainAnnotatedElement;
-import net.sf.trugger.bind.Bind;
-import net.sf.trugger.bind.Binder;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.Elements;
 import net.sf.trugger.reflection.Reflection;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 /**
  * A factory that uses an Annotation to identify the instance type for creating.
@@ -141,43 +139,6 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
       throw new CreateException("Cannot find property " + elementName + " in " + annotationType.getName());
     }
     return element.in(classIdentifier).value();
-  }
-
-  /**
-   * Binds the annotation that contains the annotation used to create an
-   * instance.
-   *
-   * @param key
-   *          the key passed to this factory.
-   * @param instance
-   *          the instance to bind the annotation.
-   * @return the given instance
-   * @since 2.7
-   */
-  protected E bindAnnotation(AnnotatedElement key, E instance) {
-    if (!key.isAnnotationPresent(annotationType)) {
-      Binder binder = Bind.newBinder();
-      registerAnnotation(binder, key);
-      binder.applyBinds(instance);
-    }
-    return instance;
-  }
-
-  /**
-   * Registers the annotation that contains the annotation used to create an
-   * instance in the given binder.
-   *
-   * @param binder
-   *          the binder for registering the bind.
-   * @param key
-   *          the key passed to this factory.
-   * @since 2.7
-   */
-  protected void registerAnnotation(Binder binder, AnnotatedElement key) {
-    if (!key.isAnnotationPresent(annotationType)) {
-      Annotation annotation = domainAnnotatedElement().getDomainAnnotation(annotationType).parent().annotation();
-      binder.bind(annotation).toElement().ofType(annotation.annotationType());
-    }
   }
 
 }

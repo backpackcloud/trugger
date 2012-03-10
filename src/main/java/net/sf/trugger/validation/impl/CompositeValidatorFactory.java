@@ -16,12 +16,12 @@
  */
 package net.sf.trugger.validation.impl;
 
-import java.util.List;
-
 import net.sf.trugger.CreateException;
-import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorContext;
 import net.sf.trugger.validation.ValidatorFactory;
+import net.sf.trugger.validation.ValidatorInvoker;
+
+import java.util.List;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -43,7 +43,7 @@ public final class CompositeValidatorFactory implements ValidatorFactory {
     return false;
   }
 
-  public Validator create(ValidatorContext key) throws CreateException {
+  public ValidatorInvoker create(ValidatorContext key) throws CreateException {
     for (ValidatorFactory vf : factories) {
       if (vf.canCreate(key)) {
         return vf.create(key);

@@ -16,14 +16,6 @@
  */
 package net.sf.trugger.test.validation;
 
-import static net.sf.trugger.util.mock.Mock.annotation;
-import static net.sf.trugger.util.mock.Mock.mock;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
 import net.sf.trugger.bind.Binder;
 import net.sf.trugger.validation.Validation;
 import net.sf.trugger.validation.Validator;
@@ -32,9 +24,16 @@ import net.sf.trugger.validation.ValidatorClass;
 import net.sf.trugger.validation.ValidatorContext;
 import net.sf.trugger.validation.ValidatorFactory;
 import net.sf.trugger.validation.impl.ValidatorContextImpl;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import static net.sf.trugger.util.mock.Mock.annotation;
+import static net.sf.trugger.util.mock.Mock.mock;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -57,12 +56,12 @@ public class ValidatorBindTest {
   @Test
   public void testBinder() {
     ValidatorFactory factory = Validation.newValidatorFactory();
-    TestValidator validator = (TestValidator) factory.create(new ValidatorContextImpl(mock(annotation(TestValidation.class))));
+    TestValidator validator = (TestValidator) factory.create(new ValidatorContextImpl(mock(annotation(TestValidation.class)))).validator();
     assertSame(object, validator.testField);
 
     Validation.unplug(binder);
 
-    validator = (TestValidator) factory.create(new ValidatorContextImpl(mock(annotation(TestValidation.class))));
+    validator = (TestValidator) factory.create(new ValidatorContextImpl(mock(annotation(TestValidation.class)))).validator();
     assertNull(validator.testField);
   }
 

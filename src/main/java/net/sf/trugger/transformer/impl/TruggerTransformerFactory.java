@@ -16,9 +16,6 @@
  */
 package net.sf.trugger.transformer.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-
 import net.sf.trugger.CreateException;
 import net.sf.trugger.annotation.TargetElement;
 import net.sf.trugger.annotation.processors.TargetElementResolver;
@@ -31,6 +28,9 @@ import net.sf.trugger.transformer.BidirectionalTransformer;
 import net.sf.trugger.transformer.TransformerClass;
 import net.sf.trugger.transformer.TransformerFactory;
 import net.sf.trugger.transformer.TransformerInterceptor;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -70,7 +70,7 @@ public class TruggerTransformerFactory implements TransformerFactory {
           } else {
             formatter = new TransformerInterceptor().createProxy().implementing(BidirectionalTransformer.class).extending(classToCreate);
           }
-          return bindAnnotation(key, formatter);
+          return formatter;
         }
       };
 

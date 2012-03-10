@@ -16,10 +16,6 @@
  */
 package net.sf.trugger.validation;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import net.sf.trugger.annotation.AcceptedArrayTypes;
 import net.sf.trugger.annotation.AcceptedTypes;
 import net.sf.trugger.annotation.Reference;
@@ -29,49 +25,43 @@ import net.sf.trugger.annotation.TargetObject;
 import net.sf.trugger.loader.ImplementationLoader;
 import net.sf.trugger.message.MessageCreator;
 import net.sf.trugger.message.Messages;
-import net.sf.trugger.validation.adapter.HibernateValidatorFactory;
 import net.sf.trugger.validation.impl.CompositeValidatorBinder;
 import net.sf.trugger.validation.impl.CompositeValidatorFactory;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
 /**
- * This class uses a {@link ValidationEngine validation engine} for validate
- * properties of a target by using default implementations of the components
- * required.
- * <p>
- * There are a set of features that can be useful for developing a Validator and
- * depends on the implementations for the {@link ValidationEngine},
- * {@link ValidatorFactory} and {@link ValidatorBinder} (all the listed features
- * are present in the default components):
- * <p>
- * <ul>
- * <li>If the validation must use a reference value present in the target
- * object. Just annotate a <i>String</i> property in the annotation that
- * indicates the element that must be binded with the {@link Reference}
- * annotation. The reference can also have their specific validation in the
- * property of the annotation.
- * <li>If the validation requires direct access to the target, it will be bind
- * in the element that has the {@link TargetObject} annotation.
- * <li>If the validation requires direct access to the {@link ValidationEngine},
- * an instance of {@link ValidationBridge} will be injected in the validator if
- * there is a compatible element.
- * <li>If the validator requires the element that has being validated, this
- * element will be injected in the element annotated with {@link TargetElement}.
- * <li>If the validator requires the annotation in the element that has being
- * validated, it will be injected in the compatible element of the validator
- * and/or in the element annotated with {@link TargetAnnotation} (useful for
- * generic validators).
- * <li>To forbid a type that is not supported by the validator, you can use the
- * generic type (if the allowed type is only one) or the annotations
- * {@link AcceptedTypes} and/or {@link AcceptedArrayTypes} in the class
- * declaration in case of more than one.
- * <li>If you need to use other validators inside yours, you can declare an
- * element of tipe {@link Validator} and annotate it with the desired
- * validations. You can use more than one annotation.
- * <li>Validations may have a named context (configured by the property
- * "context" in any annotation). If a context is
- * {@link ValidationEngine#forContext(String) specified}, only the annotations
- * with the specified context or with no context will be processed.
- * </ul>
+ * This class uses a {@link ValidationEngine validation engine} for validate properties of
+ * a target by using default implementations of the components required.
+ * <p/>
+ * There are a set of features that can be useful for developing a Validator and depends
+ * on the implementations for the {@link ValidationEngine}, {@link ValidatorFactory} and
+ * {@link ValidatorBinder} (all the listed features are present in the default
+ * components):
+ * <p/>
+ * <ul> <li>If the validation must use a reference value present in the target object.
+ * Just annotate a <i>String</i> property in the annotation that indicates the element
+ * that must be binded with the {@link Reference} annotation. The reference can also have
+ * their specific validation in the property of the annotation. <li>If the validation
+ * requires direct access to the target, it will be bind in the element that has the
+ * {@link TargetObject} annotation. <li>If the validation requires direct access to the
+ * {@link ValidationEngine}, an instance of {@link ValidationBridge} will be injected in
+ * the validator if there is a compatible element. <li>If the validator requires the
+ * element that has being validated, this element will be injected in the element
+ * annotated with {@link TargetElement}. <li>If the validator requires the annotation in
+ * the element that has being validated, it will be injected in the compatible element of
+ * the validator and/or in the element annotated with {@link TargetAnnotation} (useful for
+ * generic validators). <li>To forbid a type that is not supported by the validator, you
+ * can use the generic type (if the allowed type is only one) or the annotations {@link
+ * AcceptedTypes} and/or {@link AcceptedArrayTypes} in the class declaration in case of
+ * more than one. <li>If you need to use other validators inside yours, you can declare an
+ * element of tipe {@link Validator} and annotate it with the desired validations. You can
+ * use more than one annotation. <li>Validations may have a named context (configured by
+ * the property "context" in any annotation). If a context is {@link
+ * ValidationEngine#forContext(String) specified}, only the annotations with the specified
+ * context or with no context will be processed. </ul>
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.1
@@ -91,9 +81,7 @@ public class Validation {
 
   private final MessageCreator messageCreator;
 
-  /**
-   * Creates a new object validator.
-   */
+  /** Creates a new object validator. */
   public Validation() {
     messageCreator = Messages.createMessageCreator();
   }
@@ -101,8 +89,7 @@ public class Validation {
   /**
    * Creates a new object validator using the specified bundle.
    *
-   * @param bundle
-   *          the resource bundle for resolving the messages.
+   * @param bundle the resource bundle for resolving the messages.
    */
   public Validation(ResourceBundle bundle) {
     messageCreator = Messages.createMessageCreator(bundle);
@@ -111,8 +98,7 @@ public class Validation {
   /**
    * Creates a new object validator using the given message creator.
    *
-   * @param messageCreator
-   *          the component for creating the validation messages.
+   * @param messageCreator the component for creating the validation messages.
    */
   public Validation(MessageCreator messageCreator) {
     this.messageCreator = messageCreator;
@@ -128,14 +114,12 @@ public class Validation {
   }
 
   /**
-   * Plugs a ValidatorFactory for using with the implementation. Use this method
-   * to include support for other validators (such as HibernateValidator)
-   * without affect the implementation.
-   * <p>
-   * Make sure that no validation is doing while calling this method because it
-   * is not thread-safe.
-   *
-   * @see HibernateValidatorFactory
+   * Plugs a ValidatorFactory for using with the implementation. Use this method to
+   * include support for other validators (such as HibernateValidator) without affect the
+   * implementation.
+   * <p/>
+   * Make sure that no validation is doing while calling this method because it is not
+   * thread-safe.
    */
   public static void plug(ValidatorFactory validatorFactory) {
     synchronized (pluggedFactories) {
@@ -145,9 +129,9 @@ public class Validation {
 
   /**
    * Unplugs the given ValidatorFactory.
-   * <p>
-   * Make sure that no validation is doing while calling this method because it
-   * is not thread-safe.
+   * <p/>
+   * Make sure that no validation is doing while calling this method because it is not
+   * thread-safe.
    */
   public static void unplug(ValidatorFactory validatorFactory) {
     synchronized (pluggedFactories) {
@@ -157,9 +141,9 @@ public class Validation {
 
   /**
    * Plugs the given binder.
-   * <p>
-   * Make sure that no validation is doing while calling this method because it
-   * is not thread-safe.
+   * <p/>
+   * Make sure that no validation is doing while calling this method because it is not
+   * thread-safe.
    *
    * @since 2.4
    */
@@ -171,9 +155,9 @@ public class Validation {
 
   /**
    * Unplus the given binder.
-   * <p>
-   * Make sure that no validation is doing while calling this method because it
-   * is not thread-safe.
+   * <p/>
+   * Make sure that no validation is doing while calling this method because it is not
+   * thread-safe.
    *
    * @since 2.4
    */
@@ -184,10 +168,9 @@ public class Validation {
   }
 
   /**
-   * Creates a new ValidatorFactory based on the
-   * {@link ValidationFactory#createValidatorFactory(ValidatorBinder) implementation} and the
-   * {@link #plug(ValidatorFactory) pluggeds}.
-   * <p>
+   * Creates a new ValidatorFactory based on the {@link ValidationFactory#createValidatorFactory(ValidatorBinder)
+   * implementation} and the {@link #plug(ValidatorFactory) pluggeds}.
+   * <p/>
    * Every factory plugged after will be used by the returning ValidatorFactory.
    *
    * @return the created factory.
@@ -197,13 +180,13 @@ public class Validation {
   }
 
   /**
-   * Creates a new ValidatorBinder based on the
-   * {@link ValidationFactory#createValidatorBinder() implementation} and the
-   * {@link #plug(ValidatorBinder) pluggeds}.
-   * <p>
+   * Creates a new ValidatorBinder based on the {@link ValidationFactory#createValidatorBinder()
+   * implementation} and the {@link #plug(ValidatorBinder) pluggeds}.
+   * <p/>
    * Every binder plugged after will be used by the returning ValidatorBinder.
    *
    * @return the created binder
+   *
    * @since 2.4
    */
   public static ValidatorBinder newValidatorBinder() {

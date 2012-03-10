@@ -42,6 +42,7 @@ import net.sf.trugger.validation.ValidationResult;
 import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorContext;
 import net.sf.trugger.validation.ValidatorFactory;
+import net.sf.trugger.validation.ValidatorInvoker;
 
 /**
  * The default validation engine.
@@ -163,7 +164,7 @@ public final class TruggerValidationEngine implements ValidationEngine {
               }
             }
           }
-          Validator validator = newValidator(parameter, validatorContext);
+          ValidatorInvoker validator = newValidator(parameter, validatorContext);
           if (!valueGetted) {
             value = element.in(parameter.target).value();
             valueGetted = true;
@@ -227,7 +228,7 @@ public final class TruggerValidationEngine implements ValidationEngine {
       for (Annotation annotation : annotatedElement.getDeclaredAnnotations()) {
         ValidatorContext context = new ValidatorContextImpl(annotation, parameter.element, parameter.target, TruggerValidationEngine.this.context);
         if (validatorFactory.canCreate(context)) {
-          Validator validator = newValidator(parameter, context);
+          ValidatorInvoker validator = newValidator(parameter, context);
           if (!validator.isValid(value)) {
             Message message = messageCreator.createMessage(parameter.element, annotation, parameter.target);
             parameter.messages.add(message);
@@ -240,14 +241,14 @@ public final class TruggerValidationEngine implements ValidationEngine {
 
   }
 
-  private Validator newValidator(ValidationParameter parameter, ValidatorContext context) {
-    Validator validator = validatorFactory.create(context);
+  private ValidatorInvoker newValidator(ValidationParameter parameter, ValidatorContext context) {
+    ValidatorInvoker invoker = validatorFactory.create(context);
     Binder binder = Bind.newBinder();
     Bridge bridge = new Bridge(parameter);
     binder.use(new ValidatorReferenceResolver(bridge)).toElements().ofType(Validator.class);
     binder.bind(bridge).toElements().ofType(ValidationBridge.class);
-    binder.applyBinds(validator);
-    return validator;
+    binder.applyBinds(invoker.validator());
+    return invoker;
   }
 
 }

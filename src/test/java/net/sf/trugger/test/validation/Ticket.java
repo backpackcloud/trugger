@@ -16,20 +16,19 @@
  */
 package net.sf.trugger.test.validation;
 
+import net.sf.trugger.date.DateType;
+import net.sf.trugger.validation.validator.After;
+import net.sf.trugger.validation.validator.Before;
+import net.sf.trugger.validation.validator.NotEmpty;
+import net.sf.trugger.validation.validator.NotNull;
+import net.sf.trugger.validation.validator.Valid;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.trugger.date.DateType;
-import net.sf.trugger.validation.validator.After;
-import net.sf.trugger.validation.validator.Before;
-import net.sf.trugger.validation.validator.NotEmpty;
-import net.sf.trugger.validation.validator.Valid;
-
-import org.hibernate.validator.NotNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães

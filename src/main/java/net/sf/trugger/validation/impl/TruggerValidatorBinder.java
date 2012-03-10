@@ -16,9 +16,6 @@
  */
 package net.sf.trugger.validation.impl;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
-
 import net.sf.trugger.annotation.Reference;
 import net.sf.trugger.annotation.TargetAnnotation;
 import net.sf.trugger.annotation.TargetElement;
@@ -36,6 +33,10 @@ import net.sf.trugger.validation.Validator;
 import net.sf.trugger.validation.ValidatorBinder;
 import net.sf.trugger.validation.ValidatorContext;
 import net.sf.trugger.validation.ValidatorFactory;
+import net.sf.trugger.validation.ValidatorInvoker;
+
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -98,9 +99,9 @@ public class TruggerValidatorBinder implements ValidatorBinder {
     for (Annotation annotation : element.getAnnotations()) {
       ValidatorContext context = new ValidatorContextImpl(annotation);
       if (factory.canCreate(context)) {
-        Validator validator = factory.create(context);
-        binder.applyBinds(validator);
-        if (!validator.isValid(referenceValue)) {
+        ValidatorInvoker invoker = factory.create(context);
+        binder.applyBinds(invoker.validator());
+        if (!invoker.isValid(referenceValue)) {
           return false;
         }
       }

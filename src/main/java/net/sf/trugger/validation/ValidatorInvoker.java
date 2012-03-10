@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Varella Barca Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -14,15 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.sf.trugger.validation;
 
-import net.sf.trugger.factory.Factory;
-
 /**
- * Interface that defines a factory for {@link Validator} objects.
+ * Interface that defines an invoker for a validator.
  *
  * @author Marcelo Varella Barca Guimarães
+ * @since 3.0
  */
-public interface ValidatorFactory extends Factory<ValidatorContext, ValidatorInvoker> {
+public interface ValidatorInvoker<T> extends Validator<T> {
+
+  /** Invokes the {@link Validator#isValid(Object)} method on the target validator. */
+  boolean isValid(T value);
+
+  /** @return the target validator. */
+  Validator<T> validator();
 
 }

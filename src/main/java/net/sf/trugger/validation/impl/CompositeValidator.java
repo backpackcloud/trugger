@@ -16,28 +16,29 @@
  */
 package net.sf.trugger.validation.impl;
 
+import net.sf.trugger.validation.Validator;
+import net.sf.trugger.validation.ValidatorInvoker;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import net.sf.trugger.validation.Validator;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 final class CompositeValidator implements Validator {
   
-  private final Collection<Validator> validators;
+  private final Collection<ValidatorInvoker> validators;
   
   public CompositeValidator() {
-    this.validators = new ArrayList<Validator>();
+    this.validators = new ArrayList<ValidatorInvoker>();
   }
   
-  public void add(Validator validator) {
+  public void add(ValidatorInvoker validator) {
     validators.add(validator);
   }
   
   public boolean isValid(Object value) {
-    for (Validator validator : validators) {
+    for (ValidatorInvoker validator : validators) {
       if(!validator.isValid(value)) {
         return false;
       }
