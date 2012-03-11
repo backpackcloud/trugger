@@ -1,7 +1,9 @@
 Version 3.0
 - Major Changes
+  - Removed cglib and commons collections dependency
   - Removed PredicateDSL and TransformerDSL
   - Performance improvements in validation
+  - Interceptor used only for interfaces
 
 Version 2.8
 - Major Changes
