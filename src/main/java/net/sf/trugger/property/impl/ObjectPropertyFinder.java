@@ -22,14 +22,22 @@ import net.sf.trugger.element.Element;
 import net.sf.trugger.element.impl.ElementFinderHelper;
 import net.sf.trugger.reflection.ClassHierarchyFinder;
 import net.sf.trugger.reflection.ClassHierarchyIteration;
-import org.apache.commons.collections.map.LRUMap;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static net.sf.trugger.reflection.Reflection.*;
-import static net.sf.trugger.reflection.ReflectionPredicates.*;
+import static net.sf.trugger.reflection.Reflection.fields;
+import static net.sf.trugger.reflection.Reflection.methods;
+import static net.sf.trugger.reflection.Reflection.reflect;
+import static net.sf.trugger.reflection.ReflectionPredicates.GETTER;
+import static net.sf.trugger.reflection.ReflectionPredicates.PUBLIC;
+import static net.sf.trugger.reflection.ReflectionPredicates.SETTER;
 
 /**
  * A default class for finding properties in objects.
@@ -37,11 +45,12 @@ import static net.sf.trugger.reflection.ReflectionPredicates.*;
  * @author Marcelo Varella Barca Guimarães
  */
 public final class ObjectPropertyFinder implements Finder<Element> {
-  
+
   private final Map<Class<?>, Map<String, Element>> cache;
-  
+  private static final int MAX_SIZE = 200;
+
   public ObjectPropertyFinder() {
-    cache = Collections.synchronizedMap(new LRUMap(300));
+    cache = new ConcurrentHashMap<Class<?>, Map<String, Element>>(MAX_SIZE);
   }
   
   public final Result<Element, Object> find(final String propertyName) {
