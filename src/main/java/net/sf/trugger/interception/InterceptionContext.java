@@ -18,8 +18,6 @@ package net.sf.trugger.interception;
 
 import java.lang.reflect.Method;
 
-import net.sf.cglib.proxy.MethodProxy;
-
 /**
  * This class holds the parameters of a method interception.
  *
@@ -46,12 +44,6 @@ public class InterceptionContext {
   public final Object[] args;
 
   /**
-   * The methodProxy. It can be used to either invoke the original method, or
-   * call the same method on a different object of the same type.
-   */
-  final MethodProxy methodProxy;
-
-  /**
    * Creates a new InterceptionContext
    *
    * @param proxy
@@ -60,15 +52,13 @@ public class InterceptionContext {
    *          the <code>Method</code> instance corresponding to the method
    *          invoked on the proxy instance
    * @param args
-   *          an array of objects containing the values of the arguments passed
-   *          in the method invocation on the proxy instance, or
-   *          <code>null</code> if interface method takes no arguments
+ *          an array of objects containing the values of the arguments passed
+ *          in the method invocation on the proxy instance, or
    */
-  InterceptionContext(Object proxy, Method method, Object[] args, MethodProxy methodProxy) {
+  InterceptionContext(Object proxy, Method method, Object[] args) {
     this.proxy = proxy;
     this.method = method;
     this.args = args;
-    this.methodProxy = methodProxy;
   }
 
 }

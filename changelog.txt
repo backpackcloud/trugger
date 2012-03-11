@@ -1,3 +1,8 @@
+Version 3.0
+- Major Changes
+  - Removed PredicateDSL and TransformerDSL
+  - Performance improvements in validation
+
 Version 2.8
 - Major Changes
   - Reformulated Reflection DSL

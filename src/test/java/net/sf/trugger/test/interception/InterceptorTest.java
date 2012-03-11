@@ -16,10 +16,10 @@
  */
 package net.sf.trugger.test.interception;
 
-import static org.junit.Assert.assertSame;
 import net.sf.trugger.interception.Interceptor;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertSame;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -55,20 +55,11 @@ public class InterceptorTest {
     MyInterface obj = new Interceptor().createProxy().forAllInterfaces().withTarget(new InvocationTest());
     Object argument = new Object();
     assertSame(argument, obj.doIt(argument));
-
-    obj = new Interceptor().createProxy().extending(InvocationTest.class);
-    assertSame(argument, obj.doIt(argument));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInterfaceExceptionHandling() {
     MyInterface obj = new Interceptor().createProxy().forAllInterfaces().withTarget(new ExceptionHandlingTest());
-    obj.doIt(null);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testSubclassExceptionHandling() {
-    MyInterface obj = new Interceptor().createProxy().extending(ExceptionHandlingTest.class);
     obj.doIt(null);
   }
 

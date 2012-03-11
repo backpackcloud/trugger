@@ -16,14 +16,13 @@
  */
 package net.sf.trugger.interception;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
 import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.util.Utils;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,82 +31,52 @@ import static net.sf.trugger.reflection.Reflection.reflect;
 
 /**
  * A base class to create Proxies to other classes using the CGLib.
- * <p>
- * This is how this class works:
- * <ol>
- * <li>When a method is intercepted, the Interceptor encapsulates the method and
- * the arguments in a {@link InterceptionContext} that becomes available to the
- * class by the {@link #context()}.
- * <li>The {@link #intercept() intercept} method is called.
- * <li>The {@link InterceptionContext} is released.
- * </ol>
+ * <p/>
+ * This is how this class works: <ol> <li>When a method is intercepted, the Interceptor
+ * encapsulates the method and the arguments in a {@link InterceptionContext} that becomes
+ * available to the class by the {@link #context()}. <li>The {@link #intercept()
+ * intercept} method is called. <li>The {@link InterceptionContext} is released. </ol>
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.1
  */
-public class Interceptor implements MethodInterceptor, ProxyFactory {
+public class Interceptor implements InvocationHandler, ProxyFactory {
 
-  /**
-   * The target object
-   */
+  /** The target object */
   protected Object target;
-  /**
-   * The interfaces configured for interception.
-   */
+  /** The interfaces configured for interception. */
   private final Set<Class<?>> interfaces = new HashSet<Class<?>>();
-  /**
-   * Holds the contexts.
-   */
+  /** Holds the contexts. */
   private ThreadLocal<InterceptionContext> threadLocal = new ThreadLocal<InterceptionContext>();
-  /**
-   * A flag that indicates if the proxy should subclass the target.
-   */
-  private boolean subclass;
 
-  /**
-   * Creates a new Interceptor
-   */
+  /** Creates a new Interceptor */
   public Interceptor() {
     super();
   }
 
-  /**
-   * @return the interception context.
-   */
+  /** @return the interception context. */
   protected final InterceptionContext context() {
     return threadLocal.get();
   }
 
-  /**
-   * @return InterceptionContext#proxy
-   */
+  /** @return InterceptionContext#proxy */
   protected final Object proxy() {
     return context().proxy;
   }
 
-  /**
-   * @return InterceptionContext#methodProxy
-   */
-  private MethodProxy methodProxy() {
-    return context().methodProxy;
-  }
-
-  /**
-   * @return InterceptionContext#method
-   */
+  /** @return InterceptionContext#method */
   protected final Method method() {
     return context().method;
   }
 
-  /**
-   * @return InterceptionContext#args
-   */
+  /** @return InterceptionContext#args */
   protected final Object[] args() {
     return context().args;
   }
 
   /**
    * @return the argument at the given index.
+   *
    * @since 2.3
    */
   protected final Object arg(int index) {
@@ -118,9 +87,10 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
     return new Creator();
   }
 
-  public final Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+  @Override
+  public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     Reflection.setAccessible(method);
-    threadLocal.set(new InterceptionContext(proxy, method, args, methodProxy));
+    threadLocal.set(new InterceptionContext(proxy, method, args));
     try {
       return intercept();
     } finally {
@@ -131,16 +101,13 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
   /**
    * Invokes the intercepted method on the target object.
    *
-   * @param target
-   *          the target object
+   * @param target the target object
+   *
    * @return the return of the method
-   * @throws Throwable
-   *           if an error occurs in the method.
+   *
+   * @throws Throwable if an error occurs in the method.
    */
   protected final Object invokeMethod(Object target) throws Throwable {
-    if (subclass) {
-      return methodProxy().invokeSuper(target, args());
-    }
     try {
       Method targetMethod = getTargetMethod(target);
       Reflection.setAccessible(targetMethod);
@@ -156,29 +123,22 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
    * @see #invokeMethod(Object)
    */
   protected final Object invokeMethod() throws Throwable {
-    if (subclass) {
-      return invokeMethod(proxy());
-    }
     return invokeMethod(this.target);
   }
 
-  /**
-   * This method is called when a target's method is intercepted.
-   */
+  /** This method is called when a target's method is intercepted. */
   protected Object intercept() throws Throwable {
     return invokeMethod();
   }
 
-  /**
-   * @return the intercepted method declared in the {@link #target}.
-   */
+  /** @return the intercepted method declared in the {@link #target}. */
   protected final Method getTargetMethod() {
     return getTargetMethod(target);
   }
 
   /**
-   * @param target
-   *          the target to get the method.
+   * @param target the target to get the method.
+   *
    * @return the intercepted method declared in the given target.
    */
   protected final Method getTargetMethod(Object target) {
@@ -215,36 +175,27 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
       this.computeTargetInterfaces = true;
       return this;
     }
-    
+
     public <E> E over(Class<?> clazz) {
-      if(clazz.isInterface()) {
+      if (clazz.isInterface()) {
         return (E) createProxy().implementing(clazz).withoutTarget();
       }
-      return (E) createProxy().extending(clazz);
+      throw new IllegalArgumentException("Not an interface");
     }
 
     public <E> E withTarget(Object target) {
       Interceptor.this.target = target;
-      Interceptor.this.subclass = false;
       return (E) create();
     }
 
     public <E> E withoutTarget() {
       Interceptor.this.target = new Object();
-      Interceptor.this.subclass = false;
-      return (E) create();
-    }
-
-    public <E> E extending(Class<?> subclass) {
-      target = subclass;
-      Interceptor.this.subclass = true;
       return (E) create();
     }
 
     /**
-     * Creates a Proxy for all the specified interfaces using the specified
-     * ClassLoader. If subclass is <code>true</code>, the proxy will be a
-     * subclass of the target.
+     * Creates a Proxy for all the specified interfaces using the specified ClassLoader.
+     * If subclass is <code>true</code>, the proxy will be a subclass of the target.
      */
     private <E> E create() {
       if (classLoader == null) {
@@ -257,17 +208,11 @@ public class Interceptor implements MethodInterceptor, ProxyFactory {
       if (computeTargetInterfaces) {
         interfaces.addAll(reflect().interfaces().in(target));
       }
-      Enhancer enhancer = new Enhancer();
       Class<?> targetClass = Utils.resolveType(target);
-      if (subclass) {
-        enhancer.setSuperclass(targetClass);
-      }
-      enhancer.setClassLoader(classLoader);
-      if (!interfaces.isEmpty()) {
-        enhancer.setInterfaces(interfaces.toArray(new Class[interfaces.size()]));
-      }
-      enhancer.setCallback(Interceptor.this);
-      return (E) enhancer.create();
+      return (E) Proxy.newProxyInstance(
+        classLoader,
+        interfaces.toArray(new Class[interfaces.size()]),
+        Interceptor.this);
     }
   }
 
