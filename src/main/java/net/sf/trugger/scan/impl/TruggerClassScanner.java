@@ -32,7 +32,6 @@ import net.sf.trugger.selector.ClassesSelector;
  * <ul>
  * <li> {@link FileResourceFinder} - for classes in the file system.
  * <li> {@link JarResourceFinder} - for classes in jar files.
- * <li> {@link BundleResourceFinder} - for classes in the eclipse platform.
  * </ul>
  *
  * @author Marcelo Varella Barca Guimarães
