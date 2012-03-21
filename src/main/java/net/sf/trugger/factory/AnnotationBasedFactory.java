@@ -51,8 +51,6 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
    */
   private final String elementName;
 
-  private ThreadLocal<DomainAnnotatedElement> domainAnnotatedElement = new ThreadLocal<DomainAnnotatedElement>();
-
   /**
    * Creates a new AnnotationBasedFactory based on the specified arguments.
    *
@@ -101,37 +99,17 @@ public class AnnotationBasedFactory<A extends Annotation, E> extends BaseFactory
   }
 
   public boolean canCreate(AnnotatedElement key) {
-    initialize(key);
-    return domainAnnotatedElement().isAnnotationPresent(annotationType);
-  }
-
-  private void initialize(AnnotatedElement key) {
-    DomainAnnotatedElement element = domainAnnotatedElement.get();
-    if(element == null || !element.annotatedElement().equals(key)) {
-      domainAnnotatedElement.set(DomainAnnotatedElement.wrap(key));
-    }
+    return DomainAnnotatedElement.wrap(key).isAnnotationPresent(annotationType);
   }
 
   public E create(AnnotatedElement key) throws CreateException {
-    try {
-      initialize(key);
-      return super.create(key);
-    } finally {
-      domainAnnotatedElement.remove();
-    }
-  }
-
-  /**
-   * @return the wrapped DomainAnnotatedElement for the key
-   */
-  protected final DomainAnnotatedElement domainAnnotatedElement() {
-    return domainAnnotatedElement.get();
+    return super.create(key);
   }
 
   @Override
   protected final Class<? extends E> resolveClassForCreation(AnnotatedElement key) {
     if (!key.isAnnotationPresent(annotationType)) {
-      key = domainAnnotatedElement();
+      key = DomainAnnotatedElement.wrap(key);
     }
     Annotation classIdentifier = key.getAnnotation(annotationType);
     Element element = Elements.element(elementName).in(annotationType);
