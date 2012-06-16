@@ -96,7 +96,7 @@ public final class TruggerElementsSelector implements ElementsSelector {
     return this;
   }
   
-  public ElementsSelector thatMatches(final Predicate<? super Element> predicate) {
+  public ElementsSelector that(final Predicate<? super Element> predicate) {
     builder.add(predicate);
     return this;
   }
@@ -130,7 +130,7 @@ public final class TruggerElementsSelector implements ElementsSelector {
     Set<Element> set = finder.findAll().in(target);
     Predicate<Element> predicate = builder.predicate();
     if (predicate != null) {
-      Iteration.retainFrom(set).elementsMatching(predicate);
+      Iteration.retainFrom(set).elements(predicate);
     }
     return set;
   }
@@ -143,7 +143,7 @@ public final class TruggerElementsSelector implements ElementsSelector {
         Set<Element> set = TruggerElementsSelector.this.in(target);
         Set<BindableElement> result = new HashSet<BindableElement>(set.size());
         Transformer<BindableElement, Element> t = new ElementToBindableTransformer(target);
-        Iteration.copyTo(result).transformingWith(t).allElements().from(set);
+        Iteration.copyTo(result).transformingWith(t).all().from(set);
         return result;
       }
     };

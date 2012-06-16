@@ -50,7 +50,7 @@ public interface ElementSelector extends ElementSpecifier, Result<Element, Objec
   
   ElementSelector assignableTo(Class<?> type);
   
-  ElementSelector thatMatches(Predicate<? super Element> predicate);
+  ElementSelector that(Predicate<? super Element> predicate);
   
   ElementSelector specific();
   

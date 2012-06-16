@@ -271,7 +271,7 @@ public class MethodSelectorTest {
         return reflect().method("toString");
       }
       public void makeSelections(MethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, Object.class);
     assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
@@ -279,7 +279,7 @@ public class MethodSelectorTest {
         return reflect().method("toString");
       }
       public void makeSelections(MethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, Object.class);
   }

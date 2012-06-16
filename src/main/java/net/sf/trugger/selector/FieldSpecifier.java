@@ -46,7 +46,7 @@ public interface FieldSpecifier extends MemberSelector<Field>, TypedElementSelec
 
   FieldSpecifier nonFinal();
 
-  FieldSpecifier thatMatches(Predicate<? super Field> predicate);
+  FieldSpecifier that(Predicate<? super Field> predicate);
 
   FieldSpecifier recursively();
 

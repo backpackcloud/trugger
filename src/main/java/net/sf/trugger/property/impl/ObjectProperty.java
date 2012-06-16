@@ -170,7 +170,7 @@ final class ObjectProperty extends AbstractElement {
   }
 
   private void searchForGetter() {
-    getter = reflect().getterFor(name).thatMatches(ofReturnType(type)).recursively().in(declaringClass);
+    getter = reflect().getterFor(name).that(ofReturnType(type)).recursively().in(declaringClass);
   }
 
   private void searchForAnnotatedElement() {

@@ -47,7 +47,7 @@ public class TruggerNoNamedMethodSelector extends TruggerMethodSelector {
       if (parameterTypes != null) {
         builder().add(ReflectionPredicates.withParameters(parameterTypes));
       }
-      return selectFrom(set).elementMatching(builder().predicate());
+      return selectFrom(set).element(builder().predicate());
     } catch (SearchException e) {
       throw new ReflectionException(e);
     }

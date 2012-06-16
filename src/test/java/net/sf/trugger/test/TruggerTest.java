@@ -310,7 +310,7 @@ public class TruggerTest {
       assertMatch((E) obj, predicate);
     }
     result = test.createSelector();
-    ((PredicateSelector) result).thatMatches(predicate);
+    ((PredicateSelector) result).that(predicate);
     Object obj2 = result.in(target);
     assertEquals(obj, obj2);
     test.assertions((E) obj);
@@ -343,7 +343,7 @@ public class TruggerTest {
       assertNull(obj);
     }
     result = test.createSelector();
-    ((PredicateSelector) result).thatMatches(predicate);
+    ((PredicateSelector) result).that(predicate);
     assertEquals(obj, result.in(target));
   }
 

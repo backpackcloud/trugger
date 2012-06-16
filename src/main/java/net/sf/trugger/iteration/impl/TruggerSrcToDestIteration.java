@@ -56,11 +56,11 @@ public abstract class TruggerSrcToDestIteration<To, From> implements SrcToDestIt
     this.to = to;
   }
 
-  public IterationSourceSelector<From> elementsMatching(Predicate<? super From> predicate) {
+  public IterationSourceSelector<From> elements(Predicate<? super From> predicate) {
     return new Selector(predicate);
   }
 
-  public IterationSourceSelector<From> allElements() {
+  public IterationSourceSelector<From> all() {
     return new Selector(Predicates.alwaysTrue());
   }
 

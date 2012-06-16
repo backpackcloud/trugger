@@ -125,7 +125,7 @@ public class ConstructorsSelectorTest {
         return reflect().constructors();
       }
       public void makeSelections(ConstructorsSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, AnnotatedSelectorTest.class, 2);
 
@@ -134,7 +134,7 @@ public class ConstructorsSelectorTest {
         return reflect().constructors();
       }
       public void makeSelections(ConstructorsSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, AnnotatedSelectorTest.class);
   }

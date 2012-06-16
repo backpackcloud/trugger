@@ -37,13 +37,13 @@ public interface SrcToDestIteration<E> {
    * @return the component for selecting the source collection for the
    *         operation.
    */
-  IterationSourceSelector<E> elementsMatching(Predicate<? super E> predicate);
+  IterationSourceSelector<E> elements(Predicate<? super E> predicate);
 
   /**
    * Executes the operation for all elements.
    *
    * @return the component for selecting the source collection.
    */
-  IterationSourceSelector<E> allElements();
+  IterationSourceSelector<E> all();
 
 }

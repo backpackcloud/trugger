@@ -47,7 +47,7 @@ public interface MethodSelector extends MethodSpecifier, PredicableResult<Method
 
   MethodSelector nonFinal();
 
-  MethodSelector thatMatches(Predicate<? super Method> predicate);
+  MethodSelector that(Predicate<? super Method> predicate);
 
   MethodSelector recursively();
 

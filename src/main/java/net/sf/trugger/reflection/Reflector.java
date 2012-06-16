@@ -71,8 +71,8 @@ import net.sf.trugger.selector.SetterMethodSelector;
  * </pre>
  * <li>If the selectors provided does not fit in your necessity, you can use a
  * {@link CompositePredicate} and pass it to the
- * {@link MemberSelector#thatMatches(net.sf.trugger.predicate.Predicate)
- * thatMatches} method.
+ * {@link MemberSelector#that(net.sf.trugger.predicate.Predicate)
+ * that} method.
  *
  * <pre>
  * import static {@link net.sf.trugger.reflection.ReflectionPredicates}.*;

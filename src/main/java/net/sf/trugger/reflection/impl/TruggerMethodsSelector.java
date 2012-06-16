@@ -70,7 +70,7 @@ public class TruggerMethodsSelector implements MethodsSelector {
     return this;
   }
   
-  public MethodsSelector thatMatches(Predicate<? super Method> predicate) {
+  public MethodsSelector that(Predicate<? super Method> predicate) {
     selector.builder().add(predicate);
     return this;
   }

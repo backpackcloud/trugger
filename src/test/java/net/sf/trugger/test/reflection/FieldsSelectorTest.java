@@ -186,7 +186,7 @@ public class FieldsSelectorTest {
         return reflect().fields();
       }
       public void makeSelections(FieldsSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, BaseClassTest.class, 1);
     assertNoResult(new SelectionTestAdapter<FieldsSelector, Set<Field>>(){
@@ -194,7 +194,7 @@ public class FieldsSelectorTest {
         return reflect().fields();
       }
       public void makeSelections(FieldsSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, BaseClassTest.class);
   }

@@ -100,6 +100,10 @@ public final class Predicates {
     return factory.createCompositePredicate(predicate);
   }
 
+  public static <T> CompositePredicate<T> is(Predicate<? super T> predicate) {
+    return newComposition(predicate);
+  }
+
   /**
    * A predicate that returns <code>true</code> if an object is valid based on
    * all of its elements.

@@ -32,7 +32,7 @@ import net.sf.trugger.predicate.Predicate;
 public interface FieldSetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
     Result<Method, Object>, Predicable<Method> {
   
-  FieldSetterMethodSelector thatMatches(Predicate<? super Method> predicate);
+  FieldSetterMethodSelector that(Predicate<? super Method> predicate);
   
   FieldSetterMethodSelector annotated();
   

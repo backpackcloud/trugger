@@ -111,7 +111,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
     if (map == null) {
       map = new HashMap<String, Element>(20);
       Set<Method> declaredMethods = methods().nonStatic()
-        .thatMatches(GETTER.or(SETTER))
+        .that(GETTER.or(SETTER))
       .in(type);
       for (Method method : declaredMethods) {
         String name = resolvePropertyName(method);
@@ -121,7 +121,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
         }
       }
       Set<Field> fields = fields().nonStatic()
-        .thatMatches(PUBLIC.negate())
+        .that(PUBLIC.negate())
       .in(type);
       for (Field field : fields) {
         if(!map.containsKey(field.getName())) {

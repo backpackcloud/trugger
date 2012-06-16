@@ -61,7 +61,7 @@ public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelect
     return this;
   }
   
-  public FieldGetterMethodSelector thatMatches(Predicate<? super Method> predicate) {
+  public FieldGetterMethodSelector that(Predicate<? super Method> predicate) {
     builder.add(predicate);
     return this;
   }

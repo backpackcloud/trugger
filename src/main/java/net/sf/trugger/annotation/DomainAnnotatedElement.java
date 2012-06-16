@@ -17,7 +17,6 @@
 package net.sf.trugger.annotation;
 
 import net.sf.trugger.annotation.impl.DomainAnnotationImpl;
-import net.sf.trugger.transformer.BidirectionalTransformer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -130,19 +129,6 @@ public class DomainAnnotatedElement implements AnnotatedElement {
   public AnnotatedElement annotatedElement() {
     return annotatedElement;
   }
-
-  public static BidirectionalTransformer<DomainAnnotatedElement, AnnotatedElement> TRANSFORMER = new BidirectionalTransformer<DomainAnnotatedElement, AnnotatedElement>() {
-
-    @Override
-    public DomainAnnotatedElement transform(AnnotatedElement object) {
-      return wrap(object);
-    }
-
-    @Override
-    public AnnotatedElement inverse(DomainAnnotatedElement object) {
-      return object.annotatedElement();
-    }
-  };
 
   public static DomainAnnotatedElement wrap(AnnotatedElement annotatedElement) {
     return new DomainAnnotatedElement(annotatedElement);

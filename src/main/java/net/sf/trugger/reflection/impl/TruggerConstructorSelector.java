@@ -46,7 +46,7 @@ public class TruggerConstructorSelector implements ConstructorSelector {
     return this;
   }
 
-  public ConstructorSelector thatMatches(Predicate<? super Constructor<?>> predicate) {
+  public ConstructorSelector that(Predicate<? super Constructor<?>> predicate) {
     builder.add(predicate);
     return this;
   }
@@ -64,7 +64,7 @@ public class TruggerConstructorSelector implements ConstructorSelector {
     MembersSelector<Constructor<?>> selector = new MembersSelector<Constructor<?>>(new ConstructorsFinder());
     Set<Constructor<?>> set = selector.in(target);
     try {
-      return selectFrom(set).elementMatching(builder.predicate());
+      return selectFrom(set).element(builder.predicate());
     } catch (SearchException e) {
       throw new ReflectionException(e);
     }

@@ -88,16 +88,46 @@ public final class Transformers {
     }
   };
 
+  /** Transformer from Object to Byte */
+  public static final Transformer<Byte, Object> TO_BYTE = new Transformer<Byte, Object>() {
+
+    @Override
+    public Byte transform(Object object) {
+      return Byte.valueOf(String.valueOf(object));
+    }
+  };
+
+  /** Transformer from Object to Short */
+  public static final Transformer<Short, Object> TO_SHORT = new Transformer<Short, Object>() {
+
+    @Override
+    public Short transform(Object object) {
+      return Short.valueOf(String.valueOf(object));
+    }
+  };
+
+  /** Transformer from Object to Character */
+  public static final Transformer<Character, Object> TO_CHAR = new Transformer<Character, Object>() {
+
+    @Override
+    public Character transform(Object object) {
+      return String.valueOf(object).charAt(0);
+    }
+  };
+
   private static final Map<Class, Transformer> TRANSFORMERS;
 
   static {
-    TRANSFORMERS = new HashMap<Class, Transformer>();
+    TRANSFORMERS = new HashMap<Class, Transformer>(10);
     TRANSFORMERS.put(Boolean.class, TO_BOOLEAN);
     TRANSFORMERS.put(Integer.class, TO_INTEGER);
     TRANSFORMERS.put(Long.class, TO_LONG);
     TRANSFORMERS.put(Float.class, TO_FLOAT);
     TRANSFORMERS.put(Double.class, TO_DOUBLE);
     TRANSFORMERS.put(String.class, TO_STRING);
+    TRANSFORMERS.put(Short.class, TO_SHORT);
+    TRANSFORMERS.put(Character.class, TO_CHAR);
+    TRANSFORMERS.put(Byte.class, TO_BYTE);
   }
 
   /**

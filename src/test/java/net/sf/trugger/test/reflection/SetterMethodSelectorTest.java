@@ -180,7 +180,7 @@ public class SetterMethodSelectorTest {
         return reflect().setterFor(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
@@ -188,7 +188,7 @@ public class SetterMethodSelectorTest {
         return reflect().setterFor(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, this);
   }

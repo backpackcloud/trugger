@@ -30,7 +30,6 @@ import java.util.Set;
 import net.sf.trugger.element.Element;
 import net.sf.trugger.element.ElementPredicates;
 import net.sf.trugger.element.Elements;
-import net.sf.trugger.element.UnreadableElementException;
 import net.sf.trugger.element.UnwritableElementException;
 import net.sf.trugger.loader.ImplementationLoader;
 import net.sf.trugger.property.Properties;
@@ -162,7 +161,7 @@ public class PropertyTest {
     o1.allAccess = "all1";
     o2.allAccess = "all1";
 
-    ElementsSelector selection = Elements.elements().thatMatches(ElementPredicates.ofType(boolean.class).negate());
+    ElementsSelector selection = Elements.elements().that(ElementPredicates.ofType(boolean.class).negate());
 
     Elements.copyTo(o2).notNull().inSelection(selection).from(o1);
 
@@ -183,10 +182,10 @@ public class PropertyTest {
     ElementsSelector selector = Properties.properties().readable().nonWritable();
     props = selector.in(TestObject.class);
     assertElements(props, "name", "price", "readable", "otherFieldProp", "class");
-    assertNotNull(Properties.property("name").thatMatches(selector.toPredicate()).nonWritable().in(TestObject.class));
-    assertNotNull(Properties.property("name").thatMatches(selector.toPredicate()).annotatedWith(Flag.class).in(
+    assertNotNull(Properties.property("name").that(selector.toPredicate()).nonWritable().in(TestObject.class));
+    assertNotNull(Properties.property("name").that(selector.toPredicate()).annotatedWith(Flag.class).in(
         TestObject.class));
-    assertNull(Properties.property("name").thatMatches(selector.toPredicate()).notAnnotatedWith(Flag.class).in(
+    assertNull(Properties.property("name").that(selector.toPredicate()).notAnnotatedWith(Flag.class).in(
         TestObject.class));
 
     props = Properties.properties().writable().in(TestObject.class);

@@ -43,7 +43,7 @@ public interface ConstructorSelector extends AnnotatedElementSelector, Predicate
   
   ConstructorSelector notAnnotatedWith(Class<? extends Annotation> type);
   
-  ConstructorSelector thatMatches(Predicate<? super Constructor<?>> predicate);
+  ConstructorSelector that(Predicate<? super Constructor<?>> predicate);
   
   /**
    * Selects the constructor that takes the specified parameter types.

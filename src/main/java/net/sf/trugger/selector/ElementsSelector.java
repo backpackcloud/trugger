@@ -43,7 +43,7 @@ public interface ElementsSelector extends ElementSpecifier, Result<Set<Element>,
   
   ElementsSelector assignableTo(Class<?> type);
   
-  ElementsSelector thatMatches(Predicate<? super Element> predicate);
+  ElementsSelector that(Predicate<? super Element> predicate);
   
   ElementsSelector readable();
   

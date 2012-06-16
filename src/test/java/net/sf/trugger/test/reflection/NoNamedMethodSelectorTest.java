@@ -219,7 +219,7 @@ public class NoNamedMethodSelectorTest {
         return reflect().method();
       }
       public void makeSelections(MethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, SimpleObject.class);
     assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
@@ -227,7 +227,7 @@ public class NoNamedMethodSelectorTest {
         return reflect().method();
       }
       public void makeSelections(MethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, SimpleObject.class);
   }

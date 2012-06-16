@@ -50,7 +50,7 @@ public class AbstractClassSelector implements ClassSpecifier {
     return this;
   }
 
-  public ClassSpecifier thatMatches(Predicate<? super Class> predicate) {
+  public ClassSpecifier that(Predicate<? super Class> predicate) {
     this.builder.add(predicate);
     return this;
   }

@@ -40,7 +40,7 @@ public interface GetterMethodSelector extends AnnotatedElementSelector, Predicat
 
   GetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type);
 
-  GetterMethodSelector thatMatches(Predicate<? super Method> predicate);
+  GetterMethodSelector that(Predicate<? super Method> predicate);
   
   /**
    * Note: this selection does not affect the predicate returned by

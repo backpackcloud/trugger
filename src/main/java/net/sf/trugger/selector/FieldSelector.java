@@ -45,7 +45,7 @@ public interface FieldSelector extends Result<Field, Object>, FieldSpecifier {
   
   FieldSelector nonFinal();
   
-  FieldSelector thatMatches(Predicate<? super Field> predicate);
+  FieldSelector that(Predicate<? super Field> predicate);
   
   /**
    * Note: this selection does not affect the predicate returned by

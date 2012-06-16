@@ -40,7 +40,7 @@ public class TruggerNoNamedElementSelector extends TruggerElementSelector {
   @Override
   public Element in(Object target) {
     Set<Element> elements = finder().findAll().in(target);
-    return selectFrom(elements).elementMatching(builder().predicate());
+    return selectFrom(elements).element(builder().predicate());
   }
 
 }

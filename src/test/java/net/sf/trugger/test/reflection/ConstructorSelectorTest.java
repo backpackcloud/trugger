@@ -128,8 +128,8 @@ public class ConstructorSelectorTest {
 
   @Test
   public void testPredicateSelector() {
-    assertNotNull(reflect().constructor().thatMatches(Predicates.ALWAYS_TRUE).withoutParameters().in(Object.class));
-    assertNull(reflect().constructor().thatMatches(Predicates.ALWAYS_FALSE).withoutParameters().in(Object.class));
+    assertNotNull(reflect().constructor().that(Predicates.ALWAYS_TRUE).withoutParameters().in(Object.class));
+    assertNull(reflect().constructor().that(Predicates.ALWAYS_FALSE).withoutParameters().in(Object.class));
   }
 
   static class AccessSelectorTest {

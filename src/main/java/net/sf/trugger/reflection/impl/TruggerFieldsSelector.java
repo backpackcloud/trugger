@@ -70,7 +70,7 @@ public class TruggerFieldsSelector implements FieldsSelector {
     return this;
   }
   
-  public FieldsSelector thatMatches(Predicate<? super Field> predicate) {
+  public FieldsSelector that(Predicate<? super Field> predicate) {
     selector.builder().add(predicate);
     return this;
   }

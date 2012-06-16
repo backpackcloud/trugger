@@ -40,7 +40,7 @@ public interface MemberSelector<T extends Member> extends PredicateSelector<T>, 
 
   MemberSelector<T> notAnnotatedWith(Class<? extends Annotation> type);
 
-  MemberSelector<T> thatMatches(Predicate<? super T> predicate);
+  MemberSelector<T> that(Predicate<? super T> predicate);
 
   MemberSelector<T> withAccess(Access access);
 

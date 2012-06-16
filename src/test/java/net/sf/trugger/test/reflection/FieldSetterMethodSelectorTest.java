@@ -198,7 +198,7 @@ public class FieldSetterMethodSelectorTest {
         return reflect().setterFor(fieldSize);
       }
       public void makeSelections(FieldSetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldSetterMethodSelector, Method>() {
@@ -206,7 +206,7 @@ public class FieldSetterMethodSelectorTest {
         return reflect().setterFor(fieldCount);
       }
       public void makeSelections(FieldSetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, this);
   }

@@ -81,13 +81,13 @@ final class TruggerBridgeMethodResolver {
     }
     // Gather all methods with matching name and parameter size.
     Set<Method> candidateMethods = methods().recursively()
-      .thatMatches(new SimpleBridgeCandidatePredicate())
+      .that(new SimpleBridgeCandidatePredicate())
     .in(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + '\'');
     } else if (candidateMethods.size() > 1) {
-      Iteration.retainFrom(candidateMethods).elementsMatching(new BridgeCandidatePredicate());
+      Iteration.retainFrom(candidateMethods).elements(new BridgeCandidatePredicate());
     }
     return candidateMethods.iterator().next();
   }

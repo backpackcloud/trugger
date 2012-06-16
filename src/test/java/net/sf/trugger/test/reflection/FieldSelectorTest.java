@@ -239,7 +239,7 @@ public class FieldSelectorTest {
         return reflect().field("i");
       }
       public void makeSelections(FieldSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, BaseClassTest.class);
     assertNoResult(new SelectionTestAdapter<FieldSelector, Field>() {
@@ -247,7 +247,7 @@ public class FieldSelectorTest {
         return reflect().field("i");
       }
       public void makeSelections(FieldSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, BaseClassTest.class);
   }

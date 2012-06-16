@@ -82,8 +82,8 @@ public class TruggerClassSelector extends AbstractClassSelector implements Class
     return this;
   }
 
-  public ClassSelector thatMatches(Predicate<? super Class> predicate) {
-    super.thatMatches(predicate);
+  public ClassSelector that(Predicate<? super Class> predicate) {
+    super.that(predicate);
     return this;
   }
 
@@ -112,7 +112,7 @@ public class TruggerClassSelector extends AbstractClassSelector implements Class
       throw new ClassScanningException(e);
     }
     try {
-      return Iteration.selectFrom(classes).elementMatching(builder.predicate());
+      return Iteration.selectFrom(classes).element(builder.predicate());
     } catch (SearchException e) {
       throw new ClassScanningException(e);
     }

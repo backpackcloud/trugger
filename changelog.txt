@@ -1,3 +1,9 @@
+Version 3.1
+- Major Changes
+  - Changed method PredicateSelector#thatMatches to "that"
+  - Transformers to all wrapper classes
+  - Simplified methods like "elementsMatching" and "allElements" in iteration module.
+
 Version 3.0
 - Major Changes
   - Removed cglib and commons collections dependency

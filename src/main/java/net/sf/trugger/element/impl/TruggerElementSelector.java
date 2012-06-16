@@ -83,7 +83,7 @@ public class TruggerElementSelector implements ElementSelector {
     return this;
   }
 
-  public ElementSelector thatMatches(final Predicate<? super Element> predicate) {
+  public ElementSelector that(final Predicate<? super Element> predicate) {
     builder.add(predicate);
     return this;
   }

@@ -61,12 +61,12 @@ public abstract class TruggerTransformingIteration<E> implements TransformingIte
    */
   protected abstract <From> SrcToDestIteration<From> create(Collection to, Transformer<E, From> transformer);
 
-  public IterationSourceSelector<E> elementsMatching(Predicate<? super E> predicate) {
-    return create(to).elementsMatching(predicate);
+  public IterationSourceSelector<E> elements(Predicate<? super E> predicate) {
+    return create(to).elements(predicate);
   }
 
-  public IterationSourceSelector<E> allElements() {
-    return create(to).allElements();
+  public IterationSourceSelector<E> all() {
+    return create(to).all();
   }
 
   public <From> SrcToDestIteration<From> transformingWith(Transformer<E, From> transformer) {

@@ -37,7 +37,7 @@ public interface MethodsSelector extends MethodSpecifier, Result<Set<Method>, Ob
   
   MethodsSelector nonFinal();
   
-  MethodsSelector thatMatches(Predicate<? super Method> predicate);
+  MethodsSelector that(Predicate<? super Method> predicate);
   
   MethodsSelector annotated();
   

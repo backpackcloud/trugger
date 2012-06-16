@@ -85,6 +85,6 @@ public interface ElementSpecifier extends Predicable<Element>, AnnotatedElementS
   
   ElementSpecifier assignableTo(Class<?> type);
 
-  ElementSpecifier thatMatches(Predicate<? super Element> predicate);
+  ElementSpecifier that(Predicate<? super Element> predicate);
 
 }

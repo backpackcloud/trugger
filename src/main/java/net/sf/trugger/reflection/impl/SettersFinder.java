@@ -39,7 +39,7 @@ public class SettersFinder implements MembersFinder<Method> {
 
   public Method[] find(Class<?> type) {
     List<Method> methods = new ArrayList<Method>(Arrays.asList(type.getDeclaredMethods()));
-    Iteration.retainFrom(methods).elementsMatching(ReflectionPredicates.setterFor(name));
+    Iteration.retainFrom(methods).elements(ReflectionPredicates.setterFor(name));
     return methods.toArray(new Method[methods.size()]);
   }
 }

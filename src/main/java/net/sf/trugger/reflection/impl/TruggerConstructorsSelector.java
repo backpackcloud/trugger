@@ -61,7 +61,7 @@ public class TruggerConstructorsSelector implements ConstructorsSelector {
     return this;
   }
   
-  public ConstructorsSelector thatMatches(Predicate<? super Constructor<?>> predicate) {
+  public ConstructorsSelector that(Predicate<? super Constructor<?>> predicate) {
     selector.builder().add(predicate);
     return this;
   }

@@ -180,7 +180,7 @@ public class FieldGetterMethodSelectorTest {
         return reflect().getterFor(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
@@ -188,7 +188,7 @@ public class FieldGetterMethodSelectorTest {
         return reflect().getterFor(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, this);
   }

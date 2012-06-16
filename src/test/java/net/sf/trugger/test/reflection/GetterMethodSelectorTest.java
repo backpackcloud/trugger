@@ -176,7 +176,7 @@ public class GetterMethodSelectorTest {
         return reflect().getterFor("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_TRUE);
+        selector.that(Predicates.ALWAYS_TRUE);
       }
       public void assertions(Method method) {
         assertFalse(method.isAnnotationPresent(Flag.class));
@@ -188,7 +188,7 @@ public class GetterMethodSelectorTest {
         return reflect().getterFor("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
-        selector.thatMatches(Predicates.ALWAYS_FALSE);
+        selector.that(Predicates.ALWAYS_FALSE);
       }
     }, this);
   }

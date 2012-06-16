@@ -16,9 +16,6 @@
  */
 package net.sf.trugger.element;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import net.sf.trugger.Finder;
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.ValueHandler;
@@ -26,6 +23,9 @@ import net.sf.trugger.loader.ImplementationLoader;
 import net.sf.trugger.registry.Registry;
 import net.sf.trugger.selector.ElementSelector;
 import net.sf.trugger.selector.ElementsSelector;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * A class for helping {@link Element} selection.

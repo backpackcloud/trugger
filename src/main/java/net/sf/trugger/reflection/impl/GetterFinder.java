@@ -37,7 +37,7 @@ public class GetterFinder implements MemberFinder<Method> {
 
   public Method find(Class<?> type) throws Exception {
     Set<Method> methods = new HashSet<Method>(Arrays.asList(type.getDeclaredMethods()));
-    Iteration.retainFrom(methods).elementsMatching(ReflectionPredicates.getterFor(name));
+    Iteration.retainFrom(methods).elements(ReflectionPredicates.getterFor(name));
     if (!methods.isEmpty()) {
       return methods.iterator().next();
     }

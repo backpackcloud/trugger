@@ -33,4 +33,5 @@ public interface Predicate<T> {
    * @return a flag based on the given object.
    */
   public boolean evaluate(T element);
+
 }

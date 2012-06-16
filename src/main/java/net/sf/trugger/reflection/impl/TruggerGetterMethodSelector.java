@@ -60,7 +60,7 @@ public class TruggerGetterMethodSelector implements GetterMethodSelector {
     return this;
   }
   
-  public GetterMethodSelector thatMatches(Predicate<? super Method> predicate) {
+  public GetterMethodSelector that(Predicate<? super Method> predicate) {
     builder.add(predicate);
     return this;
   }

@@ -39,6 +39,6 @@ public interface FieldGetterMethodSelector extends AnnotatedElementSelector, Pre
   
   FieldGetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type);
   
-  FieldGetterMethodSelector thatMatches(Predicate<? super Method> predicate);
+  FieldGetterMethodSelector that(Predicate<? super Method> predicate);
   
 }

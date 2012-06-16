@@ -33,7 +33,7 @@ import net.sf.trugger.predicate.Predicate;
 public interface SetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
     Result<Set<Method>, Object>, RecursionSelector, Predicable<Method> {
 
-  SetterMethodSelector thatMatches(Predicate<? super Method> predicate);
+  SetterMethodSelector that(Predicate<? super Method> predicate);
 
   SetterMethodSelector annotated();
   

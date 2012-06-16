@@ -16,9 +16,9 @@
  */
 package net.sf.trugger.iteration;
 
-import java.util.List;
-
 import net.sf.trugger.predicate.Predicate;
+
+import java.util.List;
 
 /**
  * Interface that defines a search operation for a Collection.
@@ -41,7 +41,7 @@ public interface IterationSearchOperation<E> {
    * @throws SearchException
    *           if more than one element is found.
    */
-  E elementMatching(Predicate<? super E> predicate) throws SearchException;
+  E element(Predicate<? super E> predicate) throws SearchException;
 
   /**
    * Selects the first element that matches with the given predicate.
@@ -50,7 +50,7 @@ public interface IterationSearchOperation<E> {
    *          the predicate to match.
    * @return the element found.
    */
-  E firstElementMatching(Predicate<? super E> predicate);
+  E first(Predicate<? super E> predicate);
 
   /**
    * Selects a list of elements that matches with the given predicate.
@@ -59,6 +59,6 @@ public interface IterationSearchOperation<E> {
    *          the predicate to match.
    * @return a list with the elements found.
    */
-  List<E> elementsMatching(Predicate<? super E> predicate);
+  List<E> elements(Predicate<? super E> predicate);
 
 }

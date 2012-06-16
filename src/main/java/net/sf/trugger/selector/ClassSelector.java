@@ -32,7 +32,7 @@ public interface ClassSelector extends ClassSpecifier, ClassScanResult<Class> {
 
   ClassSelector withAccess(Access access);
 
-  ClassSelector thatMatches(Predicate<? super Class> predicate);
+  ClassSelector that(Predicate<? super Class> predicate);
 
   ClassSelector annotatedWith(Class<? extends Annotation> type);
 

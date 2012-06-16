@@ -45,7 +45,7 @@ public interface MethodSpecifier extends MemberSelector<Method>, Predicable<Meth
   
   MethodSpecifier recursively();
   
-  MethodSpecifier thatMatches(Predicate<? super Method> predicate);
+  MethodSpecifier that(Predicate<? super Method> predicate);
   
   MethodSpecifier withAccess(Access access);
  

@@ -142,7 +142,7 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
     if (defined.isEmpty()) {
       methods = methods()
         .withoutParameters()
-        .thatMatches(withDefaultValue())
+        .that(withDefaultValue())
         .in(annotationType);
     } else {
       String[] names = defined.toArray(new String[defined.size()]);
@@ -154,7 +154,7 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
       CompositePredicate<Member> unused = predicate.negate();
       methods = methods()
         .withoutParameters()
-        .thatMatches(
+        .that(
           withDefaultValue()
             .and(unused))
         .in(annotationType);

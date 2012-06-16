@@ -17,6 +17,19 @@
 
 package net.sf.trugger.test.iteration;
 
+import net.sf.trugger.iteration.Iteration;
+import net.sf.trugger.iteration.SearchException;
+import net.sf.trugger.predicate.CompositePredicate;
+import net.sf.trugger.predicate.Predicate;
+import net.sf.trugger.predicate.Predicates;
+import net.sf.trugger.transformer.Transformer;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static junit.framework.Assert.assertNotNull;
 import static net.sf.trugger.iteration.Iteration.copyTo;
 import static net.sf.trugger.iteration.Iteration.countIn;
@@ -26,20 +39,6 @@ import static net.sf.trugger.iteration.Iteration.retainFrom;
 import static net.sf.trugger.iteration.Iteration.selectFrom;
 import static net.sf.trugger.test.TruggerTest.assertMatch;
 import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import net.sf.trugger.iteration.Iteration;
-import net.sf.trugger.iteration.SearchException;
-import net.sf.trugger.predicate.CompositePredicate;
-import net.sf.trugger.predicate.Predicate;
-import net.sf.trugger.predicate.Predicates;
-import net.sf.trugger.transformer.Transformer;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * A class for testing the {@link Iteration} class.
@@ -79,8 +78,8 @@ public class IterationTest {
 
   @Test
   public void retainTest() {
-    int count = countIn(numbers).elementsMatching(even);
-    int result = retainFrom(numbers).elementsMatching(even);
+    int count = countIn(numbers).elements(even);
+    int result = retainFrom(numbers).elements(even);
     assertEquals(initialNumbersHalfSize, count);
     assertEquals(count, result);
     assertEquals(initialNumbersHalfSize, numbers.size());
@@ -89,8 +88,8 @@ public class IterationTest {
 
   @Test
   public void removeTest() {
-    int count = countIn(numbers).elementsMatching(even);
-    int result = removeFrom(numbers).elementsMatching(even);
+    int count = countIn(numbers).elements(even);
+    int result = removeFrom(numbers).elements(even);
     assertEquals(initialNumbersHalfSize, count);
     assertEquals(count, result);
     assertEquals(initialNumbersHalfSize, numbers.size());
@@ -100,7 +99,7 @@ public class IterationTest {
   @Test
   public void predicateCopyTest() {
     Collection<Integer> evenNumbers = new ArrayList<Integer>();
-    int result = copyTo(evenNumbers).elementsMatching(even).from(numbers);
+    int result = copyTo(evenNumbers).elements(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, evenNumbers.size());
     assertMatch(evenNumbers, even);
@@ -111,7 +110,7 @@ public class IterationTest {
   @Test
   public void predicateMoveTest() {
     Collection<Integer> evenNumbers = new ArrayList<Integer>();
-    int result = moveTo(evenNumbers).elementsMatching(even).from(numbers);
+    int result = moveTo(evenNumbers).elements(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, evenNumbers.size());
     assertMatch(evenNumbers, even);
@@ -123,7 +122,7 @@ public class IterationTest {
   @Test
   public void copyTest() {
     Collection<Integer> integers = new ArrayList<Integer>();
-    int result = copyTo(integers).allElements().from(numbers);
+    int result = copyTo(integers).all().from(numbers);
     assertEquals(initialNumbersSize, result);
     assertEquals(initialNumbersSize, integers.size());
     assertEquals(initialNumbersSize, numbers.size());
@@ -132,7 +131,7 @@ public class IterationTest {
   @Test
   public void moveTest() {
     Collection<Integer> integers = new ArrayList<Integer>();
-    int result = moveTo(integers).allElements().from(numbers);
+    int result = moveTo(integers).all().from(numbers);
     assertEquals(initialNumbersSize, result);
     assertEquals(initialNumbersSize, integers.size());
     assertEquals(0, numbers.size());
@@ -141,7 +140,7 @@ public class IterationTest {
   @Test
   public void transformCopyTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = copyTo(strings).transformingWith(transformer).allElements().from(numbers);
+    int result = copyTo(strings).transformingWith(transformer).all().from(numbers);
     assertEquals(initialNumbersSize, result);
     assertEquals(initialNumbersSize, strings.size());
     assertEquals(initialNumbersSize, numbers.size());
@@ -150,7 +149,7 @@ public class IterationTest {
   @Test
   public void predicateTransformCopyTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = copyTo(strings).transformingWith(transformer).elementsMatching(even).from(numbers);
+    int result = copyTo(strings).transformingWith(transformer).elements(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, strings.size());
     assertEquals(initialNumbersSize, numbers.size());
@@ -159,7 +158,7 @@ public class IterationTest {
   @Test
   public void transformMoveTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = moveTo(strings).transformingWith(transformer).allElements().from(numbers);
+    int result = moveTo(strings).transformingWith(transformer).all().from(numbers);
     assertEquals(initialNumbersSize, result);
     assertEquals(initialNumbersSize, strings.size());
     assertEquals(0, numbers.size());
@@ -168,7 +167,7 @@ public class IterationTest {
   @Test
   public void predicateTransformMoveTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = moveTo(strings).transformingWith(transformer).elementsMatching(even).from(numbers);
+    int result = moveTo(strings).transformingWith(transformer).elements(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, strings.size());
     assertEquals(initialNumbersHalfSize, numbers.size());
@@ -176,7 +175,7 @@ public class IterationTest {
 
   @Test
   public void singleElementSearchTest() {
-    Integer one = selectFrom(numbers).elementMatching(new Predicate<Integer>() {
+    Integer one = selectFrom(numbers).element(new Predicate<Integer>() {
       public boolean evaluate(Integer element) {
         return element.equals(1);
       }
@@ -186,17 +185,17 @@ public class IterationTest {
 
   @Test(expected = SearchException.class)
   public void singleElementFailSearchTest() {
-    selectFrom(numbers).elementMatching(even);
+    selectFrom(numbers).element(even);
   }
 
   @Test
   public void firstElementSearchTest() {
-    assertEquals(Integer.valueOf(0), selectFrom(numbers).firstElementMatching(even));
+    assertEquals(Integer.valueOf(0), selectFrom(numbers).first(even));
   }
 
   @Test
   public void multipleElementSearchTest() {
-    List<Integer> result = selectFrom(numbers).elementsMatching(odd);
+    List<Integer> result = selectFrom(numbers).elements(odd);
     assertEquals(initialNumbersHalfSize, result.size());
     assertMatch(result, odd);
   }

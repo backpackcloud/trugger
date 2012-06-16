@@ -154,32 +154,32 @@ public class TruggerReflector implements Reflector {
 
   @Override
   public FieldSelector staticField() {
-    return field().thatMatches(STATIC);
+    return field().that(STATIC);
   }
 
   @Override
   public FieldSelector staticField(String name) {
-    return field(name).thatMatches(STATIC);
+    return field(name).that(STATIC);
   }
 
   @Override
   public FieldsSelector staticFields() {
-    return fields().thatMatches(STATIC);
+    return fields().that(STATIC);
   }
 
   @Override
   public MethodSelector staticMethod() {
-    return method().thatMatches(STATIC);
+    return method().that(STATIC);
   }
 
   @Override
   public MethodSelector staticMethod(String name) {
-    return method(name).thatMatches(STATIC);
+    return method(name).that(STATIC);
   }
 
   @Override
   public MethodsSelector staticMethods() {
-    return methods().thatMatches(STATIC);
+    return methods().that(STATIC);
   }
 
 }

@@ -37,7 +37,7 @@ public interface FieldsSelector extends Result<Set<Field>, Object>, FieldSpecifi
   
   FieldsSelector withAccess(Access access);
   
-  FieldsSelector thatMatches(Predicate<? super Field> predicate);
+  FieldsSelector that(Predicate<? super Field> predicate);
   
   FieldsSelector annotatedWith(Class<? extends Annotation> type);
 

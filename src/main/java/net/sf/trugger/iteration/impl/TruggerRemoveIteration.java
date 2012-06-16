@@ -32,7 +32,7 @@ public final class TruggerRemoveIteration<E> implements SrcIteration<E> {
     this.iterator = iterator;
   }
 
-  public int elementsMatching(Predicate<? super E> predicate) {
+  public int elements(Predicate<? super E> predicate) {
     int result = 0;
     while (iterator.hasNext()) {
       E e = iterator.next();

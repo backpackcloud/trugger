@@ -59,7 +59,7 @@ public class TruggerSetterMethodSelector implements SetterMethodSelector {
     return this;
   }
 
-  public SetterMethodSelector thatMatches(Predicate<? super Method> predicate) {
+  public SetterMethodSelector that(Predicate<? super Method> predicate) {
     selector.builder().add(predicate);
     return this;
   }

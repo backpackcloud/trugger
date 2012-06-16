@@ -35,7 +35,7 @@ public interface ConstructorsSelector extends AnnotatedElementSelector, Predicat
   
   ConstructorsSelector withAccess(Access access);
   
-  ConstructorsSelector thatMatches(Predicate<? super Constructor<?>> predicate);
+  ConstructorsSelector that(Predicate<? super Constructor<?>> predicate);
   
   ConstructorsSelector annotated();
   
