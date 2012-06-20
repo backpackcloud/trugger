@@ -49,7 +49,7 @@ import java.util.Set;
 
 /**
  * An utility class for help the use of Reflection.
- * <p>
+ * <p/>
  * This class also uses a {@link ReflectionFactory} for some operations.
  *
  * @author Marcelo Varella Barca Guimarães
@@ -60,7 +60,8 @@ public final class Reflection {
 
   private static final Map<Class<?>, Class<?>> wrappers;
 
-  private Reflection() {}
+  private Reflection() {
+  }
 
   static {
     factory = ImplementationLoader.getInstance().get(ReflectionFactory.class);
@@ -77,8 +78,7 @@ public final class Reflection {
   }
 
   /**
-   * Returns the wrapper class for the given {@link Class#isPrimitive()
-   * primitive class}.
+   * Returns the wrapper class for the given {@link Class#isPrimitive() primitive class}.
    *
    * @return the wrapper class for the given primitive class.
    */
@@ -87,43 +87,42 @@ public final class Reflection {
   }
 
   /**
-   * @return <code>true</code> if the specified member has the
-   *         <code>public</code> modifier
+   * @return <code>true</code> if the specified member has the <code>public</code>
+   *         modifier
    */
   public static boolean isPublic(Member member) {
     return Modifier.isPublic(member.getModifiers());
   }
 
   /**
-   * @return <code>true</code> if the specified member has the
-   *         <code>private</code> modifier
+   * @return <code>true</code> if the specified member has the <code>private</code>
+   *         modifier
    */
   public static boolean isPrivate(Member member) {
     return Modifier.isPrivate(member.getModifiers());
   }
 
   /**
-   * @return <code>true</code> if the specified member has the
-   *         <code>final</code> modifier
+   * @return <code>true</code> if the specified member has the <code>final</code>
+   *         modifier
    */
   public static boolean isFinal(Member member) {
     return Modifier.isFinal(member.getModifiers());
   }
 
   /**
-   * @return <code>true</code> if the specified member has the
-   *         <code>static</code> modifier
+   * @return <code>true</code> if the specified member has the <code>static</code>
+   *         modifier
    */
   public static boolean isStatic(Member member) {
     return Modifier.isStatic(member.getModifiers());
   }
 
   /**
-   * Sets the accessible flag of the given objects to <code>true</code> using a
-   * {@link PrivilegedAction}.
+   * Sets the accessible flag of the given objects to <code>true</code> using a {@link
+   * PrivilegedAction}.
    *
-   * @param objs
-   *          the objects for making accessible.
+   * @param objs the objects for making accessible.
    */
   public static void setAccessible(final AccessibleObject... objs) {
     AccessController.doPrivileged(new PrivilegedAction<Void>() {
@@ -136,8 +135,7 @@ public final class Reflection {
   }
 
   /**
-   * Uses the {@link ReflectionFactory} for creating a {@link Reflector}
-   * instance.
+   * Uses the {@link ReflectionFactory} for creating a {@link Reflector} instance.
    *
    * @return a component for reflecting objects in a target.
    */
@@ -146,11 +144,10 @@ public final class Reflection {
   }
 
   /**
-   * Uses the {@link ReflectionFactory} for creating a {@link MethodInvoker}
-   * instance.
+   * Uses the {@link ReflectionFactory} for creating a {@link MethodInvoker} instance.
    *
-   * @param method
-   *          a method to invoke.
+   * @param method a method to invoke.
+   *
    * @return a component for invoking the given method.
    */
   public static MethodInvoker invoke(Method method) {
@@ -176,11 +173,11 @@ public final class Reflection {
   }
 
   /**
-   * Uses the {@link ReflectionFactory} for creating a
-   * {@link ConstructorInvoker} instance.
+   * Uses the {@link ReflectionFactory} for creating a {@link ConstructorInvoker}
+   * instance.
    *
-   * @param constructor
-   *          the constructor to invoke.
+   * @param constructor the constructor to invoke.
+   *
    * @return a component for invoking the given constructor.
    */
   public static ConstructorInvoker invoke(Constructor<?> constructor) {
@@ -188,11 +185,10 @@ public final class Reflection {
   }
 
   /**
-   * Uses the {@link ReflectionFactory} for creating a {@link FieldHandler}
-   * instance.
+   * Uses the {@link ReflectionFactory} for creating a {@link FieldHandler} instance.
    *
-   * @param field
-   *          the field to handle.
+   * @param field the field to handle.
+   *
    * @return a component for handling the given field.
    */
   public static FieldHandler handle(Field field) {
@@ -229,8 +225,8 @@ public final class Reflection {
   /**
    * Handles the field selected by the given selector.
    *
-   * @param selector
-   *          the selector for getting the field.
+   * @param selector the selector for getting the field.
+   *
    * @return the handler.
    *
    * @since 2.8
@@ -243,18 +239,13 @@ public final class Reflection {
       @Override
       public <E> E value() throws HandlingException {
         Field field = selector.in(target);
-        if(field != null) {
-          return handle(field).in(target).value();
-        }
-        return null;
+        return handle(field).in(target).value();
       }
 
       @Override
       public void value(Object value) throws HandlingException {
         Field field = selector.in(target);
-        if(field != null) {
-          handle(field).in(target).value(value);
-        }
+        handle(field).in(target).value(value);
       }
 
       @Override
@@ -268,8 +259,8 @@ public final class Reflection {
   /**
    * Handles the field selected by the given selector.
    *
-   * @param selector
-   *          the selector for getting the field.
+   * @param selector the selector for getting the field.
+   *
    * @return the handler.
    *
    * @since 2.8
@@ -281,12 +272,14 @@ public final class Reflection {
 
       @Override
       public <E> E value() throws HandlingException {
-        return handle(selector.in(target)).in(target).value();
+        Set<Field> fields = selector.in(target);
+        return handle(fields).in(target).value();
       }
 
       @Override
       public void value(Object value) throws HandlingException {
-        handle(selector.in(target)).in(target).value(value);
+        Set<Field> fields = selector.in(target);
+        handle(fields).in(target).value(value);
       }
 
       @Override
@@ -299,15 +292,15 @@ public final class Reflection {
 
   /**
    * Handles a collection of fields.
-   * <p>
-   * Is extremely important that <strong>all</strong> fields have the same type,
-   * but the access way (static or non-static) does not matter.
-   * <p>
-   * For getting the values, the return type will be a {@link Collection} of
-   * {@link Object objects} containing the values based on the iteration order.
+   * <p/>
+   * Is extremely important that <strong>all</strong> fields have the same type, but the
+   * access way (static or non-static) does not matter.
+   * <p/>
+   * For getting the values, the return type will be a {@link Collection} of {@link Object
+   * objects} containing the values based on the iteration order.
    *
-   * @param fields
-   *          the fields for handling.
+   * @param fields the fields for handling.
+   *
    * @return a component for handling the fields.
    */
   public static FieldHandler handle(final Collection<Field> fields) {
@@ -373,15 +366,15 @@ public final class Reflection {
 
   /**
    * Invokes the method selected by the given selector.
-   * 
-   * @param selector
-   *          the selector for getting the method.
+   *
+   * @param selector the selector for getting the method.
+   *
    * @return the invoker
    *
    * @since 2.8
    */
   public static Result<Invoker, Object> invoke(final MethodSelector selector) {
-    return new MethodInvoker(){
+    return new MethodInvoker() {
 
       private Object target;
 
@@ -394,10 +387,7 @@ public final class Reflection {
       @Override
       public <E> E withArgs(Object... args) {
         Method method = selector.in(target);
-        if(method != null) {
-          return invoke(method).in(target).withArgs(args);
-        }
-        return null;
+        return invoke(method).in(target).withArgs(args);
       }
 
       @Override
@@ -411,14 +401,14 @@ public final class Reflection {
   /**
    * Invokes the methods selected by the given selector.
    *
-   * @param selector
-   *          the selector for getting the methods.
+   * @param selector the selector for getting the methods.
+   *
    * @return the invoker
    *
    * @since 2.8
    */
   public static Result<Invoker, Object> invoke(final MethodsSelector selector) {
-    return new MethodInvoker(){
+    return new MethodInvoker() {
 
       private Object target;
 
@@ -430,7 +420,8 @@ public final class Reflection {
 
       @Override
       public <E> E withArgs(Object... args) {
-        return invoke(selector.in(target)).in(target).withArgs(args);
+        Set<Method> methods = selector.in(target);
+        return invoke(methods).in(target).withArgs(args);
       }
 
       @Override
@@ -442,14 +433,14 @@ public final class Reflection {
   }
 
   /**
-   * Invokes a collection of methods that have the same parameters. The access
-   * way (static or non-static) does not matter.
-   * <p>
-   * The return type will be a {@link Collection} of {@link Object objects}
-   * containing the values based on the iteration order.
+   * Invokes a collection of methods that have the same parameters. The access way (static
+   * or non-static) does not matter.
+   * <p/>
+   * The return type will be a {@link Collection} of {@link Object objects} containing the
+   * values based on the iteration order.
    *
-   * @param methods
-   *          the methods to invoke.
+   * @param methods the methods to invoke.
+   *
    * @return a component for invoking the methods.
    */
   public static MethodInvoker invoke(final Collection<Method> methods) {
@@ -481,14 +472,14 @@ public final class Reflection {
   }
 
   /**
-   * Creates a new instance of the given type by locating the proper constructor
-   * based on the given arguments.
+   * Creates a new instance of the given type by locating the proper constructor based on
+   * the given arguments.
    *
-   * @param type
-   *          the instance type
-   * @param constructorArguments
-   *          the arguments to call the constructor.
+   * @param type                 the instance type
+   * @param constructorArguments the arguments to call the constructor.
+   *
    * @return a new instance of the give type
+   *
    * @since 2.5
    */
   public static <E> E newInstanceOf(final Class<E> type, final Object... constructorArguments) {
@@ -498,9 +489,9 @@ public final class Reflection {
         return (E) invoke(constructor).withoutArgs();
       }
       final Class<?>[] parameters = new Class[constructorArguments.length];
-      for (int i = 0 ; i < constructorArguments.length ; i++) {
+      for (int i = 0; i < constructorArguments.length; i++) {
         Object parameter = constructorArguments[i];
-        if(parameter != null) {
+        if (parameter != null) {
           parameters[i] = parameter.getClass();
         }
       }
@@ -513,10 +504,10 @@ public final class Reflection {
 
         public boolean evaluate(Constructor<?> constructor) {
           Class<?>[] parameterTypes = constructor.getParameterTypes();
-          if(parameterTypes.length != parameters.length) {
+          if (parameterTypes.length != parameters.length) {
             return false;
           }
-          for (int i = 0 ; i < parameters.length ; i++) {
+          for (int i = 0; i < parameters.length; i++) {
             Class<?> param = parameters[i];
             if (param != null && !Utils.areAssignable(parameterTypes[i], param)) {
               return false;

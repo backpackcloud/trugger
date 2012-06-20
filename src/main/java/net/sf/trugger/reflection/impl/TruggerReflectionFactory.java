@@ -16,37 +16,39 @@
  */
 package net.sf.trugger.reflection.impl;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import net.sf.trugger.reflection.ConstructorInvoker;
 import net.sf.trugger.reflection.FieldHandler;
 import net.sf.trugger.reflection.MethodInvoker;
 import net.sf.trugger.reflection.ReflectionFactory;
 import net.sf.trugger.reflection.Reflector;
+import net.sf.trugger.util.Null;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * A default factory for {@link Reflector} objects.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public class TruggerReflectionFactory implements ReflectionFactory {
-  
+
   public Reflector createReflector() {
     return new TruggerReflector();
   }
-  
+
   public MethodInvoker createInvoker(Method method) {
-    return new TruggerMethodInvoker(method);
+    return method != null ? new TruggerMethodInvoker(method) : Null.NULL_METHOD_INVOKER;
   }
-  
+
   public ConstructorInvoker createInvoker(Constructor<?> constructor) {
-    return new TruggerConstructorInvoker(constructor);
+    return constructor != null ? new TruggerConstructorInvoker(constructor) :
+      Null.NULL_CONSTRUCTOR_INVOKER;
   }
-  
+
   public FieldHandler createHandler(Field field) {
-    return new TruggerFieldHandler(field);
+    return field != null ? new TruggerFieldHandler(field) : Null.NULL_FIELD_HANDLER;
   }
-  
+
 }

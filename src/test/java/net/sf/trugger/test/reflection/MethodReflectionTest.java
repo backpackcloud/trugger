@@ -39,7 +39,9 @@ public class MethodReflectionTest {
 
   static interface TestInterface {
     void doIt();
+
     void foo();
+
     void bar();
   }
 
