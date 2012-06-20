@@ -27,6 +27,7 @@ import net.sf.trugger.selector.PredicateSelector;
 import net.sf.trugger.test.bind.BinderTestSuite;
 import net.sf.trugger.test.date.DateTestSuite;
 import net.sf.trugger.test.element.ElementTestSuite;
+import net.sf.trugger.test.exception.ExceptionHandlingTest;
 import net.sf.trugger.test.factory.FactoryTest;
 import net.sf.trugger.test.general.AcceptedTypesTest;
 import net.sf.trugger.test.general.GeneralTestSuite;
@@ -65,13 +66,13 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * This is the main test of the entire API. It includes all the separated tests
- * and has a common set of methods used by test classes.
+ * This is the main test of the entire API. It includes all the separated tests and has a
+ * common set of methods used by test classes.
  *
  * @author Marcelo Varella Barca Guimarães
  */
 @RunWith(Suite.class)
-@SuiteClasses( {
+@SuiteClasses({
   UtilsTest.class,
   FactoryTest.class,
   MessagesTest.class,
@@ -80,9 +81,10 @@ import static org.junit.Assert.assertTrue;
   RegistryTest.class,
   PredicatesTest.class,
   InterceptorTest.class,
+  TransformerTest.class,
   AcceptedTypesTest.class,
   AnnotationMockTest.class,
-  TransformerTest.class,
+  ExceptionHandlingTest.class,
   ReflectionPredicatesTest.class,
 
   DateTestSuite.class,
@@ -98,10 +100,8 @@ public class TruggerTest {
   /**
    * Tests the collection elements with the given predicate.
    *
-   * @param collection
-   *          the collection to test.
-   * @param predicate
-   *          the predicate to use.
+   * @param collection the collection to test.
+   * @param predicate  the predicate to use.
    */
   public static <E> void assertMatch(Collection<? extends E> collection, Predicate<? super E> predicate) {
     for (E element : collection) {
@@ -118,10 +118,8 @@ public class TruggerTest {
   /**
    * Tests the element with the given predicate.
    *
-   * @param element
-   *          the element to test.
-   * @param predicate
-   *          the predicate to use.
+   * @param element   the element to test.
+   * @param predicate the predicate to use.
    */
   public static <E> void assertMatch(E element, Predicate<? super E> predicate) {
     assertTrue(predicate.evaluate(element));
@@ -131,39 +129,33 @@ public class TruggerTest {
     assertFalse(predicate.evaluate(element));
   }
 
-  /**
-   * Tests a member access. The access must match with the given one.
-   */
+  /** Tests a member access. The access must match with the given one. */
   public static <E> void assertAccess(Member member, Access access) {
     assertTrue(access.memberPredicate().evaluate(member));
   }
 
-  /**
-   * Tests a class access. The access must match with the given one.
-   */
+  /** Tests a class access. The access must match with the given one. */
   public static <E> void assertAccess(Class<?> clazz, Access access) {
     assertTrue(access.classPredicate().evaluate(clazz));
   }
 
   /**
-   * Tests the access of the given member. The access must <strong>not</strong>
-   * match with the given one.
+   * Tests the access of the given member. The access must <strong>not</strong> match with
+   * the given one.
    */
   public static <E> void assertNotAccess(Member member, Access access) {
     assertFalse(access.memberPredicate().evaluate(member));
   }
 
   /**
-   * Tests the access of the given class. The access must <strong>not</strong>
-   * match with the given one.
+   * Tests the access of the given class. The access must <strong>not</strong> match with
+   * the given one.
    */
   public static <E> void assertNotAccess(Class<?> clazz, Access access) {
     assertFalse(access.classPredicate().evaluate(clazz));
   }
 
-  /**
-   * Tests if the given collection has only elements with the given names.
-   */
+  /** Tests if the given collection has only elements with the given names. */
   public static void assertElements(Collection<? extends Element> collection, String... names) {
     Set<String> elNames = new HashSet<String>(collection.size());
     for (Element el : collection) {
@@ -175,9 +167,7 @@ public class TruggerTest {
     }
   }
 
-  /**
-   * Tests if the given command throws any of the specified exceptions.
-   */
+  /** Tests if the given command throws any of the specified exceptions. */
   public static void assertThrow(Runnable command, Class<? extends Throwable>... exceptions) {
     try {
       command.run();
@@ -192,9 +182,7 @@ public class TruggerTest {
     }
   }
 
-  /**
-   * Tests if the given command does not throw any exception.
-   */
+  /** Tests if the given command does not throw any exception. */
   public static void assertNothingThrow(Runnable command) {
     try {
       command.run();
@@ -212,6 +200,7 @@ public class TruggerTest {
   public static class SelectionAccessTest implements SelectionTest {
 
     private final SelectionTest test;
+
     private final Access access;
 
     public SelectionAccessTest(SelectionTest test, Access access) {
@@ -222,14 +211,18 @@ public class TruggerTest {
     public void assertions(Object object) {
       test.assertions(object);
     }
+
     public Object createSelector() {
       return test.createSelector();
     }
+
     public void makeSelections(Object selector) {
       test.makeSelections(selector);
       ((AccessSelector) selector).withAccess(access);
     }
-  };
+  }
+
+  ;
 
   public static void assertAccessSelector(Access access, Object target, SelectionTest<AccessSelector, Object> test) {
     try {
@@ -277,7 +270,7 @@ public class TruggerTest {
   }
 
   public static void assertNoResult(Object result) {
-    if(result instanceof Collection) {
+    if (result instanceof Collection) {
       assertTrue(((Collection) result).isEmpty());
     } else {
       assertNull(result);
@@ -285,7 +278,7 @@ public class TruggerTest {
   }
 
   public static void assertResult(Object result) {
-    if(result instanceof Collection) {
+    if (result instanceof Collection) {
       assertFalse(((Collection) result).isEmpty());
     } else {
       assertNotNull(result);
@@ -297,12 +290,12 @@ public class TruggerTest {
     assertEquals(count, result.size());
   }
 
-  public static <T extends Result, E> void assertResult(SelectionTest<T,E> test, Object target) {
+  public static <T extends Result, E> void assertResult(SelectionTest<T, E> test, Object target) {
     T result = test.createSelector();
     test.makeSelections(result);
     Object obj = result.in(target);
     Predicate<E> predicate = ((Predicable) result).toPredicate();
-    if(obj instanceof Collection) {
+    if (obj instanceof Collection) {
       assertFalse(((Collection) obj).isEmpty());
       assertMatch((Collection<E>) obj, predicate);
     } else {
@@ -317,26 +310,28 @@ public class TruggerTest {
     test.assertions((E) obj2);
   }
 
-  public static <T extends Result, E extends Collection> void assertResult(final SelectionTest<T,E> test, Object target, final int size) {
+  public static <T extends Result, E extends Collection> void assertResult(final SelectionTest<T, E> test, Object target, final int size) {
     assertResult(new SelectionTest<T, E>() {
       public T createSelector() {
         return test.createSelector();
       }
+
       public void makeSelections(T selector) {
         test.makeSelections(selector);
       }
+
       public void assertions(E col) {
         assertEquals(size, col.size());
       }
     }, target);
   }
 
-  public static <T extends Result, E> void assertNoResult(SelectionTest<T,E> test, Object target) {
+  public static <T extends Result, E> void assertNoResult(SelectionTest<T, E> test, Object target) {
     T result = test.createSelector();
     test.makeSelections(result);
     Object obj = result.in(target);
     Predicate<E> predicate = ((Predicable) result).toPredicate();
-    if(obj instanceof Collection) {
+    if (obj instanceof Collection) {
       assertTrue(((Collection) obj).isEmpty());
       assertNotMatch((Collection<E>) obj, predicate);
     } else {

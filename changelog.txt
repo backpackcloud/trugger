@@ -1,3 +1,9 @@
+Version 3.2
+- New Modules
+  - Exception Handling
+- Major Changes
+  - Reflection Invokers and Handlers does not throw a NPE if a null object is passed
+
 Version 3.1
 - Major Changes
   - Changed method PredicateSelector#thatMatches to "that"
@@ -19,7 +25,7 @@ Version 2.8
 - Bug fixes:
   - ElementMockBuilder now supports call for getAnnotation method.
 
-Version 2.7.0
+Version 2.7
 - New Modules:
   - Domain Annotations
 - Major changes:
@@ -34,19 +40,19 @@ Version 2.7.0
 - Bug fixes:
   - Binder can now bind null values.
 
-Version 2.6.0
+Version 2.6
 - Major changes:
   - Validation Binder for using Seam Components inside of a validator.
   - Generic type reflection without specifying the generic parameter name.
   - Additions to PredicateDSL.
   - Renamed the bind(Resolver) method to use(Resolver).
-  - Merged Field elements and Property elements, so, if you want a property behaviour use the Properties class instead
-    of Elements.
+  - Merged Field elements and Property elements, so, if you want a property behaviour use
+    the Properties class instead of Elements.
   - New DSL for transform operations.
 - Bug fixes:
   - Element type check on element copies.
 
-Version 2.5.0
+Version 2.5
 - Major changes:
   - New Element selection without specifying a name.
   - Created a package for holding annotations for general use.
@@ -56,11 +62,11 @@ Version 2.5.0
   - Scan for one single class.
   - New method newInstanceOf in Reflection class.
 
-Version 2.4.0
+Version 2.4
 - New modules:
   - DSL for iterations
-    - Refactoring in Collection module to Iteration module. Now the iterations are made using an iterator rather than
-      a collection.
+    - Refactoring in Collection module to Iteration module. Now the iterations are made using
+      an iterator rather than a collection.
 - Major changes:
   - New ValidatorBinder component for customize binds.
   - Exceptions for validation module.
@@ -75,7 +81,7 @@ Version 2.3.1
 - Major changes:
   - Added a method to remove a registry entry (included in a minor release since its a useful method).
 
-Version 2.3.0
+Version 2.3
 - New modules:
   - DSL for class scan.
 - Major changes:
@@ -95,7 +101,7 @@ Version 2.2.1
 - Minor changes:
   - Maven support.
 
-Version 2.2.0
+Version 2.2
 - Major changes:
   - ValidatorFactory now receives a context for doing the binds without the ValidationEngine.
   - New validators.
@@ -103,7 +109,7 @@ Version 2.2.0
   - Valid annotation doesn't validate the mapped context.
   - NumberFormatException if "min" or "max" of Range is not defined.
 
-Version 2.1.0
+Version 2.1
 - New modules:
   - DSL for creating proxies.
   - DSL for Validation.
@@ -125,7 +131,7 @@ Version 2.1.0
 - Bug fixes:
   - Fixed a bug in TruggerElementsSelector that returns a null predicate if no selection is made.
 
-Version 2.0.0
+Version 2.0
 - New modules:
   - DSL for date operations.
 - Major changes:
@@ -167,7 +173,7 @@ Version 2.0.0
   - New ofType method in ElementPredicates.
   - Changed the return type of ElementPredicates.assignableTo to CompositePredicate.
 
-Version 1.2.0
+Version 1.2
 - Major changes:
   - Removed the listeners in the ImplementationLoader for prevent anonymous changes.
   - HierarchySelector replaced by RecursionSelector for better abstraction.
@@ -191,7 +197,7 @@ Version 1.2.0
 - Bug Fixes:
   - Fixed a bug in the CLASS predicate (it allows annotations).
 
-Version 1.1.0
+Version 1.1
 - New features and improvements:
   - Added the AnnotatedElementSelector to the FieldSelector.
   - Unnecessary generic types removed.

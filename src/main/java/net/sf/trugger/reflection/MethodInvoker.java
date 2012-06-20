@@ -16,39 +16,38 @@
  */
 package net.sf.trugger.reflection;
 
-import java.lang.reflect.Method;
-
 import net.sf.trugger.Invoker;
 import net.sf.trugger.Result;
 
+import java.lang.reflect.Method;
+
 /**
  * Interface that defines a class capable of invoking a {@link Method}.
- * <p>
+ * <p/>
  * For invoking a static method, you don't need to specify any instance:
- * 
+ * <p/>
  * <pre>
  * MyType result = {@link Reflection#invoke(Method)}.withoutArgs();
  * </pre>
- * 
+ * <p/>
  * For a non-static method, you must specify an instance:
- * 
+ * <p/>
  * <pre>
  * MyType result = {@link Reflection#invoke(Method)}.on(instance).withArgs(arg1, arg2);
  * </pre>
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface MethodInvoker extends Invoker, Result<Invoker, Object> {
-  
+
   /**
-   * Indicates the instance that the method must be invoked. If this method is
-   * not called before the invocation, then the method will be treated as a
-   * <i>static</i> method.
-   * 
-   * @param instance
-   *          the instance for invocation.
+   * Indicates the instance that the method must be invoked. If this method is not called
+   * before the invocation, then the method will be treated as a <i>static</i> method.
+   *
+   * @param instance the instance for invocation.
+   *
    * @return the component for invoking the method on the given instance.
    */
   Invoker in(Object instance);
-  
+
 }

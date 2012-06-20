@@ -20,6 +20,8 @@ import net.sf.trugger.HandlingException;
 import net.sf.trugger.Invoker;
 import net.sf.trugger.Result;
 import net.sf.trugger.ValueHandler;
+import net.sf.trugger.exception.ExceptionHandler;
+import net.sf.trugger.exception.ExceptionHandlers;
 import net.sf.trugger.iteration.Iteration;
 import net.sf.trugger.iteration.SearchException;
 import net.sf.trugger.loader.ImplementationLoader;
@@ -378,6 +380,9 @@ public final class Reflection {
 
       private Object target;
 
+      private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+
+
       @Override
       public Invoker in(Object instance) {
         this.target = instance;
@@ -387,12 +392,18 @@ public final class Reflection {
       @Override
       public <E> E withArgs(Object... args) {
         Method method = selector.in(target);
-        return invoke(method).in(target).withArgs(args);
+        return invoke(method).in(target).handlingWith(handler).withArgs(args);
       }
 
       @Override
       public <E> E withoutArgs() {
         return withArgs();
+      }
+
+      @Override
+      public Invoker handlingWith(ExceptionHandler handler) {
+        this.handler = handler;
+        return this;
       }
 
     };
@@ -412,6 +423,8 @@ public final class Reflection {
 
       private Object target;
 
+      private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+
       @Override
       public Invoker in(Object instance) {
         this.target = instance;
@@ -421,12 +434,18 @@ public final class Reflection {
       @Override
       public <E> E withArgs(Object... args) {
         Set<Method> methods = selector.in(target);
-        return invoke(methods).in(target).withArgs(args);
+        return invoke(methods).in(target).handlingWith(handler).withArgs(args);
       }
 
       @Override
       public <E> E withoutArgs() {
         return withArgs();
+      }
+
+      @Override
+      public Invoker handlingWith(ExceptionHandler handler) {
+        this.handler = handler;
+        return this;
       }
 
     };
@@ -448,6 +467,8 @@ public final class Reflection {
 
       private Object target;
 
+      private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+
       public Invoker in(Object instance) {
         this.target = instance;
         return this;
@@ -457,9 +478,9 @@ public final class Reflection {
         Collection results = new ArrayList();
         for (Method method : methods) {
           if (isStatic(method)) {
-            results.add(invoke(method).withArgs(args));
+            results.add(invoke(method).handlingWith(handler).withArgs(args));
           } else {
-            results.add(invoke(method).in(target).withArgs(args));
+            results.add(invoke(method).in(target).handlingWith(handler).withArgs(args));
           }
         }
         return (E) results;
@@ -468,6 +489,14 @@ public final class Reflection {
       public <E> E withoutArgs() {
         return (E) withArgs();
       }
+
+
+      @Override
+      public Invoker handlingWith(ExceptionHandler handler) {
+        this.handler = handler;
+        return this;
+      }
+
     };
   }
 

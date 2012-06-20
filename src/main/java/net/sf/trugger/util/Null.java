@@ -16,6 +16,7 @@
  */
 package net.sf.trugger.util;
 
+import net.sf.trugger.exception.ExceptionHandler;
 import net.sf.trugger.HandlingException;
 import net.sf.trugger.Invoker;
 import net.sf.trugger.ValueHandler;
@@ -102,6 +103,12 @@ public final class Null {
     public <E> E withoutArgs() {
       return null;
     }
+
+    @Override
+    public Invoker handlingWith(ExceptionHandler handler) {
+      return this;
+    }
+
   };
 
   public static final MethodInvoker NULL_METHOD_INVOKER = new MethodInvoker() {
@@ -120,6 +127,12 @@ public final class Null {
     public <E> E withoutArgs() {
       return null;
     }
+
+    @Override
+    public Invoker handlingWith(ExceptionHandler handler) {
+      return this;
+    }
+
   };
 
   public static final ValueHandler NULL_VALUE_HANDLER = new ValueHandler() {
@@ -162,6 +175,18 @@ public final class Null {
     public <E> E withoutArgs() {
       return null;
     }
+
+    @Override
+    public Invoker handlingWith(ExceptionHandler handler) {
+      return this;
+    }
+
+  };
+
+  public static final ExceptionHandler NULL_EXCEPTION_HANDLER = new ExceptionHandler() {
+    @Override
+    public void handle(Throwable throwable) {}
+
   };
 
 }

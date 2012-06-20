@@ -16,28 +16,39 @@
  */
 package net.sf.trugger;
 
+import net.sf.trugger.exception.ExceptionHandler;
+
 /**
- * Interface that defines a class capable of invoking a object with the
- * possibility of passing arguments.
- * 
+ * Interface that defines a class capable of invoking a object with the possibility of
+ * passing arguments.
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface Invoker {
-  
+
   /**
    * Invokes the object passing the given arguments.
-   * 
-   * @param args
-   *          the arguments to pass.
+   *
+   * @param args the arguments to pass.
+   *
    * @return the invocation result.
    */
   <E> E withArgs(Object... args);
-  
+
   /**
    * Invokes the object without passing any argument.
-   * 
+   *
    * @return the invocation result.
    */
   <E> E withoutArgs();
-  
+
+  /**
+   * Sets an exception handler to handle exceptions thrown while invoking.
+   *
+   * @return a reference to this object
+   *
+   * @since 3.2
+   */
+  Invoker handlingWith(ExceptionHandler handler);
+
 }

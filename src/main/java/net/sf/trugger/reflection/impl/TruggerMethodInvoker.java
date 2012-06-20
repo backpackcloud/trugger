@@ -16,50 +16,66 @@
  */
 package net.sf.trugger.reflection.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
+import net.sf.trugger.Invoker;
+import net.sf.trugger.exception.ExceptionHandler;
+import net.sf.trugger.exception.ExceptionHandlers;
 import net.sf.trugger.reflection.MethodInvoker;
 import net.sf.trugger.reflection.Reflection;
 import net.sf.trugger.reflection.ReflectionException;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 /**
  * A default implementation for invoking {@link Method} objects.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public class TruggerMethodInvoker implements MethodInvoker {
-  
+
   private final Method method;
-  
+
   private Object instance;
-  
+
+  private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+
   public TruggerMethodInvoker(final Method method) {
     if (!method.isAccessible()) {
       Reflection.setAccessible(method);
     }
     this.method = method;
   }
-  
+
   public MethodInvoker in(Object instance) {
     this.instance = instance;
     return this;
   }
-  
+
   public <E> E withArgs(Object... args) {
     try {
-      return (E) method.invoke(instance, args);
-    } catch (InvocationTargetException e) {
-      throw new ReflectionException(e.getCause());
-    } catch (IllegalAccessException e) {
-      throw new ReflectionException(e);
-    } catch (IllegalArgumentException e) {
-      throw new ReflectionException(e);
+      try {
+        return (E) method.invoke(instance, args);
+      } catch (InvocationTargetException e) {
+        throw new ReflectionException(e.getCause());
+      } catch (IllegalAccessException e) {
+        throw new ReflectionException(e);
+      } catch (IllegalArgumentException e) {
+        throw new ReflectionException(e);
+      }
+    } catch (RuntimeException e) {
+      handler.handle(e);
+      return null;
     }
   }
-  
+
   public <E> E withoutArgs() {
     return (E) withArgs();
   }
-  
+
+  @Override
+  public Invoker handlingWith(ExceptionHandler handler) {
+    this.handler = handler;
+    return this;
+  }
+
 }
