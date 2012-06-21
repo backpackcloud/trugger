@@ -73,9 +73,10 @@ public class ExceptionHandlingTest {
     handler.encapsulateEveryCauseOf(InvocationTargetException.class).with(RuntimeException.class);
     handler.throwEvery(IllegalStateException.class);
     handler.throwEveryCauseOf(Error.class);
-    handler.silence(Throwable.class);
+    handler.silence(TruggerException.class);
+    handler.handle(Throwable.class).with(ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER);
 
-    handler.handle(new Throwable());
+    handler.handle(new TruggerException());
     assertThrow(new Runnable() {
       public void run() {
         handler.handle(new Error(new NullPointerException()));

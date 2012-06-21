@@ -49,6 +49,6 @@ public interface Invoker {
    *
    * @since 3.2
    */
-  Invoker handlingWith(ExceptionHandler handler);
+  Invoker handlingExceptionsWith(ExceptionHandler handler);
 
 }

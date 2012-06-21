@@ -73,7 +73,7 @@ public class TruggerMethodInvoker implements MethodInvoker {
   }
 
   @Override
-  public Invoker handlingWith(ExceptionHandler handler) {
+  public Invoker handlingExceptionsWith(ExceptionHandler handler) {
     this.handler = handler;
     return this;
   }

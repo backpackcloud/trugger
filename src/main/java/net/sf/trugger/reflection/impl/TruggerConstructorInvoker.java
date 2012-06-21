@@ -66,7 +66,7 @@ public class TruggerConstructorInvoker implements ConstructorInvoker {
   }
 
   @Override
-  public Invoker handlingWith(ExceptionHandler handler) {
+  public Invoker handlingExceptionsWith(ExceptionHandler handler) {
     this.handler = handler;
     return this;
   }

@@ -392,7 +392,7 @@ public final class Reflection {
       @Override
       public <E> E withArgs(Object... args) {
         Method method = selector.in(target);
-        return invoke(method).in(target).handlingWith(handler).withArgs(args);
+        return invoke(method).in(target).handlingExceptionsWith(handler).withArgs(args);
       }
 
       @Override
@@ -401,7 +401,7 @@ public final class Reflection {
       }
 
       @Override
-      public Invoker handlingWith(ExceptionHandler handler) {
+      public Invoker handlingExceptionsWith(ExceptionHandler handler) {
         this.handler = handler;
         return this;
       }
@@ -434,7 +434,7 @@ public final class Reflection {
       @Override
       public <E> E withArgs(Object... args) {
         Set<Method> methods = selector.in(target);
-        return invoke(methods).in(target).handlingWith(handler).withArgs(args);
+        return invoke(methods).in(target).handlingExceptionsWith(handler).withArgs(args);
       }
 
       @Override
@@ -443,7 +443,7 @@ public final class Reflection {
       }
 
       @Override
-      public Invoker handlingWith(ExceptionHandler handler) {
+      public Invoker handlingExceptionsWith(ExceptionHandler handler) {
         this.handler = handler;
         return this;
       }
@@ -478,9 +478,9 @@ public final class Reflection {
         Collection results = new ArrayList();
         for (Method method : methods) {
           if (isStatic(method)) {
-            results.add(invoke(method).handlingWith(handler).withArgs(args));
+            results.add(invoke(method).handlingExceptionsWith(handler).withArgs(args));
           } else {
-            results.add(invoke(method).in(target).handlingWith(handler).withArgs(args));
+            results.add(invoke(method).in(target).handlingExceptionsWith(handler).withArgs(args));
           }
         }
         return (E) results;
@@ -492,7 +492,7 @@ public final class Reflection {
 
 
       @Override
-      public Invoker handlingWith(ExceptionHandler handler) {
+      public Invoker handlingExceptionsWith(ExceptionHandler handler) {
         this.handler = handler;
         return this;
       }
