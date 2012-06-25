@@ -123,19 +123,19 @@ public final class Utils {
     if (array) {
       if (accArrTypes) {
         AcceptedArrayTypes annotation = element.getAnnotation(AcceptedArrayTypes.class);
-        return checkAcception(type.getComponentType(), annotation.value());
+        return checkAcceptance(type.getComponentType(), annotation.value());
       } else if (accArr) {
         return true;
       }
     }
     if (accTypes) {
       AcceptedTypes annotation = element.getAnnotation(AcceptedTypes.class);
-      return checkAcceptionWithWrapper(type, annotation.value());
+      return checkAcceptanceWithWrapper(type, annotation.value());
     }
     return !accArr && !accArrTypes;
   }
 
-  private static boolean checkAcception(Class<?> type, Class<?>[] classes) {
+  private static boolean checkAcceptance(Class<?> type, Class<?>[] classes) {
     for (Class<?> acceptedType : classes) {
       if (acceptedType.isAssignableFrom(type)) {
         return true;
@@ -144,7 +144,7 @@ public final class Utils {
     return false;
   }
 
-  private static boolean checkAcceptionWithWrapper(Class<?> type, Class<?>[] classes) {
+  private static boolean checkAcceptanceWithWrapper(Class<?> type, Class<?>[] classes) {
     for (Class<?> acceptedType : classes) {
       if (areAssignable(acceptedType, type)) {
         return true;
