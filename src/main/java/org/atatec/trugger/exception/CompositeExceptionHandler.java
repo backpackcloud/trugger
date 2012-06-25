@@ -18,11 +18,12 @@
 package org.atatec.trugger.exception;
 
 import org.atatec.trugger.dsl.With;
-import org.atatec.trugger.reflection.ClassHierarchyFinder;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.registry.MapRegistry;
 import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.util.Null;
+
+import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 
 /**
  * An ExceptionHandler that exposes a DSL to configure its behaviour.
@@ -122,14 +123,11 @@ public class CompositeExceptionHandler implements ExceptionHandler {
 
   @Override
   public void handle(Throwable throwable) {
-    ExceptionHandler handler = new ClassHierarchyFinder<ExceptionHandler>() {
-      @Override
-      protected ExceptionHandler findObject(Class clazz) {
-        return handlers.registryFor(clazz);
+    for (Class type : hierarchyOf(throwable)) {
+      if (handlers.hasRegistryFor(type)) {
+        handlers.registryFor(type).handle(throwable);
+        return;
       }
-    }.find(throwable);
-    if (handler != null) {
-      handler.handle(throwable);
     }
   }
 

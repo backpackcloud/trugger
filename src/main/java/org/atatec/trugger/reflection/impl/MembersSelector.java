@@ -16,11 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.reflect.Member;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.atatec.trugger.Result;
 import org.atatec.trugger.iteration.Iteration;
 import org.atatec.trugger.predicate.CompositePredicate;
@@ -28,20 +23,28 @@ import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.ClassHierarchyIteration;
 import org.atatec.trugger.util.Utils;
+
+import java.lang.reflect.Member;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 
 /**
  * A base class for selecting a set of {@link Member} objects.
  *
+ * @param <T> The member type.
+ *
  * @author Marcelo Varella Barca Guimarães
- * @param <T>
- *          The member type.
  */
 public class MembersSelector<T extends Member> implements Result<Set<T>, Object>, Predicable<T> {
 
   private final PredicateBuilder<T> builder = new PredicateBuilder<T>(null);
+
   private final MembersFinder<T> finder;
+
   private boolean useHierarchy;
 
   public MembersSelector(MembersFinder<T> finder) {
@@ -51,13 +54,9 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
   public final Set<T> in(Object target) {
     if (useHierarchy) {
       final Set<T> set = new HashSet<T>();
-      new ClassHierarchyIteration() {
-
-        @Override
-        protected void iteration(Class<?> clazz) {
-          set.addAll(Arrays.asList(finder.find(clazz)));
-        }
-      }.iterate(target);
+      for (Class type : hierarchyOf(target)) {
+        set.addAll(Arrays.asList(finder.find(type)));
+      }
       return applySelection(set);
     }
     Class<?> type = Utils.resolveType(target);
@@ -73,23 +72,19 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
     return set;
   }
 
-  /**
-   * Indicates that this selector must use the target hierarchy.
-   */
+  /** Indicates that this selector must use the target hierarchy. */
   public final void useHierarchy() {
     this.useHierarchy = true;
   }
 
-  /**
-   * @return the object for holding the predicates for filtering the result
-   */
+  /** @return the object for holding the predicates for filtering the result */
   public final PredicateBuilder<T> builder() {
     return builder;
   }
 
   public CompositePredicate<T> toPredicate() {
     CompositePredicate<T> predicate = builder.predicate();
-    return predicate == null ? Predicates.<T> alwaysTrue() : predicate;
+    return predicate == null ? Predicates.<T>alwaysTrue() : predicate;
   }
 
 }

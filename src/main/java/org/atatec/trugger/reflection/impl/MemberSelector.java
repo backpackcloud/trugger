@@ -18,7 +18,7 @@ package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.PredicableResult;
 import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.reflection.ClassHierarchyFinder;
+import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.util.Utils;
 
@@ -26,27 +26,29 @@ import java.lang.reflect.Member;
 
 /**
  * A base class for selecting a single {@link Member} object.
- * 
+ *
+ * @param <T> The member type.
+ *
  * @author Marcelo Varella Barca Guimarães
- * @param <T>
- *          The member type.
  */
 public class MemberSelector<T extends Member> implements PredicableResult<T, Object> {
-  
+
   private final MemberFinder<T> finder;
+
   private final CompositePredicate<T> predicate;
+
   private final boolean useHierarchy;
-  
+
   public MemberSelector(MemberFinder<T> finder, CompositePredicate<T> predicate, boolean useHierarchy) {
     this.finder = finder;
     this.predicate = predicate;
     this.useHierarchy = useHierarchy;
   }
-  
+
   public MemberSelector(MemberFinder<T> finder, CompositePredicate<T> predicate) {
     this(finder, predicate, false);
   }
-  
+
   private T findMember(Class<?> type) {
     try {
       T element = finder.find(type);
@@ -62,24 +64,24 @@ public class MemberSelector<T extends Member> implements PredicableResult<T, Obj
       throw new ReflectionException(e);
     }
   }
-  
+
   public final T in(Object target) {
     if (useHierarchy) {
-      return new ClassHierarchyFinder<T>() {
-        
-        protected T findObject(Class<?> clazz) {
-          return findMember(clazz);
+      for (Class type : Reflection.hierarchyOf(target)) {
+        T member = findMember(type);
+        if (member != null) {
+          return member;
         }
-        
-      }.find(target);
+      }
+      return null;
     }
     Class<?> type = Utils.resolveType(target);
     return findMember(type);
   }
-  
+
   @Override
   public CompositePredicate<T> toPredicate() {
     return predicate;
   }
-  
+
 }

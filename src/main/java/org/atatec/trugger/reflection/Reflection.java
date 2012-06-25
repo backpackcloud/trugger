@@ -32,6 +32,7 @@ import org.atatec.trugger.selector.FieldSelector;
 import org.atatec.trugger.selector.FieldsSelector;
 import org.atatec.trugger.selector.MethodSelector;
 import org.atatec.trugger.selector.MethodsSelector;
+import org.atatec.trugger.util.ClassIterator;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.AccessibleObject;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -553,6 +555,21 @@ public final class Reflection {
     } catch (SearchException e) {
       throw new ReflectionException(e);
     }
+  }
+
+  /**
+   * @return an iterable Class hierarchy for use in "foreach" loops.
+   *
+   * @see ClassIterator
+   * @since 4.0
+   */
+  public static Iterable<Class> hierarchyOf(final Object target) {
+    return new Iterable<Class>() {
+      @Override
+      public Iterator<Class> iterator() {
+        return new ClassIterator(target);
+      }
+    };
   }
 
 }

@@ -20,7 +20,12 @@ package org.atatec.trugger.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/** @author Marcelo Varella Barca Guimarães */
+/**
+ * An iterator that uses a class hierarchy.
+ *
+ * @author Marcelo Varella Barca Guimarães
+ * @since 4.0
+ */
 public class ClassIterator implements Iterator<Class> {
 
   private Class target;
