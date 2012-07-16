@@ -49,18 +49,6 @@ public interface ProxyCreator {
   <E> E withoutTarget();
   
   /**
-   * Configures the proxy to extend or implement the given type.
-   * <p>
-   * If the type is a class, the proxy should extend it. If the type is an
-   * interface, the proxy should implement it.
-   * 
-   * @param subclassOrInterface a class or interface.
-   * @return the created proxy
-   * @since 2.5
-   */
-  <E> E over(Class<?> subclassOrInterface);
-  
-  /**
    * Configures the proxy to implement all the target interfaces, the explicitly
    * (declared interfaces) and implicitly (subclasses' interfaces).
    * 

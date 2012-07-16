@@ -176,13 +176,6 @@ public class Interceptor implements InvocationHandler, ProxyFactory {
       return this;
     }
 
-    public <E> E over(Class<?> clazz) {
-      if (clazz.isInterface()) {
-        return (E) createProxy().implementing(clazz).withoutTarget();
-      }
-      throw new IllegalArgumentException("Not an interface");
-    }
-
     public <E> E withTarget(Object target) {
       Interceptor.this.target = target;
       return (E) create();
@@ -208,7 +201,6 @@ public class Interceptor implements InvocationHandler, ProxyFactory {
       if (computeTargetInterfaces) {
         interfaces.addAll(reflect().interfaces().in(target));
       }
-      Class<?> targetClass = Utils.resolveType(target);
       return (E) Proxy.newProxyInstance(
         classLoader,
         interfaces.toArray(new Class[interfaces.size()]),
