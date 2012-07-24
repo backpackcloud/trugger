@@ -16,6 +16,10 @@
  */
 package org.atatec.trugger.scan.impl;
 
+import org.atatec.trugger.scan.ClassScanningException;
+import org.atatec.trugger.scan.ResourceFinder;
+import org.atatec.trugger.scan.ScanLevel;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -24,10 +28,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.atatec.trugger.scan.ClassScanningException;
-import org.atatec.trugger.scan.ResourceFinder;
-import org.atatec.trugger.scan.ScanLevel;
-
 /**
  * A class capable of search classes in a <tt>file/directory</tt> resource.
  *
@@ -35,10 +35,9 @@ import org.atatec.trugger.scan.ScanLevel;
  */
 public class FileResourceFinder implements ResourceFinder {
 
-  /**
-   * The protocol that this finder should be registered.
-   */
+  /** The protocol that this finder should be registered. */
   public static final String PROTOCOL = "file";
+
   private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
 
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
@@ -56,17 +55,19 @@ public class FileResourceFinder implements ResourceFinder {
       directory = new File(fullPath.getPath());
     }
     File[] files = directory.listFiles();
-    for (File file : files) {
-      if (canInclude(scanLevel, file)) {
-        if (file.isDirectory()) {
-          try {
-            findInDirectory(resources, file.toURI().toURL(), packagePath + '/' + file.getName(), scanLevel);
-          } catch (MalformedURLException e) {
-            throw new ClassScanningException(e);
+    if (files != null) {
+      for (File file : files) {
+        if (canInclude(scanLevel, file)) {
+          if (file.isDirectory()) {
+            try {
+              findInDirectory(resources, file.toURI().toURL(), packagePath + '/' + file.getName(), scanLevel);
+            } catch (MalformedURLException e) {
+              throw new ClassScanningException(e);
+            }
+          } else {
+            String simpleName = file.getName();
+            resources.add(String.format("%s/%s", packagePath, simpleName));
           }
-        } else {
-          String simpleName = file.getName();
-          resources.add(String.format("%s/%s", packagePath, simpleName));
         }
       }
     }
@@ -75,12 +76,11 @@ public class FileResourceFinder implements ResourceFinder {
   /**
    * Indicates if the specified resource can be included in the found resources.
    *
-   * @param scanLevel
-   *          the scan level for the package.
-   * @param resourceFile
-   *          the file that represents this resource.
-   * @return <code>true</code> if the specified resource can be included in the
-   *         found resources.
+   * @param scanLevel    the scan level for the package.
+   * @param resourceFile the file that represents this resource.
+   *
+   * @return <code>true</code> if the specified resource can be included in the found
+   *         resources.
    */
   private static boolean canInclude(ScanLevel scanLevel, File resourceFile) {
     return scanLevel != ScanLevel.PACKAGE || !resourceFile.isDirectory();
