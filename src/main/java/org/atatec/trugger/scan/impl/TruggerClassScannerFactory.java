@@ -20,7 +20,7 @@ import org.atatec.trugger.registry.MapRegistry;
 import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.scan.ClassScanner;
 import org.atatec.trugger.scan.ClassScannerFactory;
-import org.atatec.trugger.scan.ClassScanningException;
+import org.atatec.trugger.scan.NoResourceFinderException;
 import org.atatec.trugger.scan.ResourceFinder;
 
 /**
@@ -46,7 +46,7 @@ public class TruggerClassScannerFactory implements ClassScannerFactory {
   public ResourceFinder finderFor(String protocol) {
     ResourceFinder finder = registry.registryFor(protocol.toLowerCase());
     if (finder == null) {
-      throw new ClassScanningException("No finder registered for protocol \"" + protocol + '\"');
+      throw new NoResourceFinderException("No finder registered for protocol \"" + protocol + '\"');
     }
     return finder;
   }

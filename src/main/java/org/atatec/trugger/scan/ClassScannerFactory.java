@@ -32,10 +32,10 @@ public interface ClassScannerFactory {
    * @param protocol
    *          the protocol
    * @return the registered resource for the specified protocol.
-   * @throws ClassScanningException
+   * @throws NoResourceFinderException
    *           if no finder is registered for the given protocol.
    */
-  ResourceFinder finderFor(String protocol) throws ClassScanningException;
+  ResourceFinder finderFor(String protocol) throws NoResourceFinderException;
 
   /**
    * Returns the registry that associates protocol names to finders.
