@@ -29,11 +29,12 @@
     you specify what is to be
     done instead of how.
   </description>
-  <url>http://sourceforge.net/projects/trugger/</url>
+  <url>https://github.com/ataxexe/trugger</url>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
     </license>
   </licenses>
   <scm>
@@ -87,6 +88,19 @@
         <configuration>
           <test>org.atatec.trugger.test.TruggerTest</test>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <extensions>
