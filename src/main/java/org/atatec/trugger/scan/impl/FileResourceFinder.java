@@ -35,10 +35,12 @@ import java.util.regex.Pattern;
  */
 public class FileResourceFinder implements ResourceFinder {
 
-  /** The protocol that this finder should be registered. */
-  public static final String PROTOCOL = "file";
-
   private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
+
+  @Override
+  public String protocol() {
+    return "file";
+  }
 
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
     Set<String> resources = new HashSet<String>(30);

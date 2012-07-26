@@ -36,11 +36,12 @@ import java.util.regex.Pattern;
  */
 public class VfsResourceFinder implements ResourceFinder {
 
-  /**
-   * The protocol that this finder should be registered.
-   */
-  public static final String PROTOCOL = "vfs";
   private static final Pattern PACKAGE_PATTERN = Pattern.compile("\\.");
+
+  @Override
+  public String protocol() {
+    return "vfs";
+  }
 
   @Override
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {

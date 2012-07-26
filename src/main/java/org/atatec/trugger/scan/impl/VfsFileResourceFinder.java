@@ -17,8 +17,10 @@
 package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
+import org.atatec.trugger.scan.ResourceFinder;
 import org.atatec.trugger.scan.ScanLevel;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
@@ -30,20 +32,25 @@ import java.util.regex.Pattern;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.8
  */
-public class VfsFileResourceFinder extends FileResourceFinder {
+public class VfsFileResourceFinder implements ResourceFinder {
 
-  /**
-   * The protocol that this finder should be registered.
-   */
-  public static final String PROTOCOL = "vfsfile";
   private static final Pattern PATTERN = Pattern.compile("vfsfile");
+
+  private final ResourceFinder fileResourceFinder = new FileResourceFinder();
+
+  @Override
+  public String protocol() {
+    return "vfsfile";
+  }
 
   @Override
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
     try {
       URL dirUrl = new URL(PATTERN.matcher(resource.toString()).replaceFirst("file"));
-      return super.find(dirUrl, packageName, scanLevel);
+      return fileResourceFinder.find(dirUrl, packageName, scanLevel);
     } catch (MalformedURLException e) {
+      throw new ClassScanningException(e);
+    } catch (IOException e) {
       throw new ClassScanningException(e);
     }
   }

@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.scan;
 
-import org.atatec.trugger.registry.Registry;
-
 /**
  * Interface that defines a factory for the class finding operation.
  *
@@ -29,20 +27,23 @@ public interface ClassScannerFactory {
   /**
    * Returns the registered {@link ResourceFinder} for the specified protocol.
    *
-   * @param protocol
-   *          the protocol
+   * @param protocol the protocol
+   *
    * @return the registered resource for the specified protocol.
-   * @throws NoResourceFinderException
-   *           if no finder is registered for the given protocol.
+   *
+   * @throws NoResourceFinderException if no finder is registered for the given protocol.
    */
   ResourceFinder finderFor(String protocol) throws NoResourceFinderException;
 
   /**
-   * Returns the registry that associates protocol names to finders.
+   * Registers the given resource finders. Previous registered ResourceFinder will be
+   * replaced.
    *
-   * @return the registry.
+   * @param finders the resource finder to register
+   *
+   * @since 4.0
    */
-  Registry<String, ResourceFinder> registry();
+  void register(ResourceFinder... finders);
 
   /**
    * Creates the implementation for the class finding operation.

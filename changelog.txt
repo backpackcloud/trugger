@@ -7,6 +7,7 @@ Version 4.0
   - Reflection Invokers and Handlers does not throw a NPE if a null object is passed
   - Class hierarchy helpers removed. Use ClassIterator and Reflection#hierarchyOf
   - Support for JBoss Virtual Filesystem 3.1.0 (allows class scanning in JBoss AS 7.x)
+  - Improved API for registering a ResourceFinder.
 
 Version 3.1
 - Major Changes

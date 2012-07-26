@@ -36,11 +36,12 @@ import java.util.regex.Pattern;
  */
 public class JarResourceFinder implements ResourceFinder {
 
-  /**
-   * The protocol that this finder should be registered.
-   */
-  public static final String PROTOCOL = "jar";
   private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
+
+  @Override
+  public String protocol() {
+    return "jar";
+  }
 
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) throws IOException {
     Set<String> resources = new HashSet<String>(30);

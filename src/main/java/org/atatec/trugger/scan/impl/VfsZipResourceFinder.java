@@ -17,6 +17,7 @@
 package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
+import org.atatec.trugger.scan.ResourceFinder;
 import org.atatec.trugger.scan.ScanLevel;
 
 import java.net.URL;
@@ -29,14 +30,18 @@ import java.util.regex.Pattern;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.8
  */
-public class VfsZipResourceFinder extends JarResourceFinder {
+public class VfsZipResourceFinder implements ResourceFinder {
 
-  /**
-   * The protocol that this finder should be registered.
-   */
-  public static final String PROTOCOL = "vfszip";
   private static final Pattern VSFZIP_PATTERN = Pattern.compile("vfszip");
+
   private static final Pattern PACKAGE_PATTERN = Pattern.compile("\\.");
+
+  private final ResourceFinder jarResourceFinder = new JarResourceFinder();
+
+  @Override
+  public String protocol() {
+    return "vfszip";
+  }
 
   @Override
   public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
@@ -45,7 +50,7 @@ public class VfsZipResourceFinder extends JarResourceFinder {
       String path = '/' + PACKAGE_PATTERN.matcher(packageName).replaceAll("/");
       url = url.replaceFirst(path, '!' + path);
       URL dirUrl = new URL(url);
-      return super.find(dirUrl, packageName, scanLevel);
+      return jarResourceFinder.find(dirUrl, packageName, scanLevel);
     } catch (Exception e) {
       throw new ClassScanningException(e);
     }

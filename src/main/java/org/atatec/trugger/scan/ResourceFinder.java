@@ -30,6 +30,11 @@ import java.util.Set;
 public interface ResourceFinder {
 
   /**
+   * @return the protocol handled by this finder
+   */
+  String protocol();
+
+  /**
    * Returns a set of resource names present in the specified package on the
    * given path.
    *

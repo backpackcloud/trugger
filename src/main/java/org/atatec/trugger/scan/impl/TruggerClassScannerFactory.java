@@ -33,16 +33,21 @@ public class TruggerClassScannerFactory implements ClassScannerFactory {
   private final Registry<String, ResourceFinder> registry = new MapRegistry<String, ResourceFinder>();
 
   public TruggerClassScannerFactory() {
-    registry.register(new FileResourceFinder()).to(FileResourceFinder.PROTOCOL);
-    registry.register(new JarResourceFinder()).to(JarResourceFinder.PROTOCOL);
-    registry.register(new VfsFileResourceFinder()).to(VfsFileResourceFinder.PROTOCOL);
-    registry.register(new VfsZipResourceFinder()).to(VfsZipResourceFinder.PROTOCOL);
-    registry.register(new VfsZipResourceFinder()).to(VfsZipResourceFinder.PROTOCOL);
-    registry.register(new VfsResourceFinder()).to(VfsResourceFinder.PROTOCOL);
+    register(
+      new FileResourceFinder(),
+      new JarResourceFinder(),
+      new VfsFileResourceFinder(),
+      new VfsZipResourceFinder(),
+      new VfsZipResourceFinder(),
+      new VfsResourceFinder()
+    );
   }
 
-  public Registry<String, ResourceFinder> registry() {
-    return registry;
+  @Override
+  public void register(ResourceFinder... finders) {
+    for (ResourceFinder finder : finders) {
+      registry.register(finder).to(finder.protocol());
+    }
   }
 
   public ResourceFinder finderFor(String protocol) {

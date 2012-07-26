@@ -17,7 +17,6 @@
 package org.atatec.trugger.scan;
 
 import org.atatec.trugger.loader.ImplementationLoader;
-import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.selector.ClassSelector;
 import org.atatec.trugger.selector.ClassesSelector;
 
@@ -31,29 +30,29 @@ public class ClassScan {
 
   private static final ClassScannerFactory factory;
 
-  private ClassScan() {}
+  private ClassScan() {
+  }
 
   static {
     factory = ImplementationLoader.getInstance().get(ClassScannerFactory.class);
   }
 
-  /**
-   * @return a new {@link ClassScanner}.
-   */
+  /** @return a new {@link ClassScanner}. */
   public static ClassScanner newScan() {
     return factory.createClassScanner();
   }
 
   /**
-   * @return the registry.
+   * @see ClassScannerFactory#register(ResourceFinder...)
+   * @since 4.0
    */
-  public static Registry<String, ResourceFinder> registry() {
-    return factory.registry();
+  public static void register(ResourceFinder... finders) {
+    factory.register(finders);
   }
 
   /**
    * This method has the same effect as:
-   *
+   * <p/>
    * <pre>
    * newScan().findClasses();
    * </pre>
@@ -64,7 +63,7 @@ public class ClassScan {
 
   /**
    * This method has the same effect as:
-   *
+   * <p/>
    * <pre>
    * newScan().findClass();
    * </pre>
@@ -77,7 +76,7 @@ public class ClassScan {
 
   /**
    * This method has the same effect as:
-   *
+   * <p/>
    * <pre>
    * newScan().findInterfaces();
    * </pre>
@@ -88,7 +87,7 @@ public class ClassScan {
 
   /**
    * This method has the same effect as:
-   *
+   * <p/>
    * <pre>
    * newScan().findEnums();
    * </pre>
@@ -99,7 +98,7 @@ public class ClassScan {
 
   /**
    * This method has the same effect as:
-   *
+   * <p/>
    * <pre>
    * newScan().findAnnotations();
    * </pre>
@@ -110,7 +109,7 @@ public class ClassScan {
 
   /**
    * This method has the same effect as:
-   *
+   * <p/>
    * <pre>
    * newScan().findAll();
    * </pre>
