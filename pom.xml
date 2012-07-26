@@ -14,7 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.atatec.trugger</groupId>
@@ -22,8 +23,10 @@
   <packaging>jar</packaging>
   <name>trugger</name>
   <version>4.0</version>
-  <description>Trugger is a verbose framework that allows some operations with an implementable self explanatory Domain
-    Specific Language that makes the code more elegant and readable. The purpose is to let you specify what is to be
+  <description>Trugger is a verbose framework that allows some operations with an
+    implementable self explanatory Domain
+    Specific Language that makes the code more elegant and readable. The purpose is to let
+    you specify what is to be
     done instead of how.
   </description>
   <url>http://sourceforge.net/projects/trugger/</url>
@@ -90,6 +93,12 @@
     </extensions>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-vfs</artifactId>
+      <version>3.1.0.Final</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>

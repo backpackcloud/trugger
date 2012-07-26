@@ -37,6 +37,8 @@ public class TruggerClassScannerFactory implements ClassScannerFactory {
     registry.register(new JarResourceFinder()).to(JarResourceFinder.PROTOCOL);
     registry.register(new VfsFileResourceFinder()).to(VfsFileResourceFinder.PROTOCOL);
     registry.register(new VfsZipResourceFinder()).to(VfsZipResourceFinder.PROTOCOL);
+    registry.register(new VfsZipResourceFinder()).to(VfsZipResourceFinder.PROTOCOL);
+    registry.register(new VfsResourceFinder()).to(VfsResourceFinder.PROTOCOL);
   }
 
   public Registry<String, ResourceFinder> registry() {
@@ -51,9 +53,7 @@ public class TruggerClassScannerFactory implements ClassScannerFactory {
     return finder;
   }
 
-  /**
-   * Returns a new instance of {@link TruggerClassScanner}.
-   */
+  /** Returns a new instance of {@link TruggerClassScanner}. */
   public ClassScanner createClassScanner() {
     return new TruggerClassScanner(this);
   }
