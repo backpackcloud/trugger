@@ -52,7 +52,7 @@ public class MemberSelector<T extends Member> implements PredicableResult<T, Obj
   private T findMember(Class<?> type) {
     try {
       T element = finder.find(type);
-      if (predicate.evaluate(element)) {
+      if (element != null && predicate.evaluate(element)) {
         return element;
       }
       return null;

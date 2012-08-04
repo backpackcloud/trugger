@@ -17,14 +17,16 @@
 package org.atatec.trugger.reflection.impl;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class MethodsFinder implements MembersFinder<Method> {
   
-  public Method[] find(Class<?> type) {
-    return type.getDeclaredMethods();
+  public Collection<Method> find(Class<?> type) {
+    return Arrays.asList(type.getDeclaredMethods());
   }
   
 }

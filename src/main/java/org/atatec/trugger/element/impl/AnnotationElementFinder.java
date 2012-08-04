@@ -19,42 +19,40 @@ package org.atatec.trugger.element.impl;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.atatec.trugger.reflection.Reflection.methods;
 
 /**
  * A default class for finding properties in annotations.
- * <p>
+ * <p/>
  * All methods declared on the annotation will be treat as a property.
  *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class AnnotationElementFinder implements Finder<Element> {
 
-  private final Map<Class<?>, Map<String, Element>> cache;
-  private static final int MAX_SIZE = 200;
-
-  /**
-   * Creates a new finder
-   */
-  public AnnotationElementFinder() {
-    cache = new ConcurrentHashMap<Class<?>, Map<String, Element>>(MAX_SIZE);
-  }
+  private ElementCache cache = new ElementCache() {
+    @Override
+    protected void loadElements(Class type, Map<String, Element> map) {
+      Set<Method> declaredMethods = methods().in(type);
+      AnnotationElement prop;
+      for (Method method : declaredMethods) {
+        prop = new AnnotationElement(method);
+        map.put(prop.name(), prop);
+      }
+    }
+  };
 
   public Result<Set<Element>, Object> findAll() {
     return new Result<Set<Element>, Object>() {
 
       public Set<Element> in(Object target) {
-        Class<?> annotationType = Utils.resolveType(target);
-        Collection<Element> elements = getFromCache(annotationType).values();
+        Collection<Element> elements = cache.get(target);
         return ElementFinderHelper.computeResult(target, elements);
       }
     };
@@ -64,30 +62,15 @@ public final class AnnotationElementFinder implements Finder<Element> {
     return new Result<Element, Object>() {
 
       public Element in(Object target) {
-        Element property = getFromCache(Utils.resolveType(target)).get(propertyName);
+        Element property = cache.get(target, propertyName);
         if (target instanceof Class<?>) {
           return property;
-        } else if(property != null) {
+        } else if (property != null) {
           return new SpecificElement(property, target);
         }
         return null;
       }
     };
-  }
-
-  private Map<String, Element> getFromCache(Class<?> annotationType) {
-    Map<String, Element> map = cache.get(annotationType);
-    if (map == null) {
-      map = new HashMap<String, Element>(20);
-      cache.put(annotationType, map);
-      Set<Method> declaredMethods = methods().in(annotationType);
-      AnnotationElement prop;
-      for (Method method : declaredMethods) {
-        prop = new AnnotationElement(method);
-        map.put(prop.name(), prop);
-      }
-    }
-    return map;
   }
 
 }

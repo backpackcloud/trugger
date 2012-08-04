@@ -48,10 +48,6 @@ public class TestObject {
     this.readable = readable;
   }
 
-  public void setActive(double active) {
-
-  }
-
   public Object getAllAccess() {
     return allAccess;
   }

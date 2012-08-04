@@ -16,13 +16,13 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.reflection.ReflectionPredicates;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+
+import static org.atatec.trugger.reflection.ReflectionPredicates.setterFor;
 
 /**
  * A finder for setter {@link Method} objects.
@@ -37,9 +37,7 @@ public class SettersFinder implements MembersFinder<Method> {
     this.name = name;
   }
 
-  public Method[] find(Class<?> type) {
-    List<Method> methods = new ArrayList<Method>(Arrays.asList(type.getDeclaredMethods()));
-    Iteration.retainFrom(methods).elements(ReflectionPredicates.setterFor(name));
-    return methods.toArray(new Method[methods.size()]);
+  public Collection<Method> find(Class<?> type) {
+    return Iteration.selectFrom(Arrays.asList(type.getDeclaredMethods())).elements(setterFor(name));
   }
 }

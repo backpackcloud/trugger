@@ -38,7 +38,7 @@ public class RegistryEntry<K, V> implements Entry<K, V> {
     return key;
   }
 
-  public V registry() {
+  public V value() {
     return registry;
   }
 

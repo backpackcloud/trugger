@@ -19,16 +19,15 @@ package org.atatec.trugger.property.impl;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.impl.ElementCache;
 import org.atatec.trugger.element.impl.ElementFinderHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.atatec.trugger.reflection.Reflection.fields;
 import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
@@ -45,63 +44,9 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
  */
 public final class ObjectPropertyFinder implements Finder<Element> {
 
-  private final Map<Class<?>, Map<String, Element>> cache;
-
-  private static final int MAX_SIZE = 200;
-
-  public ObjectPropertyFinder() {
-    cache = new ConcurrentHashMap<Class<?>, Map<String, Element>>(MAX_SIZE);
-  }
-
-  public final Result<Element, Object> find(final String propertyName) {
-    return new Result<Element, Object>() {
-
-      public Element in(Object target) {
-        for (Class type : hierarchyOf(target)) {
-          Map<String, Element> map = getFromCache(type);
-          if (map.containsKey(propertyName)) {
-            return map.get(propertyName);
-          }
-        }
-        return null;
-      }
-    };
-  }
-
-  public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-
-      public Set<Element> in(Object target) {
-        final Map<String, Element> map = new HashMap<String, Element>();
-        for (Class type : hierarchyOf(target)) {
-          Set<Element> properties = _getProperties(type);
-          for (Element property : properties) {
-            String name = property.name();
-            //used in case of a property override
-            if (!map.containsKey(name)) {
-              map.put(name, property);
-            }
-          }
-        }
-        Collection<Element> elements = map.values();
-        return ElementFinderHelper.computeResult(target, elements);
-      }
-    };
-  }
-
-  /**
-   * @param objectClass the object class
-   *
-   * @return a list with all the object properties declared in its class.
-   */
-  private Set<Element> _getProperties(Class<?> objectClass) {
-    return new HashSet<Element>(getFromCache(objectClass).values());
-  }
-
-  private Map<String, Element> getFromCache(Class<?> type) {
-    Map<String, Element> map = cache.get(type);
-    if (map == null) {
-      map = new HashMap<String, Element>(20);
+  private final ElementCache cache = new ElementCache() {
+    @Override
+    protected void loadElements(Class type, Map<String, Element> map) {
       Set<Method> declaredMethods = methods().nonStatic()
         .that(GETTER.or(SETTER))
         .in(type);
@@ -125,9 +70,43 @@ public final class ObjectPropertyFinder implements Finder<Element> {
           }
         }
       }
-      cache.put(type, map);
     }
-    return map;
+  };
+
+  public final Result<Element, Object> find(final String propertyName) {
+    return new Result<Element, Object>() {
+
+      public Element in(Object target) {
+        for (Class type : hierarchyOf(target)) {
+          Element element = cache.get(type, propertyName);
+          if(element != null) {
+            return element;
+          }
+        }
+        return null;
+      }
+    };
+  }
+
+  public Result<Set<Element>, Object> findAll() {
+    return new Result<Set<Element>, Object>() {
+
+      public Set<Element> in(Object target) {
+        final Map<String, Element> map = new HashMap<String, Element>();
+        for (Class type : hierarchyOf(target)) {
+          Collection<Element> properties = cache.get(type);
+          for (Element property : properties) {
+            String name = property.name();
+            //used in case of a property override
+            if (!map.containsKey(name)) {
+              map.put(name, property);
+            }
+          }
+        }
+        Collection<Element> elements = map.values();
+        return ElementFinderHelper.computeResult(target, elements);
+      }
+    };
   }
 
   /**

@@ -55,12 +55,12 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
     if (useHierarchy) {
       final Set<T> set = new HashSet<T>();
       for (Class type : hierarchyOf(target)) {
-        set.addAll(Arrays.asList(finder.find(type)));
+        set.addAll(finder.find(type));
       }
       return applySelection(set);
     }
     Class<?> type = Utils.resolveType(target);
-    Set<T> set = new HashSet<T>(Arrays.asList(finder.find(type)));
+    Set<T> set = new HashSet<T>(finder.find(type));
     return applySelection(set);
   }
 

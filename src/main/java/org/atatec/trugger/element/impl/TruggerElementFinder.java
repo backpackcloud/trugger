@@ -16,9 +16,6 @@
  */
 package org.atatec.trugger.element.impl;
 
-import java.lang.reflect.AnnotatedElement;
-import java.util.Set;
-
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
@@ -29,6 +26,9 @@ import org.atatec.trugger.factory.Factory;
 import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.registry.Registry.Entry;
 import org.atatec.trugger.util.Utils;
+
+import java.lang.reflect.AnnotatedElement;
+import java.util.Set;
 
 /**
  * A default implementation for an Element finder.
@@ -65,7 +65,7 @@ public final class TruggerElementFinder implements Finder<Element> {
     }
     for (Entry<Class<?>, Finder<Element>> entry : registry.entries()) {
       if (entry.key().isAssignableFrom(type)) {
-        Finder<Element> finder = entry.registry();
+        Finder<Element> finder = entry.value();
         registry.register(finder).to(type);
         return finder;
       }

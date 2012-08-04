@@ -25,7 +25,7 @@ import java.util.Set;
  * @param <K>
  *          The key type.
  * @param <V>
- *          The registry type.
+ *          The value type.
  * @since 2.3
  */
 public interface Registry<K, V> {
@@ -86,9 +86,9 @@ public interface Registry<K, V> {
     K key();
 
     /**
-     * @return the registry.
+     * @return the value associated with the key.
      */
-    V registry();
+    V value();
 
   }
 

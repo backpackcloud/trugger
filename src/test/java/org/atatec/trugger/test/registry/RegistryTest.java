@@ -58,7 +58,7 @@ public class RegistryTest {
     assertEquals(1, entries.size());
     Entry entry = entries.iterator().next();
     assertEquals("test", entry.key());
-    assertEquals("value", entry.registry());
+    assertEquals("value", entry.value());
     map.clear();
     assertTrue(register.entries().isEmpty());
   }
