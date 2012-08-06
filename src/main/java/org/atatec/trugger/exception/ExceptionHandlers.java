@@ -23,7 +23,7 @@ import org.atatec.trugger.TruggerException;
  * A class that holds a set of exception handlers
  *
  * @author Marcelo Varella Barca Guimarães
- * @see 3.2
+ * @since 4.0
  */
 public class ExceptionHandlers {
   public static final ExceptionHandler DEFAULT_EXCEPTION_HANDLER = new ExceptionHandler<Throwable>() {
