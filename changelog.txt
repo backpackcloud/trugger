@@ -9,6 +9,7 @@ Version 4.0
   - Support for JBoss Virtual Filesystem 3.1.0 (allows class scanning in JBoss AS 7.x)
   - Improved API for registering a ResourceFinder.
   - Method RegistryEntry#registry renamed to RegistryEntry#value
+  - Method Predicates#newComposition removed. Use Predicates#is instead.
 
 Version 3.1
 - Major Changes
