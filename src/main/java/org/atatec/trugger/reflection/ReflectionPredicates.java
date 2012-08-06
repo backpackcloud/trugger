@@ -25,7 +25,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Arrays;
 
-import static org.atatec.trugger.predicate.Predicates.newComposition;
+import static org.atatec.trugger.predicate.Predicates.is;
 
 /**
  * An utilitity class for helping the use of {@link Predicate} object that
@@ -48,7 +48,7 @@ public class ReflectionPredicates {
    * take no parameter, return an object and not be static. If the method has
    * the prefix "is", then it must return a boolean value.
    */
-  public static final CompositePredicate<Method> GETTER = newComposition(new Predicate<Method>() {
+  public static final CompositePredicate<Method> GETTER = is(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
       String name = method.getName();
@@ -80,11 +80,11 @@ public class ReflectionPredicates {
    * The method must have the "set" prefix, take one parameter, return no value
    * (a void method) and not be static.
    */
-  public static final CompositePredicate<Method> SETTER = newComposition(new Predicate<Method>() {
+  public static final CompositePredicate<Method> SETTER = is(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
       if ((method.getParameterTypes().length != 1) || (Reflection.isStatic(method))
-          || (method.getReturnType() != Void.TYPE)) {
+        || (method.getReturnType() != Void.TYPE)) {
         return false;
       }
 
@@ -104,7 +104,7 @@ public class ReflectionPredicates {
    *         method for the specified property name.
    */
   public static CompositePredicate<Method> getterFor(final String propertyName) {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         if (!GETTER.evaluate(element)) {
@@ -133,7 +133,7 @@ public class ReflectionPredicates {
    *         method for the specified property name.
    */
   public static CompositePredicate<Method> setterFor(final String propertyName) {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         if (!SETTER.evaluate(element)) {
@@ -221,7 +221,7 @@ public class ReflectionPredicates {
   /**
    * Predicate that returns <code>true</code> if an element is <i>synthetic</i>.
    */
-  public static final CompositePredicate<Member> SYNTHETIC = newComposition(new Predicate<Member>() {
+  public static final CompositePredicate<Member> SYNTHETIC = is(new Predicate<Member>() {
 
     public boolean evaluate(Member element) {
       return element.isSynthetic();
@@ -309,7 +309,7 @@ public class ReflectionPredicates {
   /**
    * Predicate that returns <code>true</code> if a class is <i>synthetic</i>.
    */
-  public static final CompositePredicate<Class> SYNTHETIC_CLASS = newComposition(new Predicate<Class>() {
+  public static final CompositePredicate<Class> SYNTHETIC_CLASS = is(new Predicate<Class>() {
 
     public boolean evaluate(Class element) {
       return element.isSynthetic();
@@ -348,7 +348,7 @@ public class ReflectionPredicates {
   /**
    * Predicate that returns <code>true</code> if a class is an <i>enum</i>.
    */
-  public static final CompositePredicate<Class> ENUM = newComposition(new Predicate<Class>() {
+  public static final CompositePredicate<Class> ENUM = is(new Predicate<Class>() {
 
     public boolean evaluate(Class element) {
       return element.isEnum();
@@ -385,7 +385,7 @@ public class ReflectionPredicates {
   /**
    * Predicate that returns <code>true</code> if a method is a bridge method.
    */
-  public static final CompositePredicate<Method> BRIDGE = newComposition(new Predicate<Method>() {
+  public static final CompositePredicate<Method> BRIDGE = is(new Predicate<Method>() {
 
     public boolean evaluate(Method element) {
       return element.isBridge();
@@ -408,7 +408,7 @@ public class ReflectionPredicates {
    */
   public static <T extends AnnotatedElement> CompositePredicate<T> annotatedWith(
       final Class<? extends Annotation> annotationType) {
-    return newComposition(new Predicate<AnnotatedElement>() {
+    return is(new Predicate<AnnotatedElement>() {
 
       public boolean evaluate(AnnotatedElement element) {
         return element.isAnnotationPresent(annotationType);
@@ -435,7 +435,7 @@ public class ReflectionPredicates {
    * annotations.
    */
   public static final CompositePredicate<AnnotatedElement> ANNOTATED =
-      newComposition(new Predicate<AnnotatedElement>() {
+      is(new Predicate<AnnotatedElement>() {
 
         public boolean evaluate(AnnotatedElement element) {
           return element.getDeclaredAnnotations().length > 0;
@@ -458,7 +458,7 @@ public class ReflectionPredicates {
    *         is assignable from the evaluated element.
    */
   public static CompositePredicate<Class> assignableTo(final Class clazz) {
-    return newComposition(new Predicate<Class>() {
+    return is(new Predicate<Class>() {
 
       public boolean evaluate(Class element) {
         return clazz.isAssignableFrom(element);
@@ -484,7 +484,7 @@ public class ReflectionPredicates {
    *         a name that with the given one.
    */
   public static <T extends Member> CompositePredicate<T> named(final String name) {
-    return newComposition(new Predicate<Member>() {
+    return is(new Predicate<Member>() {
 
       public boolean evaluate(Member element) {
         return element.getName().equals(name);
@@ -502,7 +502,7 @@ public class ReflectionPredicates {
    *         has the specified modifiers.
    */
   public static <T extends Member> CompositePredicate<T> withModifiers(final int... modifiers) {
-    return newComposition(new Predicate<Member>() {
+    return is(new Predicate<Member>() {
 
       public boolean evaluate(Member element) {
         int elModifiers = element.getModifiers();
@@ -526,7 +526,7 @@ public class ReflectionPredicates {
    *         element does not have the specified modifiers.
    */
   public static <T extends Member> CompositePredicate<T> withoutModifiers(final int... modifiers) {
-    return newComposition(new Predicate<Member>() {
+    return is(new Predicate<Member>() {
 
       public boolean evaluate(Member element) {
         int elModifiers = element.getModifiers();
@@ -550,7 +550,7 @@ public class ReflectionPredicates {
    *         has the specified type as the return type.
    */
   public static CompositePredicate<Method> ofReturnType(final Class returnType) {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         return element.getReturnType().equals(returnType);
@@ -568,7 +568,7 @@ public class ReflectionPredicates {
    *         has the return type assignable to the specified type.
    */
   public static CompositePredicate<Method> ofReturnTypeAssignableTo(final Class returnType) {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         return returnType.isAssignableFrom(element.getReturnType());
@@ -586,7 +586,7 @@ public class ReflectionPredicates {
    *         is of an assignable type of the given one.
    */
   public static CompositePredicate<Field> ofType(final Class type, final boolean assignable) {
-    return newComposition(new Predicate<Field>() {
+    return is(new Predicate<Field>() {
 
       public boolean evaluate(Field element) {
         if (assignable) {
@@ -607,7 +607,7 @@ public class ReflectionPredicates {
    *         has the specified modifiers.
    */
   public static CompositePredicate<Class> classWithModifiers(final int... modifiers) {
-    return newComposition(new Predicate<Class>() {
+    return is(new Predicate<Class>() {
 
       public boolean evaluate(Class element) {
         int elModifiers = element.getModifiers();
@@ -640,7 +640,7 @@ public class ReflectionPredicates {
    *         has the specified number of parameters.
    */
   public static CompositePredicate<Method> withParameterLength(final int length) {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         return element.getParameterTypes().length == length;
@@ -658,7 +658,7 @@ public class ReflectionPredicates {
    *         has the specified parameters.
    */
   public static CompositePredicate<Method> withParameters(final Class... parameterTypes) {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         return Arrays.equals(element.getParameterTypes(), parameterTypes);
@@ -676,7 +676,7 @@ public class ReflectionPredicates {
    *         constructor has the specified parameters.
    */
   public static CompositePredicate<Constructor> constructorWithParameters(final Class... parameterTypes) {
-    return newComposition(new Predicate<Constructor>() {
+    return is(new Predicate<Constructor>() {
 
       public boolean evaluate(Constructor element) {
         return Arrays.equals(element.getParameterTypes(), parameterTypes);
@@ -690,7 +690,7 @@ public class ReflectionPredicates {
   }
 
   public static CompositePredicate<Method> withDefaultValue() {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         return element.getDefaultValue() != null;
@@ -706,7 +706,7 @@ public class ReflectionPredicates {
   /**
    * A predicate that returns <code>true</code> if a class is anonymous.
    */
-  public static final CompositePredicate<Class> ANONYMOUS = newComposition(new Predicate<Class>() {
+  public static final CompositePredicate<Class> ANONYMOUS = is(new Predicate<Class>() {
 
     public boolean evaluate(Class element) {
       return element.isAnonymousClass();
@@ -724,7 +724,7 @@ public class ReflectionPredicates {
   public static final CompositePredicate<Class> NON_ANONYMOUS = ANONYMOUS.negate();
 
   public static CompositePredicate<Method> methodDeclaredIn(final Class type) {
-    return newComposition(new Predicate<Method>() {
+    return is(new Predicate<Method>() {
 
       public boolean evaluate(Method element) {
         Class<?> declaringClass = element.getDeclaringClass();

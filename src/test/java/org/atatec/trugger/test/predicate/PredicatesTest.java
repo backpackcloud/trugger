@@ -18,7 +18,7 @@ package org.atatec.trugger.test.predicate;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.atatec.trugger.predicate.Predicates.newComposition;
+import static org.atatec.trugger.predicate.Predicates.is;
 import static org.atatec.trugger.predicate.Predicates.not;
 import static org.atatec.trugger.predicate.Predicates.valueOf;
 import org.atatec.trugger.predicate.CompositePredicate;
@@ -74,7 +74,7 @@ public class PredicatesTest {
     assertTrue(eval(valueOf(true)));
     assertFalse(eval(valueOf(false)));
 
-    assertFalse(eval(not(newComposition(new Predicate() {
+    assertFalse(eval(not(is(new Predicate() {
 
       public boolean evaluate(Object element) {
         return true;

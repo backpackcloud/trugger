@@ -39,11 +39,11 @@ public final class Predicates {
   /**
    * A predicate that always returns <code>true</code>.
    */
-  public static final CompositePredicate ALWAYS_TRUE = newComposition(new ConstantPredicate(true));
+  public static final CompositePredicate ALWAYS_TRUE = is(new ConstantPredicate(true));
   /**
    * A predicate that always returns <code>false</code>.
    */
-  public static final CompositePredicate ALWAYS_FALSE = newComposition(new ConstantPredicate(false));
+  public static final CompositePredicate ALWAYS_FALSE = is(new ConstantPredicate(false));
 
   /**
    * Note: This method returns the {@link #ALWAYS_TRUE} field, but with type
@@ -78,7 +78,7 @@ public final class Predicates {
    * @return a predicate that returns the negation of the given one.
    */
   public static <T> CompositePredicate<T> not(Predicate<? super T> predicate) {
-    return Predicates.<T> newComposition(predicate).negate();
+    return Predicates.<T>is(predicate).negate();
   }
 
   /**
@@ -96,12 +96,8 @@ public final class Predicates {
    *          the initial predicate of the composition.
    * @return the created predicate.
    */
-  public static <T> CompositePredicate<T> newComposition(Predicate<? super T> predicate) {
-    return factory.createCompositePredicate(predicate);
-  }
-
   public static <T> CompositePredicate<T> is(Predicate<? super T> predicate) {
-    return newComposition(predicate);
+    return factory.createCompositePredicate(predicate);
   }
 
   /**
@@ -126,7 +122,7 @@ public final class Predicates {
    * @since 2.5
    */
   public static CompositePredicate<Object> validUsing(final Result<ValidationResult, Object> result) {
-    return newComposition(new Predicate<Object>() {
+    return is(new Predicate<Object>() {
 
       public boolean evaluate(Object element) {
         return result.in(element).isValid();
@@ -140,7 +136,7 @@ public final class Predicates {
    * @since 2.5
    */
   public static CompositePredicate<Object> invalidUsing(final Result<ValidationResult, Object> result) {
-    return newComposition(new Predicate<Object>() {
+    return is(new Predicate<Object>() {
 
       public boolean evaluate(Object element) {
         return result.in(element).isInvalid();

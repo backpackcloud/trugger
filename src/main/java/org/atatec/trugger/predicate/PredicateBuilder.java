@@ -55,7 +55,7 @@ public class PredicateBuilder<T> {
    */
   public PredicateBuilder<T> add(Predicate<? super T> predicate) {
     if(this.predicate == null) {
-      this.predicate = Predicates.newComposition(predicate);
+      this.predicate = Predicates.is(predicate);
     } else {
       this.predicate = this.predicate.and(predicate);
     }

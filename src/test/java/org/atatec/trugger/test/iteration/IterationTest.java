@@ -47,7 +47,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class IterationTest {
 
-  private CompositePredicate<Integer> even = Predicates.newComposition(new Predicate<Integer>() {
+  private CompositePredicate<Integer> even = Predicates.is(new Predicate<Integer>() {
 
     public boolean evaluate(Integer element) {
       return element % 2 == 0;

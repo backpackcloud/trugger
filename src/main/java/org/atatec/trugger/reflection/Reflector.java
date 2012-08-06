@@ -88,7 +88,7 @@ import org.atatec.trugger.selector.SetterMethodSelector;
  * </pre>
  * </ul>
  *
- * @see Predicates#newComposition(org.atatec.trugger.predicate.Predicate)
+ * @see Predicates#is(org.atatec.trugger.predicate.Predicate)
  * @author Marcelo Varella Barca Guimarães
  */
 public interface Reflector {

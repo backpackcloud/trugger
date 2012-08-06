@@ -40,12 +40,12 @@ public final class ElementPredicates {
    * @since 2.0
    */
   public static CompositePredicate<Element> ofType(final Class<?> type) {
-    return Predicates.newComposition(new Predicate<Element>() {
-      
+    return Predicates.is(new Predicate<Element>() {
+
       public boolean evaluate(Element element) {
         return type.equals(element.type());
       }
-      
+
       @Override
       public String toString() {
         return "Of type " + type;
@@ -59,12 +59,12 @@ public final class ElementPredicates {
    */
   public static CompositePredicate<Element> named(final String... elementNames) {
     Arrays.sort(elementNames);
-    return Predicates.newComposition(new Predicate<Element>() {
-      
+    return Predicates.is(new Predicate<Element>() {
+
       public boolean evaluate(Element element) {
         return Arrays.binarySearch(elementNames, element.name()) >= 0;
       }
-      
+
       @Override
       public String toString() {
         return "Named " + Arrays.toString(elementNames);
@@ -75,12 +75,12 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element is writable.
    */
-  public static final CompositePredicate<Element> WRITABLE = Predicates.newComposition(new Predicate<Element>() {
-    
+  public static final CompositePredicate<Element> WRITABLE = Predicates.is(new Predicate<Element>() {
+
     public boolean evaluate(Element element) {
       return element.isWritable();
     }
-    
+
     @Override
     public String toString() {
       return "Writable";
@@ -95,12 +95,12 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
-  public static final CompositePredicate<Element> READABLE = Predicates.newComposition(new Predicate<Element>() {
-    
+  public static final CompositePredicate<Element> READABLE = Predicates.is(new Predicate<Element>() {
+
     public boolean evaluate(Element element) {
       return element.isReadable();
     }
-    
+
     @Override
     public String toString() {
       return "Readable";
@@ -117,12 +117,12 @@ public final class ElementPredicates {
    *         assignable to the given type.
    */
   public static CompositePredicate<Element> assignableTo(final Class<?> type) {
-    return Predicates.newComposition(new Predicate<Element>() {
-      
+    return Predicates.is(new Predicate<Element>() {
+
       public boolean evaluate(Element element) {
         return Utils.areAssignable(type, element.type());
       }
-      
+
       @Override
       public String toString() {
         return "Assignable to " + type.getName();
@@ -134,12 +134,12 @@ public final class ElementPredicates {
    * A predicate that returns <code>true</code> if the element is
    * {@link Element#isSpecific() specific}.
    */
-  public static final CompositePredicate<Element> SPECIFIC = Predicates.newComposition(new Predicate<Element>() {
-    
+  public static final CompositePredicate<Element> SPECIFIC = Predicates.is(new Predicate<Element>() {
+
     public boolean evaluate(Element element) {
       return element.isSpecific();
     }
-    
+
     @Override
     public String toString() {
       return "Specific";
