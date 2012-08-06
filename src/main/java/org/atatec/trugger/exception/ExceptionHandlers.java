@@ -20,12 +20,17 @@ package org.atatec.trugger.exception;
 import org.atatec.trugger.TruggerException;
 
 /**
- * A class that holds a set of exception handlers
+ * A class to hold exception handlers.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 4.0
  */
 public class ExceptionHandlers {
+
+  /**
+   * The default exception handler. This handler throws every {@link RuntimeException} and
+   * encapsulates the others in a {@link TruggerException}.
+   */
   public static final ExceptionHandler DEFAULT_EXCEPTION_HANDLER = new ExceptionHandler<Throwable>() {
     @Override
     public void handle(Throwable throwable) {
@@ -36,4 +41,5 @@ public class ExceptionHandlers {
       }
     }
   };
+
 }
