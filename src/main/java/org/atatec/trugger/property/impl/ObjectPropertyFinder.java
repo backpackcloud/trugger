@@ -19,7 +19,7 @@ package org.atatec.trugger.property.impl;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.impl.ElementCache;
+import org.atatec.trugger.element.impl.ClassElementsCache;
 import org.atatec.trugger.element.impl.ElementFinderHelper;
 
 import java.lang.reflect.Field;
@@ -44,7 +44,7 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
  */
 public final class ObjectPropertyFinder implements Finder<Element> {
 
-  private final ElementCache cache = new ElementCache() {
+  private final ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
       Set<Method> declaredMethods = methods().nonStatic()

@@ -36,7 +36,7 @@ import static org.atatec.trugger.reflection.Reflection.methods;
  */
 public final class AnnotationElementFinder implements Finder<Element> {
 
-  private ElementCache cache = new ElementCache() {
+  private ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
       Set<Method> declaredMethods = methods().in(type);

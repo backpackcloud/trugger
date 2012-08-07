@@ -29,24 +29,30 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Marcelo Varella Barca Guimarães
  * @since 4.0
  */
-public abstract class ElementCache {
+public abstract class ClassElementsCache {
 
-  private Map<Class, SoftReference<Map<String, Element>>> map;
+  private SoftReference<Map<Class, Map<String, Element>>> ref;
 
-  public ElementCache() {
-    this.map = new ConcurrentHashMap<Class, SoftReference<Map<String, Element>>>(50);
+  public ClassElementsCache() {
+    this.ref = new SoftReference<Map<Class, Map<String, Element>>>(
+      new ConcurrentHashMap<Class, Map<String, Element>>(50)
+    );
   }
 
   private Map<String, Element> getMap(Object target) {
     Class type = Utils.resolveType(target);
-    SoftReference<Map<String, Element>> reference = map.get(type);
-    if (reference == null || reference.get() == null) {
-      Map<String, Element> elementMap = new HashMap<String, Element>(20);
-      reference = new SoftReference<Map<String, Element>>(elementMap);
-      map.put(type, reference);
+    Map<Class, Map<String, Element>> map = ref.get();
+    if (map == null) {
+      map = new ConcurrentHashMap<Class, Map<String, Element>>(50);
+      this.ref = new SoftReference<Map<Class, Map<String, Element>>>(map);
+    }
+    Map<String, Element> elementMap = map.get(type);
+    if (elementMap == null) {
+      elementMap = new HashMap<String, Element>(20);
+      map.put(type, elementMap);
       loadElements(type, elementMap);
     }
-    return reference.get();
+    return elementMap;
   }
 
   public Collection get(Object target) {
