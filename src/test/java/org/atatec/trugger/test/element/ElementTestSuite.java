@@ -37,6 +37,7 @@ import org.junit.runners.Suite.SuiteClasses;
   ElementsSelectorTest.class,
 
   MapElementTest.class,
+  ArrayElementTest.class,
   ResultSetElementTest.class,
   AnnotationElementTest.class,
   PropertiesElementTest.class,

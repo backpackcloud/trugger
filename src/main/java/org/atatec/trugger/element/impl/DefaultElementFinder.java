@@ -34,8 +34,8 @@ import static org.atatec.trugger.reflection.Reflection.field;
 import static org.atatec.trugger.reflection.Reflection.fields;
 
 /**
- * A default finder for every type of objects. It uses the properties and fields
- * for resolving the elements.
+ * A default finder for every type of objects. It uses the properties and fields for
+ * resolving the elements.
  *
  * @author Marcelo Varella Barca Guimarães
  */
@@ -49,6 +49,9 @@ public class DefaultElementFinder implements Finder<Element> {
         Element propertyElement = null;
         Element fieldElement = null;
         boolean specific = !(target instanceof Class<?>);
+        if (specific && target.getClass().isArray()) {
+          return new ArrayElementFinder().find(name).in(target);
+        }
         Element property = Properties.property(name).in(target);
         if (property != null) {
           propertyElement = specific ? new SpecificElement(property, target) : property;
@@ -57,7 +60,7 @@ public class DefaultElementFinder implements Finder<Element> {
         if (field != null) {
           fieldElement = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
         }
-        if(property != null && field != null) {
+        if (property != null && field != null) {
           return new MergedElement(fieldElement, propertyElement);
         }
         return propertyElement != null ? propertyElement : fieldElement;
@@ -73,6 +76,9 @@ public class DefaultElementFinder implements Finder<Element> {
       public Set<Element> in(Object target) {
         Map<String, Element> map = new HashMap<String, Element>();
         boolean specific = !(target instanceof Class);
+        if (specific && target.getClass().isArray()) {
+          return new ArrayElementFinder().findAll().in(target);
+        }
         Set<Element> properties = Properties.properties().in(target);
         Set<Field> fields = fields().recursively().in(target);
 
@@ -97,7 +103,9 @@ public class DefaultElementFinder implements Finder<Element> {
   private static class MergedElement implements Element {
 
     private final Element forRead;
+
     private final Element forWrite;
+
     private final Element decorated;
 
     private MergedElement(Element field, Element property) {
@@ -182,7 +190,7 @@ public class DefaultElementFinder implements Finder<Element> {
       if (obj == null) {
         return false;
       }
-      if(obj instanceof DefaultElementFinder.MergedElement) {
+      if (obj instanceof DefaultElementFinder.MergedElement) {
         return ((DefaultElementFinder.MergedElement) obj).decorated.equals(decorated);
       }
       return decorated.equals(obj);

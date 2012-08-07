@@ -10,6 +10,7 @@ Version 4.0
   - Improved API for registering a ResourceFinder.
   - Method RegistryEntry#registry renamed to RegistryEntry#value
   - Method Predicates#newComposition removed. Use Predicates#is instead.
+  - ElementFinder for arrays
 
 Version 3.1
 - Major Changes
