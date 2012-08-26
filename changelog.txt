@@ -11,6 +11,8 @@ Version 4.0
   - Method RegistryEntry#registry renamed to RegistryEntry#value
   - Method Predicates#newComposition removed. Use Predicates#is instead.
   - ElementFinder for arrays.
+- Minor Changes
+  - Using SoftReferences to cache annotation and object elements.
 
 Version 3.1
 - Major Changes
