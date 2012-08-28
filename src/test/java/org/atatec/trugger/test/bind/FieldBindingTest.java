@@ -16,9 +16,7 @@
  */
 package org.atatec.trugger.test.bind;
 
-import org.atatec.trugger.Resolver;
 import org.atatec.trugger.bind.Binder;
-import org.atatec.trugger.element.Element;
 import org.junit.Test;
 
 import static org.atatec.trugger.bind.Bind.newBinder;
@@ -42,11 +40,7 @@ public class FieldBindingTest {
     Binder binder = newBinder();
     binder.bind(10).toFields().ofType(int.class);
     binder.bind(true).toField("booleanField");
-    binder.use(new Resolver<Object, Element>() {
-      public Object resolve(Element target) {
-        return target.name();
-      }
-    }).toFields().ofType(String.class);
+    binder.bind("stringField").toFields().ofType(String.class);
 
     FieldTest object = new FieldTest();
 
@@ -57,13 +51,10 @@ public class FieldBindingTest {
     assertEquals("stringField", object.stringField);
 
     binder = newBinder();
-    binder.bind(10).toField().ofType(int.class);
-    binder.bind(true).toField().ofType(boolean.class);
-    binder.use(new Resolver<Object, Element>() {
-      public Object resolve(Element target) {
-        return target.name();
-      }
-    }).toField().ofType(String.class);
+    binder.use(new ResultResolver(10)).toField().ofType(int.class);
+    binder.use(new ResultResolver(true)).toField("booleanField").ofType(boolean.class);
+    binder.use(new ResultResolver(false)).toField("booleanField").ofType(Boolean.class);
+    binder.use(new ResultResolver("stringField")).toFields().ofType(String.class);
 
     object = new FieldTest();
 
