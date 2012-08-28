@@ -16,15 +16,11 @@
  */
 package org.atatec.trugger.test.bind;
 
+import org.atatec.trugger.bind.PostBind;
+import org.junit.Test;
+
 import static org.atatec.trugger.bind.Bind.newBinder;
 import static org.junit.Assert.assertEquals;
-import org.atatec.trugger.bind.PostBind;
-import org.atatec.trugger.element.impl.TruggerElementSelector;
-import org.atatec.trugger.element.impl.TruggerElementsSelector;
-import org.atatec.trugger.reflection.impl.TruggerFieldSelector;
-import org.atatec.trugger.reflection.impl.TruggerFieldsSelector;
-
-import org.junit.Test;
 
 /**
  * A class for testing bind operations.
@@ -47,17 +43,6 @@ public class BinderTest {
       throw new Error();
     }
 
-  }
-
-  @Test
-  public void testSelectors() {
-    // these selectors are tested in another test class
-    // just check the types to ensure they will work
-    assertEquals(TruggerElementsSelector.class, newBinder().use(null).toElements().getClass());
-    assertEquals(TruggerElementSelector.class, newBinder().use(null).toElement("name").getClass());
-
-    assertEquals(TruggerFieldSelector.class, newBinder().use(null).toField("name").getClass());
-    assertEquals(TruggerFieldsSelector.class, newBinder().use(null).toFields().getClass());
   }
 
   @Test

@@ -66,7 +66,7 @@ public class ValueBinder implements BindSelector {
 
   public FieldSpecifier toField() {
     FieldSelector selector = field().nonFinal().recursively();
-    binds.add(new BindableElementsBindApplier(selector, value));
+    binds.add(new BindableElementBindApplier(selector, value));
     return selector;
   }
 

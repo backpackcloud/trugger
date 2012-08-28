@@ -16,13 +16,13 @@
  */
 package org.atatec.trugger.test.bind;
 
-import static org.atatec.trugger.bind.Bind.newBinder;
-import static org.junit.Assert.assertEquals;
 import org.atatec.trugger.Resolver;
 import org.atatec.trugger.bind.Binder;
 import org.atatec.trugger.element.Element;
-
 import org.junit.Test;
+
+import static org.atatec.trugger.bind.Bind.newBinder;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -49,6 +49,23 @@ public class FieldBindingTest {
     }).toFields().ofType(String.class);
 
     FieldTest object = new FieldTest();
+
+    binder.applyBinds(object);
+
+    assertEquals(10, object.intField);
+    assertEquals(true, object.booleanField);
+    assertEquals("stringField", object.stringField);
+
+    binder = newBinder();
+    binder.bind(10).toField().ofType(int.class);
+    binder.bind(true).toField().ofType(boolean.class);
+    binder.use(new Resolver<Object, Element>() {
+      public Object resolve(Element target) {
+        return target.name();
+      }
+    }).toField().ofType(String.class);
+
+    object = new FieldTest();
 
     binder.applyBinds(object);
 
