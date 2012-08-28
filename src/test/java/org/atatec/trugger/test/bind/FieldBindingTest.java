@@ -30,6 +30,7 @@ public class FieldBindingTest {
   public class FieldTest {
 
     private int intField;
+    private double doubleField;
     private boolean booleanField;
     private String stringField;
 
@@ -40,6 +41,7 @@ public class FieldBindingTest {
     Binder binder = newBinder();
     binder.bind(10).toFields().ofType(int.class);
     binder.bind(true).toField("booleanField");
+    binder.bind(50.2).toField().ofType(double.class);
     binder.bind("stringField").toFields().ofType(String.class);
 
     FieldTest object = new FieldTest();
@@ -48,12 +50,13 @@ public class FieldBindingTest {
 
     assertEquals(10, object.intField);
     assertEquals(true, object.booleanField);
+    assertEquals(50.2, object.doubleField, 1e-4);
     assertEquals("stringField", object.stringField);
 
     binder = newBinder();
     binder.use(new ResultResolver(10)).toField().ofType(int.class);
     binder.use(new ResultResolver(true)).toField("booleanField").ofType(boolean.class);
-    binder.use(new ResultResolver(false)).toField("booleanField").ofType(Boolean.class);
+    binder.use(new ResultResolver(50.2)).toField().ofType(double.class);
     binder.use(new ResultResolver("stringField")).toFields().ofType(String.class);
 
     object = new FieldTest();
@@ -62,6 +65,7 @@ public class FieldBindingTest {
 
     assertEquals(10, object.intField);
     assertEquals(true, object.booleanField);
+    assertEquals(50.2, object.doubleField, 1e-4);
     assertEquals("stringField", object.stringField);
   }
 

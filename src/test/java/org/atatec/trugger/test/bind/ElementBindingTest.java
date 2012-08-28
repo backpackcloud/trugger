@@ -16,26 +16,21 @@
  */
 package org.atatec.trugger.test.bind;
 
+import org.atatec.trugger.bind.Binder;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import static org.atatec.trugger.bind.Bind.newBinder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import org.atatec.trugger.Resolver;
-import org.atatec.trugger.bind.Binder;
-import org.atatec.trugger.element.Element;
-
-import org.junit.Before;
-import org.junit.Test;
-
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class ElementBindingTest {
 
   private static class ElementBind {
@@ -60,18 +55,27 @@ public class ElementBindingTest {
   @Before
   public void initialize() {
     binder = newBinder();
-    binder.bind(10).toElements().ofType(int.class);
-    binder.use(new Resolver<Object, Element>() {
-      public Object resolve(Element target) {
-        return target.name();
-      }
-    }).toElements().ofType(String.class);
+    binder.bind(10).toElement().ofType(int.class);
+    binder.bind("stringField").toElements().ofType(String.class);
     binder.bind(true).toElement("BOOLEAN_FIELD");
   }
 
   @Test
   public void testGeneralElementBinding() {
     ElementBind object = new ElementBind();
+
+    binder.applyBinds(object);
+
+    assertEquals(15, object.intField);
+    assertEquals("STRINGFIELD", object.stringField);
+    assertEquals(true, ElementBind.BOOLEAN_FIELD);
+
+    binder = newBinder();
+    binder.use(new ResultResolver(10)).toElement().ofType(int.class);
+    binder.use(new ResultResolver("stringField")).toElements().ofType(String.class);
+    binder.use(new ResultResolver(true)).toElement("BOOLEAN_FIELD");
+
+    object = new ElementBind();
 
     binder.applyBinds(object);
 
