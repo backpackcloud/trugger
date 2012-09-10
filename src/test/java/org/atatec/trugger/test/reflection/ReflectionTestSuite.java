@@ -42,6 +42,7 @@ import org.junit.runners.Suite.SuiteClasses;
   ConstructorsSelectorTest.class,
   GetterMethodSelectorTest.class,
   SetterMethodSelectorTest.class,
+  MemberFindersRegistryTest.class,
   NoNamedMethodSelectorTest.class,
   FieldGetterMethodSelectorTest.class,
   FieldSetterMethodSelectorTest.class
