@@ -16,12 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import static org.atatec.trugger.iteration.Iteration.selectFrom;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.util.Set;
-
 import org.atatec.trugger.iteration.SearchException;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
@@ -31,6 +25,12 @@ import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorSelector;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.util.Set;
+
+import static org.atatec.trugger.iteration.Iteration.selectFrom;
+
 /**
  * A default implementation for the constructor selector.
  *
@@ -39,7 +39,14 @@ import org.atatec.trugger.selector.ConstructorSelector;
 public class TruggerConstructorSelector implements ConstructorSelector {
 
   private PredicateBuilder<Constructor<?>> builder = new PredicateBuilder<Constructor<?>>();
+
   private Class[] parameterTypes = null;
+
+  private MemberFindersRegistry registry;
+
+  public TruggerConstructorSelector(MemberFindersRegistry registry) {
+    this.registry = registry;
+  }
 
   public ConstructorSelector withAccess(Access access) {
     builder.add(access.memberPredicate());
@@ -58,10 +65,10 @@ public class TruggerConstructorSelector implements ConstructorSelector {
 
   @Override
   public Constructor<?> in(Object target) throws ReflectionException {
-    if(parameterTypes != null) {
-      return (Constructor<?>) new MemberSelector(new ConstructorFinder(parameterTypes), builder.predicate()).in(target);
+    if (parameterTypes != null) {
+      return (Constructor<?>) new MemberSelector(registry.constructorFinder(parameterTypes), builder.predicate()).in(target);
     }
-    MembersSelector<Constructor<?>> selector = new MembersSelector<Constructor<?>>(new ConstructorsFinder());
+    MembersSelector<Constructor<?>> selector = new MembersSelector<Constructor<?>>(registry.constructorsFinder());
     Set<Constructor<?>> set = selector.in(target);
     try {
       return selectFrom(set).element(builder.predicate());
@@ -96,7 +103,7 @@ public class TruggerConstructorSelector implements ConstructorSelector {
 
   public CompositePredicate<Constructor<?>> toPredicate() {
     CompositePredicate<Constructor<?>> predicate = builder.predicate();
-    if(parameterTypes != null) {
+    if (parameterTypes != null) {
       return predicate.and(ReflectionPredicates.constructorWithParameters(parameterTypes));
     }
     return predicate;

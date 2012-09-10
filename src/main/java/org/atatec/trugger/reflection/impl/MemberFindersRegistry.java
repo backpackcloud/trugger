@@ -14,19 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.reflection.impl;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
-public class MethodsFinder implements MembersFinder<Method> {
-  
-  public Collection<Method> find(Class<?> type) {
-    return Arrays.asList(type.getMethods());
-  }
-  
+/** @author Marcelo Varella Barca Guimarães */
+public interface MemberFindersRegistry {
+
+  MemberFinder<Field> fieldFinder(String name);
+
+  MembersFinder<Field> fieldsFinder();
+
+  MemberFinder<Method> methodFinder(String name, Class... args);
+
+  MembersFinder<Method> methodsFinder();
+
+  MemberFinder<Constructor<?>> constructorFinder(Class... args);
+
+  MembersFinder<Constructor<?>> constructorsFinder();
+
 }

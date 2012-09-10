@@ -16,15 +16,15 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldGetterMethodSelector;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * A default implementation for the getter method selector.
@@ -35,9 +35,12 @@ public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelect
   
   private final PredicateBuilder<Method> builder = new PredicateBuilder<Method>();
   private final Field field;
-  
-  public TruggerFieldGetterMethodSelector(Field field) {
+
+  private MembersFinder<Method> finder;
+
+  public TruggerFieldGetterMethodSelector(Field field, MembersFinder<Method> finder) {
     this.field = field;
+    this.finder = finder;
     builder.add(ReflectionPredicates.ofReturnType(field.getType()));
   }
   
@@ -67,7 +70,7 @@ public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelect
   }
   
   public Method in(Object target) {
-    return new MemberSelector<Method>(new GetterFinder(field.getName()), builder.predicate()).in(target);
+    return new MemberSelector<Method>(new GetterFinder(field.getName(), finder), builder.predicate()).in(target);
   }
   
   public CompositePredicate<Method> toPredicate() {

@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
 public class TruggerReflectionFactory implements ReflectionFactory {
 
   public Reflector createReflector() {
-    return new TruggerReflector();
+    return new TruggerReflector(new DeclaredMemberFindersRegistry());
   }
 
   public MethodInvoker createInvoker(Method method) {

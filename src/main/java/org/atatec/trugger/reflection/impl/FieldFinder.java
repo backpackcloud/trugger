@@ -31,7 +31,7 @@ public class FieldFinder implements MemberFinder<Field> {
   
   @Override
   public Field find(Class<?> type) throws Exception {
-    return type.getDeclaredField(name);
+    return type.getField(name);
   }
   
 }

@@ -16,15 +16,15 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.Set;
-
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldsSelector;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.Set;
 
 /**
  * A default implementation for the fields selector.
@@ -33,8 +33,12 @@ import org.atatec.trugger.selector.FieldsSelector;
  */
 public class TruggerFieldsSelector implements FieldsSelector {
   
-  private MembersSelector<Field> selector = new MembersSelector<Field>(new FieldsFinder());
-  
+  private MembersSelector<Field> selector;
+
+  public TruggerFieldsSelector(MembersFinder<Field> finder) {
+    selector = new MembersSelector<Field>(finder);
+  }
+
   public FieldsSelector annotatedWith(Class<? extends Annotation> type) {
     selector.builder().add(ReflectionPredicates.annotatedWith(type));
     return this;

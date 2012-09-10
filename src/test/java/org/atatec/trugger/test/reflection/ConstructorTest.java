@@ -16,22 +16,21 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.selector.ConstructorSelector;
+import org.atatec.trugger.selector.ConstructorsSelector;
+import org.atatec.trugger.test.SelectionTestAdapter;
+import org.junit.Test;
+
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Set;
+
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertResult;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Set;
-
-import org.atatec.trugger.selector.ConstructorSelector;
-import org.atatec.trugger.selector.ConstructorsSelector;
-import org.atatec.trugger.test.SelectionTestAdapter;
-
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -44,6 +43,8 @@ public class ConstructorTest {
 
   @Test
   public void testNotDeclaredConstructor() {
+    assertNotNull(reflect().constructor().withoutParameters().in(NoDeclaredConstructor.class));
+    assertNotNull(reflect().visible().constructor().withoutParameters().in(NoDeclaredConstructor.class));
     assertResult(new SelectionTestAdapter<ConstructorSelector, Constructor>(){
       public ConstructorSelector createSelector() {
         return reflect().constructor();

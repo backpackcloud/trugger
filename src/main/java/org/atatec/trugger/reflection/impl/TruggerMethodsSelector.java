@@ -16,15 +16,15 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Set;
-
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodsSelector;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * A default implementation for the methods selector.
@@ -33,8 +33,12 @@ import org.atatec.trugger.selector.MethodsSelector;
  */
 public class TruggerMethodsSelector implements MethodsSelector {
   
-  private MembersSelector<Method> selector = new MembersSelector<Method>(new MethodsFinder());
-  
+  private MembersSelector<Method> selector;
+
+  public TruggerMethodsSelector(MembersFinder<Method> finder) {
+    selector = new MembersSelector<Method>(finder);
+  }
+
   public MethodsSelector annotated() {
     selector.builder().add(ReflectionPredicates.ANNOTATED);
     return this;

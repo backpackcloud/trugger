@@ -16,27 +16,26 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import static org.atatec.trugger.iteration.Iteration.selectFrom;
+import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.reflection.ReflectionException;
 
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import org.atatec.trugger.iteration.SearchException;
-import org.atatec.trugger.reflection.ReflectionException;
+import static org.atatec.trugger.iteration.Iteration.selectFrom;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
 
-  public TruggerNoNamedFieldSelector() {
-    super(null);
+  public TruggerNoNamedFieldSelector(MemberFindersRegistry registry) {
+    super(registry);
   }
 
   @Override
   public Field in(Object target) {
-    FieldsFinder finder = new FieldsFinder();
-    MembersSelector<Field> selector = new MembersSelector<Field>(finder);
+    MembersSelector<Field> selector = new MembersSelector<Field>(registry.fieldsFinder());
     if(useHierarchy()) {
       selector.useHierarchy();
     }

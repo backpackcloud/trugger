@@ -34,7 +34,7 @@ public class MethodFinder implements MemberFinder<Method> {
 
   @Override
   public Method find(Class<?> type) throws Exception {
-    return type.getDeclaredMethod(name, parameterTypes);
+    return type.getMethod(name, parameterTypes);
   }
   
 }

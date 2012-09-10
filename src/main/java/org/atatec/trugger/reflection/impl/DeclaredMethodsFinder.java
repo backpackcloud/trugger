@@ -23,10 +23,10 @@ import java.util.Collection;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class MethodsFinder implements MembersFinder<Method> {
+public class DeclaredMethodsFinder implements MembersFinder<Method> {
   
   public Collection<Method> find(Class<?> type) {
-    return Arrays.asList(type.getMethods());
+    return Arrays.asList(type.getDeclaredMethods());
   }
   
 }

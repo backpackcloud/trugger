@@ -23,34 +23,35 @@ import java.lang.reflect.Method;
 /**
  * Interface that defines a factory for objects using in the {@link Reflection}
  * class.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface ReflectionFactory {
-  
+
   /**
    * @return an implementation of the Reflector interface.
    */
   Reflector createReflector();
-  
+
   /**
    * @param method
    *          the method to invoke.
    * @return an implementation of the MethodInvoker interface.
    */
   MethodInvoker createInvoker(Method method);
-  
+
   /**
    * @param constructor
    *          the constructor to invoke.
    * @return an implementation of the ConstructorInvoker interface.
    */
   ConstructorInvoker createInvoker(Constructor<?> constructor);
-  
+
   /**
    * @param field
    *          the field to handle.
    * @return an implementation of the FieldHandler interface.
    */
   FieldHandler createHandler(Field field);
+
 }

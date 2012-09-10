@@ -16,6 +16,16 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.predicate.Predicates;
+import org.atatec.trugger.reflection.ReflectionPredicates;
+import org.atatec.trugger.selector.ConstructorsSelector;
+import org.atatec.trugger.test.Flag;
+import org.atatec.trugger.test.SelectionTestAdapter;
+import org.junit.Test;
+
+import java.lang.reflect.Constructor;
+import java.util.Set;
+
 import static org.atatec.trugger.reflection.Access.DEFAULT;
 import static org.atatec.trugger.reflection.Access.LIKE_DEFAULT;
 import static org.atatec.trugger.reflection.Access.LIKE_PROTECTED;
@@ -26,62 +36,77 @@ import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNoResult;
 import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Constructor;
-import java.util.Set;
-
-import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.ReflectionPredicates;
-import org.atatec.trugger.selector.ConstructorsSelector;
-import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTestAdapter;
-
-import org.junit.Test;
-
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class ConstructorsSelectorTest {
 
   static class AnnotatedSelectorTest {
     @Flag
-    AnnotatedSelectorTest() {}
-    AnnotatedSelectorTest(int i) {}
+    AnnotatedSelectorTest() {
+    }
+
+    public AnnotatedSelectorTest(int i) {
+    }
   }
 
   @Test
   public void testNoSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
     }, AnnotatedSelectorTest.class, 2);
-  }
-
-  @Test
-  public void testAnnoatedSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.annotated();
-      }
-      public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.ANNOTATED);
+        return reflect().visible().constructors();
       }
     }, AnnotatedSelectorTest.class, 1);
   }
 
   @Test
-  public void testNotAnnoatedSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+  public void testAnnoatedSelector() {
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
+      public void makeSelections(ConstructorsSelector selector) {
+        selector.annotated();
+      }
+
+      public void assertions(Set<Constructor> set) {
+        assertMatch(set, ReflectionPredicates.ANNOTATED);
+      }
+    }, AnnotatedSelectorTest.class, 1);
+    assertTrue(reflect().visible().constructors().annotated().in(AnnotatedSelectorTest.class).isEmpty());
+  }
+
+  @Test
+  public void testNotAnnoatedSelector() {
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
+      public ConstructorsSelector createSelector() {
+        return reflect().constructors();
+      }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.notAnnotated();
       }
+
+      public void assertions(Set<Constructor> set) {
+        assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
+      }
+    }, AnnotatedSelectorTest.class, 1);
+
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
+      public ConstructorsSelector createSelector() {
+        return reflect().visible().constructors();
+      }
+
+      public void makeSelections(ConstructorsSelector selector) {
+        selector.notAnnotated();
+      }
+
       public void assertions(Set<Constructor> set) {
         assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
       }
@@ -90,28 +115,48 @@ public class ConstructorsSelectorTest {
 
   @Test
   public void testAnnoatedWithSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.annotatedWith(Flag.class);
       }
+
       public void assertions(Set<Constructor> set) {
         assertMatch(set, ReflectionPredicates.annotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 1);
+    assertTrue(
+      reflect().visible().constructors().annotatedWith(Flag.class)
+        .in(AnnotatedSelectorTest.class).isEmpty());
   }
 
   @Test
   public void testNotAnnoatedWithSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.notAnnotatedWith(Flag.class);
       }
+
+      public void assertions(Set<Constructor> set) {
+        assertMatch(set, ReflectionPredicates.notAnnotatedWith(Flag.class));
+      }
+    }, AnnotatedSelectorTest.class, 1);
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
+      public ConstructorsSelector createSelector() {
+        return reflect().visible().constructors();
+      }
+
+      public void makeSelections(ConstructorsSelector selector) {
+        selector.notAnnotatedWith(Flag.class);
+      }
+
       public void assertions(Set<Constructor> set) {
         assertMatch(set, ReflectionPredicates.notAnnotatedWith(Flag.class));
       }
@@ -120,19 +165,41 @@ public class ConstructorsSelectorTest {
 
   @Test
   public void testPredicateSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.that(Predicates.ALWAYS_TRUE);
       }
     }, AnnotatedSelectorTest.class, 2);
 
-    assertNoResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
+      public ConstructorsSelector createSelector() {
+        return reflect().visible().constructors();
+      }
+
+      public void makeSelections(ConstructorsSelector selector) {
+        selector.that(Predicates.ALWAYS_TRUE);
+      }
+    }, AnnotatedSelectorTest.class, 1);
+
+    assertNoResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
+      public void makeSelections(ConstructorsSelector selector) {
+        selector.that(Predicates.ALWAYS_FALSE);
+      }
+    }, AnnotatedSelectorTest.class);
+
+    assertNoResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
+      public ConstructorsSelector createSelector() {
+        return reflect().visible().constructors();
+      }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.that(Predicates.ALWAYS_FALSE);
       }
@@ -140,58 +207,71 @@ public class ConstructorsSelectorTest {
   }
 
   static class AccessSelectorTest {
-    public AccessSelectorTest() {}
-    private AccessSelectorTest(int i) {}
-    AccessSelectorTest(String s) {}
-    protected AccessSelectorTest(double d) {}
+    public AccessSelectorTest() {
+    }
+
+    private AccessSelectorTest(int i) {
+    }
+
+    AccessSelectorTest(String s) {
+    }
+
+    protected AccessSelectorTest(double d) {
+    }
   }
 
   @Test
   public void testAccessSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.withAccess(PUBLIC);
       }
     }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.withAccess(PROTECTED);
       }
     }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.withAccess(DEFAULT);
       }
     }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.withAccess(PRIVATE);
       }
     }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.withAccess(LIKE_DEFAULT);
       }
     }, AccessSelectorTest.class, 3);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
+    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
       public ConstructorsSelector createSelector() {
         return reflect().constructors();
       }
+
       public void makeSelections(ConstructorsSelector selector) {
         selector.withAccess(LIKE_PROTECTED);
       }

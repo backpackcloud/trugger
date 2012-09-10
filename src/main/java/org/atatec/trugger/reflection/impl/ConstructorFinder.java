@@ -22,7 +22,7 @@ import java.util.Arrays;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ConstructorFinder implements MemberFinder<Constructor> {
+public class ConstructorFinder implements MemberFinder<Constructor<?>> {
   
   private final Class[] parameterTypes;
   
@@ -32,7 +32,7 @@ public class ConstructorFinder implements MemberFinder<Constructor> {
   
   @Override
   public Constructor find(Class<?> type) throws Exception {
-    return type.getDeclaredConstructor(parameterTypes);
+    return type.getConstructor(parameterTypes);
   }
   
 }

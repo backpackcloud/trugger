@@ -18,15 +18,23 @@ package org.atatec.trugger.reflection.impl;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class MethodsFinder implements MembersFinder<Method> {
-  
-  public Collection<Method> find(Class<?> type) {
-    return Arrays.asList(type.getMethods());
+public class DeclaredMethodFinder implements MemberFinder<Method> {
+
+  private final String name;
+  private final Class[] parameterTypes;
+
+  public DeclaredMethodFinder(String name, Class[] parameterTypes) {
+    this.name = name;
+    this.parameterTypes = Arrays.copyOf(parameterTypes, parameterTypes.length);
+  }
+
+  @Override
+  public Method find(Class<?> type) throws Exception {
+    return type.getDeclaredMethod(name, parameterTypes);
   }
   
 }

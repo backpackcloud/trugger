@@ -48,7 +48,7 @@ public class FieldReflectionTest {
   }
 
   @Test
-  public void testHandler() throws Exception {
+  public void testHandler() {
     ValueHandler handler = handle(field("a")).in(this);
     assertNull(handler.value());
     handler.value("string");

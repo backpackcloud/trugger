@@ -16,28 +16,27 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import static org.atatec.trugger.iteration.Iteration.selectFrom;
+import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.reflection.ReflectionException;
+import org.atatec.trugger.reflection.ReflectionPredicates;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.atatec.trugger.iteration.SearchException;
-import org.atatec.trugger.reflection.ReflectionException;
-import org.atatec.trugger.reflection.ReflectionPredicates;
+import static org.atatec.trugger.iteration.Iteration.selectFrom;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class TruggerNoNamedMethodSelector extends TruggerMethodSelector {
 
-  public TruggerNoNamedMethodSelector() {
-    super(null);
+  public TruggerNoNamedMethodSelector(MemberFindersRegistry registry) {
+    super(registry);
   }
 
   @Override
   public Method in(Object target) {
-    MethodsFinder finder = new MethodsFinder();
-    MembersSelector<Method> selector = new MembersSelector<Method>(finder);
+    MembersSelector<Method> selector = new MembersSelector<Method>(registry.methodsFinder());
     if (useHierarchy()) {
       selector.useHierarchy();
     }

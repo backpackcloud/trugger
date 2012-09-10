@@ -16,15 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import static org.atatec.trugger.reflection.ReflectionPredicates.STATIC;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.atatec.trugger.Result;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.Reflector;
@@ -40,6 +31,15 @@ import org.atatec.trugger.selector.MethodsSelector;
 import org.atatec.trugger.selector.SetterMethodSelector;
 import org.atatec.trugger.util.Utils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static org.atatec.trugger.reflection.ReflectionPredicates.STATIC;
+
 /**
  * An implementation of the reflection operations.
  *
@@ -47,52 +47,70 @@ import org.atatec.trugger.util.Utils;
  */
 public class TruggerReflector implements Reflector {
 
+  private MemberFindersRegistry registry;
+
+  public TruggerReflector(MemberFindersRegistry defaultRegistry) {
+    this.registry = defaultRegistry;
+  }
+
+  @Override
+  public Reflector visible() {
+    registry = new VisibleMemberFindersRegistry();
+    return this;
+  }
+
+  @Override
+  public Reflector declared() {
+    registry = new DeclaredMemberFindersRegistry();
+    return this;
+  }
+
   public GetterMethodSelector getterFor(String name) {
-    return new TruggerGetterMethodSelector(name);
+    return new TruggerGetterMethodSelector(name, registry.methodsFinder());
   }
 
   public FieldGetterMethodSelector getterFor(Field field) {
-    return new TruggerFieldGetterMethodSelector(field);
+    return new TruggerFieldGetterMethodSelector(field, registry.methodsFinder());
   }
 
   public SetterMethodSelector setterFor(String name) {
-    return new TruggerSetterMethodSelector(name);
+    return new TruggerSetterMethodSelector(name, registry.methodsFinder());
   }
 
   public FieldSetterMethodSelector setterFor(Field field) {
-    return new TruggerFieldSetterMethodSelector(field);
+    return new TruggerFieldSetterMethodSelector(field, registry.methodsFinder());
   }
 
   public ConstructorSelector constructor() {
-    return new TruggerConstructorSelector();
+    return new TruggerConstructorSelector(registry);
   }
 
   public ConstructorsSelector constructors() {
-    return new TruggerConstructorsSelector();
+    return new TruggerConstructorsSelector(registry.constructorsFinder());
   }
 
   public FieldSelector field(String name) {
-    return new TruggerFieldSelector(name);
+    return new TruggerFieldSelector(name, registry);
   }
 
   public FieldSelector field() {
-    return new TruggerNoNamedFieldSelector();
+    return new TruggerNoNamedFieldSelector(registry);
   }
 
   public FieldsSelector fields() {
-    return new TruggerFieldsSelector();
+    return new TruggerFieldsSelector(registry.fieldsFinder());
   }
 
   public MethodSelector method(String name) {
-    return new TruggerMethodSelector(name);
+    return new TruggerMethodSelector(name, registry);
   }
 
   public MethodSelector method() {
-    return new TruggerNoNamedMethodSelector();
+    return new TruggerNoNamedMethodSelector(registry);
   }
 
   public MethodsSelector methods() {
-    return new TruggerMethodsSelector();
+    return new TruggerMethodsSelector(registry.methodsFinder());
   }
 
   public Result<Set<Class<?>>, Object> interfaces() {
@@ -108,7 +126,7 @@ public class TruggerReflector implements Reflector {
       public Set<Class<?>> in(Object target) {
         Class<?> objectClass = Utils.resolveType(target);
         Set<Class<?>> set = new HashSet<Class<?>>(30);
-        for (Class<?> c = objectClass ; (c != null) && !Object.class.equals(c) ; c = c.getSuperclass()) {
+        for (Class<?> c = objectClass; (c != null) && !Object.class.equals(c); c = c.getSuperclass()) {
           for (Class<?> interf : c.getInterfaces()) {
             loop(interf, set);
           }
@@ -137,9 +155,9 @@ public class TruggerReflector implements Reflector {
         for (Type type : keySet) {
           paramNames.add(type.toString());
         }
-        if(paramNames.isEmpty()) {
+        if (paramNames.isEmpty()) {
           throw new ReflectionException("No generic type found.");
-        } else if(paramNames.size() > 1) {
+        } else if (paramNames.size() > 1) {
           throw new ReflectionException("More than one generic type found.");
         }
         String name = paramNames.iterator().next();

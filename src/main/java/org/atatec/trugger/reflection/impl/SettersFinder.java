@@ -19,7 +19,6 @@ package org.atatec.trugger.reflection.impl;
 import org.atatec.trugger.iteration.Iteration;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
 
 import static org.atatec.trugger.reflection.ReflectionPredicates.setterFor;
@@ -32,12 +31,14 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.setterFor;
 public class SettersFinder implements MembersFinder<Method> {
 
   private final String name;
+  private MembersFinder finder;
 
-  public SettersFinder(String name) {
+  public SettersFinder(String name, MembersFinder<Method> finder) {
     this.name = name;
+    this.finder = finder;
   }
 
   public Collection<Method> find(Class<?> type) {
-    return Iteration.selectFrom(Arrays.asList(type.getDeclaredMethods())).elements(setterFor(name));
+    return Iteration.selectFrom(finder.find(type)).elements(setterFor(name));
   }
 }

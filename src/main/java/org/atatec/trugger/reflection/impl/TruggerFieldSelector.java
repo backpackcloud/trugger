@@ -16,15 +16,15 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldSelector;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 /**
  * A default implementation for the field selector.
@@ -34,11 +34,17 @@ import org.atatec.trugger.selector.FieldSelector;
 public class TruggerFieldSelector implements FieldSelector {
 
   private final PredicateBuilder<Field> builder = new PredicateBuilder<Field>();
-  private final String name;
+  private String name;
   private boolean recursively;
+  protected MemberFindersRegistry registry;
 
-  public TruggerFieldSelector(String name) {
+  public TruggerFieldSelector(String name, MemberFindersRegistry registry) {
     this.name = name;
+    this.registry = registry;
+  }
+
+  public TruggerFieldSelector(MemberFindersRegistry registry) {
+    this.registry = registry;
   }
 
   public FieldSelector withAccess(Access access) {
@@ -92,7 +98,7 @@ public class TruggerFieldSelector implements FieldSelector {
   }
 
   public Field in(Object target) {
-    return new MemberSelector<Field>(new FieldFinder(name), builder.predicate(), recursively).in(target);
+    return new MemberSelector<Field>(registry.fieldFinder(name), builder.predicate(), recursively).in(target);
   }
 
   public FieldSelector recursively() {
@@ -104,23 +110,17 @@ public class TruggerFieldSelector implements FieldSelector {
     return builder.predicate();
   }
 
-  /**
-   * @return the predicate builder used by this object.
-   */
+  /** @return the predicate builder used by this object. */
   protected final PredicateBuilder<Field> builder() {
     return builder;
   }
 
-  /**
-   * @return <code>true</code> if recursion must be used.
-   */
+  /** @return <code>true</code> if recursion must be used. */
   protected final boolean useHierarchy() {
     return recursively;
   }
 
-  /**
-   * @return the field name for search.
-   */
+  /** @return the field name for search. */
   protected final String name() {
     return name;
   }

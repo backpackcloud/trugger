@@ -26,7 +26,7 @@ import java.util.Collection;
 public class ConstructorsFinder implements MembersFinder<Constructor<?>> {
   
   public Collection<Constructor<?>> find(Class<?> type) {
-    return Arrays.asList(type.getDeclaredConstructors());
+    return Arrays.asList(type.getConstructors());
   }
   
 }

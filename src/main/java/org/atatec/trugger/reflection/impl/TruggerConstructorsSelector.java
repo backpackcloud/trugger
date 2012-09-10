@@ -16,15 +16,15 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.util.Set;
-
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorsSelector;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.util.Set;
 
 /**
  * A default implementation for the constructors selector.
@@ -33,9 +33,12 @@ import org.atatec.trugger.selector.ConstructorsSelector;
  */
 public class TruggerConstructorsSelector implements ConstructorsSelector {
   
-  private final MembersSelector<Constructor<?>> selector =
-    new MembersSelector<Constructor<?>>(new ConstructorsFinder());
-  
+  private final MembersSelector<Constructor<?>> selector;
+
+  public TruggerConstructorsSelector(MembersFinder<Constructor<?>> finder) {
+    selector = new MembersSelector<Constructor<?>>(finder);
+  }
+
   public ConstructorsSelector annotatedWith(Class<? extends Annotation> type) {
     selector.builder().add(ReflectionPredicates.annotatedWith(type));
     return this;

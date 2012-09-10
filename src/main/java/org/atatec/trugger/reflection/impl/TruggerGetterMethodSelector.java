@@ -16,14 +16,14 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.GetterMethodSelector;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * A default implementation for the getter method selector.
@@ -35,9 +35,11 @@ public class TruggerGetterMethodSelector implements GetterMethodSelector {
   private final PredicateBuilder<Method> builder = new PredicateBuilder<Method>();
   private boolean recursively;
   private final String name;
+  private MembersFinder<Method> finder;
   
-  public TruggerGetterMethodSelector(String name) {
+  public TruggerGetterMethodSelector(String name, MembersFinder<Method> finder) {
     this.name = name;
+    this.finder = finder;
   }
   
   public GetterMethodSelector annotated() {
@@ -66,7 +68,7 @@ public class TruggerGetterMethodSelector implements GetterMethodSelector {
   }
   
   public Method in(Object target) {
-    return new MemberSelector<Method>(new GetterFinder(name), builder.predicate(), recursively).in(target);
+    return new MemberSelector<Method>(new GetterFinder(name, finder), builder.predicate(), recursively).in(target);
   }
   
   public GetterMethodSelector recursively() {

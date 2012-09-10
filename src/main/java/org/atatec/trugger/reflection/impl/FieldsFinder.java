@@ -26,7 +26,7 @@ import java.util.Collection;
 public class FieldsFinder implements MembersFinder<Field> {
   
   public Collection<Field> find(Class<?> type) {
-    return Arrays.asList(type.getDeclaredFields());
+    return Arrays.asList(type.getFields());
   }
   
 }

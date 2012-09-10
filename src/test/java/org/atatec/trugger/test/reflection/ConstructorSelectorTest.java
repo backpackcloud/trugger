@@ -16,16 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Constructor;
-
 import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionException;
@@ -34,8 +24,17 @@ import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
 import org.atatec.trugger.test.SelectionTestAdapter;
 import org.atatec.trugger.test.TruggerTest.SelectionAccessTest;
-
 import org.junit.Test;
+
+import java.lang.reflect.Constructor;
+
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -45,7 +44,7 @@ public class ConstructorSelectorTest {
 	static class AnnotatedSelectorTest {
 		@Flag
 		AnnotatedSelectorTest() {}
-		AnnotatedSelectorTest(int i) {}
+		public AnnotatedSelectorTest(int i) {}
 	}
 
 	@Test
@@ -55,11 +54,21 @@ public class ConstructorSelectorTest {
         return reflect().constructor();
       }
     }, Object.class);
+    assertResult(new SelectionTestAdapter(){
+      public Object createSelector() {
+        return reflect().visible().constructor();
+      }
+    }, Object.class);
   }
 
 	@Test(expected = ReflectionException.class)
 	public void testInsufficientSelector() {
 	  reflect().constructor().in(AnnotatedSelectorTest.class);
+	}
+
+	@Test
+	public void testVisibleSelector() {
+    assertNotNull(reflect().visible().constructor().in(AnnotatedSelectorTest.class));
 	}
 
 	@Test
@@ -76,6 +85,7 @@ public class ConstructorSelectorTest {
       }
     };
     assertResult(selection, AnnotatedSelectorTest.class);
+    assertNull(reflect().visible().constructor().annotated().in(AnnotatedSelectorTest.class));
 	}
 
 	@Test
@@ -92,6 +102,7 @@ public class ConstructorSelectorTest {
       }
     };
     assertResult(selection, AnnotatedSelectorTest.class);
+    assertNotNull(reflect().visible().constructor().notAnnotated().in(AnnotatedSelectorTest.class));
 	}
 
 	@Test
@@ -108,6 +119,7 @@ public class ConstructorSelectorTest {
       }
     };
     assertResult(selection, AnnotatedSelectorTest.class);
+    assertNull(reflect().visible().constructor().annotatedWith(Flag.class).in(AnnotatedSelectorTest.class));
   }
 
   @Test
@@ -124,6 +136,7 @@ public class ConstructorSelectorTest {
       }
     };
     assertResult(selection, AnnotatedSelectorTest.class);
+    assertNotNull(reflect().visible().constructor().notAnnotatedWith(Flag.class).in(AnnotatedSelectorTest.class));
   }
 
   @Test

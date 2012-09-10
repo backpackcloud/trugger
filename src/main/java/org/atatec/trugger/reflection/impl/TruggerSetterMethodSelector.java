@@ -16,15 +16,15 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Set;
-
 import org.atatec.trugger.Result;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.SetterMethodSelector;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * Default implementation for the setter method selector.
@@ -35,8 +35,8 @@ public class TruggerSetterMethodSelector implements SetterMethodSelector {
 
   private final MembersSelector<Method> selector;
 
-  public TruggerSetterMethodSelector(String name) {
-    this.selector = new MembersSelector<Method>(new SettersFinder(name));
+  public TruggerSetterMethodSelector(String name, MembersFinder<Method> finder) {
+    this.selector = new MembersSelector<Method>(new SettersFinder(name, finder));
   }
 
   public SetterMethodSelector annotated() {
