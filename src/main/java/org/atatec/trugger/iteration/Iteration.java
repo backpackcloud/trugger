@@ -34,7 +34,7 @@ public final class Iteration {
   private Iteration() {}
 
   static {
-    factory = ImplementationLoader.getInstance().get(IterationFactory.class);
+    factory = ImplementationLoader.instance().get(IterationFactory.class);
   }
 
   /**

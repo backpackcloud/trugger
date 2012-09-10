@@ -31,7 +31,7 @@ public final class Bind {
   private Bind() {}
 
   static {
-    factory = ImplementationLoader.getInstance().get(BinderFactory.class);
+    factory = ImplementationLoader.instance().get(BinderFactory.class);
   }
 
   /**

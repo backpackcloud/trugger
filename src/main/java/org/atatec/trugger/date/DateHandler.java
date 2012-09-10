@@ -32,7 +32,7 @@ public class DateHandler {
   private static final DateOperationFactory factory;
 
   static {
-    factory = ImplementationLoader.getInstance().get(DateOperationFactory.class);
+    factory = ImplementationLoader.instance().get(DateOperationFactory.class);
   }
 
   private DateHandler() {}

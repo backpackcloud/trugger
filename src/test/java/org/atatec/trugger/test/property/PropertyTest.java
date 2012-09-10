@@ -54,7 +54,7 @@ public class PropertyTest {
 
   private Element getProperty(String name, Object target) {
     //doing this we make sure that two properties having the same name will have diferent IDs
-    PropertyFactory factory = ImplementationLoader.getInstance().get(PropertyFactory.class);
+    PropertyFactory factory = ImplementationLoader.instance().get(PropertyFactory.class);
     return factory.createPropertySelector(name).in(target);
   }
 

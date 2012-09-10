@@ -32,7 +32,7 @@ public class Messages {
   private static final MessageFactory factory;
   
   static {
-    factory = ImplementationLoader.getInstance().get(MessageFactory.class);
+    factory = ImplementationLoader.instance().get(MessageFactory.class);
   }
   
   /**

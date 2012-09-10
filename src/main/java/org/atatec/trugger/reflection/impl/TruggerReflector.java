@@ -53,14 +53,18 @@ public class TruggerReflector implements Reflector {
     this.registry = defaultRegistry;
   }
 
+  public TruggerReflector() {
+    declared();
+  }
+
   @Override
-  public Reflector visible() {
+  public final Reflector visible() {
     registry = new VisibleMemberFindersRegistry();
     return this;
   }
 
   @Override
-  public Reflector declared() {
+  public final Reflector declared() {
     registry = new DeclaredMemberFindersRegistry();
     return this;
   }

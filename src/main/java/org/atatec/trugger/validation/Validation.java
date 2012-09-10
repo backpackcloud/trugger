@@ -74,7 +74,7 @@ public class Validation {
   private static final List<ValidatorBinder> pluggedBinders = new LinkedList<ValidatorBinder>();
 
   static {
-    factory = ImplementationLoader.getInstance().get(ValidationFactory.class);
+    factory = ImplementationLoader.instance().get(ValidationFactory.class);
     pluggedBinders.add(factory.createValidatorBinder());
     pluggedFactories.add(factory.createValidatorFactory(newValidatorBinder()));
   }

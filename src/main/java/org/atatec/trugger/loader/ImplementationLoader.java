@@ -65,7 +65,7 @@ public class ImplementationLoader {
    *
    * @return the shared instance.
    */
-  public static ImplementationLoader getInstance() {
+  public static ImplementationLoader instance() {
     return ImplementationLoaderHolder.instance;
   }
 

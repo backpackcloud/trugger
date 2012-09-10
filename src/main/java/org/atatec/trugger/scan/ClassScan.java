@@ -34,7 +34,7 @@ public class ClassScan {
   }
 
   static {
-    factory = ImplementationLoader.getInstance().get(ClassScannerFactory.class);
+    factory = ImplementationLoader.instance().get(ClassScannerFactory.class);
   }
 
   /** @return a new {@link ClassScanner}. */

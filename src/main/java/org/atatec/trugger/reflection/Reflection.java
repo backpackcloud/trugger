@@ -68,7 +68,7 @@ public final class Reflection {
   }
 
   static {
-    factory = ImplementationLoader.getInstance().get(ReflectionFactory.class);
+    factory = ImplementationLoader.instance().get(ReflectionFactory.class);
     wrappers = Collections.unmodifiableMap(new HashMap<Class<?>, Class<?>>() {{
       put(byte.class, Byte.class);
       put(short.class, Short.class);

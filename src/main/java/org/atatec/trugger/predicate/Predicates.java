@@ -33,7 +33,7 @@ public final class Predicates {
   private Predicates() {}
 
   static {
-    factory = ImplementationLoader.getInstance().get(PredicateFactory.class);
+    factory = ImplementationLoader.instance().get(PredicateFactory.class);
   }
 
   /**
