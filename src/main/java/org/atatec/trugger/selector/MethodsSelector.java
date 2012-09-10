@@ -16,13 +16,12 @@
  */
 package org.atatec.trugger.selector;
 
+import org.atatec.trugger.Result;
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
-
-import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 
 /**
  * Interface that defines a selector for {@link Method} objects.
@@ -30,8 +29,6 @@ import org.atatec.trugger.reflection.Access;
  * @author Marcelo Varella Barca Guimarães
  */
 public interface MethodsSelector extends MethodSpecifier, Result<Set<Method>, Object> {
-  
-  MethodsSelector withAccess(Access access);
   
   MethodsSelector nonStatic();
   

@@ -25,35 +25,31 @@ import org.atatec.trugger.scan.ScanLevel;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.5
  */
-public interface ClassSpecifier extends AccessSelector, PredicateSelector<Class>, AnnotatedElementSelector,
-    RecursionSelector, Predicable<Class> {
+public interface ClassSpecifier extends PredicateSelector<Class>, AnnotatedElementSelector,
+  RecursionSelector, Predicable<Class> {
 
   /**
-   * Selects only the anonymous classes.
+   * Selects only instantiable classes. Classes that applies must:
+   * <p/>
+   * <ul> <li>not be abstract</li> <li>be public</li> <li>have at least one public
+   * constructor</li> </ul>
    *
-   * @return a reference to this instance.
+   * @since 4.1
    */
-  ClassSpecifier anonymous();
+  ClassSpecifier instantiable();
 
   /**
-   * Selects only the non anonymous classes.
-   *
-   * @return a reference to this instance.
-   */
-  ClassSpecifier nonAnonymous();
-
-  /**
-   * Searchs recursively in the packages (sets the scan level to
-   * {@link ScanLevel#SUBPACKAGES}). Is a common way to scan packages and its
-   * subpackages but only take effect if using without specifying the scan level.
+   * Search recursively in the packages (sets the scan level to {@link
+   * ScanLevel#SUBPACKAGES}). Is a common way to scan packages and its subpackages but
+   * only take effect if using without specifying the scan level.
    */
   ClassSpecifier recursively();
 
   /**
    * Selects the classes that are assignable to the specified class.
    *
-   * @param type
-   *          the class that must be assignable from the found classes.
+   * @param type the class that must be assignable from the found classes.
+   *
    * @return a reference to this object.
    */
   ClassSpecifier assignableTo(Class type);

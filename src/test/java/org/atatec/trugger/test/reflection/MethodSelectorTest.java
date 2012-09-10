@@ -16,14 +16,21 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.predicate.Predicates;
+import org.atatec.trugger.selector.MethodSelector;
+import org.atatec.trugger.test.Flag;
+import org.atatec.trugger.test.SelectionTestAdapter;
+import org.junit.Test;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_FINAL;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_STATIC;
 import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
 import static org.atatec.trugger.reflection.ReflectionPredicates.annotatedWith;
+import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
 import static org.atatec.trugger.reflection.ReflectionPredicates.notAnnotatedWith;
-import static org.atatec.trugger.test.TruggerTest.assertAccessSelector;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNoResult;
 import static org.atatec.trugger.test.TruggerTest.assertResult;
@@ -33,16 +40,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.lang.reflect.Method;
-
-import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.Access;
-import org.atatec.trugger.selector.MethodSelector;
-import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTestAdapter;
-
-import org.junit.Test;
-
 /**
  * @author Marcelo Varella Barca Guimarães
  */
@@ -50,8 +47,8 @@ public class MethodSelectorTest {
 
   static class AnnotatedSelectorTest {
     @Flag
-    void foo(){};
-    void bar(){};
+    void foo(){}
+    void bar(){}
   }
 
   @Test
@@ -178,7 +175,7 @@ public class MethodSelectorTest {
         selector.nonFinal();
       }
       public void assertions(Method method) {
-        assertMatch(method, NON_FINAL);
+        assertMatch(method, dontDeclare(Modifier.FINAL));
       }
     }, obj);
     assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
@@ -206,7 +203,7 @@ public class MethodSelectorTest {
         selector.nonStatic();
       }
       public void assertions(Method method) {
-        assertMatch(method, NON_STATIC);
+        assertMatch(method, dontDeclare(Modifier.STATIC));
       }
     }, NonStaticSelector.class);
     assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
@@ -282,36 +279,6 @@ public class MethodSelectorTest {
         selector.that(Predicates.ALWAYS_FALSE);
       }
     }, Object.class);
-  }
-
-  @Test
-  public void testAccessSelector() {
-    Object obj = new Object(){
-      private void privateMethod(){}
-      void defaultMethod(){}
-      protected void protectedMethod(){}
-      public void publicMethod(){}
-    };
-    assertAccessSelector(Access.PUBLIC, obj, new SelectionTestAdapter() {
-      public Object createSelector() {
-        return reflect().method("publicMethod");
-      }
-    });
-    assertAccessSelector(Access.PROTECTED, obj, new SelectionTestAdapter() {
-      public Object createSelector() {
-        return reflect().method("protectedMethod");
-      }
-    });
-    assertAccessSelector(Access.DEFAULT, obj, new SelectionTestAdapter() {
-      public Object createSelector() {
-        return reflect().method("defaultMethod");
-      }
-    });
-    assertAccessSelector(Access.PRIVATE, obj, new SelectionTestAdapter() {
-      public Object createSelector() {
-        return reflect().method("privateMethod");
-      }
-    });
   }
 
   @Test

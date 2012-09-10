@@ -16,11 +16,11 @@
  */
 package org.atatec.trugger.scan.impl;
 
+import org.atatec.trugger.reflection.ClassPredicates;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.selector.ClassSpecifier;
@@ -30,18 +30,24 @@ import java.lang.annotation.Annotation;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class AbstractClassSelector implements ClassSpecifier {
+public class BaseClassSelector implements ClassSpecifier {
 
   protected PredicateBuilder<Class> builder = new PredicateBuilder<Class>(null);
   protected ScanLevel level = ScanLevel.PACKAGE;
   protected final Scanner scanner;
 
-  public AbstractClassSelector(Scanner scanner) {
+  public BaseClassSelector(Scanner scanner) {
     this.scanner = scanner;
   }
 
   public ClassSpecifier assignableTo(Class type) {
     this.builder.add(ReflectionPredicates.assignableTo(type));
+    return this;
+  }
+
+  @Override
+  public ClassSpecifier instantiable() {
+    this.builder.add(ClassPredicates.INSTANTIABLE);
     return this;
   }
 
@@ -72,21 +78,6 @@ public class AbstractClassSelector implements ClassSpecifier {
 
   public ClassSpecifier notAnnotated() {
     this.builder.add(ReflectionPredicates.NOT_ANNOTATED);
-    return this;
-  }
-
-  public ClassSpecifier anonymous() {
-    this.builder.add(ReflectionPredicates.ANONYMOUS);
-    return this;
-  }
-
-  public ClassSpecifier nonAnonymous() {
-    this.builder.add(ReflectionPredicates.NON_ANONYMOUS);
-    return this;
-  }
-
-  public ClassSpecifier withAccess(Access access) {
-    this.builder.add(access.classPredicate());
     return this;
   }
 

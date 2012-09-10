@@ -20,13 +20,13 @@ import org.atatec.trugger.iteration.SearchException;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodSelector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import static org.atatec.trugger.iteration.Iteration.selectFrom;
@@ -53,18 +53,13 @@ public class TruggerMethodSelector implements MethodSelector {
     this.registry = registry;
   }
 
-  public MethodSelector withAccess(Access access) {
-    builder.add(access.memberPredicate());
-    return this;
-  }
-
   public MethodSelector nonStatic() {
-    builder.add(ReflectionPredicates.NON_STATIC);
+    builder.add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
     return this;
   }
 
   public MethodSelector nonFinal() {
-    builder.add(ReflectionPredicates.NON_FINAL);
+    builder.add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
     return this;
   }
 
@@ -94,12 +89,12 @@ public class TruggerMethodSelector implements MethodSelector {
   }
 
   public MethodSelector returning(Class<?> returnType) {
-    builder.add(ReflectionPredicates.ofReturnType(returnType));
+    builder.add(ReflectionPredicates.returns(returnType));
     return this;
   }
 
   public MethodSelector withoutReturnType() {
-    builder.add(ReflectionPredicates.ofReturnType(Void.TYPE));
+    builder.add(ReflectionPredicates.returns(Void.TYPE));
     return this;
   }
 

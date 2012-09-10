@@ -16,21 +16,6 @@
  */
 package org.atatec.trugger.test.scan;
 
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.scan.impl.Scanner;
@@ -38,8 +23,19 @@ import org.atatec.trugger.scan.impl.TruggerClassesSelector;
 import org.atatec.trugger.selector.ClassesSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
-
 import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -162,72 +158,6 @@ public class ClassesSelectorTest {
         assertTrue(set.contains(ResourceAnnotated.class));
       }
     }, packageScan);
-  }
-
-  @Test
-  public void testAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
-      public ClassesSelector createSelector() {
-        return initializeForAnonymousTest();
-      }
-      public void makeSelections(ClassesSelector selector) {
-        selector.anonymous();
-      }
-      public void assertions(Set<Class> set) {
-        assertEquals(1, set.size());
-        assertFalse(set.contains(String.class));
-        assertFalse(set.contains(Object.class));
-        assertFalse(set.contains(ClassesSelectorTest.class));
-      }
-    }, packageScan);
-  }
-
-  @Test
-  public void testNonAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassesSelector, Set<Class>>() {
-      public ClassesSelector createSelector() {
-        return initializeForAnonymousTest();
-      }
-      public void makeSelections(ClassesSelector selector) {
-        selector.nonAnonymous();
-      }
-      public void assertions(Set<Class> set) {
-        assertEquals(3, set.size());
-        assertTrue(set.contains(String.class));
-        assertTrue(set.contains(Object.class));
-        assertTrue(set.contains(ClassesSelectorTest.class));
-      }
-    }, packageScan);
-  }
-
-  @Test
-  public void testAccessSelector() throws Exception {
-    Set<Class> set = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(PublicClass.class));
-
-    set = initializeForAccessTest().withAccess(Access.PROTECTED).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(ProtectedClass.class));
-
-    set = initializeForAccessTest().withAccess(Access.DEFAULT).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(DefaultClass.class));
-
-    set = initializeForAccessTest().withAccess(Access.PRIVATE).in(packageScan);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(PrivateClass.class));
-
-    set = initializeForAccessTest().withAccess(Access.LIKE_PROTECTED).in(packageScan);
-    assertEquals(2, set.size());
-    assertTrue(set.contains(PublicClass.class));
-    assertTrue(set.contains(ProtectedClass.class));
-
-    set = initializeForAccessTest().withAccess(Access.LIKE_DEFAULT).in(packageScan);
-    assertEquals(3, set.size());
-    assertTrue(set.contains(PublicClass.class));
-    assertTrue(set.contains(ProtectedClass.class));
-    assertTrue(set.contains(DefaultClass.class));
   }
 
   @Test

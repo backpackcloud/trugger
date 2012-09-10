@@ -16,32 +16,29 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_FINAL;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_STATIC;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.annotatedWith;
-import static org.atatec.trugger.reflection.ReflectionPredicates.named;
-import static org.atatec.trugger.reflection.ReflectionPredicates.notAnnotatedWith;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ofReturnType;
-import static org.atatec.trugger.reflection.ReflectionPredicates.withParameters;
-import static org.atatec.trugger.test.TruggerTest.assertAccessSelector;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-
-import java.lang.reflect.Method;
-import java.util.Set;
-
 import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.selector.MethodsSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
 import org.atatec.trugger.test.SelectionTestAdapter;
-
 import org.junit.Test;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Set;
+
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.annotatedWith;
+import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
+import static org.atatec.trugger.reflection.ReflectionPredicates.named;
+import static org.atatec.trugger.reflection.ReflectionPredicates.notAnnotatedWith;
+import static org.atatec.trugger.reflection.ReflectionPredicates.returns;
+import static org.atatec.trugger.reflection.ReflectionPredicates.withParameters;
+import static org.atatec.trugger.test.TruggerTest.assertMatch;
+import static org.atatec.trugger.test.TruggerTest.assertNoResult;
+import static org.atatec.trugger.test.TruggerTest.assertResult;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -137,7 +134,7 @@ public class MethodsSelectorTest {
         selector.nonFinal();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, NON_FINAL);
+        assertMatch(methods, dontDeclare(Modifier.FINAL));
       }
     }, obj, 1);
   }
@@ -157,7 +154,7 @@ public class MethodsSelectorTest {
         selector.nonStatic();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, NON_STATIC);
+        assertMatch(methods, dontDeclare(Modifier.STATIC));
       }
     }, NonStaticSelector.class, 1);
   }
@@ -183,7 +180,7 @@ public class MethodsSelectorTest {
         selector.withoutReturnType();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ofReturnType(Void.TYPE));
+        assertMatch(methods, returns(Void.TYPE));
       }
     }, obj, 1);
     assertResult(new SelectionTestAdapter<MethodsSelector, Set<Method>>(){
@@ -194,7 +191,7 @@ public class MethodsSelectorTest {
         selector.returning(int.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ofReturnType(int.class));
+        assertMatch(methods, returns(int.class));
       }
     }, obj, 1);
   }
@@ -240,10 +237,6 @@ public class MethodsSelectorTest {
         return reflect().methods();
       }
     };
-    assertAccessSelector(Access.PUBLIC, obj4, test);
-    assertAccessSelector(Access.PROTECTED, obj3, test);
-    assertAccessSelector(Access.DEFAULT, obj2, test);
-    assertAccessSelector(Access.PRIVATE, obj1, test);
   }
 
   @Test

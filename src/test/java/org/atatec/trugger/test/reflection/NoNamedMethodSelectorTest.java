@@ -16,32 +16,29 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_FINAL;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_STATIC;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.annotatedWith;
-import static org.atatec.trugger.reflection.ReflectionPredicates.notAnnotatedWith;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.lang.reflect.Method;
-
 import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.selector.MethodSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTestAdapter;
-
 import org.junit.Test;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.annotatedWith;
+import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
+import static org.atatec.trugger.reflection.ReflectionPredicates.notAnnotatedWith;
+import static org.atatec.trugger.test.TruggerTest.assertMatch;
+import static org.atatec.trugger.test.TruggerTest.assertNoResult;
+import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -146,7 +143,7 @@ public class NoNamedMethodSelectorTest {
         selector.nonFinal();
       }
       public void assertions(Method method) {
-        assertMatch(method, NON_FINAL);
+        assertMatch(method, dontDeclare(Modifier.FINAL));
       }
     }, obj);
   }
@@ -166,7 +163,7 @@ public class NoNamedMethodSelectorTest {
         selector.nonStatic();
       }
       public void assertions(Method method) {
-        assertMatch(method, NON_STATIC);
+        assertMatch(method, dontDeclare(Modifier.STATIC));
       }
     }, NonStaticSelector.class);
   }
@@ -230,26 +227,6 @@ public class NoNamedMethodSelectorTest {
         selector.that(Predicates.ALWAYS_FALSE);
       }
     }, SimpleObject.class);
-  }
-
-  @Test
-  public void testAccessSelector() {
-    final Object obj = new Object(){
-      private void privateMethod(){}
-      void defaultMethod(){}
-      protected void protectedMethod(){}
-      public void publicMethod(){}
-    };
-    assertResult(reflect().method().withAccess(Access.PRIVATE).in(obj));
-    assertResult(reflect().method().withAccess(Access.PROTECTED).in(obj));
-    assertResult(reflect().method().withAccess(Access.DEFAULT).in(obj));
-    assertResult(reflect().method().withAccess(Access.PUBLIC).in(obj));
-
-    assertThrow(new Runnable(){
-      public void run() {
-        reflect().method().withAccess(Access.LIKE_DEFAULT).in(obj);
-      }
-    }, ReflectionException.class);
   }
 
   @Test

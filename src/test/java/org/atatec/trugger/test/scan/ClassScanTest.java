@@ -17,7 +17,6 @@
 package org.atatec.trugger.test.scan;
 
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionFactory;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.scan.ClassScanningException;
@@ -32,6 +31,9 @@ import java.util.Set;
 import static org.atatec.trugger.scan.ClassScan.*;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.junit.Assert.*;
+
+import static org.atatec.trugger.reflection.ClassPredicates.declare;
+import static java.lang.reflect.Modifier.PUBLIC;
 
 /**
  * A class for testing the class finding.
@@ -61,36 +63,36 @@ public class ClassScanTest {
 
   private int interfaceTest(String... packages) {
     Set<Class> interfaces =
-        findInterfaces().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(interfaces, ReflectionPredicates.INTERFACE.and(Access.PUBLIC.classPredicate()));
+        findInterfaces().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+    TruggerTest.assertMatch(interfaces, ReflectionPredicates.INTERFACE.and(declare(PUBLIC)));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
     Set<Class> classes =
-        findClasses().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(classes, ReflectionPredicates.CLASS.and(Access.PUBLIC.classPredicate()));
+        findClasses().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+    TruggerTest.assertMatch(classes, ReflectionPredicates.CLASS.and(declare(PUBLIC)));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
     Set<Class> annotations =
-        findAnnotations().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(annotations, ReflectionPredicates.ANNOTATION.and(Access.PUBLIC.classPredicate()));
+        findAnnotations().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+    TruggerTest.assertMatch(annotations, ReflectionPredicates.ANNOTATION.and(declare(PUBLIC)));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
     Set<Class> enums =
-        findEnums().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(enums, ReflectionPredicates.ENUM.and(Access.PUBLIC.classPredicate()));
+        findEnums().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+    TruggerTest.assertMatch(enums, ReflectionPredicates.ENUM.and(declare(PUBLIC)));
     return enums.size();
   }
 
   private int allTest(String... packages) {
     Set<Class> classes =
-        findAll().withAccess(Access.PUBLIC).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(classes, Access.PUBLIC.classPredicate());
+        findAll().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+    TruggerTest.assertMatch(classes, declare(PUBLIC));
     assertFalse(classes.isEmpty());
     return classes.size();
   }

@@ -16,59 +16,56 @@
  */
 package org.atatec.trugger.selector;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-
 import org.atatec.trugger.Result;
 import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionException;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 
 /**
  * Interface that defines a selector for a single {@link Constructor} object.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface ConstructorSelector extends AnnotatedElementSelector, PredicateSelector<Constructor<?>>,
-    AccessSelector, Predicable<Constructor<?>>, Result<Constructor<?>, Object> {
-  
-  ConstructorSelector withAccess(Access access);
-  
+  Predicable<Constructor<?>>, Result<Constructor<?>, Object> {
+
   ConstructorSelector annotated();
-  
+
   ConstructorSelector notAnnotated();
-  
+
   ConstructorSelector annotatedWith(Class<? extends Annotation> type);
-  
+
   ConstructorSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
+
   ConstructorSelector that(Predicate<? super Constructor<?>> predicate);
-  
+
   /**
    * Selects the constructor that takes the specified parameter types.
-   * 
-   * @param parameterTypes
-   *          the parameter types taken by the constructor.
+   *
+   * @param parameterTypes the parameter types taken by the constructor.
+   *
    * @return the component used for selection on the target.
    */
   ConstructorSelector withParameters(Class<?>... parameterTypes);
-  
+
   /**
    * Selects the constructor that takes no parameters.
-   * 
+   *
    * @return the component used for selection on the target.
    */
   ConstructorSelector withoutParameters();
-  
+
   /**
    * Selects the single constructor matching the previously specified selectors.
-   * <p>
-   * This method may throw a {@link ReflectionException} if the specified
-   * selectors doesn't take to a single constructor in the given target.
+   * <p/>
+   * This method may throw a {@link ReflectionException} if the specified selectors
+   * doesn't take to a single constructor in the given target.
    *
    * @since 2.1
    */
   Constructor<?> in(Object target) throws ReflectionException;
-  
+
 }

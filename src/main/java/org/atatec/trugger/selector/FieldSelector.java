@@ -16,12 +16,11 @@
  */
 package org.atatec.trugger.selector;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 import org.atatec.trugger.Result;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 /**
  * Interface that defines a selector for a single {@link Field} object assuming
@@ -38,8 +37,6 @@ public interface FieldSelector extends Result<Field, Object>, FieldSpecifier {
   FieldSelector annotatedWith(Class<? extends Annotation> type);
   
   FieldSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
-  FieldSelector withAccess(Access access);
   
   FieldSelector nonStatic();
   

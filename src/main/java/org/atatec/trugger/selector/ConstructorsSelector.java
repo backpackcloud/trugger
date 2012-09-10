@@ -16,33 +16,30 @@
  */
 package org.atatec.trugger.selector;
 
+import org.atatec.trugger.Result;
+import org.atatec.trugger.predicate.Predicable;
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
-import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicable;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
-
 /**
  * Interface that defines a selector for {@link Constructor} objects.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface ConstructorsSelector extends AnnotatedElementSelector, PredicateSelector<Constructor<?>>,
-    AccessSelector, Result<Set<Constructor<?>>, Object>, Predicable<Constructor<?>> {
-  
-  ConstructorsSelector withAccess(Access access);
-  
+  Result<Set<Constructor<?>>, Object>, Predicable<Constructor<?>> {
+
   ConstructorsSelector that(Predicate<? super Constructor<?>> predicate);
-  
+
   ConstructorsSelector annotated();
-  
+
   ConstructorsSelector notAnnotated();
-  
+
   ConstructorsSelector annotatedWith(Class<? extends Annotation> type);
-  
+
   ConstructorsSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
+
 }

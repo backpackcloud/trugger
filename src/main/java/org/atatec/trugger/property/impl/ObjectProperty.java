@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
 
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ofReturnType;
+import static org.atatec.trugger.reflection.ReflectionPredicates.returns;
 
 /**
  * This class represents an object property.
@@ -170,7 +170,7 @@ final class ObjectProperty extends AbstractElement {
   }
 
   private void searchForGetter() {
-    getter = reflect().getterFor(name).that(ofReturnType(type)).recursively().in(declaringClass);
+    getter = reflect().getterFor(name).that(returns(type)).recursively().in(declaringClass);
   }
 
   private void searchForAnnotatedElement() {

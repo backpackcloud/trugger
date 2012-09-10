@@ -18,7 +18,6 @@ package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.iteration.Iteration;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.selector.ClassesSelector;
@@ -33,7 +32,7 @@ import java.util.Set;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class TruggerClassesSelector extends AbstractClassSelector implements ClassesSelector {
+public class TruggerClassesSelector extends BaseClassSelector implements ClassesSelector {
 
   public TruggerClassesSelector(Scanner scanner) {
     super(scanner);
@@ -49,23 +48,18 @@ public class TruggerClassesSelector extends AbstractClassSelector implements Cla
     return this;
   }
 
-  public ClassesSelector anonymous() {
-    super.anonymous();
-    return this;
-  }
-
   public ClassesSelector assignableTo(Class type) {
     super.assignableTo(type);
     return this;
   }
 
-  public ClassesSelector nonAnonymous() {
-    super.nonAnonymous();
+  public ClassesSelector notAnnotated() {
+    super.notAnnotated();
     return this;
   }
 
-  public ClassesSelector notAnnotated() {
-    super.notAnnotated();
+  public ClassesSelector instantiable() {
+    super.instantiable();
     return this;
   }
 
@@ -81,11 +75,6 @@ public class TruggerClassesSelector extends AbstractClassSelector implements Cla
 
   public ClassesSelector that(Predicate<? super Class> predicate) {
     super.that(predicate);
-    return this;
-  }
-
-  public ClassesSelector withAccess(Access access) {
-    super.withAccess(access);
     return this;
   }
 

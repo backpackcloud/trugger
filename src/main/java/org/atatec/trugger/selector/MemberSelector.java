@@ -16,11 +16,10 @@
  */
 package org.atatec.trugger.selector;
 
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
-
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 
 /**
  * Interface that defines a selector for {@link Member} objects.
@@ -29,7 +28,7 @@ import org.atatec.trugger.reflection.Access;
  * @param <T>
  *          The element type.
  */
-public interface MemberSelector<T extends Member> extends PredicateSelector<T>, AccessSelector, RecursionSelector,
+public interface MemberSelector<T extends Member> extends PredicateSelector<T>, RecursionSelector,
     AnnotatedElementSelector {
 
   MemberSelector<T> annotated();
@@ -41,8 +40,6 @@ public interface MemberSelector<T extends Member> extends PredicateSelector<T>, 
   MemberSelector<T> notAnnotatedWith(Class<? extends Annotation> type);
 
   MemberSelector<T> that(Predicate<? super T> predicate);
-
-  MemberSelector<T> withAccess(Access access);
 
   MemberSelector<T> recursively();
 

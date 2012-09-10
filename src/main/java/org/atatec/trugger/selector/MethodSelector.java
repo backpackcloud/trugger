@@ -16,18 +16,17 @@
  */
 package org.atatec.trugger.selector;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 import org.atatec.trugger.PredicableResult;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionException;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
 /**
- * Interface that defines a selector for a single {@link Method} object assuming
- * that the name was specified before.
+ * Interface that defines a selector for a single {@link Method} object assuming that the
+ * name was specified before.
  *
  * @author Marcelo Varella Barca Guimarães
  */
@@ -40,8 +39,6 @@ public interface MethodSelector extends MethodSpecifier, PredicableResult<Method
   MethodSelector annotatedWith(Class<? extends Annotation> type);
 
   MethodSelector notAnnotatedWith(Class<? extends Annotation> type);
-
-  MethodSelector withAccess(Access access);
 
   MethodSelector nonStatic();
 
@@ -61,9 +58,9 @@ public interface MethodSelector extends MethodSpecifier, PredicableResult<Method
 
   /**
    * Selects the single method matching the previously specified selectors.
-   * <p>
-   * This method may throw a {@link ReflectionException} if the specified
-   * selectors doesn't take to a single method in the given target.
+   * <p/>
+   * This method may throw a {@link ReflectionException} if the specified selectors
+   * doesn't take to a single method in the given target.
    *
    * @since 2.1
    */
@@ -75,5 +72,5 @@ public interface MethodSelector extends MethodSpecifier, PredicableResult<Method
    * @since 2.1
    */
   CompositePredicate<Method> toPredicate();
-  
+
 }

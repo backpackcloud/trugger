@@ -16,26 +16,22 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.predicate.Predicates;
+import org.atatec.trugger.reflection.ReflectionPredicates;
+import org.atatec.trugger.selector.FieldsSelector;
+import org.atatec.trugger.test.Flag;
+import org.atatec.trugger.test.SelectionTestAdapter;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Set;
+
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNoResult;
 import static org.atatec.trugger.test.TruggerTest.assertResult;
-
-import java.lang.reflect.Field;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.Access;
-import org.atatec.trugger.reflection.ReflectionPredicates;
-import org.atatec.trugger.selector.FieldsSelector;
-import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTest;
-import org.atatec.trugger.test.SelectionTestAdapter;
-import org.atatec.trugger.test.TruggerTest.SelectionAccessTest;
-
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -140,7 +136,7 @@ public class FieldsSelectorTest {
         selector.nonFinal();
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.NON_FINAL);
+        assertMatch(fields, ReflectionPredicates.dontDeclare(Modifier.FINAL));
       }
     }, NonFinalSelectorTest.class, 1);
   }
@@ -160,7 +156,7 @@ public class FieldsSelectorTest {
         selector.nonStatic();
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.NON_STATIC);
+        assertMatch(fields, ReflectionPredicates.dontDeclare(Modifier.STATIC));
       }
     }, NonStaticSelectorTest.class, 1);
   }
@@ -204,22 +200,6 @@ public class FieldsSelectorTest {
     protected int protectedField;
     int defaultField;
     public int publicField;
-  }
-
-  @Test
-  public void testAccessSelector() {
-    SelectionTest<FieldsSelector, Set<Field>> test = new SelectionTestAdapter() {
-      public FieldsSelector createSelector() {
-        return reflect().fields();
-      }
-    };
-    assertResult(new SelectionAccessTest(test, Access.PUBLIC), AccessSelectorTest.class, 1);
-    assertResult(new SelectionAccessTest(test, Access.PROTECTED), AccessSelectorTest.class, 1);
-    assertResult(new SelectionAccessTest(test, Access.DEFAULT), AccessSelectorTest.class, 1);
-    assertResult(new SelectionAccessTest(test, Access.PRIVATE), AccessSelectorTest.class, 1);
-
-    assertResult(new SelectionAccessTest(test, Access.LIKE_DEFAULT), AccessSelectorTest.class, 3);
-    assertResult(new SelectionAccessTest(test, Access.LIKE_PROTECTED), AccessSelectorTest.class, 2);
   }
 
   static class TypeSelectorTest {

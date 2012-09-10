@@ -16,33 +16,26 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import static org.atatec.trugger.reflection.Access.DEFAULT;
-import static org.atatec.trugger.reflection.Access.LIKE_DEFAULT;
-import static org.atatec.trugger.reflection.Access.PRIVATE;
-import static org.atatec.trugger.reflection.Access.PROTECTED;
-import static org.atatec.trugger.reflection.Access.PUBLIC;
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Field;
-
-import javax.annotation.Resource;
-
 import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTestAdapter;
-
 import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.test.TruggerTest.assertMatch;
+import static org.atatec.trugger.test.TruggerTest.assertNoResult;
+import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -142,7 +135,7 @@ public class NoNamedFieldSelectorTest {
         selector.nonFinal();
       }
       public void assertions(Field field) {
-        assertMatch(field, ReflectionPredicates.NON_FINAL);
+        assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
       }
     }, NonFinalSelectorTest.class);
   }
@@ -162,7 +155,7 @@ public class NoNamedFieldSelectorTest {
         selector.nonStatic();
       }
       public void assertions(Field field) {
-        assertMatch(field, ReflectionPredicates.NON_STATIC);
+        assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.STATIC));
       }
     }, NonStaticSelectorTest.class);
   }
@@ -199,27 +192,6 @@ public class NoNamedFieldSelectorTest {
         selector.that(Predicates.ALWAYS_FALSE);
       }
     }, SimpleObject.class);
-  }
-
-  static class AccessSelectorTest {
-    private int privateField;
-    protected int protectedField;
-    int defaultField;
-    public int publicField;
-  }
-
-  @Test
-  public void testAccessSelector() {
-    assertResult(reflect().field().withAccess(PRIVATE).in(AccessSelectorTest.class));
-    assertResult(reflect().field().withAccess(PROTECTED).in(AccessSelectorTest.class));
-    assertResult(reflect().field().withAccess(DEFAULT).in(AccessSelectorTest.class));
-    assertResult(reflect().field().withAccess(PUBLIC).in(AccessSelectorTest.class));
-
-    assertThrow(new Runnable(){
-      public void run() {
-        reflect().field().withAccess(LIKE_DEFAULT).in(AccessSelectorTest.class);
-      }
-    }, ReflectionException.class);
   }
 
   static class TypeSelectorTest {

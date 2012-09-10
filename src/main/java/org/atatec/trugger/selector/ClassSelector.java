@@ -17,7 +17,6 @@
 package org.atatec.trugger.selector;
 
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.scan.ClassScanResult;
 
 import java.lang.annotation.Annotation;
@@ -30,8 +29,6 @@ import java.lang.annotation.Annotation;
  */
 public interface ClassSelector extends ClassSpecifier, ClassScanResult<Class> {
 
-  ClassSelector withAccess(Access access);
-
   ClassSelector that(Predicate<? super Class> predicate);
 
   ClassSelector annotatedWith(Class<? extends Annotation> type);
@@ -42,9 +39,7 @@ public interface ClassSelector extends ClassSpecifier, ClassScanResult<Class> {
 
   ClassSelector notAnnotated();
 
-  ClassSelector anonymous();
-
-  ClassSelector nonAnonymous();
+  ClassSelector instantiable();
 
   ClassSelector recursively();
 

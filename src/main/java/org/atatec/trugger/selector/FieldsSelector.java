@@ -16,45 +16,42 @@
  */
 package org.atatec.trugger.selector;
 
+import org.atatec.trugger.Result;
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
-
 /**
  * Interface that defines a selector for {@link Field} objects.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface FieldsSelector extends Result<Set<Field>, Object>, FieldSpecifier {
-  
+
   FieldsSelector annotated();
-  
+
   FieldsSelector notAnnotated();
-  
-  FieldsSelector withAccess(Access access);
-  
+
   FieldsSelector that(Predicate<? super Field> predicate);
-  
+
   FieldsSelector annotatedWith(Class<? extends Annotation> type);
 
   FieldsSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
+
   FieldsSelector nonStatic();
-  
+
   /**
-   * Note: this selection does not affect the predicate returned by
-   * {@link #toPredicate()}.
+   * Note: this selection does not affect the predicate returned by {@link
+   * #toPredicate()}.
    */
   FieldsSelector recursively();
-  
+
   FieldsSelector ofType(Class<?> type);
-  
+
   FieldsSelector assignableTo(Class<?> type);
-  
+
   FieldsSelector nonFinal();
-  
+
 }

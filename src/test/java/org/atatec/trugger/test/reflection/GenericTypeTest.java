@@ -16,20 +16,19 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.selector.MethodSelector;
+import org.atatec.trugger.selector.MethodsSelector;
+import org.atatec.trugger.test.Flag;
+import org.junit.Test;
+
+import java.lang.reflect.Method;
+import java.util.Set;
+
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Method;
-import java.util.Set;
-
-import org.atatec.trugger.selector.MethodSelector;
-import org.atatec.trugger.selector.MethodsSelector;
-import org.atatec.trugger.test.Flag;
-
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -75,6 +74,6 @@ public class GenericTypeTest {
   @Test
   public void interfaceReflectionTest() {
     Set<Class<?>> interfaces = reflect().interfaces().in(MethodsSelector.class);
-    assertEquals(8, interfaces.size());
+    assertEquals(7, interfaces.size());
   }
 }

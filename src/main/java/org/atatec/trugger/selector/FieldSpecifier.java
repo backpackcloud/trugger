@@ -16,12 +16,11 @@
  */
 package org.atatec.trugger.selector;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 /**
  * Base interface for selecting {@link Field fields}.
@@ -30,17 +29,15 @@ import org.atatec.trugger.reflection.Access;
  * @since 2.0
  */
 public interface FieldSpecifier extends MemberSelector<Field>, TypedElementSelector,
-    Predicable<Field> {
+  Predicable<Field> {
 
   FieldSpecifier annotated();
-  
+
   FieldSpecifier notAnnotated();
-  
+
   FieldSpecifier annotatedWith(Class<? extends Annotation> type);
 
   FieldSpecifier notAnnotatedWith(Class<? extends Annotation> type);
-
-  FieldSpecifier withAccess(Access access);
 
   FieldSpecifier nonStatic();
 
@@ -51,7 +48,7 @@ public interface FieldSpecifier extends MemberSelector<Field>, TypedElementSelec
   FieldSpecifier recursively();
 
   FieldSpecifier ofType(Class<?> type);
-  
+
   FieldSpecifier assignableTo(Class<?> type);
 
 }

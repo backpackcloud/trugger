@@ -17,13 +17,11 @@
 package org.atatec.trugger.test.reflection;
 
 import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.selector.ConstructorSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
 import org.atatec.trugger.test.SelectionTestAdapter;
-import org.atatec.trugger.test.TruggerTest.SelectionAccessTest;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
@@ -143,29 +141,6 @@ public class ConstructorSelectorTest {
   public void testPredicateSelector() {
     assertNotNull(reflect().constructor().that(Predicates.ALWAYS_TRUE).withoutParameters().in(Object.class));
     assertNull(reflect().constructor().that(Predicates.ALWAYS_FALSE).withoutParameters().in(Object.class));
-  }
-
-  static class AccessSelectorTest {
-    public AccessSelectorTest() {}
-    private AccessSelectorTest(int i) {}
-    AccessSelectorTest(String s) {}
-    protected AccessSelectorTest(double d) {}
-  }
-
-  @Test
-  public void testAccessSelector() {
-    SelectionTest test = new SelectionTestAdapter() {
-      public Object createSelector() {
-        return reflect().constructors();
-      }
-    };
-    assertResult(new SelectionAccessTest(test, Access.PUBLIC), AccessSelectorTest.class, 1);
-    assertResult(new SelectionAccessTest(test, Access.PROTECTED), AccessSelectorTest.class, 1);
-    assertResult(new SelectionAccessTest(test, Access.DEFAULT), AccessSelectorTest.class, 1);
-    assertResult(new SelectionAccessTest(test, Access.PRIVATE), AccessSelectorTest.class, 1);
-
-    assertResult(new SelectionAccessTest(test, Access.LIKE_DEFAULT), AccessSelectorTest.class, 3);
-    assertResult(new SelectionAccessTest(test, Access.LIKE_PROTECTED), AccessSelectorTest.class, 2);
   }
 
   static class ParameterSelectorTest {

@@ -16,12 +16,11 @@
  */
 package org.atatec.trugger.selector;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * Base interface for selecting {@link Method} objects.
@@ -47,8 +46,6 @@ public interface MethodSpecifier extends MemberSelector<Method>, Predicable<Meth
   
   MethodSpecifier that(Predicate<? super Method> predicate);
   
-  MethodSpecifier withAccess(Access access);
- 
   /**
    * Selects the method that takes the specified parameters.
    *

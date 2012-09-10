@@ -16,25 +16,19 @@
  */
 package org.atatec.trugger.test.predicate;
 
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.FINAL_CLASS;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_FINAL_CLASS;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NON_STATIC_CLASS;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.STATIC_CLASS;
-import static org.atatec.trugger.test.TruggerTest.assertAccess;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNotAccess;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Field;
-
-import org.atatec.trugger.reflection.Access;
+import org.atatec.trugger.reflection.ClassPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.test.Flag;
-
 import org.junit.Test;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
+import static org.atatec.trugger.test.TruggerTest.assertMatch;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A class for testing the reflection predicates.
@@ -54,46 +48,22 @@ public class ReflectionPredicatesTest {
     Field field = getClass().getDeclaredField("privateField");
     assertTrue(ANNOTATED.evaluate(field));
     assertFalse(NOT_ANNOTATED.evaluate(field));
-    assertAccess(field, Access.PRIVATE);
-    assertNotAccess(field, Access.DEFAULT);
-    assertNotAccess(field, Access.LIKE_DEFAULT);
-    assertNotAccess(field, Access.PROTECTED);
-    assertNotAccess(field, Access.LIKE_PROTECTED);
-    assertNotAccess(field, Access.PUBLIC);
-    assertMatch(field, ReflectionPredicates.NON_FINAL);
-    assertMatch(field, ReflectionPredicates.STATIC);
+    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
+    assertMatch(field, ReflectionPredicates.declare(Modifier.STATIC));
 
     field = getClass().getDeclaredField("defaultField");
     assertFalse(ANNOTATED.evaluate(field));
     assertTrue(NOT_ANNOTATED.evaluate(field));
-    assertNotAccess(field, Access.PRIVATE);
-    assertAccess(field, Access.DEFAULT);
-    assertAccess(field, Access.LIKE_DEFAULT);
-    assertNotAccess(field, Access.PROTECTED);
-    assertNotAccess(field, Access.LIKE_PROTECTED);
-    assertNotAccess(field, Access.PUBLIC);
-    assertMatch(field, ReflectionPredicates.NON_FINAL);
-    assertMatch(field, ReflectionPredicates.NON_STATIC);
+    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
+    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.STATIC));
 
     field = getClass().getDeclaredField("protectedField");
-    assertNotAccess(field, Access.PRIVATE);
-    assertNotAccess(field, Access.DEFAULT);
-    assertAccess(field, Access.LIKE_DEFAULT);
-    assertAccess(field, Access.PROTECTED);
-    assertAccess(field, Access.LIKE_PROTECTED);
-    assertNotAccess(field, Access.PUBLIC);
-    assertMatch(field, ReflectionPredicates.NON_FINAL);
-    assertMatch(field, ReflectionPredicates.STATIC);
+    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
+    assertMatch(field, ReflectionPredicates.declare(Modifier.STATIC));
 
     field = getClass().getDeclaredField("publicField");
-    assertNotAccess(field, Access.PRIVATE);
-    assertNotAccess(field, Access.DEFAULT);
-    assertAccess(field, Access.LIKE_DEFAULT);
-    assertNotAccess(field, Access.PROTECTED);
-    assertAccess(field, Access.LIKE_PROTECTED);
-    assertAccess(field, Access.PUBLIC);
-    assertMatch(field, ReflectionPredicates.FINAL);
-    assertMatch(field, ReflectionPredicates.NON_STATIC);
+    assertMatch(field, ReflectionPredicates.declare(Modifier.FINAL));
+    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.STATIC));
   }
 
   private final class PrivateClass {}
@@ -106,41 +76,17 @@ public class ReflectionPredicatesTest {
 
   @Test
   public void classPredicatesTest() throws Exception {
-    assertAccess(PrivateClass.class, Access.PRIVATE);
-    assertNotAccess(PrivateClass.class, Access.DEFAULT);
-    assertNotAccess(PrivateClass.class, Access.LIKE_DEFAULT);
-    assertNotAccess(PrivateClass.class, Access.PROTECTED);
-    assertNotAccess(PrivateClass.class, Access.LIKE_PROTECTED);
-    assertNotAccess(PrivateClass.class, Access.PUBLIC);
-    assertMatch(PrivateClass.class, FINAL_CLASS);
-    assertMatch(PrivateClass.class, NON_STATIC_CLASS);
+    assertMatch(PrivateClass.class, ClassPredicates.declare(Modifier.FINAL));
+    assertMatch(PrivateClass.class, ClassPredicates.dontDeclare(Modifier.STATIC));
 
-    assertNotAccess(DefaultClass.class, Access.PRIVATE);
-    assertAccess(DefaultClass.class, Access.DEFAULT);
-    assertAccess(DefaultClass.class, Access.LIKE_DEFAULT);
-    assertNotAccess(DefaultClass.class, Access.PROTECTED);
-    assertNotAccess(DefaultClass.class, Access.LIKE_PROTECTED);
-    assertNotAccess(DefaultClass.class, Access.PUBLIC);
-    assertMatch(DefaultClass.class, NON_FINAL_CLASS);
-    assertMatch(DefaultClass.class, STATIC_CLASS);
+    assertMatch(DefaultClass.class, ClassPredicates.dontDeclare(Modifier.FINAL));
+    assertMatch(DefaultClass.class, ClassPredicates.declare(Modifier.STATIC));
 
-    assertNotAccess(ProtectedClass.class, Access.PRIVATE);
-    assertNotAccess(ProtectedClass.class, Access.DEFAULT);
-    assertAccess(ProtectedClass.class, Access.LIKE_DEFAULT);
-    assertAccess(ProtectedClass.class, Access.PROTECTED);
-    assertAccess(ProtectedClass.class, Access.LIKE_PROTECTED);
-    assertNotAccess(ProtectedClass.class, Access.PUBLIC);
-    assertMatch(ProtectedClass.class, NON_FINAL_CLASS);
-    assertMatch(ProtectedClass.class, NON_STATIC_CLASS);
+    assertMatch(ProtectedClass.class, ClassPredicates.dontDeclare(Modifier.FINAL));
+    assertMatch(ProtectedClass.class, ClassPredicates.dontDeclare(Modifier.STATIC));
 
-    assertNotAccess(PublicClass.class, Access.PRIVATE);
-    assertNotAccess(PublicClass.class, Access.DEFAULT);
-    assertAccess(PublicClass.class, Access.LIKE_DEFAULT);
-    assertNotAccess(PublicClass.class, Access.PROTECTED);
-    assertAccess(PublicClass.class, Access.LIKE_PROTECTED);
-    assertAccess(PublicClass.class, Access.PUBLIC);
-    assertMatch(PublicClass.class, NON_FINAL_CLASS);
-    assertMatch(PublicClass.class, NON_STATIC_CLASS);
+    assertMatch(PublicClass.class, ClassPredicates.dontDeclare(Modifier.FINAL));
+    assertMatch(PublicClass.class, ClassPredicates.dontDeclare(Modifier.STATIC));
   }
 
 }

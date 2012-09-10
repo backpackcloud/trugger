@@ -28,8 +28,8 @@ import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.reflection.ReflectionPredicates.HAS_DEFAULT_VALUE;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
-import static org.atatec.trugger.reflection.ReflectionPredicates.withDefaultValue;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -142,7 +142,7 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
     if (defined.isEmpty()) {
       methods = methods()
         .withoutParameters()
-        .that(withDefaultValue())
+        .that(HAS_DEFAULT_VALUE)
         .in(annotationType);
     } else {
       String[] names = defined.toArray(new String[defined.size()]);
@@ -151,12 +151,12 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
         String name = names[i];
         predicate = predicate.or(named(name));
       }
-      CompositePredicate<Member> unused = predicate.negate();
+      CompositePredicate<Member> isUnused = predicate.negate();
       methods = methods()
         .withoutParameters()
         .that(
-          withDefaultValue()
-            .and(unused))
+          HAS_DEFAULT_VALUE
+            .and(isUnused))
         .in(annotationType);
     }
 

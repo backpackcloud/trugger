@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.scan;
 
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.scan.impl.Scanner;
@@ -54,24 +53,6 @@ public class ClassSelectorTest {
     Set<Class> classes = new HashSet<Class>(){{
       add(FlagAnnotated.class);
       add(ClassSelectorTest.class);
-    }};
-    return initialize(classes);
-  }
-
-  private ClassSelector initializeForAnonymousTest() {
-    Set<Class> classes = new HashSet<Class>(){{
-      add(String.class);
-      add(getClass());
-    }};
-    return initialize(classes);
-  }
-
-  private ClassSelector initializeForAccessTest() {
-    Set<Class> classes = new HashSet<Class>(){{
-      add(PublicClass.class);
-      add(ProtectedClass.class);
-      add(DefaultClass.class);
-      add(PrivateClass.class);
     }};
     return initialize(classes);
   }
@@ -147,51 +128,6 @@ public class ClassSelectorTest {
         assertEquals(ClassSelectorTest.class, c);
       }
     }, packageScan);
-  }
-
-  @Test
-  public void testAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class>() {
-      public ClassSelector createSelector() {
-        return initializeForAnonymousTest();
-      }
-      public void makeSelections(ClassSelector selector) {
-        selector.anonymous();
-      }
-      public void assertions(Class c) {
-        assertTrue(c.isAnonymousClass());
-      }
-    }, packageScan);
-  }
-
-  @Test
-  public void testNonAnonymousSelector() throws Exception {
-    assertResult(new SelectionTest<ClassSelector, Class>() {
-      public ClassSelector createSelector() {
-        return initializeForAnonymousTest();
-      }
-      public void makeSelections(ClassSelector selector) {
-        selector.nonAnonymous();
-      }
-      public void assertions(Class c) {
-        assertFalse(c.isAnonymousClass());
-      }
-    }, packageScan);
-  }
-
-  @Test
-  public void testAccessSelector() throws Exception {
-    Class c = initializeForAccessTest().withAccess(Access.PUBLIC).in(packageScan);
-    assertEquals(PublicClass.class, c);
-
-    c = initializeForAccessTest().withAccess(Access.PROTECTED).in(packageScan);
-    assertEquals(ProtectedClass.class, c);
-
-    c = initializeForAccessTest().withAccess(Access.DEFAULT).in(packageScan);
-    assertEquals(DefaultClass.class, c);
-
-    c = initializeForAccessTest().withAccess(Access.PRIVATE).in(packageScan);
-    assertEquals(PrivateClass.class, c);
   }
 
   @Test

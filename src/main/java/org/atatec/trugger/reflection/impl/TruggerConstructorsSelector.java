@@ -18,7 +18,6 @@ package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorsSelector;
 
@@ -28,11 +27,11 @@ import java.util.Set;
 
 /**
  * A default implementation for the constructors selector.
- * 
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public class TruggerConstructorsSelector implements ConstructorsSelector {
-  
+
   private final MembersSelector<Constructor<?>> selector;
 
   public TruggerConstructorsSelector(MembersFinder<Constructor<?>> finder) {
@@ -43,38 +42,33 @@ public class TruggerConstructorsSelector implements ConstructorsSelector {
     selector.builder().add(ReflectionPredicates.annotatedWith(type));
     return this;
   }
-  
+
   public ConstructorsSelector notAnnotatedWith(Class<? extends Annotation> type) {
     selector.builder().add(ReflectionPredicates.notAnnotatedWith(type));
     return this;
   }
-  
+
   public ConstructorsSelector annotated() {
     selector.builder().add(ReflectionPredicates.ANNOTATED);
     return this;
   }
-  
+
   public ConstructorsSelector notAnnotated() {
     selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
-  
-  public ConstructorsSelector withAccess(Access access) {
-    selector.builder().add(access.memberPredicate());
-    return this;
-  }
-  
+
   public ConstructorsSelector that(Predicate<? super Constructor<?>> predicate) {
     selector.builder().add(predicate);
     return this;
   }
-  
+
   public Set<Constructor<?>> in(Object target) {
     return selector.in(target);
   }
-  
+
   public CompositePredicate<Constructor<?>> toPredicate() {
     return selector.toPredicate();
   }
-  
+
 }

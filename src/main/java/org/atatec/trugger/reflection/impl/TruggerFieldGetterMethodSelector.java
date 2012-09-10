@@ -41,7 +41,7 @@ public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelect
   public TruggerFieldGetterMethodSelector(Field field, MembersFinder<Method> finder) {
     this.field = field;
     this.finder = finder;
-    builder.add(ReflectionPredicates.ofReturnType(field.getType()));
+    builder.add(ReflectionPredicates.returns(field.getType()));
   }
   
   public FieldGetterMethodSelector annotated() {

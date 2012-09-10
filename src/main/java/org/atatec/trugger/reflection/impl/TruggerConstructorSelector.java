@@ -20,7 +20,6 @@ import org.atatec.trugger.iteration.SearchException;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorSelector;
@@ -46,11 +45,6 @@ public class TruggerConstructorSelector implements ConstructorSelector {
 
   public TruggerConstructorSelector(MemberFindersRegistry registry) {
     this.registry = registry;
-  }
-
-  public ConstructorSelector withAccess(Access access) {
-    builder.add(access.memberPredicate());
-    return this;
   }
 
   public ConstructorSelector that(Predicate<? super Constructor<?>> predicate) {

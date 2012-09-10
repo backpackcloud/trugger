@@ -18,12 +18,12 @@ package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.Access;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldsSelector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 
 /**
@@ -60,17 +60,12 @@ public class TruggerFieldsSelector implements FieldsSelector {
   }
   
   public FieldsSelector nonStatic() {
-    selector.builder().add(ReflectionPredicates.NON_STATIC);
+    selector.builder().add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
     return this;
   }
   
   public FieldsSelector nonFinal() {
-    selector.builder().add(ReflectionPredicates.NON_FINAL);
-    return this;
-  }
-  
-  public FieldsSelector withAccess(Access access) {
-    selector.builder().add(access.memberPredicate());
+    selector.builder().add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
     return this;
   }
   

@@ -26,12 +26,6 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
-import static org.atatec.trugger.reflection.Access.DEFAULT;
-import static org.atatec.trugger.reflection.Access.LIKE_DEFAULT;
-import static org.atatec.trugger.reflection.Access.LIKE_PROTECTED;
-import static org.atatec.trugger.reflection.Access.PRIVATE;
-import static org.atatec.trugger.reflection.Access.PROTECTED;
-import static org.atatec.trugger.reflection.Access.PUBLIC;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNoResult;
@@ -204,78 +198,6 @@ public class ConstructorsSelectorTest {
         selector.that(Predicates.ALWAYS_FALSE);
       }
     }, AnnotatedSelectorTest.class);
-  }
-
-  static class AccessSelectorTest {
-    public AccessSelectorTest() {
-    }
-
-    private AccessSelectorTest(int i) {
-    }
-
-    AccessSelectorTest(String s) {
-    }
-
-    protected AccessSelectorTest(double d) {
-    }
-  }
-
-  @Test
-  public void testAccessSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.withAccess(PUBLIC);
-      }
-    }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.withAccess(PROTECTED);
-      }
-    }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.withAccess(DEFAULT);
-      }
-    }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.withAccess(PRIVATE);
-      }
-    }, AccessSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.withAccess(LIKE_DEFAULT);
-      }
-    }, AccessSelectorTest.class, 3);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.withAccess(LIKE_PROTECTED);
-      }
-    }, AccessSelectorTest.class, 2);
   }
 
 }

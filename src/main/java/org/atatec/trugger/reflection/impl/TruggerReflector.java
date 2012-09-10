@@ -38,8 +38,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.atatec.trugger.reflection.ReflectionPredicates.STATIC;
-
 /**
  * An implementation of the reflection operations.
  *
@@ -172,36 +170,6 @@ public class TruggerReflector implements Reflector {
 
   public Method bridgedMethodFor(Method bridgeMethod) {
     return new TruggerBridgeMethodResolver(bridgeMethod).findBridgedMethod();
-  }
-
-  @Override
-  public FieldSelector staticField() {
-    return field().that(STATIC);
-  }
-
-  @Override
-  public FieldSelector staticField(String name) {
-    return field(name).that(STATIC);
-  }
-
-  @Override
-  public FieldsSelector staticFields() {
-    return fields().that(STATIC);
-  }
-
-  @Override
-  public MethodSelector staticMethod() {
-    return method().that(STATIC);
-  }
-
-  @Override
-  public MethodSelector staticMethod(String name) {
-    return method(name).that(STATIC);
-  }
-
-  @Override
-  public MethodsSelector staticMethods() {
-    return methods().that(STATIC);
   }
 
 }

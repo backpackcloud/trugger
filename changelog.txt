@@ -2,6 +2,8 @@ Version 4.1
 - Major Changes
   - Added the possibility to reflect only public members of a class or the declared ones.
   - ImplementationLoader#getInstance renamed to #instance
+  - Removed AccessSelector
+  - Refactor on ReflectionPredicates
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.

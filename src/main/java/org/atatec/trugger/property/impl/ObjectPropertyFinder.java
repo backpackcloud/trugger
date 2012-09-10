@@ -34,7 +34,6 @@ import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.GETTER;
-import static org.atatec.trugger.reflection.ReflectionPredicates.PUBLIC;
 import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
 
 /**
@@ -57,9 +56,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
           map.put(prop.name(), prop);
         }
       }
-      Set<Field> fields = fields().nonStatic()
-        .that(PUBLIC.negate())
-        .in(type);
+      Set<Field> fields = fields().nonStatic().in(type);
       for (Field field : fields) {
         if (!map.containsKey(field.getName())) {
           Method getter = reflect().getterFor(field).in(type);
