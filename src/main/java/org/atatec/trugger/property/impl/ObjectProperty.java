@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
 
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.returns;
+import static org.atatec.trugger.reflection.MethodPredicates.returns;
 
 /**
  * This class represents an object property.

@@ -17,8 +17,8 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionException;
-import org.atatec.trugger.reflection.ReflectionPredicates;
 
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -44,7 +44,7 @@ public class TruggerNoNamedMethodSelector extends TruggerMethodSelector {
     try {
       Class<?>[] parameterTypes = parameterTypes();
       if (parameterTypes != null) {
-        builder().add(ReflectionPredicates.withParameters(parameterTypes));
+        builder().add(MethodPredicates.takes(parameterTypes));
       }
       return selectFrom(set).element(builder().predicate());
     } catch (SearchException e) {

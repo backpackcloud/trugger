@@ -26,7 +26,7 @@ import java.util.Arrays;
 import static org.atatec.trugger.predicate.Predicates.is;
 
 /**
- * A set of predicates to use with <code>Class</code> object.
+ * A set of predicates to use with <code>Class</code> objects.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 4.1

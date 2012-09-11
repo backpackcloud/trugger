@@ -28,14 +28,14 @@ import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.annotatedWith;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.isAnnotatedWith;
 import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
-import static org.atatec.trugger.reflection.ReflectionPredicates.notAnnotatedWith;
-import static org.atatec.trugger.reflection.ReflectionPredicates.returns;
-import static org.atatec.trugger.reflection.ReflectionPredicates.withParameters;
+import static org.atatec.trugger.reflection.ReflectionPredicates.isNotAnnotatedWith;
+import static org.atatec.trugger.reflection.MethodPredicates.returns;
+import static org.atatec.trugger.reflection.MethodPredicates.takes;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNoResult;
 import static org.atatec.trugger.test.TruggerTest.assertResult;
@@ -70,7 +70,7 @@ public class MethodsSelectorTest {
         selector.annotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ANNOTATED);
+        assertMatch(methods, IS_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -85,7 +85,7 @@ public class MethodsSelectorTest {
         selector.notAnnotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, NOT_ANNOTATED);
+        assertMatch(methods, IS_NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -100,7 +100,7 @@ public class MethodsSelectorTest {
         selector.annotatedWith(Flag.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, annotatedWith(Flag.class));
+        assertMatch(methods, isAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -115,7 +115,7 @@ public class MethodsSelectorTest {
         selector.notAnnotatedWith(Flag.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, notAnnotatedWith(Flag.class));
+        assertMatch(methods, isNotAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -254,7 +254,7 @@ public class MethodsSelectorTest {
         selector.withParameters(boolean.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, withParameters(boolean.class).and(named("foo")));
+        assertMatch(methods, takes(boolean.class).and(named("foo")));
       }
     }, obj, 1);
     assertResult(new SelectionTestAdapter<MethodsSelector, Set<Method>>(){
@@ -265,7 +265,7 @@ public class MethodsSelectorTest {
         selector.withParameters(Boolean.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, withParameters(Boolean.class).and(named("foo2")));
+        assertMatch(methods, takes(Boolean.class).and(named("foo2")));
       }
     }, obj, 1);
     assertResult(new SelectionTestAdapter<MethodsSelector, Set<Method>>(){
@@ -276,7 +276,7 @@ public class MethodsSelectorTest {
         selector.withParameters(boolean.class, boolean.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, withParameters(boolean.class, boolean.class).and(named("bar")));
+        assertMatch(methods, takes(boolean.class, boolean.class).and(named("bar")));
       }
     }, obj, 1);
   }

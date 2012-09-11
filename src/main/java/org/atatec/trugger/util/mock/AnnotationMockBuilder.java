@@ -28,7 +28,7 @@ import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.HAS_DEFAULT_VALUE;
+import static org.atatec.trugger.reflection.MethodPredicates.HAS_DEFAULT_VALUE;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;

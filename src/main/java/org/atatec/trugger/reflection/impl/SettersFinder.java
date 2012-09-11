@@ -21,7 +21,7 @@ import org.atatec.trugger.iteration.Iteration;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import static org.atatec.trugger.reflection.ReflectionPredicates.setterFor;
+import static org.atatec.trugger.reflection.ReflectionPredicates.isSetterOf;
 
 /**
  * A finder for setter {@link Method} objects.
@@ -39,6 +39,6 @@ public class SettersFinder implements MembersFinder<Method> {
   }
 
   public Collection<Method> find(Class<?> type) {
-    return Iteration.selectFrom(finder.find(type)).elements(setterFor(name));
+    return Iteration.selectFrom(finder.find(type)).elements(isSetterOf(name));
   }
 }

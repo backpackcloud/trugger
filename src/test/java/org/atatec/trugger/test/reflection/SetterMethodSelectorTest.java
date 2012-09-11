@@ -91,7 +91,7 @@ public class SetterMethodSelectorTest {
         selector.annotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ReflectionPredicates.ANNOTATED);
+        assertMatch(methods, ReflectionPredicates.IS_ANNOTATED);
       }
     }, this, 1);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
@@ -114,7 +114,7 @@ public class SetterMethodSelectorTest {
         selector.notAnnotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ReflectionPredicates.NOT_ANNOTATED);
+        assertMatch(methods, ReflectionPredicates.IS_NOT_ANNOTATED);
       }
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
@@ -137,7 +137,7 @@ public class SetterMethodSelectorTest {
         selector.annotatedWith(Flag.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ReflectionPredicates.annotatedWith(Flag.class));
+        assertMatch(methods, ReflectionPredicates.isAnnotatedWith(Flag.class));
       }
     }, this, 1);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
@@ -160,7 +160,7 @@ public class SetterMethodSelectorTest {
         selector.notAnnotatedWith(Flag.class);
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ReflectionPredicates.notAnnotatedWith(Flag.class));
+        assertMatch(methods, ReflectionPredicates.isNotAnnotatedWith(Flag.class));
       }
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {

@@ -71,7 +71,7 @@ public class FieldsSelectorTest {
         selector.annotated();
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.ANNOTATED);
+        assertMatch(fields, ReflectionPredicates.IS_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 2);
   }
@@ -86,7 +86,7 @@ public class FieldsSelectorTest {
         selector.notAnnotated();
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.NOT_ANNOTATED);
+        assertMatch(fields, ReflectionPredicates.IS_NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -101,7 +101,7 @@ public class FieldsSelectorTest {
         selector.annotatedWith(Flag.class);
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.annotatedWith(Flag.class));
+        assertMatch(fields, ReflectionPredicates.isAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -116,7 +116,7 @@ public class FieldsSelectorTest {
         selector.notAnnotatedWith(Flag.class);
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.notAnnotatedWith(Flag.class));
+        assertMatch(fields, ReflectionPredicates.isNotAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 2);
   }

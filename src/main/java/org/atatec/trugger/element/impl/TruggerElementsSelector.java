@@ -50,22 +50,22 @@ public final class TruggerElementsSelector implements ElementsSelector {
   }
   
   public ElementsSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.annotatedWith(type));
+    builder.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
   
   public ElementsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.notAnnotatedWith(type));
+    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
   
   public ElementsSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    builder.add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
   
   public ElementsSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
   

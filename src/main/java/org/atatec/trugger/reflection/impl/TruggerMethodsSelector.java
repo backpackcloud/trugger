@@ -18,6 +18,7 @@ package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
+import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodsSelector;
 
@@ -40,22 +41,22 @@ public class TruggerMethodsSelector implements MethodsSelector {
   }
 
   public MethodsSelector annotated() {
-    selector.builder().add(ReflectionPredicates.ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
   
   public MethodsSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
   
   public MethodsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.annotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
   
   public MethodsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.notAnnotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
   
@@ -80,17 +81,17 @@ public class TruggerMethodsSelector implements MethodsSelector {
   }
   
   public MethodsSelector withParameters(Class<?>... parameterTypes) {
-    selector.builder().add(ReflectionPredicates.withParameters(parameterTypes));
+    selector.builder().add(MethodPredicates.takes(parameterTypes));
     return this;
   }
   
   public MethodsSelector returning(Class<?> returnType) {
-    selector.builder().add(ReflectionPredicates.returns(returnType));
+    selector.builder().add(MethodPredicates.returns(returnType));
     return this;
   }
   
   public MethodsSelector withoutReturnType() {
-    selector.builder().add(ReflectionPredicates.returns(Void.TYPE));
+    selector.builder().add(MethodPredicates.returns(Void.TYPE));
     return this;
   }
   

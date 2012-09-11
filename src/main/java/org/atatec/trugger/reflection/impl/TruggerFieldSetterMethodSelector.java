@@ -41,22 +41,22 @@ public class TruggerFieldSetterMethodSelector implements FieldSetterMethodSelect
   }
 
   public FieldSetterMethodSelector annotated() {
-    selector.builder().add(ReflectionPredicates.ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
 
   public FieldSetterMethodSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
 
   public FieldSetterMethodSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.annotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public FieldSetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.notAnnotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 

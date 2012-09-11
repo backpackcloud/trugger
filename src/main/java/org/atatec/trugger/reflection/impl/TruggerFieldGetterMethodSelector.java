@@ -19,6 +19,7 @@ package org.atatec.trugger.reflection.impl;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
+import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldGetterMethodSelector;
 
@@ -41,26 +42,26 @@ public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelect
   public TruggerFieldGetterMethodSelector(Field field, MembersFinder<Method> finder) {
     this.field = field;
     this.finder = finder;
-    builder.add(ReflectionPredicates.returns(field.getType()));
+    builder.add(MethodPredicates.returns(field.getType()));
   }
   
   public FieldGetterMethodSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    builder.add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
   
   public FieldGetterMethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
   
   public FieldGetterMethodSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.annotatedWith(type));
+    builder.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
   
   public FieldGetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.notAnnotatedWith(type));
+    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
   

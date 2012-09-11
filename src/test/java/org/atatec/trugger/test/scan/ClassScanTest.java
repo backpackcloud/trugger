@@ -64,28 +64,28 @@ public class ClassScanTest {
   private int interfaceTest(String... packages) {
     Set<Class> interfaces =
         findInterfaces().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(interfaces, ReflectionPredicates.INTERFACE.and(declare(PUBLIC)));
+    TruggerTest.assertMatch(interfaces, ReflectionPredicates.IS_INTERFACE.and(declare(PUBLIC)));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
     Set<Class> classes =
         findClasses().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(classes, ReflectionPredicates.CLASS.and(declare(PUBLIC)));
+    TruggerTest.assertMatch(classes, ReflectionPredicates.IS_CLASS.and(declare(PUBLIC)));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
     Set<Class> annotations =
         findAnnotations().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(annotations, ReflectionPredicates.ANNOTATION.and(declare(PUBLIC)));
+    TruggerTest.assertMatch(annotations, ReflectionPredicates.IS_ANNOTATION.and(declare(PUBLIC)));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
     Set<Class> enums =
         findEnums().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(enums, ReflectionPredicates.ENUM.and(declare(PUBLIC)));
+    TruggerTest.assertMatch(enums, ReflectionPredicates.IS_ENUM.and(declare(PUBLIC)));
     return enums.size();
   }
 
@@ -257,7 +257,7 @@ public class ClassScanTest {
   public void testClassScanSubPacakgeInJar() {
     Set<Class> set = findClasses().recursively().in(jarPackageNames);
 
-    assertMatch(set, ReflectionPredicates.CLASS);
+    assertMatch(set, ReflectionPredicates.IS_CLASS);
     assertMatch(set, jarPackagePredicate);
 
     assertTrue(set.contains(org.junit.runner.manipulation.NoTestsRemainException.class));
@@ -335,7 +335,7 @@ public class ClassScanTest {
   public void testAnnotationScanSubPacakgeInJar() {
     Set<Class> set = findAnnotations().recursively().in(jarPackageNames);
 
-    assertMatch(set, ReflectionPredicates.ANNOTATION);
+    assertMatch(set, ReflectionPredicates.IS_ANNOTATION);
     assertMatch(set, jarPackagePredicate);
 
     assertTrue(set.contains(org.junit.runner.RunWith.class));
@@ -345,7 +345,7 @@ public class ClassScanTest {
   public void testInterfaceScanSubPacakgeInJar() {
     Set<Class> set = findInterfaces().recursively().in(jarPackageNames);
 
-    assertMatch(set, ReflectionPredicates.INTERFACE);
+    assertMatch(set, ReflectionPredicates.IS_INTERFACE);
     assertMatch(set, jarPackagePredicate);
 
     assertTrue(set.contains(org.junit.runner.manipulation.Filterable.class));
@@ -368,7 +368,7 @@ public class ClassScanTest {
   public void testEnumScanSubPacakgeInJar() {
     Set<Class> set = findEnums().recursively().in(jarPackageNames);
 
-    assertMatch(set, ReflectionPredicates.ENUM);
+    assertMatch(set, ReflectionPredicates.IS_ENUM);
     assertMatch(set, jarPackagePredicate);
 
     assertTrue(set.contains(org.easymock.CaptureType.class));

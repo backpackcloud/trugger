@@ -18,6 +18,7 @@ package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
+import org.atatec.trugger.reflection.FieldPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldsSelector;
 
@@ -40,22 +41,22 @@ public class TruggerFieldsSelector implements FieldsSelector {
   }
 
   public FieldsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.annotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
   
   public FieldsSelector annotated() {
-    selector.builder().add(ReflectionPredicates.ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
   
   public FieldsSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
   
   public FieldsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.notAnnotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
   
@@ -75,12 +76,12 @@ public class TruggerFieldsSelector implements FieldsSelector {
   }
   
   public FieldsSelector ofType(final Class<?> type) {
-    selector.builder().add(ReflectionPredicates.ofType(type, false));
+    selector.builder().add(FieldPredicates.ofType(type));
     return this;
   }
   
   public FieldsSelector assignableTo(Class<?> type) {
-    selector.builder().add(ReflectionPredicates.ofType(type, true));
+    selector.builder().add(FieldPredicates.assignableTo(type));
     return this;
   }
   

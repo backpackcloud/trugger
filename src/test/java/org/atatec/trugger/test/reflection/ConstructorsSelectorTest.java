@@ -70,7 +70,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.ANNOTATED);
+        assertMatch(set, ReflectionPredicates.IS_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
     assertTrue(reflect().visible().constructors().annotated().in(AnnotatedSelectorTest.class).isEmpty());
@@ -88,7 +88,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
+        assertMatch(set, ReflectionPredicates.IS_NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
 
@@ -102,7 +102,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
+        assertMatch(set, ReflectionPredicates.IS_NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -119,7 +119,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.annotatedWith(Flag.class));
+        assertMatch(set, ReflectionPredicates.isAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 1);
     assertTrue(
@@ -139,7 +139,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.notAnnotatedWith(Flag.class));
+        assertMatch(set, ReflectionPredicates.isNotAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 1);
     assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
@@ -152,7 +152,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.notAnnotatedWith(Flag.class));
+        assertMatch(set, ReflectionPredicates.isNotAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class, 1);
   }

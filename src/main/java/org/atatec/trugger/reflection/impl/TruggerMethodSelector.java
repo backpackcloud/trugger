@@ -20,6 +20,7 @@ import org.atatec.trugger.iteration.SearchException;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
+import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodSelector;
@@ -69,32 +70,32 @@ public class TruggerMethodSelector implements MethodSelector {
   }
 
   public MethodSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    builder.add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
 
   public MethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
 
   public MethodSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.annotatedWith(type));
+    builder.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public MethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.notAnnotatedWith(type));
+    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public MethodSelector returning(Class<?> returnType) {
-    builder.add(ReflectionPredicates.returns(returnType));
+    builder.add(MethodPredicates.returns(returnType));
     return this;
   }
 
   public MethodSelector withoutReturnType() {
-    builder.add(ReflectionPredicates.returns(Void.TYPE));
+    builder.add(MethodPredicates.returns(Void.TYPE));
     return this;
   }
 
@@ -134,7 +135,7 @@ public class TruggerMethodSelector implements MethodSelector {
   public CompositePredicate<Method> toPredicate() {
     CompositePredicate<Method> predicate = builder.predicate();
     if (parameterTypes != null) {
-      predicate = predicate.and(ReflectionPredicates.withParameters(parameterTypes));
+      predicate = predicate.and(MethodPredicates.takes(parameterTypes));
     }
     return predicate;
   }

@@ -79,7 +79,7 @@ import java.util.Set;
  * directly after calling the method in question.
  * <p/>
  * <pre>
- * Method method = {@link Reflection#reflect()}.getterFor(&quot;myProperty&quot;).in(MyClass.class);
+ * Method method = {@link Reflection#reflect()}.isGetterOf(&quot;myProperty&quot;).in(MyClass.class);
  * Set&lt;Field&gt; fields = {@link Reflection#reflect()}.allFields().in(MyClass.class);
  * </pre>
  * </ul>

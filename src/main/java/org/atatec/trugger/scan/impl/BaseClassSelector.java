@@ -62,22 +62,22 @@ public class BaseClassSelector implements ClassSpecifier {
   }
 
   public ClassSpecifier annotatedWith(Class<? extends Annotation> annotationType) {
-    this.builder.add(ReflectionPredicates.annotatedWith(annotationType));
+    this.builder.add(ReflectionPredicates.isAnnotatedWith(annotationType));
     return this;
   }
 
   public ClassSpecifier notAnnotatedWith(Class<? extends Annotation> annotationType) {
-    this.builder.add(ReflectionPredicates.notAnnotatedWith(annotationType));
+    this.builder.add(ReflectionPredicates.isNotAnnotatedWith(annotationType));
     return this;
   }
 
   public ClassSpecifier annotated() {
-    this.builder.add(ReflectionPredicates.ANNOTATED);
+    this.builder.add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
 
   public ClassSpecifier notAnnotated() {
-    this.builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    this.builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
 

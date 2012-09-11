@@ -39,22 +39,22 @@ public class TruggerConstructorsSelector implements ConstructorsSelector {
   }
 
   public ConstructorsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.annotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public ConstructorsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.notAnnotatedWith(type));
+    selector.builder().add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public ConstructorsSelector annotated() {
-    selector.builder().add(ReflectionPredicates.ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
 
   public ConstructorsSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
+    selector.builder().add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
 

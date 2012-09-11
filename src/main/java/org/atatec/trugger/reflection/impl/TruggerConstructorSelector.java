@@ -20,6 +20,7 @@ import org.atatec.trugger.iteration.SearchException;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
+import org.atatec.trugger.reflection.ConstructorPredicates;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorSelector;
@@ -76,29 +77,29 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   }
 
   public ConstructorSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.annotatedWith(type));
+    builder.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public ConstructorSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.notAnnotatedWith(type));
+    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public ConstructorSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    builder.add(ReflectionPredicates.IS_ANNOTATED);
     return this;
   }
 
   public ConstructorSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
   }
 
   public CompositePredicate<Constructor<?>> toPredicate() {
     CompositePredicate<Constructor<?>> predicate = builder.predicate();
     if (parameterTypes != null) {
-      return predicate.and(ReflectionPredicates.constructorWithParameters(parameterTypes));
+      return predicate.and(ConstructorPredicates.takes(parameterTypes));
     }
     return predicate;
   }

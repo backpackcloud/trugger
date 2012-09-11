@@ -27,11 +27,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.annotatedWith;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.isAnnotatedWith;
 import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
-import static org.atatec.trugger.reflection.ReflectionPredicates.notAnnotatedWith;
+import static org.atatec.trugger.reflection.ReflectionPredicates.isNotAnnotatedWith;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNoResult;
 import static org.atatec.trugger.test.TruggerTest.assertResult;
@@ -76,7 +76,7 @@ public class NoNamedMethodSelectorTest {
       }
       @Override
       public void assertions(Method method) {
-        assertMatch(method, ANNOTATED);
+        assertMatch(method, IS_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class);
   }
@@ -92,7 +92,7 @@ public class NoNamedMethodSelectorTest {
       }
       @Override
       public void assertions(Method method) {
-        assertMatch(method, NOT_ANNOTATED);
+        assertMatch(method, IS_NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class);
   }
@@ -108,7 +108,7 @@ public class NoNamedMethodSelectorTest {
       }
       @Override
       public void assertions(Method method) {
-        assertMatch(method, annotatedWith(Flag.class));
+        assertMatch(method, isAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class);
   }
@@ -124,7 +124,7 @@ public class NoNamedMethodSelectorTest {
       }
       @Override
       public void assertions(Method method) {
-        assertMatch(method, notAnnotatedWith(Flag.class));
+        assertMatch(method, isNotAnnotatedWith(Flag.class));
       }
     }, AnnotatedSelectorTest.class);
   }

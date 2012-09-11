@@ -24,12 +24,12 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.GETTER;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
-import static org.atatec.trugger.reflection.ReflectionPredicates.getterFor;
-import static org.atatec.trugger.reflection.ReflectionPredicates.setterFor;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_GETTER;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_SETTER;
+import static org.atatec.trugger.reflection.ReflectionPredicates.isGetterOf;
+import static org.atatec.trugger.reflection.ReflectionPredicates.isSetterOf;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNotMatch;
 import static org.junit.Assert.assertFalse;
@@ -51,14 +51,14 @@ public class ReflectionPredicatesTest {
   @Test
   public void memberPredicatesTest() throws Exception {
     Field field = getClass().getDeclaredField("privateField");
-    assertTrue(ANNOTATED.evaluate(field));
-    assertFalse(NOT_ANNOTATED.evaluate(field));
+    assertTrue(IS_ANNOTATED.evaluate(field));
+    assertFalse(IS_NOT_ANNOTATED.evaluate(field));
     assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
     assertMatch(field, ReflectionPredicates.declare(Modifier.STATIC));
 
     field = getClass().getDeclaredField("defaultField");
-    assertFalse(ANNOTATED.evaluate(field));
-    assertTrue(NOT_ANNOTATED.evaluate(field));
+    assertFalse(IS_ANNOTATED.evaluate(field));
+    assertTrue(IS_NOT_ANNOTATED.evaluate(field));
     assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
     assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.STATIC));
 
@@ -118,16 +118,16 @@ public class ReflectionPredicatesTest {
   public void testGoodGetters() throws NoSuchMethodException {
     Class c = GoodGetterTest.class;
 
-    assertMatch(c.getMethod("getValue"), GETTER);
-    assertMatch(c.getMethod("getValue"), getterFor("value"));
-    assertNotMatch(c.getMethod("getValue"), getterFor("getValue"));
+    assertMatch(c.getMethod("getValue"), IS_GETTER);
+    assertMatch(c.getMethod("getValue"), isGetterOf("value"));
+    assertNotMatch(c.getMethod("getValue"), isGetterOf("getValue"));
 
-    assertMatch(c.getMethod("isValue"), GETTER);
-    assertMatch(c.getMethod("isValue"), getterFor("value"));
-    assertNotMatch(c.getMethod("isValue"), getterFor("Value"));
+    assertMatch(c.getMethod("isValue"), IS_GETTER);
+    assertMatch(c.getMethod("isValue"), isGetterOf("value"));
+    assertNotMatch(c.getMethod("isValue"), isGetterOf("Value"));
 
-    assertMatch(c.getMethod("value"), GETTER);
-    assertMatch(c.getMethod("value"), getterFor("value"));
+    assertMatch(c.getMethod("value"), IS_GETTER);
+    assertMatch(c.getMethod("value"), isGetterOf("value"));
   }
 
   class BadGetterTest {
@@ -170,26 +170,26 @@ public class ReflectionPredicatesTest {
   public void testBadGetters() throws NoSuchMethodException {
     Class c = BadGetterTest.class;
 
-    assertNotMatch(c.getDeclaredMethod("getValue"), GETTER);
-    assertNotMatch(c.getDeclaredMethod("getValue"), getterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("getValue"), IS_GETTER);
+    assertNotMatch(c.getDeclaredMethod("getValue"), isGetterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("isValue"), GETTER);
-    assertNotMatch(c.getDeclaredMethod("isValue"), getterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("isValue"), IS_GETTER);
+    assertNotMatch(c.getDeclaredMethod("isValue"), isGetterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("value"), GETTER);
-    assertNotMatch(c.getDeclaredMethod("value"), getterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("value"), IS_GETTER);
+    assertNotMatch(c.getDeclaredMethod("value"), isGetterOf("value"));
 
-    assertNotMatch(c.getMethod("getSize", int.class), GETTER);
-    assertNotMatch(c.getMethod("getSize", int.class), getterFor("size"));
+    assertNotMatch(c.getMethod("getSize", int.class), IS_GETTER);
+    assertNotMatch(c.getMethod("getSize", int.class), isGetterOf("size"));
 
-    assertNotMatch(c.getMethod("isSize", int.class), GETTER);
-    assertNotMatch(c.getMethod("isSize", int.class), getterFor("size"));
+    assertNotMatch(c.getMethod("isSize", int.class), IS_GETTER);
+    assertNotMatch(c.getMethod("isSize", int.class), isGetterOf("size"));
 
-    assertNotMatch(c.getMethod("size", int.class), GETTER);
-    assertNotMatch(c.getMethod("size", int.class), getterFor("size"));
+    assertNotMatch(c.getMethod("size", int.class), IS_GETTER);
+    assertNotMatch(c.getMethod("size", int.class), isGetterOf("size"));
 
-    assertNotMatch(c.getMethod("get"), GETTER);
-    assertNotMatch(c.getMethod("is"), GETTER);
+    assertNotMatch(c.getMethod("get"), IS_GETTER);
+    assertNotMatch(c.getMethod("is"), IS_GETTER);
   }
 
   class GoodSetterTest {
@@ -201,10 +201,10 @@ public class ReflectionPredicatesTest {
   public void testGoodSetter() throws NoSuchMethodException {
     Class c = GoodSetterTest.class;
 
-    assertMatch(c.getMethod("setValue", int.class), SETTER);
-    assertMatch(c.getMethod("setValue", int.class), setterFor("value"));
-    assertNotMatch(c.getMethod("setValue", int.class), setterFor("setValue"));
-    assertNotMatch(c.getMethod("setValue", int.class), setterFor("Value"));
+    assertMatch(c.getMethod("setValue", int.class), IS_SETTER);
+    assertMatch(c.getMethod("setValue", int.class), isSetterOf("value"));
+    assertNotMatch(c.getMethod("setValue", int.class), isSetterOf("setValue"));
+    assertNotMatch(c.getMethod("setValue", int.class), isSetterOf("Value"));
   }
 
   class BadSetterTest {
@@ -224,22 +224,22 @@ public class ReflectionPredicatesTest {
   public void testBadSetter() throws NoSuchMethodException {
     Class c = BadSetterTest.class;
 
-    assertNotMatch(c.getDeclaredMethod("setValue", int.class), SETTER);
-    assertNotMatch(c.getDeclaredMethod("setValue", int.class), setterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("setValue", int.class), IS_SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", int.class), isSetterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("setValue", long.class), SETTER);
-    assertNotMatch(c.getDeclaredMethod("setValue", long.class), setterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("setValue", long.class), IS_SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", long.class), isSetterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("setValue", double.class), SETTER);
-    assertNotMatch(c.getDeclaredMethod("setValue", double.class), setterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("setValue", double.class), IS_SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", double.class), isSetterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("setValue", boolean.class), SETTER);
-    assertNotMatch(c.getDeclaredMethod("setValue", boolean.class), setterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("setValue", boolean.class), IS_SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", boolean.class), isSetterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("set", int.class), SETTER);
+    assertNotMatch(c.getDeclaredMethod("set", int.class), IS_SETTER);
 
-    assertNotMatch(c.getDeclaredMethod("setValue", int.class), SETTER);
-    assertNotMatch(c.getDeclaredMethod("setValue", int.class), setterFor("value"));
+    assertNotMatch(c.getDeclaredMethod("setValue", int.class), IS_SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", int.class), isSetterOf("value"));
   }
 
 }

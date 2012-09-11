@@ -34,8 +34,8 @@ import static org.atatec.trugger.reflection.Reflection.fields;
 import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.GETTER;
-import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_GETTER;
+import static org.atatec.trugger.reflection.ReflectionPredicates.IS_SETTER;
 
 /**
  * A default class for finding properties in objects.
@@ -48,7 +48,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
       Set<Method> declaredMethods = methods().nonStatic()
-        .that(GETTER.or(SETTER))
+        .that(IS_GETTER.or(IS_SETTER))
         .in(type);
       for (Method method : declaredMethods) {
         String name = Reflection.parsePropertyName(method);
