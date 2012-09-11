@@ -21,7 +21,6 @@ import org.atatec.trugger.scan.ClassScanner;
 import org.atatec.trugger.scan.ClassScannerFactory;
 import org.atatec.trugger.scan.ResourceFinder;
 import org.atatec.trugger.scan.ScanLevel;
-import org.atatec.trugger.selector.ClassSelector;
 import org.atatec.trugger.selector.ClassesSelector;
 
 /**
@@ -51,8 +50,10 @@ public class TruggerClassScanner implements ClassScanner {
     this.scanner = new TruggerScanner(factory, classLoader);
   }
 
-  public void setClassLoader(ClassLoader classLoader) {
+  @Override
+  public ClassScanner with(ClassLoader classLoader) {
     this.scanner.setClassLoader(classLoader);
+    return this;
   }
 
   public ClassesSelector findAnnotations() {
@@ -73,10 +74,6 @@ public class TruggerClassScanner implements ClassScanner {
 
   public ClassesSelector findAll() {
     return new TruggerClassesSelector(scanner);
-  }
-
-  public ClassSelector findClass() {
-    return new TruggerClassSelector(scanner).that(ReflectionPredicates.IS_CLASS);
   }
 
 }

@@ -17,9 +17,7 @@
 package org.atatec.trugger.test.scan;
 
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.ReflectionFactory;
 import org.atatec.trugger.reflection.ReflectionPredicates;
-import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.test.Flag;
@@ -28,12 +26,17 @@ import org.junit.Test;
 
 import java.util.Set;
 
-import static org.atatec.trugger.scan.ClassScan.*;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.junit.Assert.*;
-
-import static org.atatec.trugger.reflection.ClassPredicates.declare;
 import static java.lang.reflect.Modifier.PUBLIC;
+import static org.atatec.trugger.reflection.ClassPredicates.declare;
+import static org.atatec.trugger.scan.ClassScan.findAll;
+import static org.atatec.trugger.scan.ClassScan.findAnnotations;
+import static org.atatec.trugger.scan.ClassScan.findClasses;
+import static org.atatec.trugger.scan.ClassScan.findEnums;
+import static org.atatec.trugger.scan.ClassScan.findInterfaces;
+import static org.atatec.trugger.test.TruggerTest.assertMatch;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A class for testing the class finding.
@@ -470,16 +473,6 @@ public class ClassScanTest {
 
     assertTrue(set.contains(org.easymock.CaptureType.class));
     assertTrue(set.contains(org.easymock.LogicalOperator.class));
-  }
-
-  @Test
-  public void testSingleClassScan() throws Exception {
-    assertNotNull(findClass().assignableTo(ReflectionFactory.class).recursively().in("org.atatec.trugger"));
-  }
-
-  @Test(expected = ClassScanningException.class)
-  public void testSingleClassScanFail() throws Exception {
-    findClass().annotated().recursively().in("org.atatec.trugger");
   }
 
 }

@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.scan;
 
-import org.atatec.trugger.selector.ClassSelector;
 import org.atatec.trugger.selector.ClassesSelector;
 
 /**
@@ -34,13 +33,6 @@ public interface ClassScanner {
    * @return a selector for the operation.
    */
   ClassesSelector findClasses();
-
-  /**
-   * Finds only one class that matches with the given restrictions.
-   *
-   * @return a selector for the operation.
-   */
-  ClassSelector findClass();
 
   /**
    * Finds only interfaces, but not annotations.
@@ -76,6 +68,6 @@ public interface ClassScanner {
    * @param classLoader
    *          the class loader to use.
    */
-  void setClassLoader(ClassLoader classLoader);
+  ClassScanner with(ClassLoader classLoader);
 
 }

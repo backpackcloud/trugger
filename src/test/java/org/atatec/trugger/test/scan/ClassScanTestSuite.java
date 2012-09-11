@@ -27,7 +27,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
   ClassScanTest.class,
-  ClassSelectorTest.class,
   ClassesSelectorTest.class
 })
 public interface ClassScanTestSuite {

@@ -17,7 +17,6 @@
 package org.atatec.trugger.scan;
 
 import org.atatec.trugger.loader.ImplementationLoader;
-import org.atatec.trugger.selector.ClassSelector;
 import org.atatec.trugger.selector.ClassesSelector;
 
 /**
@@ -59,19 +58,6 @@ public class ClassScan {
    */
   public static ClassesSelector findClasses() {
     return newScan().findClasses();
-  }
-
-  /**
-   * This method has the same effect as:
-   * <p/>
-   * <pre>
-   * newScan().findClass();
-   * </pre>
-   *
-   * @since 2.5
-   */
-  public static ClassSelector findClass() {
-    return newScan().findClass();
   }
 
   /**
