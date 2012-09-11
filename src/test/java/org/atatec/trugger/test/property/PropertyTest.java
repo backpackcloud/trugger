@@ -175,12 +175,13 @@ public class PropertyTest {
   @Test
   public void selectorTest() {
     Set<Element> props = Properties.properties().readable().in(TestObject.class);
-    assertElements(props, "name", "active", "price", "allAccess", "readable", "fieldProp", "otherFieldProp", "class");
+    assertElements(
+      props, "name", "active", "price", "allAccess", "readable", "fieldProp", "otherFieldProp", "class", "hashCode");
     assertNotNull(Properties.property("active").readable().in(TestObject.class));
 
     ElementsSelector selector = Properties.properties().readable().nonWritable();
     props = selector.in(TestObject.class);
-    assertElements(props, "name", "price", "readable", "otherFieldProp", "class");
+    assertElements(props, "name", "price", "readable", "otherFieldProp", "class", "hashCode");
     assertNotNull(Properties.property("name").that(selector.toPredicate()).nonWritable().in(TestObject.class));
     assertNotNull(Properties.property("name").that(selector.toPredicate()).annotatedWith(Flag.class).in(
         TestObject.class));

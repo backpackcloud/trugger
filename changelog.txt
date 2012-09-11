@@ -4,6 +4,7 @@ Version 4.1
   - ImplementationLoader#getInstance renamed to #instance
   - Removed AccessSelector
   - Refactor on ReflectionPredicates
+  - Getter and Setter specs changed to include more cases
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.

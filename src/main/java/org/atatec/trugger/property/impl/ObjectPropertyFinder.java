@@ -21,6 +21,7 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.ClassElementsCache;
 import org.atatec.trugger.element.impl.ElementFinderHelper;
+import org.atatec.trugger.reflection.Reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -50,7 +51,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
         .that(GETTER.or(SETTER))
         .in(type);
       for (Method method : declaredMethods) {
-        String name = resolvePropertyName(method);
+        String name = Reflection.parsePropertyName(method);
         if (!map.containsKey(name)) {
           ObjectProperty prop = new ObjectProperty(method, name);
           map.put(prop.name(), prop);
@@ -104,16 +105,6 @@ public final class ObjectPropertyFinder implements Finder<Element> {
         return ElementFinderHelper.computeResult(target, elements);
       }
     };
-  }
-
-  /**
-   * Compute and returns the property name encapsulated by the given method. The given
-   * method must be a getter or a setter.
-   */
-  private static String resolvePropertyName(Method method) {
-    String name = method.getName();
-    int i = name.startsWith("is") ? 2 : 3;
-    return Character.toLowerCase(name.charAt(i++)) + name.substring(i);
   }
 
 }

@@ -139,6 +139,26 @@ public final class Reflection {
   }
 
   /**
+   * Parses the method name to return a property name if it is a getter or a setter.
+   *
+   * @param method the method to evaluate
+   *
+   * @return a property name
+   *
+   * @since 4.1
+   */
+  public static String parsePropertyName(Method method) {
+    String name = method.getName();
+    int i = 0;
+    if (name.startsWith("get") || name.startsWith("set")) {
+      i = 3;
+    } else if (name.startsWith("is")) {
+      i = 2;
+    }
+    return i > 0 ? Character.toLowerCase(name.charAt(i)) + name.substring(i + 1) : name;
+  }
+
+  /**
    * Uses the {@link ReflectionFactory} for creating a {@link Reflector} instance.
    *
    * @return a component for reflecting objects in a target.

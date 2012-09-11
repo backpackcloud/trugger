@@ -22,8 +22,14 @@ import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import static org.atatec.trugger.predicate.Predicates.is;
 
@@ -36,35 +42,41 @@ import static org.atatec.trugger.predicate.Predicates.is;
  */
 public class ReflectionPredicates {
 
-  private static String computeElementName(String name, int i) {
-    return Character.toLowerCase(name.charAt(i++)) + name.substring(i);
-  }
+  private static final Pattern TO_PATTERN = Pattern.compile("to[A-Z].*");
+  private static final Pattern GET_PATTERN = Pattern.compile("get[A-Z].*");
+  private static final Pattern SET_PATTERN = Pattern.compile("set[A-Z].*");
+  private static final Pattern IS_PATTERN = Pattern.compile("is[A-Z].*");
 
   /**
    * A predicate that returns <code>true</code> if the evaluated method is a getter
    * method.
    * <p/>
-   * The method must have a prefix "get" or "is" followed by a capitalized name, take no
-   * parameter, return an object and not be static. If the method has the prefix "is",
-   * then it must return a boolean value.
+   * The method <strong>may</strong> have a prefix "get" or "is", take no parameter and
+   * return an object. If the method has the prefix "is", then it must return a boolean
+   * value.
    */
   public static final CompositePredicate<Method> GETTER = is(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
+      if (!Modifier.isPublic(method.getModifiers())) {
+        return false;
+      }
       String name = method.getName();
       Class<?> returnType = method.getReturnType();
-      if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) || (returnType == null)) {
+      if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
+        (returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
         return false;
       }
-      int i;
+      if (TO_PATTERN.matcher(name).matches()) {
+        return false;
+      }
       if (name.startsWith("get")) {
-        i = 3;
-      } else if (name.startsWith("is") && (Boolean.class.equals(returnType) || boolean.class.equals(returnType))) {
-        i = 2;
-      } else {
-        return false;
+        return GET_PATTERN.matcher(name).matches();
+      } else if (name.startsWith("is")) {
+        boolean returnBoolean = (Boolean.class.equals(returnType) || boolean.class.equals(returnType));
+        return returnBoolean && IS_PATTERN.matcher(name).matches();
       }
-      return (name.length() > i) && Character.isUpperCase(name.charAt(i));
+      return true;
     }
 
     @Override
@@ -77,20 +89,21 @@ public class ReflectionPredicates {
    * A predicate that returns <code>true</code> if the evaluated method is a setter
    * method.
    * <p/>
-   * The method must have the "set" prefix, take one parameter, return no value (a void
-   * method) and not be static.
+   * The method must have the "set" prefix, take one parameter and return no value (a void
+   * method).
    */
   public static final CompositePredicate<Method> SETTER = is(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
-      if ((method.getParameterTypes().length != 1) || (Reflection.isStatic(method))
-        || (method.getReturnType() != Void.TYPE)) {
+      if (!Modifier.isPublic(method.getModifiers())) {
         return false;
       }
-
-      String name = method.getName();
-
-      return name.startsWith("set") && ((name.length() > 3) && Character.isUpperCase(name.charAt(3)));
+      Class returnType = method.getReturnType();
+      if ((method.getParameterTypes().length != 1) ||
+        !(returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
+        return false;
+      }
+      return SET_PATTERN.matcher(method.getName()).matches();
     }
 
     @Override
@@ -104,21 +117,10 @@ public class ReflectionPredicates {
    *         the specified property name.
    */
   public static CompositePredicate<Method> getterFor(final String propertyName) {
-    return is(new Predicate<Method>() {
+    return GETTER.and(new Predicate<Method>() {
 
-      public boolean evaluate(Method element) {
-        if (!GETTER.evaluate(element)) {
-          return false;
-        }
-        String name = element.getName();
-        int i;
-        if (name.startsWith("get")) {
-          i = 3;
-        } else { // starts with "is"
-          i = 2;
-        }
-        name = computeElementName(name, i);
-        return name.equals(propertyName);
+      public boolean evaluate(Method method) {
+        return Reflection.parsePropertyName(method).equals(propertyName);
       }
 
       @Override
@@ -133,37 +135,15 @@ public class ReflectionPredicates {
    *         the specified property name.
    */
   public static CompositePredicate<Method> setterFor(final String propertyName) {
-    return is(new Predicate<Method>() {
+    return SETTER.and(new Predicate<Method>() {
 
-      public boolean evaluate(Method element) {
-        if (!SETTER.evaluate(element)) {
-          return false;
-        }
-        String name = computeElementName(element.getName(), 3); //starts with "set"
-        return name.equals(propertyName);
+      public boolean evaluate(Method method) {
+        return Reflection.parsePropertyName(method).equals(propertyName);
       }
 
       @Override
       public String toString() {
         return "Setter for " + propertyName;
-      }
-    });
-  }
-
-  /**
-   * @return a predicate that returns <code>true</code> if a method is a setter method for
-   *         the specified property name and type.
-   */
-  public static CompositePredicate<Method> setterFor(String propertyName, final Class type) {
-    return setterFor(propertyName).and(new Predicate<Method>() {
-
-      public boolean evaluate(Method element) {
-        return element.getParameterTypes()[0].isAssignableFrom(type);
-      }
-
-      @Override
-      public String toString() {
-        return "Setter for " + type.getName();
       }
     });
   }
