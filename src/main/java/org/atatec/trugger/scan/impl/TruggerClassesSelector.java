@@ -99,7 +99,7 @@ public class TruggerClassesSelector extends BaseClassSelector implements Classes
     }
     Predicate<Class> predicate = builder.predicate();
     if (predicate != null) {
-      Iteration.retainFrom(classes).elements(predicate);
+      Iteration.retainFrom(classes).any(predicate);
     }
     return classes;
   }

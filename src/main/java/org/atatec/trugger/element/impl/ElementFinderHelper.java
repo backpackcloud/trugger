@@ -37,7 +37,7 @@ public class ElementFinderHelper {
 		}
 		Set<Element> result = new HashSet<Element>(elements.size());
 		Transformer<Element, Element> transformer = new SpecificElementTransformer(target);
-		Iteration.copyTo(result).transformingWith(transformer).all().from(elements);
+		Iteration.copyTo(result).applying(transformer).all().from(elements);
 		return result;
 	}
 

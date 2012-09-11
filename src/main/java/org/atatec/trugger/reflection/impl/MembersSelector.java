@@ -26,7 +26,6 @@ import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Member;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,7 +66,7 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
   private Set<T> applySelection(final Set<T> set) {
     Predicate<T> predicate = builder.predicate();
     if (predicate != null) {
-      Iteration.retainFrom(set).elements(predicate);
+      Iteration.retainFrom(set).any(predicate);
     }
     return set;
   }

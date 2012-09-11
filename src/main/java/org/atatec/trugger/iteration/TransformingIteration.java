@@ -32,5 +32,5 @@ public interface TransformingIteration<To> extends SrcToDestIteration<To> {
    *          the transformer to use.
    * @return the component for defining the elements.
    */
-  <From> SrcToDestIteration<From> transformingWith(Transformer<To, From> transformer);
+  <From> SrcToDestIteration<From> applying(Transformer<To, From> transformer);
 }

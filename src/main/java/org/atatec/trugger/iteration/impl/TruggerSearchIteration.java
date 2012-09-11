@@ -66,7 +66,7 @@ public class TruggerSearchIteration<E> implements IterationSearchOperation<E> {
 
   public List<E> elements(Predicate<? super E> predicate) {
     List<E> result = new ArrayList<E>();
-    Iteration.copyTo(result).elements(predicate).from(iterator);
+    Iteration.copyTo(result).any(predicate).from(iterator);
     return result;
   }
 }

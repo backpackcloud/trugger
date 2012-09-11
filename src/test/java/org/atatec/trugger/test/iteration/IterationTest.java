@@ -78,8 +78,8 @@ public class IterationTest {
 
   @Test
   public void retainTest() {
-    int count = countIn(numbers).elements(even);
-    int result = retainFrom(numbers).elements(even);
+    int count = countIn(numbers).any(even);
+    int result = retainFrom(numbers).any(even);
     assertEquals(initialNumbersHalfSize, count);
     assertEquals(count, result);
     assertEquals(initialNumbersHalfSize, numbers.size());
@@ -88,8 +88,8 @@ public class IterationTest {
 
   @Test
   public void removeTest() {
-    int count = countIn(numbers).elements(even);
-    int result = removeFrom(numbers).elements(even);
+    int count = countIn(numbers).any(even);
+    int result = removeFrom(numbers).any(even);
     assertEquals(initialNumbersHalfSize, count);
     assertEquals(count, result);
     assertEquals(initialNumbersHalfSize, numbers.size());
@@ -99,7 +99,7 @@ public class IterationTest {
   @Test
   public void predicateCopyTest() {
     Collection<Integer> evenNumbers = new ArrayList<Integer>();
-    int result = copyTo(evenNumbers).elements(even).from(numbers);
+    int result = copyTo(evenNumbers).any(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, evenNumbers.size());
     assertMatch(evenNumbers, even);
@@ -110,7 +110,7 @@ public class IterationTest {
   @Test
   public void predicateMoveTest() {
     Collection<Integer> evenNumbers = new ArrayList<Integer>();
-    int result = moveTo(evenNumbers).elements(even).from(numbers);
+    int result = moveTo(evenNumbers).any(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, evenNumbers.size());
     assertMatch(evenNumbers, even);
@@ -140,7 +140,7 @@ public class IterationTest {
   @Test
   public void transformCopyTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = copyTo(strings).transformingWith(transformer).all().from(numbers);
+    int result = copyTo(strings).applying(transformer).all().from(numbers);
     assertEquals(initialNumbersSize, result);
     assertEquals(initialNumbersSize, strings.size());
     assertEquals(initialNumbersSize, numbers.size());
@@ -149,7 +149,7 @@ public class IterationTest {
   @Test
   public void predicateTransformCopyTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = copyTo(strings).transformingWith(transformer).elements(even).from(numbers);
+    int result = copyTo(strings).applying(transformer).any(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, strings.size());
     assertEquals(initialNumbersSize, numbers.size());
@@ -158,7 +158,7 @@ public class IterationTest {
   @Test
   public void transformMoveTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = moveTo(strings).transformingWith(transformer).all().from(numbers);
+    int result = moveTo(strings).applying(transformer).all().from(numbers);
     assertEquals(initialNumbersSize, result);
     assertEquals(initialNumbersSize, strings.size());
     assertEquals(0, numbers.size());
@@ -167,7 +167,7 @@ public class IterationTest {
   @Test
   public void predicateTransformMoveTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = moveTo(strings).transformingWith(transformer).elements(even).from(numbers);
+    int result = moveTo(strings).applying(transformer).any(even).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, strings.size());
     assertEquals(initialNumbersHalfSize, numbers.size());
