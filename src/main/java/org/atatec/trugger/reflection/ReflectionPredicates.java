@@ -206,7 +206,7 @@ public class ReflectionPredicates {
     return ReflectionPredicates.<T>isAnnotatedWith(annotationType).negate();
   }
 
-  /** A predicate that returns <code>true</code> if the element has any annotations. */
+  /** A predicate that returns <code>true</code> if the element has anyThat annotations. */
   public static final CompositePredicate<AnnotatedElement> IS_ANNOTATED =
     is(new Predicate<AnnotatedElement>() {
 
@@ -220,7 +220,7 @@ public class ReflectionPredicates {
       }
     });
 
-  /** A predicate that returns <code>false</code> if the element has any annotation. */
+  /** A predicate that returns <code>false</code> if the element has anyThat annotation. */
   public static final CompositePredicate<AnnotatedElement> IS_NOT_ANNOTATED = IS_ANNOTATED.negate();
 
   /**

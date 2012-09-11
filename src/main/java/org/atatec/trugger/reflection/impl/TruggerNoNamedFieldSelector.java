@@ -41,7 +41,7 @@ public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
     }
     Set<Field> fields = selector.in(target);
     try {
-      return selectFrom(fields).element(builder().predicate());
+      return selectFrom(fields).oneThat(builder().predicate());
     } catch (SearchException e) {
       throw new ReflectionException(e);
     }

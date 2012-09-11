@@ -36,7 +36,7 @@ public class TruggerSearchIteration<E> implements IterationSearchOperation<E> {
     this.iterator = iterator;
   }
 
-  public E element(Predicate<? super E> predicate) {
+  public E oneThat(Predicate<? super E> predicate) {
     E result = null;
     E next;
     boolean found = false;
@@ -64,9 +64,9 @@ public class TruggerSearchIteration<E> implements IterationSearchOperation<E> {
     return null;
   }
 
-  public List<E> elements(Predicate<? super E> predicate) {
+  public List<E> anyThat(Predicate<? super E> predicate) {
     List<E> result = new ArrayList<E>();
-    Iteration.copyTo(result).any(predicate).from(iterator);
+    Iteration.copyTo(result).anyThat(predicate).from(iterator);
     return result;
   }
 }

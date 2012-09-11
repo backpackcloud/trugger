@@ -117,7 +117,7 @@ public class TruggerMethodSelector implements MethodSelector {
     Set<Method> set = selector.in(target);
     try {
       Predicate<Method> predicate = builder.predicate().and(ReflectionPredicates.named(name));
-      return selectFrom(set).element(predicate);
+      return selectFrom(set).oneThat(predicate);
     } catch (SearchException e) {
       throw new ReflectionException(e);
     }

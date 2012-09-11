@@ -132,7 +132,7 @@ public class TruggerTest {
     }
   }
 
-  /** Tests if the given command throws any of the specified exceptions. */
+  /** Tests if the given command throws anyThat of the specified exceptions. */
   public static void assertThrow(Runnable command, Class<? extends Throwable>... exceptions) {
     try {
       command.run();
@@ -147,7 +147,7 @@ public class TruggerTest {
     }
   }
 
-  /** Tests if the given command does not throw any exception. */
+  /** Tests if the given command does not throw anyThat exception. */
   public static void assertNothingThrow(Runnable command) {
     try {
       command.run();

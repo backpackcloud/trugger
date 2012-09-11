@@ -56,7 +56,7 @@ public abstract class TruggerSrcToDestIteration<To, From> implements SrcToDestIt
     this.to = to;
   }
 
-  public IterationSourceSelector<From> any(Predicate<? super From> predicate) {
+  public IterationSourceSelector<From> anyThat(Predicate<? super From> predicate) {
     return new Selector(predicate);
   }
 

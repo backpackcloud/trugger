@@ -567,7 +567,7 @@ public final class Reflection {
           return true;
         }
       };
-      foundConstructor = Iteration.selectFrom(constructors).element(predicate);
+      foundConstructor = Iteration.selectFrom(constructors).oneThat(predicate);
       if (foundConstructor != null) {
         return (E) invoke(foundConstructor).withArgs(constructorArguments);
       }

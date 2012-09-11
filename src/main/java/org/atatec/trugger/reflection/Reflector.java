@@ -40,7 +40,7 @@ import java.util.Set;
 /**
  * Interface that defines a class that encapsulates the reflection using an automata to
  * create a more readable language. That makes more simple to get fields, methods and
- * constructors from any object.
+ * constructors from anyThat object.
  * <p/>
  * There are a set of methods that can find specific reflection objects ( {@link Field
  * fields}, {@link Constructor constructors} or {@link Method methods}). These methods

@@ -39,6 +39,6 @@ public class SettersFinder implements MembersFinder<Method> {
   }
 
   public Collection<Method> find(Class<?> type) {
-    return Iteration.selectFrom(finder.find(type)).elements(isSetterOf(name));
+    return Iteration.selectFrom(finder.find(type)).anyThat(isSetterOf(name));
   }
 }

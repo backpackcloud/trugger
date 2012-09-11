@@ -41,7 +41,7 @@ public interface IterationSearchOperation<E> {
    * @throws SearchException
    *           if more than one element is found.
    */
-  E element(Predicate<? super E> predicate) throws SearchException;
+  E oneThat(Predicate<? super E> predicate) throws SearchException;
 
   /**
    * Selects the first element that matches with the given predicate.
@@ -59,6 +59,6 @@ public interface IterationSearchOperation<E> {
    *          the predicate to match.
    * @return a list with the elements found.
    */
-  List<E> elements(Predicate<? super E> predicate);
+  List<E> anyThat(Predicate<? super E> predicate);
 
 }

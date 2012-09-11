@@ -56,7 +56,7 @@ public interface MethodSpecifier extends MemberSelector<Method>, Predicable<Meth
   MethodSpecifier withParameters(Class<?>... parameterTypes);
 
   /**
-   * Selects the method that does not take any parameter.
+   * Selects the method that does not take anyThat parameter.
    *
    * @return the component used for selection on the target.
    */

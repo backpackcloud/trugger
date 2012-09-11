@@ -66,7 +66,7 @@ public class TruggerConstructorSelector implements ConstructorSelector {
     MembersSelector<Constructor<?>> selector = new MembersSelector<Constructor<?>>(registry.constructorsFinder());
     Set<Constructor<?>> set = selector.in(target);
     try {
-      return selectFrom(set).element(builder.predicate());
+      return selectFrom(set).oneThat(builder.predicate());
     } catch (SearchException e) {
       throw new ReflectionException(e);
     }

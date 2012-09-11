@@ -63,7 +63,7 @@ import static org.easymock.EasyMock.replay;
  * There are another ways to mock annotations:
  * <p/>
  * <pre>
- * // if you don't need to specify any property
+ * // if you don't need to specify anyThat property
  * Resource resource2 = mock(annotation(Resource.class));
  *
  * // if the annonymous class looks bad to you

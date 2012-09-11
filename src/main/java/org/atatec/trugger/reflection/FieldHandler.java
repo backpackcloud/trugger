@@ -25,7 +25,7 @@ import org.atatec.trugger.ValueHandler;
 /**
  * A handler for {@link Field} objects.
  * <p>
- * For handling a static field, you don't need to specify any instance:
+ * For handling a static field, you don't need to specify anyThat instance:
  * 
  * <pre>
  * FieldHandler handler = {@link Reflection#handle(Field)};

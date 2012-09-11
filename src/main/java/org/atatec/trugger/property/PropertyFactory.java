@@ -23,7 +23,7 @@ import org.atatec.trugger.selector.ElementsSelector;
  * Interface that defines a factory for creating components for manipulating
  * properties.
  * <p>
- * A property is composed by any combination of these members:
+ * A property is composed by anyThat combination of these members:
  * <ul>
  * <li>a private field
  * <li>a getter method

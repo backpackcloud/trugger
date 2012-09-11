@@ -66,7 +66,7 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
   private Set<T> applySelection(final Set<T> set) {
     Predicate<T> predicate = builder.predicate();
     if (predicate != null) {
-      Iteration.retainFrom(set).any(predicate);
+      Iteration.retainFrom(set).anyThat(predicate);
     }
     return set;
   }

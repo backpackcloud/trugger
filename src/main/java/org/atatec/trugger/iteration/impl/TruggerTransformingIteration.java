@@ -61,8 +61,8 @@ public abstract class TruggerTransformingIteration<E> implements TransformingIte
    */
   protected abstract <From> SrcToDestIteration<From> create(Collection to, Transformer<E, From> transformer);
 
-  public IterationSourceSelector<E> any(Predicate<? super E> predicate) {
-    return create(to).any(predicate);
+  public IterationSourceSelector<E> anyThat(Predicate<? super E> predicate) {
+    return create(to).anyThat(predicate);
   }
 
   public IterationSourceSelector<E> all() {

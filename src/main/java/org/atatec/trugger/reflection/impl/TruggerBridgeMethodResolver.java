@@ -87,7 +87,7 @@ final class TruggerBridgeMethodResolver {
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + '\'');
     } else if (candidateMethods.size() > 1) {
-      Iteration.retainFrom(candidateMethods).any(new BridgeCandidatePredicate());
+      Iteration.retainFrom(candidateMethods).anyThat(new BridgeCandidatePredicate());
     }
     return candidateMethods.iterator().next();
   }

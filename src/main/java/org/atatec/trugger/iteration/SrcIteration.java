@@ -36,6 +36,6 @@ public interface SrcIteration<E> {
    *          the predicate for matching
    * @return the number of elements affected by this operation.
    */
-  int any(Predicate<? super E> predicate);
+  int anyThat(Predicate<? super E> predicate);
 
 }

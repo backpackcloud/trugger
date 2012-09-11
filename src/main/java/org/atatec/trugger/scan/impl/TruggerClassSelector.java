@@ -101,7 +101,7 @@ public class TruggerClassSelector extends BaseClassSelector implements ClassSele
       throw new ClassScanningException(e);
     }
     try {
-      return Iteration.selectFrom(classes).element(builder.predicate());
+      return Iteration.selectFrom(classes).oneThat(builder.predicate());
     } catch (SearchException e) {
       throw new ClassScanningException(e);
     }

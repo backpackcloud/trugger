@@ -130,7 +130,7 @@ public final class TruggerElementsSelector implements ElementsSelector {
     Set<Element> set = finder.findAll().in(target);
     Predicate<Element> predicate = builder.predicate();
     if (predicate != null) {
-      Iteration.retainFrom(set).any(predicate);
+      Iteration.retainFrom(set).anyThat(predicate);
     }
     return set;
   }

@@ -38,7 +38,7 @@ public class SetterResult implements Result<Method, Object> {
 
   public Method in(Object target) {
     Set<Method> methods = selector.in(target);
-    Iteration.retainFrom(methods).any(MethodPredicates.takes(type));
+    Iteration.retainFrom(methods).anyThat(MethodPredicates.takes(type));
     if (methods.isEmpty()) {
       return null;
     }

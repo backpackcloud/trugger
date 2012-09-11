@@ -47,13 +47,13 @@ import static org.junit.Assert.assertEquals;
  */
 public class IterationTest {
 
-  private CompositePredicate<Integer> even = Predicates.is(new Predicate<Integer>() {
+  private CompositePredicate<Integer> isEven = Predicates.is(new Predicate<Integer>() {
 
     public boolean evaluate(Integer element) {
       return element % 2 == 0;
     }
   });
-  private CompositePredicate<Integer> odd = even.negate();
+  private CompositePredicate<Integer> isOdd = isEven.negate();
 
   private Collection<Integer> numbers;
   private int initialNumbersSize;
@@ -78,31 +78,31 @@ public class IterationTest {
 
   @Test
   public void retainTest() {
-    int count = countIn(numbers).any(even);
-    int result = retainFrom(numbers).any(even);
+    int count = countIn(numbers).anyThat(isEven);
+    int result = retainFrom(numbers).anyThat(isEven);
     assertEquals(initialNumbersHalfSize, count);
     assertEquals(count, result);
     assertEquals(initialNumbersHalfSize, numbers.size());
-    assertMatch(numbers, even);
+    assertMatch(numbers, isEven);
   }
 
   @Test
   public void removeTest() {
-    int count = countIn(numbers).any(even);
-    int result = removeFrom(numbers).any(even);
+    int count = countIn(numbers).anyThat(isEven);
+    int result = removeFrom(numbers).anyThat(isEven);
     assertEquals(initialNumbersHalfSize, count);
     assertEquals(count, result);
     assertEquals(initialNumbersHalfSize, numbers.size());
-    assertMatch(numbers, odd);
+    assertMatch(numbers, isOdd);
   }
 
   @Test
   public void predicateCopyTest() {
     Collection<Integer> evenNumbers = new ArrayList<Integer>();
-    int result = copyTo(evenNumbers).any(even).from(numbers);
+    int result = copyTo(evenNumbers).anyThat(isEven).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, evenNumbers.size());
-    assertMatch(evenNumbers, even);
+    assertMatch(evenNumbers, isEven);
 
     assertEquals(initialNumbersSize, numbers.size());
   }
@@ -110,13 +110,13 @@ public class IterationTest {
   @Test
   public void predicateMoveTest() {
     Collection<Integer> evenNumbers = new ArrayList<Integer>();
-    int result = moveTo(evenNumbers).any(even).from(numbers);
+    int result = moveTo(evenNumbers).anyThat(isEven).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, evenNumbers.size());
-    assertMatch(evenNumbers, even);
+    assertMatch(evenNumbers, isEven);
 
     assertEquals(initialNumbersHalfSize, numbers.size());
-    assertMatch(numbers, odd);
+    assertMatch(numbers, isOdd);
   }
 
   @Test
@@ -149,7 +149,7 @@ public class IterationTest {
   @Test
   public void predicateTransformCopyTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = copyTo(strings).applying(transformer).any(even).from(numbers);
+    int result = copyTo(strings).applying(transformer).anyThat(isEven).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, strings.size());
     assertEquals(initialNumbersSize, numbers.size());
@@ -167,7 +167,7 @@ public class IterationTest {
   @Test
   public void predicateTransformMoveTest() {
     Collection<String> strings = new ArrayList<String>();
-    int result = moveTo(strings).applying(transformer).any(even).from(numbers);
+    int result = moveTo(strings).applying(transformer).anyThat(isEven).from(numbers);
     assertEquals(initialNumbersHalfSize, result);
     assertEquals(initialNumbersHalfSize, strings.size());
     assertEquals(initialNumbersHalfSize, numbers.size());
@@ -175,7 +175,7 @@ public class IterationTest {
 
   @Test
   public void singleElementSearchTest() {
-    Integer one = selectFrom(numbers).element(new Predicate<Integer>() {
+    Integer one = selectFrom(numbers).oneThat(new Predicate<Integer>() {
       public boolean evaluate(Integer element) {
         return element.equals(1);
       }
@@ -185,19 +185,19 @@ public class IterationTest {
 
   @Test(expected = SearchException.class)
   public void singleElementFailSearchTest() {
-    selectFrom(numbers).element(even);
+    selectFrom(numbers).oneThat(isEven);
   }
 
   @Test
   public void firstElementSearchTest() {
-    assertEquals(Integer.valueOf(0), selectFrom(numbers).first(even));
+    assertEquals(Integer.valueOf(0), selectFrom(numbers).first(isEven));
   }
 
   @Test
   public void multipleElementSearchTest() {
-    List<Integer> result = selectFrom(numbers).elements(odd);
+    List<Integer> result = selectFrom(numbers).anyThat(isOdd);
     assertEquals(initialNumbersHalfSize, result.size());
-    assertMatch(result, odd);
+    assertMatch(result, isOdd);
   }
 
 }
