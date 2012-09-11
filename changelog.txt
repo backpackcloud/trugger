@@ -5,6 +5,7 @@ Version 4.1
   - Removed AccessSelector
   - Refactor on ReflectionPredicates
   - Getter and Setter specs changed to include more cases
+  - Iteration DSL improved
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.
