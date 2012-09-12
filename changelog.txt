@@ -7,6 +7,8 @@ Version 4.1
   - Getter and Setter specs changed to include more cases
   - Iteration DSL improved
   - Class scan DSL improved
+  - Interceptor class simplified
+  - No more EasyMock dependency for mock an Annotation
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.

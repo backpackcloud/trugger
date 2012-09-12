@@ -16,24 +16,20 @@
  */
 package org.atatec.trugger.util.mock;
 
+import org.atatec.trugger.interception.InterceptionContext;
 import org.atatec.trugger.interception.Interceptor;
 import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.reflection.Reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.MethodPredicates.HAS_DEFAULT_VALUE;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
 
 /**
  * A builder for creating mock {@link Annotation annotations}.
@@ -63,7 +59,7 @@ import static org.easymock.EasyMock.replay;
  * There are another ways to mock annotations:
  * <p/>
  * <pre>
- * // if you don't need to specify anyThat property
+ * // if you don't need to specify any property
  * Resource resource2 = mock(annotation(Resource.class));
  *
  * // if the annonymous class looks bad to you
@@ -83,10 +79,10 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
 
   private final Class<T> annotationType;
   /** The annotation for specifying the mappings. */
-  protected T annotation; //serves as a delegate to mockedAnnotation
-  private T mockedAnnotation;
-  private Set<String> defined;
+  protected T annotation;
+  private Map<String, Object> mappings;
   private boolean mocked;
+  private String lastCall;
 
   /** @param annotationType the annotation type */
   public AnnotationMockBuilder(Class<T> annotationType) {
@@ -104,10 +100,9 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
   }
 
   private void initialize() {
-    this.mockedAnnotation = createMock(annotationType);
-    this.annotation = (T) new ConfigurationInterceptor().createProxy().implementing(annotationType).withoutTarget();
-    this.defined = new HashSet<String>();
-    expect((Class) mockedAnnotation.annotationType()).andReturn(annotationType).anyTimes();
+    this.annotation = new AnnotationMock(annotationType).create();
+    this.mappings = new HashMap<String, Object>(15);
+    this.mappings.put("annotationType", annotationType);
   }
 
   /**
@@ -130,7 +125,7 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
     return new Mapper<E, T>() {
 
       public AnnotationMockBuilder<T> to(E expected) {
-        expectLastCall().andReturn(value).anyTimes();
+        mappings.put(lastCall, value);
         return AnnotationMockBuilder.this;
       }
     };
@@ -138,35 +133,25 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
 
   @Override
   public T mock() {
-    Set<Method> methods;
-    if (defined.isEmpty()) {
-      methods = methods()
-        .withoutParameters()
-        .that(HAS_DEFAULT_VALUE)
-        .in(annotationType);
-    } else {
-      String[] names = defined.toArray(new String[defined.size()]);
-      CompositePredicate<Member> predicate = named(names[0]);
-      for (int i = 1; i < names.length; i++) {
-        String name = names[i];
-        predicate = predicate.or(named(name));
-      }
-      CompositePredicate<Member> isUnused = predicate.negate();
-      methods = methods()
-        .withoutParameters()
-        .that(
-          HAS_DEFAULT_VALUE
-            .and(isUnused))
-        .in(annotationType);
+    CompositePredicate<Member> predicate = null;
+    for (String name : mappings.keySet()) {
+      predicate = (predicate == null ? named(name) : predicate.or(named(name)));
     }
-
+    CompositePredicate<Member> isUnused = predicate.negate();
+    Set<Method> methods = methods()
+      .withoutParameters()
+      .that(isUnused)
+      .in(annotationType);
     for (Method method : methods) {
-      Reflection.invoke(method).in(mockedAnnotation).withoutArgs();
-      expectLastCall().andReturn(method.getDefaultValue()).anyTimes();
+      Object defaultValue = method.getDefaultValue();
+      if(defaultValue == null) {
+        throw new IllegalStateException("Property " + method.getName() + " not defined.");
+      }
+      mappings.put(method.getName(), defaultValue);
     }
-    replay(mockedAnnotation);
     mocked = true;
-    return mockedAnnotation;
+    lastCall = null;
+    return annotation;
   }
 
   /**
@@ -188,16 +173,26 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
     AnnotationMockBuilder<T> to(E value);
   }
 
-  private class ConfigurationInterceptor extends Interceptor {
+  private class AnnotationMock extends Interceptor {
+
+    private Class<T> type;
+
+    public AnnotationMock(Class<T> annotationType) {
+      this.type = annotationType;
+    }
 
     @Override
-    protected Object intercept() throws Throwable {
-      Method method = method();
+    protected Object intercept(InterceptionContext context) throws Throwable {
+      Method method = context.method();
+      String name = method.getName();
       if (!mocked) {
-        defined.add(method.getName());
+        lastCall = name;
       }
-      //delegates to the mock object
-      return Reflection.invoke(method).in(mockedAnnotation).withoutArgs();
+      return mappings.containsKey(name) ? mappings.get(name) : context.nullReturn();
+    }
+
+    public T create() {
+      return createProxy().implementing(type).withoutTarget();
     }
 
   }

@@ -16,19 +16,20 @@
  */
 package org.atatec.trugger.test.mock;
 
-import static org.atatec.trugger.util.mock.Mock.annotation;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.annotation.Annotation;
+import org.atatec.trugger.util.mock.AnnotationMockBuilder;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.annotation.Resource;
 import javax.annotation.Resource.AuthenticationType;
 
-import org.atatec.trugger.util.mock.AnnotationMockBuilder;
+import java.lang.annotation.Target;
 
-import org.junit.Test;
+import static org.atatec.trugger.util.mock.Mock.annotation;
+import static org.atatec.trugger.util.mock.Mock.mock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -39,8 +40,13 @@ public class AnnotationMockTest {
   private Resource resource;
 	private Resource resource2;
 
-	public AnnotationMockTest() {
+  @Before
+	public void initialize() {
 		resource = new AnnotationMockBuilder<Resource>() {{
+      annotation.authenticationType();
+      annotation.description();
+      annotation.annotationType();
+      annotation.shareable();
       map("name").to(annotation.name());
       map(false).to(annotation.shareable());
     }}.mock();
@@ -48,7 +54,7 @@ public class AnnotationMockTest {
 		AnnotationMockBuilder<Resource> builder = annotation(Resource.class);
 		resource2 = builder.annotation();
 		builder.map("name2").to(resource2.name());
-		builder.map(true).to(resource2.shareable());
+		//builder.map(true).to(resource2.shareable());
 		builder.map(AuthenticationType.APPLICATION).to(resource2.authenticationType());
 		builder.mock();
 	}
@@ -79,11 +85,9 @@ public class AnnotationMockTest {
     assertEquals(AuthenticationType.APPLICATION, resource2.authenticationType());
   }
 
-	@Test(expected = IllegalStateException.class)
-	public void testDefineAnnotationType() {
-		new AnnotationMockBuilder<Resource>() {{
-      map(Annotation.class).to((Class) annotation.annotationType());
-    }}.mock();
-	}
+  @Test(expected = IllegalStateException.class)
+  public void testInvalidAnnotationDefinition() {
+    mock(annotation(Target.class));
+  }
 
 }

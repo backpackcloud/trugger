@@ -45,7 +45,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -69,7 +68,7 @@ public final class Reflection {
 
   static {
     factory = ImplementationLoader.instance().get(ReflectionFactory.class);
-    wrappers = Collections.unmodifiableMap(new HashMap<Class<?>, Class<?>>() {{
+    wrappers = new HashMap<Class<?>, Class<?>>() {{
       put(byte.class, Byte.class);
       put(short.class, Short.class);
       put(int.class, Integer.class);
@@ -78,7 +77,7 @@ public final class Reflection {
       put(float.class, Float.class);
       put(double.class, Double.class);
       put(boolean.class, Boolean.class);
-    }});
+    }};
   }
 
   /**

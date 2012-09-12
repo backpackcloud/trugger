@@ -16,11 +16,9 @@
  */
 package org.atatec.trugger.interception;
 
-import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
@@ -30,12 +28,7 @@ import java.util.Set;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 
 /**
- * A base class to create Proxies to other classes using the CGLib.
- * <p/>
- * This is how this class works: <ol> <li>When a method is intercepted, the Interceptor
- * encapsulates the method and the arguments in a {@link InterceptionContext} that becomes
- * available to the class by the {@link #context()}. <li>The {@link #intercept()
- * intercept} method is called. <li>The {@link InterceptionContext} is released. </ol>
+ * A base class to create Proxies to interfaces.
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 2.1
@@ -43,113 +36,31 @@ import static org.atatec.trugger.reflection.Reflection.reflect;
 public class Interceptor implements InvocationHandler, ProxyFactory {
 
   /** The target object */
-  protected Object target;
+  private Object target;
   /** The interfaces configured for interception. */
   private final Set<Class<?>> interfaces = new HashSet<Class<?>>();
-  /** Holds the contexts. */
-  private ThreadLocal<InterceptionContext> threadLocal = new ThreadLocal<InterceptionContext>();
 
   /** Creates a new Interceptor */
   public Interceptor() {
     super();
   }
 
-  /** @return the interception context. */
-  protected final InterceptionContext context() {
-    return threadLocal.get();
-  }
-
-  /** @return InterceptionContext#proxy */
-  protected final Object proxy() {
-    return context().proxy;
-  }
-
-  /** @return InterceptionContext#method */
-  protected final Method method() {
-    return context().method;
-  }
-
-  /** @return InterceptionContext#args */
-  protected final Object[] args() {
-    return context().args;
-  }
-
-  /**
-   * @return the argument at the given index.
-   *
-   * @since 2.3
-   */
-  protected final Object arg(int index) {
-    return args()[index];
-  }
-
   public ProxyCreator createProxy() {
     return new Creator();
   }
 
+  protected final Object target() {
+    return target;
+  }
+
   @Override
   public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    Reflection.setAccessible(method);
-    threadLocal.set(new InterceptionContext(proxy, method, args));
-    try {
-      return intercept();
-    } finally {
-      threadLocal.remove();
-    }
-  }
-
-  /**
-   * Invokes the intercepted method on the target object.
-   *
-   * @param target the target object
-   *
-   * @return the return of the method
-   *
-   * @throws Throwable if an error occurs in the method.
-   */
-  protected final Object invokeMethod(Object target) throws Throwable {
-    try {
-      Method targetMethod = getTargetMethod(target);
-      Reflection.setAccessible(targetMethod);
-      return targetMethod.invoke(target, args());
-    } catch (InvocationTargetException e) {
-      throw e.getCause();
-    }
-  }
-
-  /**
-   * Invokes the intercepted method on the {@link #target} object.
-   *
-   * @see #invokeMethod(Object)
-   */
-  protected final Object invokeMethod() throws Throwable {
-    return invokeMethod(this.target);
+    return intercept(new InterceptionContext(proxy, method, args));
   }
 
   /** This method is called when a target's method is intercepted. */
-  protected Object intercept() throws Throwable {
-    return invokeMethod();
-  }
-
-  /** @return the intercepted method declared in the {@link #target}. */
-  protected final Method getTargetMethod() {
-    return getTargetMethod(target);
-  }
-
-  /**
-   * @param target the target to get the method.
-   *
-   * @return the intercepted method declared in the given target.
-   */
-  protected final Method getTargetMethod(Object target) {
-    Method method = method();
-    String name = method.getName();
-    Class<?>[] parameterTypes = method.getParameterTypes();
-    Method targetMethod = reflect().method(name).recursively().withParameters(parameterTypes).in(target);
-    if (targetMethod.isBridge()) {
-      return reflect().bridgedMethodFor(targetMethod);
-    }
-    return targetMethod;
+  protected Object intercept(InterceptionContext context) throws Throwable {
+    return context.invokeMethod(target);
   }
 
   private class Creator implements ProxyCreator {
@@ -182,18 +93,16 @@ public class Interceptor implements InvocationHandler, ProxyFactory {
     }
 
     public <E> E withoutTarget() {
-      Interceptor.this.target = new Object();
+      Interceptor.this.target = null;
       return (E) create();
     }
 
-    /**
-     * Creates a Proxy for all the specified interfaces using the specified ClassLoader.
-     * If subclass is <code>true</code>, the proxy will be a subclass of the target.
-     */
     private <E> E create() {
       if (classLoader == null) {
-        Class<?> targetClass = Utils.resolveType(target);
-        classLoader = targetClass.getClassLoader();
+        if (target != null) {
+          Class<?> targetClass = Utils.resolveType(target);
+          classLoader = targetClass.getClassLoader();
+        }
         if (classLoader == null) {
           classLoader = ClassLoader.getSystemClassLoader();
         }
