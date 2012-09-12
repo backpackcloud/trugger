@@ -111,7 +111,7 @@ public final class Utils {
    *          {@link AcceptedArrayTypes}.
    * @param type
    *          the type to check
-   * @return <code>true</code> if the type is compatible with anyThat type mapped to
+   * @return <code>true</code> if the type is compatible with any type mapped to
    *         the given element.
    * @since 2.3
    */

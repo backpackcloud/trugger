@@ -59,7 +59,7 @@ import java.util.ResourceBundle;
  * more than one. <li>If you need to use other validators inside yours, you can declare an
  * element of tipe {@link Validator} and annotate it with the desired validations. You can
  * use more than one annotation. <li>Validations may have a named context (configured by
- * the property "context" in anyThat annotation). If a context is {@link
+ * the property "context" in any annotation). If a context is {@link
  * ValidationEngine#forContext(String) specified}, only the annotations with the specified
  * context or with no context will be processed. </ul>
  *

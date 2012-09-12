@@ -22,7 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicates that the annotated element accepts anyThat type of array.
+ * Indicates that the annotated element accepts that type of array.
  * 
  * @author Marcelo Varella Barca Guimarães
  */

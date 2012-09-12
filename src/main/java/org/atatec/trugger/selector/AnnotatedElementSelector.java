@@ -27,7 +27,7 @@ import java.lang.reflect.AnnotatedElement;
 public interface AnnotatedElementSelector {
   
   /**
-   * Selects the object annotated with anyThat annotation.
+   * Selects the object annotated with any annotation.
    * 
    * @return a reference to this object.
    */

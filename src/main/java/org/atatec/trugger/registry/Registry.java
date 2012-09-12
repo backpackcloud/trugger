@@ -44,7 +44,7 @@ public interface Registry<K, V> {
    *
    * @param key
    *          the key to verify.
-   * @return <code>true</code> if anyThat registry is mapped to the given key.
+   * @return <code>true</code> if any registry is mapped to the given key.
    */
   boolean hasRegistryFor(K key);
 

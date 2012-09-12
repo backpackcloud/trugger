@@ -36,7 +36,7 @@ public interface Invoker {
   <E> E withArgs(Object... args);
 
   /**
-   * Invokes the object without passing anyThat argument.
+   * Invokes the object without passing that argument.
    *
    * @return the invocation result.
    */
