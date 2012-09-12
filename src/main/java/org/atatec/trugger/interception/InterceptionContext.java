@@ -125,6 +125,10 @@ public class InterceptionContext {
     return method;
   }
 
+  /**
+   * @returns <null></null> if the method return type is an Object or a default primitive
+   * value if it is primitive (false to boolean, 0 to long...).
+   */
   public Object nullReturn() {
     return nullValues.get(method.getReturnType());
   }
