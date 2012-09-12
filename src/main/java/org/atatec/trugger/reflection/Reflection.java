@@ -167,6 +167,17 @@ public final class Reflection {
   }
 
   /**
+   * Uses the {@link ReflectionFactory} for creating a {@link Reflector} instance and adds
+   * the given predicate to the filter.
+   *
+   * @return a component for reflecting objects in a target.
+   * @since 4.1
+   */
+  public static Reflector reflect(Predicate predicate) {
+    return factory.createReflector(predicate);
+  }
+
+  /**
    * Uses the {@link ReflectionFactory} for creating a {@link MethodInvoker} instance.
    *
    * @param method a method to invoke.

@@ -16,42 +16,47 @@
  */
 package org.atatec.trugger.reflection;
 
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * Interface that defines a factory for objects using in the {@link Reflection}
- * class.
+ * Interface that defines a factory for objects using in the {@link Reflection} class.
  *
  * @author Marcelo Varella Barca Guimarães
  */
 public interface ReflectionFactory {
 
-  /**
-   * @return an implementation of the Reflector interface.
-   */
+  /** @return an implementation of the Reflector interface. */
   Reflector createReflector();
 
   /**
-   * @param method
-   *          the method to invoke.
+   * @param predicate a predicate to filter the result
+   *
+   * @return an implementation of the Reflector interface.
+   */
+  Reflector createReflector(Predicate predicate);
+
+  /**
+   * @param method the method to invoke.
+   *
    * @return an implementation of the MethodInvoker interface.
    */
   MethodInvoker createInvoker(Method method);
 
   /**
-   * @param constructor
-   *          the constructor to invoke.
+   * @param constructor the constructor to invoke.
+   *
    * @return an implementation of the ConstructorInvoker interface.
    */
   ConstructorInvoker createInvoker(Constructor<?> constructor);
 
   /**
-   * @param field
-   *          the field to handle.
+   * @param field the field to handle.
+   *
    * @return an implementation of the FieldHandler interface.
    */
   FieldHandler createHandler(Field field);
-
 }

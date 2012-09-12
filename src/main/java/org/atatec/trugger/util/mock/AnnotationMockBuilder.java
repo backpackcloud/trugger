@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
 
@@ -137,10 +136,10 @@ public class AnnotationMockBuilder<T extends Annotation> implements MockBuilder<
     for (String name : mappings.keySet()) {
       predicate = (predicate == null ? named(name) : predicate.or(named(name)));
     }
-    CompositePredicate<Member> isUnused = predicate.negate();
-    Set<Method> methods = methods()
+    CompositePredicate<Member> unused = predicate.negate();
+    Set<Method> methods = reflect(unused)
+      .methods()
       .withoutParameters()
-      .that(isUnused)
       .in(annotationType);
     for (Method method : methods) {
       Object defaultValue = method.getDefaultValue();

@@ -16,6 +16,7 @@
  */
 package org.atatec.trugger.reflection.impl;
 
+import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ConstructorInvoker;
 import org.atatec.trugger.reflection.FieldHandler;
 import org.atatec.trugger.reflection.MethodInvoker;
@@ -36,6 +37,11 @@ public class TruggerReflectionFactory implements ReflectionFactory {
 
   public Reflector createReflector() {
     return new TruggerReflector();
+  }
+
+  @Override
+  public Reflector createReflector(Predicate predicate) {
+    return new TruggerPredicateReflector(predicate);
   }
 
   public MethodInvoker createInvoker(Method method) {
