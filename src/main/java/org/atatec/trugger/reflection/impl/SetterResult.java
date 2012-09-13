@@ -17,11 +17,13 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.reflection.MethodPredicates;
+import org.atatec.trugger.iteration.Find;
 
 import java.lang.reflect.Method;
 import java.util.Set;
+
+import static org.atatec.trugger.predicate.Predicates.that;
+import static org.atatec.trugger.reflection.MethodPredicates.takes;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -38,10 +40,7 @@ public class SetterResult implements Result<Method, Object> {
 
   public Method in(Object target) {
     Set<Method> methods = selector.in(target);
-    Iteration.retainFrom(methods).anyThat(MethodPredicates.takes(type));
-    if (methods.isEmpty()) {
-      return null;
-    }
-    return methods.iterator().next();
+    return Find.first(that(takes(type))).in(methods);
   }
+
 }

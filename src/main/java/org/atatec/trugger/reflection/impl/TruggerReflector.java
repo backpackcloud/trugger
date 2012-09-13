@@ -67,19 +67,19 @@ public class TruggerReflector implements Reflector {
     return this;
   }
 
-  public GetterMethodSelector getterFor(String name) {
+  public GetterMethodSelector getterOf(String name) {
     return new TruggerGetterMethodSelector(name, registry.methodsFinder());
   }
 
-  public FieldGetterMethodSelector getterFor(Field field) {
+  public FieldGetterMethodSelector getterOf(Field field) {
     return new TruggerFieldGetterMethodSelector(field, registry.methodsFinder());
   }
 
-  public SetterMethodSelector setterFor(String name) {
+  public SetterMethodSelector setterOf(String name) {
     return new TruggerSetterMethodSelector(name, registry.methodsFinder());
   }
 
-  public FieldSetterMethodSelector setterFor(Field field) {
+  public FieldSetterMethodSelector setterOf(Field field) {
     return new TruggerFieldSetterMethodSelector(field, registry.methodsFinder());
   }
 

@@ -28,8 +28,8 @@ import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.IS_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.IS_NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
 import static org.atatec.trugger.reflection.ReflectionPredicates.isAnnotatedWith;
 import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
@@ -70,7 +70,7 @@ public class MethodsSelectorTest {
         selector.annotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, IS_ANNOTATED);
+        assertMatch(methods, ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }
@@ -85,7 +85,7 @@ public class MethodsSelectorTest {
         selector.notAnnotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, IS_NOT_ANNOTATED);
+        assertMatch(methods, NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }

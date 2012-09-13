@@ -16,10 +16,9 @@
  */
 package org.atatec.trugger.iteration;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.atatec.trugger.loader.ImplementationLoader;
+import org.atatec.trugger.predicate.Predicate;
+import org.atatec.trugger.predicate.Predicates;
 
 /**
  * An utility class for making iterations.
@@ -29,122 +28,67 @@ import org.atatec.trugger.loader.ImplementationLoader;
  */
 public final class Iteration {
 
-  private static final IterationFactory factory;
+  static final IterationFactory factory;
 
-  private Iteration() {}
+  private Iteration() {
+  }
 
   static {
     factory = ImplementationLoader.instance().get(IterationFactory.class);
   }
 
   /**
-   * Retains the collection elements that matches with the given conditions.
-   * <p>
+   * Copy the collection elements that matches with the given conditions to another
+   * collection.
+   * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
    * @return the component for using.
    */
-  public static <E> SrcIteration<E> retainFrom(Collection<? extends E> collection) {
-    return retainFrom(collection.iterator());
+  public static <E> SourceSelector copy(Predicate<? super E> predicate) {
+    return factory.createCopyOperation(predicate);
+  }
+
+  public static <E> SourceSelector copy() {
+    return factory.createCopyOperation(Predicates.ALWAYS_TRUE);
   }
 
   /**
-   * Removes the collection elements that matches with the given conditions.
-   * <p>
+   * Move the collection elements that matches with the given conditions to another
+   * collection.
+   * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
    * @return the component for using.
    */
-  public static <E> SrcIteration<E> removeFrom(Collection<? extends E> collection) {
-    return removeFrom(collection.iterator());
+  public static <E> SourceSelector move(Predicate<? super E> predicate) {
+    return factory.createMoveOperation(predicate);
   }
 
-  /**
-   * Count the collection elements that matches with the given conditions.
-   * <p>
-   * A {@link IterationFactory} is used to create the component.
-   *
-   * @return the component for using.
-   */
-  public static <E> SrcIteration<E> countIn(Collection<? extends E> collection) {
-    return countIn(collection.iterator());
-  }
-
-  /**
-   * Copy the collection elements that matches with the given conditions to
-   * another collection.
-   * <p>
-   * A {@link IterationFactory} is used to create the component.
-   *
-   * @return the component for using.
-   */
-  public static <E> TransformingIteration<E> copyTo(Collection<E> collection) {
-    return factory.createCopyOperation(collection);
-  }
-
-  /**
-   * Move the collection elements that matches with the given conditions to
-   * another collection.
-   * <p>
-   * A {@link IterationFactory} is used to create the component.
-   *
-   * @return the component for using.
-   */
-  public static <E> TransformingIteration<E> moveTo(Collection<E> collection) {
-    return factory.createMoveOperation(collection);
-  }
-
-  /**
-   * Search for specific elements in the given collection. A
-   * {@link IterationFactory} is used to create the component.
-   *
-   * @return the component for using.
-   */
-  public static <E> IterationSearchOperation<E> selectFrom(Collection<E> collection) {
-    return selectFrom(collection.iterator());
+  public static <E> SourceSelector move() {
+    return factory.createMoveOperation(Predicates.ALWAYS_TRUE);
   }
 
   /**
    * Retains the elements that matches with the given conditions.
-   * <p>
+   * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
    * @return the component for using.
    */
-  public static <E> SrcIteration<E> retainFrom(Iterator<? extends E> iterator) {
-    return factory.createRetainOperation(iterator);
+  public static <E> IterationSourceSelector retain(Predicate<? super E> predicate) {
+    return factory.createRetainOperation(predicate);
   }
 
   /**
    * Removes the elements that matches with the given conditions.
-   * <p>
+   * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
    * @return the component for using.
    */
-  public static <E> SrcIteration<E> removeFrom(Iterator<? extends E> iterator) {
-    return factory.createRemoveOperation(iterator);
-  }
-
-  /**
-   * Count the elements that matches with the given conditions.
-   * <p>
-   * A {@link IterationFactory} is used to create the component.
-   *
-   * @return the component for using.
-   */
-  public static <E> SrcIteration<E> countIn(Iterator<? extends E> iterator) {
-    return factory.createCountOperation(iterator);
-  }
-
-  /**
-   * Search for specific elements using the given iterator. A
-   * {@link IterationFactory} is used to create the component.
-   *
-   * @return the component for using.
-   */
-  public static <E> IterationSearchOperation<E> selectFrom(Iterator<E> iterator) {
-    return factory.createSearchOperation(iterator);
+  public static <E> IterationSourceSelector remove(Predicate<? super E> predicate) {
+    return factory.createRemoveOperation(predicate);
   }
 
 }

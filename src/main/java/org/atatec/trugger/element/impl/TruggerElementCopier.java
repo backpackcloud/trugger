@@ -16,18 +16,19 @@
  */
 package org.atatec.trugger.element.impl;
 
-import java.util.Set;
-
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementCopier;
 import org.atatec.trugger.element.ElementCopy;
 import org.atatec.trugger.element.Elements;
+import org.atatec.trugger.predicate.BasePredicate;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.transformer.Transformer;
 import org.atatec.trugger.util.Utils;
+
+import java.util.Set;
 
 /**
  * The default implementation for the property copy operation.
@@ -114,11 +115,13 @@ public final class TruggerElementCopier implements ElementCopier {
       value = transformer.transform(copy);
     }
     if (value != null) {
-      predicate = predicate.and(new AssignablePredicate(value));
+      predicate = predicate != null ? predicate.and(new AssignablePredicate(value)) :
+        new AssignablePredicate(value);
     }
-    if (predicate.evaluate(copy)) {
-      destProperty.in(dest).value(value);
+    if (predicate != null && !predicate.evaluate(copy)) {
+      return;
     }
+    destProperty.in(dest).value(value);
   }
 
   private static class PropertyCopyImpl implements ElementCopy {
@@ -149,7 +152,7 @@ public final class TruggerElementCopier implements ElementCopier {
 
   }
 
-  private static class AssignablePredicate implements Predicate<ElementCopy> {
+  private static class AssignablePredicate extends BasePredicate<ElementCopy> {
 
     private final Object value;
 

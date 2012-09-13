@@ -45,12 +45,12 @@ public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelect
   }
   
   public FieldGetterMethodSelector annotated() {
-    builder.add(ReflectionPredicates.IS_ANNOTATED);
+    builder.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
   
   public FieldGetterMethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
   

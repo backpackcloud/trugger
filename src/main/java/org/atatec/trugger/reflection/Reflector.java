@@ -17,9 +17,6 @@
 package org.atatec.trugger.reflection;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.selector.AnnotatedElementSelector;
 import org.atatec.trugger.selector.ConstructorSelector;
 import org.atatec.trugger.selector.ConstructorsSelector;
 import org.atatec.trugger.selector.FieldGetterMethodSelector;
@@ -27,7 +24,6 @@ import org.atatec.trugger.selector.FieldSelector;
 import org.atatec.trugger.selector.FieldSetterMethodSelector;
 import org.atatec.trugger.selector.FieldsSelector;
 import org.atatec.trugger.selector.GetterMethodSelector;
-import org.atatec.trugger.selector.MemberSelector;
 import org.atatec.trugger.selector.MethodSelector;
 import org.atatec.trugger.selector.MethodsSelector;
 import org.atatec.trugger.selector.SetterMethodSelector;
@@ -48,44 +44,8 @@ import java.util.Set;
  * found, a <code>null</code> value is <strong>always</strong> returned in a case of a
  * <i>single object selection</i> (for a <i>set</i> of them, an <strong>empty
  * collection</strong> is returned).
- * <p/>
- * Examples: <ul> <li>For selecting elements annotated with some annotations, you can use
- * the {@link AnnotatedElementSelector#annotatedWith(Class) annotatedWith} method.
- * <p/>
- * <pre>
- * Field field = {@link Reflection#reflect()}.field(&quot;myField&quot;).annotatedWith(MyAnnotation.class).in(MyClass.class);
- * </pre>
- * <li>For selecting elements with a particular access, you can use the {@link
- * MemberSelector#withAccess(Access) withAccess} method.
- * <p/>
- * <pre>
- * Set&lt;Constructor&lt;?&gt;&gt; constructors = {@link Reflection#reflect()}.allConstructors().withAccess(Access.PUBLIC).in(MyClass.class);
- * </pre>
- * <li>You can also combine the selectors, making an easily readable code:
- * <p/>
- * <pre>
- * Set&lt;Method&gt; methods = {@link Reflection#reflect()}.methods().annotatedWith(MyAnnotation.class).nonStatic().in(someInstance);
- * </pre>
- * <li>If the selectors provided does not fit in your necessity, you can use a {@link
- * CompositePredicate} and pass it to the {@link MemberSelector#that(org.atatec.trugger.predicate.Predicate)
- * that} method.
- * <p/>
- * <pre>
- * import static {@link org.atatec.trugger.reflection.ReflectionPredicates}.*;
- *
- * Set&lt;Field&gt; fields = {@link Reflection#reflect()}.fields().ofType(String.class).thatMathces(PUBLIC.or(PROTECTED)).in(MyClass.class);
- * </pre>
- * <li>You can also bypass the filters by invoking the {@link Result#in(Object) in} method
- * directly after calling the method in question.
- * <p/>
- * <pre>
- * Method method = {@link Reflection#reflect()}.isGetterOf(&quot;myProperty&quot;).in(MyClass.class);
- * Set&lt;Field&gt; fields = {@link Reflection#reflect()}.allFields().in(MyClass.class);
- * </pre>
- * </ul>
  *
  * @author Marcelo Varella Barca Guimarães
- * @see Predicates#is(org.atatec.trugger.predicate.Predicate)
  */
 public interface Reflector {
 
@@ -173,7 +133,7 @@ public interface Reflector {
   MethodSelector method();
 
   /**
-   * Reflects a getter method for a specified property.
+   * Reflects a getter method of the specified property.
    *
    * @param name the property name
    *
@@ -181,10 +141,10 @@ public interface Reflector {
    *
    * @since 1.2
    */
-  GetterMethodSelector getterFor(String name);
+  GetterMethodSelector getterOf(String name);
 
   /**
-   * Reflects a getter for the given field based on its name and type.
+   * Reflects a getter of the given field based on its name and type.
    *
    * @param field the reference field.
    *
@@ -192,10 +152,10 @@ public interface Reflector {
    *
    * @since 1.2
    */
-  FieldGetterMethodSelector getterFor(Field field);
+  FieldGetterMethodSelector getterOf(Field field);
 
   /**
-   * Reflects a setter method for a specified property.
+   * Reflects a setter method of the specified property.
    *
    * @param name the property name
    *
@@ -203,10 +163,10 @@ public interface Reflector {
    *
    * @since 1.2
    */
-  SetterMethodSelector setterFor(String name);
+  SetterMethodSelector setterOf(String name);
 
   /**
-   * Reflects a setter for the given field based on its name and type.
+   * Reflects a setter of the given field based on its name and type.
    *
    * @param field the reference field.
    *
@@ -214,7 +174,7 @@ public interface Reflector {
    *
    * @since 1.2
    */
-  FieldSetterMethodSelector setterFor(Field field);
+  FieldSetterMethodSelector setterOf(Field field);
 
   /**
    * Reflects a constructor with the specified parameters in a target.

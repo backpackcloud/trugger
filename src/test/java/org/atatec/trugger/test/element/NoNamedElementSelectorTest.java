@@ -31,7 +31,7 @@ import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.TruggerNoNamedElementSelector;
-import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.iteration.NonUniqueMatchException;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
@@ -224,7 +224,7 @@ public class NoNamedElementSelectorTest {
     public void makeSelections(ElementSelector selector) {}
   }
 
-  @Test(expected = SearchException.class)
+  @Test(expected = NonUniqueMatchException.class)
   public void testInvalidSelection() {
     elementA = mock(element().writable());
     elementB = mock(element().writable());

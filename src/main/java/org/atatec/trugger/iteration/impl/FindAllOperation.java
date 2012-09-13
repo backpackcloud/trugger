@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.iteration.impl;
 
-import java.util.Iterator;
-
-import org.atatec.trugger.iteration.SrcIteration;
+import org.atatec.trugger.iteration.FindAllResult;
 import org.atatec.trugger.predicate.Predicate;
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
-public final class TruggerRemoveIteration<E> implements SrcIteration<E> {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-  private final Iterator<? extends E> iterator;
+/** @author Marcelo Varella Barca Guimarães */
+public class FindAllOperation implements FindAllResult {
 
-  public TruggerRemoveIteration(Iterator<? extends E> iterator) {
-    this.iterator = iterator;
+  private final Predicate predicate;
+
+  public FindAllOperation(Predicate predicate) {
+    this.predicate = predicate;
   }
 
-  public int anyThat(Predicate<? super E> predicate) {
-    int result = 0;
-    while (iterator.hasNext()) {
-      E e = iterator.next();
-      if (predicate.evaluate(e)) {
-        iterator.remove();
-        result++;
+  @Override
+  public <E> List<E> in(Collection<E> collection) {
+    List<E> result = new ArrayList<E>(collection.size());
+    for (E e : collection) {
+      if(predicate.evaluate(e)) {
+        result.add(e);
       }
     }
     return result;

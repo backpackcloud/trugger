@@ -58,17 +58,17 @@ public class GetterMethodSelectorTest {
   public void testNoSelector() {
     assertResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("count");
+        return reflect().getterOf("count");
       }
     }, this);
     assertResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("hits");
+        return reflect().getterOf("hits");
       }
     }, this);
     assertNoResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("myField");
+        return reflect().getterOf("myField");
       }
     }, this);
   }
@@ -77,7 +77,7 @@ public class GetterMethodSelectorTest {
   public void testAnnotatedSelector() {
     assertResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("count");
+        return reflect().getterOf("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.annotated();
@@ -89,7 +89,7 @@ public class GetterMethodSelectorTest {
 
     assertNoResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("hits");
+        return reflect().getterOf("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.annotated();
@@ -101,7 +101,7 @@ public class GetterMethodSelectorTest {
   public void testNotAnnotatedSelector() {
     assertResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("hits");
+        return reflect().getterOf("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.notAnnotated();
@@ -113,7 +113,7 @@ public class GetterMethodSelectorTest {
 
     assertNoResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("count");
+        return reflect().getterOf("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.notAnnotated();
@@ -125,7 +125,7 @@ public class GetterMethodSelectorTest {
   public void testAnnotatedWithSelector() {
     assertResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("count");
+        return reflect().getterOf("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.annotatedWith(Flag.class);
@@ -137,7 +137,7 @@ public class GetterMethodSelectorTest {
 
     assertNoResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("hits");
+        return reflect().getterOf("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.annotatedWith(Flag.class);
@@ -149,7 +149,7 @@ public class GetterMethodSelectorTest {
   public void testNotAnnotatedWithSelector() {
     assertResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("hits");
+        return reflect().getterOf("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.notAnnotatedWith(Flag.class);
@@ -161,7 +161,7 @@ public class GetterMethodSelectorTest {
 
     assertNoResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("count");
+        return reflect().getterOf("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.notAnnotatedWith(Flag.class);
@@ -173,7 +173,7 @@ public class GetterMethodSelectorTest {
   public void testPredicateSelector() {
     assertResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("hits");
+        return reflect().getterOf("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.that(Predicates.ALWAYS_TRUE);
@@ -185,7 +185,7 @@ public class GetterMethodSelectorTest {
 
     assertNoResult(new SelectionTestAdapter<GetterMethodSelector, Method>() {
       public GetterMethodSelector createSelector() {
-        return reflect().getterFor("count");
+        return reflect().getterOf("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
         selector.that(Predicates.ALWAYS_FALSE);
@@ -196,8 +196,8 @@ public class GetterMethodSelectorTest {
   @Test
   public void testRecursivelySelector() {
     GetterMethodSelectorTest object = new GetterMethodSelectorTest(){};
-    assertNull(reflect().getterFor("count").in(object));
-    assertNotNull(reflect().getterFor("count").recursively().in(object));
+    assertNull(reflect().getterOf("count").in(object));
+    assertNotNull(reflect().getterOf("count").recursively().in(object));
   }
 
 }

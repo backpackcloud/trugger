@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
  */
 public class BaseClassSelector implements ClassSpecifier {
 
-  protected PredicateBuilder<Class> builder = new PredicateBuilder<Class>(null);
+  protected PredicateBuilder<Class> builder = new PredicateBuilder<Class>();
   protected ScanLevel level = ScanLevel.PACKAGE;
   protected final Scanner scanner;
 
@@ -70,12 +70,12 @@ public class BaseClassSelector implements ClassSpecifier {
   }
 
   public ClassSpecifier annotated() {
-    this.builder.add(ReflectionPredicates.IS_ANNOTATED);
+    this.builder.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ClassSpecifier notAnnotated() {
-    this.builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    this.builder.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 

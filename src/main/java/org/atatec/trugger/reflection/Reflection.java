@@ -22,8 +22,8 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.exception.ExceptionHandler;
 import org.atatec.trugger.exception.ExceptionHandlers;
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.iteration.Find;
+import org.atatec.trugger.iteration.NonUniqueMatchException;
 import org.atatec.trugger.loader.ImplementationLoader;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.selector.ConstructorSelector;
@@ -561,7 +561,7 @@ public final class Reflection {
         return (E) invoke(foundConstructor).withArgs(constructorArguments);
       }
       Set<Constructor<?>> constructors = reflect().constructors().in(type);
-      Predicate<Constructor<?>> predicate = new Predicate<Constructor<?>>() {
+      Predicate<Constructor<?>> matchingConstructor = new Predicate<Constructor<?>>() {
 
         public boolean evaluate(Constructor<?> constructor) {
           Class<?>[] parameterTypes = constructor.getParameterTypes();
@@ -577,12 +577,12 @@ public final class Reflection {
           return true;
         }
       };
-      foundConstructor = Iteration.selectFrom(constructors).oneThat(predicate);
+      foundConstructor = Find.the(matchingConstructor).in(constructors);
       if (foundConstructor != null) {
         return (E) invoke(foundConstructor).withArgs(constructorArguments);
       }
       throw new ReflectionException("No constructor found");
-    } catch (SearchException e) {
+    } catch (NonUniqueMatchException e) {
       throw new ReflectionException(e);
     }
   }

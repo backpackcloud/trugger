@@ -16,7 +16,8 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.iteration.NonUniqueMatchException;
+import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionException;
@@ -26,8 +27,6 @@ import org.atatec.trugger.selector.ConstructorSelector;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Set;
-
-import static org.atatec.trugger.iteration.Iteration.selectFrom;
 
 /**
  * A default implementation for the constructor selector.
@@ -58,14 +57,17 @@ public class TruggerConstructorSelector implements ConstructorSelector {
 
   @Override
   public Constructor<?> in(Object target) throws ReflectionException {
+    CompositePredicate<Constructor<?>> selectedConstrucor = builder.predicate();
     if (parameterTypes != null) {
-      return (Constructor<?>) new MemberSelector(registry.constructorFinder(parameterTypes), builder.predicate()).in(target);
+      return (Constructor<?>)
+        new MemberSelector(registry.constructorFinder(parameterTypes), selectedConstrucor)
+          .in(target);
     }
-    MembersSelector<Constructor<?>> selector = new MembersSelector<Constructor<?>>(registry.constructorsFinder());
-    Set<Constructor<?>> set = selector.in(target);
+    Set<Constructor<?>> constructors =
+      new MembersSelector<Constructor<?>>(registry.constructorsFinder()).in(target);
     try {
-      return selectFrom(set).oneThat(builder.predicate());
-    } catch (SearchException e) {
+      return builder.findIn(constructors);
+    } catch (NonUniqueMatchException e) {
       throw new ReflectionException(e);
     }
   }
@@ -85,12 +87,12 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   }
 
   public ConstructorSelector annotated() {
-    builder.add(ReflectionPredicates.IS_ANNOTATED);
+    builder.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ConstructorSelector notAnnotated() {
-    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 

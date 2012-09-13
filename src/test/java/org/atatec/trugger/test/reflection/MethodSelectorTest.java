@@ -26,8 +26,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.IS_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.IS_NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
 import static org.atatec.trugger.reflection.ReflectionPredicates.isAnnotatedWith;
 import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
 import static org.atatec.trugger.reflection.ReflectionPredicates.isNotAnnotatedWith;
@@ -76,7 +76,7 @@ public class MethodSelectorTest {
       }
       @Override
       public void assertions(Method method) {
-        assertMatch(method, IS_ANNOTATED);
+        assertMatch(method, ANNOTATED);
       }
     }, AnnotatedSelectorTest.class);
     assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
@@ -100,7 +100,7 @@ public class MethodSelectorTest {
       }
       @Override
       public void assertions(Method method) {
-        assertMatch(method, IS_NOT_ANNOTATED);
+        assertMatch(method, NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class);
     assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){

@@ -14,31 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.element.impl;
 
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.iteration.Iteration;
+package org.atatec.trugger.iteration;
+
 import org.atatec.trugger.transformer.Transformer;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
-/**
- * A helper class for element finders.
- *
- * @author Marcelo Varella Barca Guimarães
- */
-public class ElementFinderHelper {
+/** @author Marcelo Varella Barca Guimarães */
+public interface SourceSelector {
 
-	public static Set<Element> computeResult(Object target, Collection<Element> elements) {
-		if (target instanceof Class<?>) {
-			return new HashSet<Element>(elements);
-		}
-		Set<Element> result = new HashSet<Element>(elements.size());
-		Transformer<Element, Element> specific = new SpecificElementTransformer(target);
-		Iteration.copy().as(specific).from(elements).to(result);
-		return result;
-	}
+  SourceSelector as(Transformer transformer);
+
+  DestinationSelector from(Collection collection);
 
 }

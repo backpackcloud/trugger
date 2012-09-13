@@ -16,8 +16,8 @@
  */
 package org.atatec.trugger.iteration;
 
-import java.util.Collection;
-import java.util.Iterator;
+import org.atatec.trugger.iteration.impl.FindResult;
+import org.atatec.trugger.predicate.Predicate;
 
 /**
  * Interface that defines a factory for iteration operations.
@@ -28,49 +28,52 @@ import java.util.Iterator;
 public interface IterationFactory {
 
   /**
-   * Creates the implementation for retaining elements based on giving
-   * conditions.
+   * Creates the implementation for retaining elements based on giving conditions.
    *
    * @return the component for this operation.
    */
-  <E> SrcIteration<E> createRetainOperation(Iterator<? extends E> iterator);
+  IterationSourceSelector createRetainOperation(Predicate predicate);
 
   /**
-   * Creates the implementation for removing elements based on giving
-   * conditions.
+   * Creates the implementation for removing elements based on giving conditions.
    *
    * @return the component for this operation.
    */
-  <E> SrcIteration<E> createRemoveOperation(Iterator<? extends E> iterator);
-
-  /**
-   * Creates the implementation for counting elements based on giving
-   * conditions.
-   *
-   * @return the component for this operation.
-   * @since 1.2
-   */
-  <E> SrcIteration<E> createCountOperation(Iterator<? extends E> iterator);
+  IterationSourceSelector createRemoveOperation(Predicate predicate);
 
   /**
    * Creates the implementation for moving elements based on giving conditions.
    *
    * @return the component for this operation.
    */
-  <E> TransformingIteration<E> createMoveOperation(Collection<E> collection);
+  SourceSelector createMoveOperation(Predicate predicate);
 
   /**
    * Creates the implementation for copying elements based on giving conditions.
    *
    * @return the component for this operation.
    */
-  <E> TransformingIteration<E> createCopyOperation(Collection<E> collection);
+  SourceSelector createCopyOperation(Predicate predicate);
 
   /**
    * Creates the implementation for searching elements.
    *
    * @return the component for this operation
    */
-  <E> IterationSearchOperation<E> createSearchOperation(Iterator<E> iterator);
+  FindResult createFindOperation(Predicate predicate);
+
+  /**
+   * Creates the implementation for searching elements.
+   *
+   * @return the component for this operation
+   */
+  FindResult createFindFirstOperation(Predicate predicate);
+
+  /**
+   * Creates the implementation for searching elements.
+   *
+   * @return the component for this operation
+   */
+  FindAllResult createFindAllOperation(Predicate predicate);
 
 }

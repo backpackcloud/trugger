@@ -43,23 +43,23 @@ public class TruggerPredicateReflector extends TruggerReflector {
   }
 
   @Override
-  public GetterMethodSelector getterFor(String name) {
-    return super.getterFor(name).that(predicate);
+  public GetterMethodSelector getterOf(String name) {
+    return super.getterOf(name).that(predicate);
   }
 
   @Override
-  public FieldGetterMethodSelector getterFor(Field field) {
-    return super.getterFor(field).that(predicate);
+  public FieldGetterMethodSelector getterOf(Field field) {
+    return super.getterOf(field).that(predicate);
   }
 
   @Override
-  public SetterMethodSelector setterFor(String name) {
-    return super.setterFor(name).that(predicate);
+  public SetterMethodSelector setterOf(String name) {
+    return super.setterOf(name).that(predicate);
   }
 
   @Override
-  public FieldSetterMethodSelector setterFor(Field field) {
-    return super.setterFor(field).that(predicate);
+  public FieldSetterMethodSelector setterOf(Field field) {
+    return super.setterOf(field).that(predicate);
   }
 
   @Override

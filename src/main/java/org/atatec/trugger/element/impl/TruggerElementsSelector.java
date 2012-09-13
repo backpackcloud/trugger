@@ -38,122 +38,122 @@ import java.util.Set;
  * @author Marcelo Varella Barca Guimarães
  */
 public final class TruggerElementsSelector implements ElementsSelector {
-  
+
   private final PredicateBuilder<Element> builder;
   private final Finder<Element> finder;
-  
+
   public TruggerElementsSelector(Finder<Element> finder) {
-    this.builder = new PredicateBuilder<Element>(null);
+    this.builder = new PredicateBuilder<Element>();
     this.finder = finder;
   }
-  
+
   public ElementsSelector annotatedWith(Class<? extends Annotation> type) {
     builder.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
-  
+
   public ElementsSelector notAnnotatedWith(Class<? extends Annotation> type) {
     builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
-  
+
   public ElementsSelector annotated() {
-    builder.add(ReflectionPredicates.IS_ANNOTATED);
+    builder.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
-  
+
   public ElementsSelector notAnnotated() {
-    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
-  
+
   public ElementsSelector ofType(Class<?> type) {
     builder.add(ElementPredicates.ofType(type));
     return this;
   }
-  
+
   public ElementsSelector assignableTo(Class<?> type) {
     builder.add(ElementPredicates.assignableTo(type));
     return this;
   }
-  
+
   @Override
   public ElementsSelector nonSpecific() {
     builder.add(ElementPredicates.NON_SPECIFIC);
     return this;
   }
-  
+
   @Override
   public ElementsSelector specific() {
     builder.add(ElementPredicates.SPECIFIC);
     return this;
   }
-  
+
   public ElementsSelector named(String... names) {
     builder.add(ElementPredicates.named(names));
     return this;
   }
-  
+
   public ElementsSelector that(final Predicate<? super Element> predicate) {
     builder.add(predicate);
     return this;
   }
-  
+
   public ElementsSelector nonReadable() {
     builder.add(ElementPredicates.NON_READABLE);
     return this;
   }
-  
+
   public ElementsSelector nonWritable() {
     builder.add(ElementPredicates.NON_WRITABLE);
     return this;
   }
-  
+
   public ElementsSelector readable() {
     builder.add(ElementPredicates.READABLE);
     return this;
   }
-  
+
   public ElementsSelector writable() {
     builder.add(ElementPredicates.WRITABLE);
     return this;
   }
-  
+
   public Set<Element> in(Object target) {
-    Set<Element> set = finder.findAll().in(target);
-    Predicate<Element> predicate = builder.predicate();
-    if (predicate != null) {
-      Iteration.retainFrom(set).anyThat(predicate);
+    Set<Element> elements = finder.findAll().in(target);
+    Predicate<Element> selected = builder.predicate();
+    if (selected != null) {
+      Iteration.retain(selected).from(elements);
     }
-    return set;
+    return elements;
   }
-  
+
   public Result<Set<BindableElement>, Object> forBind() {
     writable();
     return new Result<Set<BindableElement>, Object>() {
-      
+
       public Set<BindableElement> in(Object target) {
-        Set<Element> set = TruggerElementsSelector.this.in(target);
-        Set<BindableElement> result = new HashSet<BindableElement>(set.size());
-        Transformer<BindableElement, Element> t = new ElementToBindableTransformer(target);
-        Iteration.copyTo(result).applying(t).all().from(set);
+        Set<Element> elements = TruggerElementsSelector.this.in(target);
+        Set<BindableElement> result = new HashSet<BindableElement>(elements.size());
+        Transformer<BindableElement, Element> bindable = new ElementToBindableTransformer(target);
+        Iteration.copy().as(bindable).from(elements).to(result);
         return result;
       }
     };
   }
-  
+
   private static class ElementToBindableTransformer implements Transformer<BindableElement, Element> {
-    
+
     private final Object target;
-    
+
     public ElementToBindableTransformer(Object target) {
       this.target = target;
     }
-    
+
     public BindableElement transform(Element object) {
       return new TruggerBindableElement(object, target);
     }
-    
+
   }
-  
+
 }

@@ -37,7 +37,7 @@ import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
  */
 public class MembersSelector<T extends Member> implements Result<Set<T>, Object> {
 
-  private final PredicateBuilder<T> builder = new PredicateBuilder<T>(null);
+  private final PredicateBuilder<T> builder = new PredicateBuilder<T>();
 
   private final MembersFinder<T> finder;
 
@@ -61,9 +61,9 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
   }
 
   private Set<T> applySelection(final Set<T> set) {
-    Predicate<T> predicate = builder.predicate();
-    if (predicate != null) {
-      Iteration.retainFrom(set).anyThat(predicate);
+    Predicate<T> selected = builder.predicate();
+    if (selected != null) {
+      Iteration.retain(selected).from(set);
     }
     return set;
   }

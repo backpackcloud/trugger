@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.iteration.NonUniqueMatchException;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
@@ -29,8 +29,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Set;
-
-import static org.atatec.trugger.iteration.Iteration.selectFrom;
 
 /**
  * A default implementation for the method selector.
@@ -70,12 +68,12 @@ public class TruggerMethodSelector implements MethodSelector {
   }
 
   public MethodSelector annotated() {
-    builder.add(ReflectionPredicates.IS_ANNOTATED);
+    builder.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public MethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 
@@ -114,11 +112,10 @@ public class TruggerMethodSelector implements MethodSelector {
     if (recursively) {
       selector.useHierarchy();
     }
-    Set<Method> set = selector.in(target);
+    Set<Method> methods = selector.in(target);
     try {
-      Predicate<Method> predicate = builder.predicate().and(ReflectionPredicates.named(name));
-      return selectFrom(set).oneThat(predicate);
-    } catch (SearchException e) {
+      return builder.add(ReflectionPredicates.named(name)).findIn(methods);
+    } catch (NonUniqueMatchException e) {
       throw new ReflectionException(e);
     }
   }

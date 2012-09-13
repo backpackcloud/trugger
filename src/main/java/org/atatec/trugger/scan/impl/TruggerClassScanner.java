@@ -57,19 +57,19 @@ public class TruggerClassScanner implements ClassScanner {
   }
 
   public ClassesSelector findAnnotations() {
-    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.IS_ANNOTATION);
+    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.ANNOTATION);
   }
 
   public ClassesSelector findEnums() {
-    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.IS_ENUM);
+    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.ENUM);
   }
 
   public ClassesSelector findClasses() {
-    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.IS_CLASS);
+    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.CLASS);
   }
 
   public ClassesSelector findInterfaces() {
-    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.IS_INTERFACE);
+    return new TruggerClassesSelector(scanner).that(ReflectionPredicates.INTERFACE);
   }
 
   public ClassesSelector findAll() {

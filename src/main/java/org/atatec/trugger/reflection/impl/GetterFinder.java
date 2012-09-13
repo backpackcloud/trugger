@@ -16,12 +16,13 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.reflection.ReflectionPredicates;
+import org.atatec.trugger.iteration.Find;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.atatec.trugger.reflection.ReflectionPredicates.getterOf;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -38,6 +39,6 @@ public class GetterFinder implements MemberFinder<Method> {
 
   public Method find(Class<?> type) throws Exception {
     Set<Method> methods = new HashSet<Method>(finder.find(type));
-    return Iteration.selectFrom(methods).oneThat(ReflectionPredicates.isGetterOf(name));
+    return Find.the(getterOf(name)).in(methods);
   }
 }

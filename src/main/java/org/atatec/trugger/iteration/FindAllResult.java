@@ -14,27 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.element.impl;
 
-import org.atatec.trugger.Finder;
-import org.atatec.trugger.element.Element;
+package org.atatec.trugger.iteration;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 
 /** @author Marcelo Varella Barca Guimarães */
-public class TruggerNoNamedElementSelector extends TruggerElementSelector {
+public interface FindAllResult {
 
-  public TruggerNoNamedElementSelector(Finder<Element> finder) {
-    super(null, finder);
-  }
-
-  @Override
-  public Element in(Object target) {
-    Set<Element> elements = finder().findAll().in(target);
-    if (elements.isEmpty()) {
-      return null;
-    }
-    return builder().findIn(elements);
-  }
+  <E> List<E> in(Collection<E> collection);
 
 }

@@ -71,7 +71,7 @@ public class FieldsSelectorTest {
         selector.annotated();
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.IS_ANNOTATED);
+        assertMatch(fields, ReflectionPredicates.ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 2);
   }
@@ -86,7 +86,7 @@ public class FieldsSelectorTest {
         selector.notAnnotated();
       }
       public void assertions(Set<Field> fields) {
-        assertMatch(fields, ReflectionPredicates.IS_NOT_ANNOTATED);
+        assertMatch(fields, ReflectionPredicates.NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }

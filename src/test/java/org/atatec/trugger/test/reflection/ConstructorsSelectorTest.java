@@ -70,7 +70,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.IS_ANNOTATED);
+        assertMatch(set, ReflectionPredicates.ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
     assertTrue(reflect().visible().constructors().annotated().in(AnnotatedSelectorTest.class).isEmpty());
@@ -88,7 +88,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.IS_NOT_ANNOTATED);
+        assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
 
@@ -102,7 +102,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.IS_NOT_ANNOTATED);
+        assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
       }
     }, AnnotatedSelectorTest.class, 1);
   }

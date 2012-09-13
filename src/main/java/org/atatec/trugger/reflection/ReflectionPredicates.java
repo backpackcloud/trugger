@@ -52,7 +52,7 @@ public class ReflectionPredicates {
    * return an object. If the method has the prefix "is", then it must return a boolean
    * value.
    */
-  public static final CompositePredicate<Method> IS_GETTER = wrap(new Predicate<Method>() {
+  public static final CompositePredicate<Method> GETTER = wrap(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
       if (!Modifier.isPublic(method.getModifiers())) {
@@ -89,7 +89,7 @@ public class ReflectionPredicates {
    * The method must have the "set" prefix, take one parameter and return no value (a void
    * method).
    */
-  public static final CompositePredicate<Method> IS_SETTER = wrap(new Predicate<Method>() {
+  public static final CompositePredicate<Method> SETTER = wrap(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
       if (!Modifier.isPublic(method.getModifiers())) {
@@ -113,8 +113,8 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if a method is a getter method for
    *         the specified property name.
    */
-  public static CompositePredicate<Method> isGetterOf(final String propertyName) {
-    return IS_GETTER.and(new Predicate<Method>() {
+  public static CompositePredicate<Method> getterOf(final String propertyName) {
+    return GETTER.and(new Predicate<Method>() {
 
       public boolean evaluate(Method method) {
         return Reflection.parsePropertyName(method).equals(propertyName);
@@ -131,8 +131,8 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if a method is a setter method for
    *         the specified property name.
    */
-  public static CompositePredicate<Method> isSetterOf(final String propertyName) {
-    return IS_SETTER.and(new Predicate<Method>() {
+  public static CompositePredicate<Method> setterOf(final String propertyName) {
+    return SETTER.and(new Predicate<Method>() {
 
       public boolean evaluate(Method method) {
         return Reflection.parsePropertyName(method).equals(propertyName);
@@ -149,12 +149,12 @@ public class ReflectionPredicates {
    * Predicate that returns <code>true</code> if a class is an <i>interface</i> and is not
    * an <i>annotation</i>.
    */
-  public static final CompositePredicate<Class> IS_INTERFACE =
+  public static final CompositePredicate<Class> INTERFACE =
     ClassPredicates.declare(Modifier.INTERFACE).and(notAssignableTo(Annotation.class));
-  /** The negation of the {@link #IS_INTERFACE} predicate. */
-  public static final CompositePredicate<Class> IS_NOT_INTERFACE = IS_INTERFACE.negate();
+  /** The negation of the {@link #INTERFACE} predicate. */
+  public static final CompositePredicate<Class> NOT_INTERFACE = INTERFACE.negate();
   /** Predicate that returns <code>true</code> if a class is an <i>enum</i>. */
-  public static final CompositePredicate<Class> IS_ENUM = wrap(new Predicate<Class>() {
+  public static final CompositePredicate<Class> ENUM = wrap(new Predicate<Class>() {
 
     public boolean evaluate(Class element) {
       return element.isEnum();
@@ -165,18 +165,18 @@ public class ReflectionPredicates {
       return "Enum";
     }
   });
-  /** The negation of the {@link #IS_ENUM} predicate. */
-  public static final CompositePredicate<Class> IS_NOT_ENUM = IS_ENUM.negate();
+  /** The negation of the {@link #ENUM} predicate. */
+  public static final CompositePredicate<Class> NOT_ENUM = ENUM.negate();
   /** Predicate that returns <code>true</code> if a class is an <i>annotation</i>. */
-  public static final CompositePredicate<Class> IS_ANNOTATION =
+  public static final CompositePredicate<Class> ANNOTATION =
     ClassPredicates.declare(Modifier.INTERFACE).and(assignableTo(Annotation.class));
-  /** The negation of the {@link #IS_ANNOTATION} predicate. */
-  public static final CompositePredicate<Class> IS_NOT_ANNOTATION = IS_ANNOTATION.negate();
+  /** The negation of the {@link #ANNOTATION} predicate. */
+  public static final CompositePredicate<Class> NOT_ANNOTATION = ANNOTATION.negate();
   /**
    * Predicate that returns <code>true</code> if a class is not an <i>interface</i> and is
    * not an <i>enum</i>.
    */
-  public static final CompositePredicate<Class> IS_CLASS = IS_NOT_INTERFACE.and(IS_NOT_ENUM).and(IS_NOT_ANNOTATION);
+  public static final CompositePredicate<Class> CLASS = NOT_INTERFACE.and(NOT_ENUM).and(NOT_ANNOTATION);
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated element is
@@ -207,7 +207,7 @@ public class ReflectionPredicates {
   }
 
   /** A predicate that returns <code>true</code> if the element has that annotations. */
-  public static final CompositePredicate<AnnotatedElement> IS_ANNOTATED =
+  public static final CompositePredicate<AnnotatedElement> ANNOTATED =
     wrap(new Predicate<AnnotatedElement>() {
 
       public boolean evaluate(AnnotatedElement element) {
@@ -221,7 +221,7 @@ public class ReflectionPredicates {
     });
 
   /** A predicate that returns <code>false</code> if the element has that annotation. */
-  public static final CompositePredicate<AnnotatedElement> IS_NOT_ANNOTATED = IS_ANNOTATED.negate();
+  public static final CompositePredicate<AnnotatedElement> NOT_ANNOTATED = ANNOTATED.negate();
 
   /**
    * @return a predicate that returns <code>true</code> if the specified Class is

@@ -22,6 +22,7 @@ import org.atatec.trugger.bind.BindableElement;
 import org.atatec.trugger.bind.impl.BindableElementTransformer;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
+import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
@@ -53,12 +54,12 @@ public class TruggerElementSelector implements ElementSelector {
   }
 
   public ElementSelector annotated() {
-    builder.add(ReflectionPredicates.IS_ANNOTATED);
+    builder.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ElementSelector notAnnotated() {
-    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 
@@ -122,7 +123,11 @@ public class TruggerElementSelector implements ElementSelector {
     if (element == null) {
       return null;
     }
-    return builder.predicate().evaluate(element) ? element : null;
+    CompositePredicate<Element> predicate = builder.predicate();
+    if(predicate != null) {
+      return predicate.evaluate(element) ? element : null;
+    }
+    return element;
   }
 
   public Result<BindableElement, Object> forBind() {

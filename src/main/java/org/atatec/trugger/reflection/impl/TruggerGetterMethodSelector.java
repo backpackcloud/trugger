@@ -42,12 +42,12 @@ public class TruggerGetterMethodSelector implements GetterMethodSelector {
   }
   
   public GetterMethodSelector annotated() {
-    builder.add(ReflectionPredicates.IS_ANNOTATED);
+    builder.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
   
   public GetterMethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    builder.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
   

@@ -16,65 +16,53 @@
  */
 package org.atatec.trugger.predicate;
 
+import org.atatec.trugger.iteration.Find;
+import org.atatec.trugger.iteration.NonUniqueMatchException;
+
+import java.util.Collection;
+
 /**
  * Helper class for building composite predicates using the AND operation.
  *
+ * @param <T> The element type.
+ *
  * @author Marcelo Varella Barca Guimarães
- * @param <T>
- *          The element type.
  */
 public class PredicateBuilder<T> {
-
-  private final CompositePredicate<T> defaultPredicate;
 
   private CompositePredicate<T> predicate;
 
   /**
-   * Creates a new builder using a {@link Predicates#ALWAYS_TRUE} as the default
-   * predicate.
-   */
-  public PredicateBuilder() {
-    this(Predicates.ALWAYS_TRUE);
-  }
-
-  /**
-   * Creates a new builder using the given predicate as the default one.
-   *
-   * @param defaultPredicate
-   *          the default predicate, may be <code>null</code>.
-   */
-  public PredicateBuilder(CompositePredicate<T> defaultPredicate) {
-    this.defaultPredicate = defaultPredicate;
-  }
-
-  /**
    * Adds the given predicate.
    *
-   * @param predicate
-   *          the predicate to add.
+   * @param other the predicate to add.
    */
-  public PredicateBuilder<T> add(Predicate<? super T> predicate) {
-    if(this.predicate == null) {
-      this.predicate = Predicates.wrap(predicate);
-    } else {
-      this.predicate = this.predicate.and(predicate);
-    }
+  public PredicateBuilder<T> add(Predicate<? super T> other) {
+    predicate = predicate == null ? Predicates.wrap(other) : predicate.and(other);
     return this;
   }
 
   /**
-   * Returns the created predicate. This predicate will return <code>true</code>
-   * if all the {@link #add(Predicate) added} predicates returns
-   * <code>true</code>.
-   * <p>
-   * Note that this method can return <code>null</code> if <code>null</code> is
-   * defined as the default predicate.
+   * Returns the created predicate. This predicate will return <code>true</code> if all
+   * the {@link #add(Predicate) added} predicates returns <code>true</code>.
    *
-   * @return the created predicate, or the default if no one is added to this
-   *         builder.
+   * @return the created predicate.
    */
   public CompositePredicate<T> predicate() {
-    return predicate == null ? defaultPredicate : predicate;
+    return predicate;
   }
 
+  public T findIn(Collection<T> collection) {
+    if(collection.isEmpty()) {
+      return null;
+    }
+    CompositePredicate<T> selectedElement = predicate();
+    if (selectedElement != null) {
+      return Find.the(selectedElement).in(collection);
+    }
+    if (collection.size() == 1) {
+      return collection.iterator().next();
+    }
+    throw new NonUniqueMatchException();
+  }
 }

@@ -48,12 +48,12 @@ public class TruggerConstructorsSelector implements ConstructorsSelector {
   }
 
   public ConstructorsSelector annotated() {
-    selector.builder().add(ReflectionPredicates.IS_ANNOTATED);
+    selector.builder().add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ConstructorsSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.IS_NOT_ANNOTATED);
+    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 

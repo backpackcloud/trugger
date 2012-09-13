@@ -16,17 +16,13 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.SearchException;
+import org.atatec.trugger.iteration.NonUniqueMatchException;
 import org.atatec.trugger.reflection.ReflectionException;
 
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import static org.atatec.trugger.iteration.Iteration.selectFrom;
-
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
 
   public TruggerNoNamedFieldSelector(MemberFindersRegistry registry) {
@@ -36,13 +32,13 @@ public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
   @Override
   public Field in(Object target) {
     MembersSelector<Field> selector = new MembersSelector<Field>(registry.fieldsFinder());
-    if(useHierarchy()) {
+    if (useHierarchy()) {
       selector.useHierarchy();
     }
     Set<Field> fields = selector.in(target);
     try {
-      return selectFrom(fields).oneThat(builder().predicate());
-    } catch (SearchException e) {
+      return builder().findIn(fields);
+    } catch (NonUniqueMatchException e) {
       throw new ReflectionException(e);
     }
   }

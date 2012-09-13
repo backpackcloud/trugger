@@ -14,40 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.iteration.impl;
+
+import org.atatec.trugger.iteration.IterationSourceSelector;
+import org.atatec.trugger.predicate.Predicate;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.atatec.trugger.transformer.Transformer;
+/** @author Marcelo Varella Barca Guimarães */
+public class RemoveOperation implements IterationSourceSelector {
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
-public final class TruggerMoveIteration<To, From> extends TruggerSrcToDestIteration<To, From> {
+  private final Predicate predicate;
 
-  /**
-   * @param to
-   *          destination collection
-   * @param transformer
-   *          transformer to apply on each element.
-   */
-  public TruggerMoveIteration(Collection<To> to, Transformer<To, From> transformer) {
-    super(to, transformer);
-  }
-
-  /**
-   * @param to
-   *          destination collection
-   */
-  public TruggerMoveIteration(Collection<To> to) {
-    super(to);
+  public RemoveOperation(Predicate predicate) {
+    this.predicate = predicate;
   }
 
   @Override
-  protected void execute(Iterator<? extends From> iterator, From e) {
-    to.add(transformer.transform(e));
-    iterator.remove();
+  public void from(Collection collection) {
+    if(predicate == null) {
+      return;
+    }
+    Iterator iterator = collection.iterator();
+    while (iterator.hasNext()) {
+      Object next = iterator.next();
+      if(predicate.evaluate(next)) {
+        iterator.remove();
+      }
+    }
   }
 
 }

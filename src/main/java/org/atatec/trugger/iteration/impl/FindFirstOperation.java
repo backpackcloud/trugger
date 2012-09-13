@@ -14,23 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.iteration;
 
-import org.atatec.trugger.transformer.Transformer;
+package org.atatec.trugger.iteration.impl;
 
-/**
- * Interface that defines an iteration that can transform elements.
- *
- * @author Marcelo Varella Barca Guimarães
- */
-public interface TransformingIteration<To> extends SrcToDestIteration<To> {
+import org.atatec.trugger.predicate.Predicate;
 
-  /**
-   * Executes iteration transforming the elements using the given transformer.
-   *
-   * @param transformer
-   *          the transformer to use.
-   * @return the component for defining the elements.
-   */
-  <From> SrcToDestIteration<From> applying(Transformer<To, From> transformer);
+import java.util.Collection;
+
+/** @author Marcelo Varella Barca Guimarães */
+public class FindFirstOperation implements FindResult {
+
+  private final Predicate predicate;
+
+  public FindFirstOperation(Predicate predicate) {
+    this.predicate = predicate;
+  }
+
+  @Override
+  public <E> E in(Collection<? extends E> collection) {
+    for (E e : collection) {
+      if(predicate.evaluate(e)) {
+        return e;
+      }
+    }
+    return null;
+  }
+
 }

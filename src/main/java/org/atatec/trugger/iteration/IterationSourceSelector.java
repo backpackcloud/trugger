@@ -14,41 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.iteration;
 
 import java.util.Collection;
-import java.util.Iterator;
 
-/**
- * Interface that defines a source for an iteration.
- *
- * @author Marcelo Varella Barca Guimarães
- * @param <E>
- *          The type of the elements in the collection.
- * @since 2.4
- */
-public interface IterationSourceSelector<E> {
+/** @author Marcelo Varella Barca Guimarães */
+public interface IterationSourceSelector {
 
-  /**
-   * Specifies the elements by passing an iterator.
-   * <p>
-   * After this call, the operation must be executed.
-   *
-   * @param iterator
-   *          an iterator for the source elements.
-   * @return the number of elements affected by the operation.
-   */
-  int from(Iterator<E> iterator);
-
-  /**
-   * Specifies the source collection as the elements for iteration.
-   * <p>
-   * After this call, the operation must be executed.
-   *
-   * @param collection
-   *          the source collection.
-   * @return the number of elements affected by the operation.
-   */
-  int from(Collection<E> collection);
+  void from(Collection collection);
 
 }

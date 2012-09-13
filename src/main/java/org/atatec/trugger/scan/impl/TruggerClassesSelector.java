@@ -97,9 +97,9 @@ public class TruggerClassesSelector extends BaseClassSelector implements Classes
     } catch (ClassNotFoundException e) {
       throw new ClassScanningException(e);
     }
-    Predicate<Class> predicate = builder.predicate();
-    if (predicate != null) {
-      Iteration.retainFrom(classes).anyThat(predicate);
+    Predicate<Class> selectedClasses = builder.predicate();
+    if (selectedClasses != null) {
+      Iteration.retain(selectedClasses).from(classes);
     }
     return classes;
   }

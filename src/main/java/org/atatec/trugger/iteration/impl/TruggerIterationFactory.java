@@ -16,15 +16,11 @@
  */
 package org.atatec.trugger.iteration.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
-
+import org.atatec.trugger.iteration.FindAllResult;
 import org.atatec.trugger.iteration.IterationFactory;
-import org.atatec.trugger.iteration.IterationSearchOperation;
-import org.atatec.trugger.iteration.SrcIteration;
-import org.atatec.trugger.iteration.SrcToDestIteration;
-import org.atatec.trugger.iteration.TransformingIteration;
-import org.atatec.trugger.transformer.Transformer;
+import org.atatec.trugger.iteration.IterationSourceSelector;
+import org.atatec.trugger.iteration.SourceSelector;
+import org.atatec.trugger.predicate.Predicate;
 
 /**
  * The default implementation for {@link IterationFactory}.
@@ -34,51 +30,38 @@ import org.atatec.trugger.transformer.Transformer;
 public class TruggerIterationFactory implements IterationFactory {
 
   @Override
-  public <E> TransformingIteration<E> createCopyOperation(Collection<E> collection) {
-    return new TruggerTransformingIteration<E>(collection) {
-
-      protected SrcToDestIteration<E> create(Collection to) {
-        return new TruggerCopyIteration<E, E>(to);
-      }
-
-      protected <From> SrcToDestIteration<From> create(Collection to, Transformer<E, From> transformer) {
-        return new TruggerCopyIteration<E, From>(to, transformer);
-      }
-    };
+  public IterationSourceSelector createRetainOperation(Predicate predicate) {
+    return new RetainOperation(predicate);
   }
 
   @Override
-  public <E> TransformingIteration<E> createMoveOperation(Collection<E> collection) {
-    return new TruggerTransformingIteration<E>(collection) {
-
-      protected SrcToDestIteration<E> create(Collection to) {
-        return new TruggerMoveIteration<E, E>(to);
-      }
-
-      protected <From> SrcToDestIteration<From> create(Collection to, Transformer<E, From> transformer) {
-        return new TruggerMoveIteration<E, From>(to, transformer);
-      }
-    };
+  public IterationSourceSelector createRemoveOperation(Predicate predicate) {
+    return new RemoveOperation(predicate);
   }
 
   @Override
-  public <E> SrcIteration<E> createCountOperation(Iterator<? extends E> iterator) {
-    return new TruggerCountIteration<E>(iterator);
+  public SourceSelector createMoveOperation(Predicate predicate) {
+    return new MoveOperation(predicate);
   }
 
   @Override
-  public <E> SrcIteration<E> createRemoveOperation(Iterator<? extends E> iterator) {
-    return new TruggerRemoveIteration<E>(iterator);
+  public SourceSelector createCopyOperation(Predicate predicate) {
+    return new CopyOperation(predicate);
   }
 
   @Override
-  public <E> SrcIteration<E> createRetainOperation(Iterator<? extends E> iterator) {
-    return new TruggerRetainIteration<E>(iterator);
+  public FindResult createFindOperation(Predicate predicate) {
+    return new FindOperation(predicate);
   }
 
   @Override
-  public <E> IterationSearchOperation<E> createSearchOperation(Iterator<E> iterator) {
-    return new TruggerSearchIteration<E>(iterator);
+  public FindResult createFindFirstOperation(Predicate predicate) {
+    return new FindFirstOperation(predicate);
+  }
+
+  @Override
+  public FindAllResult createFindAllOperation(Predicate predicate) {
+    return new FindAllOperation(predicate);
   }
 
 }

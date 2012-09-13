@@ -107,6 +107,36 @@ public final class Predicates {
     };
   }
 
+  /**
+   * @see #wrap(Predicate)
+   * @see #that(CompositePredicate)
+   */
+  public static <E> CompositePredicate<E> that(Predicate<E> predicate) {
+    return wrap(predicate);
+  }
+
+  /**
+   * Returns the given predicate. This method purpose is to make the code more readable.
+   */
+  public static <E> CompositePredicate<E> that(CompositePredicate<E> predicate) {
+    return predicate;
+  }
+
+  /**
+   * Returns the given predicate. This method purpose is to make the code more readable.
+   */
+  public static <E> CompositePredicate<E> is(CompositePredicate<E> predicate) {
+    return predicate;
+  }
+
+  /**
+   * @see #wrap(Predicate)
+   * @see #that(CompositePredicate)
+   */
+  public static <E> CompositePredicate<E> is(Predicate<E> predicate) {
+    return wrap(predicate);
+  }
+
   private static class ConstantPredicate implements Predicate<Object> {
 
     private final boolean returnValue;

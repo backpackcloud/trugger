@@ -66,17 +66,17 @@ public class FieldGetterMethodSelectorTest {
   public void testNoSelector() {
     assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
     }, this);
     assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldHits);
+        return reflect().getterOf(fieldHits);
       }
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
     }, Object.class);
   }
@@ -85,7 +85,7 @@ public class FieldGetterMethodSelectorTest {
   public void testAnnotatedSelector() {
     assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.annotated();
@@ -96,7 +96,7 @@ public class FieldGetterMethodSelectorTest {
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldHits);
+        return reflect().getterOf(fieldHits);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.annotated();
@@ -108,7 +108,7 @@ public class FieldGetterMethodSelectorTest {
   public void testNotAnnotatedSelector() {
     assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldHits);
+        return reflect().getterOf(fieldHits);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.notAnnotated();
@@ -119,7 +119,7 @@ public class FieldGetterMethodSelectorTest {
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.notAnnotated();
@@ -131,7 +131,7 @@ public class FieldGetterMethodSelectorTest {
   public void testAnnotatedWithSelector() {
     assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.annotatedWith(Flag.class);
@@ -142,7 +142,7 @@ public class FieldGetterMethodSelectorTest {
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldHits);
+        return reflect().getterOf(fieldHits);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.annotatedWith(Flag.class);
@@ -154,7 +154,7 @@ public class FieldGetterMethodSelectorTest {
   public void testNotAnnotatedWithSelector() {
     assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldHits);
+        return reflect().getterOf(fieldHits);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.notAnnotatedWith(Flag.class);
@@ -165,7 +165,7 @@ public class FieldGetterMethodSelectorTest {
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.notAnnotatedWith(Flag.class);
@@ -177,7 +177,7 @@ public class FieldGetterMethodSelectorTest {
   public void testPredicateSelector() {
     assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.that(Predicates.ALWAYS_TRUE);
@@ -185,7 +185,7 @@ public class FieldGetterMethodSelectorTest {
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
       public FieldGetterMethodSelector createSelector() {
-        return reflect().getterFor(fieldCount);
+        return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
         selector.that(Predicates.ALWAYS_FALSE);

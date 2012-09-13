@@ -66,17 +66,17 @@ public class SetterMethodSelectorTest {
   public void testNoSelector() {
     assertResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(HITS);
+        return reflect().setterOf(HITS);
       }
     }, this, 2);
     assertResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(COUNT);
+        return reflect().setterOf(COUNT);
       }
     }, this, 1);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor("myField");
+        return reflect().setterOf("myField");
       }
     }, this);
   }
@@ -85,18 +85,18 @@ public class SetterMethodSelectorTest {
   public void testAnnotatedSelector() {
     assertResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(COUNT);
+        return reflect().setterOf(COUNT);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.annotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ReflectionPredicates.IS_ANNOTATED);
+        assertMatch(methods, ReflectionPredicates.ANNOTATED);
       }
     }, this, 1);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(HITS);
+        return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.annotated();
@@ -108,18 +108,18 @@ public class SetterMethodSelectorTest {
   public void testNotAnnotatedSelector() {
     assertResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(HITS);
+        return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.notAnnotated();
       }
       public void assertions(Set<Method> methods) {
-        assertMatch(methods, ReflectionPredicates.IS_NOT_ANNOTATED);
+        assertMatch(methods, ReflectionPredicates.NOT_ANNOTATED);
       }
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(COUNT);
+        return reflect().setterOf(COUNT);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.notAnnotated();
@@ -131,7 +131,7 @@ public class SetterMethodSelectorTest {
   public void testAnnotatedWithSelector() {
     assertResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(COUNT);
+        return reflect().setterOf(COUNT);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.annotatedWith(Flag.class);
@@ -142,7 +142,7 @@ public class SetterMethodSelectorTest {
     }, this, 1);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(HITS);
+        return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.annotatedWith(Flag.class);
@@ -154,7 +154,7 @@ public class SetterMethodSelectorTest {
   public void testNotAnnotatedWithSelector() {
     assertResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(HITS);
+        return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.notAnnotatedWith(Flag.class);
@@ -165,7 +165,7 @@ public class SetterMethodSelectorTest {
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(COUNT);
+        return reflect().setterOf(COUNT);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.notAnnotatedWith(Flag.class);
@@ -177,7 +177,7 @@ public class SetterMethodSelectorTest {
   public void testPredicateSelector() {
     assertResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(HITS);
+        return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.that(Predicates.ALWAYS_TRUE);
@@ -185,7 +185,7 @@ public class SetterMethodSelectorTest {
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
       public SetterMethodSelector createSelector() {
-        return reflect().setterFor(HITS);
+        return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
         selector.that(Predicates.ALWAYS_FALSE);
@@ -196,18 +196,18 @@ public class SetterMethodSelectorTest {
   @Test
   public void testRecursivelySelector() {
     SetterMethodSelectorTest object = new SetterMethodSelectorTest(){};
-    assertNoResult(reflect().setterFor("count").in(object));
-    assertResult(reflect().setterFor("count").recursively().in(object), 1);
+    assertNoResult(reflect().setterOf("count").in(object));
+    assertResult(reflect().setterOf("count").recursively().in(object), 1);
   }
 
   @Test
   public void testTypeSelector() {
-    assertNull(reflect().setterFor("hits").forType(String.class).in(this));
-    Method setter = reflect().setterFor("hits").forType(int.class).in(this);
+    assertNull(reflect().setterOf("hits").forType(String.class).in(this));
+    Method setter = reflect().setterOf("hits").forType(int.class).in(this);
     assertNotNull(setter);
     assertArrayEquals(new Class[]{int.class}, setter.getParameterTypes());
 
-    setter = reflect().setterFor("hits").forType(long.class).in(this);
+    setter = reflect().setterOf("hits").forType(long.class).in(this);
     assertNotNull(setter);
     assertArrayEquals(new Class[]{long.class}, setter.getParameterTypes());
   }

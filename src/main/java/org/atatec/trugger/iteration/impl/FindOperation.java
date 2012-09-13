@@ -14,28 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.iteration;
 
+package org.atatec.trugger.iteration.impl;
+
+import org.atatec.trugger.iteration.NonUniqueMatchException;
 import org.atatec.trugger.predicate.Predicate;
 
-/**
- * Interface that defines an iteration over a source.
- *
- * @author Marcelo Varella Barca Guimarães
- * @param <E>
- *          The element of the types in the collection.
- * @since 2.4
- */
-public interface SrcIteration<E> {
+import java.util.Collection;
 
-  /**
-   * Executes the operation for the elements in that matches with the given
-   * predicate.
-   *
-   * @param predicate
-   *          the predicate for matching
-   * @return the number of elements affected by this operation.
-   */
-  int anyThat(Predicate<? super E> predicate);
+/** @author Marcelo Varella Barca Guimarães */
+public class FindOperation implements FindResult {
+
+  private final Predicate predicate;
+
+  public FindOperation(Predicate predicate) {
+    this.predicate = predicate;
+  }
+
+  @Override
+  public <E> E in(Collection<? extends E> collection) {
+    E found = null;
+    for (E e : collection) {
+      if(predicate.evaluate(e)) {
+        if(found != null) {
+          throw new NonUniqueMatchException();
+        }
+        found = e;
+      }
+    }
+    return found;
+  }
 
 }

@@ -14,34 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.iteration.impl;
 
-import java.util.Iterator;
+import java.util.Collection;
 
-import org.atatec.trugger.iteration.SrcIteration;
-import org.atatec.trugger.predicate.Predicate;
+/** @author Marcelo Varella Barca Guimarães */
+public interface FindResult {
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
-public final class TruggerRetainIteration<E> implements SrcIteration<E> {
-
-  private final Iterator<? extends E> iterator;
-
-  public TruggerRetainIteration(Iterator<? extends E> iterator) {
-    this.iterator = iterator;
-  }
-
-  public int anyThat(Predicate<? super E> predicate) {
-    int result = 0;
-    while (iterator.hasNext()) {
-      E e = iterator.next();
-      if (!predicate.evaluate(e)) {
-        iterator.remove();
-        result++;
-      }
-    }
-    return result;
-  }
+  <E> E in(Collection<? extends E> collection);
 
 }
