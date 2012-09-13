@@ -83,7 +83,7 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
 
   public CompositePredicate<T> toPredicate() {
     CompositePredicate<T> predicate = builder.predicate();
-    return predicate == null ? Predicates.<T>alwaysTrue() : predicate;
+    return predicate == null ? Predicates.ALWAYS_TRUE : predicate;
   }
 
 }

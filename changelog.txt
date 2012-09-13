@@ -10,6 +10,7 @@ Version 4.1
   - Interceptor class simplified
   - No more EasyMock dependency for mock an Annotation
   - Reflection DSL improved
+  - Predicates improved
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.

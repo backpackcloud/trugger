@@ -16,11 +16,10 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.reflection.ClassPredicates;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
-import org.atatec.trugger.predicate.Predicates;
+import org.atatec.trugger.reflection.ClassPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.selector.ClassSpecifier;
@@ -82,8 +81,7 @@ public class BaseClassSelector implements ClassSpecifier {
   }
 
   public CompositePredicate<Class> toPredicate() {
-    CompositePredicate<Class> predicate = builder.predicate();
-    return predicate == null ? Predicates.ALWAYS_TRUE : predicate;
+    return builder.predicate();
   }
 
 }

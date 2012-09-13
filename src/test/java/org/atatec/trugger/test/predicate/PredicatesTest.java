@@ -16,17 +16,15 @@
  */
 package org.atatec.trugger.test.predicate;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static org.atatec.trugger.predicate.Predicates.is;
-import static org.atatec.trugger.predicate.Predicates.not;
-import static org.atatec.trugger.predicate.Predicates.valueOf;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.Predicates;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+import static org.atatec.trugger.predicate.Predicates.not;
 
 /**
  * A class for testing the {@link Predicates} class.
@@ -44,8 +42,8 @@ public class PredicatesTest {
 
   @Before
   public void initialize() {
-    T = Predicates.alwaysTrue();
-    F = Predicates.alwaysFalse();
+    T = Predicates.ALWAYS_TRUE;
+    F = Predicates.ALWAYS_FALSE;
   }
 
   @Test
@@ -71,15 +69,12 @@ public class PredicatesTest {
     assertFalse(eval(T.xand(F)));
     assertTrue(eval(F.xand(F)));
 
-    assertTrue(eval(valueOf(true)));
-    assertFalse(eval(valueOf(false)));
-
-    assertFalse(eval(not(is(new Predicate() {
+    assertFalse(eval(not(new Predicate() {
 
       public boolean evaluate(Object element) {
         return true;
       }
-    }))));
+    })));
   }
 
   @Test

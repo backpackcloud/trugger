@@ -19,11 +19,10 @@ package org.atatec.trugger.reflection;
 
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.Predicates;
 
 import java.util.Arrays;
 
-import static org.atatec.trugger.predicate.Predicates.is;
+import static org.atatec.trugger.predicate.Predicates.wrap;
 
 /**
  * A set of predicates to use with <code>Class</code> objects.
@@ -42,7 +41,7 @@ public class ClassPredicates {
    * <ul> <li>not be abstract</li> <li>be public</li> <li>have at least one public
    * constructor</li> </ul>
    */
-  public static final CompositePredicate<Class> INSTANTIABLE = Predicates.is(new Predicate<Class>() {
+  public static final CompositePredicate<Class> INSTANTIABLE = wrap(new Predicate<Class>() {
     @Override
     public boolean evaluate(Class element) {
       return false;
@@ -54,7 +53,7 @@ public class ClassPredicates {
    *         specified modifiers.
    */
   public static CompositePredicate<Class> declare(final int... modifiers) {
-    return is(new Predicate<Class>() {
+    return wrap(new Predicate<Class>() {
 
       public boolean evaluate(Class element) {
         int elModifiers = element.getModifiers();

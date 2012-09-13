@@ -17,13 +17,11 @@
 
 package org.atatec.trugger.reflection;
 
+import org.atatec.trugger.predicate.BasePredicate;
 import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-
-import static org.atatec.trugger.predicate.Predicates.is;
 
 /**
  * A set of predicates to use with <code>Method</code> objects.
@@ -41,7 +39,7 @@ public class MethodPredicates {
    *         specified type as the return type.
    */
   public static CompositePredicate<Method> returns(final Class returnType) {
-    return is(new Predicate<Method>() {
+    return new BasePredicate<Method>() {
 
       public boolean evaluate(Method element) {
         return element.getReturnType().equals(returnType);
@@ -51,7 +49,7 @@ public class MethodPredicates {
       public String toString() {
         return "Method returning " + returnType.getName();
       }
-    });
+    };
   }
 
   /**
@@ -59,7 +57,7 @@ public class MethodPredicates {
    *         return type assignable to the specified type.
    */
   public static CompositePredicate<Method> returnsAssignableTo(final Class returnType) {
-    return is(new Predicate<Method>() {
+    return new BasePredicate<Method>() {
 
       public boolean evaluate(Method element) {
         return returnType.isAssignableFrom(element.getReturnType());
@@ -69,7 +67,7 @@ public class MethodPredicates {
       public String toString() {
         return "Method returning assignable to " + returnType.getName();
       }
-    });
+    };
   }
 
   /**
@@ -77,7 +75,7 @@ public class MethodPredicates {
    *         specified parameters.
    */
   public static CompositePredicate<Method> takes(final Class... parameterTypes) {
-    return is(new Predicate<Method>() {
+    return new BasePredicate<Method>() {
 
       public boolean evaluate(Method element) {
         return Arrays.equals(element.getParameterTypes(), parameterTypes);
@@ -87,19 +85,7 @@ public class MethodPredicates {
       public String toString() {
         return "With parameters " + Arrays.toString(parameterTypes);
       }
-    });
+    };
   }
-
-  public static CompositePredicate<Method> HAS_DEFAULT_VALUE = is(new Predicate<Method>() {
-
-    public boolean evaluate(Method element) {
-      return element.getDefaultValue() != null;
-    }
-
-    @Override
-    public String toString() {
-      return "With default value";
-    }
-  });
 
 }

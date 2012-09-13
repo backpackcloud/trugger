@@ -23,7 +23,7 @@ import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Field;
 
-import static org.atatec.trugger.predicate.Predicates.is;
+import static org.atatec.trugger.predicate.Predicates.wrap;
 
 /**
  * A set of predicates to use with <code>Field</code> objects.
@@ -41,7 +41,7 @@ public class FieldPredicates {
    *         given type.
    */
   public static CompositePredicate<Field> ofType(final Class type) {
-    return is(new Predicate<Field>() {
+    return wrap(new Predicate<Field>() {
 
       public boolean evaluate(Field element) {
         return type.equals(element.getType());
@@ -59,7 +59,7 @@ public class FieldPredicates {
    *         assignable to the given type.
    */
   public static CompositePredicate<Field> assignableTo(final Class type) {
-    return is(new Predicate<Field>() {
+    return wrap(new Predicate<Field>() {
 
       public boolean evaluate(Field element) {
         return Utils.areAssignable(type, element.getType());

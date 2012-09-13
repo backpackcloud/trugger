@@ -40,7 +40,7 @@ public final class ElementPredicates {
    * @since 2.0
    */
   public static CompositePredicate<Element> ofType(final Class<?> type) {
-    return Predicates.is(new Predicate<Element>() {
+    return Predicates.wrap(new Predicate<Element>() {
 
       public boolean evaluate(Element element) {
         return type.equals(element.type());
@@ -59,7 +59,7 @@ public final class ElementPredicates {
    */
   public static CompositePredicate<Element> named(final String... elementNames) {
     Arrays.sort(elementNames);
-    return Predicates.is(new Predicate<Element>() {
+    return Predicates.wrap(new Predicate<Element>() {
 
       public boolean evaluate(Element element) {
         return Arrays.binarySearch(elementNames, element.name()) >= 0;
@@ -75,7 +75,7 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element is writable.
    */
-  public static final CompositePredicate<Element> WRITABLE = Predicates.is(new Predicate<Element>() {
+  public static final CompositePredicate<Element> WRITABLE = Predicates.wrap(new Predicate<Element>() {
 
     public boolean evaluate(Element element) {
       return element.isWritable();
@@ -95,7 +95,7 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
-  public static final CompositePredicate<Element> READABLE = Predicates.is(new Predicate<Element>() {
+  public static final CompositePredicate<Element> READABLE = Predicates.wrap(new Predicate<Element>() {
 
     public boolean evaluate(Element element) {
       return element.isReadable();
@@ -117,7 +117,7 @@ public final class ElementPredicates {
    *         assignable to the given type.
    */
   public static CompositePredicate<Element> assignableTo(final Class<?> type) {
-    return Predicates.is(new Predicate<Element>() {
+    return Predicates.wrap(new Predicate<Element>() {
 
       public boolean evaluate(Element element) {
         return Utils.areAssignable(type, element.type());
@@ -134,7 +134,7 @@ public final class ElementPredicates {
    * A predicate that returns <code>true</code> if the element is
    * {@link Element#isSpecific() specific}.
    */
-  public static final CompositePredicate<Element> SPECIFIC = Predicates.is(new Predicate<Element>() {
+  public static final CompositePredicate<Element> SPECIFIC = Predicates.wrap(new Predicate<Element>() {
 
     public boolean evaluate(Element element) {
       return element.isSpecific();

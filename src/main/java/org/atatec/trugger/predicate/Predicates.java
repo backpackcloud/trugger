@@ -17,7 +17,6 @@
 package org.atatec.trugger.predicate;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.loader.ImplementationLoader;
 import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationResult;
 
@@ -28,120 +27,84 @@ import org.atatec.trugger.validation.ValidationResult;
  */
 public final class Predicates {
 
-  private static PredicateFactory factory;
-
-  private Predicates() {}
-
-  static {
-    factory = ImplementationLoader.instance().get(PredicateFactory.class);
+  private Predicates() {
   }
 
-  /**
-   * A predicate that always returns <code>true</code>.
-   */
-  public static final CompositePredicate ALWAYS_TRUE = is(new ConstantPredicate(true));
-  /**
-   * A predicate that always returns <code>false</code>.
-   */
-  public static final CompositePredicate ALWAYS_FALSE = is(new ConstantPredicate(false));
+  /** A predicate that always returns <code>true</code>. */
+  public static final CompositePredicate ALWAYS_TRUE = wrap(new ConstantPredicate(true));
+  /** A predicate that always returns <code>false</code>. */
+  public static final CompositePredicate ALWAYS_FALSE = wrap(new ConstantPredicate(false));
 
   /**
-   * Note: This method returns the {@link #ALWAYS_TRUE} field, but with type
-   * safety.
+   * Wraps the given predicate into a CompositePredicate
    *
-   * @return A predicate that always returns <code>true</code>.
-   */
-  public static <T> CompositePredicate<T> alwaysTrue() {
-    return ALWAYS_TRUE;
-  }
-
-  /**
-   * Note: This method returns the {@link #ALWAYS_FALSE} field, but with type
-   * safety.
+   * @return a composite predicate that uses the given one to evaluate
    *
-   * @return A predicate that always returns <code>false</code>.
+   * @since 4.1
    */
-  public static <T> CompositePredicate<T> alwaysFalse() {
-    return ALWAYS_FALSE;
+  public static <T> CompositePredicate<T> wrap(final Predicate<? super T> predicate) {
+    return new BasePredicate<T>() {
+      @Override
+      public boolean evaluate(T element) {
+        return predicate.evaluate(element);
+      }
+
+      public String toString() {
+        return predicate.toString();
+      }
+
+    };
+  }
+
+  /** @return a predicate that returns the negation of the given one. */
+  public static <T> CompositePredicate<T> not(final Predicate<? super T> predicate) {
+    return wrap(predicate).negate();
   }
 
   /**
-   * @param value
-   *          the value that must be returned by the predicate.
-   * @return a predicate that always return the given value.
-   */
-  public static <T> CompositePredicate<T> valueOf(boolean value) {
-    return value ? ALWAYS_TRUE : ALWAYS_FALSE;
-  }
-
-  /**
-   * @return a predicate that returns the negation of the given one.
-   */
-  public static <T> CompositePredicate<T> not(Predicate<? super T> predicate) {
-    return Predicates.<T>is(predicate).negate();
-  }
-
-  /**
-   * @return a predicate that returns the negation of the given one.
-   */
-  public static <T> CompositePredicate<T> not(CompositePredicate<T> predicate) {
-    return predicate.negate();
-  }
-
-  /**
-   * Creates a new {@link CompositePredicate} using a {@link PredicateFactory}
-   * to create the instance.
-   *
-   * @param predicate
-   *          the initial predicate of the composition.
-   * @return the created predicate.
-   */
-  public static <T> CompositePredicate<T> is(Predicate<? super T> predicate) {
-    return factory.createCompositePredicate(predicate);
-  }
-
-  /**
-   * A predicate that returns <code>true</code> if an object is valid based on
-   * all of its elements.
+   * A predicate that returns <code>true</code> if an object is valid based on all of its
+   * elements.
    *
    * @since 2.5
    */
   public static CompositePredicate<Object> VALID = validUsing(new Validation().validate().allElements());
 
   /**
-   * A predicate that returns <code>true</code> if an object is invalid based on
-   * all of its elements.
+   * A predicate that returns <code>true</code> if an object is invalid based on all of
+   * its elements.
    *
    * @since 2.5
    */
   public static CompositePredicate<Object> INVALID = invalidUsing(new Validation().validate().allElements());
 
   /**
-   * @return a predicate that returns <code>true</code> if an object is valid
-   *         based on the given validation result.
+   * @return a predicate that returns <code>true</code> if an object is valid based on the
+   *         given validation result.
+   *
    * @since 2.5
    */
   public static CompositePredicate<Object> validUsing(final Result<ValidationResult, Object> result) {
-    return is(new Predicate<Object>() {
+    return new BasePredicate<Object>() {
 
       public boolean evaluate(Object element) {
         return result.in(element).isValid();
       }
-    });
+    };
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if an object is invalid
-   *         based on the given validation result.
+   * @return a predicate that returns <code>true</code> if an object is invalid based on
+   *         the given validation result.
+   *
    * @since 2.5
    */
   public static CompositePredicate<Object> invalidUsing(final Result<ValidationResult, Object> result) {
-    return is(new Predicate<Object>() {
+    return new BasePredicate<Object>() {
 
       public boolean evaluate(Object element) {
         return result.in(element).isInvalid();
       }
-    });
+    };
   }
 
   private static class ConstantPredicate implements Predicate<Object> {

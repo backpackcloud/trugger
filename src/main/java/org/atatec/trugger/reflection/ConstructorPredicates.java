@@ -23,7 +23,7 @@ import org.atatec.trugger.predicate.Predicate;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 
-import static org.atatec.trugger.predicate.Predicates.is;
+import static org.atatec.trugger.predicate.Predicates.wrap;
 
 /**
  * A set of predicates to use with <code>Constructor</code> objects.
@@ -41,7 +41,7 @@ public class ConstructorPredicates {
    *         the specified parameters.
    */
   public static CompositePredicate<Constructor> takes(final Class... parameterTypes) {
-    return is(new Predicate<Constructor>() {
+    return wrap(new Predicate<Constructor>() {
 
       public boolean evaluate(Constructor element) {
         return Arrays.equals(element.getParameterTypes(), parameterTypes);

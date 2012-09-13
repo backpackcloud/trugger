@@ -16,14 +16,14 @@
  */
 package org.atatec.trugger.iteration.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.atatec.trugger.iteration.IterationSourceSelector;
 import org.atatec.trugger.iteration.SrcToDestIteration;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.transformer.Transformer;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -61,7 +61,7 @@ public abstract class TruggerSrcToDestIteration<To, From> implements SrcToDestIt
   }
 
   public IterationSourceSelector<From> all() {
-    return new Selector(Predicates.alwaysTrue());
+    return new Selector(Predicates.ALWAYS_TRUE);
   }
 
   /**

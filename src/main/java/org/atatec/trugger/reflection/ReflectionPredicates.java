@@ -28,7 +28,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import static org.atatec.trugger.predicate.Predicates.is;
+import static org.atatec.trugger.predicate.Predicates.wrap;
 
 /**
  * An utilitity class for helping the use of {@link Predicate} object that involves
@@ -52,7 +52,7 @@ public class ReflectionPredicates {
    * return an object. If the method has the prefix "is", then it must return a boolean
    * value.
    */
-  public static final CompositePredicate<Method> IS_GETTER = is(new Predicate<Method>() {
+  public static final CompositePredicate<Method> IS_GETTER = wrap(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
       if (!Modifier.isPublic(method.getModifiers())) {
@@ -89,7 +89,7 @@ public class ReflectionPredicates {
    * The method must have the "set" prefix, take one parameter and return no value (a void
    * method).
    */
-  public static final CompositePredicate<Method> IS_SETTER = is(new Predicate<Method>() {
+  public static final CompositePredicate<Method> IS_SETTER = wrap(new Predicate<Method>() {
 
     public boolean evaluate(Method method) {
       if (!Modifier.isPublic(method.getModifiers())) {
@@ -154,7 +154,7 @@ public class ReflectionPredicates {
   /** The negation of the {@link #IS_INTERFACE} predicate. */
   public static final CompositePredicate<Class> IS_NOT_INTERFACE = IS_INTERFACE.negate();
   /** Predicate that returns <code>true</code> if a class is an <i>enum</i>. */
-  public static final CompositePredicate<Class> IS_ENUM = is(new Predicate<Class>() {
+  public static final CompositePredicate<Class> IS_ENUM = wrap(new Predicate<Class>() {
 
     public boolean evaluate(Class element) {
       return element.isEnum();
@@ -184,7 +184,7 @@ public class ReflectionPredicates {
    */
   public static <T extends AnnotatedElement> CompositePredicate<T> isAnnotatedWith(
     final Class<? extends Annotation> annotationType) {
-    return is(new Predicate<AnnotatedElement>() {
+    return wrap(new Predicate<AnnotatedElement>() {
 
       public boolean evaluate(AnnotatedElement element) {
         return element.isAnnotationPresent(annotationType);
@@ -208,7 +208,7 @@ public class ReflectionPredicates {
 
   /** A predicate that returns <code>true</code> if the element has that annotations. */
   public static final CompositePredicate<AnnotatedElement> IS_ANNOTATED =
-    is(new Predicate<AnnotatedElement>() {
+    wrap(new Predicate<AnnotatedElement>() {
 
       public boolean evaluate(AnnotatedElement element) {
         return element.getDeclaredAnnotations().length > 0;
@@ -228,7 +228,7 @@ public class ReflectionPredicates {
    *         assignable from the evaluated element.
    */
   public static CompositePredicate<Class> assignableTo(final Class clazz) {
-    return is(new Predicate<Class>() {
+    return wrap(new Predicate<Class>() {
 
       public boolean evaluate(Class element) {
         return clazz.isAssignableFrom(element);
@@ -254,7 +254,7 @@ public class ReflectionPredicates {
    *         name that with the given one.
    */
   public static <T extends Member> CompositePredicate<T> named(final String name) {
-    return is(new Predicate<Member>() {
+    return wrap(new Predicate<Member>() {
 
       public boolean evaluate(Member element) {
         return element.getName().equals(name);
@@ -272,7 +272,7 @@ public class ReflectionPredicates {
    *         specified modifiers.
    */
   public static <T extends Member> CompositePredicate<T> declare(final int... modifiers) {
-    return is(new Predicate<Member>() {
+    return wrap(new Predicate<Member>() {
 
       public boolean evaluate(Member element) {
         int elModifiers = element.getModifiers();
@@ -296,7 +296,7 @@ public class ReflectionPredicates {
    *         have the specified modifiers.
    */
   public static <T extends Member> CompositePredicate<T> dontDeclare(final int... modifiers) {
-    return is(new Predicate<Member>() {
+    return wrap(new Predicate<Member>() {
 
       public boolean evaluate(Member element) {
         int elModifiers = element.getModifiers();

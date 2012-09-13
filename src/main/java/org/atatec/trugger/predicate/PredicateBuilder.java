@@ -34,7 +34,7 @@ public class PredicateBuilder<T> {
    * predicate.
    */
   public PredicateBuilder() {
-    this(Predicates.<T> alwaysTrue());
+    this(Predicates.ALWAYS_TRUE);
   }
 
   /**
@@ -55,7 +55,7 @@ public class PredicateBuilder<T> {
    */
   public PredicateBuilder<T> add(Predicate<? super T> predicate) {
     if(this.predicate == null) {
-      this.predicate = Predicates.is(predicate);
+      this.predicate = Predicates.wrap(predicate);
     } else {
       this.predicate = this.predicate.and(predicate);
     }
