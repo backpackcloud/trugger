@@ -70,8 +70,7 @@ public class InterceptionContext {
    * @param proxy  the proxy instance that the method was invoked on
    * @param method the <code>Method</code> instance corresponding to the method invoked on
    *               the proxy instance
-   * @param args   an array of objects containing the values of the arguments passed in
-   *               the method invocation on the proxy instance, or
+   * @param args   the arguments passed in the method invocation on the proxy instance
    */
   public InterceptionContext(Object proxy, Method method, Object[] args) {
     this.proxy = proxy;
@@ -113,14 +112,20 @@ public class InterceptionContext {
     return targetMethod;
   }
 
+  /** @return the arguments passed in the method invocation on the proxy instance */
   public Object[] args() {
     return args;
   }
 
+  /** @return the proxy instance that the method was invoked on */
   public Object proxy() {
     return proxy;
   }
 
+  /**
+   * @return the <code>Method</code> instance corresponding to the method invoked on the
+   *         proxy instance
+   */
   public Method method() {
     return method;
   }
