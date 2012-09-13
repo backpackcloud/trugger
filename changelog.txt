@@ -11,6 +11,7 @@ Version 4.1
   - No more EasyMock dependency for mock an Annotation
   - Reflection DSL improved
   - Predicates improved
+  - Predicable interface removed
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.
