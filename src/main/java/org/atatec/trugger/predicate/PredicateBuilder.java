@@ -52,8 +52,17 @@ public class PredicateBuilder<T> {
     return predicate;
   }
 
+  /**
+   * Tries to find an element matching the build predicate
+   *
+   * @param collection the collection to search
+   *
+   * @return the found element or <code>null</code> if no one matches.
+   *
+   * @throws NonUniqueMatchException if the predicate matches to more than one element
+   */
   public T findIn(Collection<T> collection) {
-    if(collection.isEmpty()) {
+    if (collection.isEmpty()) {
       return null;
     }
     CompositePredicate<T> selectedElement = predicate();
@@ -65,4 +74,5 @@ public class PredicateBuilder<T> {
     }
     throw new NonUniqueMatchException();
   }
+
 }
