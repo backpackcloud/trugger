@@ -20,34 +20,44 @@ package org.atatec.trugger.iteration;
 import org.atatec.trugger.iteration.impl.FindResult;
 import org.atatec.trugger.predicate.Predicate;
 
-/** @author Marcelo Varella Barca Guimarães */
+/**
+ * A class to help searching for elements in a collection.
+ *
+ * @author Marcelo Varella Barca Guimarães
+ * @since 4.1
+ */
 public class Find {
 
   /**
-   * Search for a specific elements using the given predicate. An {@link
-   * IterationFactory} is used to create the component.
+   * Finds the only element that matches to the given predicate.
    *
-   * @return the component for using.
+   * @param predicate the predicate to use
+   *
+   * @return a component for defining the remaining parameters.
+   *
+   * @throws NonUniqueMatchException if the predicate matches to more than one element.
    */
   public static FindResult the(Predicate predicate) {
     return Iteration.factory.createFindOperation(predicate);
   }
 
   /**
-   * Search for the first specific element using the given predicate. An {@link
-   * IterationFactory} is used to create the component.
+   * Finds the first element that matches to the given predicate.
    *
-   * @return the component for using.
+   * @param predicate the predicate to use
+   *
+   * @return a component for defining the remaining parameters.
    */
   public static <E> FindResult first(Predicate<? super E> predicate) {
     return Iteration.factory.createFindFirstOperation(predicate);
   }
 
   /**
-   * Search for all specific elements using the given predicate. An {@link
-   * IterationFactory} is used to create the component.
+   * Finds all elements that matches to the given predicate.
    *
-   * @return the component for using.
+   * @param predicate the predicate to use
+   *
+   * @return a component for defining the remaining parameters.
    */
   public static <E> FindAllResult all(Predicate<? super E> predicate) {
     return Iteration.factory.createFindAllOperation(predicate);
