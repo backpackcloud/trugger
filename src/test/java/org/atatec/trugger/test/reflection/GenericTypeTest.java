@@ -74,6 +74,6 @@ public class GenericTypeTest {
   @Test
   public void interfaceReflectionTest() {
     Set<Class<?>> interfaces = reflect().interfaces().in(MethodsSelector.class);
-    assertEquals(7, interfaces.size());
+    assertEquals(6, interfaces.size());
   }
 }

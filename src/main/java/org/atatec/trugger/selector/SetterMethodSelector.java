@@ -16,13 +16,12 @@
  */
 package org.atatec.trugger.selector;
 
+import org.atatec.trugger.Result;
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
-
-import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicable;
-import org.atatec.trugger.predicate.Predicate;
 
 /**
  * Interface that defines a selector for setter methods.
@@ -31,7 +30,7 @@ import org.atatec.trugger.predicate.Predicate;
  * @since 1.1
  */
 public interface SetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
-  Result<Set<Method>, Object>, RecursionSelector, Predicable<Method> {
+  Result<Set<Method>, Object>, RecursionSelector {
 
   SetterMethodSelector that(Predicate<? super Method> predicate);
 
@@ -43,10 +42,6 @@ public interface SetterMethodSelector extends AnnotatedElementSelector, Predicat
 
   SetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type);
   
-  /**
-   * Note: this selection does not affect the predicate returned by
-   * {@link #toPredicate()}.
-   */
   SetterMethodSelector recursively();
 
   /**

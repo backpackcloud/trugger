@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldSetterMethodSelector;
@@ -67,10 +66,6 @@ public class TruggerFieldSetterMethodSelector implements FieldSetterMethodSelect
 
   public Method in(Object target) {
     return new SetterResult(selector, field.getType()).in(target);
-  }
-
-  public CompositePredicate<Method> toPredicate() {
-    return selector.toPredicate();
   }
 
 }

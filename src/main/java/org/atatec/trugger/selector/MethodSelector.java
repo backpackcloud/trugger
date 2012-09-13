@@ -17,7 +17,6 @@
 package org.atatec.trugger.selector;
 
 import org.atatec.trugger.PredicableResult;
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionException;
 
@@ -65,12 +64,5 @@ public interface MethodSelector extends MethodSpecifier, PredicableResult<Method
    * @since 2.1
    */
   Method in(Object target) throws ReflectionException;
-
-  /**
-   * Returns a predicate that matches with the specified selections.
-   *
-   * @since 2.1
-   */
-  CompositePredicate<Method> toPredicate();
 
 }

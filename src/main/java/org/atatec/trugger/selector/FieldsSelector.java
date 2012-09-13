@@ -42,10 +42,6 @@ public interface FieldsSelector extends Result<Set<Field>, Object>, FieldSpecifi
 
   FieldsSelector nonStatic();
 
-  /**
-   * Note: this selection does not affect the predicate returned by {@link
-   * #toPredicate()}.
-   */
   FieldsSelector recursively();
 
   FieldsSelector ofType(Class<?> type);

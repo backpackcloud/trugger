@@ -17,7 +17,6 @@
 package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionException;
 
@@ -30,7 +29,7 @@ import java.lang.reflect.Constructor;
  * @author Marcelo Varella Barca Guimarães
  */
 public interface ConstructorSelector extends AnnotatedElementSelector, PredicateSelector<Constructor<?>>,
-  Predicable<Constructor<?>>, Result<Constructor<?>, Object> {
+  Result<Constructor<?>, Object> {
 
   ConstructorSelector annotated();
 

@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorsSelector;
@@ -65,10 +64,6 @@ public class TruggerConstructorsSelector implements ConstructorsSelector {
 
   public Set<Constructor<?>> in(Object target) {
     return selector.in(target);
-  }
-
-  public CompositePredicate<Constructor<?>> toPredicate() {
-    return selector.toPredicate();
   }
 
 }

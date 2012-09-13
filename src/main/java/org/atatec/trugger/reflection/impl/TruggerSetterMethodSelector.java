@@ -17,7 +17,6 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.SetterMethodSelector;
@@ -75,10 +74,6 @@ public class TruggerSetterMethodSelector implements SetterMethodSelector {
 
   public Result<Method, Object> forType(final Class<?> type) {
     return new SetterResult(selector, type);
-  }
-
-  public CompositePredicate<Method> toPredicate() {
-    return selector.toPredicate();
   }
 
 }

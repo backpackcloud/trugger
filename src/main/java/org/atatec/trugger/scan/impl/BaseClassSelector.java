@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ClassPredicates;
@@ -78,10 +77,6 @@ public class BaseClassSelector implements ClassSpecifier {
   public ClassSpecifier notAnnotated() {
     this.builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
-  }
-
-  public CompositePredicate<Class> toPredicate() {
-    return builder.predicate();
   }
 
 }

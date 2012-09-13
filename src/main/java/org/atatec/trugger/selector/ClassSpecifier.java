@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.scan.ScanLevel;
 
 /**
@@ -26,7 +25,7 @@ import org.atatec.trugger.scan.ScanLevel;
  * @since 2.5
  */
 public interface ClassSpecifier extends PredicateSelector<Class>, AnnotatedElementSelector,
-  RecursionSelector, Predicable<Class> {
+  RecursionSelector {
 
   /**
    * Selects only instantiable classes. Classes that applies must:

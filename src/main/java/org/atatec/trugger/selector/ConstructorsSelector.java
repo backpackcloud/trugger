@@ -17,7 +17,6 @@
 package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
 
 import java.lang.annotation.Annotation;
@@ -30,7 +29,7 @@ import java.util.Set;
  * @author Marcelo Varella Barca Guimarães
  */
 public interface ConstructorsSelector extends AnnotatedElementSelector, PredicateSelector<Constructor<?>>,
-  Result<Set<Constructor<?>>, Object>, Predicable<Constructor<?>> {
+  Result<Set<Constructor<?>>, Object> {
 
   ConstructorsSelector that(Predicate<? super Constructor<?>> predicate);
 

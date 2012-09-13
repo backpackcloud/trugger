@@ -22,10 +22,8 @@ import org.atatec.trugger.bind.BindableElement;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.transformer.Transformer;
@@ -119,11 +117,6 @@ public final class TruggerElementsSelector implements ElementsSelector {
   public ElementsSelector writable() {
     builder.add(ElementPredicates.WRITABLE);
     return this;
-  }
-  
-  public CompositePredicate<Element> toPredicate() {
-    CompositePredicate<Element> predicate = builder.predicate();
-    return predicate != null ? predicate : Predicates.ALWAYS_TRUE;
   }
   
   public Set<Element> in(Object target) {

@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.FieldPredicates;
@@ -100,10 +99,6 @@ public class TruggerFieldSelector implements FieldSelector {
   public FieldSelector recursively() {
     recursively = true;
     return this;
-  }
-
-  public CompositePredicate<Field> toPredicate() {
-    return builder.predicate();
   }
 
   /** @return the predicate builder used by this object. */

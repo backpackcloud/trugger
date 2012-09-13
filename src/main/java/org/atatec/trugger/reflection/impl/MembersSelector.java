@@ -18,11 +18,8 @@ package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.Result;
 import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Member;
@@ -38,7 +35,7 @@ import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
  *
  * @author Marcelo Varella Barca Guimarães
  */
-public class MembersSelector<T extends Member> implements Result<Set<T>, Object>, Predicable<T> {
+public class MembersSelector<T extends Member> implements Result<Set<T>, Object> {
 
   private final PredicateBuilder<T> builder = new PredicateBuilder<T>(null);
 
@@ -79,11 +76,6 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
   /** @return the object for holding the predicates for filtering the result */
   public final PredicateBuilder<T> builder() {
     return builder;
-  }
-
-  public CompositePredicate<T> toPredicate() {
-    CompositePredicate<T> predicate = builder.predicate();
-    return predicate == null ? Predicates.ALWAYS_TRUE : predicate;
   }
 
 }

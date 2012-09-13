@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
@@ -74,10 +73,6 @@ public class TruggerGetterMethodSelector implements GetterMethodSelector {
   public GetterMethodSelector recursively() {
     recursively = true;
     return this;
-  }
-  
-  public CompositePredicate<Method> toPredicate() {
-    return builder.predicate();
   }
   
 }

@@ -79,9 +79,4 @@ public class MemberSelector<T extends Member> implements PredicableResult<T, Obj
     return findMember(type);
   }
 
-  @Override
-  public CompositePredicate<T> toPredicate() {
-    return predicate;
-  }
-
 }

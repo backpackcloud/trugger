@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
 
 import java.lang.annotation.Annotation;
@@ -28,8 +27,7 @@ import java.lang.reflect.Field;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.0
  */
-public interface FieldSpecifier extends MemberSelector<Field>, TypedElementSelector,
-  Predicable<Field> {
+public interface FieldSpecifier extends MemberSelector<Field>, TypedElementSelector {
 
   FieldSpecifier annotated();
 

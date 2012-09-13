@@ -182,10 +182,10 @@ public class PropertyTest {
     ElementsSelector selector = Properties.properties().readable().nonWritable();
     props = selector.in(TestObject.class);
     assertElements(props, "name", "price", "readable", "otherFieldProp", "class", "hashCode");
-    assertNotNull(Properties.property("name").that(selector.toPredicate()).nonWritable().in(TestObject.class));
-    assertNotNull(Properties.property("name").that(selector.toPredicate()).annotatedWith(Flag.class).in(
+    assertNotNull(Properties.property("name").readable().nonWritable().in(TestObject.class));
+    assertNotNull(Properties.property("name").readable().nonWritable().annotatedWith(Flag.class).in(
         TestObject.class));
-    assertNull(Properties.property("name").that(selector.toPredicate()).notAnnotatedWith(Flag.class).in(
+    assertNull(Properties.property("name").readable().nonWritable().notAnnotatedWith(Flag.class).in(
         TestObject.class));
 
     props = Properties.properties().writable().in(TestObject.class);

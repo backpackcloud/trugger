@@ -44,10 +44,6 @@ public interface FieldSelector extends Result<Field, Object>, FieldSpecifier {
   
   FieldSelector that(Predicate<? super Field> predicate);
   
-  /**
-   * Note: this selection does not affect the predicate returned by
-   * {@link #toPredicate()}.
-   */
   FieldSelector recursively();
   
   FieldSelector ofType(Class<?> type);

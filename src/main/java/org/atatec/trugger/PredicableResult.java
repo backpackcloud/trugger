@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger;
 
-import org.atatec.trugger.predicate.Predicable;
-
 /**
  * A result that can be converted into a predicate that evaluates as
  * <code>true</code> all results returned by
@@ -30,6 +28,6 @@ import org.atatec.trugger.predicate.Predicable;
  *          the target type
  * @since 1.2
  */
-public interface PredicableResult<Value, Target> extends Predicable<Value>, Result<Value, Target> {
+public interface PredicableResult<Value, Target> extends Result<Value, Target> {
 
 }

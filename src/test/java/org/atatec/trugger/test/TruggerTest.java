@@ -19,9 +19,7 @@ package org.atatec.trugger.test;
 import junit.framework.AssertionFailedError;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.selector.PredicateSelector;
 import org.atatec.trugger.test.bind.BinderTestSuite;
 import org.atatec.trugger.test.date.DateTestSuite;
 import org.atatec.trugger.test.element.ElementTestSuite;
@@ -187,20 +185,11 @@ public class TruggerTest {
     T result = test.createSelector();
     test.makeSelections(result);
     Object obj = result.in(target);
-    Predicate<E> predicate = ((Predicable) result).toPredicate();
     if (obj instanceof Collection) {
       assertFalse(((Collection) obj).isEmpty());
-      assertMatch((Collection<E>) obj, predicate);
     } else {
       assertNotNull(obj);
-      assertMatch((E) obj, predicate);
     }
-    result = test.createSelector();
-    ((PredicateSelector) result).that(predicate);
-    Object obj2 = result.in(target);
-    assertEquals(obj, obj2);
-    test.assertions((E) obj);
-    test.assertions((E) obj2);
   }
 
   public static <T extends Result, E extends Collection> void assertResult(final SelectionTest<T, E> test, Object target, final int size) {
@@ -223,16 +212,11 @@ public class TruggerTest {
     T result = test.createSelector();
     test.makeSelections(result);
     Object obj = result.in(target);
-    Predicate<E> predicate = ((Predicable) result).toPredicate();
     if (obj instanceof Collection) {
       assertTrue(((Collection) obj).isEmpty());
-      assertNotMatch((Collection<E>) obj, predicate);
     } else {
       assertNull(obj);
     }
-    result = test.createSelector();
-    ((PredicateSelector) result).that(predicate);
-    assertEquals(obj, result.in(target));
   }
 
 }

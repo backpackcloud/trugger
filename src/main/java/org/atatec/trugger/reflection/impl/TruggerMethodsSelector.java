@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
@@ -106,10 +105,6 @@ public class TruggerMethodsSelector implements MethodsSelector {
   public MethodsSelector recursively() {
     selector.useHierarchy();
     return this;
-  }
-  
-  public CompositePredicate<Method> toPredicate() {
-    return selector.toPredicate();
   }
   
 }

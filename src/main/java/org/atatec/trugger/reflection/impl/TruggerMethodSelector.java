@@ -132,14 +132,6 @@ public class TruggerMethodSelector implements MethodSelector {
     return withParameters();
   }
 
-  public CompositePredicate<Method> toPredicate() {
-    CompositePredicate<Method> predicate = builder.predicate();
-    if (parameterTypes != null) {
-      predicate = predicate.and(MethodPredicates.takes(parameterTypes));
-    }
-    return predicate;
-  }
-
   /** @return the predicate builder used by this object. */
   protected final PredicateBuilder<Method> builder() {
     return builder;

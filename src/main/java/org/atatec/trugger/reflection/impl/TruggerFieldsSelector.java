@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.FieldPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
@@ -92,10 +91,6 @@ public class TruggerFieldsSelector implements FieldsSelector {
   public FieldsSelector recursively() {
     selector.useHierarchy();
     return this;
-  }
-  
-  public CompositePredicate<Field> toPredicate() {
-    return selector.toPredicate();
   }
   
 }

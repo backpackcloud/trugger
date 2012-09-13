@@ -16,19 +16,18 @@
  */
 package org.atatec.trugger.element.impl;
 
-import java.lang.annotation.Annotation;
-
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.bind.BindableElement;
 import org.atatec.trugger.bind.impl.BindableElementTransformer;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ElementSelector;
+
+import java.lang.annotation.Annotation;
 
 /**
  * A default implementation for {@link ElementSelector}.
@@ -111,11 +110,6 @@ public class TruggerElementSelector implements ElementSelector {
   public ElementSelector specific() {
     builder.add(ElementPredicates.SPECIFIC);
     return this;
-  }
-
-  @Override
-  public CompositePredicate<Element> toPredicate() {
-    return builder.predicate();
   }
 
   public ElementSelector writable() {

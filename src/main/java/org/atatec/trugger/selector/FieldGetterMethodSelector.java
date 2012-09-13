@@ -16,12 +16,11 @@
  */
 package org.atatec.trugger.selector;
 
+import org.atatec.trugger.Result;
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-
-import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicable;
-import org.atatec.trugger.predicate.Predicate;
 
 /**
  * Interface that defines a selector for getter methods associated with a field.
@@ -29,7 +28,7 @@ import org.atatec.trugger.predicate.Predicate;
  * @author Marcelo Varella Barca Guimarães
  */
 public interface FieldGetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
-    Result<Method, Object>, Predicable<Method> {
+    Result<Method, Object> {
   
   FieldGetterMethodSelector annotated();
   

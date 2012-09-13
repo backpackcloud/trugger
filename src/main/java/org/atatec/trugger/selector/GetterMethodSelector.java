@@ -16,12 +16,11 @@
  */
 package org.atatec.trugger.selector;
 
+import org.atatec.trugger.Result;
+import org.atatec.trugger.predicate.Predicate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-
-import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicable;
-import org.atatec.trugger.predicate.Predicate;
 
 /**
  * Interface that defines a selector for getter methods.
@@ -30,7 +29,7 @@ import org.atatec.trugger.predicate.Predicate;
  * @since 1.1
  */
 public interface GetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
-    Result<Method, Object>, RecursionSelector, Predicable<Method> {
+    Result<Method, Object>, RecursionSelector {
 
   GetterMethodSelector annotated();
   
@@ -42,10 +41,6 @@ public interface GetterMethodSelector extends AnnotatedElementSelector, Predicat
 
   GetterMethodSelector that(Predicate<? super Method> predicate);
   
-  /**
-   * Note: this selection does not affect the predicate returned by
-   * {@link #toPredicate()}.
-   */
   GetterMethodSelector recursively();
 
 }

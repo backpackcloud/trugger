@@ -17,10 +17,8 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.iteration.SearchException;
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
-import org.atatec.trugger.reflection.ConstructorPredicates;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorSelector;
@@ -94,14 +92,6 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   public ConstructorSelector notAnnotated() {
     builder.add(ReflectionPredicates.IS_NOT_ANNOTATED);
     return this;
-  }
-
-  public CompositePredicate<Constructor<?>> toPredicate() {
-    CompositePredicate<Constructor<?>> predicate = builder.predicate();
-    if (parameterTypes != null) {
-      return predicate.and(ConstructorPredicates.takes(parameterTypes));
-    }
-    return predicate;
   }
 
 }

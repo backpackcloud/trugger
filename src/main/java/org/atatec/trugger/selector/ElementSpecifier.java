@@ -16,11 +16,10 @@
  */
 package org.atatec.trugger.selector;
 
-import java.lang.annotation.Annotation;
-
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Base interface for selecting {@link Element elements}.
@@ -28,7 +27,7 @@ import org.atatec.trugger.predicate.Predicate;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.0
  */
-public interface ElementSpecifier extends Predicable<Element>, AnnotatedElementSelector, PredicateSelector<Element>,
+public interface ElementSpecifier extends AnnotatedElementSelector, PredicateSelector<Element>,
     TypedElementSelector {
 
   /**

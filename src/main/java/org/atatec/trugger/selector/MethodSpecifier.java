@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.predicate.Predicable;
 import org.atatec.trugger.predicate.Predicate;
 
 import java.lang.annotation.Annotation;
@@ -28,7 +27,7 @@ import java.lang.reflect.Method;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.1
  */
-public interface MethodSpecifier extends MemberSelector<Method>, Predicable<Method> {
+public interface MethodSpecifier extends MemberSelector<Method> {
   
   MethodSpecifier annotated();
   
