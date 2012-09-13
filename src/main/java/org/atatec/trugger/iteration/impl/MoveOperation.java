@@ -53,7 +53,7 @@ public class MoveOperation implements SourceSelector {
           Iterator iterator = src.iterator();
           while (iterator.hasNext()) {
             Object obj = iterator.next();
-            if (predicate.evaluate(obj)) {
+            if (predicate == null || predicate.evaluate(obj)) {
               if (transformer != null) {
                 obj = transformer.transform(obj);
               }

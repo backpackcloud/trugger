@@ -19,9 +19,18 @@ package org.atatec.trugger.iteration;
 
 import java.util.Collection;
 
-/** @author Marcelo Varella Barca Guimarães */
+/**
+ * Interface for defining the destination collection parameter.
+ *
+ * @author Marcelo Varella Barca Guimarães
+ */
 public interface DestinationSelector {
 
+  /**
+   * Defines the destination collection and executes the operation.
+   *
+   * @param collection the destination collection.
+   */
   void to(Collection collection);
 
 }

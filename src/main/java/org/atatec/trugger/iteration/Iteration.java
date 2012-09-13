@@ -18,7 +18,6 @@ package org.atatec.trugger.iteration;
 
 import org.atatec.trugger.loader.ImplementationLoader;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.Predicates;
 
 /**
  * An utility class for making iterations.
@@ -43,14 +42,19 @@ public final class Iteration {
    * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
-   * @return the component for using.
+   * @return a component for defining the remaining parameters.
    */
   public static <E> SourceSelector copy(Predicate<? super E> predicate) {
     return factory.createCopyOperation(predicate);
   }
 
-  public static <E> SourceSelector copy() {
-    return factory.createCopyOperation(Predicates.ALWAYS_TRUE);
+  /**
+   * Assumes that all elements must be moved.
+   *
+   * @see #copy(org.atatec.trugger.predicate.Predicate)
+   */
+  public static SourceSelector copy() {
+    return factory.createCopyOperation(null);
   }
 
   /**
@@ -59,14 +63,19 @@ public final class Iteration {
    * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
-   * @return the component for using.
+   * @return a component for defining the remaining parameters.
    */
   public static <E> SourceSelector move(Predicate<? super E> predicate) {
     return factory.createMoveOperation(predicate);
   }
 
-  public static <E> SourceSelector move() {
-    return factory.createMoveOperation(Predicates.ALWAYS_TRUE);
+  /**
+   * Assumes that all elements must be moved.
+   *
+   * @see #move(org.atatec.trugger.predicate.Predicate)
+   */
+  public static SourceSelector move() {
+    return factory.createMoveOperation(null);
   }
 
   /**
@@ -74,7 +83,7 @@ public final class Iteration {
    * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
-   * @return the component for using.
+   * @return a component for defining the remaining parameters.
    */
   public static <E> IterationSourceSelector retain(Predicate<? super E> predicate) {
     return factory.createRetainOperation(predicate);
@@ -85,7 +94,7 @@ public final class Iteration {
    * <p/>
    * A {@link IterationFactory} is used to create the component.
    *
-   * @return the component for using.
+   * @return a component for defining the remaining parameters.
    */
   public static <E> IterationSourceSelector remove(Predicate<? super E> predicate) {
     return factory.createRemoveOperation(predicate);

@@ -20,9 +20,21 @@ package org.atatec.trugger.iteration;
 import java.util.Collection;
 import java.util.List;
 
-/** @author Marcelo Varella Barca Guimarães */
+/**
+ * Interface for defining the source collection in a "find all" operation.
+ *
+ * @author Marcelo Varella Barca Guimarães
+ * @since 4.1
+ */
 public interface FindAllResult {
 
+  /**
+   * Defines the source collection and executes the operation.
+   *
+   * @param collection the source collection
+   *
+   * @return the operation result
+   */
   <E> List<E> in(Collection<E> collection);
 
 }
