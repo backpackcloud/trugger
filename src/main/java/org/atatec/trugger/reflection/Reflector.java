@@ -50,8 +50,9 @@ import java.util.Set;
 public interface Reflector {
 
   /**
-   * Indicates to reflect only visible elements (declared as "public"). This is useful if
-   * you want to use reflection when access to non public fields are forbidden.
+   * Indicates to reflect only visible elements (declared as "public" in all hierarchy).
+   * This is useful if you want to use reflection when access to non public fields are
+   * forbidden.
    *
    * @return a reference to this object
    *
