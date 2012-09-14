@@ -219,4 +219,12 @@ public class TruggerTest {
     }
   }
 
+  public static ElementMock element() {
+    return new ElementMock();
+  }
+
+  public static ElementFinderMock elementFinder() {
+    return new ElementFinderMock();
+  }
+
 }

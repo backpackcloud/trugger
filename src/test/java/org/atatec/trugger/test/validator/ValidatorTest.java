@@ -19,7 +19,7 @@ package org.atatec.trugger.test.validator;
 import junit.framework.Assert;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.reflection.Reflection;
-import org.atatec.trugger.util.mock.AnnotationMockBuilder;
+import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidatorContext;
 import org.atatec.trugger.validation.ValidatorFactory;
@@ -42,7 +42,7 @@ public abstract class ValidatorTest<T extends Annotation> {
   protected final ValidatorFactory factory = Validation.newValidatorFactory();
   protected ValidatorInvoker validator;
   protected T annotation;
-  protected AnnotationMockBuilder<T> builder;
+  protected AnnotationMock<T> builder;
   private final Class<T> annotationType;
 
   public ValidatorTest() {
@@ -51,7 +51,7 @@ public abstract class ValidatorTest<T extends Annotation> {
 
   @Before
   public void initialize() {
-    builder = new AnnotationMockBuilder<T>(annotationType);
+    builder = new AnnotationMock<T>(annotationType);
     annotation = builder.annotation();
     validator = null;
   }
@@ -65,11 +65,11 @@ public abstract class ValidatorTest<T extends Annotation> {
   }
 
   protected final void createValidator(Element element, Object target) {
-    validator = factory.create(new ValidatorContextImpl(builder.mock(), element, target));
+    validator = factory.create(new ValidatorContextImpl(builder.createMock(), element, target));
   }
 
   protected final void createValidator(Object target) {
-    validator = factory.create(new ValidatorContextImpl(builder.mock(), null, target));
+    validator = factory.create(new ValidatorContextImpl(builder.createMock(), null, target));
   }
 
   protected final void createValidator(Class<? extends Annotation> annotationType) {
@@ -77,7 +77,7 @@ public abstract class ValidatorTest<T extends Annotation> {
   }
 
   protected final void createValidator() {
-    validator = factory.create(new ValidatorContextImpl(builder.mock()));
+    validator = factory.create(new ValidatorContextImpl(builder.createMock()));
   }
 
   protected final void assertTypeDisallowed(Object value) {

@@ -16,14 +16,6 @@
  */
 package org.atatec.trugger.test.element;
 
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.atatec.trugger.util.mock.Mock.element;
-import static org.atatec.trugger.util.mock.Mock.mock;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertSame;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
@@ -31,8 +23,16 @@ import org.atatec.trugger.element.impl.TruggerElementSelector;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
-
 import org.junit.Test;
+
+import static org.atatec.trugger.test.TruggerTest.assertNoResult;
+import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.atatec.trugger.test.TruggerTest.element;
+import static org.atatec.trugger.util.mock.Mock.mock;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertSame;
 
 /**
  * @author Marcelo Varella Barca Guimarães

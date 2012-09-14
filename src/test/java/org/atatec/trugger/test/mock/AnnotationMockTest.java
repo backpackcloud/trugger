@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger.test.mock;
 
-import org.atatec.trugger.util.mock.AnnotationMockBuilder;
+import org.atatec.trugger.util.mock.AnnotationMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,21 +42,17 @@ public class AnnotationMockTest {
 
   @Before
 	public void initialize() {
-		resource = new AnnotationMockBuilder<Resource>() {{
-      annotation.authenticationType();
-      annotation.description();
-      annotation.annotationType();
-      annotation.shareable();
+		resource = new AnnotationMock<Resource>() {{
       map("name").to(annotation.name());
       map(false).to(annotation.shareable());
-    }}.mock();
+    }}.createMock();
 
-		AnnotationMockBuilder<Resource> builder = annotation(Resource.class);
+		AnnotationMock<Resource> builder = annotation(Resource.class);
 		resource2 = builder.annotation();
 		builder.map("name2").to(resource2.name());
 		//builder.map(true).to(resource2.shareable());
 		builder.map(AuthenticationType.APPLICATION).to(resource2.authenticationType());
-		builder.mock();
+		builder.createMock();
 	}
 
   @Test

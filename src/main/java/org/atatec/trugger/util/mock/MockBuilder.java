@@ -26,10 +26,10 @@ package org.atatec.trugger.util.mock;
 public interface MockBuilder<T> {
   
   /**
-   * Activate and return the mock object.
+   * Create and return the mock object.
    * 
-   * @return the activated mock object.
+   * @return the created mock object.
    */
-  T mock();
+  T createMock();
   
 }

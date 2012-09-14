@@ -18,9 +18,6 @@ package org.atatec.trugger.util.mock;
 
 import java.lang.annotation.Annotation;
 
-import org.atatec.trugger.Finder;
-import org.atatec.trugger.element.Element;
-
 /**
  * A helper class for creating mock objects of this framework. Use this class to
  * improve code readability.
@@ -31,10 +28,7 @@ import org.atatec.trugger.element.Element;
  * import static org.atatec.trugger.util.mock.Mock.*;
  * // ...
  * 
- * Element mock = mock(element().named(&quot;myElement&quot;).ofType(String.class).readable());
- * 
- * // that code is equivalent to this one:
- * Element mock = new ElementMockBuilder().named(&quot;myElement&quot;).ofType(String.class).readable().mock();
+ * Resource mock = mock(annotation(Resource.class);
  * </pre>
  * 
  * @author Marcelo Varella Barca Guimarães
@@ -52,31 +46,17 @@ public class Mock {
    * @return the created mock object.
    */
   public static <T> T mock(MockBuilder<T> builder) {
-    return builder.mock();
+    return builder.createMock();
   }
-  
-  /**
-   * @return a new mock builder for {@link Element}.
-   */
-  public static ElementMockBuilder element() {
-    return new ElementMockBuilder();
-  }
-  
-  /**
-   * @return a new mock builder for {@link Finder} of {@link Element elements}.
-   */
-  public static ElementFinderMockBuilder elementFinder() {
-    return new ElementFinderMockBuilder();
-  }
-  
+
   /**
    * @param annotationType
    *          the annotation type
    * @return a new mock builder for {@link Annotation}.
    * @since 2.1
    */
-  public static <T extends Annotation> AnnotationMockBuilder<T> annotation(Class<T> annotationType) {
-    return new AnnotationMockBuilder<T>(annotationType);
+  public static <T extends Annotation> AnnotationMock<T> annotation(Class<T> annotationType) {
+    return new AnnotationMock<T>(annotationType);
   }
-  
+
 }

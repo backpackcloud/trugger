@@ -19,7 +19,7 @@ package org.atatec.trugger.test.validator;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import org.atatec.trugger.util.mock.AnnotationMockBuilder;
+import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.ValidationContext;
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.ValidatorClass;
@@ -93,9 +93,9 @@ public class ValidValidatorTest extends ValidatorTest<Valid> {
 
   @Test
   public void testContextPropagation() {
-    Valid annotation = new AnnotationMockBuilder<Valid>(){{
+    Valid annotation = new AnnotationMock<Valid>(){{
       map("simple").to(annotation.forContext());
-    }}.mock();
+    }}.createMock();
     ContextTest test = new ContextTest();
     test.context = "simple";
     createValidator(annotation, annotation);

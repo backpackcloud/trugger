@@ -16,23 +16,22 @@
  */
 package org.atatec.trugger.test.element;
 
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.atatec.trugger.util.mock.Mock.element;
-import static org.atatec.trugger.util.mock.Mock.elementFinder;
-import static org.atatec.trugger.util.mock.Mock.mock;
-
-import java.util.Set;
-
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.TruggerElementsSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
-
 import org.junit.Test;
+
+import java.util.Set;
+
+import static org.atatec.trugger.test.TruggerTest.assertElements;
+import static org.atatec.trugger.test.TruggerTest.assertNoResult;
+import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.atatec.trugger.test.TruggerTest.element;
+import static org.atatec.trugger.test.TruggerTest.elementFinder;
+import static org.atatec.trugger.util.mock.Mock.mock;
 
 /**
  * @author Marcelo Varella Barca Guimarães
