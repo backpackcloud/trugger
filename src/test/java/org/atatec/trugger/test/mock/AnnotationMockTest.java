@@ -50,7 +50,7 @@ public class AnnotationMockTest {
 		AnnotationMock<Resource> builder = annotation(Resource.class);
 		resource2 = builder.annotation();
 		builder.map("name2").to(resource2.name());
-		//builder.map(true).to(resource2.shareable());
+		builder.map(true).to(resource2.shareable());
 		builder.map(AuthenticationType.APPLICATION).to(resource2.authenticationType());
 		builder.createMock();
 	}
