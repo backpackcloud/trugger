@@ -30,16 +30,20 @@ import java.lang.reflect.Field;
  * bind using a selection of {@link Field} objects must use the target hierarchy. </ul>
  *
  * @author Marcelo Varella Barca Guimarães
- * @since 1.2
+ * @since 4.1
  */
 public interface ValueBindSelector {
 
+  /** Binds the value to the field returned by the given selector. */
   Binder to(FieldSelector selector);
 
+  /** Binds the value to the fields returned by the given selector. */
   Binder to(FieldsSelector selector);
 
+  /** Binds the value to the element returned by the given selector. */
   Binder to(ElementSelector selector);
 
+  /** Binds the value to the elements returned by the given selector. */
   Binder to(ElementsSelector selector);
 
 }

@@ -22,7 +22,7 @@ import org.atatec.trugger.selector.FieldSelector;
 import org.atatec.trugger.selector.FieldsSelector;
 
 /**
- * Interface for the bind configuration for a {@link org.atatec.trugger.bind.Binder#use(org.atatec.trugger.Resolver)
+ * Interface for the bind configuration for a {@link Binder#use(org.atatec.trugger.Resolver)
  * resolver}.
  * <p/>
  * There are some conventions for keeping compatibility against the binds: <ul> <li>The
@@ -30,16 +30,20 @@ import org.atatec.trugger.selector.FieldsSelector;
  * hierarchy. </ul>
  *
  * @author Marcelo Varella Barca Guimarães
- * @since 1.2
+ * @since 4.1
  */
 public interface ResolverBindSelector {
 
+  /** Binds the value to the field returned by the given selector. */
   Binder in(FieldSelector selector);
 
+  /** Binds the value to the fields returned by the given selector. */
   Binder in(FieldsSelector selector);
 
+  /** Binds the value to the element returned by the given selector. */
   Binder in(ElementSelector selector);
 
+  /** Binds the value to the elements returned by the given selector. */
   Binder in(ElementsSelector selector);
 
 }
