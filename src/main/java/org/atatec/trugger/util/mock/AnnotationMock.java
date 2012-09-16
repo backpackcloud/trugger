@@ -16,6 +16,7 @@
  */
 package org.atatec.trugger.util.mock;
 
+import org.atatec.trugger.interception.Interception;
 import org.atatec.trugger.interception.InterceptionContext;
 import org.atatec.trugger.interception.Interceptor;
 import org.atatec.trugger.predicate.CompositePredicate;
@@ -99,14 +100,15 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
   }
 
   private void initialize() {
-    this.annotation = new AnnotationMockInterceptor(annotationType).create();
+    this.annotation = new Interceptor(new AnnotationMockInterception())
+      .createProxy().implementing(annotationType);
     this.mappings = new HashMap<String, Object>(15);
     this.mappings.put("annotationType", annotationType);
   }
 
   /**
-   * @return the annotation for specifying the mappings. After calling {@link #createMock()} it
-   *         can be used as the mocked annotation.
+   * @return the annotation for specifying the mappings. After calling {@link
+   *         #createMock()} it can be used as the mocked annotation.
    */
   public T annotation() {
     return annotation;
@@ -143,7 +145,7 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
       .in(annotationType);
     for (Method method : methods) {
       Object defaultValue = method.getDefaultValue();
-      if(defaultValue == null) {
+      if (defaultValue == null) {
         throw new IllegalStateException("Property " + method.getName() + " not defined.");
       }
       mappings.put(method.getName(), defaultValue);
@@ -172,26 +174,16 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
     org.atatec.trugger.util.mock.AnnotationMock<T> to(E value);
   }
 
-  private class AnnotationMockInterceptor extends Interceptor {
-
-    private Class<T> type;
-
-    public AnnotationMockInterceptor(Class<T> annotationType) {
-      this.type = annotationType;
-    }
+  private class AnnotationMockInterception implements Interception {
 
     @Override
-    protected Object intercept(InterceptionContext context) throws Throwable {
+    public Object intercept(InterceptionContext context) throws Throwable {
       Method method = context.method();
       String name = method.getName();
       if (!mocked) {
         lastCall = name;
       }
       return mappings.containsKey(name) ? mappings.get(name) : context.nullReturn();
-    }
-
-    public T create() {
-      return createProxy().implementing(type).withoutTarget();
     }
 
   }

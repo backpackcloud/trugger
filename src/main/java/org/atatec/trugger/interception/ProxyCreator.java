@@ -39,14 +39,7 @@ public interface ProxyCreator {
    *          the target to encapsulate.
    * @return the created proxy.
    */
-  <E> E withTarget(Object target);
-  
-  /**
-   * Configures the proxy to not encapsulate a target.
-   * 
-   * @return the created proxy.
-   */
-  <E> E withoutTarget();
+  ProxyCreator over(Object target);
   
   /**
    * Configures the proxy to implement all the target interfaces, the explicitly
@@ -54,7 +47,7 @@ public interface ProxyCreator {
    * 
    * @return a reference to this object.
    */
-  ProxyCreator forAllInterfaces();
+  <E> E forAllInterfaces();
   
   /**
    * Configures the proxy to implement these interfaces.
@@ -63,6 +56,6 @@ public interface ProxyCreator {
    *          the interfaces that the proxy must implement.
    * @return a reference to this object.
    */
-  ProxyCreator implementing(Class<?>... interfaces);
+  <E> E implementing(Class<?>... interfaces);
   
 }

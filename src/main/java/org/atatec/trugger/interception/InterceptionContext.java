@@ -49,6 +49,8 @@ public class InterceptionContext {
 
   }
 
+  private final Object target;
+
   /** The proxy instance that the method was invoked on */
   private final Object proxy;
 
@@ -72,14 +74,26 @@ public class InterceptionContext {
    *               the proxy instance
    * @param args   the arguments passed in the method invocation on the proxy instance
    */
-  public InterceptionContext(Object proxy, Method method, Object[] args) {
+  public InterceptionContext(Object target, Object proxy, Method method, Object[] args) {
+    this.target = target;
     this.proxy = proxy;
     this.method = method;
     this.args = args;
   }
 
   /**
-   * Invokes the intercepted method on the target object.
+   * Invokes the intercepted method on the {@link #target() target} object.
+   *
+   * @return the return of the method
+   *
+   * @throws Throwable if an error occurs in the method.
+   */
+  public Object invokeMethod() throws Throwable {
+    return invokeMethod(target);
+  }
+
+  /**
+   * Invokes the intercepted method on the given target object.
    *
    * @param target the target object
    *
@@ -110,6 +124,11 @@ public class InterceptionContext {
       return reflect().bridgedMethodFor(targetMethod);
     }
     return targetMethod;
+  }
+
+  /** @return the interceptor target or <code>null</code> if is not defined. */
+  public Object target() {
+    return target;
   }
 
   /** @return the arguments passed in the method invocation on the proxy instance */

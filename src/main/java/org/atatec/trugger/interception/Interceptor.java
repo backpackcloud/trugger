@@ -37,64 +37,46 @@ public class Interceptor implements InvocationHandler, ProxyFactory {
 
   /** The target object */
   private Object target;
-  /** The interfaces configured for interception. */
-  private final Set<Class<?>> interfaces = new HashSet<Class<?>>();
 
-  /** Creates a new Interceptor */
-  public Interceptor() {
-    super();
+  private Interception interception;
+
+  public Interceptor(Interception interception) {
+    this.interception = interception;
   }
 
   public ProxyCreator createProxy() {
     return new Creator();
   }
 
-  protected final Object target() {
-    return target;
-  }
-
   @Override
   public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    return intercept(new InterceptionContext(proxy, method, args));
-  }
-
-  /** This method is called when a target's method is intercepted. */
-  protected Object intercept(InterceptionContext context) throws Throwable {
-    return context.invokeMethod(target);
+    return interception.intercept(new InterceptionContext(target, proxy, method, args));
   }
 
   private class Creator implements ProxyCreator {
 
     private boolean computeTargetInterfaces;
     private ClassLoader classLoader;
-
-    private Creator() {
-
-    }
+    private final Set<Class<?>> interfaces = new HashSet<Class<?>>();
 
     public ProxyCreator withClassLoader(ClassLoader classLoader) {
       this.classLoader = classLoader;
       return this;
     }
 
-    public ProxyCreator implementing(Class<?>... interfaces) {
-      Interceptor.this.interfaces.addAll(Arrays.asList(interfaces));
-      return this;
+    public <E> E implementing(Class<?>... interfaces) {
+      this.interfaces.addAll(Arrays.asList(interfaces));
+      return create();
     }
 
-    public ProxyCreator forAllInterfaces() {
+    public <E> E forAllInterfaces() {
       this.computeTargetInterfaces = true;
-      return this;
+      return create();
     }
 
-    public <E> E withTarget(Object target) {
+    public ProxyCreator over(Object target) {
       Interceptor.this.target = target;
-      return (E) create();
-    }
-
-    public <E> E withoutTarget() {
-      Interceptor.this.target = null;
-      return (E) create();
+      return this;
     }
 
     private <E> E create() {

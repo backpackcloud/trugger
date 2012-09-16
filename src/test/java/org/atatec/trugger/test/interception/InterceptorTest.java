@@ -16,15 +16,21 @@
  */
 package org.atatec.trugger.test.interception;
 
+import org.atatec.trugger.interception.Interception;
+import org.atatec.trugger.interception.InterceptionContext;
 import org.atatec.trugger.interception.Interceptor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class InterceptorTest {
+
+  Interception action = new Interception() {
+    public Object intercept(InterceptionContext context) throws Throwable {
+      return context.invokeMethod();
+    }
+  };
 
   static interface MyInterface {
 
@@ -52,14 +58,14 @@ public class InterceptorTest {
 
   @Test
   public void testInterception() {
-    MyInterface obj = new Interceptor().createProxy().forAllInterfaces().withTarget(new InvocationTest());
+    MyInterface obj = new Interceptor(action).createProxy().over(new InvocationTest()).forAllInterfaces();
     Object argument = new Object();
     assertSame(argument, obj.doIt(argument));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInterfaceExceptionHandling() {
-    MyInterface obj = new Interceptor().createProxy().forAllInterfaces().withTarget(new ExceptionHandlingTest());
+    MyInterface obj = new Interceptor(action).createProxy().over(new ExceptionHandlingTest()).forAllInterfaces();
     obj.doIt(null);
   }
 

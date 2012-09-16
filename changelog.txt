@@ -8,7 +8,7 @@ Version 4.1
   - Iteration DSL improved
     - Finding operation separated in Find class
   - Class scan DSL improved
-  - Interceptor class simplified
+  - Interceptor class simplified and improved DSL to create a proxy
   - No more EasyMock dependency for mock an Annotation
   - Reflection DSL improved
   - Predicates improved
