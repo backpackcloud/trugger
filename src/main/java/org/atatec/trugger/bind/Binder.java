@@ -38,7 +38,7 @@ public interface Binder {
    *          the value to bind.
    * @return the component used for specifying the bind type.
    */
-  BindSelector bind(Object value);
+  ValueBindSelector bind(Object value);
 
   /**
    * Specifies a resolver that will decide the proper value for bind.
@@ -48,7 +48,7 @@ public interface Binder {
    * @return the component used for specifying the bind type.
    * @since 2.6
    */
-  BindSelector use(Resolver<Object, Element> resolver);
+  ResolverBindSelector use(Resolver<Object, Element> resolver);
 
   /**
    * Applies the bindings in the given object.
@@ -58,6 +58,6 @@ public interface Binder {
    *
    * @return a reference to the given object.
    */
-  <E> E applyBinds(E object);
+  <E> E applyIn(E object);
 
 }

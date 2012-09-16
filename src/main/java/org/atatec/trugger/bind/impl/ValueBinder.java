@@ -16,76 +16,54 @@
  */
 package org.atatec.trugger.bind.impl;
 
-import org.atatec.trugger.bind.BindSelector;
+import org.atatec.trugger.bind.ValueBindSelector;
+import org.atatec.trugger.bind.Binder;
 import org.atatec.trugger.selector.ElementSelector;
-import org.atatec.trugger.selector.ElementSpecifier;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.selector.FieldSelector;
-import org.atatec.trugger.selector.FieldSpecifier;
 import org.atatec.trugger.selector.FieldsSelector;
 
 import java.util.Collection;
-
-import static org.atatec.trugger.element.Elements.element;
-import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.reflection.Reflection.field;
-import static org.atatec.trugger.reflection.Reflection.fields;
 
 /**
  * A class for binding values.
  *
  * @author Marcelo Varella Barca Guimarães
  */
-public class ValueBinder implements BindSelector {
+public class ValueBinder implements ValueBindSelector {
 
   private final Object value;
   private final Collection<BindApplier> binds;
+  private final Binder binder;
 
-  /**
-   * @param value
-   *          the value to bind.
-   * @param binds
-   *          the collection of binds for update.
-   */
-  public ValueBinder(Object value, Collection<BindApplier> binds) {
+  public ValueBinder(Object value, Collection<BindApplier> binds, Binder binder) {
     this.value = value;
     this.binds = binds;
+    this.binder = binder;
   }
 
-  public FieldSelector toField(String fieldName) {
-    FieldSelector selector = field(fieldName).nonFinal().recursively();
-    binds.add(new BindableElementBindApplier(selector, value));
-    return selector;
+  @Override
+  public Binder to(FieldSelector selector) {
+    binds.add(new BindableElementBindApplier(selector.nonFinal().recursively(), value));
+    return binder;
   }
 
-  public FieldsSelector toFields() {
-    FieldsSelector selector = fields().nonFinal().recursively();
-    binds.add(new BindableElementsBindApplier(selector, value));
-    return selector;
+  @Override
+  public Binder to(FieldsSelector selector) {
+    binds.add(new BindableElementsBindApplier(selector.nonFinal().recursively(), value));
+    return binder;
   }
 
-  public FieldSpecifier toField() {
-    FieldSelector selector = field().nonFinal().recursively();
-    binds.add(new BindableElementBindApplier(selector, value));
-    return selector;
+  @Override
+  public Binder to(ElementSelector selector) {
+    binds.add(new BindableElementBindApplier(selector.forBind(), value));
+    return binder;
   }
 
-  public ElementsSelector toElements() {
-    ElementsSelector selector = elements();
+  @Override
+  public Binder to(ElementsSelector selector) {
     binds.add(new BindableElementsBindApplier(selector.forBind(), value));
-    return selector;
-  }
-
-  public ElementSelector toElement(String name) {
-    ElementSelector selector = element(name);
-    binds.add(new BindableElementBindApplier(selector.forBind(), value));
-    return selector;
-  }
-
-  public ElementSpecifier toElement() {
-    ElementSelector selector = element();
-    binds.add(new BindableElementBindApplier(selector.forBind(), value));
-    return selector;
+    return binder;
   }
 
 }

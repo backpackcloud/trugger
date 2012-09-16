@@ -16,10 +16,11 @@
  */
 package org.atatec.trugger.test.bind;
 
-import org.atatec.trugger.bind.Binder;
 import org.junit.Test;
 
-import static org.atatec.trugger.bind.Bind.newBinder;
+import static org.atatec.trugger.bind.Bind.binds;
+import static org.atatec.trugger.reflection.Reflection.field;
+import static org.atatec.trugger.reflection.Reflection.fields;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -38,30 +39,28 @@ public class FieldBindingTest {
 
   @Test
   public void testFieldBinding() {
-    Binder binder = newBinder();
-    binder.bind(10).toFields().ofType(int.class);
-    binder.bind(true).toField("booleanField");
-    binder.bind(50.2).toField().ofType(double.class);
-    binder.bind("stringField").toFields().ofType(String.class);
-
     FieldTest object = new FieldTest();
 
-    binder.applyBinds(object);
+    binds()
+      .bind(10).to(fields().ofType(int.class))
+      .bind(true).to(field("booleanField"))
+      .bind(50.2).to(field().ofType(double.class))
+      .bind("stringField").to(fields().ofType(String.class))
+      .applyIn(object);
 
     assertEquals(10, object.intField);
     assertEquals(true, object.booleanField);
     assertEquals(50.2, object.doubleField, 1e-4);
     assertEquals("stringField", object.stringField);
 
-    binder = newBinder();
-    binder.use(new ResultResolver(10)).toField().ofType(int.class);
-    binder.use(new ResultResolver(true)).toField("booleanField").ofType(boolean.class);
-    binder.use(new ResultResolver(50.2)).toField().ofType(double.class);
-    binder.use(new ResultResolver("stringField")).toFields().ofType(String.class);
-
     object = new FieldTest();
+    binds()
+      .use(new ResultResolver(10)).in(field().ofType(int.class))
+      .use(new ResultResolver(true)).in(field("booleanField").ofType(boolean.class))
+      .use(new ResultResolver(50.2)).in(field().ofType(double.class))
+      .use(new ResultResolver("stringField")).in(fields().ofType(String.class))
 
-    binder.applyBinds(object);
+      .applyIn(object);
 
     assertEquals(10, object.intField);
     assertEquals(true, object.booleanField);

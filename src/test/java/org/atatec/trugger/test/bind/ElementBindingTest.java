@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.atatec.trugger.bind.Bind.newBinder;
+import static org.atatec.trugger.bind.Bind.binds;
+import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.element.Elements.elements;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
@@ -54,30 +56,29 @@ public class ElementBindingTest {
 
   @Before
   public void initialize() {
-    binder = newBinder();
-    binder.bind(10).toElement().ofType(int.class);
-    binder.bind("stringField").toElements().ofType(String.class);
-    binder.bind(true).toElement("BOOLEAN_FIELD");
+    binder = binds();
+    binder.bind(10).to(element().ofType(int.class));
+    binder.bind("stringField").to(elements().ofType(String.class));
+    binder.bind(true).to(element("BOOLEAN_FIELD"));
   }
 
   @Test
   public void testGeneralElementBinding() {
     ElementBind object = new ElementBind();
 
-    binder.applyBinds(object);
+    binder.applyIn(object);
 
     assertEquals(15, object.intField);
     assertEquals("STRINGFIELD", object.stringField);
     assertEquals(true, ElementBind.BOOLEAN_FIELD);
 
-    binder = newBinder();
-    binder.use(new ResultResolver(10)).toElement().ofType(int.class);
-    binder.use(new ResultResolver("stringField")).toElements().ofType(String.class);
-    binder.use(new ResultResolver(true)).toElement("BOOLEAN_FIELD");
-
     object = new ElementBind();
+    binds()
+      .use(new ResultResolver(10)).in(element().ofType(int.class))
+      .use(new ResultResolver("stringField")).in(elements().ofType(String.class))
+      .use(new ResultResolver(true)).in(element("BOOLEAN_FIELD"))
 
-    binder.applyBinds(object);
+      .applyIn(object);
 
     assertEquals(15, object.intField);
     assertEquals("STRINGFIELD", object.stringField);
@@ -87,12 +88,12 @@ public class ElementBindingTest {
   @Test
   public void testMapBinding() {
     Object value = new Object();
-    binder.bind("value").toElement("key");
-    binder.bind(value).toElement("object");
+    binder.bind("value").to(element("key"));
+    binder.bind(value).to(element("object"));
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    binder.applyBinds(map);
+    binder.applyIn(map);
 
     assertFalse(map.containsKey("intField"));
     assertFalse(map.containsKey("stringField"));
@@ -106,11 +107,11 @@ public class ElementBindingTest {
 
   @Test
   public void testPropertiesBind() throws Exception {
-    binder.bind("value").toElement("key");
+    binder.bind("value").to(element("key"));
 
     Properties props = new Properties();
 
-    binder.applyBinds(props);
+    binder.applyIn(props);
 
     assertFalse(props.containsKey("intField"));
     assertFalse(props.containsKey("stringField"));

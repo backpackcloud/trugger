@@ -19,7 +19,7 @@ package org.atatec.trugger.test.bind;
 import org.atatec.trugger.bind.PostBind;
 import org.junit.Test;
 
-import static org.atatec.trugger.bind.Bind.newBinder;
+import static org.atatec.trugger.bind.Bind.binds;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -48,7 +48,7 @@ public class BinderTest {
   @Test
   public void testPostBind() {
     PostBindTest object = new PostBindTest(){};
-    newBinder().applyBinds(object);
+    binds().applyIn(object);
     assertEquals(1, object.count);
   }
 

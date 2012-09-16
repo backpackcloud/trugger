@@ -17,6 +17,7 @@ Version 4.1
     - Mocks for Element and ElementFinder are now in test packages
     - Annotation mock still in the binaries, but is implemented Interceptor class instead
       of EasyMock
+  - Bind DSL improved
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.

@@ -38,6 +38,9 @@ import org.atatec.trugger.validation.ValidatorInvoker;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
+import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.element.Elements.elements;
+
 /**
  * @author Marcelo Varella Barca Guimarães
  */
@@ -48,11 +51,13 @@ public class TruggerValidatorBinder implements ValidatorBinder {
   public void configureBinds(Validator validator, ValidatorContext context, Binder binder) {
     Annotation annotation = context.annotation();
     Class<? extends Annotation> annotationType = annotation.annotationType();
-    binder.bind(annotation).toElement().ofType(annotationType);
-    binder.bind(annotation).toElement().annotatedWith(TargetAnnotation.class);
-    binder.bind(context.target()).toElement().annotatedWith(TargetObject.class);
-    binder.use(new TargetElementResolver(context)).toElements().annotatedWith(TargetElement.class);
-    binder.bind(context.validationContext()).toElement().annotatedWith(ValidationContext.class);
+    binder
+      .bind(annotation).to(element().ofType(annotationType))
+      .bind(annotation).to(element().annotatedWith(TargetAnnotation.class))
+      .bind(context.target()).to(element().annotatedWith(TargetObject.class))
+      .use(new TargetElementResolver(context)).in(elements().annotatedWith(TargetElement.class))
+      .bind(context.validationContext()).to(element().annotatedWith(ValidationContext.class));
+
     bindReferences(context, binder, validator);
   }
 
@@ -100,7 +105,7 @@ public class TruggerValidatorBinder implements ValidatorBinder {
       ValidatorContext context = new ValidatorContextImpl(annotation);
       if (factory.canCreate(context)) {
         ValidatorInvoker invoker = factory.create(context);
-        binder.applyBinds(invoker.validator());
+        binder.applyIn(invoker.validator());
         if (!invoker.isValid(referenceValue)) {
           return false;
         }

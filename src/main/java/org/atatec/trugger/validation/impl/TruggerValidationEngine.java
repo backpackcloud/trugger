@@ -16,18 +16,8 @@
  */
 package org.atatec.trugger.validation.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.atatec.trugger.Result;
 import org.atatec.trugger.bind.Bind;
-import org.atatec.trugger.bind.Binder;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.message.Message;
@@ -44,6 +34,17 @@ import org.atatec.trugger.validation.ValidatorContext;
 import org.atatec.trugger.validation.ValidatorFactory;
 import org.atatec.trugger.validation.ValidatorInvoker;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.atatec.trugger.element.Elements.elements;
+
 /**
  * The default validation engine.
  *
@@ -58,10 +59,9 @@ public final class TruggerValidationEngine implements ValidationEngine {
   /**
    * Creates a new engine for validation.
    *
-   * @param messageCreator
-   *          the component to create the messages for the invalid properties.
-   * @param validatorFactory
-   *          the component to creates {@link Validator} instances.
+   * @param messageCreator   the component to create the messages for the invalid
+   *                         properties.
+   * @param validatorFactory the component to creates {@link Validator} instances.
    */
   public TruggerValidationEngine(ValidatorFactory validatorFactory, MessageCreator messageCreator) {
     this.messageCreator = messageCreator;
@@ -122,7 +122,7 @@ public final class TruggerValidationEngine implements ValidationEngine {
         if (p != null) {
           elements.add(p);
         }
-      } else if(element != null) {
+      } else if (element != null) {
         elements = Arrays.asList(element);
       } else {
         elements = Elements.elements().annotated().in(target);
@@ -155,11 +155,11 @@ public final class TruggerValidationEngine implements ValidationEngine {
         ValidatorContext validatorContext = new ValidatorContextImpl(annotation, element, parameter.target, context);
         if (validatorFactory.canCreate(validatorContext)) {
           //checks the context (if defined)
-          if(context != null) {
+          if (context != null) {
             Element ctxElement = Elements.element("context").in(annotation);
-            if((ctxElement != null) && String[].class.equals(ctxElement.type())) {
+            if ((ctxElement != null) && String[].class.equals(ctxElement.type())) {
               String[] ctxValues = ctxElement.value();
-              if((ctxValues.length > 0) && !Arrays.asList(ctxValues).contains(context)) {
+              if ((ctxValues.length > 0) && !Arrays.asList(ctxValues).contains(context)) {
                 continue;
               }
             }
@@ -188,9 +188,7 @@ public final class TruggerValidationEngine implements ValidationEngine {
 
   }
 
-  /**
-   * A class to be the bridge between the validator and the object validator.
-   */
+  /** A class to be the bridge between the validator and the object validator. */
   private class Bridge implements ValidationBridge {
 
     private final ValidationParameter parameter;
@@ -243,11 +241,11 @@ public final class TruggerValidationEngine implements ValidationEngine {
 
   private ValidatorInvoker newValidator(ValidationParameter parameter, ValidatorContext context) {
     ValidatorInvoker invoker = validatorFactory.create(context);
-    Binder binder = Bind.newBinder();
     Bridge bridge = new Bridge(parameter);
-    binder.use(new ValidatorReferenceResolver(bridge)).toElements().ofType(Validator.class);
-    binder.bind(bridge).toElements().ofType(ValidationBridge.class);
-    binder.applyBinds(invoker.validator());
+    Bind.binds()
+      .use(new ValidatorReferenceResolver(bridge)).in(elements().ofType(Validator.class))
+      .bind(bridge).to(elements().ofType(ValidationBridge.class))
+      .applyIn(invoker.validator());
     return invoker;
   }
 

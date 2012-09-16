@@ -30,6 +30,7 @@ import org.junit.Test;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import static org.atatec.trugger.reflection.Reflection.field;
 import static org.atatec.trugger.util.mock.Mock.annotation;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.assertNull;
@@ -47,7 +48,7 @@ public class ValidatorBindTest {
   public void initialize() {
     binder = new ValidatorBinder() {
       public void configureBinds(Validator validator, ValidatorContext context, Binder binder) {
-        binder.bind(object).toField("testField");
+        binder.bind(object).to(field("testField"));
       }
     };
     Validation.plug(binder);

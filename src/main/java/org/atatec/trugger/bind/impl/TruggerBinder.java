@@ -17,9 +17,10 @@
 package org.atatec.trugger.bind.impl;
 
 import org.atatec.trugger.Resolver;
-import org.atatec.trugger.bind.BindSelector;
 import org.atatec.trugger.bind.Binder;
 import org.atatec.trugger.bind.PostBind;
+import org.atatec.trugger.bind.ResolverBindSelector;
+import org.atatec.trugger.bind.ValueBindSelector;
 import org.atatec.trugger.element.Element;
 
 import java.util.Collection;
@@ -43,15 +44,15 @@ public final class TruggerBinder implements Binder {
    */
   private final Collection<BindApplier> binds = new LinkedList<BindApplier>();
   
-  public BindSelector bind(Object value) {
-    return new ValueBinder(value, binds);
+  public ValueBindSelector bind(Object value) {
+    return new ValueBinder(value, binds, this);
   }
   
-  public BindSelector use(Resolver<Object, Element> resolver) {
-    return new ResolverBinder(resolver, binds);
+  public ResolverBindSelector use(Resolver<Object, Element> resolver) {
+    return new ResolverBinder(resolver, binds, this);
   }
   
-  public <E> E applyBinds(E object) {
+  public <E> E applyIn(E object) {
     for (BindApplier bind : binds) {
       bind.applyBind(object);
     }

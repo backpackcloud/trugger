@@ -16,31 +16,30 @@
  */
 package org.atatec.trugger.bind;
 
-import org.atatec.trugger.loader.ImplementationLoader;
+import org.atatec.trugger.selector.ElementSelector;
+import org.atatec.trugger.selector.ElementsSelector;
+import org.atatec.trugger.selector.FieldSelector;
+import org.atatec.trugger.selector.FieldsSelector;
+
+import java.lang.reflect.Field;
 
 /**
- * A class for helping binding operations.
+ * Interface for the bind configuration for a {@link Binder#bind(Object) value}.
+ * <p/>
+ * There are some conventions for keeping compatibility against the binds: <ul> <li>The
+ * bind using a selection of {@link Field} objects must use the target hierarchy. </ul>
  *
  * @author Marcelo Varella Barca Guimarães
  * @since 1.2
  */
-public final class Bind {
+public interface ValueBindSelector {
 
-  private static final BinderFactory factory;
+  Binder to(FieldSelector selector);
 
-  private Bind() {}
+  Binder to(FieldsSelector selector);
 
-  static {
-    factory = ImplementationLoader.instance().get(BinderFactory.class);
-  }
+  Binder to(ElementSelector selector);
 
-  /**
-   * Starts a new binding.
-   *
-   * @return the component for this operation.
-   */
-  public static Binder binds() {
-    return factory.createBinder();
-  }
+  Binder to(ElementsSelector selector);
 
 }
