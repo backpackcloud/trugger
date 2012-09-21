@@ -37,7 +37,7 @@ public class PredicateBuilder<T> {
    *
    * @param other the predicate to add.
    */
-  public PredicateBuilder<T> add(Predicate<? super T> other) {
+  public PredicateBuilder<T> add(Predicate other) {
     predicate = predicate == null ? Predicates.wrap(other) : predicate.and(other);
     return this;
   }

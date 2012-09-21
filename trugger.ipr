@@ -86,6 +86,10 @@
   <component name="ExportToHTMLSettings">
     <option name="OUTPUT_DIRECTORY" value="$APPLICATION_HOME_DIR$/inspections" />
   </component>
+  <component name="GradleSettings">
+    <option name="gradleHome" value="$USER_HOME$/build/gradle" />
+    <option name="linkedProjectPath" value="$PROJECT_DIR$/build.gradle" />
+  </component>
   <component name="GradleUISettings">
     <setting name="root" />
   </component>
@@ -815,6 +819,40 @@
   <component name="XPathView.XPathProjectComponent">
     <history />
     <find-history />
+  </component>
+  <component name="libraryTable">
+    <library name="easymock-2.5.2">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/2.5.2/easymock-2.5.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/2.5.2/easymock-2.5.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="jboss-logging-3.0.0.CR1">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/logging/jboss-logging/3.0.0.CR1/jboss-logging-3.0.0.CR1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="jboss-vfs-3.1.0.Final">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/jboss-vfs/3.1.0.Final/jboss-vfs-3.1.0.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="junit-4.8">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.8/junit-4.8.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.8/junit-4.8-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">
