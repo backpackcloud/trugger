@@ -18,6 +18,8 @@ Version 4.1
     - Annotation mock still in the binaries, but is implemented Interceptor class instead
       of EasyMock
   - Bind DSL improved
+Other
+  - Using Gradle as the build system (good bye, Maven)
 
 Version 4.0.1
 - Fixed a bug when using a non-named field as selector for binding.
