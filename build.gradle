@@ -1,5 +1,15 @@
 apply plugin: 'java'
 
+configurations {
+  project.group = "org.atatec"
+  project.version = "4.1"
+
+  description = "Trugger is a project that helps you make a code that anyone can read."
+
+  targetCompatibility = "1.6"
+  sourceCompatibility = "1.6"
+}
+
 repositories {
   mavenLocal()
   mavenCentral()
@@ -9,4 +19,19 @@ dependencies {
   compile group: 'org.jboss', name: 'jboss-vfs', version: '3.1.0.Final'
   testCompile group: 'junit', name: 'junit', version: '4.8'
   testCompile group: 'org.easymock', name: 'easymock', version: '2.5.2'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+artifacts {
+  archives sourcesJar
+  archives javadocJar
 }

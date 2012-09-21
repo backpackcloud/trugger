@@ -16,23 +16,21 @@
  */
 package org.atatec.trugger.test.element;
 
+import org.atatec.trugger.HandlingException;
+import org.atatec.trugger.ValueHandler;
+import org.atatec.trugger.element.Element;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Collection;
+import java.util.Set;
+
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.element.Elements.handle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.Collection;
-import java.util.Set;
-
-import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.ValueHandler;
-import org.atatec.trugger.element.Element;
-
-import org.junit.Test;
-
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class HandleTest {
 
   public static class TestObject {
@@ -47,6 +45,14 @@ public class HandleTest {
     static String g;
     static String h;
 
+  }
+
+  @Before
+  public void before() {
+    TestObject.e = null;
+    TestObject.f = null;
+    TestObject.g = null;
+    TestObject.h = null;
   }
 
   @Test
