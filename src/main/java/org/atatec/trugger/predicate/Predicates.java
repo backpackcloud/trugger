@@ -115,16 +115,12 @@ public final class Predicates {
     return wrap(predicate);
   }
 
-  /**
-   * Returns the given predicate. This method purpose is to make the code more readable.
-   */
+  /** Returns the given predicate. This method purpose is to make the code more readable. */
   public static <E> CompositePredicate<E> that(CompositePredicate<E> predicate) {
     return predicate;
   }
 
-  /**
-   * Returns the given predicate. This method purpose is to make the code more readable.
-   */
+  /** Returns the given predicate. This method purpose is to make the code more readable. */
   public static <E> CompositePredicate<E> is(CompositePredicate<E> predicate) {
     return predicate;
   }
@@ -135,6 +131,20 @@ public final class Predicates {
    */
   public static <E> CompositePredicate<E> is(Predicate<E> predicate) {
     return wrap(predicate);
+  }
+
+  /**
+   * @return a predicate that checks if the given object is not null.
+   *
+   * @since 4.1
+   */
+  public static <E> CompositePredicate<E> notNull() {
+    return wrap(new Predicate<E>() {
+      @Override
+      public boolean evaluate(E element) {
+        return element != null;
+      }
+    });
   }
 
   private static class ConstantPredicate implements Predicate<Object> {

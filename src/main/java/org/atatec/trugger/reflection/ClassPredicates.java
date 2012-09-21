@@ -17,6 +17,7 @@
 
 package org.atatec.trugger.reflection;
 
+import org.atatec.trugger.element.Element;
 import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.predicate.Predicate;
 
@@ -78,6 +79,19 @@ public class ClassPredicates {
    */
   public static CompositePredicate<Class> dontDeclare(int... modifiers) {
     return declare(modifiers).negate();
+  }
+
+  /**
+   * @return a predicate that checks if the given element is an array.
+   *
+   * @since 4.1
+   */
+  public static Predicate<Element> array() {
+    return new Predicate<Element>() {
+      public boolean evaluate(Element element) {
+        return element.type().isArray();
+      }
+    };
   }
 
 }
