@@ -14,37 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.element;
 
-import org.atatec.trugger.predicate.Predicate;
+import org.atatec.trugger.transformer.Transformer;
 
 /**
- * Interface that defines a class that copies elements from a target to another.
- * <p>
- * The objects could be of the same or different types. If they are different,
- * only the elements with the same name and compatible types will be copied.
- * <p>
- * Only the {@link Element#isReadable() readable} elements are copied and only
- * the {@link Element#isWritable() writable} elements receives the value.
- *
  * @author Marcelo Varella Barca Guimarães
- * @since 1.2
+ * @since 4.1
  */
-public interface ElementCopier {
+public interface DestinationSelector {
 
   /**
-   * Copies only the elements that matches with the given predicate.
+   * Executes the operation transforming the filtered elements using the given
+   * transformer.
+   *
+   * @param transformer the transformer to use.
    *
    * @return a reference to this object.
    */
-  ElementCopier that(Predicate<ElementCopy> predicate);
+  DestinationSelector as(Transformer<?, ElementCopy> transformer);
 
   /**
-   * Sets the source object and copies the elements.
+   * Copies only the elements that are not <code>null</code>.
    *
-   * @param src
-   *          the source object.
+   * @return a reference to this object.
    */
-  DestinationSelector from(Object src);
+  DestinationSelector notNull();
+
+  void to(Object dest);
 
 }

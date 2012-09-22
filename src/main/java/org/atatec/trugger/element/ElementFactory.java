@@ -62,13 +62,8 @@ public interface ElementFactory {
    */
   ElementsSelector createElementsSelector();
 
-  /**
-   * Creates the component for the element copy operation.
-   *
-   * @param dest
-   *          the destination object.
-   * @return the created component
-   */
-  ElementCopier createElementCopier(Object dest);
+  ElementCopier createElementCopier();
+
+  ElementCopier createElementCopier(ElementsSelector selector);
 
 }

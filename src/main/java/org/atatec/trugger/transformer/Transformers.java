@@ -35,7 +35,7 @@ public final class Transformers {
   }
 
   /** Transformer from Object to Boolean */
-  public static final Transformer<Boolean, Object> TO_BOOLEAN = new Transformer<Boolean, Object>() {
+  public static final Transformer<Boolean, Object> BOOLEAN = new Transformer<Boolean, Object>() {
 
     @Override
     public Boolean transform(Object object) {
@@ -44,7 +44,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to Double */
-  public static final Transformer<Double, Object> TO_DOUBLE = new Transformer<Double, Object>() {
+  public static final Transformer<Double, Object> DOUBLE = new Transformer<Double, Object>() {
 
     @Override
     public Double transform(Object object) {
@@ -53,7 +53,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to Float */
-  public static final Transformer<Float, Object> TO_FLOAT = new Transformer<Float, Object>() {
+  public static final Transformer<Float, Object> FLOAT = new Transformer<Float, Object>() {
 
     @Override
     public Float transform(Object object) {
@@ -62,7 +62,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to Integer */
-  public static final Transformer<Integer, Object> TO_INTEGER = new Transformer<Integer, Object>() {
+  public static final Transformer<Integer, Object> INTEGER = new Transformer<Integer, Object>() {
 
     @Override
     public Integer transform(Object object) {
@@ -71,7 +71,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to Long */
-  public static final Transformer<Long, Object> TO_LONG = new Transformer<Long, Object>() {
+  public static final Transformer<Long, Object> LONG = new Transformer<Long, Object>() {
 
     @Override
     public Long transform(Object object) {
@@ -80,7 +80,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to String */
-  public static final Transformer<String, Object> TO_STRING = new Transformer<String, Object>() {
+  public static final Transformer<String, Object> STRING = new Transformer<String, Object>() {
 
     @Override
     public String transform(Object object) {
@@ -89,7 +89,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to Byte */
-  public static final Transformer<Byte, Object> TO_BYTE = new Transformer<Byte, Object>() {
+  public static final Transformer<Byte, Object> BYTE = new Transformer<Byte, Object>() {
 
     @Override
     public Byte transform(Object object) {
@@ -98,7 +98,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to Short */
-  public static final Transformer<Short, Object> TO_SHORT = new Transformer<Short, Object>() {
+  public static final Transformer<Short, Object> SHORT = new Transformer<Short, Object>() {
 
     @Override
     public Short transform(Object object) {
@@ -107,7 +107,7 @@ public final class Transformers {
   };
 
   /** Transformer from Object to Character */
-  public static final Transformer<Character, Object> TO_CHAR = new Transformer<Character, Object>() {
+  public static final Transformer<Character, Object> CHAR = new Transformer<Character, Object>() {
 
     @Override
     public Character transform(Object object) {
@@ -119,36 +119,31 @@ public final class Transformers {
 
   static {
     TRANSFORMERS = new HashMap<Class, Transformer>(10);
-    TRANSFORMERS.put(Boolean.class, TO_BOOLEAN);
-    TRANSFORMERS.put(Integer.class, TO_INTEGER);
-    TRANSFORMERS.put(Long.class, TO_LONG);
-    TRANSFORMERS.put(Float.class, TO_FLOAT);
-    TRANSFORMERS.put(Double.class, TO_DOUBLE);
-    TRANSFORMERS.put(String.class, TO_STRING);
-    TRANSFORMERS.put(Short.class, TO_SHORT);
-    TRANSFORMERS.put(Character.class, TO_CHAR);
-    TRANSFORMERS.put(Byte.class, TO_BYTE);
+    TRANSFORMERS.put(Boolean.class, BOOLEAN);
+    TRANSFORMERS.put(Integer.class, INTEGER);
+    TRANSFORMERS.put(Long.class, LONG);
+    TRANSFORMERS.put(Float.class, FLOAT);
+    TRANSFORMERS.put(Double.class, DOUBLE);
+    TRANSFORMERS.put(String.class, STRING);
+    TRANSFORMERS.put(Short.class, SHORT);
+    TRANSFORMERS.put(Character.class, CHAR);
+    TRANSFORMERS.put(Byte.class, BYTE);
   }
 
   /**
    * An useful transformer to copy {@link Properties} elements.
-   * <p/>
-   * Elements of the types below will be converted automaticaly: <ul> <li>String
-   * <li>Integer or int <li>Long or long <li>Float or float <li>Double or double
-   * <li>Boolean or boolean </ul>
    */
-  public static Transformer<Object, ElementCopy> properties() {
-    return new Transformer<Object, ElementCopy>() {
+  public static Transformer<Object, ElementCopy> PROPERTIES = new Transformer<Object, ElementCopy>() {
 
-      @Override
-      public Object transform(ElementCopy object) {
-        Class type = Utils.objectClass(object.destinationElement().type());
-        if (TRANSFORMERS.containsKey(type)) {
-          return TRANSFORMERS.get(type).transform(object.value());
-        }
-        return object.value();
+    @Override
+    public Object transform(ElementCopy object) {
+      Class type = Utils.objectClass(object.destinationElement().type());
+      if (TRANSFORMERS.containsKey(type)) {
+        return TRANSFORMERS.get(type).transform(object.value());
       }
+      return object.value();
+    }
 
-    };
-  }
+  };
+
 }

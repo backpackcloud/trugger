@@ -4,10 +4,10 @@ configurations {
   project.group = "org.atatec"
   project.version = "4.1"
 
-  description = "Trugger is a project that helps you make a code that anyone can read."
+  project.description = "Trugger is a project that helps you make a code that anyone can read."
 
-  targetCompatibility = "1.6"
-  sourceCompatibility = "1.6"
+  project.targetCompatibility = "1.6"
+  project.sourceCompatibility = "1.6"
 }
 
 repositories {

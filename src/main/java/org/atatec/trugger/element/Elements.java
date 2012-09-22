@@ -82,14 +82,16 @@ public class Elements {
   }
 
   /**
-   * Copies the elements from the given source.
+   * Copies elements thought objects.
    *
-   * @param dest
-   *          the destination object.
-   * @return the component for copying the elements.
+   * @return a component for
    */
-  public static ElementCopier copyTo(Object dest) {
-    return factory.createElementCopier(dest);
+  public static ElementCopier copy() {
+    return factory.createElementCopier();
+  }
+
+  public static ElementCopier copy(ElementsSelector selector) {
+    return factory.createElementCopier(selector);
   }
 
   /**

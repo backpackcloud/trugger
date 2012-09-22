@@ -16,6 +16,7 @@
  */
 package org.atatec.trugger.element.impl;
 
+import org.atatec.trugger.element.DestinationSelector;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementCopier;
 import org.atatec.trugger.element.ElementCopy;
@@ -35,7 +36,7 @@ import java.util.Set;
  *
  * @author Marcelo Varella Barca Guimarães
  */
-public final class TruggerElementCopier implements ElementCopier {
+public final class TruggerElementCopier implements ElementCopier, DestinationSelector {
 
   private final PredicateBuilder<ElementCopy> builder;
 
@@ -45,21 +46,16 @@ public final class TruggerElementCopier implements ElementCopier {
   private Object src;
   private Object dest;
 
-  /**
-   * @param dest
-   *          the receiver object.
-   */
-  public TruggerElementCopier(Object dest) {
-    this.dest = dest;
+  public TruggerElementCopier() {
     this.builder = new PredicateBuilder<ElementCopy>();
   }
 
-  public ElementCopier inSelection(ElementsSelector selector) {
+  public TruggerElementCopier(ElementsSelector selector) {
+    this();
     this.selector = selector.readable();
-    return this;
   }
 
-  public ElementCopier notNull() {
+  public DestinationSelector notNull() {
     this.builder.add(new Predicate<ElementCopy>() {
 
       public boolean evaluate(ElementCopy element) {
@@ -69,18 +65,23 @@ public final class TruggerElementCopier implements ElementCopier {
     return this;
   }
 
-  public ElementCopier elementsMatching(Predicate<ElementCopy> predicate) {
+  public ElementCopier that(Predicate<ElementCopy> predicate) {
     this.builder.add(predicate);
     return this;
   }
 
-  public void from(Object src) {
+  public DestinationSelector from(Object src) {
     this.src = src;
+    return this;
+  }
+
+  public void to(Object object) {
+    dest = object;
     startCopy();
   }
 
   @Override
-  public ElementCopier transformingWith(Transformer transformer) {
+  public DestinationSelector as(Transformer transformer) {
     this.transformer = transformer;
     return this;
   }

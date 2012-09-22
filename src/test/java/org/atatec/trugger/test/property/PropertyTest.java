@@ -162,7 +162,7 @@ public class PropertyTest {
 
     ElementsSelector selection = Elements.elements().that(ElementPredicates.ofType(boolean.class).negate());
 
-    Elements.copyTo(o2).notNull().inSelection(selection).from(o1);
+    Elements.copy(selection).from(o1).notNull().to(o2);
 
     assertNotNull(o1.getName()); // a null value indicates that the null property has been copied
     assertNotSame(o1.active, o2.active); // not covered by the selection

@@ -23,13 +23,13 @@ import org.junit.Test;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static org.atatec.trugger.transformer.Transformers.TO_BOOLEAN;
-import static org.atatec.trugger.transformer.Transformers.TO_DOUBLE;
-import static org.atatec.trugger.transformer.Transformers.TO_FLOAT;
-import static org.atatec.trugger.transformer.Transformers.TO_INTEGER;
-import static org.atatec.trugger.transformer.Transformers.TO_LONG;
-import static org.atatec.trugger.transformer.Transformers.TO_STRING;
-import static org.atatec.trugger.transformer.Transformers.properties;
+import static org.atatec.trugger.transformer.Transformers.BOOLEAN;
+import static org.atatec.trugger.transformer.Transformers.DOUBLE;
+import static org.atatec.trugger.transformer.Transformers.FLOAT;
+import static org.atatec.trugger.transformer.Transformers.INTEGER;
+import static org.atatec.trugger.transformer.Transformers.LONG;
+import static org.atatec.trugger.transformer.Transformers.PROPERTIES;
+import static org.atatec.trugger.transformer.Transformers.STRING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -63,7 +63,7 @@ public class TransformerTest {
 
     MailConfig config = new MailConfig();
 
-    Elements.copyTo(config).transformingWith(properties()).from(props);
+    Elements.copy().from(props).as(PROPERTIES).to(config);
 
     assertTrue(config.sendMail);
     assertFalse(config.checkMail);
@@ -77,14 +77,14 @@ public class TransformerTest {
 
   @Test
   public void testTransformers() throws Exception {
-    assertTrue(TO_BOOLEAN.transform("true"));
-    assertFalse(TO_BOOLEAN.transform("false"));
+    assertTrue(BOOLEAN.transform("true"));
+    assertFalse(BOOLEAN.transform("false"));
 
-    assertEquals(Integer.valueOf(1), TO_INTEGER.transform("1"));
-    assertEquals(Long.valueOf(1), TO_LONG.transform("1"));
-    assertEquals(Double.valueOf(2.5), TO_DOUBLE.transform("2.5"));
-    assertEquals(Float.valueOf(2.5f), TO_FLOAT.transform("2.5"));
-    assertEquals("1", TO_STRING.transform(1));
+    assertEquals(Integer.valueOf(1), INTEGER.transform("1"));
+    assertEquals(Long.valueOf(1), LONG.transform("1"));
+    assertEquals(Double.valueOf(2.5), DOUBLE.transform("2.5"));
+    assertEquals(Float.valueOf(2.5f), FLOAT.transform("2.5"));
+    assertEquals("1", STRING.transform(1));
   }
 
   private static class MockTransformer implements Transformer {

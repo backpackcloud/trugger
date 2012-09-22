@@ -16,13 +16,6 @@
  */
 package org.atatec.trugger.element.impl;
 
-import java.lang.annotation.Annotation;
-import java.sql.ResultSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
-
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementCopier;
@@ -31,6 +24,13 @@ import org.atatec.trugger.registry.MapRegistry;
 import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.selector.ElementsSelector;
+
+import java.lang.annotation.Annotation;
+import java.sql.ResultSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * A default implementation for ElementFactory.
@@ -75,11 +75,14 @@ public final class TruggerElementFactory implements ElementFactory {
     return new TruggerElementsSelector(finder);
   }
 
-  /**
-   * Returns a new {@link TruggerElementCopier}.
-   */
-  public ElementCopier createElementCopier(Object src) {
-    return new TruggerElementCopier(src);
+  @Override
+  public ElementCopier createElementCopier() {
+    return new TruggerElementCopier();
+  }
+
+  @Override
+  public ElementCopier createElementCopier(ElementsSelector selector) {
+    return new TruggerElementCopier(selector);
   }
 
 }

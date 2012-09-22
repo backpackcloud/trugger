@@ -16,20 +16,19 @@
  */
 package org.atatec.trugger.test.element;
 
-import static org.atatec.trugger.element.Elements.copyTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.atatec.trugger.element.ElementCopy;
+import org.atatec.trugger.predicate.Predicate;
+import org.atatec.trugger.transformer.Transformer;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.atatec.trugger.element.ElementCopy;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.transformer.Transformer;
-
-import org.junit.Before;
-import org.junit.Test;
+import static org.atatec.trugger.element.Elements.copy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -54,12 +53,13 @@ public class ElementCopyTest {
     o2.setNickName("Nick");
     o2.setWeight(30.4);
 
-    copyTo(o2).elementsMatching(new Predicate<ElementCopy>() {
+    Predicate<ElementCopy> predicate = new Predicate<ElementCopy>() {
 
       public boolean evaluate(ElementCopy element) {
         return element.sourceElement().equals(element.destinationElement());
       }
-    }).notNull().from(testObject);
+    };
+    copy().that(predicate).from(testObject).notNull().to(o2);
 
     assertEquals(testObject.getAge(), o2.getAge());
     assertEquals(23, o2.getAge());
@@ -85,7 +85,7 @@ public class ElementCopyTest {
     o2.setNickName("Nick");
     o2.setWeight(30.4);
 
-    copyTo(o2).from(testObject);
+    copy().from(testObject).to(o2);
 
     assertEquals(testObject.getWeight(), o2.getWeight(), 0.001);
     assertEquals(80.2, o2.getWeight(), 0.01);
@@ -94,7 +94,7 @@ public class ElementCopyTest {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    copyTo(map).from(testObject);
+    copy().from(testObject).to(map);
     assertEquals(23, map.get("age"));
     assertEquals(null, map.get("nickName"));
     assertEquals("Marcelo", map.get("name"));
@@ -103,8 +103,9 @@ public class ElementCopyTest {
     assertEquals(80.2, (Double) map.get("weight"), 0.001);
 
     Properties props = new Properties();
+    Transformer<String, ElementCopy> string = new ToStringTransformer();
 
-    copyTo(props).transformingWith(new ToStringTransformer()).from(testObject);
+    copy().from(testObject).as(string).to(props);
     assertEquals("23", props.getProperty("age"));
     assertEquals("null", props.getProperty("nickName"));
     assertEquals("Marcelo", props.getProperty("name"));
@@ -147,7 +148,7 @@ public class ElementCopyTest {
 
     object1.setName("name");
 
-    copyTo(object2).from(object1);
+    copy().from(object1).to(object2);
 
     assertEquals(0, object2.getName());
   }
