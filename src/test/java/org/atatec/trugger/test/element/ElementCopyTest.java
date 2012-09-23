@@ -17,7 +17,6 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.ElementCopy;
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.transformer.Transformer;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,13 +52,7 @@ public class ElementCopyTest {
     o2.setNickName("Nick");
     o2.setWeight(30.4);
 
-    Predicate<ElementCopy> predicate = new Predicate<ElementCopy>() {
-
-      public boolean evaluate(ElementCopy element) {
-        return element.sourceElement().equals(element.destinationElement());
-      }
-    };
-    copy().that(predicate).from(testObject).notNull().to(o2);
+    copy().from(testObject).notNull().to(o2);
 
     assertEquals(testObject.getAge(), o2.getAge());
     assertEquals(23, o2.getAge());

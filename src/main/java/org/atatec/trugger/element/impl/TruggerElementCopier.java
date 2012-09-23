@@ -21,10 +21,6 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementCopier;
 import org.atatec.trugger.element.ElementCopy;
 import org.atatec.trugger.element.Elements;
-import org.atatec.trugger.predicate.BasePredicate;
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.transformer.Transformer;
 import org.atatec.trugger.util.Utils;
@@ -38,35 +34,24 @@ import java.util.Set;
  */
 public final class TruggerElementCopier implements ElementCopier, DestinationSelector {
 
-  private final PredicateBuilder<ElementCopy> builder;
-
   private ElementsSelector selector;
   private Transformer<Object, ElementCopy> transformer;
+
+  private boolean copyNull = true;
 
   private Object src;
   private Object dest;
 
   public TruggerElementCopier() {
-    this.builder = new PredicateBuilder<ElementCopy>();
+
   }
 
   public TruggerElementCopier(ElementsSelector selector) {
-    this();
     this.selector = selector.readable();
   }
 
   public DestinationSelector notNull() {
-    this.builder.add(new Predicate<ElementCopy>() {
-
-      public boolean evaluate(ElementCopy element) {
-        return element.value() != null;
-      }
-    });
-    return this;
-  }
-
-  public ElementCopier that(Predicate<ElementCopy> predicate) {
-    this.builder.add(predicate);
+    this.copyNull = false;
     return this;
   }
 
@@ -108,21 +93,19 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
     }
   }
 
-  private void copy(boolean transform, Element destProperty, Element srcProperty) {
-    Object value = srcProperty.in(src).value();
-    PropertyCopyImpl copy = new PropertyCopyImpl(srcProperty, destProperty, value);
-    CompositePredicate<ElementCopy> predicate = builder.predicate();
+  private void copy(boolean transform, Element dest, Element src) {
+    Object value = src.in(this.src).value();
+    PropertyCopyImpl copy = new PropertyCopyImpl(src, dest, value);
     if (transform) {
       value = transformer.transform(copy);
     }
     if (value != null) {
-      predicate = predicate != null ? predicate.and(new AssignablePredicate(value)) :
-        new AssignablePredicate(value);
+      if (Utils.areAssignable(dest.type(), value.getClass())) {
+        dest.in(this.dest).value(value);
+      }
+    } else if (copyNull) {
+      dest.in(this.dest).value(value);
     }
-    if (predicate != null && !predicate.evaluate(copy)) {
-      return;
-    }
-    destProperty.in(dest).value(value);
   }
 
   private static class PropertyCopyImpl implements ElementCopy {
@@ -149,21 +132,6 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
 
     public Element destinationElement() {
       return to;
-    }
-
-  }
-
-  private static class AssignablePredicate extends BasePredicate<ElementCopy> {
-
-    private final Object value;
-
-    private AssignablePredicate(Object value) {
-      this.value = value;
-    }
-
-    @Override
-    public boolean evaluate(ElementCopy element) {
-      return value == null || Utils.areAssignable(element.destinationElement().type(), value.getClass());
     }
 
   }

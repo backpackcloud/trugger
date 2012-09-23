@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.element;
 
-import org.atatec.trugger.predicate.Predicate;
-
 /**
  * Interface that defines a class that copies elements from a target to another.
  * <p>
@@ -31,13 +29,6 @@ import org.atatec.trugger.predicate.Predicate;
  * @since 1.2
  */
 public interface ElementCopier {
-
-  /**
-   * Copies only the elements that matches with the given predicate.
-   *
-   * @return a reference to this object.
-   */
-  ElementCopier that(Predicate<ElementCopy> predicate);
 
   /**
    * Sets the source object and copies the elements.
