@@ -5,7 +5,7 @@ configurations {
   project.group = "org.atatec"
   project.version = "4.1"
 
-  project.description = "Trugger is a project that helps you make a code that anyone can read."
+  project.description = "Trugger is a project that helps you write code that anyone can read."
 
   project.targetCompatibility = "1.6"
   project.sourceCompatibility = "1.6"
@@ -21,6 +21,8 @@ dependencies {
   testCompile group: 'junit', name: 'junit', version: '4.8'
   testCompile group: 'org.easymock', name: 'easymock', version: '2.5.2'
 }
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 task sourcesJar(type: Jar, dependsOn: classes) {
   classifier = 'sources'
@@ -53,3 +55,5 @@ task pom << {
     }
   }.writeTo("$buildDir/pom.xml")
 }
+
+task release(dependsOn: [clean, build, uploadArchives, pom])
