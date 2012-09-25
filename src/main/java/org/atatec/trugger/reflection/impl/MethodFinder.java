@@ -17,7 +17,6 @@
 package org.atatec.trugger.reflection.impl;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -29,7 +28,7 @@ public class MethodFinder implements MemberFinder<Method> {
   
   public MethodFinder(String name, Class[] parameterTypes) {
     this.name = name;
-    this.parameterTypes = Arrays.copyOf(parameterTypes, parameterTypes.length);
+    this.parameterTypes = parameterTypes;
   }
 
   @Override
