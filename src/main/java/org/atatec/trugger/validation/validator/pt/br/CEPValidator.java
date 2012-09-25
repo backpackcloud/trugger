@@ -16,10 +16,10 @@
  */
 package org.atatec.trugger.validation.validator.pt.br;
 
-import java.util.regex.Pattern;
-
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.validator.NotEmpty;
+
+import java.util.regex.Pattern;
 
 /**
  * The implementation of the {@link CEP} validation.
@@ -29,7 +29,7 @@ import org.atatec.trugger.validation.validator.NotEmpty;
  */
 public class CEPValidator implements Validator<String> {
 
-  private static final Pattern pattern = Pattern.compile("^(\\d{5}-\\d{3})|(\\d{8})$");
+  private static final Pattern pattern = Pattern.compile("^(\\d{5}-?\\d{3})$");
 
   public boolean isValid(@NotEmpty String value) {
     return pattern.matcher(value).matches();
