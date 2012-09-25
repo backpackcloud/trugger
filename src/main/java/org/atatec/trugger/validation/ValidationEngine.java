@@ -16,30 +16,67 @@
  */
 package org.atatec.trugger.validation;
 
+import org.atatec.trugger.element.Element;
 import org.atatec.trugger.message.MessageCreator;
 
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 /**
- * Interface that defines a class capable of validate an object based on the
- * Metadatas of its properties.
+ * Interface that defines a class capable of validate an object based on the defined
+ * constraints in its elements.
  *
  * @author Marcelo Varella Barca Guimarães
  */
-public interface ValidationEngine extends ContextValidationEngine {
+public interface ValidationEngine {
 
   /**
-   * Indicates that the validation must be processed only over the annotations
-   * with property <code>context</code> equals to given context.
+   * Indicates that the validation must be processed only over the annotations with
+   * property <code>context</code> equals to given context.
    *
-   * @param context
-   *          the context validation.
+   * @param context the context validation.
+   *
    * @return a reference to this object.
    */
-  ContextValidationEngine forContext(String context);
+  ValidationEngine forContext(String context);
 
+  /**
+   * Sets a message creator for creating the messages.
+   *
+   * @param messageCreator the message creator to use
+   */
   ValidationEngine using(MessageCreator messageCreator);
 
+  /**
+   * Sets the resource bundle to search for messages. The {@link
+   * org.atatec.trugger.message.Messages#createMessageCreator(java.util.ResourceBundle)
+   * default message creator} will be used.
+   *
+   * @param resourceBundle the resource bundle to use.
+   */
   ValidationEngine using(ResourceBundle resourceBundle);
+
+  /**
+   * Validates all elements in the given target.
+   *
+   * @return the validation result
+   */
+  ValidationResult validate(Object target);
+
+  /**
+   * Validates the given {@link org.atatec.trugger.element.Element#isSpecific() specific}
+   * element
+   *
+   * @return the validation result
+   */
+  ValidationResult validate(Element element);
+
+  /**
+   * Validates the given {@link org.atatec.trugger.element.Element#isSpecific() specific}
+   * elements
+   *
+   * @return the validation result
+   */
+  ValidationResult validate(Collection<Element> elements);
 
 }
