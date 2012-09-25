@@ -17,7 +17,6 @@
 
 package org.atatec.trugger.exception;
 
-import org.atatec.trugger.dsl.With;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.registry.MapRegistry;
 import org.atatec.trugger.registry.Registry;
@@ -129,6 +128,12 @@ public class CompositeExceptionHandler implements ExceptionHandler {
         return;
       }
     }
+  }
+
+  public static interface With<I, O> {
+
+    O with(I input);
+
   }
 
 }
