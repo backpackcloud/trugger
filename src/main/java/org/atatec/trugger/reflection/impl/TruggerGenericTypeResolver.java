@@ -16,57 +16,55 @@
  */
 package org.atatec.trugger.reflection.impl;
 
+import java.lang.ref.SoftReference;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Helper class for resolving generic types against type variables.
- * <p>
+ * <p/>
  * This class is originally from the SpringFramework.
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
- * @author Marcelo Varella Barca Guimarães (method
- *         {@link #resolveParameterName(String, Class)} and default visibility
- *         to public methods).
+ * @author Marcelo Varella Barca Guimarães (method {@link #resolveParameterName(String,
+ *         Class)} and default visibility to public methods).
  */
 final class TruggerGenericTypeResolver {
 
   //Changed to generic type
-  private static final Map<Class, Map<Type, Type>> typeVariableCache =
-    Collections.synchronizedMap(new WeakHashMap<Class, Map<Type, Type>>());
+  private static final SoftReference<Map<Class, Map<Type, Type>>> typeVariableCache =
+    new SoftReference<Map<Class, Map<Type, Type>>>(new ConcurrentHashMap<Class, Map<Type, Type>>(50));
 
-  private TruggerGenericTypeResolver() {}
+  private TruggerGenericTypeResolver() {
+  }
 
   /**
    * Resolve the specified generic type against the given TypeVariable map.
    *
-   * @param genericType
-   *          the generic type to resolve
-   * @param typeVariableMap
-   *          the TypeVariable Map to resolved against
+   * @param genericType     the generic type to resolve
+   * @param typeVariableMap the TypeVariable Map to resolved against
+   *
    * @return the type if it resolves to a Class, or <code>Object.class otherwise
    */
   static Class resolveType(Type genericType, Map<Type, Type> typeVariableMap) {
     Type rawType = getRawType(genericType, typeVariableMap);
-    return(rawType instanceof Class ? (Class) rawType : Object.class);
+    return (rawType instanceof Class ? (Class) rawType : Object.class);
   }
 
   /**
    * Resolves the generic parameter name of a class.
    *
-   * @param parameterName
-   *          the parameter name
-   * @param target
-   *          the target class
+   * @param parameterName the parameter name
+   * @param target        the target class
+   *
    * @return the parameter class.
    */
   static Class<?> resolveParameterName(String parameterName, Class<?> target) {
@@ -86,10 +84,9 @@ final class TruggerGenericTypeResolver {
   /**
    * Determine the raw type for the given generic parameter type.
    *
-   * @param genericType
-   *          the generic type to resolve
-   * @param typeVariableMap
-   *          the TypeVariable Map to resolved against
+   * @param genericType     the generic type to resolve
+   * @param typeVariableMap the TypeVariable Map to resolved against
+   *
    * @return the resolved raw type
    */
   static Type getRawType(Type genericType, Map<Type, Type> typeVariableMap) {
@@ -108,13 +105,21 @@ final class TruggerGenericTypeResolver {
     }
   }
 
+  private static Map<Class, Map<Type, Type>> cache() {
+    Map<Class, Map<Type, Type>> map = typeVariableCache.get();
+    if (map == null) {
+      map = new ConcurrentHashMap<Class, Map<Type, Type>>(100);
+    }
+    return map;
+  }
+
   /**
-   * Build a mapping of {@link TypeVariable#getName TypeVariable names} to
-   * concrete {@link Class} for the specified {@link Class}. Searches all super
-   * types, enclosing types and interfaces.
+   * Build a mapping of {@link TypeVariable#getName TypeVariable names} to concrete {@link
+   * Class} for the specified {@link Class}. Searches all super types, enclosing types and
+   * interfaces.
    */
   static Map<Type, Type> getTypeVariableMap(Class clazz) {
-    Map<Type, Type> typeVariableMap = typeVariableCache.get(clazz);
+    Map<Type, Type> typeVariableMap = cache().get(clazz);
 
     if (typeVariableMap == null) {
       typeVariableMap = new HashMap<Type, Type>();
@@ -146,15 +151,13 @@ final class TruggerGenericTypeResolver {
         type = type.getEnclosingClass();
       }
 
-      typeVariableCache.put(clazz, typeVariableMap);
+      cache().put(clazz, typeVariableMap);
     }
 
     return typeVariableMap;
   }
 
-  /**
-   * Extracts the bound <code>Type for a given {@link TypeVariable}.
-   */
+  /** Extracts the bound <code>Type for a given {@link TypeVariable}. */
   private static Type extractBoundForTypeVariable(TypeVariable typeVariable) {
     Type[] bounds = typeVariable.getBounds();
     if (bounds.length == 0) {
@@ -182,28 +185,23 @@ final class TruggerGenericTypeResolver {
   }
 
   /**
-   * Read the {@link TypeVariable TypeVariables} from the supplied
-   * {@link ParameterizedType} and add mappings corresponding to the
-   * {@link TypeVariable#getName TypeVariable name} -> concrete type to the
-   * supplied {@link Map}.
-   * <p>
+   * Read the {@link TypeVariable TypeVariables} from the supplied {@link
+   * ParameterizedType} and add mappings corresponding to the {@link TypeVariable#getName
+   * TypeVariable name} -> concrete type to the supplied {@link Map}.
+   * <p/>
    * Consider this case:
-   *
-   * <pre class="code>
-   * public
-   * interface Foo&lt;S, T&gt; { .. } public class FooImpl implements
-   * Foo&lt;String, Integer&gt; { .. }
-   * </pre>
-   *
-   * For '<code>FooImpl' the
-   * following mappings would be added to the {@link Map}:
+   * <p/>
+   * <pre class="code> public interface Foo&lt;S, T&gt; { .. } public class FooImpl
+   * implements Foo&lt;String, Integer&gt; { .. } </pre>
+   * <p/>
+   * For '<code>FooImpl' the following mappings would be added to the {@link Map}:
    * {S=java.lang.String, T=java.lang.Integer}.
    */
   private static void populateTypeMapFromParameterizedType(ParameterizedType type, Map<Type, Type> typeVariableMap) {
     if (type.getRawType() instanceof Class) {
       Type[] actualTypeArguments = type.getActualTypeArguments();
       TypeVariable[] typeVariables = ((Class) type.getRawType()).getTypeParameters();
-      for (int i = 0 ; i < actualTypeArguments.length ; i++) {
+      for (int i = 0; i < actualTypeArguments.length; i++) {
         Type actualTypeArgument = actualTypeArguments[i];
         TypeVariable variable = typeVariables[i];
         if (actualTypeArgument instanceof Class) {

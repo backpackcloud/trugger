@@ -20,8 +20,7 @@ import org.atatec.trugger.loader.impl.TruggerRegistry;
 import org.atatec.trugger.registry.Registry;
 
 /**
- * This is the main class of this API, it loads implementations for the
- * interfaces.
+ * A class used for loading implementations for the DSLs exposed by this framework.
  *
  * @author Marcelo Varella Barca Guimarães
  */
@@ -35,7 +34,7 @@ public class ImplementationLoader {
 
   /**
    * Returns the implementation for a given class.
-   * <p>
+   * <p/>
    * The implementation will be an instance of the resolved class for the key
    * <code>type</code>.
    *
@@ -46,13 +45,14 @@ public class ImplementationLoader {
   }
 
   /**
-   * Returns the register for manual configuration.
+   * Registers the given implementation for an interface.
    *
-   * @return the register used by this instance.
-   * @since 2.3
+   * @param implementation implementation to register
+   *
+   * @return an object to specify the interface
    */
-  public final Registry<Class<?>, Object> registry() {
-    return registry;
+  public final Registry.RegistryMapper<Class<?>, Object> register(Object implementation) {
+    return registry.register(implementation);
   }
 
   private static class ImplementationLoaderHolder {
@@ -60,8 +60,8 @@ public class ImplementationLoader {
   }
 
   /**
-   * Returns this class shared instance, which is used by the entire framework
-   * to load implementations.
+   * Returns this class shared instance, which is used by the entire framework to load
+   * implementations.
    *
    * @return the shared instance.
    */

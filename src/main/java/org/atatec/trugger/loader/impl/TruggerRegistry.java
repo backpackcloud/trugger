@@ -16,13 +16,15 @@
  */
 package org.atatec.trugger.loader.impl;
 
-import java.util.Set;
-
 import org.atatec.trugger.CreateException;
 import org.atatec.trugger.registry.MapRegistry;
 import org.atatec.trugger.registry.Registry;
 
+import java.util.Set;
+
 /**
+ * A register that loads the default implementations if there is no one registered.
+ *
  * @author Marcelo Varella Barca Guimarães
  */
 public final class TruggerRegistry implements Registry<Class<?>, Object> {
@@ -49,8 +51,8 @@ public final class TruggerRegistry implements Registry<Class<?>, Object> {
     return decorated.removeRegistryFor(key);
   }
 
-  public synchronized Object registryFor(Class<?> key) {
-    if(!decorated.hasRegistryFor(key)) {
+  public Object registryFor(Class<?> key) {
+    if (!decorated.hasRegistryFor(key)) {
       try {
         Class<?> className = Class.forName(getDefaultImplementationName(key));
         decorated.register(className.newInstance()).to(key);
