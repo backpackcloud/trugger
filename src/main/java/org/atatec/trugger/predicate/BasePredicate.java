@@ -25,7 +25,7 @@ package org.atatec.trugger.predicate;
  */
 public abstract class BasePredicate<T> implements CompositePredicate<T> {
 
-  public CompositePredicate<T> and(final Predicate<? super T> predicate) {
+  public CompositePredicate<T> and(final Predicate predicate) {
     return new BasePredicate<T>() {
 
       public boolean evaluate(T element) {
@@ -39,7 +39,7 @@ public abstract class BasePredicate<T> implements CompositePredicate<T> {
     };
   }
 
-  public CompositePredicate<T> nand(final Predicate<? super T> predicate) {
+  public CompositePredicate<T> nand(final Predicate predicate) {
     return new BasePredicate<T>() {
 
       public boolean evaluate(T element) {
@@ -53,7 +53,7 @@ public abstract class BasePredicate<T> implements CompositePredicate<T> {
     };
   }
 
-  public CompositePredicate<T> nor(final Predicate<? super T> predicate) {
+  public CompositePredicate<T> nor(final Predicate predicate) {
     return new BasePredicate<T>() {
 
       public boolean evaluate(T element) {
@@ -67,7 +67,7 @@ public abstract class BasePredicate<T> implements CompositePredicate<T> {
     };
   }
 
-  public CompositePredicate<T> or(final Predicate<? super T> predicate) {
+  public CompositePredicate<T> or(final Predicate predicate) {
     return new BasePredicate<T>() {
 
       public boolean evaluate(T element) {
@@ -81,7 +81,7 @@ public abstract class BasePredicate<T> implements CompositePredicate<T> {
     };
   }
 
-  public CompositePredicate<T> xand(final Predicate<? super T> predicate) {
+  public CompositePredicate<T> xand(final Predicate predicate) {
     return new BasePredicate<T>() {
 
       public boolean evaluate(T element) {
@@ -96,7 +96,7 @@ public abstract class BasePredicate<T> implements CompositePredicate<T> {
     };
   }
 
-  public CompositePredicate<T> xor(final Predicate<? super T> predicate) {
+  public CompositePredicate<T> xor(final Predicate predicate) {
     return new BasePredicate<T>() {
 
       public boolean evaluate(T element) {

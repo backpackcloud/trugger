@@ -36,7 +36,7 @@ public interface CompositePredicate<T> extends Predicate<T> {
    *          the predicate to compose.
    * @return the created predicate.
    */
-  CompositePredicate<T> and(Predicate<? super T> predicate);
+  CompositePredicate<T> and(Predicate predicate);
   
   /**
    * Composes this predicate with the given one using the NAND operation.
@@ -45,7 +45,7 @@ public interface CompositePredicate<T> extends Predicate<T> {
    *          the predicate to compose.
    * @return the created predicate.
    */
-  CompositePredicate<T> nand(Predicate<? super T> predicate);
+  CompositePredicate<T> nand(Predicate predicate);
   
   /**
    * Composes this predicate with the given one using the OR operation.
@@ -54,7 +54,7 @@ public interface CompositePredicate<T> extends Predicate<T> {
    *          the predicate to compose.
    * @return the created predicate.
    */
-  CompositePredicate<T> or(Predicate<? super T> predicate);
+  CompositePredicate<T> or(Predicate predicate);
   
   /**
    * Composes this predicate with the given one using the NOR operation.
@@ -63,7 +63,7 @@ public interface CompositePredicate<T> extends Predicate<T> {
    *          the predicate to compose.
    * @return the created predicate.
    */
-  CompositePredicate<T> nor(Predicate<? super T> predicate);
+  CompositePredicate<T> nor(Predicate predicate);
   
   /**
    * Composes this predicate with the given one using the XAND operation.
@@ -75,7 +75,7 @@ public interface CompositePredicate<T> extends Predicate<T> {
    *          the predicate to compose.
    * @return the created predicate.
    */
-  CompositePredicate<T> xand(Predicate<? super T> predicate);
+  CompositePredicate<T> xand(Predicate predicate);
   
   /**
    * Composes this predicate with the given one using the XOR operation.
@@ -87,7 +87,7 @@ public interface CompositePredicate<T> extends Predicate<T> {
    *          the predicate to compose.
    * @return the created predicate.
    */
-  CompositePredicate<T> xor(Predicate<? super T> predicate);
+  CompositePredicate<T> xor(Predicate predicate);
   
   /**
    * Negates this predicate.

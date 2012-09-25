@@ -16,9 +16,8 @@
  */
 package org.atatec.trugger.predicate;
 
-import org.atatec.trugger.Result;
-import org.atatec.trugger.validation.Validation;
-import org.atatec.trugger.validation.ValidationResult;
+import static org.atatec.trugger.element.Elements.elements;
+import static org.atatec.trugger.validation.Validation.validation;
 
 /**
  * An utility class to handle {@link Predicate} objects.
@@ -67,7 +66,12 @@ public final class Predicates {
    *
    * @since 2.5
    */
-  public static CompositePredicate<Object> VALID = validUsing(new Validation().validate().allElements());
+  public static CompositePredicate<Object> VALID = wrap(new Predicate<Object>() {
+    @Override
+    public boolean evaluate(Object object) {
+      return validation().validate(elements().in(object)).isValid();
+    }
+  });
 
   /**
    * A predicate that returns <code>true</code> if an object is invalid based on all of
@@ -75,37 +79,12 @@ public final class Predicates {
    *
    * @since 2.5
    */
-  public static CompositePredicate<Object> INVALID = invalidUsing(new Validation().validate().allElements());
-
-  /**
-   * @return a predicate that returns <code>true</code> if an object is valid based on the
-   *         given validation result.
-   *
-   * @since 2.5
-   */
-  public static CompositePredicate<Object> validUsing(final Result<ValidationResult, Object> result) {
-    return new BasePredicate<Object>() {
-
-      public boolean evaluate(Object element) {
-        return result.in(element).isValid();
-      }
-    };
-  }
-
-  /**
-   * @return a predicate that returns <code>true</code> if an object is invalid based on
-   *         the given validation result.
-   *
-   * @since 2.5
-   */
-  public static CompositePredicate<Object> invalidUsing(final Result<ValidationResult, Object> result) {
-    return new BasePredicate<Object>() {
-
-      public boolean evaluate(Object element) {
-        return result.in(element).isInvalid();
-      }
-    };
-  }
+  public static CompositePredicate<Object> INVALID = wrap(new Predicate<Object>() {
+    @Override
+    public boolean evaluate(Object object) {
+      return validation().validate(elements().in(object)).isInvalid();
+    }
+  });
 
   /**
    * @see #wrap(Predicate)
@@ -134,18 +113,28 @@ public final class Predicates {
   }
 
   /**
-   * @return a predicate that checks if the given object is not null.
+   * A predicate that checks if the given object is not null.
    *
    * @since 4.1
    */
-  public static <E> CompositePredicate<E> notNull() {
-    return wrap(new Predicate<E>() {
-      @Override
-      public boolean evaluate(E element) {
-        return element != null;
-      }
-    });
-  }
+  public static CompositePredicate NOT_NULL = wrap(new Predicate() {
+    @Override
+    public boolean evaluate(Object element) {
+      return element != null;
+    }
+  });
+
+  /**
+   * A predicate that checks if the given object is null.
+   *
+   * @since 4.1
+   */
+  public static CompositePredicate NULL = wrap(new Predicate() {
+    @Override
+    public boolean evaluate(Object element) {
+      return element == null;
+    }
+  });
 
   private static class ConstantPredicate implements Predicate<Object> {
 
