@@ -33,6 +33,7 @@ public interface ElementFactory {
    * Returns the registry that associates classes to finders.
    *
    * @return the registry.
+   *
    * @since 2.3
    */
   Registry<Class<?>, Finder<Element>> registry();
@@ -40,17 +41,17 @@ public interface ElementFactory {
   /**
    * Creates a selector for an {@link Element} object.
    *
-   * @param name
-   *          the element name.
+   * @param name the element name.
+   *
    * @return the selector.
    */
   ElementSelector createElementSelector(String name);
 
   /**
-   * Creates a selector for an {@link Element} object without specifying the
-   * name.
+   * Creates a selector for an {@link Element} object without specifying the name.
    *
    * @return the selector.
+   *
    * @since 2.5
    */
   ElementSelector createElementSelector();
@@ -62,8 +63,10 @@ public interface ElementFactory {
    */
   ElementsSelector createElementsSelector();
 
+  /** Creates a new ElementCopier for all elements. */
   ElementCopier createElementCopier();
 
+  /** Creates a new ElementCopier for the elements returned by the given selector */
   ElementCopier createElementCopier(ElementsSelector selector);
 
 }

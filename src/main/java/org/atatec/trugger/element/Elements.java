@@ -37,7 +37,8 @@ public class Elements {
 
   private static final ElementFactory factory;
 
-  private Elements() {}
+  private Elements() {
+  }
 
   static {
     factory = ImplementationLoader.instance().get(ElementFactory.class);
@@ -45,6 +46,7 @@ public class Elements {
 
   /**
    * @return the registry.
+   *
    * @since 2.3
    */
   public static Registry<Class<?>, Finder<Element>> registry() {
@@ -54,8 +56,8 @@ public class Elements {
   /**
    * Selects an element.
    *
-   * @param name
-   *          the element name.
+   * @param name the element name.
+   *
    * @return a component for selecting the element.
    */
   public static ElementSelector element(String name) {
@@ -66,6 +68,7 @@ public class Elements {
    * Selects an element without specifying a name.
    *
    * @return a component for selecting the element.
+   *
    * @since 2.5
    */
   public static ElementSelector element() {
@@ -82,27 +85,27 @@ public class Elements {
   }
 
   /**
-   * Copies elements thought objects.
-   *
-   * @return a component for
+   * Copies elements through objects.
    */
   public static ElementCopier copy() {
     return factory.createElementCopier();
   }
 
+  /** Copies the elements returned by the given selector through objects. */
   public static ElementCopier copy(ElementsSelector selector) {
     return factory.createElementCopier(selector);
   }
 
   /**
    * Handles a collection of {@link Element#isSpecific() specific} elements.
-   * <p>
-   * This ValueHandler can set a common value to all elements and retrieve a
-   * Collection of all element values.
+   * <p/>
+   * This ValueHandler can set a common value to all elements and retrieve a Collection of
+   * all element values.
    *
-   * @param elements
-   *          the elements to handle
+   * @param elements the elements to handle
+   *
    * @return a ValueHandler for handle multiple Element objects.
+   *
    * @since 2.4
    */
   public static ValueHandler handle(final Collection<Element> elements) {
@@ -128,15 +131,15 @@ public class Elements {
 
   /**
    * Handles a collection of {@link Element#isSpecific() non specific} elements.
-   * <p>
-   * This ValueHandler can set a common value to all elements and retrieve a
-   * Collection of all element values.
+   * <p/>
+   * This ValueHandler can set a common value to all elements and retrieve a Collection of
+   * all element values.
    *
-   * @param elements
-   *          the elements to handle
-   * @param target
-   *          the target
+   * @param elements the elements to handle
+   * @param target   the target
+   *
    * @return a ValueHandler for handle multiple Element objects.
+   *
    * @since 2.4
    */
   public static ValueHandler handle(final Collection<Element> elements, final Object target) {

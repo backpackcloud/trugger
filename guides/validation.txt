@@ -6,32 +6,31 @@
 
 To validate an object, you can simply use the Validation class and the provided DSL:
 
-ValidationResult result = new Validation().validate().allElements().in(object);
+ValidationResult result = validation().validate(object);
 
 The result will give all information needed to integrate the validation to almost all
 frameworks and architectures. (You can access messages, values and use reflection and other
 DSLs using the invalid elements.)
 
-You can also give a resource bundle to the Validation constructor for externalize the validation messages.
-The provided constraints uses a key following the pattern "validation." plus the Annotation name (validation.NotNull for
-NotNull constraint).
+You can also give a resource bundle to the Validation constructor for externalize the
+validation messages. The provided constraints uses a key following the pattern "validation."
+plus the Annotation name (validation.NotNull for NotNull constraint).
 
 1.1.2 - Validation using Element selectors
 
 You can pass a selector for restrict the elements to validate:
 
-ElementsSelector selector = Elements.elements().ofType(String.class);
-ValidationResult result = new Validation().validate().selection(selector).in(object);
+ValidationResult result = validation().validate(elements().ofType(String.class).in(object));
 
 1.1.3 - Validation using context
 
 Context are useful for defining different validations for the same object (like simple and
 full validations). You can define a context using "forContext" method:
 
-ValidationResult result = new Validation().validate().forContext("context_name").allElements().in(object);
+ValidationResult result = validation().forContext("context_name").validate(object);
 
-The contexts can be defined using the "context" property in the constraint annotations. All constraints without
-explicity contexts will be used no matter what context was defined.
+The contexts can be defined using the "context" property in the constraint annotations.
+All constraints without contexts will be used no matter what context was defined.
 
 1.2 - Creating Validators
 
@@ -67,8 +66,8 @@ public class Person {
 
 1.2.2 - Type Validators
 
-You can create validators for a specific type or a set of types using the validator generic type or the annotations
-@AcceptedTypes, @AcceptedArrayTypes or @AcceptArrays.
+You can create validators for a specific type or a set of types using the validator generic
+type or the annotations @AcceptedTypes, @AcceptedArrayTypes or @AcceptArrays.
 
 Example: a regex validator.
 
@@ -94,8 +93,8 @@ public class PatternValidator implements Validator<CharSequence> {
   }
 }
 
-In this example, everything that is a CharSequence can be validated with @Pattern. The same effect can be reached using
-@AcceptedTypes:
+In this example, everything that is a CharSequence can be validated with @Pattern. The
+same effect can be reached using @AcceptedTypes:
 
 @AcceptedTypes(CharSequence.class)
 public class PatternValidator implements Validator<Object> {
@@ -105,18 +104,20 @@ or
 @AcceptedTypes({String.class, StringBuilder.class})
 public class PatternValidator implements Validator<Object> {
 
-The second form will work only for String and StringBuilder objects. The same restriction can be used for arrays with
-@AcceptedArrayTypes for explicity defining the array types or @AcceptArrays to accept every array type.
+The second form will work only for String and StringBuilder objects. The same restriction
+can be used for arrays with @AcceptedArrayTypes for defining the array types or @AcceptArrays
+to accept every array type.
 
-Note that the validator doesn't have an initialize method that takes the annotation (like in Hibernate Validator). The
-annotation will be injected automatically in the field with the same type. (You can use @TargetAnnotation if you want
-to force the injection to another compatible field - like Object or Annotation.)
+Note that the validator doesn't have an initialize method that takes the annotation (like
+in Hibernate Validator). The annotation will be injected automatically in the field with
+the same type. (You can use @TargetAnnotation if you want to force the injection to another
+compatible field - like Object or Annotation.)
 
 1.2.3 - Validation of arguments
 
-Take a look at the first instruction in the validation method of PatternValidator. That check can be a pain if you are
-going to create a extensive set of validators. To avoid that you can use validations in parameter declared in "isValid"
-method.
+Take a look at the first instruction in the validation method of PatternValidator. That
+check can be a pain if you are going to create a extensive set of validators. To avoid that
+you can use validations in parameter declared in "isValid" method.
 
   public boolean isValid(@NotNull CharSequence value) {
     java.util.regex.Pattern pattern =
@@ -126,14 +127,14 @@ method.
 
 Much more elegant!
 
-You can use almost all validations in there (almost all because there is a special type of validators that use binds,
-and they cannot be used here) and as much as needed.
+You can use almost all validations in there (almost all because there is a special type of
+validators that use binds, and they cannot be used here) and as much as needed.
 
 1.2.4 - Binds
 
 1.2.4.1 - Reference binds
 
-Supose you have two dates and one must be after the other.
+Suppose you have two dates and one must be after the other.
 
 public class Ticket {
 
@@ -145,8 +146,8 @@ public class Ticket {
 
 }
 
-Validating the "arrival" field will require access to the "leaving" field. This can be done by using References in the
-annotation. Let's look the @After validation:
+Validating the "arrival" field will require access to the "leaving" field. This can be done
+by using References in the annotation. Let's look the @After validation:
 
 @Retention(RetentionPolicy.RUNTIME)
 @ValidatorClass(AfterValidator.class)
@@ -169,8 +170,8 @@ public class AfterValidator implements Validator<Date> {
 
 }
 
-Notice that the references can be validated as well as the arguments in validator. If the reference is invalid the
-validation will not be processed.
+Notice that the references can be validated as well as the arguments in validator. If the
+reference is invalid the validation will not be processed.
 
 The class will now looks like this:
 
@@ -193,23 +194,26 @@ You can bind the target object in validator using the annotation @TargetObject.
 
 1.2.4.3 - Elements bind
 
-You can bind any element (fields, properties, ...) from the target object using @TargetElement annotation. If you don't
-define the element name, the current element being validated will be injected.
+You can bind any element (fields, properties, ...) from the target object using @TargetElement
+annotation. If you don't define the element name, the current element being validated will
+be injected.
 
 1.2.4.4 - Bridge bind
 
-If you need a way to interact with the ValidationEngine, just declare an element of type ValidationBridge and the bridge
-will be injected here. A ValidationBridge is useful for recursive validations (you can create validators using the same
-configurations and add invalid elements).
+If you need a way to interact with the ValidationEngine, just declare an element of type
+ValidationBridge and the bridge will be injected here. A ValidationBridge is useful for
+recursive validations (you can create validators using the same configurations and add
+invalid elements).
 
 1.2.4.5 - Context bind
 
-The current context of the validation will be injected in elements annotated with ValidationContext.
+The current context of the validation will be injected in elements annotated with
+ValidationContext.
 
 1.2.4.6 - Validator bind
 
-If you need a validation that depends on other validators, you can declare the contraints in elements of type Validator
-and a proper validator will be injected on it.
+If you need a validation that depends on other validators, you can declare the constraints
+in elements of type Validator and a proper validator will be injected on it.
 
 Example:
 
@@ -230,8 +234,8 @@ public class MyValidator implements Validator<Double> {
 
 1.2.5 - Domain Validations
 
-Supose you have some properties that requires more than one validation. You can group then into a single constraint
-(a domain constraint) using the GroupValidator as the @ValidatorClass.
+Supose you have some properties that requires more than one validation. You can group then
+into a single constraint (a domain constraint) using the GroupValidator as the @ValidatorClass.
 
 Example:
 
@@ -257,11 +261,12 @@ public class Ticket {
 
 1.3.1 - Message Resolving
 
-By default, every Validator can have a validation message mapped in the annotation with the property named "message". If
-the annotation doesn't have a message property, then its name will be used
+By default, every Validator can have a validation message mapped in the annotation with the
+property named "message". If the annotation doesn't have a message property, then its name
+will be used
 
-The message can be a ResourceBundle key (and the ResourceBundle used will be the one passed to the Validation instance)
-or a literal message.
+The message can be a ResourceBundle key (and the ResourceBundle used will be the one passed
+to the Validation instance) or a literal message.
 
   @NotNull(message = "Name required!")
   private String name;
@@ -289,10 +294,11 @@ In case of an Element, you can use the following attributes:
   * type - the type of the element
   * value - the value of the element
 
-To use a constraint value in the message, just put the desired name of the element between "${" and "}".
-You can also use the reference elements.
+To use a constraint value in the message, just put the desired name of the element between
+"${" and "}". You can also use the reference elements.
 
-There is a way to format the message using a java.util.Formatter. Just put the agruments between "@{" and "}"
+There is a way to format the message using a java.util.Formatter. Just put the arguments
+between "@{" and "}"
 
 Examples:
 
@@ -311,11 +317,12 @@ Will use both date1 value and date2 value.
 @After(reference = "date1", message = "#{name} is not after #{reference.name}"
 private Date date2;
 
-Will search for keys "date2" and "date1" in the ResourceBundle passed to the Validation instance and their values will
-be used in the message.
+Will search for keys "date2" and "date1" in the ResourceBundle passed to the Validation
+instance and their values will be used in the message.
 
 
-@Range(min = 0, max = 1, message = "@{%.3f,{value}} is out of range [@{%.3f,${min}} ; @{%.3f,${max}}]"
+@Range(min = 0, max = 1,
+ message = "@{%.3f,{value}} is out of range [@{%.3f,${min}} ; @{%.3f,${max}}]"
 private double rate;
 
 For a 6.789 value, the message will be "6.789 is out of range [0.000 ; 1.000]".

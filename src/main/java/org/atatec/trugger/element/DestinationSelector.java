@@ -26,22 +26,20 @@ import org.atatec.trugger.transformer.Transformer;
 public interface DestinationSelector {
 
   /**
-   * Executes the operation transforming the filtered elements using the given
-   * transformer.
+   * Executes the operation transforming the elements with the given transformer.
    *
    * @param transformer the transformer to use.
-   *
-   * @return a reference to this object.
    */
   DestinationSelector as(Transformer<?, ElementCopy> transformer);
 
-  /**
-   * Copies only the elements that are not <code>null</code>.
-   *
-   * @return a reference to this object.
-   */
+  /** Copies only the elements that are not <code>null</code>. */
   DestinationSelector notNull();
 
+  /**
+   * Copy the elements to the given object.
+   *
+   * @param dest the object to copy the elements.
+   */
   void to(Object dest);
 
 }

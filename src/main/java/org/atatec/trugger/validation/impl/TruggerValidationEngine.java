@@ -22,7 +22,6 @@ import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.message.Message;
 import org.atatec.trugger.message.MessageCreator;
 import org.atatec.trugger.message.Messages;
-import org.atatec.trugger.validation.ContextValidationEngine;
 import org.atatec.trugger.validation.InvalidElement;
 import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationBridge;
@@ -79,7 +78,7 @@ public final class TruggerValidationEngine implements ValidationEngine {
   }
 
   @Override
-  public ContextValidationEngine forContext(String context) {
+  public ValidationEngine forContext(String context) {
     this.context = context;
     return this;
   }
