@@ -16,14 +16,13 @@
  */
 package org.atatec.trugger.validation.impl;
 
-import org.atatec.trugger.Result;
 import org.atatec.trugger.bind.Bind;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.message.Message;
 import org.atatec.trugger.message.MessageCreator;
-import org.atatec.trugger.selector.ElementSelector;
-import org.atatec.trugger.selector.ElementsSelector;
+import org.atatec.trugger.message.Messages;
+import org.atatec.trugger.validation.ContextValidationEngine;
 import org.atatec.trugger.validation.InvalidElement;
 import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationBridge;
@@ -41,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import static org.atatec.trugger.element.Elements.elements;
@@ -52,140 +52,107 @@ import static org.atatec.trugger.element.Elements.elements;
  */
 public final class TruggerValidationEngine implements ValidationEngine {
 
-  private final ValidatorFactory validatorFactory;
-  private final MessageCreator messageCreator;
+  private MessageCreator messageCreator;
   private String context = null;
+  private ValidatorFactory validatorFactory;
 
   /**
    * Creates a new engine for validation.
    *
-   * @param messageCreator   the component to create the messages for the invalid
-   *                         properties.
-   * @param validatorFactory the component to creates {@link Validator} instances.
+   * @param factory the component to creates {@link Validator} instances.
    */
-  public TruggerValidationEngine(ValidatorFactory validatorFactory, MessageCreator messageCreator) {
-    this.messageCreator = messageCreator;
-    this.validatorFactory = validatorFactory;
+  public TruggerValidationEngine(ValidatorFactory factory) {
+    this.validatorFactory = factory;
+    this.messageCreator = Messages.createMessageCreator();
   }
 
   @Override
-  public ValidationEngine forContext(String context) {
+  public ValidationEngine using(MessageCreator messageCreator) {
+    this.messageCreator = messageCreator;
+    return this;
+  }
+
+  @Override
+  public ValidationEngine using(ResourceBundle resourceBundle) {
+    this.messageCreator = Messages.createMessageCreator(resourceBundle);
+    return this;
+  }
+
+  @Override
+  public ContextValidationEngine forContext(String context) {
     this.context = context;
     return this;
   }
 
-  public Result<ValidationResult, Object> selection(ElementsSelector selector) {
-    return new ValidationRequest(selector);
+  @Override
+  public ValidationResult validate(Object target) {
+    return validate(elements().in(target));
   }
 
-  public Result<ValidationResult, Object> selection(ElementSelector selector) {
-    return new ValidationRequest(selector);
+  @Override
+  public ValidationResult validate(Element element) {
+    return validate(Arrays.asList(element));
   }
 
-  public Result<ValidationResult, Object> allElements() {
-    return new ValidationRequest();
+  @Override
+  public ValidationResult validate(Collection<Element> elements) {
+    Set<Element> currentValidElements = new HashSet<Element>();
+    Set<Element> currentInvalidElements = new HashSet<Element>();
+
+    Collection<InvalidElement> invalidElements = new ArrayList<InvalidElement>(20);
+    Collection<Element> elementsToValidate = new ArrayList<Element>(elements);
+
+    for (Element element : elementsToValidate) {
+      validate(new ValidationParameter(element.target(), element, currentInvalidElements, currentValidElements, invalidElements));
+    }
+
+    return new TruggerValidationResult(invalidElements, elements.iterator().next().target());
   }
 
-  public Result<ValidationResult, Object> element(Element element) {
-    return new ValidationRequest(element);
-  }
-
-  private class ValidationRequest implements Result<ValidationResult, Object> {
-
-    private ElementSelector elementSelector;
-    private ElementsSelector elementsSelector;
-    private Element element;
-
-    private ValidationRequest() {
-
-    }
-
-    private ValidationRequest(Element element) {
-      this.element = element;
-    }
-
-    private ValidationRequest(ElementsSelector elementsSelector) {
-      this.elementsSelector = elementsSelector;
-    }
-
-    private ValidationRequest(ElementSelector elementSelector) {
-      this.elementSelector = elementSelector;
-    }
-
-    public ValidationResult in(Object target) {
-      Collection<Element> elements;
-      if (elementsSelector != null) {
-        elements = elementsSelector.annotated().in(target);
-      } else if (elementSelector != null) {
-        elements = new ArrayList<Element>();
-        Element p = elementSelector.annotated().in(target);
-        if (p != null) {
-          elements.add(p);
-        }
-      } else if (element != null) {
-        elements = Arrays.asList(element);
-      } else {
-        elements = Elements.elements().annotated().in(target);
-      }
-      return validate(target, elements);
-    }
-
-    private ValidationResult validate(Object target, Collection<Element> elements) {
-      Set<Element> currentValidElements = new HashSet<Element>();
-      Set<Element> currentInvalidElements = new HashSet<Element>();
-
-      Collection<InvalidElement> invalidElements = new ArrayList<InvalidElement>(20);
-      Collection<Element> elementsToValidate = new ArrayList<Element>(elements);
-
-      for (Element prop : elementsToValidate) {
-        validate(new ValidationParameter(target, prop, currentInvalidElements, currentValidElements, invalidElements));
-      }
-
-      return new TruggerValidationResult(invalidElements, target);
-    }
-
-    private void validate(ValidationParameter parameter) {
-      Element element = parameter.element;
-      Object value = null;
-      Annotation[] annotations = element.getAnnotations();
-      boolean valid = true;
-      boolean valueGetted = false; //for lazy get
-      List<Message> messages = parameter.messages;
-      for (Annotation annotation : annotations) {
-        ValidatorContext validatorContext = new ValidatorContextImpl(annotation, element, parameter.target, context);
-        if (validatorFactory.canCreate(validatorContext)) {
-          //checks the context (if defined)
-          if (context != null) {
-            Element ctxElement = Elements.element("context").in(annotation);
-            if ((ctxElement != null) && String[].class.equals(ctxElement.type())) {
-              String[] ctxValues = ctxElement.value();
-              if ((ctxValues.length > 0) && !Arrays.asList(ctxValues).contains(context)) {
-                continue;
-              }
-            }
-          }
-          ValidatorInvoker validator = newValidator(parameter, validatorContext);
-          if (!valueGetted) {
-            value = element.in(parameter.target).value();
-            valueGetted = true;
-          }
-          if (!validator.isValid(value)) {
-            valid = false;
-            Message message = messageCreator.createMessage(element, annotation, parameter.target);
-            if (message != null) {
-              messages.add(message);
+  private void validate(ValidationParameter parameter) {
+    Element element = parameter.element;
+    Object value = null;
+    Annotation[] annotations = element.getAnnotations();
+    boolean valid = true;
+    boolean gotValue = false; //for lazy get
+    List<Message> messages = parameter.messages;
+    for (Annotation annotation : annotations) {
+      ValidatorContext validatorContext = new ValidatorContextImpl()
+        .annotation(annotation)
+        .element(element)
+        .target(parameter.target)
+        .context(context);
+      if (validatorFactory.canCreate(validatorContext)) {
+        //checks the context (if defined)
+        if (context != null) {
+          Element ctxElement = Elements.element("context").in(annotation);
+          if ((ctxElement != null) && String[].class.equals(ctxElement.type())) {
+            String[] ctxValues = ctxElement.value();
+            if ((ctxValues.length > 0) && !Arrays.asList(ctxValues).contains(context)) {
+              continue;
             }
           }
         }
-      }
-      if (!valid) {
-        parameter.invalidElements.add(new TruggerInvalidElement(element, value, parameter.target, messages));
-        parameter.currentInvalidElements.add(element);
-      } else {
-        parameter.currentValidElements.add(element);
+        ValidatorInvoker validator = newValidator(parameter, validatorContext);
+        if (!gotValue) {
+          value = element.in(parameter.target).value();
+          gotValue = true;
+        }
+        if (!validator.isValid(value)) {
+          valid = false;
+          Message message = messageCreator.createMessage(element, annotation, parameter.target);
+          if (message != null) {
+            messages.add(message);
+          }
+        }
       }
     }
-
+    if (!valid) {
+      parameter.invalidElements.add(new TruggerInvalidElement(element, value, parameter.target, messages));
+      parameter.currentInvalidElements.add(element);
+    } else {
+      parameter.currentValidElements.add(element);
+    }
   }
 
   /** A class to be the bridge between the validator and the object validator. */
@@ -205,15 +172,18 @@ public final class TruggerValidationEngine implements ValidationEngine {
       parameter.invalidElements.add(invalidElement);
     }
 
-    public ValidationEngine validate() {
-      Validation validator = new Validation(messageCreator);
-      return validator.validate();
+    public ValidationEngine validation() {
+      return Validation.validation().using(messageCreator);
     }
 
     public Validator createValidator(Element element) {
       CompositeValidator validator = new CompositeValidator();
       for (Annotation nestedAnnotation : element.getDeclaredAnnotations()) {
-        ValidatorContext context = new ValidatorContextImpl(nestedAnnotation, element, parameter.target, TruggerValidationEngine.this.context);
+        ValidatorContext context = new ValidatorContextImpl()
+          .annotation(nestedAnnotation)
+          .element(element)
+          .target(parameter.target)
+          .context(TruggerValidationEngine.this.context);
         if (validatorFactory.canCreate(context)) {
           validator.add(newValidator(parameter, context));
         }
@@ -224,7 +194,11 @@ public final class TruggerValidationEngine implements ValidationEngine {
     public boolean validate(AnnotatedElement annotatedElement, Object value) {
       boolean valid = true;
       for (Annotation annotation : annotatedElement.getDeclaredAnnotations()) {
-        ValidatorContext context = new ValidatorContextImpl(annotation, parameter.element, parameter.target, TruggerValidationEngine.this.context);
+        ValidatorContext context = new ValidatorContextImpl()
+          .annotation(annotation)
+          .element(parameter.element)
+          .target(parameter.target)
+          .context(TruggerValidationEngine.this.context);
         if (validatorFactory.canCreate(context)) {
           ValidatorInvoker validator = newValidator(parameter, context);
           if (!validator.isValid(value)) {

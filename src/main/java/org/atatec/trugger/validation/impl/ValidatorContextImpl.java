@@ -22,33 +22,39 @@ import org.atatec.trugger.validation.ValidatorContext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class ValidatorContextImpl implements ValidatorContext {
 
-  private final Annotation annotation;
-  private final Element element;
-  private final Object target;
-  private final String validationContext;
+  private Annotation annotation;
+  private Element element;
+  private Object target;
+  private String context;
+
+  public ValidatorContextImpl() {
+  }
 
   public ValidatorContextImpl(Annotation annotation) {
-    this(annotation, null, null, null);
-  }
-
-  public ValidatorContextImpl(Annotation annotation, Object target) {
-    this(annotation, null, target, null);
-  }
-
-  public ValidatorContextImpl(Annotation annotation, Element element, Object target) {
-    this(annotation, element, target, null);
-  }
-
-  public ValidatorContextImpl(Annotation annotation, Element element, Object target, String validationContext) {
     this.annotation = annotation;
+  }
+
+  public ValidatorContextImpl annotation(Annotation annotation) {
+    this.annotation = annotation;
+    return this;
+  }
+
+  public ValidatorContextImpl element(Element element) {
     this.element = element;
+    return this;
+  }
+
+  public ValidatorContextImpl target(Object target) {
     this.target = target;
-    this.validationContext = validationContext;
+    return this;
+  }
+
+  public ValidatorContextImpl context(String validationContext) {
+    this.context = validationContext;
+    return this;
   }
 
   public Annotation annotation() {
@@ -67,8 +73,8 @@ public class ValidatorContextImpl implements ValidatorContext {
     return element;
   }
 
-  public String validationContext() {
-    return validationContext;
+  public String context() {
+    return context;
   }
 
 }

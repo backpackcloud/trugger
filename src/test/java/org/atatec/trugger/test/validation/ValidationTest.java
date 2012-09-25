@@ -20,7 +20,6 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.validation.InvalidElement;
-import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationResult;
 import org.junit.Test;
 
@@ -32,6 +31,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.validation.Validation.validation;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -50,14 +51,11 @@ public class ValidationTest {
     cal.add(Calendar.SECOND, 1);
     Date arrival = cal.getTime();
     
-    Validation validation = new Validation();
-    ElementSelector selection = Elements.element("owner");
-    
     Ticket ticket = new Ticket(new Owner("Marcelo"), parting, arrival, new City("Brasília"), new City("Natal"));
-    assertTrue(validation.validate().allElements().in(ticket).isValid());
+    assertTrue(validation().validate(ticket).isValid());
     
     ticket = new Ticket(new Owner("Marcelo"), parting, parting, new City("Brasília"), new City("Natal"));
-    assertTrue(validation.validate().selection(selection).in(ticket).isValid());
+    assertTrue(validation().validate(element("owner").in(ticket)).isValid());
   }
   
   @Test
@@ -69,33 +67,32 @@ public class ValidationTest {
     cal.add(Calendar.SECOND, 2);
     Date arrival = cal.getTime();
     
-    Validation validation = new Validation();
     ElementSelector selection = Elements.element("owner");
     
     Ticket ticket = new Ticket(new Owner("Marcelo"), parting, invalidArrival, new City("Brasília"), new City("Natal"));
-    ValidationResult result = validation.validate().allElements().in(ticket);
+    ValidationResult result = validation().validate(ticket);
     assertInvalid(result, "parting", "arrival", "before", "after");
     
     ticket = new Ticket(new Owner("Marcelo"), parting, parting, new City("Brasília"), new City("Natal"));
-    result = validation.validate().allElements().in(ticket);
+    result = validation().validate(ticket);
     assertInvalid(result, "parting", "arrival");
     
     ticket = new Ticket(new Owner("Marcelo"), parting, null, new City(null), new City("Natal"));
-    result = validation.validate().allElements().in(ticket);
+    result = validation().validate(ticket);
     assertInvalid(result, "route", "routeMap", "routeArray", "arrival", "after");
     
     ticket = new Ticket(new Owner(null), parting, arrival, new City("Brasília"), new City("Natal"));
-    result = validation.validate().allElements().in(ticket);
+    result = validation().validate(ticket);
     assertInvalid(result, "owner", "owner.name");
     
     ticket = new Ticket(null, parting, arrival, new City("Brasília"), new City("Natal"));
-    result = validation.validate().selection(selection).in(ticket);
+    result = validation().validate(ticket);
     assertInvalid(result, "owner");
-    result = validation.validate().element(selection.in(Ticket.class)).in(ticket);
+    result = validation().validate(element("owner").in(ticket));
     assertInvalid(result, "owner");
     
     ticket = new Ticket(new Owner("Marcelo"), arrival, parting);
-    result = validation.validate().allElements().in(ticket);
+    result = validation().validate(ticket);
     assertInvalid(result, "route", "routeMap", "routeArray", "parting", "arrival", "before", "after");
   }
   

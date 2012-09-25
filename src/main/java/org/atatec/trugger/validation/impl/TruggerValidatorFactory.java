@@ -33,12 +33,11 @@ import java.lang.annotation.Annotation;
 
 /**
  * A default implementation for the validator factory.
- * <p>
- * If the validation must use a reference value present in the target object.
- * Just annotate a <i>String</i> property in the annotation that indicates the
- * element that must be binded with the {@link Reference} annotation. The
- * reference can also have their specific validation in the property of the
- * annotation.
+ * <p/>
+ * If the validation must use a reference value present in the target object. Just
+ * annotate a <i>String</i> property in the annotation that indicates the element that
+ * must be binded with the {@link Reference} annotation. The reference can also have their
+ * specific validation in the property of the annotation.
  *
  * @author Marcelo Varella Barca Guimarães
  */
@@ -51,10 +50,10 @@ public class TruggerValidatorFactory implements ValidatorFactory {
     }
   };
 
-  private final AnnotationBasedFactory<ValidatorClass, Validator> factory = 
+  private final AnnotationBasedFactory<ValidatorClass, Validator> factory =
     new AnnotationBasedFactory<ValidatorClass, Validator>(ValidatorClass.class);
 
-  private final ValidatorBinder validatorBinder;
+  private ValidatorBinder validatorBinder;
 
   public TruggerValidatorFactory(ValidatorBinder validatorBinder) {
     this.validatorBinder = validatorBinder;

@@ -14,32 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.validation;
 
-/**
- * Interface for creating validation engines.
- *
- * @author Marcelo Varella Barca Guimarães
- * @since 2.1
- */
-public interface ValidationFactory {
+import org.atatec.trugger.element.Element;
+import org.atatec.trugger.message.MessageCreator;
 
-  /**
-   * @return a binder for injecting dependencies.
-   * @since 2.4
-   */
-  ValidatorBinder createValidatorBinder();
+import java.util.Collection;
+import java.util.ResourceBundle;
 
-  /**
-   * @return a factory for creating {@link Validator} objects.
-   */
-  ValidatorFactory createValidatorFactory(ValidatorBinder binder);
+/** @author Marcelo Varella Barca Guimarães */
+public interface ContextValidationEngine {
 
-  /**
-   * Creates a new engine for validating a target.
-   *
-   * @return the created engine.
-   */
-  ValidationEngine createValidationEngine(ValidatorFactory factory);
+  ContextValidationEngine using(MessageCreator messageCreator);
+
+  ContextValidationEngine using(ResourceBundle resourceBundle);
+
+  ValidationResult validate(Object target);
+
+  ValidationResult validate(Element element);
+
+  ValidationResult validate(Collection<Element> elements);
 
 }

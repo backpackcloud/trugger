@@ -21,17 +21,24 @@ import org.atatec.trugger.validation.ValidatorContext;
 import org.atatec.trugger.validation.ValidatorFactory;
 import org.atatec.trugger.validation.ValidatorInvoker;
 
+import java.util.LinkedList;
 import java.util.List;
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public final class CompositeValidatorFactory implements ValidatorFactory {
 
   private final List<ValidatorFactory> factories;
 
+  public CompositeValidatorFactory() {
+    this(new LinkedList<ValidatorFactory>());
+  }
+
   public CompositeValidatorFactory(List<ValidatorFactory> factories) {
     this.factories = factories;
+  }
+
+  public void add(ValidatorFactory factory) {
+    factories.add(factory);
   }
 
   public boolean canCreate(ValidatorContext key) {
@@ -51,5 +58,4 @@ public final class CompositeValidatorFactory implements ValidatorFactory {
     }
     throw new CreateException("Cannot create a validator for " + key.annotation().annotationType().getName());
   }
-
 }

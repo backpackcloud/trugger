@@ -49,7 +49,10 @@ public class GroupValidator implements Validator<Object> {
     Annotation[] declaredAnnotations = annotation.annotationType().getDeclaredAnnotations();
     ValidatorContext context;
     for (Annotation an : declaredAnnotations) {
-      context = new ValidatorContextImpl(an, element, target);
+      context = new ValidatorContextImpl()
+        .annotation(an)
+        .element(element)
+        .target(target);
       if (factory.canCreate(context)) {
         ValidatorInvoker validator = factory.create(context);
         if (!validator.isValid(value)) {

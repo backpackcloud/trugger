@@ -87,7 +87,7 @@ public class ArgumentValidator {
   private boolean isArgumentInvalid(Object value, Annotation[] annotations) {
     ValidatorContext context;
     for (Annotation annotation : annotations) {
-      context = new ValidatorContextImpl(annotation);
+      context = new ValidatorContextImpl().annotation(annotation);
       if (factory.canCreate(context)) {
         ValidatorInvoker validator = factory.create(context);
         if (!validator.isValid(value)) {

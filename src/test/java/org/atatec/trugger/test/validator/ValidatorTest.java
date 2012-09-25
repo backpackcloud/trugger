@@ -61,27 +61,44 @@ public abstract class ValidatorTest<T extends Annotation> {
   }
 
   protected final void createValidator(Annotation annotation, Object target) {
-    validator = factory.create(new ValidatorContextImpl(annotation, target));
+    validator = factory.create(
+      new ValidatorContextImpl()
+        .annotation(annotation)
+        .target(target)
+    );
   }
 
   protected final void createValidator(Element element, Object target) {
-    validator = factory.create(new ValidatorContextImpl(builder.createMock(), element, target));
+    validator = factory.create(
+      new ValidatorContextImpl()
+        .annotation(builder.createMock())
+        .element(element)
+        .target(target)
+    );
   }
 
   protected final void createValidator(Object target) {
-    validator = factory.create(new ValidatorContextImpl(builder.createMock(), null, target));
+    validator = factory.create(
+      new ValidatorContextImpl()
+        .annotation(builder.createMock())
+        .target(target)
+    );
   }
 
   protected final void createValidator(Class<? extends Annotation> annotationType) {
-    validator = factory.create(new ValidatorContextImpl(mock(annotation(annotationType))));
+    validator = factory.create(
+      new ValidatorContextImpl().annotation(mock(annotation(annotationType)))
+    );
   }
 
   protected final void createValidator() {
-    validator = factory.create(new ValidatorContextImpl(builder.createMock()));
+    validator = factory.create(
+      new ValidatorContextImpl().annotation(builder.createMock())
+    );
   }
 
   protected final void assertTypeDisallowed(Object value) {
-    if(validator == null) {
+    if (validator == null) {
       createValidator();
     }
     boolean error = false;
@@ -94,14 +111,14 @@ public abstract class ValidatorTest<T extends Annotation> {
   }
 
   protected final void assertValid(Object value) {
-    if(validator == null) {
+    if (validator == null) {
       createValidator();
     }
     Assert.assertTrue(validator.isValid(value));
   }
 
   protected final void assertInvalid(Object value) {
-    if(validator == null) {
+    if (validator == null) {
       createValidator();
     }
     Assert.assertFalse(validator.isValid(value));

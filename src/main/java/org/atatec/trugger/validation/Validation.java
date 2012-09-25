@@ -23,14 +23,6 @@ import org.atatec.trugger.annotation.TargetAnnotation;
 import org.atatec.trugger.annotation.TargetElement;
 import org.atatec.trugger.annotation.TargetObject;
 import org.atatec.trugger.loader.ImplementationLoader;
-import org.atatec.trugger.message.MessageCreator;
-import org.atatec.trugger.message.Messages;
-import org.atatec.trugger.validation.impl.CompositeValidatorBinder;
-import org.atatec.trugger.validation.impl.CompositeValidatorFactory;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * This class uses a {@link ValidationEngine validation engine} for validate properties of
@@ -66,42 +58,15 @@ import java.util.ResourceBundle;
  * @author Marcelo Varella Barca Guimarães
  * @since 2.1
  */
-public class Validation {
+public final class Validation {
 
   private static final ValidationFactory factory;
 
-  private static final List<ValidatorFactory> pluggedFactories = new LinkedList<ValidatorFactory>();
-  private static final List<ValidatorBinder> pluggedBinders = new LinkedList<ValidatorBinder>();
-
   static {
     factory = ImplementationLoader.instance().get(ValidationFactory.class);
-    pluggedBinders.add(factory.createValidatorBinder());
-    pluggedFactories.add(factory.createValidatorFactory(newValidatorBinder()));
   }
 
-  private final MessageCreator messageCreator;
-
-  /** Creates a new object validator. */
-  public Validation() {
-    messageCreator = Messages.createMessageCreator();
-  }
-
-  /**
-   * Creates a new object validator using the specified bundle.
-   *
-   * @param bundle the resource bundle for resolving the messages.
-   */
-  public Validation(ResourceBundle bundle) {
-    messageCreator = Messages.createMessageCreator(bundle);
-  }
-
-  /**
-   * Creates a new object validator using the given message creator.
-   *
-   * @param messageCreator the component for creating the validation messages.
-   */
-  public Validation(MessageCreator messageCreator) {
-    this.messageCreator = messageCreator;
+  private Validation() {
   }
 
   /**
@@ -109,88 +74,16 @@ public class Validation {
    *
    * @return a reference for the validation component.
    */
-  public final ValidationEngine validate() {
-    return factory.createValidationEngine(newValidatorFactory(), messageCreator);
+  public static ValidationEngine validation() {
+    return factory.createValidationEngine(newValidatorFactory());
   }
 
-  /**
-   * Plugs a ValidatorFactory for using with the implementation. Use this method to
-   * include support for other validators (such as HibernateValidator) without affect the
-   * implementation.
-   * <p/>
-   * Make sure that no validation is doing while calling this method because it is not
-   * thread-safe.
-   */
-  public static void plug(ValidatorFactory validatorFactory) {
-    synchronized (pluggedFactories) {
-      pluggedFactories.add(validatorFactory);
-    }
-  }
-
-  /**
-   * Unplugs the given ValidatorFactory.
-   * <p/>
-   * Make sure that no validation is doing while calling this method because it is not
-   * thread-safe.
-   */
-  public static void unplug(ValidatorFactory validatorFactory) {
-    synchronized (pluggedFactories) {
-      pluggedFactories.remove(validatorFactory);
-    }
-  }
-
-  /**
-   * Plugs the given binder.
-   * <p/>
-   * Make sure that no validation is doing while calling this method because it is not
-   * thread-safe.
-   *
-   * @since 2.4
-   */
-  public static void plug(ValidatorBinder validatorBinder) {
-    synchronized (pluggedBinders) {
-      pluggedBinders.add(validatorBinder);
-    }
-  }
-
-  /**
-   * Unplus the given binder.
-   * <p/>
-   * Make sure that no validation is doing while calling this method because it is not
-   * thread-safe.
-   *
-   * @since 2.4
-   */
-  public static void unplug(ValidatorBinder validatorBinder) {
-    synchronized (pluggedBinders) {
-      pluggedBinders.remove(validatorBinder);
-    }
-  }
-
-  /**
-   * Creates a new ValidatorFactory based on the {@link ValidationFactory#createValidatorFactory(ValidatorBinder)
-   * implementation} and the {@link #plug(ValidatorFactory) pluggeds}.
-   * <p/>
-   * Every factory plugged after will be used by the returning ValidatorFactory.
-   *
-   * @return the created factory.
-   */
   public static ValidatorFactory newValidatorFactory() {
-    return new CompositeValidatorFactory(pluggedFactories);
+    return factory.createValidatorFactory(newValidatorBinder());
   }
 
-  /**
-   * Creates a new ValidatorBinder based on the {@link ValidationFactory#createValidatorBinder()
-   * implementation} and the {@link #plug(ValidatorBinder) pluggeds}.
-   * <p/>
-   * Every binder plugged after will be used by the returning ValidatorBinder.
-   *
-   * @return the created binder
-   *
-   * @since 2.4
-   */
   public static ValidatorBinder newValidatorBinder() {
-    return new CompositeValidatorBinder(pluggedBinders);
+    return factory.createValidatorBinder();
   }
 
 }

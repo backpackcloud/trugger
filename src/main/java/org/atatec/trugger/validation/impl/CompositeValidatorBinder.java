@@ -16,22 +16,29 @@
  */
 package org.atatec.trugger.validation.impl;
 
-import java.util.List;
-
 import org.atatec.trugger.bind.Binder;
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.ValidatorBinder;
 import org.atatec.trugger.validation.ValidatorContext;
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+import java.util.LinkedList;
+import java.util.List;
+
+/** @author Marcelo Varella Barca Guimarães */
 public class CompositeValidatorBinder implements ValidatorBinder {
 
   private final List<ValidatorBinder> binders;
 
+  public CompositeValidatorBinder() {
+    this(new LinkedList<ValidatorBinder>());
+  }
+
   public CompositeValidatorBinder(List<ValidatorBinder> binders) {
     this.binders = binders;
+  }
+
+  public void add(ValidatorBinder binder) {
+    this.binders.add(binder);
   }
 
   public void configureBinds(Validator validator, ValidatorContext context, Binder binder) {

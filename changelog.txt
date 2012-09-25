@@ -18,6 +18,9 @@ Version 4.1
     - Annotation mock still in the binaries, but is implemented Interceptor class instead
       of EasyMock
   - Bind DSL improved
+  - Validation DSL improved
+    - Removed pluggable binders and factories (use the composite ones to override the
+      default ValidationFactory
 Other
   - Using Gradle as the build system (good bye, Maven)
 

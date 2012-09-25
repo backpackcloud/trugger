@@ -28,7 +28,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses( {
   ValidationTest.class,
-  ValidatorBindTest.class,
   ValidatorTestSuite.class,
   ContextValidationTest.class
 })

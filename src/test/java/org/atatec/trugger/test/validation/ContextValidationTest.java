@@ -16,15 +16,15 @@
  */
 package org.atatec.trugger.test.validation;
 
+import org.atatec.trugger.validation.ValidationResult;
+import org.atatec.trugger.validation.validator.NotNull;
+import org.junit.Test;
+
+import static org.atatec.trugger.validation.Validation.validation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.atatec.trugger.validation.Validation;
-import org.atatec.trugger.validation.ValidationResult;
-import org.atatec.trugger.validation.validator.NotNull;
-
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -55,7 +55,7 @@ public class ContextValidationTest {
   @Test
   public void testInvalidWithNoContext() {
     MyClass c = new MyClass(false);
-    ValidationResult result = new Validation().validate().allElements().in(c);
+    ValidationResult result = validation().validate(c);
     assertTrue(result.isInvalid());
     assertEquals(3, result.invalidElements().size());
     assertNotNull(result.invalidElement("notNull"));
@@ -66,14 +66,14 @@ public class ContextValidationTest {
   @Test
   public void testInvalidWithContexts() {
     MyClass c = new MyClass(false);
-    ValidationResult result = new Validation().validate().forContext("basic").allElements().in(c);
+    ValidationResult result = validation().forContext("basic").validate(c);
     assertTrue(result.isInvalid());
     assertEquals(3, result.invalidElements().size());
     assertNotNull(result.invalidElement("notNull"));
     assertNotNull(result.invalidElement("notNullForBasic"));
     assertNotNull(result.invalidElement("notNullForMinimalAndBasic"));
     
-    result = new Validation().validate().forContext("minimal").allElements().in(c);
+    result = validation().forContext("minimal").validate(c);
     assertTrue(result.isInvalid());
     assertEquals(2, result.invalidElements().size());
     assertNotNull(result.invalidElement("notNull"));
@@ -83,7 +83,7 @@ public class ContextValidationTest {
   @Test
   public void testValidWithNoContext() {
     MyClass c = new MyClass(true);
-    ValidationResult result = new Validation().validate().allElements().in(c);
+    ValidationResult result = validation().validate(c);
     assertTrue(result.isValid());
     assertEquals(0, result.invalidElements().size());
     assertNull(result.invalidElement("notNull"));
@@ -94,14 +94,14 @@ public class ContextValidationTest {
   @Test
   public void testValidWithContexts() {
     MyClass c = new MyClass(true);
-    ValidationResult result = new Validation().validate().forContext("basic").allElements().in(c);
+    ValidationResult result = validation().forContext("basic").validate(c);
     assertTrue(result.isValid());
     assertEquals(0, result.invalidElements().size());
     assertNull(result.invalidElement("notNull"));
     assertNull(result.invalidElement("notNullForBasic"));
     assertNull(result.invalidElement("notNullForMinimalAndBasic"));
     
-    result = new Validation().validate().forContext("minimal").allElements().in(c);
+    result = validation().forContext("minimal").validate(c);
     assertTrue(result.isValid());
     assertEquals(0, result.invalidElements().size());
     assertNull(result.invalidElement("notNull"));

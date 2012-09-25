@@ -16,8 +16,19 @@
  */
 package org.atatec.trugger.test.message;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.atatec.trugger.date.DateType;
+import org.atatec.trugger.message.Message;
+import org.atatec.trugger.message.MessagePart;
+import org.atatec.trugger.validation.InvalidElement;
+import org.atatec.trugger.validation.ValidationResult;
+import org.atatec.trugger.validation.ValidatorClass;
+import org.atatec.trugger.validation.validator.After;
+import org.atatec.trugger.validation.validator.GroupValidator;
+import org.atatec.trugger.validation.validator.NotEmpty;
+import org.atatec.trugger.validation.validator.NotNull;
+import org.atatec.trugger.validation.validator.Range;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,75 +39,64 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.atatec.trugger.date.DateType;
-import org.atatec.trugger.message.Message;
-import org.atatec.trugger.message.MessagePart;
-import org.atatec.trugger.validation.InvalidElement;
-import org.atatec.trugger.validation.Validation;
-import org.atatec.trugger.validation.ValidationResult;
-import org.atatec.trugger.validation.ValidatorClass;
-import org.atatec.trugger.validation.validator.After;
-import org.atatec.trugger.validation.validator.GroupValidator;
-import org.atatec.trugger.validation.validator.NotEmpty;
-import org.atatec.trugger.validation.validator.NotNull;
-import org.atatec.trugger.validation.validator.Range;
+import static org.atatec.trugger.validation.Validation.validation;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-import org.junit.Before;
-import org.junit.Test;
-
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class MessagesTest {
-  
+
   @NotNull
   @NotEmpty
   @ValidatorClass(GroupValidator.class)
   @Retention(RetentionPolicy.RUNTIME)
   public static @interface NotNullAndNotEmpty {
-    
+
     String message() default "not null & not empty";
-    
+
   }
-  
+
   public static class TestObject {
-    
+
     @Range(min = 0.45, max = 7.89)
     public double value;
-    
+
     @After(reference = "date2", type = DateType.DATE)
     public Date date1;
-    
+
     public Date date2;
-    
+
     @NotNullAndNotEmpty
     public String string;
-    
+
   }
-  
+
   private ValidationResult result;
   private TestObject testObject;
-  
+
   @Before
   public void initialize() {
-    Validation validation =
-        new Validation(ResourceBundle.getBundle("org.atatec.trugger.test.validation.validation-messages", Locale.ENGLISH));
     testObject = new TestObject();
-    
+
     testObject.value = 0.004;
     Calendar cal = Calendar.getInstance();
     DateType.DATE.clearIrrelevantFields(cal);
     testObject.date1 = cal.getTime();
     cal.add(Calendar.DATE, 1);
     testObject.date2 = cal.getTime();
-    
-    result = validation.validate().allElements().in(testObject);
+
+    ResourceBundle bundle = ResourceBundle.getBundle(
+      "org.atatec.trugger.test.validation.validation-messages", Locale.ENGLISH
+    );
+    result = validation()
+      .using(bundle)
+      .validate(testObject);
   }
-  
+
   @Test
   public void testMessageFormatter() {
     assertFalse(result.isValid());
-    
+
     Collection<InvalidElement> invalids = result.invalidElements();
     for (InvalidElement invalid : invalids) {
       List<Message> messages = invalid.messages();
@@ -117,12 +117,12 @@ public class MessagesTest {
       }
     }
   }
-  
+
   @Test
   public void testJoinMessages() {
     InvalidElement el = result.invalidElement("string");
     assertEquals("not null|not empty|not null & not empty", el.joinMessages("|", MessagePart.SUMMARY));
     assertEquals("not null detail|not empty detail", el.joinMessages("|", MessagePart.DETAIL));
   }
-  
+
 }

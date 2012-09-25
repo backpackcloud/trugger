@@ -16,11 +16,11 @@
  */
 package org.atatec.trugger.validation;
 
-import java.lang.reflect.AnnotatedElement;
-import java.util.Collection;
-
 import org.atatec.trugger.bind.BindableElement;
 import org.atatec.trugger.element.Element;
+
+import java.lang.reflect.AnnotatedElement;
+import java.util.Collection;
 
 /**
  * Interface that defines a class that serves as a bridge between the
@@ -57,7 +57,7 @@ public interface ValidationBridge {
    *
    * @return the component for doing the validation.
    */
-  ValidationEngine validate();
+  ValidationEngine validation();
 
   /**
    * @param element

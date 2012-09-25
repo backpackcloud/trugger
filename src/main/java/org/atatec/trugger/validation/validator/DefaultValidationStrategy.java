@@ -21,6 +21,8 @@ import org.atatec.trugger.util.Utils;
 import org.atatec.trugger.validation.ValidationBridge;
 import org.atatec.trugger.validation.ValidationResult;
 
+import static org.atatec.trugger.element.Elements.elements;
+
 /**
  * The default implementation for the {@link ValidationStrategy}.
  *
@@ -44,9 +46,9 @@ public class DefaultValidationStrategy implements ValidationStrategy {
   public ValidationResult validate(Object object, ValidationBridge bridge, Valid annotation, Element element) {
     String context = annotation.forContext();
     if (Utils.isEmpty(context)) {
-      return bridge.validate().allElements().in(object);
+      return bridge.validation().validate(elements().in(object));
     }
-    return bridge.validate().forContext(context).allElements().in(object);
+    return bridge.validation().forContext(context).validate(elements().in(object));
   }
 
 }

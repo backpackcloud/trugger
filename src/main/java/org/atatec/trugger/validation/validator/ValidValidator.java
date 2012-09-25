@@ -16,11 +16,6 @@
  */
 package org.atatec.trugger.validation.validator;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.atatec.trugger.CreateException;
 import org.atatec.trugger.annotation.TargetElement;
 import org.atatec.trugger.bind.PostBind;
@@ -33,13 +28,20 @@ import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.util.HashBuilder;
 import org.atatec.trugger.util.Utils;
 import org.atatec.trugger.validation.InvalidElement;
-import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationBridge;
 import org.atatec.trugger.validation.ValidationContext;
 import org.atatec.trugger.validation.ValidationException;
 import org.atatec.trugger.validation.ValidationResult;
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.validator.Valid.DEFAULT;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import static org.atatec.trugger.element.Elements.elements;
+import static org.atatec.trugger.validation.Validation.validation;
 
 /**
  * Implementation of the {@link Valid} validation.
@@ -100,9 +102,9 @@ public class ValidValidator implements Validator<Object> {
     }
     ValidationResult result;
     if (Utils.isEmpty(context)) {
-      result = new Validation().validate().allElements().in(value);
+      result = validation().validate(elements().in(value));
     } else {
-      result = new Validation().validate().forContext(context).allElements().in(value);
+      result = validation().forContext(context).validate(elements().in(value));
     }
     return result.isValid();
   }

@@ -27,9 +27,7 @@ import org.atatec.trugger.bind.Binder;
  */
 public interface ValidatorBinder {
 
-  /**
-   * Configures the binds for the given context.
-   */
+  /** Configures the binds for the given context. */
   void configureBinds(Validator validator, ValidatorContext context, Binder binder);
 
 }

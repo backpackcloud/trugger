@@ -29,6 +29,6 @@ public interface ValidatorContext extends AnnotationFactoryContext {
   /**
    * @return the {@link ValidationEngine#forContext(String) validation context}.
    */
-  String validationContext();
+  String context();
 
 }

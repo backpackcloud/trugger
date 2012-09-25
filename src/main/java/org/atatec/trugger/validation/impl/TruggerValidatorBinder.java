@@ -41,12 +41,8 @@ import java.util.Set;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 
-/**
- * @author Marcelo Varella Barca Guimarães
- */
+/** @author Marcelo Varella Barca Guimarães */
 public class TruggerValidatorBinder implements ValidatorBinder {
-
-  private ValidatorFactory factory = Validation.newValidatorFactory();
 
   public void configureBinds(Validator validator, ValidatorContext context, Binder binder) {
     Annotation annotation = context.annotation();
@@ -56,14 +52,14 @@ public class TruggerValidatorBinder implements ValidatorBinder {
       .bind(annotation).to(element().annotatedWith(TargetAnnotation.class))
       .bind(context.target()).to(element().annotatedWith(TargetObject.class))
       .use(new TargetElementResolver(context)).in(elements().annotatedWith(TargetElement.class))
-      .bind(context.validationContext()).to(element().annotatedWith(ValidationContext.class));
+      .bind(context.context()).to(element().annotatedWith(ValidationContext.class));
 
     bindReferences(context, binder, validator);
   }
 
   /**
-   * Checks the references that the annotation needs. Binding the values in the
-   * given validator.
+   * Checks the references that the annotation needs. Binding the values in the given
+   * validator.
    */
   private void bindReferences(ValidatorContext context, Binder binder, Validator validator) {
     Set<Element> list = Elements.elements().in(context.annotation());
@@ -91,18 +87,19 @@ public class TruggerValidatorBinder implements ValidatorBinder {
         bindableElement.bind(value);
       } else {
         throw new ValidationException("Incompatible type. Reference: " + bindableElement.name() + "|Annotation: "
-            + context.annotation().annotationType() + "|Element: " + context.element().name());
+          + context.annotation().annotationType() + "|Element: " + context.element().name());
       }
     }
   }
 
   /**
-   * Validates the reference element using the specified annotations in the
-   * annotation parameter
+   * Validates the reference element using the specified annotations in the annotation
+   * parameter
    */
   private boolean isReferenceValid(Element element, Object referenceValue, Binder binder) {
+    ValidatorFactory factory = Validation.newValidatorFactory();
     for (Annotation annotation : element.getAnnotations()) {
-      ValidatorContext context = new ValidatorContextImpl(annotation);
+      ValidatorContext context = new ValidatorContextImpl().annotation(annotation);
       if (factory.canCreate(context)) {
         ValidatorInvoker invoker = factory.create(context);
         binder.applyIn(invoker.validator());

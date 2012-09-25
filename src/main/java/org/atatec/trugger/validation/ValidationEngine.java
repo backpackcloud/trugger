@@ -16,10 +16,9 @@
  */
 package org.atatec.trugger.validation;
 
-import org.atatec.trugger.Result;
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.selector.ElementSelector;
-import org.atatec.trugger.selector.ElementsSelector;
+import org.atatec.trugger.message.MessageCreator;
+
+import java.util.ResourceBundle;
 
 /**
  * Interface that defines a class capable of validate an object based on the
@@ -27,27 +26,7 @@ import org.atatec.trugger.selector.ElementsSelector;
  *
  * @author Marcelo Varella Barca Guimarães
  */
-public interface ValidationEngine {
-
-  /**
-   * Selects the elements for validation. Only the specified elements will be
-   * validated.
-   *
-   * @param selector
-   *          the elements that must be validated.
-   * @return the component for doing the validation.
-   */
-  Result<ValidationResult, Object> selection(ElementsSelector selector);
-
-  /**
-   * Selects the element for validation. Only the specified element will be
-   * validated.
-   *
-   * @param selector
-   *          the element that must be validated.
-   * @return the component for doing the validation.
-   */
-  Result<ValidationResult, Object> selection(ElementSelector selector);
+public interface ValidationEngine extends ContextValidationEngine {
 
   /**
    * Indicates that the validation must be processed only over the annotations
@@ -57,22 +36,10 @@ public interface ValidationEngine {
    *          the context validation.
    * @return a reference to this object.
    */
-  ValidationEngine forContext(String context);
+  ContextValidationEngine forContext(String context);
 
-  /**
-   * Selects all properties for validation.
-   *
-   * @return the component for doing the validation.
-   */
-  Result<ValidationResult, Object> allElements();
+  ValidationEngine using(MessageCreator messageCreator);
 
-  /**
-   * Selects the given element for validation.
-   *
-   * @param element
-   *          the element for validation.
-   * @return the component for doing the validation.
-   */
-  Result<ValidationResult, Object> element(Element element);
+  ValidationEngine using(ResourceBundle resourceBundle);
 
 }

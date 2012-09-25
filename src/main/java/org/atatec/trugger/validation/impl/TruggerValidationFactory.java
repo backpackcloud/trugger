@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.validation.impl;
 
-import org.atatec.trugger.message.MessageCreator;
 import org.atatec.trugger.validation.ValidationEngine;
 import org.atatec.trugger.validation.ValidationFactory;
 import org.atatec.trugger.validation.ValidatorBinder;
@@ -33,12 +32,12 @@ public class TruggerValidationFactory implements ValidationFactory {
     return new TruggerValidatorBinder();
   }
 
-  public ValidationEngine createValidationEngine(ValidatorFactory validatorFactory, MessageCreator messageCreator) {
-    return new TruggerValidationEngine(validatorFactory, messageCreator);
+  public ValidatorFactory createValidatorFactory(ValidatorBinder binder) {
+    return new TruggerValidatorFactory(binder);
   }
 
-  public ValidatorFactory createValidatorFactory(ValidatorBinder validatorBinder) {
-    return new TruggerValidatorFactory(validatorBinder);
+  public ValidationEngine createValidationEngine(ValidatorFactory validatorFactory) {
+    return new TruggerValidationEngine(validatorFactory);
   }
 
 }
