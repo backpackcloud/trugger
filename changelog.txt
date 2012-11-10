@@ -15,8 +15,8 @@ Version 4.1
   - Predicable interface removed
   - Changed scope of EasyMock to test
     - Mocks for Element and ElementFinder are now in test packages
-    - Annotation mock still in the binaries, but is implemented Interceptor class instead
-      of EasyMock
+    - Annotation mock still in the binaries, but is implemented using Interceptor class
+      instead of EasyMock
   - Bind DSL improved
   - Validation DSL improved
     - Removed pluggable binders and factories (use the composite ones to override the
