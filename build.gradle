@@ -56,4 +56,8 @@ task pom << {
   }.writeTo("$buildDir/pom.xml")
 }
 
-task release(dependsOn: [clean, build, uploadArchives, pom])
+task dist(type: Zip) {
+  from "$buildDir/libs"
+  from "$buildDir/pom.xml"
+  from "changelog.txt"
+}
