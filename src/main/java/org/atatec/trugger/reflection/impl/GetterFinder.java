@@ -39,6 +39,6 @@ public class GetterFinder implements MemberFinder<Method> {
 
   public Method find(Class<?> type) throws Exception {
     Set<Method> methods = new HashSet<Method>(finder.find(type));
-    return Find.the(getterOf(name)).in(methods);
+    return Find.first(getterOf(name)).in(methods);
   }
 }

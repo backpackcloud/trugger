@@ -35,6 +35,7 @@ import org.junit.runners.Suite.SuiteClasses;
   ElementSelectorTest.class,
   NoNamedElementSelectorTest.class,
   ElementsSelectorTest.class,
+  OverrideTest.class,
 
   MapElementTest.class,
   ArrayElementTest.class,

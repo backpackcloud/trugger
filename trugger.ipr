@@ -50,7 +50,11 @@
       <entry name="?*.ftl" />
       <entry name="trace.info" />
     </wildcardResourcePatterns>
-    <annotationProcessing enabled="false" useClasspath="true" />
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+    </annotationProcessing>
   </component>
   <component name="CopyrightManager" default="Apache 2">
     <copyright>
@@ -321,10 +325,7 @@
         <inspection_tool class="LengthOneStringsInConcatenation" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="LoadLibraryWithNonConstantString" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="LocalVariableOfConcreteClass" enabled="true" level="WARNING" enabled_by_default="true" />
-        <inspection_tool class="MagicNumber" enabled="true" level="WARNING" enabled_by_default="true">
-          <option name="ignoreInHashCode" value="true" />
-          <option name="ignoreInTestCode" value="false" />
-        </inspection_tool>
+        <inspection_tool class="MagicNumber" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="MapReplaceableByEnumMap" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="MethodCallInLoopCondition" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="MethodCount" enabled="true" level="WARNING" enabled_by_default="true">
@@ -378,13 +379,12 @@
         <inspection_tool class="PackageVisibleField" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="PackageVisibleInnerClass" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignoreEnums" value="false" />
+          <option name="ignoreInterfaces" value="false" />
         </inspection_tool>
         <inspection_tool class="PageflowModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
         <inspection_tool class="PagesModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
         <inspection_tool class="ParameterOfConcreteClass" enabled="true" level="WARNING" enabled_by_default="true" />
-        <inspection_tool class="ParametersPerConstructor" enabled="true" level="WARNING" enabled_by_default="true">
-          <option name="m_limit" value="5" />
-        </inspection_tool>
+        <inspection_tool class="ParametersPerConstructor" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ParametersPerMethod" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="m_limit" value="5" />
         </inspection_tool>
@@ -393,6 +393,7 @@
         <inspection_tool class="ProtectedField" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ProtectedInnerClass" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignoreEnums" value="false" />
+          <option name="ignoreInterfaces" value="false" />
         </inspection_tool>
         <inspection_tool class="PublicField" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignoreEnums" value="true" />
@@ -402,6 +403,7 @@
         </inspection_tool>
         <inspection_tool class="PublicInnerClass" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignoreEnums" value="true" />
+          <option name="ignoreInterfaces" value="false" />
         </inspection_tool>
         <inspection_tool class="PublicMethodNotExposedInInterface" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="onlyWarnIfContainingClassImplementsAnInterface" value="false" />
@@ -553,6 +555,7 @@
         <inspection_tool class="ThreadDumpStack" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ThreeNegationsPerMethod" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="m_ignoreInEquals" value="true" />
+          <option name="ignoreInAssert" value="false" />
         </inspection_tool>
         <inspection_tool class="ThrowablePrintStackTrace" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ThrownExceptionsPerMethod" enabled="true" level="WARNING" enabled_by_default="true">
