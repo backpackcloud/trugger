@@ -1,3 +1,6 @@
+Version 4.1.1
+- Bug Fixes
+  - Fixed a bug with getter method finder on overrided methods.
 Version 4.1
 - Major Changes
   - Added the possibility to reflect only public members of a class or the declared ones.
