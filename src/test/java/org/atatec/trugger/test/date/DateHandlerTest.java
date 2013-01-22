@@ -16,16 +16,16 @@
  */
 package org.atatec.trugger.test.date;
 
+import org.atatec.trugger.date.DateType;
+import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.atatec.trugger.date.DateHandler.now;
 import static org.atatec.trugger.date.DateHandler.timeNow;
 import static org.atatec.trugger.date.DateHandler.today;
 import static org.junit.Assert.assertEquals;
-
-import java.util.Calendar;
-
-import org.atatec.trugger.date.DateType;
-
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -35,8 +35,9 @@ public class DateHandlerTest {
   @Test
   public void test() {
     Calendar cal = Calendar.getInstance();
+    Date now = now();
     DateType.DATE_TIME.clearIrrelevantFields(cal);
-    assertEquals(cal.getTime(), now());
+    assertEquals(cal.getTime(), now);
 
     cal = Calendar.getInstance();
     DateType.DATE.clearIrrelevantFields(cal);
