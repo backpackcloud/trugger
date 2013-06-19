@@ -29,7 +29,7 @@ import java.util.Set;
  * A class that defines an {@link AnnotatedElement} that can search in its
  * Annotation hierarchy.
  * <p>
- * This is usefull to create domain annotations. Supose you have a set of
+ * This is useful to create domain annotations. Suppose you have a set of
  * annotations that represents something if they are together in the same
  * annotated element. You can put it all in a new annotation that refers to the
  * meaning of the annotations and, if the annotated element is
