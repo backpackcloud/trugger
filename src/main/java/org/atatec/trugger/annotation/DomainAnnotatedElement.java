@@ -77,7 +77,7 @@ public class DomainAnnotatedElement implements AnnotatedElement {
    */
   public <T extends Annotation> DomainAnnotation<T> getDomainAnnotation(Class<T> annotationType) {
     if (annotatedElement.isAnnotationPresent(annotationType)) {
-      return new DomainAnnotationImpl<T>(getAnnotation(annotationType));
+      return new DomainAnnotationImpl<T>(annotatedElement.getAnnotation(annotationType));
     }
     if (map.containsKey(annotationType)) {
       return map.get(annotationType);
