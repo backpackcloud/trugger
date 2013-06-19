@@ -553,7 +553,7 @@ public final class Reflection {
       for (int i = 0; i < constructorArguments.length; i++) {
         Object parameter = constructorArguments[i];
         if (parameter != null) {
-          parameters[i] = parameter.getClass();
+          parameters[i] = Utils.resolveType(parameter);
         }
       }
       Constructor<?> foundConstructor = reflect().constructor().withParameters(parameters).in(type);
