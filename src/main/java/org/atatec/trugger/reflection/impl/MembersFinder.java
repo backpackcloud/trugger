@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -22,7 +22,7 @@ import java.util.Collection;
 /**
  * Interface that defines a class capable of find {@link Member} objects.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface MembersFinder<T extends Member> {
   

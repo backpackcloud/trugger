@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -26,7 +26,7 @@ import static org.atatec.trugger.predicate.Predicates.that;
 import static org.atatec.trugger.reflection.MethodPredicates.takes;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public class SetterResult implements Result<Method, Object> {
 

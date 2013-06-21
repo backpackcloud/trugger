@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -27,7 +27,7 @@ import org.atatec.trugger.validation.ValidatorClass;
  * Validates a number using an interval. The number will be valid if it belongs
  * to the specified interval.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 @Documented

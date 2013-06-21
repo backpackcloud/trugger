@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -33,7 +33,7 @@ import org.atatec.trugger.selector.ElementsSelector;
  * field named "myField" plus a getter named "getMyField" that return a String
  * and a setter named "setMyField" that takes a String).
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface PropertyFactory {
   

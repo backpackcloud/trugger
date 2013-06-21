@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -21,7 +21,7 @@ import org.atatec.trugger.predicate.Predicate;
 /**
  * Interface that defines a selector that uses {@link Predicate} objects.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @param <T>
  *          The object type to select.
  * @since 1.1

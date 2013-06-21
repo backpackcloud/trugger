@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 /**
  * A class capable of search classes in a <tt>jar</tt> resource.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public class JarResourceFinder implements ResourceFinder {
 

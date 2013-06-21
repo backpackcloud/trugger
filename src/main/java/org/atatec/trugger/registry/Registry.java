@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * Interface that defines a registry.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @param <K>
  *          The key type.
  * @param <V>
@@ -72,7 +72,7 @@ public interface Registry<K, V> {
   /**
    * Interface that represents a registry entry.
    *
-   * @author Marcelo Varella Barca Guimarães
+   * @author Marcelo Guimarães
    * @param <K>
    *          The key type.
    * @param <V>
@@ -95,7 +95,7 @@ public interface Registry<K, V> {
   /**
    * Interface for mapping a registry to a key.
    *
-   * @author Marcelo Varella Barca Guimarães
+   * @author Marcelo Guimarães
    * @param <K>
    *          The key type.
    * @param <V>

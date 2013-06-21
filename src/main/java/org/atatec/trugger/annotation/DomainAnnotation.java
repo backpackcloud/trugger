@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -22,7 +22,7 @@ import java.lang.annotation.Annotation;
  * Interface that defines an Annotation obtained using a
  * {@link DomainAnnotatedElement}.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @param <T>
  *          The annotation type.
  * @since 2.7

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -27,7 +27,7 @@ import java.util.Arrays;
  * An utility class for helping the use of {@link Predicate predicates} for
  * {@link Element elements}.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 1.2
  */
 public final class ElementPredicates {

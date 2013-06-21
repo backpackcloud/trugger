@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 /**
  * Interface that defines a selector for getter methods associated with a field.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface FieldGetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
     Result<Method, Object> {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -29,7 +29,7 @@ import org.atatec.trugger.Finder;
  * This annotation indicates a specific {@link Finder finder} to be used for
  * search for {@link Element elements} in the annotated element.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 1.2
  */
 @Documented

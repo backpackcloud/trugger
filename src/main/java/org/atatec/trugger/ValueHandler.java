@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -20,7 +20,7 @@ package org.atatec.trugger;
  * Interface that defines a component for handling, modifying and/or accessing a
  * value according to the implementation behavior.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface ValueHandler {
   

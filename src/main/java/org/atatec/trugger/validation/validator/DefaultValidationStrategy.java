@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -26,7 +26,7 @@ import static org.atatec.trugger.element.Elements.elements;
 /**
  * The default implementation for the {@link ValidationStrategy}.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 public class DefaultValidationStrategy implements ValidationStrategy {

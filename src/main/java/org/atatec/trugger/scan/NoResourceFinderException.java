@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -21,7 +21,7 @@ package org.atatec.trugger.scan;
  * Exception thrown to indicate that there is no ResourceFinder mapped for a given
  * protocol.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 4.0
  */
 public class NoResourceFinderException extends ClassScanningException {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -21,7 +21,7 @@ import org.atatec.trugger.CreateException;
 /**
  * Interface that defines a factory that, based on a key, creates an object.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @param <K>
  *          the key type
  * @param <E>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -21,7 +21,7 @@ import org.atatec.trugger.validation.Validator;
 /**
  * Implementation of the {@link AssertTrue} validation.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 public class AssertTrueValidator implements Validator<Boolean> {

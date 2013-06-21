@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 /**
  * A finder for zip resources (jar files) inside a JBoss AS 7.x
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 4.0
  */
 public class VfsResourceFinder implements ResourceFinder {

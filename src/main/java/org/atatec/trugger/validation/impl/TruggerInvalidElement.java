@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -31,7 +31,7 @@ import org.atatec.trugger.validation.InvalidElement;
 /**
  * This class represents an invalid element.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 final class TruggerInvalidElement extends SpecificElement implements InvalidElement {
 

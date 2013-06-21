@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -20,7 +20,7 @@ package org.atatec.trugger.validation;
 /**
  * Interface that defines an invoker for a validator.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 3.0
  */
 public interface ValidatorInvoker<T> extends Validator<T> {

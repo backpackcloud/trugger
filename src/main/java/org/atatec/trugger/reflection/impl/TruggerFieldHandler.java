@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -26,7 +26,7 @@ import org.atatec.trugger.reflection.Reflection;
 /**
  * Implementation for the FieldHandler interface.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public class TruggerFieldHandler implements FieldHandler {
   

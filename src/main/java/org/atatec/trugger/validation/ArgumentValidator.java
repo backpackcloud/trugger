@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -31,7 +31,7 @@ import static org.atatec.trugger.util.Utils.resolveType;
  * An utility class to validate arguments passed to a method using generic types and
  * {@link Validator} annotations.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 3.0
  */
 public class ArgumentValidator {

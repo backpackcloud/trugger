@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -25,7 +25,7 @@ package org.atatec.trugger.element;
  * Only the {@link Element#isReadable() readable} elements are copied and only
  * the {@link Element#isWritable() writable} elements receives the value.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 1.2
  */
 public interface ElementCopier {

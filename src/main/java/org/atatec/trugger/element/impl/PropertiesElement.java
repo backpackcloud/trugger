@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -23,7 +23,7 @@ import org.atatec.trugger.element.Element;
 import java.util.Properties;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public class PropertiesElement extends AbstractElement implements Element {
 

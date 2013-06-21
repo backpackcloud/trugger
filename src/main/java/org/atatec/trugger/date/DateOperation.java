@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -31,7 +31,7 @@ import java.util.Date;
  * Note that if the object is a {@link Calendar}, it will be affected by the
  * operation. So, the {@link #result() result} will be the given calendar.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.0
  */
 public interface DateOperation {

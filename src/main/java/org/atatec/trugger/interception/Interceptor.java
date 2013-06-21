@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -30,7 +30,7 @@ import static org.atatec.trugger.reflection.Reflection.reflect;
 /**
  * A base class to create Proxies to interfaces.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 public class Interceptor implements InvocationHandler, ProxyFactory {

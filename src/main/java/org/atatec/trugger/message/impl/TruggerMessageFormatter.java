@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -51,7 +51,7 @@ import java.util.regex.Pattern;
  * Example: if you define the expression <i>#{element.name}</i> and the context
  * element is <i>otherElement</i>, the expression will not work.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public final class TruggerMessageFormatter implements MessageFormatter {
 

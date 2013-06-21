@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -34,7 +34,7 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.named;
 /**
  * A builder for creating mock {@link Annotation annotations}.
  * <p/>
- * This mock provides some usefull features because annotations may have default values.
+ * This mock provides some useful features because annotations may have default values.
  * This class can resolve them and automatically configure the values in the mock object.
  * <p/>
  * Here is an example of use:
@@ -62,7 +62,7 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.named;
  * // if you don't need to specify any property
  * Resource resource2 = mock(annotation(Resource.class));
  *
- * // if the annonymous class looks bad to you
+ * // if the anonymous class looks bad to you
  * AnnotationMock&lt;Resource&gt; builder = annotation(Resource.class);
  * Resource resource3 = builder.annotation();
  * builder.map(&quot;name&quot;).to(resource3.name());
@@ -72,7 +72,7 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.named;
  *
  * @param <T> The annotation type.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
@@ -161,7 +161,7 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
    * @param <E> The value type.
    * @param <T> The annotation type.
    *
-   * @author Marcelo Varella Barca Guimarães
+   * @author Marcelo Guimarães
    * @since 2.1
    */
   public static interface Mapper<E, T extends Annotation> {

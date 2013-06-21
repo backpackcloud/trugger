@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -45,7 +45,7 @@ import java.util.Set;
  * <i>single object selection</i> (for a <i>set</i> of them, an <strong>empty
  * collection</strong> is returned).
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface Reflector {
 

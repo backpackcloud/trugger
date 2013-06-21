@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * A register that loads the default implementations if there is no one registered.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public final class TruggerRegistry implements Registry<Class<?>, Object> {
 

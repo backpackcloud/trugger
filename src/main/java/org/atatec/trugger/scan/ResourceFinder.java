@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -24,7 +24,7 @@ import java.util.Set;
  * Interface that defines a class capable of find resources in a given
  * {@link URL path} based on a package name.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.3
  */
 public interface ResourceFinder {

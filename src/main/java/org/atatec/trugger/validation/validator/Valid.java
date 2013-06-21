@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -38,7 +38,7 @@ import org.atatec.trugger.validation.ValidatorClass;
  * Note that the {@link ValidationEngine} used to validate the target is the
  * same that will be used to validate the annotated property.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 @Documented
@@ -86,7 +86,7 @@ public @interface Valid {
   /**
    * A key class to indicate that the default strategy must be used.
    *
-   * @author Marcelo Varella Barca Guimarães
+   * @author Marcelo Guimarães
    */
   static final class DEFAULT implements ValidationStrategy {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -37,7 +37,7 @@ import java.util.Set;
  * {@link #isAnnotationPresent(Class)} and {@link #getAnnotation(Class)} will
  * return that annotations.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.7
  */
 public class DomainAnnotatedElement implements AnnotatedElement {

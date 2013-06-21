@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -35,7 +35,7 @@ import static org.atatec.trugger.reflection.Reflection.methods;
  * The binds are applied in order they are registered with the
  * {@link #bind(Object)} and {@link #use(Resolver)} methods.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public final class TruggerBinder implements Binder {
   

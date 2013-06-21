@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -23,7 +23,7 @@ package org.atatec.trugger.predicate;
  * <strong>Every instance of this interface must be <i>immutable</i>. The
  * composition methods should always return new instances.</strong>
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @param <T>
  *          The element type.
  */

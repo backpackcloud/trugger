@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -24,7 +24,7 @@ import org.atatec.trugger.element.Element;
  * Interface that defines a formatter to a message, this interface can be used
  * with a {@link MessageCreator} to create formatted messages.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 public interface MessageFormatter {

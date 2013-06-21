@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -22,7 +22,7 @@ import java.lang.reflect.AnnotatedElement;
 /**
  * Interface that defines a selector for {@link AnnotatedElement} objects.
  * 
- * @author Marcelo Varella Barca Guimarães The element type.
+ * @author Marcelo Guimarães The element type.
  */
 public interface AnnotatedElementSelector {
   

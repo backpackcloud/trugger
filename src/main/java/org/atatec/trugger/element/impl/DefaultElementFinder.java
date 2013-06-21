@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -37,7 +37,7 @@ import static org.atatec.trugger.reflection.Reflection.fields;
  * A default finder for every type of objects. It uses the properties and fields for
  * resolving the elements.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public class DefaultElementFinder implements Finder<Element> {
 

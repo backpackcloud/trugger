@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -30,7 +30,7 @@ import java.util.Collection;
 /**
  * A class for helping {@link Element} selection.
  *
- * @author Marcelo Varella Barca Guimarães.
+ * @author Marcelo Guimarães.
  * @since 1.2
  */
 public class Elements {

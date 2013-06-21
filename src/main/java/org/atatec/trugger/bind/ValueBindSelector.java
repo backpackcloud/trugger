@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
  * There are some conventions for keeping compatibility against the binds: <ul> <li>The
  * bind using a selection of {@link Field} objects must use the target hierarchy. </ul>
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 4.1
  */
 public interface ValueBindSelector {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 /**
  * Base interface for selecting {@link Element elements}.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.0
  */
 public interface ElementSpecifier extends AnnotatedElementSelector, PredicateSelector<Element>,

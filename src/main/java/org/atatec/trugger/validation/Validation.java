@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -55,7 +55,7 @@ import org.atatec.trugger.loader.ImplementationLoader;
  * ValidationEngine#forContext(String) specified}, only the annotations with the specified
  * context or with no context will be processed. </ul>
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 public final class Validation {

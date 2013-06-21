@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -33,7 +33,7 @@ import java.lang.reflect.AnnotatedElement;
  * This class also supports nested annotations by scanning the annotations of
  * the key.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @param <A>
  *          the annotation type
  * @param <E>

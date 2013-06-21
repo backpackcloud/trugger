@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -26,7 +26,7 @@ import org.atatec.trugger.element.Element;
  * is to be a component for seamless bind objects into another one (a
  * lower-level in comparison with an IoC container).
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 1.2
  */
 public interface Binder {

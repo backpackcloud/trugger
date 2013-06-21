@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
 /**
  * An {@link Element} originated from a {@link Field}.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public final class FieldElement extends AbstractElement implements Element {
 

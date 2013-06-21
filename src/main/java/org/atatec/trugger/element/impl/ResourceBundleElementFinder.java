@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -28,7 +28,7 @@ import org.atatec.trugger.element.Element;
 /**
  * A finder for ResourceBundle elements.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public class ResourceBundleElementFinder implements Finder<Element> {
   

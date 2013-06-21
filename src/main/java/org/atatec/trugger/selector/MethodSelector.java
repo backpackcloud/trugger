@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
  * Interface that defines a selector for a single {@link Method} object assuming that the
  * name was specified before.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface MethodSelector extends MethodSpecifier, PredicableResult<Method, Object> {
 

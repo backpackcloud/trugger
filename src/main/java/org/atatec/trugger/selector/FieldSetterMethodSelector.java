@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
  * Interface that defines a selector for setter methods associated with a field
  * object.
  * 
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface FieldSetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
     Result<Method, Object> {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -22,7 +22,7 @@ import org.atatec.trugger.validation.ValidationResult;
 /**
  * Interface that defines the restrictions allowed by the Predicate DSL.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @param <E>
  *          The object type.
  * @param <V>
@@ -169,7 +169,7 @@ public interface Criteria<E, V> {
   /**
    * Interface for defining the validation criteria.
    *
-   * @author Marcelo Varella Barca Guimarães
+   * @author Marcelo Guimarães
    * @since 2.5
    */
   public static interface ValidationCriteria {

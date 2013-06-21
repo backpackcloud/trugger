@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
- * @author Marcelo Varella Barca Guimarães (method {@link #resolveParameterName(String,
+ * @author Marcelo Guimarães (method {@link #resolveParameterName(String,
  *         Class)} and default visibility to public methods).
  */
 final class TruggerGenericTypeResolver {

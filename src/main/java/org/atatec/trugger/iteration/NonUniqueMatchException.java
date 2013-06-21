@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -22,7 +22,7 @@ import org.atatec.trugger.TruggerException;
  * Exception thrown to indicate that a predicate given to search for an unique element
  * matches two or more elements..
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public class NonUniqueMatchException extends TruggerException {
 

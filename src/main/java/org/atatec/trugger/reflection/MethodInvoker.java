@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
  * MyType result = {@link Reflection#invoke(Method)}.on(instance).withArgs(arg1, arg2);
  * </pre>
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  */
 public interface MethodInvoker extends Invoker, Result<Invoker, Object> {
 

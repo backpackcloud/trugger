@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -26,7 +26,7 @@ import org.atatec.trugger.validation.ValidatorClass;
 /**
  * Indicates that the value must be a valid email address.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @since 2.1
  */
 @Documented
@@ -37,7 +37,7 @@ public @interface Email {
   /**
    * A class that enumerates a set of methods to validate an email address.
    *
-   * @author Marcelo Varella Barca Guimarães
+   * @author Marcelo Guimarães
    */
   public static enum EmailValidationMethod {
 

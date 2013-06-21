@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2012 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -34,7 +34,7 @@ import static org.atatec.trugger.predicate.Predicates.wrap;
  * An utilitity class for helping the use of {@link Predicate} object that involves
  * Reflection.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo Guimarães
  * @see Predicates
  */
 public class ReflectionPredicates {
