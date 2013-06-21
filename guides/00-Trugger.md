@@ -1,2 +1,2 @@
 % Trugger User Guide
-% Marcelo Guimarães
+% Marcelo Guimarães <ataxexe at gmail dot com>
