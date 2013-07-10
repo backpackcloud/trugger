@@ -1,5 +1,7 @@
 # Utilities
 
+Trugger has a couple of utilities used by itself and may be useful for you.
+
 ## Annotation Mock
 
 You can mock an Annotation using the *AnnotationMock* class:
@@ -27,3 +29,16 @@ The DSL exposed allows a mock of an Annotation with defaults in a easy way:
 
     Resource resource = mock(annotation(Resource.class));
 
+## Class Iteration
+
+An *Iterator* that uses the hierarchy of the target class. Useful in *foreach* loops:
+
+    import static org.atatec.trugger.reflection.hierarchyOf;
+
+    for (Class type : hierarchyOf(target)) {
+      //do something with the class
+    }
+
+## Null Objects
+
+A set of
