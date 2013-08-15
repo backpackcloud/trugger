@@ -76,3 +76,5 @@ task dist(type: Zip) {
   from "$buildDir/pom.xml"
   from "changelog.txt"
 }
+
+task make(dependsOn: [test, sourcesJar, javadocJar, pom, generateGuide, dist])

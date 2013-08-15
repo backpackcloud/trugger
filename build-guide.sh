@@ -1,3 +1,5 @@
+#!/bin/sh
+
 dist=$1
 shift
 formats=$@
