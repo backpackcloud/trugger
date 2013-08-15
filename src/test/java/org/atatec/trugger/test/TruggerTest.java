@@ -26,7 +26,7 @@ import org.atatec.trugger.test.element.ElementTestSuite;
 import org.atatec.trugger.test.exception.ExceptionHandlingTest;
 import org.atatec.trugger.test.factory.FactoryTest;
 import org.atatec.trugger.test.general.AcceptedTypesTest;
-import org.atatec.trugger.test.general.GeneralTestSuite;
+import org.atatec.trugger.test.general.NullObjectsTest;
 import org.atatec.trugger.test.general.UtilsTest;
 import org.atatec.trugger.test.interception.InterceptorTest;
 import org.atatec.trugger.test.iteration.IterationTest;
@@ -71,6 +71,7 @@ import static org.junit.Assert.assertTrue;
   PredicatesTest.class,
   InterceptorTest.class,
   TransformerTest.class,
+  NullObjectsTest.class,
   AcceptedTypesTest.class,
   AnnotationMockTest.class,
   ExceptionHandlingTest.class,
@@ -78,7 +79,6 @@ import static org.junit.Assert.assertTrue;
 
   DateTestSuite.class,
   BinderTestSuite.class,
-  GeneralTestSuite.class,
   ElementTestSuite.class,
   ClassScanTestSuite.class,
   ReflectionTestSuite.class,
