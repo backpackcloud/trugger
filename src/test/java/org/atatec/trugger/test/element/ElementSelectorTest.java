@@ -176,11 +176,6 @@ public class ElementSelectorTest {
         selector.writable();
       }
     }, this);
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.forBind();
-      }
-    }, this);
     assertNoResult(new Selection() {
       public void makeSelections(ElementSelector selector) {
         selector.nonWritable();

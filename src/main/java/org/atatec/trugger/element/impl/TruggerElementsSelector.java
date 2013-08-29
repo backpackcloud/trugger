@@ -17,8 +17,6 @@
 package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.Finder;
-import org.atatec.trugger.Result;
-import org.atatec.trugger.bind.BindableElement;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.iteration.Iteration;
@@ -26,10 +24,8 @@ import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ElementsSelector;
-import org.atatec.trugger.transformer.Transformer;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -126,34 +122,6 @@ public final class TruggerElementsSelector implements ElementsSelector {
       Iteration.retain(selected).from(elements);
     }
     return elements;
-  }
-
-  public Result<Set<BindableElement>, Object> forBind() {
-    writable();
-    return new Result<Set<BindableElement>, Object>() {
-
-      public Set<BindableElement> in(Object target) {
-        Set<Element> elements = TruggerElementsSelector.this.in(target);
-        Set<BindableElement> result = new HashSet<BindableElement>(elements.size());
-        Transformer<BindableElement, Element> bindable = new ElementToBindableTransformer(target);
-        Iteration.copy().as(bindable).from(elements).to(result);
-        return result;
-      }
-    };
-  }
-
-  private static class ElementToBindableTransformer implements Transformer<BindableElement, Element> {
-
-    private final Object target;
-
-    public ElementToBindableTransformer(Object target) {
-      this.target = target;
-    }
-
-    public BindableElement transform(Element object) {
-      return new TruggerBindableElement(object, target);
-    }
-
   }
 
 }

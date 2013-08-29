@@ -166,7 +166,7 @@ public final class NestedElement extends AbstractElement implements Element {
   static NestedElement createNestedElement(Object source, String elementsPath) {
     String[] names = DOT_PATTERN.split(elementsPath);
     List<Element> path = new ArrayList<Element>(names.length);
-    Element property = null;
+    Element property;
     Object _source = source;
     for (String string : names) {
       property = Elements.element(string).in(_source);

@@ -16,13 +16,9 @@
  */
 package org.atatec.trugger.util;
 
-import org.atatec.trugger.annotation.AcceptArrays;
-import org.atatec.trugger.annotation.AcceptedArrayTypes;
-import org.atatec.trugger.annotation.AcceptedTypes;
 import org.atatec.trugger.reflection.Reflection;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 
 /**
  * A class with general utility methods.
@@ -101,39 +97,6 @@ public final class Utils {
     return to.isAssignableFrom(from);
   }
 
-  /**
-   * Checks if the specified type is mapped on the given element based on the
-   * annotations {@link AcceptedTypes}, {@link AcceptedArrayTypes} and
-   * {@link AcceptArrays}.
-   *
-   * @param element
-   *          the element to search for the {@link AcceptedTypes} and/or
-   *          {@link AcceptedArrayTypes}.
-   * @param type
-   *          the type to check
-   * @return <code>true</code> if the type is compatible with any type mapped to
-   *         the given element.
-   * @since 2.3
-   */
-  public static boolean isTypeAccepted(Class<?> type, AnnotatedElement element) {
-    boolean array = type.isArray();
-    boolean accTypes = element.isAnnotationPresent(AcceptedTypes.class);
-    boolean accArrTypes = element.isAnnotationPresent(AcceptedArrayTypes.class);
-    boolean accArr = element.isAnnotationPresent(AcceptArrays.class);
-    if (array) {
-      if (accArrTypes) {
-        AcceptedArrayTypes annotation = element.getAnnotation(AcceptedArrayTypes.class);
-        return checkAcceptance(type.getComponentType(), annotation.value());
-      } else if (accArr) {
-        return true;
-      }
-    }
-    if (accTypes) {
-      AcceptedTypes annotation = element.getAnnotation(AcceptedTypes.class);
-      return checkAcceptanceWithWrapper(type, annotation.value());
-    }
-    return !accArr && !accArrTypes;
-  }
 
   private static boolean checkAcceptance(Class<?> type, Class<?>[] classes) {
     for (Class<?> acceptedType : classes) {

@@ -118,7 +118,7 @@ public final class Transformers {
   private static final Map<Class, Transformer> TRANSFORMERS;
 
   static {
-    TRANSFORMERS = new HashMap<Class, Transformer>(10);
+    TRANSFORMERS = new HashMap<Class, Transformer>(15);
     TRANSFORMERS.put(Boolean.class, BOOLEAN);
     TRANSFORMERS.put(Integer.class, INTEGER);
     TRANSFORMERS.put(Long.class, LONG);

@@ -16,12 +16,11 @@
  */
 package org.atatec.trugger.selector;
 
-import java.lang.annotation.Annotation;
-
 import org.atatec.trugger.Result;
-import org.atatec.trugger.bind.BindableElement;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.predicate.Predicate;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Interface that defines a selector for {@link Element} objects.
@@ -55,16 +54,5 @@ public interface ElementSelector extends ElementSpecifier, Result<Element, Objec
   ElementSelector specific();
   
   ElementSelector nonSpecific();
-  
-  /**
-   * Selects an element for binding a value.
-   * <p>
-   * The target passed for the Result object must be the target for binding. If
-   * the element is a static one (like a static field), the target must be a
-   * {@link Class}.
-   * 
-   * @return the component for getting the element.
-   */
-  Result<BindableElement, Object> forBind();
   
 }

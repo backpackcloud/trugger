@@ -1,9 +1,11 @@
-Version 4.1.2
-- Bug Fixes
-  - Fixed a bug that causes a StackOverflowError in DomainAnnotatedElement#getAnnotation
+Version 4.2
+- Modules removed (I don't have time to maintain them)
+  - Validation
+  - Bind
+  - Annotation (only Domain Annotation was kept)
+- Minor Improvements
   - Reflection#newInstanceOf uses Utils#resolveType
-  - Removed MultiResourceBundle and TransformerCriteria classes due to its useless
-    contribution
+
 Version 4.1.1
 - Bug Fixes
   - Fixed a bug with getter method finder on overrided methods.

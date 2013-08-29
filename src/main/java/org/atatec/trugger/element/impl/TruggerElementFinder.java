@@ -19,22 +19,14 @@ package org.atatec.trugger.element.impl;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementFinderClass;
-import org.atatec.trugger.factory.AnnotationBasedFactory;
-import org.atatec.trugger.factory.Factories;
-import org.atatec.trugger.factory.Factory;
 import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.registry.Registry.Entry;
 import org.atatec.trugger.util.Utils;
 
-import java.lang.reflect.AnnotatedElement;
 import java.util.Set;
 
 /**
  * A default implementation for an Element finder.
- * <p>
- * This class uses registered finders for defined types and allows custom
- * finders via {@link ElementFinderClass}.
  *
  * @author Marcelo Guimarães
  */
@@ -42,19 +34,14 @@ public final class TruggerElementFinder implements Finder<Element> {
 
   private final Registry<Class<?>, Finder<Element>> registry;
   private final Finder<Element> defaultFinder;
-  private final Factory<AnnotatedElement, Finder<Element>> factory;
 
   public TruggerElementFinder(Finder<Element> defaultFinder, Registry<Class<?>, Finder<Element>> registry) {
     this.registry = registry;
-    this.factory = Factories.sharedObjectFactory(new AnnotationBasedFactory<ElementFinderClass, Finder<Element>>(ElementFinderClass.class));
     this.defaultFinder = defaultFinder;
   }
 
   private Finder<Element> getFinder(Object target) {
     Class<?> type = Utils.resolveType(target);
-    if (factory.canCreate(type)) {
-      return factory.create(type);
-    }
     if (registry.hasRegistryFor(type)) {
       return registry.registryFor(type);
     }

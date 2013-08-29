@@ -17,9 +17,6 @@
 package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.Finder;
-import org.atatec.trugger.Result;
-import org.atatec.trugger.bind.BindableElement;
-import org.atatec.trugger.bind.impl.BindableElementTransformer;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.predicate.CompositePredicate;
@@ -128,17 +125,6 @@ public class TruggerElementSelector implements ElementSelector {
       return predicate.evaluate(element) ? element : null;
     }
     return element;
-  }
-
-  public Result<BindableElement, Object> forBind() {
-    writable();
-    return new Result<BindableElement, Object>() {
-
-      public BindableElement in(Object target) {
-        Element element = TruggerElementSelector.this.in(target);
-        return new BindableElementTransformer(target).transform(element);
-      }
-    };
   }
 
   protected PredicateBuilder<Element> builder() {

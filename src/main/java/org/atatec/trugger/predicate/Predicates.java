@@ -16,9 +16,6 @@
  */
 package org.atatec.trugger.predicate;
 
-import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.validation.Validation.validation;
-
 /**
  * An utility class to handle {@link Predicate} objects.
  *
@@ -59,32 +56,6 @@ public final class Predicates {
   public static <T> CompositePredicate<T> not(final Predicate<? super T> predicate) {
     return (CompositePredicate<T>) wrap(predicate).negate();
   }
-
-  /**
-   * A predicate that returns <code>true</code> if an object is valid based on all of its
-   * elements.
-   *
-   * @since 2.5
-   */
-  public static CompositePredicate<Object> VALID = wrap(new Predicate<Object>() {
-    @Override
-    public boolean evaluate(Object object) {
-      return validation().validate(elements().in(object)).isValid();
-    }
-  });
-
-  /**
-   * A predicate that returns <code>true</code> if an object is invalid based on all of
-   * its elements.
-   *
-   * @since 2.5
-   */
-  public static CompositePredicate<Object> INVALID = wrap(new Predicate<Object>() {
-    @Override
-    public boolean evaluate(Object object) {
-      return validation().validate(elements().in(object)).isInvalid();
-    }
-  });
 
   /**
    * @see #wrap(Predicate)

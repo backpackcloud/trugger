@@ -149,11 +149,6 @@ public class NoNamedElementSelectorTest {
         selector.writable();
       }
     }, this);
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.forBind();
-      }
-    }, this);
   }
 
   @Test

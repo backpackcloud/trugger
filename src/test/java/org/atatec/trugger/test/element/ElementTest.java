@@ -16,6 +16,13 @@
  */
 package org.atatec.trugger.test.element;
 
+import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.ElementPredicates;
+import org.atatec.trugger.test.Flag;
+import org.junit.Test;
+
+import java.util.Set;
+
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
@@ -24,15 +31,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Set;
-
-import org.atatec.trugger.bind.BindableElement;
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementPredicates;
-import org.atatec.trugger.test.Flag;
-
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -96,15 +94,6 @@ public class ElementTest {
     assertTrue(el.isSpecific());
     assertTrue(el2.isSpecific());
     assertMatch(el, ElementPredicates.SPECIFIC);
-
-    BindableElement bel = element("age").forBind().in(t1);
-    BindableElement bel2 = element("age").forBind().in(t2);
-    assertFalse(bel.equals(bel2));
-    assertTrue(bel.isSpecific());
-    assertTrue(bel2.isSpecific());
-
-    bel2 = element("age").forBind().in(t1);
-    assertTrue(bel.equals(bel2));
 
     Set<Element> elements = elements().in(t1);
     assertMatch(elements, ElementPredicates.SPECIFIC);

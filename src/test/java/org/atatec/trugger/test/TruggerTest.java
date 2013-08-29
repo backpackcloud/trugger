@@ -20,17 +20,14 @@ import junit.framework.AssertionFailedError;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.test.bind.BinderTestSuite;
 import org.atatec.trugger.test.date.DateTestSuite;
 import org.atatec.trugger.test.element.ElementTestSuite;
 import org.atatec.trugger.test.exception.ExceptionHandlingTest;
 import org.atatec.trugger.test.factory.FactoryTest;
-import org.atatec.trugger.test.general.AcceptedTypesTest;
 import org.atatec.trugger.test.general.NullObjectsTest;
 import org.atatec.trugger.test.general.UtilsTest;
 import org.atatec.trugger.test.interception.InterceptorTest;
 import org.atatec.trugger.test.iteration.IterationTest;
-import org.atatec.trugger.test.message.MessagesTest;
 import org.atatec.trugger.test.mock.AnnotationMockTest;
 import org.atatec.trugger.test.predicate.PredicatesTest;
 import org.atatec.trugger.test.predicate.ReflectionPredicatesTest;
@@ -39,7 +36,6 @@ import org.atatec.trugger.test.reflection.ReflectionTestSuite;
 import org.atatec.trugger.test.registry.RegistryTest;
 import org.atatec.trugger.test.scan.ClassScanTestSuite;
 import org.atatec.trugger.test.transformer.TransformerTest;
-import org.atatec.trugger.test.validation.ValidationTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -64,7 +60,6 @@ import static org.junit.Assert.assertTrue;
 @SuiteClasses({
   UtilsTest.class,
   FactoryTest.class,
-  MessagesTest.class,
   IterationTest.class,
   PropertyTest.class,
   RegistryTest.class,
@@ -72,17 +67,14 @@ import static org.junit.Assert.assertTrue;
   InterceptorTest.class,
   TransformerTest.class,
   NullObjectsTest.class,
-  AcceptedTypesTest.class,
   AnnotationMockTest.class,
   ExceptionHandlingTest.class,
   ReflectionPredicatesTest.class,
 
   DateTestSuite.class,
-  BinderTestSuite.class,
   ElementTestSuite.class,
   ClassScanTestSuite.class,
-  ReflectionTestSuite.class,
-  ValidationTestSuite.class
+  ReflectionTestSuite.class
 })
 public class TruggerTest {
 

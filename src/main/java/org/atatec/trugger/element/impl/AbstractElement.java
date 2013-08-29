@@ -49,7 +49,7 @@ public abstract class AbstractElement implements Element {
   }
 
   @Override
-  public String name() {
+  public final String name() {
     return name;
   }
 

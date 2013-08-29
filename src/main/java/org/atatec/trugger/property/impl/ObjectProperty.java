@@ -136,11 +136,6 @@ final class ObjectProperty extends AbstractElement {
   }
 
   @Override
-  public String name() {
-    return name;
-  }
-
-  @Override
   public Class<?> type() {
     return type;
   }
