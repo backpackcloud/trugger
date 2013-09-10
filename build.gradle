@@ -60,21 +60,10 @@ task pom << {
   }.writeTo("$buildDir/pom.xml")
 }
 
-task generateGuide(type:Exec) {
-
-  commandLine "./build-guide.sh", "$buildDir", project.guideFormats.join(' ')
-
-}
-
 task dist(type: Zip) {
   from "$buildDir/libs"
-
-  project.guideFormats.each() {
-    from "$buildDir/trugger.${it}"
-  }
-
   from "$buildDir/pom.xml"
   from "changelog.txt"
 }
 
-task make(dependsOn: [test, sourcesJar, javadocJar, pom, generateGuide, dist])
+task make(dependsOn: [test, sourcesJar, javadocJar, pom, dist])
