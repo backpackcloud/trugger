@@ -16,21 +16,17 @@
  */
 package org.atatec.trugger.test.factory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import org.atatec.trugger.CreateException;
+import org.atatec.trugger.factory.AnnotationBasedFactory;
+import org.atatec.trugger.factory.Factory;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.AnnotatedElement;
 
-import org.atatec.trugger.CreateException;
-import org.atatec.trugger.factory.AnnotationBasedFactory;
-import org.atatec.trugger.factory.Factories;
-import org.atatec.trugger.factory.Factory;
-
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the Factories.
@@ -72,20 +68,6 @@ public class FactoryTest {
   @Test(expected = CreateException.class)
   public void testNotAnnotated() {
     factory.create(NotAnnotated.class);
-  }
-
-  @Test
-  public void testSharedObjectFactory() {
-    Object o1 = factory.create(Direct.class);
-    Object o2 = factory.create(Direct.class);
-
-    assertNotSame(o1, o2);
-
-    Factory sharedObjectFactory = Factories.sharedObjectFactory(factory);
-    o1 = sharedObjectFactory.create(Direct.class);
-    o2 = sharedObjectFactory.create(Direct.class);
-
-    assertSame(o1, o2);
   }
 
   @ComponentClass(Object.class)
