@@ -9,10 +9,6 @@ configurations {
 
   project.targetCompatibility = "1.6"
   project.sourceCompatibility = "1.6"
-
-  project.ext {
-    guideFormats = ["pdf", "html"]
-  }
 }
 
 repositories {
