@@ -56,10 +56,9 @@ task pom << {
   }.writeTo("$buildDir/pom.xml")
 }
 
-task dist(type: Zip) {
+task dist(type: Zip, dependsOn: [clean, sourcesJar, javadocJar, test, pom]) {
   from "$buildDir/libs"
   from "$buildDir/pom.xml"
   from "changelog.txt"
 }
 
-task make(dependsOn: [test, sourcesJar, javadocJar, pom, dist])
