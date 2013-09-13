@@ -133,7 +133,7 @@ public final class Transformers {
   /**
    * An useful transformer to copy {@link Properties} elements.
    */
-  public static Transformer<Object, ElementCopy> PROPERTIES = new Transformer<Object, ElementCopy>() {
+  public static final Transformer<Object, ElementCopy> PROPERTIES = new Transformer<Object, ElementCopy>() {
 
     @Override
     public Object transform(ElementCopy object) {
