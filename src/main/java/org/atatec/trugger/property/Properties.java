@@ -30,7 +30,7 @@ public class Properties {
   private static final PropertyFactory factory;
 
   static {
-    factory = ImplementationLoader.instance().get(PropertyFactory.class);
+    factory = ImplementationLoader.get(PropertyFactory.class);
   }
 
   private Properties() {}

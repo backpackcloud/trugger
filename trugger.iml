@@ -14,8 +14,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="junit-4.8" level="project" />
     <orderEntry type="library" scope="TEST" name="easymock-2.5.2" level="project" />
-    <orderEntry type="library" exported="" name="jboss-vfs-3.1.0.Final" level="project" />
-    <orderEntry type="library" exported="" name="jboss-logging-3.0.0.CR1" level="project" />
+    <orderEntry type="library" name="jboss-vfs-3.1.0.Final" level="project" />
+    <orderEntry type="library" name="jboss-logging-3.0.0.CR1" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">

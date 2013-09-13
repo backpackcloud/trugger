@@ -16,10 +16,10 @@
  */
 package org.atatec.trugger.date;
 
+import org.atatec.trugger.loader.ImplementationLoader;
+
 import java.util.Calendar;
 import java.util.Date;
-
-import org.atatec.trugger.loader.ImplementationLoader;
 
 /**
  * An utility class for handling {@link Date} objects.
@@ -32,7 +32,7 @@ public class DateHandler {
   private static final DateOperationFactory factory;
 
   static {
-    factory = ImplementationLoader.instance().get(DateOperationFactory.class);
+    factory = ImplementationLoader.get(DateOperationFactory.class);
   }
 
   private DateHandler() {}

@@ -16,6 +16,15 @@
  */
 package org.atatec.trugger.test.element;
 
+import org.atatec.trugger.HandlingException;
+import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.ElementFactory;
+import org.atatec.trugger.element.impl.TruggerElementFactory;
+import org.junit.Test;
+
+import java.lang.annotation.Annotation;
+import java.util.Collection;
+
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
@@ -25,17 +34,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.annotation.Annotation;
-import java.util.Collection;
-
-import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementFactory;
-import org.atatec.trugger.loader.ImplementationLoader;
-import org.atatec.trugger.loader.impl.TruggerRegistry;
-
-import org.junit.Test;
-
 /**
  * @author Marcelo Varella Barca Guimarães
  */
@@ -43,7 +41,7 @@ public class AnnotationElementTest {
 
   private Element getAnnotationElement(String name) {
     //doing this we make sure that two properties having the same name will have diferent IDs
-    ElementFactory factory = new ImplementationLoader(new TruggerRegistry()).get(ElementFactory.class);
+    ElementFactory factory = new TruggerElementFactory();
     return factory.createElementSelector(name).in(TestAnnotation.class);
   }
 

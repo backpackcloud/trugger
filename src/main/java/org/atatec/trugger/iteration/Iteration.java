@@ -33,7 +33,7 @@ public final class Iteration {
   }
 
   static {
-    factory = ImplementationLoader.instance().get(IterationFactory.class);
+    factory = ImplementationLoader.get(IterationFactory.class);
   }
 
   /**

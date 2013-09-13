@@ -16,57 +16,53 @@
  */
 package org.atatec.trugger.loader;
 
-import org.atatec.trugger.loader.impl.TruggerRegistry;
-import org.atatec.trugger.registry.Registry;
+import org.atatec.trugger.TruggerException;
+
+import java.util.ServiceLoader;
 
 /**
  * A class used for loading implementations for the DSLs exposed by this framework.
+ *
+ * Since this class uses a {@link ServiceLoader} for custom loading, you can define
+ * your own implementations by using a file in the META-INF/services directory. The
+ * implementations used are:
+ *
+ * <ul>
+ * <li>org.atatec.trugger.date.DateOperationFactory</li>
+ * <li>org.atatec.trugger.element.ElementFactory</li>
+ * <li>org.atatec.trugger.iteration.IterationFactory</li>
+ * <li>org.atatec.trugger.property.PropertyFactory</li>
+ * <li>org.atatec.trugger.reflection.ReflectionFactory</li>
+ * <li>org.atatec.trugger.scan.ClassScannerFactory</li>
+ * </ul>
  *
  * @author Marcelo Guimarães
  */
 public class ImplementationLoader {
 
-  private final Registry<Class<?>, Object> registry;
-
-  public ImplementationLoader(Registry<Class<?>, Object> registry) {
-    this.registry = registry;
+  private ImplementationLoader() {
   }
 
   /**
    * Returns the implementation for a given class.
-   * <p/>
-   * The implementation will be an instance of the resolved class for the key
-   * <code>type</code>.
    *
    * @return the implementation for the given class.
    */
-  public final <E> E get(Class<E> type) {
-    return (E) registry.registryFor(type);
+  public static <E> E get(Class<E> type) {
+    ServiceLoader<E> loader = ServiceLoader.load(type);
+    for (E e : loader) {
+      return e; // only one is expected
+    }
+    try {
+      //loads the default implementation
+      return (E) Class.forName(getDefaultImplementationName(type)).newInstance();
+    } catch (Exception e) {
+      throw new TruggerException(e);
+    }
   }
 
-  /**
-   * Registers the given implementation for an interface.
-   *
-   * @param implementation implementation to register
-   *
-   * @return an object to specify the interface
-   */
-  public final Registry.RegistryMapper<Class<?>, Object> register(Object implementation) {
-    return registry.register(implementation);
-  }
-
-  private static class ImplementationLoaderHolder {
-    private static final ImplementationLoader instance = new ImplementationLoader(new TruggerRegistry());
-  }
-
-  /**
-   * Returns this class shared instance, which is used by the entire framework to load
-   * implementations.
-   *
-   * @return the shared instance.
-   */
-  public static ImplementationLoader instance() {
-    return ImplementationLoaderHolder.instance;
+  private static String getDefaultImplementationName(Class<?> type) {
+    return type.getPackage().getName() + ".impl.Trugger" + type.getSimpleName();
   }
 
 }

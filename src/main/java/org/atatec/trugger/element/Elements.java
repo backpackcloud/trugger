@@ -41,7 +41,7 @@ public class Elements {
   }
 
   static {
-    factory = ImplementationLoader.instance().get(ElementFactory.class);
+    factory = ImplementationLoader.get(ElementFactory.class);
   }
 
   /**

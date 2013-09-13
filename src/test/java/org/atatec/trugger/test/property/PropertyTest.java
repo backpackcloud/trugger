@@ -20,9 +20,9 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.element.UnwritableElementException;
-import org.atatec.trugger.loader.ImplementationLoader;
 import org.atatec.trugger.property.Properties;
 import org.atatec.trugger.property.PropertyFactory;
+import org.atatec.trugger.property.impl.TruggerPropertyFactory;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.test.Flag;
 import org.junit.Before;
@@ -54,7 +54,7 @@ public class PropertyTest {
 
   private Element getProperty(String name, Object target) {
     //doing this we make sure that two properties having the same name will have diferent IDs
-    PropertyFactory factory = ImplementationLoader.instance().get(PropertyFactory.class);
+    PropertyFactory factory = new TruggerPropertyFactory();
     return factory.createPropertySelector(name).in(target);
   }
 

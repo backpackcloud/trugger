@@ -33,7 +33,7 @@ public class ClassScan {
   }
 
   static {
-    factory = ImplementationLoader.instance().get(ClassScannerFactory.class);
+    factory = ImplementationLoader.get(ClassScannerFactory.class);
   }
 
   /** @return a new {@link ClassScanner}. */
