@@ -104,7 +104,7 @@ final class ObjectProperty extends AbstractElement {
         throw new UnreadableElementException(name);
       }
       try {
-        return (E) invoke(getter).in(target).withoutArgs();
+        return invoke(getter).in(target).withoutArgs();
       } catch (ReflectionException e) {
         throw new HandlingException(e.getCause());
       }

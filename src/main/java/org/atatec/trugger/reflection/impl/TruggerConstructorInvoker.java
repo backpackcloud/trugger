@@ -62,7 +62,7 @@ public class TruggerConstructorInvoker implements ConstructorInvoker {
   }
 
   public <E> E withoutArgs() {
-    return (E) withArgs();
+    return withArgs();
   }
 
   @Override

@@ -54,7 +54,7 @@ public final class Predicates {
 
   /** @return a predicate that returns the negation of the given one. */
   public static <T> CompositePredicate<T> not(final Predicate<? super T> predicate) {
-    return (CompositePredicate<T>) wrap(predicate).negate();
+    return wrap(predicate).negate();
   }
 
   /**

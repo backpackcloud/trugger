@@ -130,13 +130,13 @@ public class DefaultElementFinder implements Finder<Element> {
         }
 
         public <E> E value() throws HandlingException {
-          return (E) forRead.in(target).value();
+          return forRead.in(target).value();
         }
       };
     }
 
     public <E> E value() throws HandlingException {
-      return (E) forRead.value();
+      return forRead.value();
     }
 
     public void value(Object value) throws HandlingException {
@@ -168,7 +168,7 @@ public class DefaultElementFinder implements Finder<Element> {
     }
 
     public <E> E target() {
-      return (E) decorated.target();
+      return decorated.target();
     }
 
     public String name() {

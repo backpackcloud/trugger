@@ -100,7 +100,7 @@ public abstract class AbstractElement implements Element {
   @Override
   public <E> E value() throws HandlingException {
     if (isSpecific()) {
-      return (E) in(target()).value();
+      return in(target()).value();
     }
     throw new NonSpecificElementException();
   }

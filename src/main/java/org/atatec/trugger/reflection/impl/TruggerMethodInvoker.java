@@ -69,7 +69,7 @@ public class TruggerMethodInvoker implements MethodInvoker {
   }
 
   public <E> E withoutArgs() {
-    return (E) withArgs();
+    return withArgs();
   }
 
   @Override

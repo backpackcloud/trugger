@@ -60,7 +60,7 @@ public class DecoratedElement implements Element {
   }
 
   public <E> E target() {
-    return (E) element.target();
+    return element.target();
   }
 
   public String name() {
@@ -78,7 +78,7 @@ public class DecoratedElement implements Element {
 
   @Override
   public <E> E value() throws HandlingException {
-    return (E) in(target()).value();
+    return in(target()).value();
   }
 
   @Override
