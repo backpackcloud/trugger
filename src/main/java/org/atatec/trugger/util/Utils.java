@@ -59,7 +59,7 @@ public final class Utils {
    *         only spaces) or <code>false</code> if it does not.
    */
   public static boolean isEmpty(CharSequence sequence) {
-    return (sequence == null) || (sequence.toString().trim().length() == 0);
+    return (sequence == null) || (sequence.toString().trim().isEmpty());
   }
 
   /**
