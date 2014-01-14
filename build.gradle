@@ -56,7 +56,7 @@ task pom << {
   }.writeTo("$buildDir/pom.xml")
 }
 
-task dist(type: Zip, dependsOn: [clean, sourcesJar, javadocJar, test, pom]) {
+task dist(type: Zip, dependsOn: [clean, jar, sourcesJar, javadocJar, test, pom]) {
   from "$buildDir/libs"
   from "$buildDir/pom.xml"
   from "changelog.txt"
