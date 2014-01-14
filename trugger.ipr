@@ -78,8 +78,9 @@
     <option name="OUTPUT_DIRECTORY" value="$APPLICATION_HOME_DIR$/inspections" />
   </component>
   <component name="GradleSettings">
-    <option name="gradleHome" value="$USER_HOME$/build/gradle" />
+    <option name="gradleHome" value="$USER_HOME$/tools/gradle" />
     <option name="linkedProjectPath" value="$PROJECT_DIR$/build.gradle" />
+    <option name="preferLocalInstallationToWrapper" value="true" />
   </component>
   <component name="GradleUISettings">
     <setting name="root" />
@@ -777,7 +778,7 @@
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="JDK 1.6" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
@@ -823,34 +824,38 @@
   <component name="libraryTable">
     <library name="easymock-2.5.2">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/2.5.2/easymock-2.5.2.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.easymock/easymock/2.5.2/e25783424f37ade86d387afbdbb7845a6782ef1e/easymock-2.5.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/2.5.2/easymock-2.5.2-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.easymock/easymock/2.5.2/b3c483129178b7be895a81afe02c34044245a70e/easymock-2.5.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="jboss-logging-3.0.0.CR1">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/logging/jboss-logging/3.0.0.CR1/jboss-logging-3.0.0.CR1.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="jboss-vfs-3.1.0.Final">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/jboss-vfs/3.1.0.Final/jboss-vfs-3.1.0.Final.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="junit-4.8">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.8/junit-4.8.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.0.0.CR1/f3e5929b4c4d5aea2caff56b2ad67c3bcd5da55d/jboss-logging-3.0.0.CR1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.8/junit-4.8-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.0.0.CR1/8c3bc33bd1e4574c083f047ade1424626b9f512b/jboss-logging-3.0.0.CR1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="jboss-vfs-3.1.0.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jboss-vfs/3.1.0.Final/d234479ff4ce2282789dedf378b052cde00bb543/jboss-vfs-3.1.0.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jboss-vfs/3.1.0.Final/9a7d9835a70481dd322601a8c173a83130490c1a/jboss-vfs-3.1.0.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="junit-4.8">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.8/4150c00c5706306ef0f8f1410e70c8ff12757922/junit-4.8.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.8/abe171e0fc1242d1fe10e8dc43bce031e3f65560/junit-4.8-sources.jar!/" />
       </SOURCES>
     </library>
   </component>
