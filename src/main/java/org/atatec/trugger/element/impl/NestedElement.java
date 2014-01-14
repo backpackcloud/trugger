@@ -57,7 +57,7 @@ public final class NestedElement extends AbstractElement implements Element {
   }
 
   public boolean isReadable() {
-    for (Element property : getPath()) {
+    for (Element property : path) {
       if (!property.isReadable()) {
         return false;
       }
@@ -67,7 +67,7 @@ public final class NestedElement extends AbstractElement implements Element {
 
   public boolean isWritable() {
     if (path.size() > 1) {
-      for (Element property : getPath().subList(0, path.size() - 1)) {
+      for (Element property : path.subList(0, path.size() - 1)) {
         if (!property.isReadable()) {
           return false;
         }
@@ -119,7 +119,7 @@ public final class NestedElement extends AbstractElement implements Element {
    * @return the first property in the path
    */
   public final Element getFirst() {
-    return getPath().get(0);
+    return path.get(0);
   }
 
   /**
@@ -128,14 +128,14 @@ public final class NestedElement extends AbstractElement implements Element {
    * @return the property in the specified path index
    */
   public final Element get(int index) {
-    return getPath().get(index);
+    return path.get(index);
   }
 
   /**
    * @return the last property in the path
    */
   public final Element getLast() {
-    return getPath().get(path.size() - 1);
+    return path.get(path.size() - 1);
   }
 
   @Override

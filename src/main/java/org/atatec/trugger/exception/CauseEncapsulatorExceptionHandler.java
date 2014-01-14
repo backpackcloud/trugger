@@ -35,8 +35,7 @@ public class CauseEncapsulatorExceptionHandler implements ExceptionHandler {
 
   @Override
   public void handle(Throwable throwable) {
-    RuntimeException encapsulated = Reflection.newInstanceOf(encapsulate, throwable.getCause());
-    throw encapsulated;
+    throw Reflection.newInstanceOf(encapsulate, throwable.getCause());
   }
 
 }

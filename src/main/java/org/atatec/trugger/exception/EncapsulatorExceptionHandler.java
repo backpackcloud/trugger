@@ -35,8 +35,7 @@ public class EncapsulatorExceptionHandler implements ExceptionHandler {
 
   @Override
   public void handle(Throwable throwable) {
-    RuntimeException encapsulated = Reflection.newInstanceOf(encapsulate, throwable);
-    throw encapsulated;
+    throw Reflection.newInstanceOf(encapsulate, throwable);
   }
 
 }

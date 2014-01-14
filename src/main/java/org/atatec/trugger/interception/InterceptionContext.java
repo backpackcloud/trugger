@@ -37,11 +37,11 @@ public class InterceptionContext {
 
   static {
     nullValues = new HashMap<Class<?>, Object>() {{
-      put(byte.class, Byte.valueOf((byte) 0));
-      put(short.class, Short.valueOf((short) 0));
+      put(byte.class, (byte) 0);
+      put(short.class, (short) 0);
       put(int.class, 0);
       put(long.class, 0L);
-      put(char.class, Character.valueOf((char) 0));
+      put(char.class, (char) 0);
       put(float.class, 0f);
       put(double.class, 0d);
       put(boolean.class, false);

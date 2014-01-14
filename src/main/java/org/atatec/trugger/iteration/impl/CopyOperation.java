@@ -49,9 +49,7 @@ public class CopyOperation implements SourceSelector {
         if (predicate == null && transformer == null) {
           src.addAll(src);
         } else {
-          Iterator iterator = src.iterator();
-          while (iterator.hasNext()) {
-            Object obj = iterator.next();
+          for (Object obj : src) {
             if (predicate == null || predicate.evaluate(obj)) {
               if (transformer != null) {
                 obj = transformer.transform(obj);

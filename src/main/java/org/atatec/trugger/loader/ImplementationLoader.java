@@ -18,6 +18,7 @@ package org.atatec.trugger.loader;
 
 import org.atatec.trugger.TruggerException;
 
+import java.util.Iterator;
 import java.util.ServiceLoader;
 
 /**
@@ -50,8 +51,9 @@ public class ImplementationLoader {
    */
   public static <E> E get(Class<E> type) {
     ServiceLoader<E> loader = ServiceLoader.load(type);
-    for (E e : loader) {
-      return e; // only one is expected
+    Iterator<E> iterator = loader.iterator();
+    if (iterator.hasNext()) {
+      return iterator.next(); // only one is expected
     }
     try {
       //loads the default implementation
