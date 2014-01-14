@@ -20,25 +20,6 @@ import junit.framework.AssertionFailedError;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.test.date.DateTestSuite;
-import org.atatec.trugger.test.element.ElementTestSuite;
-import org.atatec.trugger.test.exception.ExceptionHandlingTest;
-import org.atatec.trugger.test.factory.FactoryTest;
-import org.atatec.trugger.test.general.NullObjectsTest;
-import org.atatec.trugger.test.general.UtilsTest;
-import org.atatec.trugger.test.interception.InterceptorTest;
-import org.atatec.trugger.test.iteration.IterationTest;
-import org.atatec.trugger.test.mock.AnnotationMockTest;
-import org.atatec.trugger.test.predicate.PredicatesTest;
-import org.atatec.trugger.test.predicate.ReflectionPredicatesTest;
-import org.atatec.trugger.test.property.PropertyTest;
-import org.atatec.trugger.test.reflection.ReflectionTestSuite;
-import org.atatec.trugger.test.registry.RegistryTest;
-import org.atatec.trugger.test.scan.ClassScanTestSuite;
-import org.atatec.trugger.test.transformer.TransformerTest;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -56,26 +37,6 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Marcelo Varella Barca Guimarães
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-  UtilsTest.class,
-  FactoryTest.class,
-  IterationTest.class,
-  PropertyTest.class,
-  RegistryTest.class,
-  PredicatesTest.class,
-  InterceptorTest.class,
-  TransformerTest.class,
-  NullObjectsTest.class,
-  AnnotationMockTest.class,
-  ExceptionHandlingTest.class,
-  ReflectionPredicatesTest.class,
-
-  DateTestSuite.class,
-  ElementTestSuite.class,
-  ClassScanTestSuite.class,
-  ReflectionTestSuite.class
-})
 public class TruggerTest {
 
   /**
