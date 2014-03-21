@@ -5,6 +5,7 @@ Version 4.4
   - Renamed Invoker#handlingExceptionsWith to onError
   - Unique searches no longer throws exceptions if two or
     more results are found
+  - Reformulated the Interception module
 - Minor Changes
   - Removed non used classes
 

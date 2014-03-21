@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.util.mock;
 
-import org.atatec.trugger.interception.Interception;
-import org.atatec.trugger.interception.InterceptionContext;
 import org.atatec.trugger.interception.Interceptor;
 
 import java.lang.annotation.Annotation;
@@ -33,12 +31,12 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.named;
 
 /**
  * A builder for creating mock {@link Annotation annotations}.
- * <p/>
+ * <p>
  * This mock provides some useful features because annotations may have default values.
  * This class can resolve them and automatically configure the values in the mock object.
- * <p/>
+ * <p>
  * Here is an example of use:
- * <p/>
+ * <p>
  * <pre>
  * import static org.atatec.trugger.util.mock.Mock.annotation;
  * import static org.atatec.trugger.util.mock.Mock.mock;
@@ -55,9 +53,9 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.named;
  * Class&lt;? extends Annotation&gt; type = resource.annotationType(); //return
  * javax.annotation.Resource class
  * </pre>
- * <p/>
+ * <p>
  * There are another ways to mock annotations:
- * <p/>
+ * <p>
  * <pre>
  * // if you don't need to specify any property
  * Resource resource2 = mock(annotation(Resource.class));
@@ -71,20 +69,23 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.named;
  * </pre>
  *
  * @param <T> The annotation type.
- *
  * @author Marcelo Guimarães
  * @since 2.1
  */
 public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
 
   private final Class<T> annotationType;
-  /** The annotation for specifying the mappings. */
+  /**
+   * The annotation for specifying the mappings.
+   */
   protected T annotation;
   private Map<String, Object> mappings;
   private boolean mocked;
   private String lastCall;
 
-  /** @param annotationType the annotation type */
+  /**
+   * @param annotationType the annotation type
+   */
   public AnnotationMock(Class<T> annotationType) {
     this.annotationType = annotationType;
     initialize();
@@ -100,15 +101,24 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
   }
 
   private void initialize() {
-    this.annotation = new Interceptor(new AnnotationMockInterception())
-      .createProxy().implementing(annotationType);
-    this.mappings = new HashMap<String, Object>(15);
+    this.annotation = Interceptor.intercept(annotationType)
+        .onCall(context -> {
+          Method method = context.method();
+          String name = method.getName();
+          if (!mocked) {
+            lastCall = name;
+          }
+          return mappings.containsKey(name) ?
+              mappings.get(name) : context.nullReturn();
+        })
+        .proxy();
+    this.mappings = new HashMap<>(15);
     this.mappings.put("annotationType", annotationType);
   }
 
   /**
    * @return the annotation for specifying the mappings. After calling {@link
-   *         #createMock()} it can be used as the mocked annotation.
+   * #createMock()} it can be used as the mocked annotation.
    */
   public T annotation() {
     return annotation;
@@ -119,7 +129,6 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
    *
    * @param <E>   The value type
    * @param value the value
-   *
    * @return the component for selecting the property.
    */
   public <E> Mapper<E, T> map(final E value) {
@@ -140,9 +149,9 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
     }
     Predicate<Member> unused = predicate.negate();
     Set<Method> methods = reflect(unused)
-      .methods()
-      .withoutParameters()
-      .in(annotationType);
+        .methods()
+        .withoutParameters()
+        .in(annotationType);
     for (Method method : methods) {
       Object defaultValue = method.getDefaultValue();
       if (defaultValue == null) {
@@ -160,7 +169,6 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
    *
    * @param <E> The value type.
    * @param <T> The annotation type.
-   *
    * @author Marcelo Guimarães
    * @since 2.1
    */
@@ -172,20 +180,6 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
      * @return a reference to the builder.
      */
     org.atatec.trugger.util.mock.AnnotationMock<T> to(E value);
-  }
-
-  private class AnnotationMockInterception implements Interception {
-
-    @Override
-    public Object intercept(InterceptionContext context) throws Throwable {
-      Method method = context.method();
-      String name = method.getName();
-      if (!mocked) {
-        lastCall = name;
-      }
-      return mappings.containsKey(name) ? mappings.get(name) : context.nullReturn();
-    }
-
   }
 
 }

@@ -16,16 +16,14 @@
  */
 package org.atatec.trugger.interception;
 
+import org.atatec.trugger.exception.ExceptionHandler;
+import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
-
-import static org.atatec.trugger.reflection.Reflection.reflect;
 
 /**
  * A base class to create Proxies to interfaces.
@@ -33,70 +31,82 @@ import static org.atatec.trugger.reflection.Reflection.reflect;
  * @author Marcelo Guimarães
  * @since 2.1
  */
-public class Interceptor implements InvocationHandler, ProxyFactory {
+public final class Interceptor implements InvocationHandler {
 
-  /** The target object */
   private Object target;
+  private Class[] interfaces;
+  private ClassLoader classloader;
+  private Interception action;
+  private ExceptionHandler handler;
 
-  private Interception interception;
-
-  public Interceptor(Interception interception) {
-    this.interception = interception;
+  private Interceptor(Object target) {
+    Class<?> targetClass = Utils.resolveType(target);
+    this.classloader = targetClass.getClassLoader();
+    this.target = target;
+    loadInterfaces();
   }
 
-  public ProxyCreator createProxy() {
-    return new Creator();
+  private Interceptor(Class[] interfaces) {
+    this.interfaces = interfaces;
+    this.classloader = ClassLoader.getSystemClassLoader();
+  }
+
+  public Interceptor with(ClassLoader classloader) {
+    this.classloader = classloader;
+    return this;
+  }
+
+  public Interceptor of(Object target) {
+    this.target = target;
+    loadInterfaces();
+    return this;
+  }
+
+  private void loadInterfaces() {
+    Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
+    interfaces = classes.toArray(new Class[classes.size()]);
+  }
+
+  public Interceptor onCall(Interception action) {
+    this.action = action;
+    return this;
+  }
+
+  public Interceptor onError(ExceptionHandler handler) {
+    this.handler = handler;
+    return this;
+  }
+
+  public <E> E proxy() {
+    return (E) Proxy.newProxyInstance(classloader, interfaces, Interceptor.this);
   }
 
   @Override
-  public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    return interception.intercept(new InterceptionContext(target, proxy, method, args));
-  }
-
-  private class Creator implements ProxyCreator {
-
-    private boolean computeTargetInterfaces;
-    private ClassLoader classLoader;
-    private final Set<Class<?>> interfaces = new HashSet<Class<?>>();
-
-    public ProxyCreator withClassLoader(ClassLoader classLoader) {
-      this.classLoader = classLoader;
-      return this;
-    }
-
-    public <E> E implementing(Class<?>... interfaces) {
-      this.interfaces.addAll(Arrays.asList(interfaces));
-      return create();
-    }
-
-    public <E> E forAllInterfaces() {
-      this.computeTargetInterfaces = true;
-      return create();
-    }
-
-    public ProxyCreator over(Object target) {
-      Interceptor.this.target = target;
-      return this;
-    }
-
-    private <E> E create() {
-      if (classLoader == null) {
-        if (target != null) {
-          Class<?> targetClass = Utils.resolveType(target);
-          classLoader = targetClass.getClassLoader();
-        }
-        if (classLoader == null) {
-          classLoader = ClassLoader.getSystemClassLoader();
-        }
+  public Object invoke(Object proxy, Method method, Object[] args)
+      throws Throwable {
+    InterceptionContext context = new InterceptionContext(target, proxy,
+        method, args);
+    try {
+      return action.intercept(context);
+    } catch (Throwable e) {
+      if (handler != null) {
+        handler.handle(e);
+        return null;
+      } else {
+        throw e;
       }
-      if (computeTargetInterfaces) {
-        interfaces.addAll(reflect().interfaces().in(target));
-      }
-      return (E) Proxy.newProxyInstance(
-        classLoader,
-        interfaces.toArray(new Class[interfaces.size()]),
-        Interceptor.this);
     }
   }
 
+  public static Interceptor intercept(Class interfaceClass) {
+    return new Interceptor(new Class[]{interfaceClass});
+  }
+
+  public static Interceptor intercept(Class... interfaces) {
+    return new Interceptor(interfaces);
+  }
+
+  public static Interceptor intercept(Object target) {
+    return new Interceptor(target);
+  }
 }
