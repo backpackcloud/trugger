@@ -23,6 +23,7 @@ package org.atatec.trugger.interception;
  * @author Marcelo Guimarães
  * @since 4.1
  */
+@FunctionalInterface
 public interface Interception {
 
   /**
