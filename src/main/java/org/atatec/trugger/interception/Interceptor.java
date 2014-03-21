@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.interception;
 
-import org.atatec.trugger.exception.ExceptionHandler;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.util.Utils;
 
@@ -37,7 +36,7 @@ public final class Interceptor implements InvocationHandler {
   private Class[] interfaces;
   private ClassLoader classloader;
   private Interception action;
-  private ExceptionHandler handler;
+  private InterceptionFailHandler handler;
 
   private Interceptor(Object target) {
     Class<?> targetClass = Utils.resolveType(target);
@@ -72,7 +71,7 @@ public final class Interceptor implements InvocationHandler {
     return this;
   }
 
-  public Interceptor onError(ExceptionHandler handler) {
+  public Interceptor onError(InterceptionFailHandler handler) {
     this.handler = handler;
     return this;
   }
@@ -90,8 +89,7 @@ public final class Interceptor implements InvocationHandler {
       return action.intercept(context);
     } catch (Throwable e) {
       if (handler != null) {
-        handler.handle(e);
-        return null;
+        return handler.handle(context, e);
       } else {
         throw e;
       }

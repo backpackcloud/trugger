@@ -28,10 +28,24 @@ public interface Interception {
 
   /**
    * Intercepts the method call.
+   *
    * @param context the context of the interception
    * @return a return value or <code>null</code> if the method is void.
    * @throws Throwable if any error occurs
    */
   Object intercept(InterceptionContext context) throws Throwable;
+
+  /**
+   * Combines this interception with another one.
+   *
+   * @param other the other interception to execute after this
+   * @return the new Interception
+   */
+  default Interception and(Interception other) {
+    return context -> {
+      this.intercept(context);
+      return other.intercept(context);
+    };
+  }
 
 }
