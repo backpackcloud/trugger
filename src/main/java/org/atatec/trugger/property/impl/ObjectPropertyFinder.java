@@ -72,38 +72,32 @@ public final class ObjectPropertyFinder implements Finder<Element> {
   };
 
   public final Result<Element, Object> find(final String propertyName) {
-    return new Result<Element, Object>() {
-
-      public Element in(Object target) {
-        for (Class type : hierarchyOf(target)) {
-          Element element = cache.get(type, propertyName);
-          if(element != null) {
-            return element;
-          }
+    return target -> {
+      for (Class type : hierarchyOf(target)) {
+        Element element = cache.get(type, propertyName);
+        if(element != null) {
+          return element;
         }
-        return null;
       }
+      return null;
     };
   }
 
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-
-      public Set<Element> in(Object target) {
-        final Map<String, Element> map = new HashMap<String, Element>();
-        for (Class type : hierarchyOf(target)) {
-          Collection<Element> properties = cache.get(type);
-          for (Element property : properties) {
-            String name = property.name();
-            //used in case of a property override
-            if (!map.containsKey(name)) {
-              map.put(name, property);
-            }
+    return target -> {
+      final Map<String, Element> map = new HashMap<String, Element>();
+      for (Class type : hierarchyOf(target)) {
+        Collection<Element> properties = cache.get(type);
+        for (Element property : properties) {
+          String name = property.name();
+          //used in case of a property override
+          if (!map.containsKey(name)) {
+            map.put(name, property);
           }
         }
-        Collection<Element> elements = map.values();
-        return ElementFinderHelper.computeResult(target, elements);
       }
+      Collection<Element> elements = map.values();
+      return ElementFinderHelper.computeResult(target, elements);
     };
   }
 

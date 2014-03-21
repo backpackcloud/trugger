@@ -16,14 +16,14 @@
  */
 package org.atatec.trugger.element.impl;
 
+import org.atatec.trugger.Finder;
+import org.atatec.trugger.Result;
+import org.atatec.trugger.element.Element;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
-import org.atatec.trugger.Finder;
-import org.atatec.trugger.Result;
-import org.atatec.trugger.element.Element;
 
 /**
  * @author Marcelo Guimarães
@@ -32,36 +32,28 @@ public class PropertiesElementFinder implements Finder<Element> {
   
   @Override
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-      
-      @Override
-      public Set<Element> in(Object target) {
-        if (target instanceof Class<?>) {
-          return Collections.emptySet();
-        }
-        Set<Element> elements = new HashSet<Element>();
-        Properties props = (Properties) target;
-        for (Object key : props.keySet()) {
-          if (key instanceof String) {
-            elements.add(new SpecificElement(new PropertiesElement((String) key), props));
-          }
-        }
-        return elements;
+    return target -> {
+      if (target instanceof Class<?>) {
+        return Collections.emptySet();
       }
+      Set<Element> elements = new HashSet<Element>();
+      Properties props = (Properties) target;
+      for (Object key : props.keySet()) {
+        if (key instanceof String) {
+          elements.add(new SpecificElement(new PropertiesElement((String) key), props));
+        }
+      }
+      return elements;
     };
   }
   
   @Override
   public Result<Element, Object> find(final String name) {
-    return new Result<Element, Object>() {
-      
-      @Override
-      public Element in(Object target) {
-        if (target instanceof Class<?>) {
-          return new PropertiesElement(name);
-        }
-        return new SpecificElement(new PropertiesElement(name), target);
+    return target -> {
+      if (target instanceof Class<?>) {
+        return new PropertiesElement(name);
       }
+      return new SpecificElement(new PropertiesElement(name), target);
     };
   }
   

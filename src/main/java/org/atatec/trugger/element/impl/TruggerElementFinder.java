@@ -62,28 +62,20 @@ public final class TruggerElementFinder implements Finder<Element> {
 
   @Override
   public Result<Element, Object> find(final String name) {
-    return new Result<Element, Object>() {
-
-      public Element in(Object target) {
-        if (name.indexOf('.') > -1) {
-          return NestedElement.createNestedElement(target, name);
-        }
-        Finder<Element> finder = getFinder(target);
-        return finder.find(name).in(target);
+    return target -> {
+      if (name.indexOf('.') > -1) {
+        return NestedElement.createNestedElement(target, name);
       }
-
+      Finder<Element> finder = getFinder(target);
+      return finder.find(name).in(target);
     };
   }
 
   @Override
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-
-      public Set<Element> in(Object target) {
-        Finder<Element> finder = getFinder(target);
-        return finder.findAll().in(target);
-      }
-
+    return target -> {
+      Finder<Element> finder = getFinder(target);
+      return finder.findAll().in(target);
     };
   }
 

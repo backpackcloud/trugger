@@ -16,16 +16,16 @@
  */
 package org.atatec.trugger.element.impl;
 
+import org.atatec.trugger.Finder;
+import org.atatec.trugger.Result;
+import org.atatec.trugger.element.Element;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.atatec.trugger.Finder;
-import org.atatec.trugger.Result;
-import org.atatec.trugger.element.Element;
 
 /**
  * @author Marcelo Guimarães
@@ -34,39 +34,34 @@ public class ResultSetElementFinder implements Finder<Element> {
 
   @Override
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-
-      @Override
-      public Set<Element> in(Object target) {
-        if (target instanceof Class<?>) {
-          return Collections.emptySet();
-        }
-        Set<Element> elements = new HashSet<Element>();
-        ResultSet resultSet = (ResultSet) target;
-        try {
-          ResultSetMetaData metaData = resultSet.getMetaData();
-          for (int i = 1 ; i <= metaData.getColumnCount() ; i++) {
-            elements.add(new SpecificElement(new ResultSetElement(metaData.getColumnName(i)), resultSet));
-          }
-        } catch (SQLException e) {
-          throw new RuntimeException(e);
-        }
-        return elements;
+    return target -> {
+      if (target instanceof Class<?>) {
+        return Collections.emptySet();
       }
+      Set<Element> elements = new HashSet<Element>();
+      ResultSet resultSet = (ResultSet) target;
+      try {
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        for (int i = 1 ; i <= metaData.getColumnCount() ; i++) {
+          elements.add(
+              new SpecificElement(
+                  new ResultSetElement(metaData.getColumnName(i)), resultSet)
+          );
+        }
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+      return elements;
     };
   }
 
   @Override
   public Result<Element, Object> find(final String name) {
-    return new Result<Element, Object>() {
-
-      @Override
-      public Element in(Object target) {
-        if (target instanceof Class<?>) {
-          return new ResultSetElement(name);
-        }
-        return new SpecificElement(new ResultSetElement(name), target);
+    return target -> {
+      if (target instanceof Class<?>) {
+        return new ResultSetElement(name);
       }
+      return new SpecificElement(new ResultSetElement(name), target);
     };
   }
 

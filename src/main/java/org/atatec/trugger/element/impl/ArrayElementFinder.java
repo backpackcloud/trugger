@@ -30,31 +30,25 @@ public class ArrayElementFinder implements Finder<Element> {
 
   @Override
   public Result<Element, Object> find(final String name) {
-    return new Result<Element, Object>() {
-      @Override
-      public Element in(Object array) {
-        if ("first".equals(name)) {
-          return new ArrayElement(array, 0);
-        } else if ("last".equals(name)) {
-          return new ArrayElement(array, Array.getLength(array) - 1);
-        }
-        return new ArrayElement(array, Integer.parseInt(name));
+    return array -> {
+      if ("first".equals(name)) {
+        return new ArrayElement(array, 0);
+      } else if ("last".equals(name)) {
+        return new ArrayElement(array, Array.getLength(array) - 1);
       }
+      return new ArrayElement(array, Integer.parseInt(name));
     };
   }
 
   @Override
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-      @Override
-      public Set<Element> in(Object array) {
-        int size = Array.getLength(array);
-        Set<Element> result = new LinkedHashSet<Element>(size);
-        for (int i = 0; i < size; i++) {
-          result.add(new ArrayElement(array,  i));
-        }
-        return result;
+    return array -> {
+      int size = Array.getLength(array);
+      Set<Element> result = new LinkedHashSet<Element>(size);
+      for (int i = 0; i < size; i++) {
+        result.add(new ArrayElement(array,  i));
       }
+      return result;
     };
   }
 

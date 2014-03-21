@@ -44,11 +44,7 @@ public class ElementSelectorTest {
 
   public ElementSelectorTest() {
     finder = createMock(Finder.class);
-    Result<Element, Object> result = new Result<Element, Object>() {
-      public Element in(Object target) {
-        return element;
-      }
-    };
+    Result<Element, Object> result = target -> element;
     expect(finder.find("name")).andReturn(result).anyTimes();
     replay(finder);
   }

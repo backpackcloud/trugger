@@ -37,6 +37,7 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An implementation of the reflection operations.
@@ -128,7 +129,9 @@ public class TruggerReflector implements Reflector {
       public Set<Class<?>> in(Object target) {
         Class<?> objectClass = Utils.resolveType(target);
         Set<Class<?>> set = new HashSet<Class<?>>(30);
-        for (Class<?> c = objectClass; (c != null) && !Object.class.equals(c); c = c.getSuperclass()) {
+        for (Class<?> c = objectClass;
+             (c != null) && !Object.class.equals(c);
+             c = c.getSuperclass()) {
           for (Class<?> interf : c.getInterfaces()) {
             loop(interf, set);
           }
@@ -139,32 +142,27 @@ public class TruggerReflector implements Reflector {
   }
 
   public Result<Class, Object> genericType(final String parameterName) {
-    return new Result<Class, Object>() {
-
-      public Class in(Object target) {
-        return TruggerGenericTypeResolver.resolveParameterName(parameterName, Utils.resolveType(target));
-      }
-    };
+    return target -> TruggerGenericTypeResolver.resolveParameterName(
+        parameterName, Utils.resolveType(target));
   }
 
   public Result<Class, Object> genericType() {
-    return new Result<Class, Object>() {
-
-      public Class in(Object target) {
-        Map<Type, Type> typeVariableMap = TruggerGenericTypeResolver.getTypeVariableMap(Utils.resolveType(target));
-        Set<Type> keySet = typeVariableMap.keySet();
-        Set<String> paramNames = new HashSet<String>(keySet.size());
-        for (Type type : keySet) {
-          paramNames.add(type.toString());
-        }
-        if (paramNames.isEmpty()) {
-          throw new ReflectionException("No generic type found.");
-        } else if (paramNames.size() > 1) {
-          throw new ReflectionException("More than one generic type found.");
-        }
-        String name = paramNames.iterator().next();
-        return genericType(name).in(target);
+    return target -> {
+      Map<Type, Type> typeVariableMap =
+          TruggerGenericTypeResolver.getTypeVariableMap(Utils.resolveType(target));
+      Set<Type> keySet = typeVariableMap.keySet();
+      Set<String> paramNames = new HashSet<>(keySet.size());
+      paramNames.addAll(
+          keySet.stream().map(Type::toString)
+              .collect(Collectors.toList())
+      );
+      if (paramNames.isEmpty()) {
+        throw new ReflectionException("No generic type found.");
+      } else if (paramNames.size() > 1) {
+        throw new ReflectionException("More than one generic type found.");
       }
+      String name = paramNames.iterator().next();
+      return genericType(name).in(target);
     };
   }
 

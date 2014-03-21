@@ -43,60 +43,52 @@ public class DefaultElementFinder implements Finder<Element> {
 
   @Override
   public Result<Element, Object> find(final String name) {
-    return new Result<Element, Object>() {
-
-      public Element in(Object target) {
-        Element propertyElement = null;
-        Element fieldElement = null;
-        boolean specific = !(target instanceof Class<?>);
-        if (specific && target.getClass().isArray()) {
-          return new ArrayElementFinder().find(name).in(target);
-        }
-        Element property = Properties.property(name).in(target);
-        if (property != null) {
-          propertyElement = specific ? new SpecificElement(property, target) : property;
-        }
-        Field field = field(name).recursively().in(target);
-        if (field != null) {
-          fieldElement = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
-        }
-        if (property != null && field != null) {
-          return new MergedElement(fieldElement, propertyElement);
-        }
-        return propertyElement != null ? propertyElement : fieldElement;
+    return target -> {
+      Element propertyElement = null;
+      Element fieldElement = null;
+      boolean specific = !(target instanceof Class<?>);
+      if (specific && target.getClass().isArray()) {
+        return new ArrayElementFinder().find(name).in(target);
       }
-
+      Element property = Properties.property(name).in(target);
+      if (property != null) {
+        propertyElement = specific ? new SpecificElement(property, target) : property;
+      }
+      Field field = field(name).recursively().in(target);
+      if (field != null) {
+        fieldElement = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
+      }
+      if (property != null && field != null) {
+        return new MergedElement(fieldElement, propertyElement);
+      }
+      return propertyElement != null ? propertyElement : fieldElement;
     };
   }
 
   @Override
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-
-      public Set<Element> in(Object target) {
-        Map<String, Element> map = new HashMap<String, Element>();
-        boolean specific = !(target instanceof Class);
-        if (specific && target.getClass().isArray()) {
-          return new ArrayElementFinder().findAll().in(target);
-        }
-        Set<Element> properties = Properties.properties().in(target);
-        Set<Field> fields = fields().recursively().in(target);
-
-        for (Element property : properties) {
-          Element element = specific ? new SpecificElement(property, target) : property;
-          map.put(property.name(), element);
-        }
-        for (Field field : fields) {
-          Element element = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
-          if (!map.containsKey(field.getName())) {
-            map.put(field.getName(), element);
-          } else {
-            map.put(field.getName(), new MergedElement(element, map.get(field.getName())));
-          }
-        }
-        return new HashSet<Element>(map.values());
+    return target -> {
+      Map<String, Element> map = new HashMap<>();
+      boolean specific = !(target instanceof Class);
+      if (specific && target.getClass().isArray()) {
+        return new ArrayElementFinder().findAll().in(target);
       }
+      Set<Element> properties = Properties.properties().in(target);
+      Set<Field> fields = fields().recursively().in(target);
 
+      for (Element property : properties) {
+        Element element = specific ? new SpecificElement(property, target) : property;
+        map.put(property.name(), element);
+      }
+      for (Field field : fields) {
+        Element element = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
+        if (!map.containsKey(field.getName())) {
+          map.put(field.getName(), element);
+        } else {
+          map.put(field.getName(), new MergedElement(element, map.get(field.getName())));
+        }
+      }
+      return new HashSet<>(map.values());
     };
   }
 

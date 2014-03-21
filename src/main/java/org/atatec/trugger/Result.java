@@ -27,6 +27,7 @@ package org.atatec.trugger;
  * @param <Target>
  *          the target type
  */
+@FunctionalInterface
 public interface Result<Value, Target> {
   
   /**

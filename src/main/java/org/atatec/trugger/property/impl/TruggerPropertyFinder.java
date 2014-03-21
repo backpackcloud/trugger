@@ -44,21 +44,11 @@ public class TruggerPropertyFinder implements Finder<Element> {
   }
   
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-      
-      public Set<Element> in(Object target) {
-        return finder.findAll().in(target);
-      }
-    };
+    return target -> finder.findAll().in(target);
   }
   
   public Result<Element, Object> find(final String name) {
-    return new Result<Element, Object>() {
-      
-      public Element in(Object target) {
-        return finder.find(name).in(target);
-      }
-    };
+    return target -> finder.find(name).in(target);
   }
   
 }

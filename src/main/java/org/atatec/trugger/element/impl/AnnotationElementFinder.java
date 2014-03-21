@@ -49,27 +49,21 @@ public final class AnnotationElementFinder implements Finder<Element> {
   };
 
   public Result<Set<Element>, Object> findAll() {
-    return new Result<Set<Element>, Object>() {
-
-      public Set<Element> in(Object target) {
-        Collection<Element> elements = cache.get(target);
-        return ElementFinderHelper.computeResult(target, elements);
-      }
+    return target -> {
+      Collection<Element> elements = cache.get(target);
+      return ElementFinderHelper.computeResult(target, elements);
     };
   }
 
   public final Result<Element, Object> find(final String propertyName) {
-    return new Result<Element, Object>() {
-
-      public Element in(Object target) {
-        Element property = cache.get(target, propertyName);
-        if (target instanceof Class<?>) {
-          return property;
-        } else if (property != null) {
-          return new SpecificElement(property, target);
-        }
-        return null;
+    return target -> {
+      Element property = cache.get(target, propertyName);
+      if (target instanceof Class<?>) {
+        return property;
+      } else if (property != null) {
+        return new SpecificElement(property, target);
       }
+      return null;
     };
   }
 
