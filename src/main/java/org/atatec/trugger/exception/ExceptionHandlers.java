@@ -31,14 +31,11 @@ public class ExceptionHandlers {
    * The default exception handler. This handler throws every {@link RuntimeException} and
    * encapsulates the others in a {@link TruggerException}.
    */
-  public static final ExceptionHandler DEFAULT_EXCEPTION_HANDLER = new ExceptionHandler<Throwable>() {
-    @Override
-    public void handle(Throwable throwable) {
-      if (throwable instanceof RuntimeException) {
-        throw (RuntimeException) throwable;
-      } else {
-        throw new TruggerException(throwable);
-      }
+  public static final ExceptionHandler DEFAULT_EXCEPTION_HANDLER = throwable -> {
+    if (throwable instanceof RuntimeException) {
+      throw (RuntimeException) throwable;
+    } else {
+      throw new TruggerException(throwable);
     }
   };
 
