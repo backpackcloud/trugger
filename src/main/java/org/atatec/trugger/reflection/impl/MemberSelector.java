@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.PredicableResult;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.util.Utils;
@@ -31,7 +30,7 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public class MemberSelector<T extends Member> implements PredicableResult<T, Object> {
+public class MemberSelector<T extends Member> implements org.atatec.trugger.Result<T,Object> {
 
   private final MemberFinder<T> finder;
 

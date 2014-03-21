@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.PredicableResult;
 import org.atatec.trugger.reflection.ReflectionException;
 
 import java.lang.annotation.Annotation;
@@ -29,7 +28,7 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface MethodSelector extends MethodSpecifier, PredicableResult<Method, Object> {
+public interface MethodSelector extends MethodSpecifier, org.atatec.trugger.Result<Method,Object> {
 
   MethodSelector annotated();
 
