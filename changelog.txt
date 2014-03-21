@@ -6,6 +6,8 @@ Version 4.4
   - Unique searches no longer throws exceptions if two or
     more results are found
   - Reformulated the Interception module
+  - Removed the CompositeExceptionHandler (with lambdas, this
+    feature can be achieved much more easily)
 - Minor Changes
   - Removed non used classes
 
