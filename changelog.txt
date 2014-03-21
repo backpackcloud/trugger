@@ -2,7 +2,7 @@ Version 4.4
 - Major Changes
   - Java 8
     - Removed Predicate, Iteration and Date modules
-  - Renamed Invoker#handlingExceptionsWith to whenError
+  - Renamed Invoker#handlingExceptionsWith to onError
   - Unique searches no longer throws exceptions if two or
     more results are found
 - Minor Changes

@@ -105,7 +105,7 @@ public final class Null {
     }
 
     @Override
-    public Invoker whenError(ExceptionHandler handler) {
+    public Invoker onError(ExceptionHandler handler) {
       return this;
     }
 
@@ -129,7 +129,7 @@ public final class Null {
     }
 
     @Override
-    public Invoker whenError(ExceptionHandler handler) {
+    public Invoker onError(ExceptionHandler handler) {
       return this;
     }
 
@@ -177,7 +177,7 @@ public final class Null {
     }
 
     @Override
-    public Invoker whenError(ExceptionHandler handler) {
+    public Invoker onError(ExceptionHandler handler) {
       return this;
     }
 
