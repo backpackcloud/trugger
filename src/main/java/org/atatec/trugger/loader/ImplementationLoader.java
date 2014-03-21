@@ -29,9 +29,7 @@ import java.util.ServiceLoader;
  * implementations used are:
  *
  * <ul>
- * <li>org.atatec.trugger.date.DateOperationFactory</li>
  * <li>org.atatec.trugger.element.ElementFactory</li>
- * <li>org.atatec.trugger.iteration.IterationFactory</li>
  * <li>org.atatec.trugger.property.PropertyFactory</li>
  * <li>org.atatec.trugger.reflection.ReflectionFactory</li>
  * <li>org.atatec.trugger.scan.ClassScannerFactory</li>
