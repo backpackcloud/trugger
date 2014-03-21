@@ -19,17 +19,13 @@ package org.atatec.trugger.test;
 import junit.framework.AssertionFailedError;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.predicate.Predicate;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * This is the main test of the entire API. It includes all the separated tests and has a
@@ -64,11 +60,11 @@ public class TruggerTest {
    * @param predicate the predicate to use.
    */
   public static <E> void assertMatch(E element, Predicate<? super E> predicate) {
-    assertTrue(predicate.evaluate(element));
+    assertTrue(predicate.test(element));
   }
 
   public static <E> void assertNotMatch(E element, Predicate<? super E> predicate) {
-    assertFalse(predicate.evaluate(element));
+    assertFalse(predicate.test(element));
   }
 
   /** Tests if the given collection has only elements with the given names. */

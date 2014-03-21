@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.selector.MethodsSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTest;
@@ -27,18 +26,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.isAnnotatedWith;
-import static org.atatec.trugger.reflection.ReflectionPredicates.dontDeclare;
-import static org.atatec.trugger.reflection.ReflectionPredicates.named;
-import static org.atatec.trugger.reflection.ReflectionPredicates.isNotAnnotatedWith;
 import static org.atatec.trugger.reflection.MethodPredicates.returns;
 import static org.atatec.trugger.reflection.MethodPredicates.takes;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.reflection.ReflectionPredicates.*;
+import static org.atatec.trugger.test.TruggerTest.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -203,7 +195,7 @@ public class MethodsSelectorTest {
         return reflect().methods();
       }
       public void makeSelections(MethodsSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(el -> true);
       }
     }, Object.class);
     assertNoResult(new SelectionTestAdapter<MethodsSelector, Set<Method>>(){
@@ -211,7 +203,7 @@ public class MethodsSelectorTest {
         return reflect().methods();
       }
       public void makeSelections(MethodsSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(el -> false);
       }
     }, Object.class);
   }

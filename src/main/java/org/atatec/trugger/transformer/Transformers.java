@@ -35,90 +35,45 @@ public final class Transformers {
   }
 
   /** Transformer from Object to Boolean */
-  public static final Transformer<Boolean, Object> BOOLEAN = new Transformer<Boolean, Object>() {
-
-    @Override
-    public Boolean transform(Object object) {
-      return Boolean.valueOf(String.valueOf(object));
-    }
-  };
+  public static final Transformer<Boolean, Object> BOOLEAN =
+    object -> Boolean.valueOf(String.valueOf(object));
 
   /** Transformer from Object to Double */
-  public static final Transformer<Double, Object> DOUBLE = new Transformer<Double, Object>() {
-
-    @Override
-    public Double transform(Object object) {
-      return Double.valueOf(String.valueOf(object));
-    }
-  };
+  public static final Transformer<Double, Object> DOUBLE =
+    object -> Double.valueOf(String.valueOf(object));
 
   /** Transformer from Object to Float */
-  public static final Transformer<Float, Object> FLOAT = new Transformer<Float, Object>() {
-
-    @Override
-    public Float transform(Object object) {
-      return Float.valueOf(String.valueOf(object));
-    }
-  };
+  public static final Transformer<Float, Object> FLOAT =
+    object -> Float.valueOf(String.valueOf(object));
 
   /** Transformer from Object to Integer */
-  public static final Transformer<Integer, Object> INTEGER = new Transformer<Integer, Object>() {
-
-    @Override
-    public Integer transform(Object object) {
-      return Integer.valueOf(String.valueOf(object));
-    }
-  };
+  public static final Transformer<Integer, Object> INTEGER =
+    object -> Integer.valueOf(String.valueOf(object));
 
   /** Transformer from Object to Long */
-  public static final Transformer<Long, Object> LONG = new Transformer<Long, Object>() {
-
-    @Override
-    public Long transform(Object object) {
-      return Long.valueOf(String.valueOf(object));
-    }
-  };
+  public static final Transformer<Long, Object> LONG =
+    object -> Long.valueOf(String.valueOf(object));
 
   /** Transformer from Object to String */
-  public static final Transformer<String, Object> STRING = new Transformer<String, Object>() {
-
-    @Override
-    public String transform(Object object) {
-      return String.valueOf(object);
-    }
-  };
+  public static final Transformer<String, Object> STRING =
+    object -> String.valueOf(object);
 
   /** Transformer from Object to Byte */
-  public static final Transformer<Byte, Object> BYTE = new Transformer<Byte, Object>() {
-
-    @Override
-    public Byte transform(Object object) {
-      return Byte.valueOf(String.valueOf(object));
-    }
-  };
+  public static final Transformer<Byte, Object> BYTE =
+    object -> Byte.valueOf(String.valueOf(object));
 
   /** Transformer from Object to Short */
-  public static final Transformer<Short, Object> SHORT = new Transformer<Short, Object>() {
-
-    @Override
-    public Short transform(Object object) {
-      return Short.valueOf(String.valueOf(object));
-    }
-  };
+  public static final Transformer<Short, Object> SHORT =
+    object -> Short.valueOf(String.valueOf(object));
 
   /** Transformer from Object to Character */
-  public static final Transformer<Character, Object> CHAR = new Transformer<Character, Object>() {
-
-    @Override
-    public Character transform(Object object) {
-      return String.valueOf(object).charAt(0);
-    }
-  };
+  public static final Transformer<Character, Object> CHAR =
+    object -> String.valueOf(object).charAt(0);
 
   private static final Map<Class, Transformer> TRANSFORMERS;
 
   static {
-    TRANSFORMERS = new HashMap<Class, Transformer>(15);
+    TRANSFORMERS = new HashMap<>();
     TRANSFORMERS.put(Boolean.class, BOOLEAN);
     TRANSFORMERS.put(Integer.class, INTEGER);
     TRANSFORMERS.put(Long.class, LONG);

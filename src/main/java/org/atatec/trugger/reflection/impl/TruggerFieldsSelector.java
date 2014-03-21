@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.FieldPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldsSelector;
@@ -25,6 +24,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for the fields selector.
@@ -40,47 +40,47 @@ public class TruggerFieldsSelector implements FieldsSelector {
   }
 
   public FieldsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.isAnnotatedWith(type));
+    selector.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
   
   public FieldsSelector annotated() {
-    selector.builder().add(ReflectionPredicates.ANNOTATED);
+    selector.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
   
   public FieldsSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
+    selector.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
   
   public FieldsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.isNotAnnotatedWith(type));
+    selector.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
   
   public FieldsSelector nonStatic() {
-    selector.builder().add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
+    selector.add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
     return this;
   }
   
   public FieldsSelector nonFinal() {
-    selector.builder().add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
+    selector.add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
     return this;
   }
   
   public FieldsSelector that(Predicate<? super Field> predicate) {
-    selector.builder().add(predicate);
+    selector.add(predicate);
     return this;
   }
   
   public FieldsSelector ofType(final Class<?> type) {
-    selector.builder().add(FieldPredicates.ofType(type));
+    selector.add(FieldPredicates.ofType(type));
     return this;
   }
   
   public FieldsSelector assignableTo(Class<?> type) {
-    selector.builder().add(FieldPredicates.assignableTo(type));
+    selector.add(FieldPredicates.assignableTo(type));
     return this;
   }
   

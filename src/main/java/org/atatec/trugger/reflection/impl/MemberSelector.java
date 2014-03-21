@@ -17,12 +17,12 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.PredicableResult;
-import org.atatec.trugger.predicate.CompositePredicate;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Member;
+import java.util.function.Predicate;
 
 /**
  * A base class for selecting a single {@link Member} object.
@@ -35,17 +35,17 @@ public class MemberSelector<T extends Member> implements PredicableResult<T, Obj
 
   private final MemberFinder<T> finder;
 
-  private final CompositePredicate<T> predicate;
+  private final Predicate<T> predicate;
 
   private final boolean useHierarchy;
 
-  public MemberSelector(MemberFinder<T> finder, CompositePredicate<T> predicate, boolean useHierarchy) {
+  public MemberSelector(MemberFinder<T> finder, Predicate<T> predicate, boolean useHierarchy) {
     this.finder = finder;
     this.predicate = predicate;
     this.useHierarchy = useHierarchy;
   }
 
-  public MemberSelector(MemberFinder<T> finder, CompositePredicate<T> predicate) {
+  public MemberSelector(MemberFinder<T> finder, Predicate<T> predicate) {
     this(finder, predicate, false);
   }
 
@@ -54,7 +54,7 @@ public class MemberSelector<T extends Member> implements PredicableResult<T, Obj
       T element = finder.find(type);
       if (element != null) {
         if (predicate != null) {
-          return predicate.evaluate(element) ? element : null;
+          return predicate.test(element) ? element : null;
         }
         return element;
       }

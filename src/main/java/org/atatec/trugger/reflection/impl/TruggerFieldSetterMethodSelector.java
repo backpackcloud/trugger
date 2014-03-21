@@ -16,13 +16,13 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldSetterMethodSelector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 
 /**
  * Default implementation for the setter method selector.
@@ -40,27 +40,27 @@ public class TruggerFieldSetterMethodSelector implements FieldSetterMethodSelect
   }
 
   public FieldSetterMethodSelector annotated() {
-    selector.builder().add(ReflectionPredicates.ANNOTATED);
+    selector.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public FieldSetterMethodSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
+    selector.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 
   public FieldSetterMethodSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.isAnnotatedWith(type));
+    selector.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public FieldSetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.isNotAnnotatedWith(type));
+    selector.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public FieldSetterMethodSelector that(Predicate<? super Method> predicate) {
-    selector.builder().add(predicate);
+    selector.add(predicate);
     return this;
   }
 

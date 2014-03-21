@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.selector.ClassesSelector;
@@ -28,6 +26,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author Marcelo Guimarães
@@ -55,11 +55,6 @@ public class TruggerClassesSelector extends BaseClassSelector implements Classes
 
   public ClassesSelector notAnnotated() {
     super.notAnnotated();
-    return this;
-  }
-
-  public ClassesSelector instantiable() {
-    super.instantiable();
     return this;
   }
 
@@ -97,9 +92,8 @@ public class TruggerClassesSelector extends BaseClassSelector implements Classes
     } catch (ClassNotFoundException e) {
       throw new ClassScanningException(e);
     }
-    Predicate<Class> selectedClasses = builder.predicate();
-    if (selectedClasses != null) {
-      Iteration.retain(selectedClasses).from(classes);
+    if(predicate != null) {
+      classes.stream().filter(predicate).collect(Collectors.toSet());
     }
     return classes;
   }

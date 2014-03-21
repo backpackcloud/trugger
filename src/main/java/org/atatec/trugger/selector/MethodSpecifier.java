@@ -16,10 +16,9 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.predicate.Predicate;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 
 /**
  * Base interface for selecting {@link Method} objects.

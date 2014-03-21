@@ -16,11 +16,7 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.NonUniqueMatchException;
-import org.atatec.trugger.reflection.ReflectionException;
-
 import java.lang.reflect.Field;
-import java.util.Set;
 
 /** @author Marcelo Guimarães */
 public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
@@ -35,12 +31,9 @@ public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
     if (useHierarchy()) {
       selector.useHierarchy();
     }
-    Set<Field> fields = selector.in(target);
-    try {
-      return builder().findIn(fields);
-    } catch (NonUniqueMatchException e) {
-      throw new ReflectionException(e);
-    }
+    return selector.in(target).stream()
+        .filter(predicate)
+        .findAny().orElse(null);
   }
 
 }

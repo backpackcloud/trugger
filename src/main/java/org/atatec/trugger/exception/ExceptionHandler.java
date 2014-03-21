@@ -23,6 +23,7 @@ package org.atatec.trugger.exception;
  * @author Marcelo Guimarães
  * @since 4.0
  */
+@FunctionalInterface
 public interface ExceptionHandler<E extends Throwable> {
 
   /** Handles the exception */

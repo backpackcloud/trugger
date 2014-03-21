@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.selector.ConstructorSelector;
 import org.atatec.trugger.test.Flag;
@@ -139,8 +138,8 @@ public class ConstructorSelectorTest {
 
   @Test
   public void testPredicateSelector() {
-    assertNotNull(reflect().constructor().that(Predicates.ALWAYS_TRUE).withoutParameters().in(Object.class));
-    assertNull(reflect().constructor().that(Predicates.ALWAYS_FALSE).withoutParameters().in(Object.class));
+    assertNotNull(reflect().constructor().that((c) -> true).withoutParameters().in(Object.class));
+    assertNull(reflect().constructor().that((c) -> false).withoutParameters().in(Object.class));
   }
 
   static class ParameterSelectorTest {

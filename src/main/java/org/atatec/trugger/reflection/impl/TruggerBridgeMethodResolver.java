@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.reflection.ReflectionException;
 
@@ -27,6 +25,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.Reflection.method;
 import static org.atatec.trugger.reflection.Reflection.methods;
@@ -72,8 +71,7 @@ final class TruggerBridgeMethodResolver {
    * method.
    *
    * @return the original method for the supplied {@link Method bridge Method}
-   * @throws ReflectionException
-   *           if no bridged {@link Method} can be found.
+   * @throws ReflectionException if no bridged {@link Method} can be found.
    */
   Method findBridgedMethod() {
     if (!bridgeMethod.isBridge()) {
@@ -82,23 +80,25 @@ final class TruggerBridgeMethodResolver {
     // Gather all methods with matching name and parameter size.
     Set<Method> candidateMethods = methods().recursively()
       .that(new SimpleBridgeCandidatePredicate())
-    .in(bridgeMethod.getDeclaringClass());
+      .in(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + '\'');
     } else if (candidateMethods.size() > 1) {
       Predicate bridgeCandidate = new BridgeCandidatePredicate();
-      Iteration.retain(bridgeCandidate).from(candidateMethods);
+      return (Method) candidateMethods.stream()
+        .filter(bridgeCandidate)
+        .findAny().orElse(null);
     }
     return candidateMethods.iterator().next();
   }
 
   private class SimpleBridgeCandidatePredicate implements Predicate<Method> {
 
-    public boolean evaluate(Method candidateMethod) {
-      return(!candidateMethod.isBridge() && !candidateMethod.equals(bridgeMethod)
-          && candidateMethod.getName().equals(bridgeMethod.getName()) && (candidateMethod.getParameterTypes().length == bridgeMethod
-              .getParameterTypes().length));
+    public boolean test(Method candidateMethod) {
+      return (!candidateMethod.isBridge() && !candidateMethod.equals(bridgeMethod)
+        && candidateMethod.getName().equals(bridgeMethod.getName()) && (candidateMethod.getParameterTypes().length == bridgeMethod
+        .getParameterTypes().length));
     }
 
   }
@@ -118,7 +118,7 @@ final class TruggerBridgeMethodResolver {
       if (genericParameters.length != candidateParameters.length) {
         return false;
       }
-      for (int i = 0 ; i < genericParameters.length ; i++) {
+      for (int i = 0; i < genericParameters.length; i++) {
         Type genericParameter = genericParameters[i];
         Class candidateParameter = candidateParameters[i];
         if (candidateParameter.isArray()) {
@@ -126,8 +126,9 @@ final class TruggerBridgeMethodResolver {
           Type rawType = TruggerGenericTypeResolver.getRawType(genericParameter, typeParameterMap);
           if (rawType instanceof GenericArrayType) {
             if (!candidateParameter.getComponentType().equals(
-                TruggerGenericTypeResolver.resolveType(((GenericArrayType) rawType).getGenericComponentType(),
-                    typeParameterMap))) {
+              TruggerGenericTypeResolver.resolveType(((GenericArrayType) rawType).getGenericComponentType(),
+                typeParameterMap)
+            )) {
               return false;
             }
             break;
@@ -174,15 +175,15 @@ final class TruggerBridgeMethodResolver {
     private Method searchForMatch(Class type) {
       return method(bridgeMethod.getName())
         .withParameters(bridgeMethod.getParameterTypes())
-      .in(type);
+        .in(type);
     }
 
-    public boolean evaluate(Method candidateMethod) {
+    public boolean test(Method candidateMethod) {
       if (isResolvedTypeMatch(candidateMethod, bridgeMethod)) {
         return true;
       }
       Method method = findGenericDeclaration();
-      return((method != null) && isResolvedTypeMatch(method, candidateMethod));
+      return ((method != null) && isResolvedTypeMatch(method, candidateMethod));
     }
   }
 }

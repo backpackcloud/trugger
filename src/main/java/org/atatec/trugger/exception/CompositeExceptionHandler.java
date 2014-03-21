@@ -106,7 +106,7 @@ public class CompositeExceptionHandler implements ExceptionHandler {
    */
   public CompositeExceptionHandler use(ExceptionHandler handler) {
     Class type = Reflection.reflect().genericType("E").in(handler);
-    return handle(type).with(handler);
+    return (CompositeExceptionHandler) handle(type).with(handler);
   }
 
   /** Configures an ExceptionHandler to use */

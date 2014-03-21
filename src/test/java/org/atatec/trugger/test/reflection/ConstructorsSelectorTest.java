@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorsSelector;
 import org.atatec.trugger.test.Flag;
@@ -25,15 +24,17 @@ import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.atatec.trugger.test.TruggerTest.*;
 import static org.junit.Assert.assertTrue;
 
 /** @author Marcelo Varella Barca Guimarães */
 public class ConstructorsSelectorTest {
+
+  static final Predicate ALWAYS_TRUE = el -> true;
+  static final Predicate ALWAYS_FALSE = el -> false;
 
   static class AnnotatedSelectorTest {
     @Flag
@@ -165,7 +166,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(ALWAYS_TRUE);
       }
     }, AnnotatedSelectorTest.class, 2);
 
@@ -175,7 +176,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(ALWAYS_TRUE);
       }
     }, AnnotatedSelectorTest.class, 1);
 
@@ -185,7 +186,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(ALWAYS_FALSE);
       }
     }, AnnotatedSelectorTest.class);
 
@@ -195,7 +196,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(ALWAYS_FALSE);
       }
     }, AnnotatedSelectorTest.class);
   }

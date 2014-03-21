@@ -124,7 +124,7 @@ public class PropertyTest {
     assertEquals(long.class, property1.type());
     assertFalse(property1.isAnnotationPresent(Flag.class));
     property1.in(test).value(10L);
-    assertEquals(10L, property1.in(test).value());
+    assertEquals(10L, (long) property1.in(test).value());
     assertEqualsAndHash(property1, property2);
 
     property1 = getProperty("otherFieldProp", test);
@@ -135,7 +135,7 @@ public class PropertyTest {
     assertFalse(property1.isWritable());
     assertEquals(long.class, property1.type());
     assertFalse(property1.isAnnotationPresent(Flag.class));
-    assertEquals(10L, property1.in(test).value());
+    assertEquals(10L, (long) property1.in(test).value());
     assertEqualsAndHash(property1, property2);
   }
 

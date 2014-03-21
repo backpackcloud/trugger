@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.FieldPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldSelector;
@@ -25,6 +23,7 @@ import org.atatec.trugger.selector.FieldSelector;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for the field selector.
@@ -33,7 +32,7 @@ import java.lang.reflect.Modifier;
  */
 public class TruggerFieldSelector implements FieldSelector {
 
-  private final PredicateBuilder<Field> builder = new PredicateBuilder<Field>();
+  protected Predicate<Field> predicate;
   private String name;
   private boolean recursively;
   protected MemberFindersRegistry registry;
@@ -43,67 +42,70 @@ public class TruggerFieldSelector implements FieldSelector {
     this.registry = registry;
   }
 
+  protected void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
+  }
+
   public TruggerFieldSelector(MemberFindersRegistry registry) {
     this.registry = registry;
   }
 
   public FieldSelector nonStatic() {
-    builder.add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
+    add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
     return this;
   }
 
   public FieldSelector nonFinal() {
-    builder.add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
+    add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
     return this;
   }
 
   public FieldSelector that(Predicate<? super Field> predicate) {
-    builder.add(predicate);
+    add(predicate);
     return this;
   }
 
   public FieldSelector ofType(Class<?> type) {
-    builder.add(FieldPredicates.ofType(type));
+    add(FieldPredicates.ofType(type));
     return this;
   }
 
   public FieldSelector assignableTo(Class<?> type) {
-    builder.add(FieldPredicates.assignableTo(type));
+    add(FieldPredicates.assignableTo(type));
     return this;
   }
 
   public FieldSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public FieldSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 
   public FieldSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isAnnotatedWith(type));
+    add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public FieldSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
+    add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public Field in(Object target) {
-    return new MemberSelector<Field>(registry.fieldFinder(name), builder.predicate(), recursively).in(target);
+    return new MemberSelector<>(registry.fieldFinder(name), predicate, recursively).in(target);
   }
 
   public FieldSelector recursively() {
     recursively = true;
     return this;
-  }
-
-  /** @return the predicate builder used by this object. */
-  protected final PredicateBuilder<Field> builder() {
-    return builder;
   }
 
   /** @return <code>true</code> if recursion must be used. */

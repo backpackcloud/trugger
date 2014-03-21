@@ -18,9 +18,9 @@ package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.predicate.Predicate;
 
 import java.lang.annotation.Annotation;
+import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for {@link Element} objects.

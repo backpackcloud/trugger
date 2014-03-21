@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodsSelector;
@@ -25,6 +24,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for the methods selector.
@@ -36,61 +36,61 @@ public class TruggerMethodsSelector implements MethodsSelector {
   private MembersSelector<Method> selector;
 
   public TruggerMethodsSelector(MembersFinder<Method> finder) {
-    selector = new MembersSelector<Method>(finder);
+    selector = new MembersSelector<>(finder);
   }
 
   public MethodsSelector annotated() {
-    selector.builder().add(ReflectionPredicates.ANNOTATED);
+    selector.add(ReflectionPredicates.ANNOTATED);
     return this;
   }
   
   public MethodsSelector notAnnotated() {
-    selector.builder().add(ReflectionPredicates.NOT_ANNOTATED);
+    selector.add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
   
   public MethodsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.isAnnotatedWith(type));
+    selector.add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
   
   public MethodsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.builder().add(ReflectionPredicates.isNotAnnotatedWith(type));
+    selector.add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
   
   public MethodsSelector nonStatic() {
-    selector.builder().add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
+    selector.add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
     return this;
   }
   
   public MethodsSelector nonFinal() {
-    selector.builder().add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
+    selector.add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
     return this;
   }
   
   public MethodsSelector that(Predicate<? super Method> predicate) {
-    selector.builder().add(predicate);
+    selector.add(predicate);
     return this;
   }
   
   public MethodsSelector named(String name) {
-    selector.builder().add(ReflectionPredicates.named(name));
+    selector.add(ReflectionPredicates.named(name));
     return this;
   }
   
   public MethodsSelector withParameters(Class<?>... parameterTypes) {
-    selector.builder().add(MethodPredicates.takes(parameterTypes));
+    selector.add(MethodPredicates.takes(parameterTypes));
     return this;
   }
   
   public MethodsSelector returning(Class<?> returnType) {
-    selector.builder().add(MethodPredicates.returns(returnType));
+    selector.add(MethodPredicates.returns(returnType));
     return this;
   }
   
   public MethodsSelector withoutReturnType() {
-    selector.builder().add(MethodPredicates.returns(Void.TYPE));
+    selector.add(MethodPredicates.returns(Void.TYPE));
     return this;
   }
   

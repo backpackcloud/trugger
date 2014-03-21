@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.selector.FieldSetterMethodSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTestAdapter;
@@ -198,7 +197,7 @@ public class FieldSetterMethodSelectorTest {
         return reflect().setterOf(fieldSize);
       }
       public void makeSelections(FieldSetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(el -> true);
       }
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldSetterMethodSelector, Method>() {
@@ -206,7 +205,7 @@ public class FieldSetterMethodSelectorTest {
         return reflect().setterOf(fieldCount);
       }
       public void makeSelections(FieldSetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(el -> false);
       }
     }, this);
   }

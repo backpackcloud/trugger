@@ -34,7 +34,9 @@ public class TruggerNoNamedElementSelector extends TruggerElementSelector {
     if (elements.isEmpty()) {
       return null;
     }
-    return builder().findIn(elements);
+    return elements.stream()
+        .filter(predicate)
+        .findAny().orElse(null);
   }
 
 }

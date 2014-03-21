@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldsSelector;
 import org.atatec.trugger.test.Flag;
@@ -29,9 +28,7 @@ import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.atatec.trugger.test.TruggerTest.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -182,7 +179,7 @@ public class FieldsSelectorTest {
         return reflect().fields();
       }
       public void makeSelections(FieldsSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(el -> true);
       }
     }, BaseClassTest.class, 1);
     assertNoResult(new SelectionTestAdapter<FieldsSelector, Set<Field>>(){
@@ -190,7 +187,7 @@ public class FieldsSelectorTest {
         return reflect().fields();
       }
       public void makeSelections(FieldsSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(el -> false);
       }
     }, BaseClassTest.class);
   }

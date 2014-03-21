@@ -19,7 +19,6 @@ package org.atatec.trugger.util.mock;
 import org.atatec.trugger.interception.Interception;
 import org.atatec.trugger.interception.InterceptionContext;
 import org.atatec.trugger.interception.Interceptor;
-import org.atatec.trugger.predicate.CompositePredicate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
@@ -27,6 +26,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
@@ -134,11 +134,11 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
 
   @Override
   public T createMock() {
-    CompositePredicate<Member> predicate = null;
+    Predicate<Member> predicate = null;
     for (String name : mappings.keySet()) {
       predicate = (predicate == null ? named(name) : predicate.or(named(name)));
     }
-    CompositePredicate<Member> unused = predicate.negate();
+    Predicate<Member> unused = predicate.negate();
     Set<Method> methods = reflect(unused)
       .methods()
       .withoutParameters()

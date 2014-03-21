@@ -17,12 +17,11 @@
 package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.transformer.Transformer;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A helper class for element finders.
@@ -33,12 +32,11 @@ public class ElementFinderHelper {
 
 	public static Set<Element> computeResult(Object target, Collection<Element> elements) {
 		if (target instanceof Class<?>) {
-			return new HashSet<Element>(elements);
+			return new HashSet<>(elements);
 		}
-		Set<Element> result = new HashSet<Element>(elements.size());
-		Transformer<Element, Element> specific = new SpecificElementTransformer(target);
-		Iteration.copy().as(specific).from(elements).to(result);
-		return result;
+    return elements.stream().map(
+      element -> new SpecificElement(element, target)
+    ).collect(Collectors.toSet());
 	}
 
 }

@@ -17,12 +17,10 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.iteration.Find;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import static org.atatec.trugger.predicate.Predicates.that;
 import static org.atatec.trugger.reflection.MethodPredicates.takes;
 
 /**
@@ -40,7 +38,7 @@ public class SetterResult implements Result<Method, Object> {
 
   public Method in(Object target) {
     Set<Method> methods = selector.in(target);
-    return Find.first(that(takes(type))).in(methods);
+    return methods.stream().filter(takes(type)).findAny().orElse(null);
   }
 
 }

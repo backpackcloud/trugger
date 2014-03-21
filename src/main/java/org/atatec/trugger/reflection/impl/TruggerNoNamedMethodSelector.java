@@ -16,14 +16,14 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.NonUniqueMatchException;
 import org.atatec.trugger.reflection.MethodPredicates;
-import org.atatec.trugger.reflection.ReflectionException;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
-/** @author Marcelo Guimarães */
+/**
+ * @author Marcelo Guimarães
+ */
 public class TruggerNoNamedMethodSelector extends TruggerMethodSelector {
 
   public TruggerNoNamedMethodSelector(MemberFindersRegistry registry) {
@@ -37,15 +37,13 @@ public class TruggerNoNamedMethodSelector extends TruggerMethodSelector {
       selector.useHierarchy();
     }
     Set<Method> methods = selector.in(target);
-    try {
-      Class<?>[] parameterTypes = parameterTypes();
-      if (parameterTypes != null) {
-        builder().add(MethodPredicates.takes(parameterTypes));
-      }
-      return builder().findIn(methods);
-    } catch (NonUniqueMatchException e) {
-      throw new ReflectionException(e);
+    Class<?>[] parameterTypes = parameterTypes();
+    if (parameterTypes != null) {
+      add(MethodPredicates.takes(parameterTypes));
     }
+    return methods.stream()
+        .filter(predicate)
+        .findAny().orElse(null);
   }
 
 }

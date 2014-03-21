@@ -16,21 +16,19 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
-import org.atatec.trugger.reflection.ClassPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.selector.ClassSpecifier;
 
 import java.lang.annotation.Annotation;
+import java.util.function.Predicate;
 
 /**
  * @author Marcelo Guimarães
  */
 public class BaseClassSelector implements ClassSpecifier {
 
-  protected PredicateBuilder<Class> builder = new PredicateBuilder<Class>();
+  protected Predicate<Class> predicate;
   protected ScanLevel level = ScanLevel.PACKAGE;
   protected final Scanner scanner;
 
@@ -38,14 +36,16 @@ public class BaseClassSelector implements ClassSpecifier {
     this.scanner = scanner;
   }
 
-  public ClassSpecifier assignableTo(Class type) {
-    this.builder.add(ReflectionPredicates.assignableTo(type));
-    return this;
+  private void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
   }
 
-  @Override
-  public ClassSpecifier instantiable() {
-    this.builder.add(ClassPredicates.INSTANTIABLE);
+  public ClassSpecifier assignableTo(Class type) {
+    add(ReflectionPredicates.assignableTo(type));
     return this;
   }
 
@@ -55,27 +55,27 @@ public class BaseClassSelector implements ClassSpecifier {
   }
 
   public ClassSpecifier that(Predicate<? super Class> predicate) {
-    this.builder.add(predicate);
+    add(predicate);
     return this;
   }
 
   public ClassSpecifier annotatedWith(Class<? extends Annotation> annotationType) {
-    this.builder.add(ReflectionPredicates.isAnnotatedWith(annotationType));
+    add(ReflectionPredicates.isAnnotatedWith(annotationType));
     return this;
   }
 
   public ClassSpecifier notAnnotatedWith(Class<? extends Annotation> annotationType) {
-    this.builder.add(ReflectionPredicates.isNotAnnotatedWith(annotationType));
+    add(ReflectionPredicates.isNotAnnotatedWith(annotationType));
     return this;
   }
 
   public ClassSpecifier annotated() {
-    this.builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ClassSpecifier notAnnotated() {
-    this.builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 

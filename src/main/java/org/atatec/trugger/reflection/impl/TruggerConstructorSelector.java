@@ -16,10 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.NonUniqueMatchException;
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorSelector;
@@ -27,6 +23,7 @@ import org.atatec.trugger.selector.ConstructorSelector;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for the constructor selector.
@@ -35,7 +32,7 @@ import java.util.Set;
  */
 public class TruggerConstructorSelector implements ConstructorSelector {
 
-  private PredicateBuilder<Constructor<?>> builder = new PredicateBuilder<Constructor<?>>();
+  private Predicate<? super Constructor> predicate;
 
   private Class[] parameterTypes = null;
 
@@ -45,8 +42,16 @@ public class TruggerConstructorSelector implements ConstructorSelector {
     this.registry = registry;
   }
 
+  public void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
+  }
+
   public ConstructorSelector that(Predicate<? super Constructor<?>> predicate) {
-    builder.add(predicate);
+    add(predicate);
     return this;
   }
 
@@ -57,18 +62,21 @@ public class TruggerConstructorSelector implements ConstructorSelector {
 
   @Override
   public Constructor<?> in(Object target) throws ReflectionException {
-    CompositePredicate<Constructor<?>> selectedConstrucor = builder.predicate();
     if (parameterTypes != null) {
       return (Constructor<?>)
-        new MemberSelector(registry.constructorFinder(parameterTypes), selectedConstrucor)
-          .in(target);
+          new MemberSelector(registry.constructorFinder(parameterTypes), predicate)
+              .in(target);
     }
     Set<Constructor<?>> constructors =
-      new MembersSelector<Constructor<?>>(registry.constructorsFinder()).in(target);
-    try {
-      return builder.findIn(constructors);
-    } catch (NonUniqueMatchException e) {
-      throw new ReflectionException(e);
+        new MembersSelector<>(registry.constructorsFinder()).in(target);
+    if (predicate != null) {
+      return constructors.stream()
+          .filter(predicate)
+          .findAny().orElse(null);
+    } else if (constructors.size() > 1) {
+      throw new ReflectionException("More than one constructor found for " + target.getClass());
+    } else {
+      return constructors.iterator().next();
     }
   }
 
@@ -77,22 +85,22 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   }
 
   public ConstructorSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isAnnotatedWith(type));
+    add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public ConstructorSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
+    add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public ConstructorSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ConstructorSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 

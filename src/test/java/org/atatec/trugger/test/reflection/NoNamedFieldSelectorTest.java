@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldSelector;
@@ -29,13 +28,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.atatec.trugger.test.TruggerTest.*;
+import static org.junit.Assert.*;
 
 
 /**
@@ -181,7 +175,7 @@ public class NoNamedFieldSelectorTest {
         return reflect().field();
       }
       public void makeSelections(FieldSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(el -> true);
       }
     }, SimpleObject.class);
     assertNoResult(new SelectionTestAdapter<FieldSelector, Field>() {
@@ -189,7 +183,7 @@ public class NoNamedFieldSelectorTest {
         return reflect().field();
       }
       public void makeSelections(FieldSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(el -> false);
       }
     }, SimpleObject.class);
   }

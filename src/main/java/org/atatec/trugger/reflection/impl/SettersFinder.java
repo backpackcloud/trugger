@@ -16,10 +16,9 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.Find;
-
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static org.atatec.trugger.reflection.ReflectionPredicates.setterOf;
 
@@ -39,7 +38,7 @@ public class SettersFinder implements MembersFinder<Method> {
   }
 
   public Collection<Method> find(Class<?> type) {
-    Collection methods = finder.find(type);
-    return Find.all(setterOf(name)).in(methods);
+    Collection<Method> methods = finder.find(type);
+    return methods.stream().filter(setterOf(name)).collect(Collectors.toSet());
   }
 }

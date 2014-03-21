@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.scan;
 
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.scan.ScanLevel;
@@ -25,18 +24,13 @@ import org.atatec.trugger.test.TruggerTest;
 import org.junit.Test;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static java.lang.reflect.Modifier.PUBLIC;
 import static org.atatec.trugger.reflection.ClassPredicates.declare;
-import static org.atatec.trugger.scan.ClassScan.findAll;
-import static org.atatec.trugger.scan.ClassScan.findAnnotations;
-import static org.atatec.trugger.scan.ClassScan.findClasses;
-import static org.atatec.trugger.scan.ClassScan.findEnums;
-import static org.atatec.trugger.scan.ClassScan.findInterfaces;
+import static org.atatec.trugger.scan.ClassScan.*;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * A class for testing the class finding.
@@ -49,19 +43,12 @@ public class ClassScanTest {
   private String filePackageName = "org.atatec.trugger.test.scan.classes";
   private String[] jarPackageNames = new String[] { "org.junit.runner", "org.easymock" };
 
-  private Predicate<Class> filePackagePredicate = new Predicate<Class>() {
+  private Predicate<Class> filePackagePredicate =
+      element -> element.getPackage().getName().startsWith(filePackageName);
 
-    public boolean evaluate(Class element) {
-      return element.getPackage().getName().startsWith(filePackageName);
-    }
-  };
-
-  private Predicate<Class> jarPackagePredicate = new Predicate<Class>() {
-
-    public boolean evaluate(Class element) {
-      String packageName = element.getPackage().getName();
-      return packageName.startsWith(jarPackageNames[0]) || packageName.startsWith(jarPackageNames[1]);
-    }
+  private Predicate<Class> jarPackagePredicate = element -> {
+    String packageName = element.getPackage().getName();
+    return packageName.startsWith(jarPackageNames[0]) || packageName.startsWith(jarPackageNames[1]);
   };
 
   private int interfaceTest(String... packages) {

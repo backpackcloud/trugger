@@ -22,37 +22,20 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.exception.ExceptionHandler;
 import org.atatec.trugger.exception.ExceptionHandlers;
-import org.atatec.trugger.iteration.Find;
-import org.atatec.trugger.iteration.NonUniqueMatchException;
 import org.atatec.trugger.loader.ImplementationLoader;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.selector.ConstructorSelector;
-import org.atatec.trugger.selector.ConstructorsSelector;
-import org.atatec.trugger.selector.FieldSelector;
-import org.atatec.trugger.selector.FieldsSelector;
-import org.atatec.trugger.selector.MethodSelector;
-import org.atatec.trugger.selector.MethodsSelector;
+import org.atatec.trugger.selector.*;
 import org.atatec.trugger.util.ClassIterator;
 import org.atatec.trugger.util.Utils;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * An utility class for help the use of Reflection.
- * <p/>
+ * <p>
  * This class also uses a {@link ReflectionFactory} for some operations.
  *
  * @author Marcelo Guimarães
@@ -91,7 +74,7 @@ public final class Reflection {
 
   /**
    * @return <code>true</code> if the specified member has the <code>public</code>
-   *         modifier
+   * modifier
    */
   public static boolean isPublic(Member member) {
     return Modifier.isPublic(member.getModifiers());
@@ -99,7 +82,7 @@ public final class Reflection {
 
   /**
    * @return <code>true</code> if the specified member has the <code>private</code>
-   *         modifier
+   * modifier
    */
   public static boolean isPrivate(Member member) {
     return Modifier.isPrivate(member.getModifiers());
@@ -107,7 +90,7 @@ public final class Reflection {
 
   /**
    * @return <code>true</code> if the specified member has the <code>final</code>
-   *         modifier
+   * modifier
    */
   public static boolean isFinal(Member member) {
     return Modifier.isFinal(member.getModifiers());
@@ -115,7 +98,7 @@ public final class Reflection {
 
   /**
    * @return <code>true</code> if the specified member has the <code>static</code>
-   *         modifier
+   * modifier
    */
   public static boolean isStatic(Member member) {
     return Modifier.isStatic(member.getModifiers());
@@ -127,13 +110,10 @@ public final class Reflection {
    *
    * @param objs the objects for making accessible.
    */
-  public static void setAccessible(final AccessibleObject... objs) {
-    AccessController.doPrivileged(new PrivilegedAction<Void>() {
-
-      public Void run() {
-        AccessibleObject.setAccessible(objs, true);
-        return null;
-      }
+  public static void setAccessible(AccessibleObject... objs) {
+    AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+      AccessibleObject.setAccessible(objs, true);
+      return null;
     });
   }
 
@@ -141,9 +121,7 @@ public final class Reflection {
    * Parses the method name to return a property name if it is a getter or a setter.
    *
    * @param method the method to evaluate
-   *
    * @return a property name
-   *
    * @since 4.1
    */
   public static String parsePropertyName(Method method) {
@@ -181,7 +159,6 @@ public final class Reflection {
    * Uses the {@link ReflectionFactory} for creating a {@link MethodInvoker} instance.
    *
    * @param method a method to invoke.
-   *
    * @return a component for invoking the given method.
    */
   public static MethodInvoker invoke(Method method) {
@@ -211,7 +188,6 @@ public final class Reflection {
    * instance.
    *
    * @param constructor the constructor to invoke.
-   *
    * @return a component for invoking the given constructor.
    */
   public static ConstructorInvoker invoke(Constructor<?> constructor) {
@@ -222,7 +198,6 @@ public final class Reflection {
    * Uses the {@link ReflectionFactory} for creating a {@link FieldHandler} instance.
    *
    * @param field the field to handle.
-   *
    * @return a component for handling the given field.
    */
   public static FieldHandler handle(Field field) {
@@ -260,9 +235,7 @@ public final class Reflection {
    * Handles the field selected by the given selector.
    *
    * @param selector the selector for getting the field.
-   *
    * @return the handler.
-   *
    * @since 2.8
    */
   public static Result<ValueHandler, Object> handle(final FieldSelector selector) {
@@ -294,9 +267,7 @@ public final class Reflection {
    * Handles the field selected by the given selector.
    *
    * @param selector the selector for getting the field.
-   *
    * @return the handler.
-   *
    * @since 2.8
    */
   public static Result<ValueHandler, Object> handle(final FieldsSelector selector) {
@@ -326,15 +297,14 @@ public final class Reflection {
 
   /**
    * Handles a collection of fields.
-   * <p/>
+   * <p>
    * Is extremely important that <strong>all</strong> fields have the same type, but the
    * access way (static or non-static) does not matter.
-   * <p/>
+   * <p>
    * For getting the values, the return type will be a {@link Collection} of {@link Object
    * objects} containing the values based on the iteration order.
    *
    * @param fields the fields for handling.
-   *
    * @return a component for handling the fields.
    */
   public static FieldHandler handle(final Collection<Field> fields) {
@@ -402,9 +372,7 @@ public final class Reflection {
    * Invokes the method selected by the given selector.
    *
    * @param selector the selector for getting the method.
-   *
    * @return the invoker
-   *
    * @since 2.8
    */
   public static Result<Invoker, Object> invoke(final MethodSelector selector) {
@@ -445,9 +413,7 @@ public final class Reflection {
    * Invokes the methods selected by the given selector.
    *
    * @param selector the selector for getting the methods.
-   *
    * @return the invoker
-   *
    * @since 2.8
    */
   public static Result<Invoker, Object> invoke(final MethodsSelector selector) {
@@ -486,12 +452,11 @@ public final class Reflection {
   /**
    * Invokes a collection of methods that have the same parameters. The access way (static
    * or non-static) does not matter.
-   * <p/>
+   * <p>
    * The return type will be a {@link Collection} of {@link Object objects} containing the
    * values based on the iteration order.
    *
    * @param methods the methods to invoke.
-   *
    * @return a component for invoking the methods.
    */
   public static MethodInvoker invoke(final Collection<Method> methods) {
@@ -538,68 +503,56 @@ public final class Reflection {
    *
    * @param type                 the instance type
    * @param constructorArguments the arguments to call the constructor.
-   *
    * @return a new instance of the give type
-   *
    * @since 2.5
    */
   public static <E> E newInstanceOf(final Class<E> type, final Object... constructorArguments) {
-    try {
-      if (constructorArguments.length == 0) {
-        Constructor<?> constructor = reflect().constructor().withoutParameters().in(type);
-        return invoke(constructor).withoutArgs();
-      }
-      final Class<?>[] parameters = new Class[constructorArguments.length];
-      for (int i = 0; i < constructorArguments.length; i++) {
-        Object parameter = constructorArguments[i];
-        if (parameter != null) {
-          parameters[i] = Utils.resolveType(parameter);
-        }
-      }
-      Constructor<?> foundConstructor = reflect().constructor().withParameters(parameters).in(type);
-      if (foundConstructor != null) {
-        return invoke(foundConstructor).withArgs(constructorArguments);
-      }
-      Set<Constructor<?>> constructors = reflect().constructors().in(type);
-      Predicate<Constructor<?>> matchingConstructor = new Predicate<Constructor<?>>() {
 
-        public boolean evaluate(Constructor<?> constructor) {
-          Class<?>[] parameterTypes = constructor.getParameterTypes();
-          if (parameterTypes.length != parameters.length) {
-            return false;
-          }
-          for (int i = 0; i < parameters.length; i++) {
-            Class<?> param = parameters[i];
-            if (param != null && !Utils.areAssignable(parameterTypes[i], param)) {
-              return false;
-            }
-          }
-          return true;
-        }
-      };
-      foundConstructor = Find.the(matchingConstructor).in(constructors);
-      if (foundConstructor != null) {
-        return invoke(foundConstructor).withArgs(constructorArguments);
-      }
-      throw new ReflectionException("No constructor found");
-    } catch (NonUniqueMatchException e) {
-      throw new ReflectionException(e);
+    if (constructorArguments.length == 0) {
+      Constructor<?> constructor = reflect().constructor().withoutParameters().in(type);
+      return invoke(constructor).withoutArgs();
     }
+    final Class<?>[] parameters = new Class[constructorArguments.length];
+    for (int i = 0; i < constructorArguments.length; i++) {
+      Object parameter = constructorArguments[i];
+      if (parameter != null) {
+        parameters[i] = Utils.resolveType(parameter);
+      }
+    }
+    Constructor<?> foundConstructor = reflect().constructor().withParameters(parameters).in(type);
+    if (foundConstructor != null) {
+      return invoke(foundConstructor).withArgs(constructorArguments);
+    }
+    Set<Constructor<?>> constructors = reflect().constructors().in(type);
+    Predicate<Constructor<?>> matchingConstructor = constructor -> {
+      Class<?>[] parameterTypes = constructor.getParameterTypes();
+      if (parameterTypes.length != parameters.length) {
+        return false;
+      }
+      for (int i = 0; i < parameters.length; i++) {
+        Class<?> param = parameters[i];
+        if (param != null && !Utils.areAssignable(parameterTypes[i], param)) {
+          return false;
+        }
+      }
+      return true;
+    };
+    Optional<Constructor<?>> constructor = constructors.stream()
+      .filter(matchingConstructor)
+      .findAny();
+    if (constructor.isPresent()) {
+      return invoke(constructor.get()).withArgs(constructorArguments);
+    }
+    throw new ReflectionException("No constructor found");
   }
 
   /**
    * @return an iterable Class hierarchy for use in "foreach" loops.
-   *
    * @see ClassIterator
    * @since 4.0
    */
   public static Iterable<Class> hierarchyOf(final Object target) {
-    return new Iterable<Class>() {
-      @Override
-      public Iterator<Class> iterator() {
-        return new ClassIterator(target);
-      }
-    };
+    return () -> new ClassIterator(target);
   }
 
 }

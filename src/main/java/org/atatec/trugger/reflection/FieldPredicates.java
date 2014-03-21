@@ -17,13 +17,10 @@
 
 package org.atatec.trugger.reflection;
 
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Field;
-
-import static org.atatec.trugger.predicate.Predicates.wrap;
+import java.util.function.Predicate;
 
 /**
  * A set of predicates to use with <code>Field</code> objects.
@@ -40,36 +37,16 @@ public class FieldPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated field is of the
    *         given type.
    */
-  public static CompositePredicate<Field> ofType(final Class type) {
-    return wrap(new Predicate<Field>() {
-
-      public boolean evaluate(Field element) {
-        return type.equals(element.getType());
-      }
-
-      @Override
-      public String toString() {
-        return "Field of type " + type.getName();
-      }
-    });
+  public static Predicate<Field> ofType(final Class type) {
+    return element -> type.equals(element.getType());
   }
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated field is
    *         assignable to the given type.
    */
-  public static CompositePredicate<Field> assignableTo(final Class type) {
-    return wrap(new Predicate<Field>() {
-
-      public boolean evaluate(Field element) {
-        return Utils.areAssignable(type, element.getType());
-      }
-
-      @Override
-      public String toString() {
-        return "Field of type " + type.getName();
-      }
-    });
+  public static Predicate<Field> assignableTo(final Class type) {
+    return element -> Utils.areAssignable(type, element.getType());
   }
 
 }

@@ -26,6 +26,7 @@ package org.atatec.trugger.transformer;
  * @param <To>
  *          The transformed object type
  */
+@FunctionalInterface
 public interface Transformer<To, From> {
   
   /**

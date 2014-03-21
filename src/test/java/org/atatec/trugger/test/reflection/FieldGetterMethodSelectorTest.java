@@ -16,23 +16,20 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.selector.FieldGetterMethodSelector;
+import org.atatec.trugger.test.Flag;
+import org.atatec.trugger.test.SelectionTestAdapter;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertNoResult;
 import static org.atatec.trugger.test.TruggerTest.assertResult;
 import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import javax.annotation.Resource;
-
-import org.atatec.trugger.predicate.Predicates;
-import org.atatec.trugger.selector.FieldGetterMethodSelector;
-import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTestAdapter;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -180,7 +177,7 @@ public class FieldGetterMethodSelectorTest {
         return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(el -> true);
       }
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
@@ -188,7 +185,7 @@ public class FieldGetterMethodSelectorTest {
         return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(el -> false);
       }
     }, this);
   }

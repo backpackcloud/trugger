@@ -16,25 +16,18 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Method;
-
-import javax.annotation.Resource;
-
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.selector.GetterMethodSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTestAdapter;
-
 import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Method;
+
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.test.TruggerTest.assertNoResult;
+import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -176,7 +169,7 @@ public class GetterMethodSelectorTest {
         return reflect().getterOf("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(el -> true);
       }
       public void assertions(Method method) {
         assertFalse(method.isAnnotationPresent(Flag.class));
@@ -188,7 +181,7 @@ public class GetterMethodSelectorTest {
         return reflect().getterOf("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(el -> false);
       }
     }, this);
   }

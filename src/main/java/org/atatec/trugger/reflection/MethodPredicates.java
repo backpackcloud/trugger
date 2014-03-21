@@ -17,11 +17,9 @@
 
 package org.atatec.trugger.reflection;
 
-import org.atatec.trugger.predicate.BasePredicate;
-import org.atatec.trugger.predicate.CompositePredicate;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * A set of predicates to use with <code>Method</code> objects.
@@ -38,54 +36,24 @@ public class MethodPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated method has the
    *         specified type as the return type.
    */
-  public static CompositePredicate<Method> returns(final Class returnType) {
-    return new BasePredicate<Method>() {
-
-      public boolean evaluate(Method element) {
-        return element.getReturnType().equals(returnType);
-      }
-
-      @Override
-      public String toString() {
-        return "Method returning " + returnType.getName();
-      }
-    };
+  public static Predicate<Method> returns(Class returnType) {
+    return element -> element.getReturnType().equals(returnType);
   }
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated method has the
    *         return type assignable to the specified type.
    */
-  public static CompositePredicate<Method> returnsAssignableTo(final Class returnType) {
-    return new BasePredicate<Method>() {
-
-      public boolean evaluate(Method element) {
-        return returnType.isAssignableFrom(element.getReturnType());
-      }
-
-      @Override
-      public String toString() {
-        return "Method returning assignable to " + returnType.getName();
-      }
-    };
+  public static Predicate<Method> returnsAssignableTo(Class returnType) {
+    return element -> returnType.isAssignableFrom(element.getReturnType());
   }
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated method takes the
    *         specified parameters.
    */
-  public static CompositePredicate<Method> takes(final Class... parameterTypes) {
-    return new BasePredicate<Method>() {
-
-      public boolean evaluate(Method element) {
-        return Arrays.equals(element.getParameterTypes(), parameterTypes);
-      }
-
-      @Override
-      public String toString() {
-        return "With parameters " + Arrays.toString(parameterTypes);
-      }
-    };
+  public static Predicate<Method> takes(Class... parameterTypes) {
+    return element -> Arrays.equals(element.getParameterTypes(), parameterTypes);
   }
 
 }

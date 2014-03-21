@@ -29,7 +29,7 @@
     <option name="SHOW_CLOSE_PROMPT" value="true" />
   </component>
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Eclipse" />
+    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions>
       <entry name=".+\.(properties|xml|html|dtd|tld)" />
       <entry name=".+\.(gif|png|jpeg|jpg)" />
@@ -42,6 +42,7 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="1.8" />
   </component>
   <component name="CopyrightManager" default="Apache 2">
     <copyright>
@@ -77,10 +78,22 @@
   <component name="ExportToHTMLSettings">
     <option name="OUTPUT_DIRECTORY" value="$APPLICATION_HOME_DIR$/inspections" />
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
   <component name="GradleSettings">
-    <option name="gradleHome" value="$USER_HOME$/tools/gradle" />
-    <option name="linkedProjectPath" value="$PROJECT_DIR$/build.gradle" />
-    <option name="preferLocalInstallationToWrapper" value="true" />
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$USER_HOME$/tools/gradle" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
   </component>
   <component name="GradleUISettings">
     <setting name="root" />
@@ -249,6 +262,7 @@
         <inspection_tool class="FieldCount" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="m_countConstantFields" value="false" />
           <option name="m_considerStaticFinalFieldsConstant" value="false" />
+          <option name="myCountEnumConstants" value="false" />
           <option name="m_limit" value="10" />
         </inspection_tool>
         <inspection_tool class="FieldMayBeStatic" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -320,6 +334,7 @@
         <inspection_tool class="MethodCount" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="m_limit" value="20" />
           <option name="ignoreGettersAndSetters" value="false" />
+          <option name="ignoreOverridingMethods" value="false" />
         </inspection_tool>
         <inspection_tool class="MethodMayBeStatic" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="m_onlyPrivateOrFinal" value="false" />
@@ -395,10 +410,10 @@
           <option name="ignoreInterfaces" value="false" />
         </inspection_tool>
         <inspection_tool class="PublicMethodNotExposedInInterface" enabled="true" level="WARNING" enabled_by_default="true">
-          <option name="onlyWarnIfContainingClassImplementsAnInterface" value="false" />
           <option name="ignorableAnnotations">
             <value />
           </option>
+          <option name="onlyWarnIfContainingClassImplementsAnInterface" value="false" />
         </inspection_tool>
         <inspection_tool class="PublicStaticArrayField" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="PublicStaticCollectionField" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -609,9 +624,6 @@
     <option name="USE_PROJECT_PROFILE" value="true" />
     <version value="1.0" />
   </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="-target 1.6" />
-  </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />
@@ -763,6 +775,7 @@
         </XML>
       </value>
     </option>
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="User" />
   </component>
   <component name="ProjectDictionaryState">
     <dictionary name="ataxexe" />
@@ -778,7 +791,7 @@
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
@@ -815,6 +828,7 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="XPathView.XPathProjectComponent">
@@ -822,7 +836,7 @@
     <find-history />
   </component>
   <component name="libraryTable">
-    <library name="easymock-2.5.2">
+    <library name="Gradle: easymock-2.5.2">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.easymock/easymock/2.5.2/e25783424f37ade86d387afbdbb7845a6782ef1e/easymock-2.5.2.jar!/" />
       </CLASSES>
@@ -831,7 +845,7 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.easymock/easymock/2.5.2/b3c483129178b7be895a81afe02c34044245a70e/easymock-2.5.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="jboss-logging-3.0.0.CR1">
+    <library name="Gradle: jboss-logging-3.0.0.CR1">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.0.0.CR1/f3e5929b4c4d5aea2caff56b2ad67c3bcd5da55d/jboss-logging-3.0.0.CR1.jar!/" />
       </CLASSES>
@@ -840,7 +854,7 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.0.0.CR1/8c3bc33bd1e4574c083f047ade1424626b9f512b/jboss-logging-3.0.0.CR1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="jboss-vfs-3.1.0.Final">
+    <library name="Gradle: jboss-vfs-3.1.0.Final">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jboss-vfs/3.1.0.Final/d234479ff4ce2282789dedf378b052cde00bb543/jboss-vfs-3.1.0.Final.jar!/" />
       </CLASSES>
@@ -849,7 +863,7 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jboss-vfs/3.1.0.Final/9a7d9835a70481dd322601a8c173a83130490c1a/jboss-vfs-3.1.0.Final-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="junit-4.8">
+    <library name="Gradle: junit-4.8">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.8/4150c00c5706306ef0f8f1410e70c8ff12757922/junit-4.8.jar!/" />
       </CLASSES>

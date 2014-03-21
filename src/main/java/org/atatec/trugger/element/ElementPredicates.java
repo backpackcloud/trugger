@@ -16,12 +16,10 @@
  */
 package org.atatec.trugger.element;
 
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.util.Utils;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * An utility class for helping the use of {@link Predicate predicates} for
@@ -39,118 +37,57 @@ public final class ElementPredicates {
    *         given type.
    * @since 2.0
    */
-  public static CompositePredicate<Element> ofType(final Class<?> type) {
-    return Predicates.wrap(new Predicate<Element>() {
-
-      public boolean evaluate(Element element) {
-        return type.equals(element.type());
-      }
-
-      @Override
-      public String toString() {
-        return "Of type " + type;
-      }
-    });
+  public static Predicate<Element> ofType(Class<?> type) {
+    return element -> type.equals(element.type());
   }
   
   /**
    * @return a predicate that returns <code>true</code> if the element name
    *         equals one of the specified names.
    */
-  public static CompositePredicate<Element> named(final String... elementNames) {
+  public static Predicate<Element> named(String... elementNames) {
     Arrays.sort(elementNames);
-    return Predicates.wrap(new Predicate<Element>() {
-
-      public boolean evaluate(Element element) {
-        return Arrays.binarySearch(elementNames, element.name()) >= 0;
-      }
-
-      @Override
-      public String toString() {
-        return "Named " + Arrays.toString(elementNames);
-      }
-    });
+    return element -> Arrays.binarySearch(elementNames, element.name()) >= 0;
   }
   
   /**
    * A predicate that returns <code>true</code> if the element is writable.
    */
-  public static final CompositePredicate<Element> WRITABLE = Predicates.wrap(new Predicate<Element>() {
-
-    public boolean evaluate(Element element) {
-      return element.isWritable();
-    }
-
-    @Override
-    public String toString() {
-      return "Writable";
-    }
-  });
+  public static final Predicate<Element> WRITABLE = element -> element.isWritable();
   
   /**
    * A predicate that returns <code>false</code> if the element is writable.
    */
-  public static final CompositePredicate<Element> NON_WRITABLE = WRITABLE.negate();
+  public static final Predicate<Element> NON_WRITABLE = WRITABLE.negate();
   
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
-  public static final CompositePredicate<Element> READABLE = Predicates.wrap(new Predicate<Element>() {
-
-    public boolean evaluate(Element element) {
-      return element.isReadable();
-    }
-
-    @Override
-    public String toString() {
-      return "Readable";
-    }
-  });
+  public static final Predicate<Element> READABLE = element -> element.isReadable();
   
   /**
    * A predicate that returns <code>false</code> if the element is readable.
    */
-  public static final CompositePredicate<Element> NON_READABLE = READABLE.negate();
+  public static final Predicate<Element> NON_READABLE = READABLE.negate();
   
   /**
    * @return a predicate that return <code>true</code> if the element is
    *         assignable to the given type.
    */
-  public static CompositePredicate<Element> assignableTo(final Class<?> type) {
-    return Predicates.wrap(new Predicate<Element>() {
-
-      public boolean evaluate(Element element) {
-        return Utils.areAssignable(type, element.type());
-      }
-
-      @Override
-      public String toString() {
-        return "Assignable to " + type.getName();
-      }
-    });
+  public static Predicate<Element> assignableTo(final Class<?> type) {
+    return element -> Utils.areAssignable(type, element.type());
   }
   
   /**
    * A predicate that returns <code>true</code> if the element is
    * {@link Element#isSpecific() specific}.
    */
-  public static final CompositePredicate<Element> SPECIFIC = Predicates.wrap(new Predicate<Element>() {
-
-    public boolean evaluate(Element element) {
-      return element.isSpecific();
-    }
-
-    @Override
-    public String toString() {
-      return "Specific";
-    }
-
-  });
+  public static final Predicate<Element> SPECIFIC = element -> element.isSpecific();
   
   /**
    * A predicate that returns <code>true</code> if the element is not
    * {@link Element#isSpecific() specific}.
    */
-  public static final CompositePredicate<Element> NON_SPECIFIC = SPECIFIC.negate();
+  public static final Predicate<Element> NON_SPECIFIC = SPECIFIC.negate();
   
 }

@@ -50,17 +50,17 @@ public class ArrayElementTest {
     Element element = Elements.element("0").in(ints);
     assertEquals(int.class, element.type());
     assertEquals(int[].class, element.declaringClass());
-    assertEquals(0, element.value());
+    assertEquals(0, (int) element.value());
 
     element = Elements.element("2").in(ints);
     assertEquals(int.class, element.type());
     assertEquals(int[].class, element.declaringClass());
-    assertEquals(12, element.value());
+    assertEquals(12, (int) element.value());
 
     element = Elements.element("ints.1").in(this);
     assertEquals(int.class, element.type());
     assertEquals(ArrayElementTest.class, element.declaringClass());
-    assertEquals(10, element.value());
+    assertEquals(10, (int) element.value());
 
     element = Elements.element("0").in(objects);
     assertEquals(TestObject.class, element.type());
@@ -83,10 +83,10 @@ public class ArrayElementTest {
   @Test
   public void testReferencedElements() {
     Element element = Elements.element("first").in(ints);
-    assertEquals(0, element.value());
+    assertEquals(0, (int) element.value());
 
     element = Elements.element("last").in(ints);
-    assertEquals(33, element.value());
+    assertEquals(33, (int) element.value());
 
     element = Elements.element("first").in(objects);
     TestObject a = element.value();

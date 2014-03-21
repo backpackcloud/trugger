@@ -16,11 +16,10 @@
  */
 package org.atatec.trugger.reflection;
 
-import org.atatec.trugger.predicate.Predicate;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 
 /**
  * Interface that defines a factory for objects using in the {@link Reflection} class.

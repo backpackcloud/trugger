@@ -28,16 +28,6 @@ public interface ClassSpecifier extends PredicateSelector<Class>, AnnotatedEleme
   RecursionSelector {
 
   /**
-   * Selects only instantiable classes. Classes that applies must:
-   * <p/>
-   * <ul> <li>not be abstract</li> <li>be public</li> <li>have at least one public
-   * constructor</li> </ul>
-   *
-   * @since 4.1
-   */
-  ClassSpecifier instantiable();
-
-  /**
    * Search recursively in the packages (sets the scan level to {@link
    * ScanLevel#SUBPACKAGES}). Is a common way to scan packages and its subpackages but
    * only take effect if using without specifying the scan level.

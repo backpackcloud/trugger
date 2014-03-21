@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldGetterMethodSelector;
@@ -25,15 +23,16 @@ import org.atatec.trugger.selector.FieldGetterMethodSelector;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for the getter method selector.
- * 
+ *
  * @author Marcelo Guimarães
  */
 public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelector {
-  
-  private final PredicateBuilder<Method> builder = new PredicateBuilder<Method>();
+
+  private Predicate<Method> predicate;
   private final Field field;
 
   private MembersFinder<Method> finder;
@@ -41,36 +40,46 @@ public class TruggerFieldGetterMethodSelector implements FieldGetterMethodSelect
   public TruggerFieldGetterMethodSelector(Field field, MembersFinder<Method> finder) {
     this.field = field;
     this.finder = finder;
-    builder.add(MethodPredicates.returns(field.getType()));
+    add(MethodPredicates.returns(field.getType()));
   }
-  
+
+  public void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
+  }
+
   public FieldGetterMethodSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
-  
+
   public FieldGetterMethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
-  
+
   public FieldGetterMethodSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isAnnotatedWith(type));
+    add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
-  
+
   public FieldGetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
+    add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
-  
+
   public FieldGetterMethodSelector that(Predicate<? super Method> predicate) {
-    builder.add(predicate);
+    add(predicate);
     return this;
   }
-  
+
   public Method in(Object target) {
-    return new MemberSelector<Method>(new GetterFinder(field.getName(), finder), builder.predicate()).in(target);
+    return new MemberSelector<>(
+        new GetterFinder(field.getName(), finder), predicate)
+        .in(target);
   }
-  
+
 }

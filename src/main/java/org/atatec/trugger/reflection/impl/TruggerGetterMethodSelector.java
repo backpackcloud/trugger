@@ -16,63 +16,72 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.GetterMethodSelector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for the getter method selector.
- * 
+ *
  * @author Marcelo Guimarães
  */
 public class TruggerGetterMethodSelector implements GetterMethodSelector {
-  
-  private final PredicateBuilder<Method> builder = new PredicateBuilder<Method>();
+
+  private Predicate<Method> predicate;
   private boolean recursively;
   private final String name;
   private MembersFinder<Method> finder;
-  
+
   public TruggerGetterMethodSelector(String name, MembersFinder<Method> finder) {
     this.name = name;
     this.finder = finder;
   }
-  
+
+  private void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
+  }
+
   public GetterMethodSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
-  
+
   public GetterMethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
-  
+
   public GetterMethodSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isAnnotatedWith(type));
+    add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
-  
+
   public GetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
+    add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
-  
+
   public GetterMethodSelector that(Predicate<? super Method> predicate) {
-    builder.add(predicate);
+    add(predicate);
     return this;
   }
-  
+
   public Method in(Object target) {
-    return new MemberSelector<Method>(new GetterFinder(name, finder), builder.predicate(), recursively).in(target);
+    return new MemberSelector<>(
+        new GetterFinder(name, finder), predicate, recursively)
+        .in(target);
   }
-  
+
   public GetterMethodSelector recursively() {
     recursively = true;
     return this;
   }
-  
+
 }

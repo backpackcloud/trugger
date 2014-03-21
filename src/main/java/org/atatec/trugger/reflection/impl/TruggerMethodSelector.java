@@ -16,19 +16,14 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.NonUniqueMatchException;
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.MethodPredicates;
-import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodSelector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for the method selector.
@@ -37,7 +32,7 @@ import java.util.Set;
  */
 public class TruggerMethodSelector implements MethodSelector {
 
-  private final PredicateBuilder<Method> builder = new PredicateBuilder<Method>();
+  protected Predicate<Method> predicate;
   private String name;
   private boolean recursively;
   private Class[] parameterTypes;
@@ -48,52 +43,60 @@ public class TruggerMethodSelector implements MethodSelector {
     this.registry = registry;
   }
 
+  protected void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
+  }
+
   public TruggerMethodSelector(MemberFindersRegistry registry) {
     this.registry = registry;
   }
 
   public MethodSelector nonStatic() {
-    builder.add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
+    add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
     return this;
   }
 
   public MethodSelector nonFinal() {
-    builder.add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
+    add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
     return this;
   }
 
   public MethodSelector that(Predicate<? super Method> predicate) {
-    builder.add(predicate);
+    add(predicate);
     return this;
   }
 
   public MethodSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public MethodSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 
   public MethodSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isAnnotatedWith(type));
+    add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public MethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
+    add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public MethodSelector returning(Class<?> returnType) {
-    builder.add(MethodPredicates.returns(returnType));
+    add(MethodPredicates.returns(returnType));
     return this;
   }
 
   public MethodSelector withoutReturnType() {
-    builder.add(MethodPredicates.returns(Void.TYPE));
+    add(MethodPredicates.returns(Void.TYPE));
     return this;
   }
 
@@ -104,20 +107,17 @@ public class TruggerMethodSelector implements MethodSelector {
 
   public Method in(Object target) {
     if (parameterTypes != null) {
-      final CompositePredicate<Method> predicate = builder.predicate();
-      return new MemberSelector<Method>(registry.methodFinder(name, parameterTypes),
-        predicate, recursively).in(target);
+      return new MemberSelector<>(registry.methodFinder(name, parameterTypes),
+          predicate, recursively).in(target);
     }
     MembersSelector<Method> selector = new MembersSelector<Method>(registry.methodsFinder());
     if (recursively) {
       selector.useHierarchy();
     }
-    Set<Method> methods = selector.in(target);
-    try {
-      return builder.add(ReflectionPredicates.named(name)).findIn(methods);
-    } catch (NonUniqueMatchException e) {
-      throw new ReflectionException(e);
-    }
+    add(ReflectionPredicates.named(name));
+    return selector.in(target).stream()
+        .filter(predicate)
+        .findAny().orElse(null);
   }
 
   public MethodSelector recursively() {
@@ -129,22 +129,23 @@ public class TruggerMethodSelector implements MethodSelector {
     return withParameters();
   }
 
-  /** @return the predicate builder used by this object. */
-  protected final PredicateBuilder<Method> builder() {
-    return builder;
-  }
-
-  /** @return <code>true</code> if recursion must be used. */
+  /**
+   * @return <code>true</code> if recursion must be used.
+   */
   protected final boolean useHierarchy() {
     return recursively;
   }
 
-  /** @return the field name for search. */
+  /**
+   * @return the field name for search.
+   */
   protected final String name() {
     return name;
   }
 
-  /** @return the specified parameter types. */
+  /**
+   * @return the specified parameter types.
+   */
   protected final Class[] parameterTypes() {
     return parameterTypes;
   }

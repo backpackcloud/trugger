@@ -19,13 +19,11 @@ package org.atatec.trugger.element.impl;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ElementSelector;
 
 import java.lang.annotation.Annotation;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for {@link ElementSelector}.
@@ -34,7 +32,7 @@ import java.lang.annotation.Annotation;
  */
 public class TruggerElementSelector implements ElementSelector {
 
-  private final PredicateBuilder<Element> builder;
+  protected Predicate<Element> predicate;
   private final Finder<Element> finder;
   private final String name;
 
@@ -47,71 +45,78 @@ public class TruggerElementSelector implements ElementSelector {
   public TruggerElementSelector(String name, Finder<Element> finder) {
     this.name = name;
     this.finder = finder;
-    builder = new PredicateBuilder<Element>();
+  }
+
+  protected void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
   }
 
   public ElementSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ElementSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 
   public ElementSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isAnnotatedWith(type));
+    add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public ElementSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
+    add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public ElementSelector ofType(Class<?> type) {
-    builder.add(ElementPredicates.ofType(type));
+    add(ElementPredicates.ofType(type));
     return this;
   }
 
   public ElementSelector assignableTo(Class<?> type) {
-    builder.add(ElementPredicates.assignableTo(type));
+    add(ElementPredicates.assignableTo(type));
     return this;
   }
 
   public ElementSelector that(final Predicate<? super Element> predicate) {
-    builder.add(predicate);
+    add(predicate);
     return this;
   }
 
   public ElementSelector nonReadable() {
-    builder.add(ElementPredicates.NON_READABLE);
+    add(ElementPredicates.NON_READABLE);
     return this;
   }
 
   public ElementSelector nonWritable() {
-    builder.add(ElementPredicates.NON_WRITABLE);
+    add(ElementPredicates.NON_WRITABLE);
     return this;
   }
 
   public ElementSelector readable() {
-    builder.add(ElementPredicates.READABLE);
+    add(ElementPredicates.READABLE);
     return this;
   }
 
   public ElementSelector nonSpecific() {
-    builder.add(ElementPredicates.NON_SPECIFIC);
+    add(ElementPredicates.NON_SPECIFIC);
     return this;
   }
 
   public ElementSelector specific() {
-    builder.add(ElementPredicates.SPECIFIC);
+    add(ElementPredicates.SPECIFIC);
     return this;
   }
 
   public ElementSelector writable() {
-    builder.add(ElementPredicates.WRITABLE);
+    add(ElementPredicates.WRITABLE);
     return this;
   }
 
@@ -120,15 +125,10 @@ public class TruggerElementSelector implements ElementSelector {
     if (element == null) {
       return null;
     }
-    CompositePredicate<Element> predicate = builder.predicate();
     if(predicate != null) {
-      return predicate.evaluate(element) ? element : null;
+      return predicate.test(element) ? element : null;
     }
     return element;
-  }
-
-  protected PredicateBuilder<Element> builder() {
-    return builder;
   }
 
   protected Finder<Element> finder() {

@@ -19,14 +19,13 @@ package org.atatec.trugger.element.impl;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ElementsSelector;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A default implementation for {@link ElementsSelector}.
@@ -35,91 +34,97 @@ import java.util.Set;
  */
 public final class TruggerElementsSelector implements ElementsSelector {
 
-  private final PredicateBuilder<Element> builder;
+  private Predicate<? super Element> predicate;
   private final Finder<Element> finder;
 
   public TruggerElementsSelector(Finder<Element> finder) {
-    this.builder = new PredicateBuilder<Element>();
     this.finder = finder;
   }
 
+  private void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
+  }
+
   public ElementsSelector annotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isAnnotatedWith(type));
+    add(ReflectionPredicates.isAnnotatedWith(type));
     return this;
   }
 
   public ElementsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    builder.add(ReflectionPredicates.isNotAnnotatedWith(type));
+    add(ReflectionPredicates.isNotAnnotatedWith(type));
     return this;
   }
 
   public ElementsSelector annotated() {
-    builder.add(ReflectionPredicates.ANNOTATED);
+    add(ReflectionPredicates.ANNOTATED);
     return this;
   }
 
   public ElementsSelector notAnnotated() {
-    builder.add(ReflectionPredicates.NOT_ANNOTATED);
+    add(ReflectionPredicates.NOT_ANNOTATED);
     return this;
   }
 
   public ElementsSelector ofType(Class<?> type) {
-    builder.add(ElementPredicates.ofType(type));
+    add(ElementPredicates.ofType(type));
     return this;
   }
 
   public ElementsSelector assignableTo(Class<?> type) {
-    builder.add(ElementPredicates.assignableTo(type));
+    add(ElementPredicates.assignableTo(type));
     return this;
   }
 
   @Override
   public ElementsSelector nonSpecific() {
-    builder.add(ElementPredicates.NON_SPECIFIC);
+    add(ElementPredicates.NON_SPECIFIC);
     return this;
   }
 
   @Override
   public ElementsSelector specific() {
-    builder.add(ElementPredicates.SPECIFIC);
+    add(ElementPredicates.SPECIFIC);
     return this;
   }
 
   public ElementsSelector named(String... names) {
-    builder.add(ElementPredicates.named(names));
+    add(ElementPredicates.named(names));
     return this;
   }
 
   public ElementsSelector that(final Predicate<? super Element> predicate) {
-    builder.add(predicate);
+    add(predicate);
     return this;
   }
 
   public ElementsSelector nonReadable() {
-    builder.add(ElementPredicates.NON_READABLE);
+    add(ElementPredicates.NON_READABLE);
     return this;
   }
 
   public ElementsSelector nonWritable() {
-    builder.add(ElementPredicates.NON_WRITABLE);
+    add(ElementPredicates.NON_WRITABLE);
     return this;
   }
 
   public ElementsSelector readable() {
-    builder.add(ElementPredicates.READABLE);
+    add(ElementPredicates.READABLE);
     return this;
   }
 
   public ElementsSelector writable() {
-    builder.add(ElementPredicates.WRITABLE);
+    add(ElementPredicates.WRITABLE);
     return this;
   }
 
   public Set<Element> in(Object target) {
     Set<Element> elements = finder.findAll().in(target);
-    Predicate<Element> selected = builder.predicate();
-    if (selected != null) {
-      Iteration.retain(selected).from(elements);
+    if (predicate != null) {
+      return elements.stream().filter(predicate).collect(Collectors.toSet());
     }
     return elements;
   }

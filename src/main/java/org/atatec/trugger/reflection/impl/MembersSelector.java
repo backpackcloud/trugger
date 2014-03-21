@@ -17,14 +17,13 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.iteration.Iteration;
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.predicate.PredicateBuilder;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Member;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 
@@ -32,15 +31,12 @@ import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
  * A base class for selecting a set of {@link Member} objects.
  *
  * @param <T> The member type.
- *
  * @author Marcelo Guimarães
  */
 public class MembersSelector<T extends Member> implements Result<Set<T>, Object> {
 
-  private final PredicateBuilder<T> builder = new PredicateBuilder<T>();
-
   private final MembersFinder<T> finder;
-
+  private Predicate<T> predicate;
   private boolean useHierarchy;
 
   public MembersSelector(MembersFinder<T> finder) {
@@ -61,21 +57,27 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
   }
 
   private Set<T> applySelection(final Set<T> set) {
-    Predicate<T> selected = builder.predicate();
-    if (selected != null) {
-      Iteration.retain(selected).from(set);
+    if (predicate != null) {
+      return set.stream()
+        .filter(predicate)
+        .collect(Collectors.toSet());
     }
     return set;
   }
 
-  /** Indicates that this selector must use the target hierarchy. */
+  /**
+   * Indicates that this selector must use the target hierarchy.
+   */
   public final void useHierarchy() {
     this.useHierarchy = true;
   }
 
-  /** @return the object for holding the predicates for filtering the result */
-  public final PredicateBuilder<T> builder() {
-    return builder;
+  public void add(Predicate other) {
+    if (predicate != null) {
+      predicate = predicate.and(other);
+    } else {
+      predicate = other;
+    }
   }
 
 }

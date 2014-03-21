@@ -17,13 +17,9 @@
 
 package org.atatec.trugger.reflection;
 
-import org.atatec.trugger.predicate.CompositePredicate;
-import org.atatec.trugger.predicate.Predicate;
-
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-
-import static org.atatec.trugger.predicate.Predicates.wrap;
+import java.util.function.Predicate;
 
 /**
  * A set of predicates to use with <code>Constructor</code> objects.
@@ -38,20 +34,10 @@ public class ConstructorPredicates {
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated constructor takes
-   *         the specified parameters.
+   * the specified parameters.
    */
-  public static CompositePredicate<Constructor> takes(final Class... parameterTypes) {
-    return wrap(new Predicate<Constructor>() {
-
-      public boolean evaluate(Constructor element) {
-        return Arrays.equals(element.getParameterTypes(), parameterTypes);
-      }
-
-      @Override
-      public String toString() {
-        return "With parameters " + Arrays.toString(parameterTypes);
-      }
-    });
+  public static Predicate<Constructor> takes(final Class... parameterTypes) {
+    return element -> Arrays.equals(element.getParameterTypes(), parameterTypes);
   }
 
 }

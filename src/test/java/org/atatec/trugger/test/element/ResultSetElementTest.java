@@ -16,27 +16,22 @@
  */
 package org.atatec.trugger.test.element;
 
-import static org.atatec.trugger.element.Elements.element;
-import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.ElementPredicates;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Set;
 
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementPredicates;
-
-import org.junit.Before;
-import org.junit.Test;
+import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.element.Elements.elements;
+import static org.atatec.trugger.test.TruggerTest.assertElements;
+import static org.atatec.trugger.test.TruggerTest.assertMatch;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -96,11 +91,11 @@ public class ResultSetElementTest {
     
     assertEquals("John", name.value());
     assertEquals("kranck", nickname.value());
-    assertEquals(26, age.value());
+    assertEquals(26, (int) age.value());
     resultSet.next();
     assertEquals("Justin", name.value());
     assertEquals("tropper", nickname.value());
-    assertEquals(27, age.value());
+    assertEquals(27, (int) age.value());
   }
   
 }

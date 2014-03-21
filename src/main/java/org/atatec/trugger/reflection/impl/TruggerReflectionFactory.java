@@ -16,17 +16,13 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.reflection.ConstructorInvoker;
-import org.atatec.trugger.reflection.FieldHandler;
-import org.atatec.trugger.reflection.MethodInvoker;
-import org.atatec.trugger.reflection.ReflectionFactory;
-import org.atatec.trugger.reflection.Reflector;
+import org.atatec.trugger.reflection.*;
 import org.atatec.trugger.util.Null;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 
 /**
  * A default factory for {@link Reflector} objects.

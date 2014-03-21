@@ -17,11 +17,11 @@
 package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.predicate.Predicate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for {@link Method} objects.

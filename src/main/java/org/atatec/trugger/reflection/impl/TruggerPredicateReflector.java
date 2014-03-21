@@ -16,19 +16,10 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.predicate.Predicate;
-import org.atatec.trugger.selector.ConstructorSelector;
-import org.atatec.trugger.selector.ConstructorsSelector;
-import org.atatec.trugger.selector.FieldGetterMethodSelector;
-import org.atatec.trugger.selector.FieldSelector;
-import org.atatec.trugger.selector.FieldSetterMethodSelector;
-import org.atatec.trugger.selector.FieldsSelector;
-import org.atatec.trugger.selector.GetterMethodSelector;
-import org.atatec.trugger.selector.MethodSelector;
-import org.atatec.trugger.selector.MethodsSelector;
-import org.atatec.trugger.selector.SetterMethodSelector;
+import org.atatec.trugger.selector.*;
 
 import java.lang.reflect.Field;
+import java.util.function.Predicate;
 
 /**
  * @author Marcelo Guimarães

@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.iteration.Find;
-
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +37,6 @@ public class GetterFinder implements MemberFinder<Method> {
 
   public Method find(Class<?> type) throws Exception {
     Set<Method> methods = new HashSet<Method>(finder.find(type));
-    return Find.first(getterOf(name)).in(methods);
+    return methods.stream().filter(getterOf(name)).findAny().orElse(null);
   }
 }

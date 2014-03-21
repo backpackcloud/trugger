@@ -16,7 +16,8 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.predicate.Predicate;
+import java.util.function.Predicate;
+
 import org.atatec.trugger.scan.ClassScanResult;
 
 import java.lang.annotation.Annotation;
@@ -39,8 +40,6 @@ public interface ClassesSelector extends ClassSpecifier, ClassScanResult<Set<Cla
   ClassesSelector annotated();
 
   ClassesSelector notAnnotated();
-
-  ClassesSelector instantiable();
 
   ClassesSelector recursively();
 

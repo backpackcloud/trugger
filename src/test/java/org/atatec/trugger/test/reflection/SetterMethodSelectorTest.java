@@ -16,26 +16,19 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.lang.reflect.Method;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.atatec.trugger.predicate.Predicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.SetterMethodSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTestAdapter;
-
 import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Method;
+import java.util.Set;
+
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.test.TruggerTest.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -180,7 +173,7 @@ public class SetterMethodSelectorTest {
         return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_TRUE);
+        selector.that(el -> true);
       }
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
@@ -188,7 +181,7 @@ public class SetterMethodSelectorTest {
         return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
-        selector.that(Predicates.ALWAYS_FALSE);
+        selector.that(el -> false);
       }
     }, this);
   }
