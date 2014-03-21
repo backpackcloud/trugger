@@ -23,6 +23,7 @@ package org.atatec.trugger.util.mock;
  * @param <T>
  *          The mock object class.
  */
+@FunctionalInterface
 public interface MockBuilder<T> {
   
   /**
