@@ -17,6 +17,7 @@
 package org.atatec.trugger.reflection.impl;
 
 import java.lang.reflect.Field;
+import java.util.Set;
 
 /** @author Marcelo Guimarães */
 public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
@@ -31,7 +32,11 @@ public class TruggerNoNamedFieldSelector extends TruggerFieldSelector {
     if (useHierarchy()) {
       selector.useHierarchy();
     }
-    return selector.in(target).stream()
+    Set<Field> fields = selector.in(target);
+    if (predicate == null) {
+      return fields.isEmpty() ? null : fields.iterator().next();
+    }
+    return fields.stream()
         .filter(predicate)
         .findAny().orElse(null);
   }

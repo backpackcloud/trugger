@@ -66,7 +66,6 @@ public class GenericTypeTest {
     Method bridgeMethod = method.withParameters(Object.class, Object.class).in(TestObject.class);
     assertNotNull(bridgeMethod);
     assertTrue(bridgeMethod.isBridge());
-    assertFalse(bridgeMethod.isAnnotationPresent(Flag.class));
 
     assertEquals(bridgedMethod, reflect().bridgedMethodFor(bridgeMethod));
   }

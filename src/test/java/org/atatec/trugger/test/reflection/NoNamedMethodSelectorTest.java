@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.selector.MethodSelector;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.SelectionTestAdapter;
@@ -48,11 +47,6 @@ public class NoNamedMethodSelectorTest {
     @Flag
     void foo(){};
     void bar(){};
-  }
-
-  @Test(expected = ReflectionException.class)
-  public void testMultipleMatch() {
-    reflect().method().in(AnnotatedSelectorTest.class);
   }
 
   @Test

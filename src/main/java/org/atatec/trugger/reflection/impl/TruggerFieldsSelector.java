@@ -36,7 +36,7 @@ public class TruggerFieldsSelector implements FieldsSelector {
   private MembersSelector<Field> selector;
 
   public TruggerFieldsSelector(MembersFinder<Field> finder) {
-    selector = new MembersSelector<Field>(finder);
+    selector = new MembersSelector<>(finder);
   }
 
   public FieldsSelector annotatedWith(Class<? extends Annotation> type) {

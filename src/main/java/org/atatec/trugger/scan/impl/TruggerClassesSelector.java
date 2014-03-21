@@ -93,7 +93,7 @@ public class TruggerClassesSelector extends BaseClassSelector implements Classes
       throw new ClassScanningException(e);
     }
     if(predicate != null) {
-      classes.stream().filter(predicate).collect(Collectors.toSet());
+      return classes.stream().filter(predicate).collect(Collectors.toSet());
     }
     return classes;
   }

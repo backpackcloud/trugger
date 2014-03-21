@@ -41,6 +41,9 @@ public class TruggerNoNamedMethodSelector extends TruggerMethodSelector {
     if (parameterTypes != null) {
       add(MethodPredicates.takes(parameterTypes));
     }
+    if (predicate == null) {
+      return methods.isEmpty() ? null : methods.iterator().next();
+    }
     return methods.stream()
         .filter(predicate)
         .findAny().orElse(null);

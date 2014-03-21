@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldSelector;
 import org.atatec.trugger.test.Flag;
@@ -301,11 +300,6 @@ public class NoNamedFieldSelectorTest {
         selector.assignableTo(String.class);
       }
     }, AssignableSelectorTest.class);
-  }
-
-  @Test(expected = ReflectionException.class)
-  public void testMultipleMatch() {
-    reflect().field().assignableTo(Object.class).in(AssignableSelectorTest.class);
   }
 
 }
