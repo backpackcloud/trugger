@@ -17,7 +17,6 @@
 package org.atatec.trugger.test.interception;
 
 import org.atatec.trugger.interception.Interception;
-import org.atatec.trugger.interception.InterceptionContext;
 import org.atatec.trugger.interception.Interceptor;
 import org.junit.Test;
 
@@ -26,11 +25,7 @@ import static org.junit.Assert.assertSame;
 /** @author Marcelo Varella Barca Guimarães */
 public class InterceptorTest {
 
-  Interception action = new Interception() {
-    public Object intercept(InterceptionContext context) throws Throwable {
-      return context.invokeMethod();
-    }
-  };
+  Interception action = context -> context.invokeMethod();
 
   static interface MyInterface {
 
