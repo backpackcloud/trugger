@@ -35,7 +35,7 @@ public class CompositeExceptionHandler implements ExceptionHandler {
   private final Registry<Class<? extends Throwable>, ExceptionHandler> handlers;
 
   public CompositeExceptionHandler() {
-    handlers = new MapRegistry<Class<? extends Throwable>, ExceptionHandler>();
+    handlers = new MapRegistry<>();
   }
 
   /**
@@ -63,13 +63,10 @@ public class CompositeExceptionHandler implements ExceptionHandler {
    *
    * @return a reference to this object
    */
-  public With<Class<? extends RuntimeException>, CompositeExceptionHandler> encapsulateEvery(final Class<? extends Throwable> clazz) {
-    return new With<Class<? extends RuntimeException>, CompositeExceptionHandler>() {
-      @Override
-      public CompositeExceptionHandler with(Class<? extends RuntimeException> input) {
-        handlers.register(new EncapsulatorExceptionHandler(input)).to(clazz);
-        return CompositeExceptionHandler.this;
-      }
+  public With<Class<? extends RuntimeException>, CompositeExceptionHandler> encapsulateEvery(Class<? extends Throwable> clazz) {
+    return input -> {
+      handlers.register(new EncapsulatorExceptionHandler(input)).to(clazz);
+      return CompositeExceptionHandler.this;
     };
   }
 
@@ -111,12 +108,9 @@ public class CompositeExceptionHandler implements ExceptionHandler {
 
   /** Configures an ExceptionHandler to use */
   public With<ExceptionHandler, CompositeExceptionHandler> handle(final Class<? extends Throwable> clazz) {
-    return new With<ExceptionHandler, CompositeExceptionHandler>() {
-      @Override
-      public CompositeExceptionHandler with(ExceptionHandler input) {
-        handlers.register(input).to(clazz);
-        return CompositeExceptionHandler.this;
-      }
+    return input -> {
+      handlers.register(input).to(clazz);
+      return CompositeExceptionHandler.this;
     };
   }
 
