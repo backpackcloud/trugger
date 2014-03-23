@@ -16,9 +16,11 @@
  */
 package org.atatec.trugger.test.interception;
 
+import org.atatec.trugger.TruggerException;
 import org.atatec.trugger.interception.Interceptor;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -59,12 +61,22 @@ public class InterceptorTest {
     assertSame(argument, obj.doIt(argument));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testInterfaceExceptionHandling() {
     MyInterface obj = Interceptor.intercept(new ExceptionHandlingTest())
         .onCall(context -> context.invokeMethod())
+        .onError((context, error) -> "pass")
         .proxy();
 
+    assertEquals("pass", obj.doIt(null));
+  }
+
+  @Test(expected = TruggerException.class)
+  public void testInterfaceInterception() {
+    MyInterface obj = Interceptor.intercept(MyInterface.class)
+        .onCall(context -> {throw new IllegalArgumentException();})
+        .onError((context, error) -> {throw new TruggerException(error);})
+        .proxy();
     obj.doIt(null);
   }
 
