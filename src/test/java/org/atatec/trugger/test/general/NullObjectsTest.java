@@ -16,42 +16,26 @@
  */
 package org.atatec.trugger.test.general;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.atatec.trugger.util.Null;
+import org.junit.Test;
 
 import java.lang.reflect.AnnotatedElement;
-import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
 
-import org.atatec.trugger.util.Null;
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class NullObjectsTest {
-  
+
   @Test
   public void nullAnnotatedElementTest() {
     AnnotatedElement el = Null.NULL_ANNOTATED_ELEMENT;
-    
+
     assertEquals(0, el.getAnnotations().length);
     assertEquals(0, el.getDeclaredAnnotations().length);
     assertFalse(el.isAnnotationPresent(null)); // annotation type doesn't matter
     assertNull(null, el.getAnnotation(null)); // annotation type doesn't matter
   }
-  
-  @Test(expected = NoSuchElementException.class)
-  public void nullResourceBundleTest() {
-    ResourceBundle bundle = Null.NULL_BUNDLE;
-    
-    assertFalse(bundle.getKeys().hasMoreElements());
-    
-    assertNotNull(bundle.getLocale());
-    bundle.getKeys().nextElement();
-  }
-  
+
 }

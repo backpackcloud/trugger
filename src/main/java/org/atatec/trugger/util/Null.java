@@ -16,20 +16,16 @@
  */
 package org.atatec.trugger.util;
 
-import org.atatec.trugger.exception.ExceptionHandler;
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.Invoker;
 import org.atatec.trugger.ValueHandler;
+import org.atatec.trugger.exception.ExceptionHandler;
 import org.atatec.trugger.reflection.ConstructorInvoker;
 import org.atatec.trugger.reflection.FieldHandler;
 import org.atatec.trugger.reflection.MethodInvoker;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
 
 /**
  * This class has a set of objects that should be used to eliminate the checks against
@@ -59,36 +55,6 @@ public final class Null {
 
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationType) {
       return false;
-    }
-
-  };
-
-  /** An empty bundle. */
-  public static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
-
-    @Override
-    public Enumeration<String> getKeys() {
-      return new Enumeration<String>() {
-
-        public boolean hasMoreElements() {
-          return false;
-        }
-
-        public String nextElement() {
-          throw new NoSuchElementException();
-        }
-
-      };
-    }
-
-    @Override
-    protected Object handleGetObject(String key) {
-      return null;
-    }
-
-    @Override
-    public Locale getLocale() {
-      return Locale.getDefault();
     }
 
   };
@@ -180,12 +146,6 @@ public final class Null {
     public Invoker onError(ExceptionHandler handler) {
       return this;
     }
-
-  };
-
-  public static final ExceptionHandler NULL_EXCEPTION_HANDLER = new ExceptionHandler() {
-    @Override
-    public void handle(Throwable throwable) {}
 
   };
 
