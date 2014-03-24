@@ -169,7 +169,7 @@ public class GetterMethodSelectorTest {
         return reflect().getterOf("hits");
       }
       public void makeSelections(GetterMethodSelector selector) {
-        selector.that(el -> true);
+        selector.filter(el -> true);
       }
       public void assertions(Method method) {
         assertFalse(method.isAnnotationPresent(Flag.class));
@@ -181,7 +181,7 @@ public class GetterMethodSelectorTest {
         return reflect().getterOf("count");
       }
       public void makeSelections(GetterMethodSelector selector) {
-        selector.that(el -> false);
+        selector.filter(el -> false);
       }
     }, this);
   }

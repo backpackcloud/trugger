@@ -145,17 +145,6 @@ public final class Reflection {
   }
 
   /**
-   * Uses the {@link ReflectionFactory} for creating a {@link Reflector} instance and adds
-   * the given predicate to the filter.
-   *
-   * @return a component for reflecting objects in a target.
-   * @since 4.1
-   */
-  public static Reflector reflect(Predicate predicate) {
-    return factory.createReflector(predicate);
-  }
-
-  /**
    * Uses the {@link ReflectionFactory} for creating a {@link MethodInvoker} instance.
    *
    * @param method a method to invoke.
@@ -202,15 +191,6 @@ public final class Reflection {
    */
   public static FieldHandler handle(Field field) {
     return factory.createHandler(field);
-  }
-
-  /**
-   * The same as <code>reflect().field()</code>
-   *
-   * @since 2.8
-   */
-  public static FieldSelector field() {
-    return reflect().field();
   }
 
   /**
@@ -339,15 +319,6 @@ public final class Reflection {
         }
       }
     };
-  }
-
-  /**
-   * The same as <code>reflect().method()</code>
-   *
-   * @since 2.8
-   */
-  public static MethodSelector method() {
-    return reflect().method();
   }
 
   /**

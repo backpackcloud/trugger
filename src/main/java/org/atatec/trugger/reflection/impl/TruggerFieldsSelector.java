@@ -16,81 +16,49 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.reflection.FieldPredicates;
-import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.FieldsSelector;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.function.Predicate;
 
 /**
  * A default implementation for the fields selector.
- * 
+ *
  * @author Marcelo Guimarães
  */
 public class TruggerFieldsSelector implements FieldsSelector {
-  
-  private MembersSelector<Field> selector;
+
+  private final MembersFinder<Field> finder;
+  private final Predicate<? super Field> predicate;
+  private final boolean recursively;
 
   public TruggerFieldsSelector(MembersFinder<Field> finder) {
-    selector = new MembersSelector<>(finder);
+    this.finder = finder;
+    this.predicate = null;
+    this.recursively = false;
   }
 
-  public FieldsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.add(ReflectionPredicates.isAnnotatedWith(type));
-    return this;
+  public TruggerFieldsSelector(MembersFinder<Field> finder,
+                               Predicate<? super Field> predicate,
+                               boolean recursively) {
+    this.finder = finder;
+    this.predicate = predicate;
+    this.recursively = recursively;
   }
-  
-  public FieldsSelector annotated() {
-    selector.add(ReflectionPredicates.ANNOTATED);
-    return this;
+
+  @Override
+  public FieldsSelector filter(Predicate<? super Field> predicate) {
+    return new TruggerFieldsSelector(finder, predicate, recursively);
   }
-  
-  public FieldsSelector notAnnotated() {
-    selector.add(ReflectionPredicates.NOT_ANNOTATED);
-    return this;
-  }
-  
-  public FieldsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.add(ReflectionPredicates.isNotAnnotatedWith(type));
-    return this;
-  }
-  
-  public FieldsSelector nonStatic() {
-    selector.add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
-    return this;
-  }
-  
-  public FieldsSelector nonFinal() {
-    selector.add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
-    return this;
-  }
-  
-  public FieldsSelector that(Predicate<? super Field> predicate) {
-    selector.add(predicate);
-    return this;
-  }
-  
-  public FieldsSelector ofType(final Class<?> type) {
-    selector.add(FieldPredicates.ofType(type));
-    return this;
-  }
-  
-  public FieldsSelector assignableTo(Class<?> type) {
-    selector.add(FieldPredicates.assignableTo(type));
-    return this;
-  }
-  
-  public Set<Field> in(Object target) {
-    return selector.in(target);
-  }
-  
+
+  @Override
   public FieldsSelector recursively() {
-    selector.useHierarchy();
-    return this;
+    return new TruggerFieldsSelector(finder, predicate, true);
   }
-  
+
+  public Set<Field> in(Object target) {
+    return new MembersSelector<>(finder, predicate, recursively).in(target);
+  }
+
 }

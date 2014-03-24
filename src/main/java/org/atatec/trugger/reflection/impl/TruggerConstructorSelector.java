@@ -17,10 +17,8 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.reflection.ReflectionException;
-import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorSelector;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -32,32 +30,35 @@ import java.util.function.Predicate;
  */
 public class TruggerConstructorSelector implements ConstructorSelector {
 
-  private Predicate<? super Constructor> predicate;
-
-  private Class[] parameterTypes = null;
-
-  private MemberFindersRegistry registry;
+  private final Predicate<? super Constructor<?>> predicate;
+  private final Class[] parameterTypes;
+  private final MemberFindersRegistry registry;
 
   public TruggerConstructorSelector(MemberFindersRegistry registry) {
     this.registry = registry;
+    this.predicate = null;
+    this.parameterTypes = null;
   }
 
-  public void add(Predicate other) {
-    if (predicate != null) {
-      predicate = predicate.and(other);
-    } else {
-      predicate = other;
-    }
+  public TruggerConstructorSelector(MemberFindersRegistry registry,
+                                    Predicate<? super Constructor<?>> predicate,
+                                    Class[] parameterTypes) {
+    this.predicate = predicate;
+    this.parameterTypes = parameterTypes;
+    this.registry = registry;
   }
 
-  public ConstructorSelector that(Predicate<? super Constructor<?>> predicate) {
-    add(predicate);
-    return this;
+  public ConstructorSelector filter(
+      Predicate<? super Constructor<?>> predicate) {
+    return new TruggerConstructorSelector(registry, predicate, parameterTypes);
   }
 
   public ConstructorSelector withParameters(Class<?>... parameterTypes) {
-    this.parameterTypes = parameterTypes;
-    return this;
+    return new TruggerConstructorSelector(registry, predicate, parameterTypes);
+  }
+
+  public ConstructorSelector withoutParameters() {
+    return withParameters();
   }
 
   @Override
@@ -78,30 +79,6 @@ public class TruggerConstructorSelector implements ConstructorSelector {
     } else {
       return constructors.iterator().next();
     }
-  }
-
-  public ConstructorSelector withoutParameters() {
-    return withParameters();
-  }
-
-  public ConstructorSelector annotatedWith(Class<? extends Annotation> type) {
-    add(ReflectionPredicates.isAnnotatedWith(type));
-    return this;
-  }
-
-  public ConstructorSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    add(ReflectionPredicates.isNotAnnotatedWith(type));
-    return this;
-  }
-
-  public ConstructorSelector annotated() {
-    add(ReflectionPredicates.ANNOTATED);
-    return this;
-  }
-
-  public ConstructorSelector notAnnotated() {
-    add(ReflectionPredicates.NOT_ANNOTATED);
-    return this;
   }
 
 }

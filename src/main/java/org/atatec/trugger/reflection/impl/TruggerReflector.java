@@ -19,19 +19,9 @@ package org.atatec.trugger.reflection.impl;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.Reflector;
-import org.atatec.trugger.selector.ConstructorSelector;
-import org.atatec.trugger.selector.ConstructorsSelector;
-import org.atatec.trugger.selector.FieldGetterMethodSelector;
-import org.atatec.trugger.selector.FieldSelector;
-import org.atatec.trugger.selector.FieldSetterMethodSelector;
-import org.atatec.trugger.selector.FieldsSelector;
-import org.atatec.trugger.selector.GetterMethodSelector;
-import org.atatec.trugger.selector.MethodSelector;
-import org.atatec.trugger.selector.MethodsSelector;
-import org.atatec.trugger.selector.SetterMethodSelector;
+import org.atatec.trugger.selector.*;
 import org.atatec.trugger.util.Utils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.HashSet;
@@ -46,42 +36,24 @@ import java.util.stream.Collectors;
  */
 public class TruggerReflector implements Reflector {
 
-  private MemberFindersRegistry registry;
+  private final MemberFindersRegistry registry;
 
   public TruggerReflector(MemberFindersRegistry defaultRegistry) {
     this.registry = defaultRegistry;
   }
 
   public TruggerReflector() {
-    declared();
+    this(new DeclaredMemberFindersRegistry());
   }
 
   @Override
   public final Reflector visible() {
-    registry = new VisibleMemberFindersRegistry();
-    return this;
+    return new TruggerReflector(new VisibleMemberFindersRegistry());
   }
 
   @Override
   public final Reflector declared() {
-    registry = new DeclaredMemberFindersRegistry();
-    return this;
-  }
-
-  public GetterMethodSelector getterOf(String name) {
-    return new TruggerGetterMethodSelector(name, registry.methodsFinder());
-  }
-
-  public FieldGetterMethodSelector getterOf(Field field) {
-    return new TruggerFieldGetterMethodSelector(field, registry.methodsFinder());
-  }
-
-  public SetterMethodSelector setterOf(String name) {
-    return new TruggerSetterMethodSelector(name, registry.methodsFinder());
-  }
-
-  public FieldSetterMethodSelector setterOf(Field field) {
-    return new TruggerFieldSetterMethodSelector(field, registry.methodsFinder());
+    return new TruggerReflector(new DeclaredMemberFindersRegistry());
   }
 
   public ConstructorSelector constructor() {
@@ -96,20 +68,12 @@ public class TruggerReflector implements Reflector {
     return new TruggerFieldSelector(name, registry);
   }
 
-  public FieldSelector field() {
-    return new TruggerNoNamedFieldSelector(registry);
-  }
-
   public FieldsSelector fields() {
     return new TruggerFieldsSelector(registry.fieldsFinder());
   }
 
   public MethodSelector method(String name) {
     return new TruggerMethodSelector(name, registry);
-  }
-
-  public MethodSelector method() {
-    return new TruggerNoNamedMethodSelector(registry);
   }
 
   public MethodsSelector methods() {

@@ -18,7 +18,6 @@ package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -28,26 +27,11 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface FieldsSelector extends Result<Set<Field>, Object>, FieldSpecifier {
+public interface FieldsSelector extends PredicateSelector<Field>,
+    RecursionSelector, Result<Set<Field>, Object> {
 
-  FieldsSelector annotated();
-
-  FieldsSelector notAnnotated();
-
-  FieldsSelector that(Predicate<? super Field> predicate);
-
-  FieldsSelector annotatedWith(Class<? extends Annotation> type);
-
-  FieldsSelector notAnnotatedWith(Class<? extends Annotation> type);
-
-  FieldsSelector nonStatic();
+  FieldsSelector filter(Predicate<? super Field> predicate);
 
   FieldsSelector recursively();
-
-  FieldsSelector ofType(Class<?> type);
-
-  FieldsSelector assignableTo(Class<?> type);
-
-  FieldsSelector nonFinal();
 
 }

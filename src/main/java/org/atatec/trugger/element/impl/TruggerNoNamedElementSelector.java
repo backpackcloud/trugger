@@ -18,25 +18,46 @@ package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.selector.ElementSelector;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
-/** @author Marcelo Guimarães */
-public class TruggerNoNamedElementSelector extends TruggerElementSelector {
+/**
+ * @author Marcelo Guimarães
+ */
+public class TruggerNoNamedElementSelector implements ElementSelector {
+
+  private final Predicate<? super Element> predicate;
+  private final Finder<Element> finder;
 
   public TruggerNoNamedElementSelector(Finder<Element> finder) {
-    super(null, finder);
+    this.finder = finder;
+    this.predicate = null;
+  }
+
+  public TruggerNoNamedElementSelector(Finder<Element> finder,
+                                       Predicate<? super Element> predicate) {
+    this.predicate = predicate;
+    this.finder = finder;
+  }
+
+  @Override
+  public ElementSelector filter(Predicate<? super Element> predicate) {
+    return new TruggerNoNamedElementSelector(finder, predicate);
   }
 
   @Override
   public Element in(Object target) {
-    Set<Element> elements = finder().findAll().in(target);
+    Set<Element> elements = finder.findAll().in(target);
     if (elements.isEmpty()) {
       return null;
+    }
+    if (predicate == null) {
+      return elements.iterator().next();
     }
     return elements.stream()
         .filter(predicate)
         .findAny().orElse(null);
   }
-
 }

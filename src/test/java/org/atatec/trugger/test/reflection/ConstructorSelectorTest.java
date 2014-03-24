@@ -138,8 +138,8 @@ public class ConstructorSelectorTest {
 
   @Test
   public void testPredicateSelector() {
-    assertNotNull(reflect().constructor().that((c) -> true).withoutParameters().in(Object.class));
-    assertNull(reflect().constructor().that((c) -> false).withoutParameters().in(Object.class));
+    assertNotNull(reflect().constructor().filter((c) -> true).withoutParameters().in(Object.class));
+    assertNull(reflect().constructor().filter((c) -> false).withoutParameters().in(Object.class));
   }
 
   static class ParameterSelectorTest {

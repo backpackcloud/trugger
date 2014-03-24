@@ -29,13 +29,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.Reflection.fields;
 import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.GETTER;
-import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
+import static org.atatec.trugger.reflection.ReflectionPredicates.*;
 
 /**
  * A default class for finding properties in objects.
@@ -44,12 +44,18 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
  */
 public final class ObjectPropertyFinder implements Finder<Element> {
 
+  private Method searchMethod(Class type, Predicate<Method> predicate) {
+    Set<Method> candidates = reflect().methods().recursively()
+        .filter(predicate).in(type);
+    return candidates.isEmpty() ? null : candidates.iterator().next();
+  }
+
   private final ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
-      Set<Method> declaredMethods = methods().nonStatic()
-        .that(GETTER.or(SETTER))
-        .in(type);
+      Set<Method> declaredMethods = methods()
+          .filter((GETTER.or(SETTER)).and(nonStatic()))
+          .in(type);
       for (Method method : declaredMethods) {
         String name = Reflection.parsePropertyName(method);
         if (!map.containsKey(name)) {
@@ -57,11 +63,11 @@ public final class ObjectPropertyFinder implements Finder<Element> {
           map.put(prop.name(), prop);
         }
       }
-      Set<Field> fields = fields().nonStatic().in(type);
+      Set<Field> fields = fields().filter(nonStatic()).in(type);
       for (Field field : fields) {
         if (!map.containsKey(field.getName())) {
-          Method getter = reflect().getterOf(field).in(type);
-          Method setter = reflect().setterOf(field).in(type);
+          Method getter = searchMethod(type, getterOf(field));
+          Method setter = searchMethod(type, setterOf(field));
           if ((getter != null) || (setter != null)) {
             ObjectProperty prop = new ObjectProperty(field, getter, setter);
             map.put(prop.name(), prop);
@@ -75,7 +81,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
     return target -> {
       for (Class type : hierarchyOf(target)) {
         Element element = cache.get(type, propertyName);
-        if(element != null) {
+        if (element != null) {
           return element;
         }
       }

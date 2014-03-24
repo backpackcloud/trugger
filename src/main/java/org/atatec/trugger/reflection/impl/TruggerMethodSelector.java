@@ -16,13 +16,10 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.reflection.MethodPredicates;
 import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodSelector;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
 /**
@@ -32,77 +29,48 @@ import java.util.function.Predicate;
  */
 public class TruggerMethodSelector implements MethodSelector {
 
-  protected Predicate<Method> predicate;
-  private String name;
-  private boolean recursively;
-  private Class[] parameterTypes;
-  protected MemberFindersRegistry registry;
+  private final String name;
+  private final MemberFindersRegistry registry;
+  private final Class[] parameterTypes;
+  private final boolean recursively;
+  private final Predicate<? super Method> predicate;
 
   public TruggerMethodSelector(String name, MemberFindersRegistry registry) {
     this.name = name;
     this.registry = registry;
+    this.parameterTypes = null;
+    this.recursively = false;
+    this.predicate = null;
   }
 
-  protected void add(Predicate other) {
-    if (predicate != null) {
-      predicate = predicate.and(other);
-    } else {
-      predicate = other;
-    }
-  }
-
-  public TruggerMethodSelector(MemberFindersRegistry registry) {
+  public TruggerMethodSelector(String name, MemberFindersRegistry registry,
+                               Class[] parameterTypes, boolean recursively,
+                               Predicate<? super Method> predicate) {
+    this.name = name;
     this.registry = registry;
-  }
-
-  public MethodSelector nonStatic() {
-    add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
-    return this;
-  }
-
-  public MethodSelector nonFinal() {
-    add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
-    return this;
-  }
-
-  public MethodSelector that(Predicate<? super Method> predicate) {
-    add(predicate);
-    return this;
-  }
-
-  public MethodSelector annotated() {
-    add(ReflectionPredicates.ANNOTATED);
-    return this;
-  }
-
-  public MethodSelector notAnnotated() {
-    add(ReflectionPredicates.NOT_ANNOTATED);
-    return this;
-  }
-
-  public MethodSelector annotatedWith(Class<? extends Annotation> type) {
-    add(ReflectionPredicates.isAnnotatedWith(type));
-    return this;
-  }
-
-  public MethodSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    add(ReflectionPredicates.isNotAnnotatedWith(type));
-    return this;
-  }
-
-  public MethodSelector returning(Class<?> returnType) {
-    add(MethodPredicates.returns(returnType));
-    return this;
-  }
-
-  public MethodSelector withoutReturnType() {
-    add(MethodPredicates.returns(Void.TYPE));
-    return this;
-  }
-
-  public MethodSelector withParameters(final Class<?>... parameterTypes) {
     this.parameterTypes = parameterTypes;
-    return this;
+    this.recursively = recursively;
+    this.predicate = predicate;
+  }
+
+  public MethodSelector withParameters(Class<?>... parameterTypes) {
+    return new TruggerMethodSelector(name, registry, parameterTypes,
+        recursively, predicate);
+  }
+
+  public MethodSelector withoutParameters() {
+    return withParameters();
+  }
+
+  public MethodSelector recursively() {
+    return new TruggerMethodSelector(name, registry, parameterTypes,
+        true, predicate);
+  }
+
+  @Override
+  public MethodSelector filter(Predicate<? super Method> predicate) {
+    return new TruggerMethodSelector(name, registry, parameterTypes,
+        recursively, predicate);
   }
 
   public Method in(Object target) {
@@ -110,44 +78,11 @@ public class TruggerMethodSelector implements MethodSelector {
       return new MemberSelector<>(registry.methodFinder(name, parameterTypes),
           predicate, recursively).in(target);
     }
-    MembersSelector<Method> selector = new MembersSelector<Method>(registry.methodsFinder());
-    if (recursively) {
-      selector.useHierarchy();
-    }
-    add(ReflectionPredicates.named(name));
+    MembersSelector<Method> selector = new MembersSelector<>(
+        registry.methodsFinder(), predicate, recursively);
     return selector.in(target).stream()
-        .filter(predicate)
+        .filter(ReflectionPredicates.named(name))
         .findAny().orElse(null);
-  }
-
-  public MethodSelector recursively() {
-    recursively = true;
-    return this;
-  }
-
-  public MethodSelector withoutParameters() {
-    return withParameters();
-  }
-
-  /**
-   * @return <code>true</code> if recursion must be used.
-   */
-  protected final boolean useHierarchy() {
-    return recursively;
-  }
-
-  /**
-   * @return the field name for search.
-   */
-  protected final String name() {
-    return name;
-  }
-
-  /**
-   * @return the specified parameter types.
-   */
-  protected final Class[] parameterTypes() {
-    return parameterTypes;
   }
 
 }

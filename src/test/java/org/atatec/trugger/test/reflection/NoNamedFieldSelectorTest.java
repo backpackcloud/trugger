@@ -174,7 +174,7 @@ public class NoNamedFieldSelectorTest {
         return reflect().field();
       }
       public void makeSelections(FieldSelector selector) {
-        selector.that(el -> true);
+        selector.filter(el -> true);
       }
     }, SimpleObject.class);
     assertNoResult(new SelectionTestAdapter<FieldSelector, Field>() {
@@ -182,7 +182,7 @@ public class NoNamedFieldSelectorTest {
         return reflect().field();
       }
       public void makeSelections(FieldSelector selector) {
-        selector.that(el -> false);
+        selector.filter(el -> false);
       }
     }, SimpleObject.class);
   }

@@ -18,7 +18,6 @@ package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -28,17 +27,9 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface ConstructorsSelector extends AnnotatedElementSelector, PredicateSelector<Constructor<?>>,
-  Result<Set<Constructor<?>>, Object> {
+public interface ConstructorsSelector extends PredicateSelector<Constructor<?>>,
+    Result<Set<Constructor<?>>, Object> {
 
-  ConstructorsSelector that(Predicate<? super Constructor<?>> predicate);
-
-  ConstructorsSelector annotated();
-
-  ConstructorsSelector notAnnotated();
-
-  ConstructorsSelector annotatedWith(Class<? extends Annotation> type);
-
-  ConstructorsSelector notAnnotatedWith(Class<? extends Annotation> type);
+  ConstructorsSelector filter(Predicate<? super Constructor<?>> predicate);
 
 }

@@ -19,48 +19,17 @@ package org.atatec.trugger.selector;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
-import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for {@link Element} objects.
- * 
+ *
  * @author Marcelo Guimarães
  */
-public interface ElementsSelector extends ElementSpecifier, Result<Set<Element>, Object> {
-  
-  ElementsSelector annotated();
-  
-  ElementsSelector notAnnotated();
-  
-  ElementsSelector annotatedWith(Class<? extends Annotation> type);
-  
-  ElementsSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
-  ElementsSelector ofType(Class<?> type);
-  
-  ElementsSelector assignableTo(Class<?> type);
-  
-  ElementsSelector that(Predicate<? super Element> predicate);
-  
-  ElementsSelector readable();
-  
-  ElementsSelector nonReadable();
-  
-  ElementsSelector writable();
-  
-  ElementsSelector nonWritable();
-  
-  ElementsSelector nonSpecific();
-  
-  ElementsSelector specific();
-  
-  /**
-   * Selects the elements that have one of the specified names.
-   * 
-   * @return a reference to this object.
-   */
-  ElementsSelector named(String... names);
+public interface ElementsSelector extends PredicateSelector<Element>,
+    Result<Set<Element>, Object> {
+
+  ElementsSelector filter(Predicate<? super Element> predicate);
 
 }

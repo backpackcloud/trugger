@@ -34,8 +34,8 @@ public abstract class ClassElementsCache {
   private SoftReference<Map<Class, Map<String, Element>>> ref;
 
   public ClassElementsCache() {
-    this.ref = new SoftReference<Map<Class, Map<String, Element>>>(
-      new ConcurrentHashMap<Class, Map<String, Element>>(50)
+    this.ref = new SoftReference<>(
+      new ConcurrentHashMap<>(50)
     );
   }
 
@@ -43,12 +43,12 @@ public abstract class ClassElementsCache {
     Class type = Utils.resolveType(target);
     Map<Class, Map<String, Element>> map = ref.get();
     if (map == null) {
-      map = new ConcurrentHashMap<Class, Map<String, Element>>(50);
-      this.ref = new SoftReference<Map<Class, Map<String, Element>>>(map);
+      map = new ConcurrentHashMap<>(50);
+      this.ref = new SoftReference<>(map);
     }
     Map<String, Element> elementMap = map.get(type);
     if (elementMap == null) {
-      elementMap = new HashMap<String, Element>(20);
+      elementMap = new HashMap<>(20);
       map.put(type, elementMap);
       loadElements(type, elementMap);
     }

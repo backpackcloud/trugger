@@ -19,7 +19,6 @@ package org.atatec.trugger.selector;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
-import java.lang.annotation.Annotation;
 import java.util.function.Predicate;
 
 /**
@@ -27,32 +26,8 @@ import java.util.function.Predicate;
  * 
  * @author Marcelo Guimarães
  */
-public interface ElementSelector extends ElementSpecifier, Result<Element, Object> {
+public interface ElementSelector extends PredicateSelector<Element>, Result<Element, Object> {
   
-  ElementSelector readable();
-  
-  ElementSelector nonReadable();
-  
-  ElementSelector writable();
-  
-  ElementSelector nonWritable();
-  
-  ElementSelector annotated();
-  
-  ElementSelector notAnnotated();
-  
-  ElementSelector annotatedWith(Class<? extends Annotation> type);
-  
-  ElementSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
-  ElementSelector ofType(Class<?> type);
-  
-  ElementSelector assignableTo(Class<?> type);
-  
-  ElementSelector that(Predicate<? super Element> predicate);
-  
-  ElementSelector specific();
-  
-  ElementSelector nonSpecific();
+  ElementSelector filter(Predicate<? super Element> predicate);
   
 }

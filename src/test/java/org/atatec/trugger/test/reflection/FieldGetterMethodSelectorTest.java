@@ -177,7 +177,7 @@ public class FieldGetterMethodSelectorTest {
         return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.that(el -> true);
+        selector.filter(el -> true);
       }
     }, this);
     assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
@@ -185,7 +185,7 @@ public class FieldGetterMethodSelectorTest {
         return reflect().getterOf(fieldCount);
       }
       public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.that(el -> false);
+        selector.filter(el -> false);
       }
     }, this);
   }

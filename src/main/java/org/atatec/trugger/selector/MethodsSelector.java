@@ -18,47 +18,20 @@ package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for {@link Method} objects.
- * 
+ *
  * @author Marcelo Guimarães
  */
-public interface MethodsSelector extends MethodSpecifier, Result<Set<Method>, Object> {
-  
-  MethodsSelector nonStatic();
-  
-  MethodsSelector nonFinal();
-  
-  MethodsSelector that(Predicate<? super Method> predicate);
-  
-  MethodsSelector annotated();
-  
-  MethodsSelector notAnnotated();
-  
-  MethodsSelector annotatedWith(Class<? extends Annotation> type);
-  
-  MethodsSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
+public interface MethodsSelector extends PredicateSelector<Method>,
+    RecursionSelector, Result<Set<Method>, Object> {
+
+  MethodsSelector filter(Predicate<? super Method> predicate);
+
   MethodsSelector recursively();
-  
-  MethodsSelector returning(Class<?> returnType);
-  
-  MethodsSelector withoutReturnType();
-  
-  MethodsSelector withParameters(Class<?>... parameterTypes);
-  
-  MethodsSelector withoutParameters();
-  
-  /**
-   * Selects methods that have the specified name.
-   * 
-   * @return a reference to this object.
-   */
-  MethodsSelector named(String name);
-  
+
 }

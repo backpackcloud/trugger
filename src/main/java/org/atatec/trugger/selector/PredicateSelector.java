@@ -35,6 +35,6 @@ public interface PredicateSelector<T> {
    *          the predicate to match.
    * @return a reference to this object.
    */
-  PredicateSelector<T> that(Predicate<? super T> predicate);
+  PredicateSelector<T> filter(Predicate<? super T> predicate);
 
 }

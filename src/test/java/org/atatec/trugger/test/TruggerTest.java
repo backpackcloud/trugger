@@ -41,13 +41,15 @@ public class TruggerTest {
    * @param collection the collection to test.
    * @param predicate  the predicate to use.
    */
-  public static <E> void assertMatch(Collection<? extends E> collection, Predicate<? super E> predicate) {
+  public static <E> void assertMatch(Collection<? extends E> collection,
+                                     Predicate<? super E> predicate) {
     for (E element : collection) {
       assertMatch(element, predicate);
     }
   }
 
-  public static <E> void assertNotMatch(Collection<? extends E> collection, Predicate<? super E> predicate) {
+  public static <E> void assertNotMatch(Collection<? extends E> collection,
+                                        Predicate<? super E> predicate) {
     for (E element : collection) {
       assertNotMatch(element, predicate);
     }
@@ -59,16 +61,21 @@ public class TruggerTest {
    * @param element   the element to test.
    * @param predicate the predicate to use.
    */
-  public static <E> void assertMatch(E element, Predicate<? super E> predicate) {
+  public static <E> void assertMatch(E element,
+                                     Predicate<? super E> predicate) {
     assertTrue(predicate.test(element));
   }
 
-  public static <E> void assertNotMatch(E element, Predicate<? super E> predicate) {
+  public static <E> void assertNotMatch(E element,
+                                        Predicate<? super E> predicate) {
     assertFalse(predicate.test(element));
   }
 
-  /** Tests if the given collection has only elements with the given names. */
-  public static void assertElements(Collection<? extends Element> collection, String... names) {
+  /**
+   * Tests if the given collection has only elements with the given names.
+   */
+  public static void assertElements(Collection<? extends Element> collection,
+                                    String... names) {
     Set<String> elNames = new HashSet<String>(collection.size());
     for (Element el : collection) {
       elNames.add(el.name());
@@ -79,22 +86,25 @@ public class TruggerTest {
     }
   }
 
-  /** Tests if the given command throws anyThat of the specified exceptions. */
-  public static void assertThrow(Runnable command, Class<? extends Throwable>... exceptions) {
+  /**
+   * Tests if the given command throws anyThat of the specified exceptions.
+   */
+  public static void assertThrow(Class<? extends Throwable> exception,
+                                 Runnable command) {
     try {
       command.run();
       throw new AssertionFailedError("No exception thrown.");
     } catch (Throwable e) {
-      for (Class<? extends Throwable> exception : exceptions) {
-        if (exception.isAssignableFrom(e.getClass())) {
-          return;
-        }
+      if (exception.isAssignableFrom(e.getClass())) {
+        return;
       }
       throwError(e);
     }
   }
 
-  /** Tests if the given command does not throw anyThat exception. */
+  /**
+   * Tests if the given command does not throw anyThat exception.
+   */
   public static void assertNothingThrow(Runnable command) {
     try {
       command.run();
@@ -104,7 +114,8 @@ public class TruggerTest {
   }
 
   private static void throwError(Throwable e) throws AssertionFailedError {
-    AssertionFailedError error = new AssertionFailedError("Exception " + e.getClass() + " thrown.");
+    AssertionFailedError error = new AssertionFailedError("Exception "
+        + e.getClass() + " thrown.");
     error.initCause(e);
     throw error;
   }

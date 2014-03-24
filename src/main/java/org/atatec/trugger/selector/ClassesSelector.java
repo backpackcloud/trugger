@@ -16,12 +16,10 @@
  */
 package org.atatec.trugger.selector;
 
-import java.util.function.Predicate;
-
 import org.atatec.trugger.scan.ClassScanResult;
 
-import java.lang.annotation.Annotation;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for {@link Class} objects.
@@ -29,20 +27,11 @@ import java.util.Set;
  * @author Marcelo Guimarães
  * @since 2.3
  */
-public interface ClassesSelector extends ClassSpecifier, ClassScanResult<Set<Class>> {
+public interface ClassesSelector extends PredicateSelector<Class>,
+    RecursionSelector, ClassScanResult<Set<Class>> {
 
-  ClassesSelector that(Predicate<? super Class> predicate);
-
-  ClassesSelector annotatedWith(Class<? extends Annotation> type);
-
-  ClassesSelector notAnnotatedWith(Class<? extends Annotation> type);
-
-  ClassesSelector annotated();
-
-  ClassesSelector notAnnotated();
+  ClassesSelector filter(Predicate<? super Class> predicate);
 
   ClassesSelector recursively();
-
-  ClassesSelector assignableTo(Class type);
 
 }

@@ -47,7 +47,7 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
   }
 
   public TruggerElementCopier(ElementsSelector selector) {
-    this.selector = selector.readable();
+    this.selector = selector;
   }
 
   public DestinationSelector notNull() {
@@ -74,7 +74,7 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
   private void startCopy() {
     Set<Element> elements;
     if (selector == null) {
-      elements = Elements.elements().readable().in(src);
+      elements = Elements.elements().in(src);
     } else {
       elements = selector.in(src);
     }
@@ -85,9 +85,10 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
       if (src.getClass().equals(dest.getClass())) {
         destProperty = element.isWritable() ? element : null;
       } else {
-        destProperty = Elements.element(name).writable().in(dest);
+        destProperty = Elements.element(name).in(dest);
       }
-      if (destProperty != null) {
+      if (destProperty != null && element.isReadable()
+          && destProperty.isWritable()) {
         copy(transform, destProperty, element);
       }
     }

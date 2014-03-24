@@ -22,7 +22,6 @@ import org.atatec.trugger.util.Null;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.function.Predicate;
 
 /**
  * A default factory for {@link Reflector} objects.
@@ -35,18 +34,13 @@ public class TruggerReflectionFactory implements ReflectionFactory {
     return new TruggerReflector();
   }
 
-  @Override
-  public Reflector createReflector(Predicate predicate) {
-    return new TruggerPredicateReflector(predicate);
-  }
-
   public MethodInvoker createInvoker(Method method) {
     return method != null ? new TruggerMethodInvoker(method) : Null.NULL_METHOD_INVOKER;
   }
 
   public ConstructorInvoker createInvoker(Constructor<?> constructor) {
     return constructor != null ? new TruggerConstructorInvoker(constructor) :
-      Null.NULL_CONSTRUCTOR_INVOKER;
+        Null.NULL_CONSTRUCTOR_INVOKER;
   }
 
   public FieldHandler createHandler(Field field) {

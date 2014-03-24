@@ -18,10 +18,10 @@ package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.PackageScan;
+import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.selector.ClassesSelector;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,45 +32,31 @@ import java.util.stream.Collectors;
 /**
  * @author Marcelo Guimarães
  */
-public class TruggerClassesSelector extends BaseClassSelector implements ClassesSelector {
+public class TruggerClassesSelector implements ClassesSelector {
+
+  private final Scanner scanner;
+  private final ScanLevel level;
+  private final Predicate<? super Class> predicate;
 
   public TruggerClassesSelector(Scanner scanner) {
-    super(scanner);
+    this.scanner = scanner;
+    this.level = ScanLevel.PACKAGE;
+    this.predicate = null;
   }
 
-  public ClassesSelector annotated() {
-    super.annotated();
-    return this;
+  public TruggerClassesSelector(Scanner scanner, ScanLevel level,
+                                Predicate<? super Class> predicate) {
+    this.scanner = scanner;
+    this.level = level;
+    this.predicate = predicate;
   }
 
-  public ClassesSelector annotatedWith(Class<? extends Annotation> annotationType) {
-    super.annotatedWith(annotationType);
-    return this;
-  }
-
-  public ClassesSelector assignableTo(Class type) {
-    super.assignableTo(type);
-    return this;
-  }
-
-  public ClassesSelector notAnnotated() {
-    super.notAnnotated();
-    return this;
-  }
-
-  public ClassesSelector notAnnotatedWith(Class<? extends Annotation> annotationType) {
-    super.notAnnotatedWith(annotationType);
-    return this;
+  public ClassesSelector filter(Predicate<? super Class> predicate) {
+    return new TruggerClassesSelector(scanner, level, predicate);
   }
 
   public ClassesSelector recursively() {
-    super.recursively();
-    return this;
-  }
-
-  public ClassesSelector that(Predicate<? super Class> predicate) {
-    super.that(predicate);
-    return this;
+    return new TruggerClassesSelector(scanner, ScanLevel.SUBPACKAGES, predicate);
   }
 
   public Set<Class> in(String... packageNames) throws ClassScanningException {
@@ -82,7 +68,7 @@ public class TruggerClassesSelector extends BaseClassSelector implements Classes
   }
 
   public Set<Class> in(Collection<PackageScan> packagesToScan) throws ClassScanningException {
-    Set<Class> classes = new HashSet<Class>(40);
+    Set<Class> classes = new HashSet<>(40);
     try {
       for (PackageScan entry : packagesToScan) {
         classes.addAll(scanner.scanPackage(entry));
@@ -92,7 +78,7 @@ public class TruggerClassesSelector extends BaseClassSelector implements Classes
     } catch (ClassNotFoundException e) {
       throw new ClassScanningException(e);
     }
-    if(predicate != null) {
+    if (predicate != null) {
       return classes.stream().filter(predicate).collect(Collectors.toSet());
     }
     return classes;

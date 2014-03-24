@@ -18,36 +18,20 @@ package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for a single {@link Field} object assuming
  * that the name was specified before.
- * 
+ *
  * @author Marcelo Guimarães
  */
-public interface FieldSelector extends Result<Field, Object>, FieldSpecifier {
-  
-  FieldSelector annotated();
-  
-  FieldSelector notAnnotated();
-  
-  FieldSelector annotatedWith(Class<? extends Annotation> type);
-  
-  FieldSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
-  FieldSelector nonStatic();
-  
-  FieldSelector nonFinal();
-  
-  FieldSelector that(Predicate<? super Field> predicate);
-  
+public interface FieldSelector extends PredicateSelector<Field>,
+    RecursionSelector, Result<Field, Object> {
+
+  FieldSelector filter(Predicate<? super Field> predicate);
+
   FieldSelector recursively();
-  
-  FieldSelector ofType(Class<?> type);
-  
-  FieldSelector assignableTo(Class<?> type);
-  
+
 }

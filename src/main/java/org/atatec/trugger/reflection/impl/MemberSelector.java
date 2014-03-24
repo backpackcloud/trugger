@@ -16,6 +16,7 @@
  */
 package org.atatec.trugger.reflection.impl;
 
+import org.atatec.trugger.Result;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.util.Utils;
@@ -30,21 +31,20 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public class MemberSelector<T extends Member> implements org.atatec.trugger.Result<T,Object> {
+public class MemberSelector<T extends Member> implements Result<T,Object> {
 
   private final MemberFinder<T> finder;
-
-  private final Predicate<T> predicate;
-
+  private final Predicate<? super T> predicate;
   private final boolean useHierarchy;
 
-  public MemberSelector(MemberFinder<T> finder, Predicate<T> predicate, boolean useHierarchy) {
+  public MemberSelector(MemberFinder<T> finder, Predicate<? super T> predicate,
+                        boolean useHierarchy) {
     this.finder = finder;
     this.predicate = predicate;
     this.useHierarchy = useHierarchy;
   }
 
-  public MemberSelector(MemberFinder<T> finder, Predicate<T> predicate) {
+  public MemberSelector(MemberFinder<T> finder, Predicate<? super T> predicate) {
     this(finder, predicate, false);
   }
 

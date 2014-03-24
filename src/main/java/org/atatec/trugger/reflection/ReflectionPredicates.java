@@ -17,12 +17,12 @@
 package org.atatec.trugger.reflection;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
+import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+
+import static org.atatec.trugger.reflection.MethodPredicates.returns;
 
 /**
  * An utility class for helping the use of {@link Predicate} object that involves
@@ -52,7 +52,7 @@ public class ReflectionPredicates {
     String name = method.getName();
     Class<?> returnType = method.getReturnType();
     if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
-      (returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
+        (returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
       return false;
     }
     if (TO_PATTERN.matcher(name).matches()) {
@@ -80,7 +80,7 @@ public class ReflectionPredicates {
     }
     Class returnType = method.getReturnType();
     if ((method.getParameterTypes().length != 1) ||
-      !(returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
+        !(returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
       return false;
     }
     return SET_PATTERN.matcher(method.getName()).matches();
@@ -102,12 +102,43 @@ public class ReflectionPredicates {
     return SETTER.and(method -> Reflection.parsePropertyName(method).equals(propertyName));
   }
 
+  public static Predicate<Method> getterOf(Field field) {
+    return getterOf(field.getName()).and(returns(field.getType()));
+  }
+
+  public static Predicate<Method> setterOf(Field field) {
+    return setterOf(field.getName()).and(withParameters(field.getType()));
+  }
+
+  /**
+   * Returns a predicate that evaluates to <code>true</code> if the parameter
+   * types of a method equals the given types.
+   *
+   * @param parameterTypes the parameter types
+   * @return a predicate to evaluate the parameter types.
+   * @since 4.4
+   */
+  public static Predicate<Method> withParameters(Class... parameterTypes) {
+    return method -> Arrays.equals(method.getParameterTypes(), parameterTypes);
+  }
+
+  /**
+   * Returns a predicate that evaluates to <code>true</code> if a method takes
+   * no parameter.
+   *
+   * @return a predicate to evaluate the method.
+   * @since 4.4
+   */
+  public static Predicate<Method> withoutParameters() {
+    return method -> method.getParameterTypes().length == 0;
+  }
+
   /**
    * Predicate that returns <code>true</code> if a class is an <i>interface</i> and is not
    * an <i>annotation</i>.
    */
   public static final Predicate<Class> INTERFACE =
-    ClassPredicates.declare(Modifier.INTERFACE).and(notAssignableTo(Annotation.class));
+      ClassPredicates.declare(Modifier.INTERFACE).and(notAssignableTo(Annotation.class));
   /**
    * The negation of the {@link #INTERFACE} predicate.
    */
@@ -125,7 +156,7 @@ public class ReflectionPredicates {
    * Predicate that returns <code>true</code> if a class is an <i>annotation</i>.
    */
   public static final Predicate<Class> ANNOTATION =
-    ClassPredicates.declare(Modifier.INTERFACE).and(assignableTo(Annotation.class));
+      ClassPredicates.declare(Modifier.INTERFACE).and(assignableTo(Annotation.class));
   /**
    * The negation of the {@link #ANNOTATION} predicate.
    */
@@ -141,7 +172,7 @@ public class ReflectionPredicates {
    * annotated with the specified Annotation.
    */
   public static <T extends AnnotatedElement> Predicate<T> isAnnotatedWith(
-    final Class<? extends Annotation> annotationType) {
+      final Class<? extends Annotation> annotationType) {
     return element -> element.isAnnotationPresent(annotationType);
   }
 
@@ -150,7 +181,7 @@ public class ReflectionPredicates {
    * annotated with the specified Annotation.
    */
   public static <T extends AnnotatedElement> Predicate<T> isNotAnnotatedWith(
-    final Class<? extends Annotation> annotationType) {
+      final Class<? extends Annotation> annotationType) {
     return ReflectionPredicates.<T>isAnnotatedWith(annotationType).negate();
   }
 
@@ -158,7 +189,7 @@ public class ReflectionPredicates {
    * A predicate that returns <code>true</code> if the element has that annotations.
    */
   public static final Predicate<AnnotatedElement> ANNOTATED =
-    element -> element.getDeclaredAnnotations().length > 0;
+      element -> element.getDeclaredAnnotations().length > 0;
 
   /**
    * A predicate that returns <code>false</code> if the element has that annotation.
@@ -219,6 +250,10 @@ public class ReflectionPredicates {
       }
       return true;
     };
+  }
+
+  public static <T extends Member> Predicate<T> nonStatic() {
+    return dontDeclare(Modifier.STATIC);
   }
 
 }

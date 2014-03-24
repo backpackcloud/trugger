@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
+import static org.atatec.trugger.reflection.ReflectionPredicates.withoutParameters;
 
 /**
  * A builder for creating mock {@link Annotation annotations}.
@@ -148,9 +149,9 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
       predicate = (predicate == null ? named(name) : predicate.or(named(name)));
     }
     Predicate<Member> unused = predicate.negate();
-    Set<Method> methods = reflect(unused)
+    Set<Method> methods = reflect()
         .methods()
-        .withoutParameters()
+        .filter(withoutParameters().and(unused))
         .in(annotationType);
     for (Method method : methods) {
       Object defaultValue = method.getDefaultValue();

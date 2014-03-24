@@ -36,11 +36,27 @@ import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 public class MembersSelector<T extends Member> implements Result<Set<T>, Object> {
 
   private final MembersFinder<T> finder;
-  private Predicate<T> predicate;
-  private boolean useHierarchy;
+  private final Predicate<? super T> predicate;
+  private final boolean useHierarchy;
 
   public MembersSelector(MembersFinder<T> finder) {
     this.finder = finder;
+    this.predicate = null;
+    this.useHierarchy = false;
+  }
+
+  public MembersSelector(MembersFinder<T> finder,
+                         Predicate<? super T> predicate) {
+    this.predicate = predicate;
+    this.finder = finder;
+    this.useHierarchy = false;
+  }
+
+  public MembersSelector(MembersFinder<T> finder, Predicate<? super T> predicate,
+                         boolean useHierarchy) {
+    this.finder = finder;
+    this.predicate = predicate;
+    this.useHierarchy = useHierarchy;
   }
 
   public final Set<T> in(Object target) {
@@ -52,32 +68,17 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
       return applySelection(set);
     }
     Class<?> type = Utils.resolveType(target);
-    Set<T> set = new HashSet<T>(finder.find(type));
+    Set<T> set = new HashSet<>(finder.find(type));
     return applySelection(set);
   }
 
   private Set<T> applySelection(final Set<T> set) {
     if (predicate != null) {
       return set.stream()
-        .filter(predicate)
-        .collect(Collectors.toSet());
+          .filter(predicate)
+          .collect(Collectors.toSet());
     }
     return set;
-  }
-
-  /**
-   * Indicates that this selector must use the target hierarchy.
-   */
-  public final void useHierarchy() {
-    this.useHierarchy = true;
-  }
-
-  public void add(Predicate other) {
-    if (predicate != null) {
-      predicate = predicate.and(other);
-    } else {
-      predicate = other;
-    }
   }
 
 }

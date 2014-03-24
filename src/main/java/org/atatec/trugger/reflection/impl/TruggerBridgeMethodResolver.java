@@ -79,7 +79,7 @@ final class TruggerBridgeMethodResolver {
     }
     // Gather all methods with matching name and parameter size.
     Set<Method> candidateMethods = methods().recursively()
-      .that(new SimpleBridgeCandidatePredicate())
+      .filter(new SimpleBridgeCandidatePredicate())
       .in(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {

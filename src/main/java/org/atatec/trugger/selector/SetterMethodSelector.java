@@ -18,7 +18,6 @@ package org.atatec.trugger.selector;
 
 import org.atatec.trugger.Result;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -29,27 +28,18 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  * @since 1.1
  */
-public interface SetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
-  Result<Set<Method>, Object>, RecursionSelector {
+public interface SetterMethodSelector extends PredicateSelector<Method>,
+    RecursionSelector, Result<Set<Method>, Object> {
 
-  SetterMethodSelector that(Predicate<? super Method> predicate);
+  SetterMethodSelector filter(Predicate<? super Method> predicate);
 
-  SetterMethodSelector annotated();
-  
-  SetterMethodSelector notAnnotated();
-  
-  SetterMethodSelector annotatedWith(Class<? extends Annotation> type);
-
-  SetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type);
-  
   SetterMethodSelector recursively();
 
   /**
    * Selects the setter method that receives a value assignable to the given
    * type.
    *
-   * @param type
-   *          the argument type in the setter method.
+   * @param type the argument type in the setter method.
    * @return the component for selecting the method.
    */
   Result<Method, Object> forType(Class<?> type);

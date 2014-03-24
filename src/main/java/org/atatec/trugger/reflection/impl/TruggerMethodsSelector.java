@@ -16,95 +16,49 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.reflection.MethodPredicates;
-import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.MethodsSelector;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.function.Predicate;
 
 /**
  * A default implementation for the methods selector.
- * 
+ *
  * @author Marcelo Guimarães
  */
 public class TruggerMethodsSelector implements MethodsSelector {
-  
-  private MembersSelector<Method> selector;
+
+  private final MembersFinder<Method> finder;
+  private final Predicate<? super Method> predicate;
+  private final boolean recursively;
 
   public TruggerMethodsSelector(MembersFinder<Method> finder) {
-    selector = new MembersSelector<>(finder);
+    this.finder = finder;
+    this.predicate = null;
+    this.recursively = false;
   }
 
-  public MethodsSelector annotated() {
-    selector.add(ReflectionPredicates.ANNOTATED);
-    return this;
+  public TruggerMethodsSelector(MembersFinder<Method> finder,
+                                Predicate<? super Method> predicate,
+                                boolean recursively) {
+    this.finder = finder;
+    this.predicate = predicate;
+    this.recursively = recursively;
   }
-  
-  public MethodsSelector notAnnotated() {
-    selector.add(ReflectionPredicates.NOT_ANNOTATED);
-    return this;
+
+  @Override
+  public MethodsSelector filter(Predicate<? super Method> predicate) {
+    return new TruggerMethodsSelector(finder, predicate, recursively);
   }
-  
-  public MethodsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.add(ReflectionPredicates.isAnnotatedWith(type));
-    return this;
-  }
-  
-  public MethodsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.add(ReflectionPredicates.isNotAnnotatedWith(type));
-    return this;
-  }
-  
-  public MethodsSelector nonStatic() {
-    selector.add(ReflectionPredicates.dontDeclare(Modifier.STATIC));
-    return this;
-  }
-  
-  public MethodsSelector nonFinal() {
-    selector.add(ReflectionPredicates.dontDeclare(Modifier.FINAL));
-    return this;
-  }
-  
-  public MethodsSelector that(Predicate<? super Method> predicate) {
-    selector.add(predicate);
-    return this;
-  }
-  
-  public MethodsSelector named(String name) {
-    selector.add(ReflectionPredicates.named(name));
-    return this;
-  }
-  
-  public MethodsSelector withParameters(Class<?>... parameterTypes) {
-    selector.add(MethodPredicates.takes(parameterTypes));
-    return this;
-  }
-  
-  public MethodsSelector returning(Class<?> returnType) {
-    selector.add(MethodPredicates.returns(returnType));
-    return this;
-  }
-  
-  public MethodsSelector withoutReturnType() {
-    selector.add(MethodPredicates.returns(Void.TYPE));
-    return this;
-  }
-  
-  public MethodsSelector withoutParameters() {
-    return withParameters();
-  }
-  
-  public Set<Method> in(Object target) {
-    return selector.in(target);
-  }
-  
+
+  @Override
   public MethodsSelector recursively() {
-    selector.useHierarchy();
-    return this;
+    return new TruggerMethodsSelector(finder, predicate, true);
   }
-  
+
+  @Override
+  public Set<Method> in(Object target) {
+    return new MembersSelector<>(finder, predicate, recursively).in(target);
+  }
 }

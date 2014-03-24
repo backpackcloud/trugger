@@ -166,7 +166,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(ALWAYS_TRUE);
+        selector.filter(ALWAYS_TRUE);
       }
     }, AnnotatedSelectorTest.class, 2);
 
@@ -176,7 +176,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(ALWAYS_TRUE);
+        selector.filter(ALWAYS_TRUE);
       }
     }, AnnotatedSelectorTest.class, 1);
 
@@ -186,7 +186,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(ALWAYS_FALSE);
+        selector.filter(ALWAYS_FALSE);
       }
     }, AnnotatedSelectorTest.class);
 
@@ -196,7 +196,7 @@ public class ConstructorsSelectorTest {
       }
 
       public void makeSelections(ConstructorsSelector selector) {
-        selector.that(ALWAYS_FALSE);
+        selector.filter(ALWAYS_FALSE);
       }
     }, AnnotatedSelectorTest.class);
   }

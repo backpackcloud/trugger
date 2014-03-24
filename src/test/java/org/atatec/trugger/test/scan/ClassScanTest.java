@@ -53,35 +53,35 @@ public class ClassScanTest {
 
   private int interfaceTest(String... packages) {
     Set<Class> interfaces =
-        findInterfaces().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+        findInterfaces().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(interfaces, ReflectionPredicates.INTERFACE.and(declare(PUBLIC)));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
     Set<Class> classes =
-        findClasses().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+        findClasses().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(classes, ReflectionPredicates.CLASS.and(declare(PUBLIC)));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
     Set<Class> annotations =
-        findAnnotations().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+        findAnnotations().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(annotations, ReflectionPredicates.ANNOTATION.and(declare(PUBLIC)));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
     Set<Class> enums =
-        findEnums().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+        findEnums().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(enums, ReflectionPredicates.ENUM.and(declare(PUBLIC)));
     return enums.size();
   }
 
   private int allTest(String... packages) {
     Set<Class> classes =
-        findAll().that(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+        findAll().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(classes, declare(PUBLIC));
     assertFalse(classes.isEmpty());
     return classes.size();

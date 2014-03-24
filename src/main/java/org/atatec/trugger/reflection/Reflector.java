@@ -17,16 +17,7 @@
 package org.atatec.trugger.reflection;
 
 import org.atatec.trugger.Result;
-import org.atatec.trugger.selector.ConstructorSelector;
-import org.atatec.trugger.selector.ConstructorsSelector;
-import org.atatec.trugger.selector.FieldGetterMethodSelector;
-import org.atatec.trugger.selector.FieldSelector;
-import org.atatec.trugger.selector.FieldSetterMethodSelector;
-import org.atatec.trugger.selector.FieldsSelector;
-import org.atatec.trugger.selector.GetterMethodSelector;
-import org.atatec.trugger.selector.MethodSelector;
-import org.atatec.trugger.selector.MethodsSelector;
-import org.atatec.trugger.selector.SetterMethodSelector;
+import org.atatec.trugger.selector.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -90,17 +81,6 @@ public interface Reflector {
   FieldSelector field(String name);
 
   /**
-   * Reflects a field based on the further selection.
-   * <p/>
-   * This method should be used only if the selection matches a single field.
-   *
-   * @return the component used for selection.
-   *
-   * @since 2.3
-   */
-  FieldSelector field();
-
-  /**
    * Reflects all methods in a target.
    * <p/>
    * Use this method for selecting a set of methods.
@@ -121,61 +101,6 @@ public interface Reflector {
    * @return the component used for selection.
    */
   MethodSelector method(String name);
-
-  /**
-   * Reflects a method based on the further selection.
-   * <p/>
-   * This method should be used only if the selection matches a single method.
-   *
-   * @return the component used for selection.
-   *
-   * @since 2.3
-   */
-  MethodSelector method();
-
-  /**
-   * Reflects a getter method of the specified property.
-   *
-   * @param name the property name
-   *
-   * @return the component used for selection.
-   *
-   * @since 1.2
-   */
-  GetterMethodSelector getterOf(String name);
-
-  /**
-   * Reflects a getter of the given field based on its name and type.
-   *
-   * @param field the reference field.
-   *
-   * @return the supposed getter for the field.
-   *
-   * @since 1.2
-   */
-  FieldGetterMethodSelector getterOf(Field field);
-
-  /**
-   * Reflects a setter method of the specified property.
-   *
-   * @param name the property name
-   *
-   * @return the component used for selection.
-   *
-   * @since 1.2
-   */
-  SetterMethodSelector setterOf(String name);
-
-  /**
-   * Reflects a setter of the given field based on its name and type.
-   *
-   * @param field the reference field.
-   *
-   * @return the supposed setter for the field.
-   *
-   * @since 1.2
-   */
-  FieldSetterMethodSelector setterOf(Field field);
 
   /**
    * Reflects a constructor with the specified parameters in a target.

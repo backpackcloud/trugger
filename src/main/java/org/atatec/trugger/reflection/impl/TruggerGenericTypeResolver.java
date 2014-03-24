@@ -41,7 +41,7 @@ final class TruggerGenericTypeResolver {
 
   //Changed to generic type
   private static final SoftReference<Map<Class, Map<Type, Type>>> typeVariableCache =
-    new SoftReference<Map<Class, Map<Type, Type>>>(new ConcurrentHashMap<Class, Map<Type, Type>>(50));
+    new SoftReference<Map<Class, Map<Type, Type>>>(new ConcurrentHashMap<>(50));
 
   private TruggerGenericTypeResolver() {
   }
@@ -108,7 +108,7 @@ final class TruggerGenericTypeResolver {
   private static Map<Class, Map<Type, Type>> cache() {
     Map<Class, Map<Type, Type>> map = typeVariableCache.get();
     if (map == null) {
-      map = new ConcurrentHashMap<Class, Map<Type, Type>>(100);
+      map = new ConcurrentHashMap<>(100);
     }
     return map;
   }
@@ -122,7 +122,7 @@ final class TruggerGenericTypeResolver {
     Map<Type, Type> typeVariableMap = cache().get(clazz);
 
     if (typeVariableMap == null) {
-      typeVariableMap = new HashMap<Type, Type>();
+      typeVariableMap = new HashMap<>();
 
       // interfaces
       extractTypeVariablesFromGenericInterfaces(clazz.getGenericInterfaces(), typeVariableMap);

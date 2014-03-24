@@ -230,7 +230,7 @@ public class FieldSelectorTest {
         return reflect().field("i");
       }
       public void makeSelections(FieldSelector selector) {
-        selector.that(el -> true);
+        selector.filter(el -> true);
       }
     }, BaseClassTest.class);
     assertNoResult(new SelectionTestAdapter<FieldSelector, Field>() {
@@ -238,7 +238,7 @@ public class FieldSelectorTest {
         return reflect().field("i");
       }
       public void makeSelections(FieldSelector selector) {
-        selector.that(el -> false);
+        selector.filter(el -> false);
       }
     }, BaseClassTest.class);
   }

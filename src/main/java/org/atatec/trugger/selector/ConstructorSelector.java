@@ -19,7 +19,6 @@ package org.atatec.trugger.selector;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.reflection.ReflectionException;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.function.Predicate;
 
@@ -28,24 +27,15 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface ConstructorSelector extends AnnotatedElementSelector, PredicateSelector<Constructor<?>>,
-  Result<Constructor<?>, Object> {
+public interface ConstructorSelector extends PredicateSelector<Constructor<?>>,
+    Result<Constructor<?>, Object> {
 
-  ConstructorSelector annotated();
-
-  ConstructorSelector notAnnotated();
-
-  ConstructorSelector annotatedWith(Class<? extends Annotation> type);
-
-  ConstructorSelector notAnnotatedWith(Class<? extends Annotation> type);
-
-  ConstructorSelector that(Predicate<? super Constructor<?>> predicate);
+  ConstructorSelector filter(Predicate<? super Constructor<?>> predicate);
 
   /**
    * Selects the constructor that takes the specified parameter types.
    *
    * @param parameterTypes the parameter types taken by the constructor.
-   *
    * @return the component used for selection on the target.
    */
   ConstructorSelector withParameters(Class<?>... parameterTypes);
@@ -59,7 +49,7 @@ public interface ConstructorSelector extends AnnotatedElementSelector, Predicate
 
   /**
    * Selects the single constructor matching the previously specified selectors.
-   * <p/>
+   * <p>
    * This method may throw a {@link ReflectionException} if the specified selectors
    * doesn't take to a single constructor in the given target.
    *

@@ -27,10 +27,13 @@ import org.atatec.trugger.util.HashBuilder;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Set;
+import java.util.function.Predicate;
 
+import static org.atatec.trugger.reflection.MethodPredicates.returns;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.MethodPredicates.returns;
+import static org.atatec.trugger.reflection.ReflectionPredicates.*;
 
 /**
  * This class represents an object property.
@@ -97,29 +100,29 @@ final class ObjectProperty extends AbstractElement {
   }
 
   public ValueHandler in(final Object target) {
-    return new ValueHandler(){
+    return new ValueHandler() {
 
       public <E> E value() throws HandlingException {
-      if (!isReadable()) {
-        throw new UnreadableElementException(name);
+        if (!isReadable()) {
+          throw new UnreadableElementException(name);
+        }
+        try {
+          return invoke(getter).in(target).withoutArgs();
+        } catch (ReflectionException e) {
+          throw new HandlingException(e.getCause());
+        }
       }
-      try {
-        return invoke(getter).in(target).withoutArgs();
-      } catch (ReflectionException e) {
-        throw new HandlingException(e.getCause());
-      }
-    }
 
-    public void value(Object value) throws HandlingException {
-      if (!isWritable()) {
-        throw new UnwritableElementException(name);
+      public void value(Object value) throws HandlingException {
+        if (!isWritable()) {
+          throw new UnwritableElementException(name);
+        }
+        try {
+          invoke(setter).in(target).withArgs(value);
+        } catch (ReflectionException e) {
+          throw new HandlingException(e.getCause());
+        }
       }
-      try {
-        invoke(setter).in(target).withArgs(value);
-      } catch (ReflectionException e) {
-        throw new HandlingException(e.getCause());
-      }
-    }
     };
   }
 
@@ -161,11 +164,17 @@ final class ObjectProperty extends AbstractElement {
   }
 
   private void searchForSetter() {
-    setter = reflect().setterOf(name).recursively().forType(type).in(declaringClass);
+    setter = searchMethod(setterOf(name).and(withParameters(type)));
   }
 
   private void searchForGetter() {
-    getter = reflect().getterOf(name).that(returns(type)).recursively().in(declaringClass);
+    getter = searchMethod(getterOf(name).and(returns(type)));
+  }
+
+  private Method searchMethod(Predicate<Method> predicate) {
+    Set<Method> candidates = reflect().methods().recursively()
+        .filter(predicate).in(declaringClass);
+    return candidates.isEmpty() ? null : candidates.iterator().next();
   }
 
   private void searchForAnnotatedElement() {

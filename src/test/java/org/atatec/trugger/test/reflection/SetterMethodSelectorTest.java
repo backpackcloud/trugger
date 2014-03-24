@@ -173,7 +173,7 @@ public class SetterMethodSelectorTest {
         return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
-        selector.that(el -> true);
+        selector.filter(el -> true);
       }
     }, this, 2);
     assertNoResult(new SelectionTestAdapter<SetterMethodSelector, Set<Method>>() {
@@ -181,7 +181,7 @@ public class SetterMethodSelectorTest {
         return reflect().setterOf(HITS);
       }
       public void makeSelections(SetterMethodSelector selector) {
-        selector.that(el -> false);
+        selector.filter(el -> false);
       }
     }, this);
   }

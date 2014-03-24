@@ -28,19 +28,15 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  * @since 1.1
  */
-public interface GetterMethodSelector extends AnnotatedElementSelector, PredicateSelector<Method>,
-    Result<Method, Object>, RecursionSelector {
+public interface GetterMethodSelector extends PredicateSelector<Method>,
+    RecursionSelector, Result<Method, Object> {
 
   GetterMethodSelector annotated();
-  
-  GetterMethodSelector notAnnotated();
-  
+
   GetterMethodSelector annotatedWith(Class<? extends Annotation> type);
 
-  GetterMethodSelector notAnnotatedWith(Class<? extends Annotation> type);
+  GetterMethodSelector filter(Predicate<? super Method> predicate);
 
-  GetterMethodSelector that(Predicate<? super Method> predicate);
-  
   GetterMethodSelector recursively();
 
 }

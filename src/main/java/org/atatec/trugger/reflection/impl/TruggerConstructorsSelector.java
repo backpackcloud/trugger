@@ -16,10 +16,8 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ConstructorsSelector;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -29,41 +27,30 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public class TruggerConstructorsSelector implements ConstructorsSelector {
+public final class TruggerConstructorsSelector implements ConstructorsSelector {
 
-  private final MembersSelector<Constructor<?>> selector;
+  private final MembersFinder<Constructor<?>> finder;
+  private final Predicate<? super Constructor<?>> predicate;
 
   public TruggerConstructorsSelector(MembersFinder<Constructor<?>> finder) {
-    selector = new MembersSelector<Constructor<?>>(finder);
+    this.finder = finder;
+    this.predicate = null;
   }
 
-  public ConstructorsSelector annotatedWith(Class<? extends Annotation> type) {
-    selector.add(ReflectionPredicates.isAnnotatedWith(type));
-    return this;
+  public TruggerConstructorsSelector(
+      MembersFinder<Constructor<?>> finder,
+      Predicate<? super Constructor<?>> predicate) {
+    this.finder = finder;
+    this.predicate = predicate;
   }
 
-  public ConstructorsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    selector.add(ReflectionPredicates.isNotAnnotatedWith(type));
-    return this;
-  }
-
-  public ConstructorsSelector annotated() {
-    selector.add(ReflectionPredicates.ANNOTATED);
-    return this;
-  }
-
-  public ConstructorsSelector notAnnotated() {
-    selector.add(ReflectionPredicates.NOT_ANNOTATED);
-    return this;
-  }
-
-  public ConstructorsSelector that(Predicate<? super Constructor<?>> predicate) {
-    selector.add(predicate);
-    return this;
+  public ConstructorsSelector filter(
+      Predicate<? super Constructor<?>> predicate) {
+    return new TruggerConstructorsSelector(finder, predicate);
   }
 
   public Set<Constructor<?>> in(Object target) {
-    return selector.in(target);
+    return new MembersSelector<>(finder, predicate).in(target);
   }
 
 }

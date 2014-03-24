@@ -18,11 +18,8 @@ package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementPredicates;
-import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.selector.ElementsSelector;
 
-import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -34,91 +31,23 @@ import java.util.stream.Collectors;
  */
 public final class TruggerElementsSelector implements ElementsSelector {
 
-  private Predicate<? super Element> predicate;
+  private final Predicate<? super Element> predicate;
   private final Finder<Element> finder;
 
   public TruggerElementsSelector(Finder<Element> finder) {
     this.finder = finder;
+    this.predicate = null;
   }
 
-  private void add(Predicate other) {
-    if (predicate != null) {
-      predicate = predicate.and(other);
-    } else {
-      predicate = other;
-    }
-  }
-
-  public ElementsSelector annotatedWith(Class<? extends Annotation> type) {
-    add(ReflectionPredicates.isAnnotatedWith(type));
-    return this;
-  }
-
-  public ElementsSelector notAnnotatedWith(Class<? extends Annotation> type) {
-    add(ReflectionPredicates.isNotAnnotatedWith(type));
-    return this;
-  }
-
-  public ElementsSelector annotated() {
-    add(ReflectionPredicates.ANNOTATED);
-    return this;
-  }
-
-  public ElementsSelector notAnnotated() {
-    add(ReflectionPredicates.NOT_ANNOTATED);
-    return this;
-  }
-
-  public ElementsSelector ofType(Class<?> type) {
-    add(ElementPredicates.ofType(type));
-    return this;
-  }
-
-  public ElementsSelector assignableTo(Class<?> type) {
-    add(ElementPredicates.assignableTo(type));
-    return this;
+  public TruggerElementsSelector(Finder<Element> finder,
+                                 Predicate<? super Element> predicate) {
+    this.predicate = predicate;
+    this.finder = finder;
   }
 
   @Override
-  public ElementsSelector nonSpecific() {
-    add(ElementPredicates.NON_SPECIFIC);
-    return this;
-  }
-
-  @Override
-  public ElementsSelector specific() {
-    add(ElementPredicates.SPECIFIC);
-    return this;
-  }
-
-  public ElementsSelector named(String... names) {
-    add(ElementPredicates.named(names));
-    return this;
-  }
-
-  public ElementsSelector that(final Predicate<? super Element> predicate) {
-    add(predicate);
-    return this;
-  }
-
-  public ElementsSelector nonReadable() {
-    add(ElementPredicates.NON_READABLE);
-    return this;
-  }
-
-  public ElementsSelector nonWritable() {
-    add(ElementPredicates.NON_WRITABLE);
-    return this;
-  }
-
-  public ElementsSelector readable() {
-    add(ElementPredicates.READABLE);
-    return this;
-  }
-
-  public ElementsSelector writable() {
-    add(ElementPredicates.WRITABLE);
-    return this;
+  public ElementsSelector filter(Predicate<? super Element> predicate) {
+    return new TruggerElementsSelector(finder, predicate);
   }
 
   public Set<Element> in(Object target) {

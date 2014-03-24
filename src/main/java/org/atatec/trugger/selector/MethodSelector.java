@@ -16,9 +16,8 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.reflection.ReflectionException;
+import org.atatec.trugger.Result;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
@@ -28,27 +27,12 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface MethodSelector extends MethodSpecifier, org.atatec.trugger.Result<Method,Object> {
+public interface MethodSelector extends PredicateSelector<Method>,
+    RecursionSelector, Result<Method, Object> {
 
-  MethodSelector annotated();
-
-  MethodSelector notAnnotated();
-
-  MethodSelector annotatedWith(Class<? extends Annotation> type);
-
-  MethodSelector notAnnotatedWith(Class<? extends Annotation> type);
-
-  MethodSelector nonStatic();
-
-  MethodSelector nonFinal();
-
-  MethodSelector that(Predicate<? super Method> predicate);
+  MethodSelector filter(Predicate<? super Method> predicate);
 
   MethodSelector recursively();
-
-  MethodSelector returning(Class<?> returnType);
-
-  MethodSelector withoutReturnType();
 
   MethodSelector withParameters(Class<?>... parameterTypes);
 
@@ -56,12 +40,9 @@ public interface MethodSelector extends MethodSpecifier, org.atatec.trugger.Resu
 
   /**
    * Selects the single method matching the previously specified selectors.
-   * <p/>
-   * This method may throw a {@link ReflectionException} if the specified selectors
-   * doesn't take to a single method in the given target.
    *
    * @since 2.1
    */
-  Method in(Object target) throws ReflectionException;
+  Method in(Object target);
 
 }
