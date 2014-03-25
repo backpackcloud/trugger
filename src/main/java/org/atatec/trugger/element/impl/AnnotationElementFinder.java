@@ -29,7 +29,7 @@ import static org.atatec.trugger.reflection.Reflection.methods;
 
 /**
  * A default class for finding properties in annotations.
- * <p/>
+ * <p>
  * All methods declared on the annotation will be treat as a property.
  *
  * @author Marcelo Guimarães

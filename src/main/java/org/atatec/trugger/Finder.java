@@ -23,9 +23,8 @@ import java.util.Set;
  * Interface that defines a class capable of search a source for specific
  * objects.
  *
+ * @param <T> the result type
  * @author Marcelo Guimarães
- * @param <T>
- *          the result type
  * @since 2.0
  */
 public interface Finder<T> {
@@ -36,8 +35,7 @@ public interface Finder<T> {
    * The result may return <code>null</code> if no object with the specified
    * name is found.
    *
-   * @param name
-   *          the object name to find.
+   * @param name the object name to find.
    * @return the component for selecting the target.
    */
   Result<T, Object> find(String name);

@@ -36,7 +36,9 @@ public class ClassScan {
     factory = ImplementationLoader.get(ClassScannerFactory.class);
   }
 
-  /** @return a new {@link ClassScanner}. */
+  /**
+   * @return a new {@link ClassScanner}.
+   */
   public static ClassScanner newScan() {
     return factory.createClassScanner();
   }
@@ -51,7 +53,6 @@ public class ClassScan {
 
   /**
    * This method has the same effect as:
-   * <p/>
    * <pre>
    * newScan().find();
    * </pre>

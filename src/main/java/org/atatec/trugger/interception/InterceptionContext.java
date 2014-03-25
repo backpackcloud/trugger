@@ -51,7 +51,9 @@ public class InterceptionContext {
 
   private final Object target;
 
-  /** The proxy instance that the method was invoked on */
+  /**
+   * The proxy instance that the method was invoked on
+   */
   private final Object proxy;
 
   /**
@@ -85,7 +87,6 @@ public class InterceptionContext {
    * Invokes the intercepted method on the {@link #target() target} object.
    *
    * @return the return of the method
-   *
    * @throws Throwable if an error occurs in the method.
    */
   public Object invokeMethod() throws Throwable {
@@ -96,9 +97,7 @@ public class InterceptionContext {
    * Invokes the intercepted method on the given target object.
    *
    * @param target the target object
-   *
    * @return the return of the method
-   *
    * @throws Throwable if an error occurs in the method.
    */
   public Object invokeMethod(Object target) throws Throwable {
@@ -113,7 +112,6 @@ public class InterceptionContext {
 
   /**
    * @param target the target to get the method.
-   *
    * @return the intercepted method declared in the given target.
    */
   public Method methodOn(Object target) {
@@ -126,32 +124,39 @@ public class InterceptionContext {
     return targetMethod;
   }
 
-  /** @return the interceptor target or <code>null</code> if is not defined. */
+  /**
+   * @return the interceptor target or <code>null</code> if is not defined.
+   */
   public Object target() {
     return target;
   }
 
-  /** @return the arguments passed in the method invocation on the proxy instance */
+  /**
+   * @return the arguments passed in the method invocation on the proxy instance
+   */
   public Object[] args() {
     return args;
   }
 
-  /** @return the proxy instance that the method was invoked on */
+  /**
+   * @return the proxy instance that the method was invoked on
+   */
   public Object proxy() {
     return proxy;
   }
 
   /**
-   * @return the <code>Method</code> instance corresponding to the method invoked on the
-   *         proxy instance
+   * @return the <code>Method</code> instance corresponding to the method
+   * invoked on the proxy instance
    */
   public Method method() {
     return method;
   }
 
   /**
-   * @return <null></null> if the method return type is an Object or a default primitive
-   * value if it is primitive (false to boolean, 0 to long...).
+   * @return <code>null</code> if the method return type is an Object or a
+   * default primitive value if it is primitive (false to boolean, 0 to long,
+   * ...).
    */
   public Object nullReturn() {
     return nullValues.get(method.getReturnType());

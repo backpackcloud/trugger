@@ -94,7 +94,7 @@ public class ClassPredicates {
   }
 
   /**
-   * @return a predicate that checks if the given element is an array.
+   * A predicate that checks if the given element is an array.
    * @since 4.1
    */
   public static Predicate<Element> ARRAY = element -> element.type().isArray();
