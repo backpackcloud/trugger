@@ -20,9 +20,8 @@ import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.Invoker;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.ValueHandler;
-import org.atatec.trugger.exception.ExceptionHandler;
-import org.atatec.trugger.exception.ExceptionHandlers;
 import org.atatec.trugger.loader.ImplementationLoader;
+import org.atatec.trugger.reflection.impl.MethodSelectorInvoker;
 import org.atatec.trugger.selector.*;
 import org.atatec.trugger.util.ClassIterator;
 import org.atatec.trugger.util.Utils;
@@ -346,126 +345,8 @@ public final class Reflection {
    * @return the invoker
    * @since 2.8
    */
-  public static Result<Invoker, Object> invoke(final MethodSelector selector) {
-    return new MethodInvoker() {
-
-      private Object target;
-
-      private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
-
-
-      @Override
-      public Invoker in(Object instance) {
-        this.target = instance;
-        return this;
-      }
-
-      @Override
-      public <E> E withArgs(Object... args) {
-        Method method = selector.in(target);
-        return invoke(method).in(target).onError(handler).withArgs(args);
-      }
-
-      @Override
-      public <E> E withoutArgs() {
-        return withArgs();
-      }
-
-      @Override
-      public Invoker onError(ExceptionHandler handler) {
-        this.handler = handler;
-        return this;
-      }
-
-    };
-  }
-
-  /**
-   * Invokes the methods selected by the given selector.
-   *
-   * @param selector the selector for getting the methods.
-   * @return the invoker
-   * @since 2.8
-   */
-  public static Result<Invoker, Object> invoke(final MethodsSelector selector) {
-    return new MethodInvoker() {
-
-      private Object target;
-
-      private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
-
-      @Override
-      public Invoker in(Object instance) {
-        this.target = instance;
-        return this;
-      }
-
-      @Override
-      public <E> E withArgs(Object... args) {
-        Set<Method> methods = selector.in(target);
-        return invoke(methods).in(target).onError(handler).withArgs(args);
-      }
-
-      @Override
-      public <E> E withoutArgs() {
-        return withArgs();
-      }
-
-      @Override
-      public Invoker onError(ExceptionHandler handler) {
-        this.handler = handler;
-        return this;
-      }
-
-    };
-  }
-
-  /**
-   * Invokes a collection of methods that have the same parameters. The access way (static
-   * or non-static) does not matter.
-   * <p>
-   * The return type will be a {@link Collection} of {@link Object objects} containing the
-   * values based on the iteration order.
-   *
-   * @param methods the methods to invoke.
-   * @return a component for invoking the methods.
-   */
-  public static MethodInvoker invoke(final Collection<Method> methods) {
-    return new MethodInvoker() {
-
-      private Object target;
-
-      private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
-
-      public Invoker in(Object instance) {
-        this.target = instance;
-        return this;
-      }
-
-      public <E> E withArgs(Object... args) {
-        Collection results = new ArrayList();
-        for (Method method : methods) {
-          if (isStatic(method)) {
-            results.add(invoke(method).onError(handler).withArgs(args));
-          } else {
-            results.add(invoke(method).in(target).onError(handler).withArgs(args));
-          }
-        }
-        return (E) results;
-      }
-
-      public <E> E withoutArgs() {
-        return withArgs();
-      }
-
-
-      @Override
-      public Invoker onError(ExceptionHandler handler) {
-        this.handler = handler;
-        return this;
-      }
-
-    };
+  public static Result<Invoker, Object> invoke(MethodSelector selector) {
+    return new MethodSelectorInvoker(selector);
   }
 
   /**

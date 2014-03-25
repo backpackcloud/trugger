@@ -34,21 +34,27 @@ import java.lang.reflect.Method;
 public class TruggerMethodInvoker implements MethodInvoker {
 
   private final Method method;
-
-  private Object instance;
-
-  private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+  private final Object instance;
+  private final ExceptionHandler handler;
 
   public TruggerMethodInvoker(final Method method) {
     if (!method.isAccessible()) {
       Reflection.setAccessible(method);
     }
     this.method = method;
+    this.handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+    this.instance = null;
+  }
+
+  public TruggerMethodInvoker(Method method, Object instance,
+                              ExceptionHandler handler) {
+    this.method = method;
+    this.instance = instance;
+    this.handler = handler;
   }
 
   public MethodInvoker in(Object instance) {
-    this.instance = instance;
-    return this;
+    return new TruggerMethodInvoker(method, instance, handler);
   }
 
   public <E> E withArgs(Object... args) {
@@ -74,8 +80,7 @@ public class TruggerMethodInvoker implements MethodInvoker {
 
   @Override
   public Invoker onError(ExceptionHandler handler) {
-    this.handler = handler;
-    return this;
+    return new TruggerMethodInvoker(method, instance, handler);
   }
 
 }

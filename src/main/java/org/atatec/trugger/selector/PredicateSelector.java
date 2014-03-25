@@ -33,7 +33,7 @@ public interface PredicateSelector<T> {
    *
    * @param predicate
    *          the predicate to match.
-   * @return a reference to this object.
+   * @return a new selector with the given filter
    */
   PredicateSelector<T> filter(Predicate<? super T> predicate);
 

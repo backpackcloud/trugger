@@ -34,14 +34,20 @@ import java.lang.reflect.InvocationTargetException;
 public class TruggerConstructorInvoker implements ConstructorInvoker {
 
   private final Constructor<?> constructor;
-
-  private ExceptionHandler handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+  private final ExceptionHandler handler;
 
   public TruggerConstructorInvoker(final Constructor<?> constructor) {
     if (!constructor.isAccessible()) {
       Reflection.setAccessible(constructor);
     }
     this.constructor = constructor;
+    this.handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
+  }
+
+  public TruggerConstructorInvoker(Constructor<?> constructor,
+                                   ExceptionHandler handler) {
+    this.constructor = constructor;
+    this.handler = handler;
   }
 
   public <E> E withArgs(Object... args) {
@@ -67,8 +73,7 @@ public class TruggerConstructorInvoker implements ConstructorInvoker {
 
   @Override
   public Invoker onError(ExceptionHandler handler) {
-    this.handler = handler;
-    return this;
+    return new TruggerConstructorInvoker(constructor, handler);
   }
 
 }

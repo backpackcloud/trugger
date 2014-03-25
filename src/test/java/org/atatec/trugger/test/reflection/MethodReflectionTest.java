@@ -60,18 +60,6 @@ public class MethodReflectionTest {
   }
 
   @Test
-  public void invokerForCollectionTest() {
-    obj.doIt();
-    expectLastCall().once();
-    obj.foo();
-    expectLastCall().once();
-    obj.bar();
-    expectLastCall().once();
-    replay(obj);
-    invoke(methods().in(TestInterface.class)).in(obj).withoutArgs();
-  }
-
-  @Test
   public void invokerForNoMethodTest() {
     replay(obj);
     invoke(method("notDeclared")).in(obj).withoutArgs();

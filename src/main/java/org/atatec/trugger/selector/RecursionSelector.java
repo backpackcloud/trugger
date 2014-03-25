@@ -29,7 +29,7 @@ public interface RecursionSelector {
    * <p>
    * If the result is a single object, then the first one will be returned.
    *
-   * @return a reference to this object.
+   * @return a new selector with recursion enabled
    */
   RecursionSelector recursively();
 

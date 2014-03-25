@@ -30,7 +30,6 @@ public interface Invoker {
    * Invokes the object passing the given arguments.
    *
    * @param args the arguments to pass.
-   *
    * @return the invocation result.
    */
   <E> E withArgs(Object... args);
@@ -45,8 +44,7 @@ public interface Invoker {
   /**
    * Sets an exception handler to handle exceptions thrown while invoking.
    *
-   * @return a reference to this object
-   *
+   * @return an invoker that uses the given handler
    * @since 4.0
    */
   Invoker onError(ExceptionHandler handler);
