@@ -16,7 +16,6 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.reflection.ReflectionPredicates;
 import org.atatec.trugger.scan.ClassScanner;
 import org.atatec.trugger.scan.ClassScannerFactory;
 import org.atatec.trugger.scan.ResourceFinder;
@@ -54,22 +53,6 @@ public class TruggerClassScanner implements ClassScanner {
   public ClassScanner with(ClassLoader classLoader) {
     this.scanner.setClassLoader(classLoader);
     return this;
-  }
-
-  public ClassesSelector findAnnotations() {
-    return new TruggerClassesSelector(scanner).filter(ReflectionPredicates.ANNOTATION);
-  }
-
-  public ClassesSelector findEnums() {
-    return new TruggerClassesSelector(scanner).filter(ReflectionPredicates.ENUM);
-  }
-
-  public ClassesSelector findClasses() {
-    return new TruggerClassesSelector(scanner).filter(ReflectionPredicates.CLASS);
-  }
-
-  public ClassesSelector findInterfaces() {
-    return new TruggerClassesSelector(scanner).filter(ReflectionPredicates.INTERFACE);
   }
 
   public ClassesSelector find() {

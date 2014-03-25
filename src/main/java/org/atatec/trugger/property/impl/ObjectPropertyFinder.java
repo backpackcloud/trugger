@@ -36,6 +36,7 @@ import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
 import static org.atatec.trugger.reflection.Reflection.methods;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.*;
+import static org.atatec.trugger.reflection.MethodPredicates.*;
 
 /**
  * A default class for finding properties in objects.

@@ -17,9 +17,13 @@
 
 package org.atatec.trugger.reflection;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * A set of predicates to use with <code>Method</code> objects.
@@ -32,28 +36,156 @@ public class MethodPredicates {
   private MethodPredicates() {
   }
 
+  private static final Pattern TO_PATTERN = Pattern.compile("to[A-Z].*");
+  private static final Pattern GET_PATTERN = Pattern.compile("get[A-Z].*");
+  private static final Pattern SET_PATTERN = Pattern.compile("set[A-Z].*");
+  private static final Pattern IS_PATTERN = Pattern.compile("is[A-Z].*");
+
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated method has the
-   *         specified type as the return type.
+   * A predicate that returns <code>true</code> if the evaluated method is a getter
+   * method.
+   * <p>
+   * The method <strong>may</strong> have a prefix "get" or "is", take no parameter and
+   * return an object. If the method has the prefix "is", then it must return a boolean
+   * value.
+   */
+  public static final Predicate<Method> GETTER = method -> {
+    if (!Modifier.isPublic(method.getModifiers())) {
+      return false;
+    }
+    String name = method.getName();
+    Class<?> returnType = method.getReturnType();
+    if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
+        (returnType == null || returnType.equals(void.class) ||
+            returnType.equals(Void.class))) {
+      return false;
+    }
+    if (TO_PATTERN.matcher(name).matches()) {
+      return false;
+    }
+    if (name.startsWith("get")) {
+      return GET_PATTERN.matcher(name).matches();
+    } else if (name.startsWith("is")) {
+      boolean returnBoolean = (Boolean.class.equals(returnType) ||
+          boolean.class.equals(returnType));
+      return returnBoolean && IS_PATTERN.matcher(name).matches();
+    }
+    return true;
+  };
+
+  /**
+   * A predicate that returns <code>true</code> if the evaluated method is a
+   * setter method.
+   * <p>
+   * The method must have the "set" prefix, take one parameter and return no
+   * value (a void method).
+   */
+  public static final Predicate<Method> SETTER = method -> {
+    if (!Modifier.isPublic(method.getModifiers())) {
+      return false;
+    }
+    Class returnType = method.getReturnType();
+    if ((method.getParameterTypes().length != 1) ||
+        !(returnType == null || returnType.equals(void.class) ||
+            returnType.equals(Void.class))) {
+      return false;
+    }
+    return SET_PATTERN.matcher(method.getName()).matches();
+  };
+
+  /**
+   * @return a predicate that returns <code>true</code> if a method is a getter
+   * method for the specified property name.
+   */
+  public static Predicate<Method> getterOf(String propertyName) {
+    return GETTER.and(
+        method -> Reflection.parsePropertyName(method).equals(propertyName));
+  }
+
+  /**
+   * @return a predicate that returns <code>true</code> if a method is a setter
+   * method for the specified property name.
+   */
+  public static Predicate<Method> setterOf(String propertyName) {
+    return SETTER.and(
+        method -> Reflection.parsePropertyName(method).equals(propertyName));
+  }
+
+  public static Predicate<Method> getterOf(Field field) {
+    return getterOf(field.getName()).and(returns(field.getType()));
+  }
+
+  public static Predicate<Method> setterOf(Field field) {
+    return setterOf(field.getName()).and(withParameters(field.getType()));
+  }
+
+  /**
+   * Returns a predicate that evaluates to <code>true</code> if the parameter
+   * types of a method equals the given types.
+   *
+   * @param parameterTypes the parameter types
+   * @return a predicate to evaluate the parameter types.
+   * @since 5.0
+   */
+  public static Predicate<Method> withParameters(Class... parameterTypes) {
+    return method -> Arrays.equals(method.getParameterTypes(), parameterTypes);
+  }
+
+  /**
+   * Returns a predicate that evaluates to <code>true</code> if a method takes
+   * no parameter.
+   *
+   * @return a predicate to evaluate the method.
+   * @since 5.0
+   */
+  public static Predicate<Method> withoutParameters() {
+    return method -> method.getParameterTypes().length == 0;
+  }
+
+  /**
+   * @return a predicate that returns <code>true</code> if the evaluated method
+   * has the specified type as the return type.
    */
   public static Predicate<Method> returns(Class returnType) {
     return element -> element.getReturnType().equals(returnType);
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated method has the
-   *         return type assignable to the specified type.
+   * @return a predicate that returns <code>true</code> if the evaluated method
+   * has the return type assignable to the specified type.
    */
   public static Predicate<Method> returnsAssignableTo(Class returnType) {
     return element -> returnType.isAssignableFrom(element.getReturnType());
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated method takes the
-   *         specified parameters.
+   * A predicate that returns <code>true</code> if the element has annotations.
    */
-  public static Predicate<Method> takes(Class... parameterTypes) {
-    return element -> Arrays.equals(element.getParameterTypes(), parameterTypes);
+  public static final Predicate<Method> ANNOTATED =
+      element -> element.getDeclaredAnnotations().length > 0;
+
+  /**
+   * A predicate that returns <code>false</code> if the element has no
+   * annotations
+   */
+  public static final Predicate<Method> NOT_ANNOTATED = ANNOTATED.negate();
+
+  /**
+   * @return a predicate that returns <code>true</code> if the evaluated element
+   * is annotated with the specified Annotation.
+   */
+  public static Predicate<Method> annotatedWith(
+      final Class<? extends Annotation> annotationType) {
+    return element -> element.isAnnotationPresent(annotationType);
+  }
+
+  /**
+   * @return a predicate that returns <code>false</code> if the evaluated
+   * element is annotated with the specified Annotation.
+   */
+  public static Predicate<Method> notAnnotatedWith(
+      final Class<? extends Annotation> annotationType) {
+    return annotatedWith(annotationType).negate();
   }
 
 }

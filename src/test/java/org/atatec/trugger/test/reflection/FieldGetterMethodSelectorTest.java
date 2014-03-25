@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.Field;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.getterOf;
+import static org.atatec.trugger.reflection.MethodPredicates.getterOf;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

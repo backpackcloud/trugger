@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
-import static org.atatec.trugger.reflection.ReflectionPredicates.withoutParameters;
+import static org.atatec.trugger.reflection.MethodPredicates.withoutParameters;
 
 /**
  * A builder for creating mock {@link Annotation annotations}.

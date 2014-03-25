@@ -19,7 +19,8 @@ package org.atatec.trugger.reflection;
 
 import org.atatec.trugger.element.Element;
 
-import java.util.Arrays;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
 /**
@@ -32,6 +33,41 @@ public class ClassPredicates {
 
   private ClassPredicates() {
   }
+
+  /**
+   * Predicate that returns <code>true</code> if a class is an <i>interface</i> and is not
+   * an <i>annotation</i>.
+   */
+  public static final Predicate<Class> INTERFACE =
+      ClassPredicates.declare(Modifier.INTERFACE).and(notAssignableTo(Annotation.class));
+  /**
+   * The negation of the {@link #INTERFACE} predicate.
+   */
+  public static final Predicate<Class> NOT_INTERFACE = INTERFACE.negate();
+  /**
+   * Predicate that returns <code>true</code> if a class is an <i>enum</i>.
+   */
+  public static final Predicate<Class> ENUM = element -> element.isEnum();
+
+  /**
+   * The negation of the {@link #ENUM} predicate.
+   */
+  public static final Predicate<Class> NOT_ENUM = ENUM.negate();
+  /**
+   * Predicate that returns <code>true</code> if a class is an <i>annotation</i>.
+   */
+  public static final Predicate<Class> ANNOTATION =
+      ClassPredicates.declare(Modifier.INTERFACE)
+          .and(assignableTo(Annotation.class));
+  /**
+   * The negation of the {@link #ANNOTATION} predicate.
+   */
+  public static final Predicate<Class> NOT_ANNOTATION = ANNOTATION.negate();
+  /**
+   * Predicate that returns <code>true</code> if a class is not an <i>interface</i> and is
+   * not an <i>enum</i>.
+   */
+  public static final Predicate<Class> CLASS = NOT_INTERFACE.and(NOT_ENUM).and(NOT_ANNOTATION);
 
   /**
    * @return a predicate that returns <code>false</code> if the evaluated class has the
@@ -62,5 +98,21 @@ public class ClassPredicates {
    * @since 4.1
    */
   public static Predicate<Element> ARRAY = element -> element.type().isArray();
+
+  /**
+   * @return a predicate that returns <code>true</code> if the specified Class is
+   * assignable from the evaluated element.
+   */
+  public static Predicate<Class> assignableTo(Class clazz) {
+    return element -> clazz.isAssignableFrom(element);
+  }
+
+  /**
+   * @return a predicate that returns <code>true</code> if the specified Class is not
+   * assignable from the evaluated element.
+   */
+  public static Predicate<Class> notAssignableTo(final Class clazz) {
+    return assignableTo(clazz).negate();
+  }
 
 }

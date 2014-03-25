@@ -17,155 +17,18 @@
 package org.atatec.trugger.reflection;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
-import java.util.Arrays;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
-
-import static org.atatec.trugger.reflection.MethodPredicates.returns;
 
 /**
  * An utility class for helping the use of {@link Predicate} object that involves
- * Reflection.
+ * Reflection in general.
  *
  * @author Marcelo Guimarães
  */
 public class ReflectionPredicates {
-
-  private static final Pattern TO_PATTERN = Pattern.compile("to[A-Z].*");
-  private static final Pattern GET_PATTERN = Pattern.compile("get[A-Z].*");
-  private static final Pattern SET_PATTERN = Pattern.compile("set[A-Z].*");
-  private static final Pattern IS_PATTERN = Pattern.compile("is[A-Z].*");
-
-  /**
-   * A predicate that returns <code>true</code> if the evaluated method is a getter
-   * method.
-   * <p>
-   * The method <strong>may</strong> have a prefix "get" or "is", take no parameter and
-   * return an object. If the method has the prefix "is", then it must return a boolean
-   * value.
-   */
-  public static final Predicate<Method> GETTER = method -> {
-    if (!Modifier.isPublic(method.getModifiers())) {
-      return false;
-    }
-    String name = method.getName();
-    Class<?> returnType = method.getReturnType();
-    if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
-        (returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
-      return false;
-    }
-    if (TO_PATTERN.matcher(name).matches()) {
-      return false;
-    }
-    if (name.startsWith("get")) {
-      return GET_PATTERN.matcher(name).matches();
-    } else if (name.startsWith("is")) {
-      boolean returnBoolean = (Boolean.class.equals(returnType) || boolean.class.equals(returnType));
-      return returnBoolean && IS_PATTERN.matcher(name).matches();
-    }
-    return true;
-  };
-
-  /**
-   * A predicate that returns <code>true</code> if the evaluated method is a setter
-   * method.
-   * <p>
-   * The method must have the "set" prefix, take one parameter and return no value (a void
-   * method).
-   */
-  public static final Predicate<Method> SETTER = method -> {
-    if (!Modifier.isPublic(method.getModifiers())) {
-      return false;
-    }
-    Class returnType = method.getReturnType();
-    if ((method.getParameterTypes().length != 1) ||
-        !(returnType == null || returnType.equals(void.class) || returnType.equals(Void.class))) {
-      return false;
-    }
-    return SET_PATTERN.matcher(method.getName()).matches();
-  };
-
-  /**
-   * @return a predicate that returns <code>true</code> if a method is a getter method for
-   * the specified property name.
-   */
-  public static Predicate<Method> getterOf(String propertyName) {
-    return GETTER.and(method -> Reflection.parsePropertyName(method).equals(propertyName));
-  }
-
-  /**
-   * @return a predicate that returns <code>true</code> if a method is a setter method for
-   * the specified property name.
-   */
-  public static Predicate<Method> setterOf(String propertyName) {
-    return SETTER.and(method -> Reflection.parsePropertyName(method).equals(propertyName));
-  }
-
-  public static Predicate<Method> getterOf(Field field) {
-    return getterOf(field.getName()).and(returns(field.getType()));
-  }
-
-  public static Predicate<Method> setterOf(Field field) {
-    return setterOf(field.getName()).and(withParameters(field.getType()));
-  }
-
-  /**
-   * Returns a predicate that evaluates to <code>true</code> if the parameter
-   * types of a method equals the given types.
-   *
-   * @param parameterTypes the parameter types
-   * @return a predicate to evaluate the parameter types.
-   * @since 5.0
-   */
-  public static Predicate<Method> withParameters(Class... parameterTypes) {
-    return method -> Arrays.equals(method.getParameterTypes(), parameterTypes);
-  }
-
-  /**
-   * Returns a predicate that evaluates to <code>true</code> if a method takes
-   * no parameter.
-   *
-   * @return a predicate to evaluate the method.
-   * @since 5.0
-   */
-  public static Predicate<Method> withoutParameters() {
-    return method -> method.getParameterTypes().length == 0;
-  }
-
-  /**
-   * Predicate that returns <code>true</code> if a class is an <i>interface</i> and is not
-   * an <i>annotation</i>.
-   */
-  public static final Predicate<Class> INTERFACE =
-      ClassPredicates.declare(Modifier.INTERFACE).and(notAssignableTo(Annotation.class));
-  /**
-   * The negation of the {@link #INTERFACE} predicate.
-   */
-  public static final Predicate<Class> NOT_INTERFACE = INTERFACE.negate();
-  /**
-   * Predicate that returns <code>true</code> if a class is an <i>enum</i>.
-   */
-  public static final Predicate<Class> ENUM = element -> element.isEnum();
-
-  /**
-   * The negation of the {@link #ENUM} predicate.
-   */
-  public static final Predicate<Class> NOT_ENUM = ENUM.negate();
-  /**
-   * Predicate that returns <code>true</code> if a class is an <i>annotation</i>.
-   */
-  public static final Predicate<Class> ANNOTATION =
-      ClassPredicates.declare(Modifier.INTERFACE).and(assignableTo(Annotation.class));
-  /**
-   * The negation of the {@link #ANNOTATION} predicate.
-   */
-  public static final Predicate<Class> NOT_ANNOTATION = ANNOTATION.negate();
-  /**
-   * Predicate that returns <code>true</code> if a class is not an <i>interface</i> and is
-   * not an <i>enum</i>.
-   */
-  public static final Predicate<Class> CLASS = NOT_INTERFACE.and(NOT_ENUM).and(NOT_ANNOTATION);
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated element is
@@ -195,22 +58,6 @@ public class ReflectionPredicates {
    * A predicate that returns <code>false</code> if the element has that annotation.
    */
   public static final Predicate<AnnotatedElement> NOT_ANNOTATED = ANNOTATED.negate();
-
-  /**
-   * @return a predicate that returns <code>true</code> if the specified Class is
-   * assignable from the evaluated element.
-   */
-  public static Predicate<Class> assignableTo(Class clazz) {
-    return element -> clazz.isAssignableFrom(element);
-  }
-
-  /**
-   * @return a predicate that returns <code>true</code> if the specified Class is not
-   * assignable from the evaluated element.
-   */
-  public static Predicate<Class> notAssignableTo(final Class clazz) {
-    return assignableTo(clazz).negate();
-  }
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated element has a

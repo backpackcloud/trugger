@@ -25,11 +25,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.GETTER;
+import static org.atatec.trugger.reflection.MethodPredicates.GETTER;
 import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.SETTER;
-import static org.atatec.trugger.reflection.ReflectionPredicates.getterOf;
-import static org.atatec.trugger.reflection.ReflectionPredicates.setterOf;
+import static org.atatec.trugger.reflection.MethodPredicates.SETTER;
+import static org.atatec.trugger.reflection.MethodPredicates.getterOf;
+import static org.atatec.trugger.reflection.MethodPredicates.setterOf;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNotMatch;
 import static org.junit.Assert.assertFalse;

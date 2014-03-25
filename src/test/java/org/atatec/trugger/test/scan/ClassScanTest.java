@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger.test.scan;
 
-import org.atatec.trugger.reflection.ReflectionPredicates;
+import org.atatec.trugger.reflection.ClassPredicates;
 import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.test.Flag;
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 
 import static java.lang.reflect.Modifier.PUBLIC;
 import static org.atatec.trugger.reflection.ClassPredicates.declare;
-import static org.atatec.trugger.scan.ClassScan.*;
+import static org.atatec.trugger.scan.ClassScan.find;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.junit.Assert.*;
 
@@ -53,28 +53,28 @@ public class ClassScanTest {
 
   private int interfaceTest(String... packages) {
     Set<Class> interfaces = find()
-        .filter(ReflectionPredicates.INTERFACE.and(declare(PUBLIC)))
+        .filter(ClassPredicates.INTERFACE.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
     Set<Class> classes = find()
-        .filter(ReflectionPredicates.CLASS.and(declare(PUBLIC)))
+        .filter(ClassPredicates.CLASS.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
     Set<Class> annotations = find()
-        .filter(ReflectionPredicates.ANNOTATION.and(declare(PUBLIC)))
+        .filter(ClassPredicates.ANNOTATION.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
     Set<Class> enums = find()
-        .filter(ReflectionPredicates.ENUM.and(declare(PUBLIC)))
+        .filter(ClassPredicates.ENUM.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return enums.size();
   }
@@ -174,7 +174,7 @@ public class ClassScanTest {
   @Test
   public void testClassScanSubPackageInJar() {
     Set<Class> set = find()
-        .filter(ReflectionPredicates.CLASS)
+        .filter(ClassPredicates.CLASS)
         .recursively()
         .in(jarPackageNames);
 
