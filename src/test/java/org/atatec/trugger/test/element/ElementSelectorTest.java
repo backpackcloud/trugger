@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -22,16 +22,13 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.TruggerElementSelector;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTest;
 import org.junit.Test;
 
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.test.TruggerTest.element;
 import static org.atatec.trugger.util.mock.Mock.mock;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -49,223 +46,168 @@ public class ElementSelectorTest {
     replay(finder);
   }
 
-  private ElementSelector selector() {
+  private ElementSelector select() {
     return new TruggerElementSelector("name", finder);
   }
 
   @Test
   public void testAnnotatedSelector() {
     element = mock(element().annotatedWith(Flag.class));
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-    }, this);
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.annotated();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.notAnnotated();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(annotatedWith(Flag.class)).in(this)
+    );
+    assertSame(
+        element,
+        select().filter(ANNOTATED).in(this)
+    );
+    assertNull(
+        select().filter(notAnnotatedWith(Flag.class)).in(this)
+    );
+    assertNull(
+        select().filter(NOT_ANNOTATED).in(this)
+    );
   }
 
   @Test
   public void testNotAnnotatedAnnotatedSelector() {
     element = mock(element());
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-    }, this);
-
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.notAnnotated();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.annotated();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(notAnnotatedWith(Flag.class)).in(this)
+    );
+    assertSame(
+        element,
+        select().filter(NOT_ANNOTATED).in(this)
+    );
+    assertNull(
+        select().filter(annotatedWith(Flag.class)).in(this)
+    );
+    assertNull(
+        select().filter(ANNOTATED).in(this)
+    );
   }
 
   @Test
   public void testReadableSelector() {
     element = mock(element().readable());
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.readable();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.nonReadable();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(READABLE).in(this)
+    );
+    assertNull(
+        select().filter(NON_READABLE).in(this)
+    );
   }
 
   @Test
   public void testNonReadableSelector() {
     element = mock(element().nonReadable());
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.nonReadable();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.readable();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(NON_READABLE).in(this)
+    );
+    assertNull(
+        select().filter(READABLE).in(this)
+    );
   }
 
   @Test
   public void testSpecificSelector() {
     element = mock(element().specific());
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.specific();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.nonSpecific();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(SPECIFIC).in(this)
+    );
+    assertNull(
+        select().filter(NON_SPECIFIC).in(this)
+    );
   }
 
   @Test
   public void testNonSpecificSelector() {
     element = mock(element().nonSpecific());
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.nonSpecific();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.specific();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(NON_SPECIFIC).in(this)
+    );
+    assertNull(
+        select().filter(SPECIFIC).in(this)
+    );
   }
 
   @Test
   public void testWritableSelector() {
     element = mock(element().writable());
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.writable();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.nonWritable();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(WRITABLE).in(this)
+    );
+    assertNull(
+        select().filter(NON_WRITABLE).in(this)
+    );
   }
 
   @Test
   public void testNonWritableSelector() {
     element = mock(element().nonWritable());
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.nonWritable();
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.writable();
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(NON_WRITABLE).in(this)
+    );
+    assertNull(
+        select().filter(WRITABLE).in(this)
+    );
   }
 
   @Test
   public void testOfTypeSelector() {
     element = mock(element().ofType(String.class));
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.ofType(String.class);
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.ofType(Integer.class);
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.ofType(CharSequence.class);
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(ofType(String.class)).in(this)
+    );
+    assertNull(
+        select().filter(ofType(Integer.class)).in(this)
+    );
+    assertNull(
+        select().filter(ofType(CharSequence.class)).in(this)
+    );
 
     element = mock(element().ofType(int.class));
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.ofType(int.class);
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.ofType(Integer.class);
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(ofType(int.class)).in(this)
+    );
+    assertNull(
+        select().filter(ofType(Integer.class)).in(this)
+    );
   }
 
   @Test
   public void testAssignableToSelector() {
     element = mock(element().ofType(String.class));
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.assignableTo(CharSequence.class);
-      }
-    }, this);
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.assignableTo(String.class);
-      }
-    }, this);
-    assertNoResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.assignableTo(StringBuilder.class);
-      }
-    }, this);
+    assertSame(
+        element,
+        select().filter(assignableTo(String.class)).in(this)
+    );
+    assertNull(
+        select().filter(assignableTo(Integer.class)).in(this)
+    );
+    assertSame(
+        element,
+        select().filter(assignableTo(CharSequence.class)).in(this)
+    );
 
     element = mock(element().ofType(int.class));
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.assignableTo(Integer.class);
-      }
-    }, this);
-    assertResult(new Selection() {
-      public void makeSelections(ElementSelector selector) {
-        selector.assignableTo(int.class);
-      }
-    }, this);
-  }
-
-  private class Selection implements SelectionTest<ElementSelector, Element> {
-    public ElementSelector createSelector() {
-      return selector();
-    }
-    public void assertions(Element element) {
-      assertSame(ElementSelectorTest.this.element, element);
-    }
-    public void makeSelections(ElementSelector selector) {}
+    assertSame(
+        element,
+        select().filter(assignableTo(Integer.class)).in(this)
+    );
+    assertSame(
+        element,
+        select().filter(assignableTo(int.class)).in(this)
+    );
   }
 
 }

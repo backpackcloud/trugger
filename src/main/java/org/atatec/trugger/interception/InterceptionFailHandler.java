@@ -20,7 +20,7 @@ package org.atatec.trugger.interception;
 /**
  * Interface that defines a handler to deal with interception fails.
  *
- * @since 4.4
+ * @since 5.0
  */
 @FunctionalInterface
 public interface InterceptionFailHandler {

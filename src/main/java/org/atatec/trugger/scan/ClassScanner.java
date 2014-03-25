@@ -28,39 +28,11 @@ import org.atatec.trugger.selector.ClassesSelector;
 public interface ClassScanner {
 
   /**
-   * Finds only classes (not enums, annotations and interfaces).
-   *
-   * @return a selector for the operation.
-   */
-  ClassesSelector findClasses();
-
-  /**
-   * Finds only interfaces, but not annotations.
-   *
-   * @return a selector for the operation.
-   */
-  ClassesSelector findInterfaces();
-
-  /**
-   * Finds only annotations.
-   *
-   * @return a selector for the operation.
-   */
-  ClassesSelector findAnnotations();
-
-  /**
-   * Finds only enums.
-   *
-   * @return a selector for the operation.
-   */
-  ClassesSelector findEnums();
-
-  /**
    * Finds all the types (classes, enums, annotations and interfaces).
    *
    * @return a selector for the operation.
    */
-  ClassesSelector findAll();
+  ClassesSelector find();
 
   /**
    * Sets the class loader to use.

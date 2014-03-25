@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -73,6 +73,6 @@ public class GenericTypeTest {
   @Test
   public void interfaceReflectionTest() {
     Set<Class<?>> interfaces = reflect().interfaces().in(MethodsSelector.class);
-    assertEquals(6, interfaces.size());
+    assertEquals(3, interfaces.size());
   }
 }

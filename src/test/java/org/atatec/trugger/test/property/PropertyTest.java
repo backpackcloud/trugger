@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -20,7 +20,6 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.element.UnwritableElementException;
-import org.atatec.trugger.property.Properties;
 import org.atatec.trugger.property.PropertyFactory;
 import org.atatec.trugger.property.impl.TruggerPropertyFactory;
 import org.atatec.trugger.selector.ElementsSelector;
@@ -28,16 +27,7 @@ import org.atatec.trugger.test.Flag;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Set;
-
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests the properties implementations.
@@ -160,7 +150,8 @@ public class PropertyTest {
     o1.allAccess = "all1";
     o2.allAccess = "all1";
 
-    ElementsSelector selection = Elements.elements().that(ElementPredicates.ofType(boolean.class).negate());
+    ElementsSelector selection = Elements.elements()
+        .filter(ElementPredicates.ofType(boolean.class).negate());
 
     Elements.copy(selection).from(o1).notNull().to(o2);
 
@@ -170,26 +161,6 @@ public class PropertyTest {
     assertNotSame(o1.price, o2.price); //only writable
     assertFalse(o1.readable.equals(o2.readable)); // only readable
     assertTrue(o1.allAccess.equals(o2.allAccess));
-  }
-
-  @Test
-  public void selectorTest() {
-    Set<Element> props = Properties.properties().readable().in(TestObject.class);
-    assertElements(
-      props, "name", "active", "price", "allAccess", "readable", "fieldProp", "otherFieldProp", "class", "hashCode");
-    assertNotNull(Properties.property("active").readable().in(TestObject.class));
-
-    ElementsSelector selector = Properties.properties().readable().nonWritable();
-    props = selector.in(TestObject.class);
-    assertElements(props, "name", "price", "readable", "otherFieldProp", "class", "hashCode");
-    assertNotNull(Properties.property("name").readable().nonWritable().in(TestObject.class));
-    assertNotNull(Properties.property("name").readable().nonWritable().annotatedWith(Flag.class).in(
-        TestObject.class));
-    assertNull(Properties.property("name").readable().nonWritable().notAnnotatedWith(Flag.class).in(
-        TestObject.class));
-
-    props = Properties.properties().writable().in(TestObject.class);
-    assertElements(props, "active", "allAccess", "fieldProp");
   }
 
 }

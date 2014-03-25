@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -16,17 +16,12 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.selector.MethodSelector;
 import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTestAdapter;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.*;
-import static org.atatec.trugger.test.TruggerTest.*;
 import static org.junit.Assert.*;
 
 /**
@@ -34,295 +29,88 @@ import static org.junit.Assert.*;
  */
 public class MethodSelectorTest {
 
-  static class AnnotatedSelectorTest {
+  static class TestObject {
     @Flag
-    void foo(){}
-    void bar(){}
+    void foo() {
+    }
+
+    void bar() {
+    }
   }
 
   @Test
   public void testNoSelector() {
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-    }, AnnotatedSelectorTest.class);
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-    }, AnnotatedSelectorTest.class);
-  }
-
-  @Test
-  public void testAnnotatedSelector() {
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.annotated();
-      }
-      @Override
-      public void assertions(Method method) {
-        assertMatch(method, ANNOTATED);
-      }
-    }, AnnotatedSelectorTest.class);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.annotated();
-      }
-    }, AnnotatedSelectorTest.class);
-  }
-
-  @Test
-  public void testNotAnnotatedSelector() {
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.notAnnotated();
-      }
-      @Override
-      public void assertions(Method method) {
-        assertMatch(method, NOT_ANNOTATED);
-      }
-    }, AnnotatedSelectorTest.class);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.notAnnotated();
-      }
-    }, AnnotatedSelectorTest.class);
-  }
-
-  @Test
-  public void testAnnotatedWithSelector() {
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-      @Override
-      public void assertions(Method method) {
-        assertMatch(method, isAnnotatedWith(Flag.class));
-      }
-    }, AnnotatedSelectorTest.class);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-    }, AnnotatedSelectorTest.class);
-  }
-
-  @Test
-  public void testNotAnnotatedWithSelector() {
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-      @Override
-      public void assertions(Method method) {
-        assertMatch(method, isNotAnnotatedWith(Flag.class));
-      }
-    }, AnnotatedSelectorTest.class);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-    }, AnnotatedSelectorTest.class);
-  }
-
-  @Test
-  public void testNonFinalSelector() {
-    Object obj = new Object(){
-      void foo(){}
-      final void bar(){}
-    };
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.nonFinal();
-      }
-      public void assertions(Method method) {
-        assertMatch(method, dontDeclare(Modifier.FINAL));
-      }
-    }, obj);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.nonFinal();
-      }
-    }, obj);
-  }
-
-  static class NonStaticSelector {
-    void foo(){}
-    static void bar(){}
-  }
-
-  @Test
-  public void testNonStaticSelector() {
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.nonStatic();
-      }
-      public void assertions(Method method) {
-        assertMatch(method, dontDeclare(Modifier.STATIC));
-      }
-    }, NonStaticSelector.class);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.nonStatic();
-      }
-    }, NonStaticSelector.class);
+    assertNotNull(
+        reflect().method("foo").in(TestObject.class)
+    );
+    assertNotNull(
+        reflect().method("bar").in(TestObject.class)
+    );
   }
 
   @Test
   public void testRecursivelySelector() {
-    Object obj = new Object(){};
+    Object obj = new Object() {
+    }; // anonymous class
     assertNull(reflect().method("toString").in(obj));
     assertNotNull(reflect().method("toString").recursively().in(obj));
   }
 
   @Test
-  public void testReturnTypeSelector() {
-    Object obj = new Object(){
-      void foo(){}
-      int bar(){return 0;}
-    };
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.withoutReturnType();
-      }
-      public void assertions(Method method) {
-        assertEquals(Void.TYPE, method.getReturnType());
-      }
-    }, obj);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.withoutReturnType();
-      }
-    }, obj);
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.returning(int.class);
-      }
-      public void assertions(Method method) {
-        assertEquals(int.class, method.getReturnType());
-      }
-    }, obj);
-  }
-
-  @Test
   public void testPredicateSelector() {
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("toString");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.that(el -> true);
-      }
-    }, Object.class);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("toString");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.that(el -> false);
-      }
-    }, Object.class);
+    assertNotNull(
+        reflect().method("toString").filter(el -> true).in(Object.class)
+    );
+    assertNull(
+        reflect().method("toString").filter(el -> false).in(Object.class)
+    );
   }
 
   @Test
   public void testParameterSelector() throws Exception {
-    Object obj = new Object(){
-      void foo(boolean b){}
-      void foo2(Boolean b){}
-      void bar(boolean b, boolean bool){}
+    Object obj = new Object() {
+      void foo(boolean b) {
+      }
+
+      void foo2(Boolean b) {
+      }
+
+      void bar(boolean b, boolean bool) {
+      }
     };
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.withParameters(boolean.class);
-      }
-      public void assertions(Method method) {
-        assertArrayEquals(new Class[]{boolean.class}, method.getParameterTypes());
-      }
-    }, obj);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.withParameters(Boolean.class);
-      }
-    }, obj);
-    assertNoResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("foo2");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.withParameters(boolean.class);
-      }
-    }, obj);
-    assertResult(new SelectionTestAdapter<MethodSelector, Method>(){
-      public MethodSelector createSelector() {
-        return reflect().method("bar");
-      }
-      public void makeSelections(MethodSelector selector) {
-        selector.withParameters(boolean.class, boolean.class);
-      }
-      public void assertions(Method method) {
-        assertArrayEquals(new Class[]{boolean.class, boolean.class}, method.getParameterTypes());
-      }
-    }, obj);
+
+    Method method = reflect().method("foo")
+        .withParameters(boolean.class)
+        .in(obj);
+    assertNotNull(method);
+    assertArrayEquals(new Class[]{boolean.class}, method.getParameterTypes());
+    method = reflect().method("foo2")
+        .withParameters(Boolean.class)
+        .in(obj);
+    assertNotNull(method);
+    assertArrayEquals(new Class[]{Boolean.class}, method.getParameterTypes());
+
+    assertNull(
+        reflect().method("foo2")
+            .withParameters(boolean.class)
+            .in(obj)
+    );
+
+    method = reflect().method("bar")
+        .withParameters(boolean.class, boolean.class)
+        .in(obj);
+    assertNotNull(method);
+    assertArrayEquals(new Class[]{boolean.class, boolean.class}, method.getParameterTypes());
   }
 
   @Test
   public void precedenceTest() {
-    Object o = new Object(){
+    Object o = new Object() {
       public String toString() {
         return super.toString();
-      };
+      }
+
+      ;
     };
     Method method1 = reflect().method("toString").in(Object.class);
     Method method2 = reflect().method("toString").in(o);

@@ -1,13 +1,16 @@
-Version 4.4
+Version 5.0
 - Major Changes
   - Java 8
     - Removed Predicate, Iteration and Date modules
+    - Removed the tons of selector classes (lambdas are now a good solution) and
+      everything are now centred in "filter" methods
   - Renamed Invoker#handlingExceptionsWith to onError
   - Unique searches no longer throws exceptions if two or
     more results are found
   - Reformulated the Interception module
   - Removed the CompositeExceptionHandler (with lambdas, this
     feature can be achieved much more easily)
+  - Immutable classes
 - Minor Changes
   - Removed non used classes
 

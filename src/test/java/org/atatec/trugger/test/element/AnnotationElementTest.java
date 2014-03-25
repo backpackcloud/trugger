@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -70,11 +70,7 @@ public class AnnotationElementTest {
     final Element specific = element("bool").in(annotation);
     assertEquals(boolean.class, specific.type());
     assertEquals(false, specific.value());
-    assertThrow(new Runnable(){
-      public void run() {
-        specific.value(true);
-      }
-    }, HandlingException.class);
+    assertThrow(HandlingException.class, () -> specific.value(true));
   }
 
   private void assertAnnotationElement(Element element) {

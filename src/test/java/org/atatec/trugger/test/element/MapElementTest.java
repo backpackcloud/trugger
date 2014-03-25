@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -16,24 +16,18 @@
  */
 package org.atatec.trugger.test.element;
 
-import static org.atatec.trugger.element.Elements.element;
-import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.atatec.trugger.test.TruggerTest.assertNothingThrow;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.atatec.trugger.HandlingException;
+import org.atatec.trugger.element.Element;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
-
-import org.junit.Test;
+import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.element.Elements.elements;
+import static org.atatec.trugger.test.TruggerTest.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -74,15 +68,11 @@ public class MapElementTest {
     final Element element = element("obj.bundle.framework").in(map3);
     assertTrue(element.isSpecific());
     assertEquals("trugger", element.value());
-    assertThrow(new Runnable() {
-      
-      public void run() {
-        element.value("none");
-      }
-    }, HandlingException.class);
+    assertThrow(HandlingException.class, () -> element.value("none"));
   }
   
-  private void testMap(final Map map1, final Map map2, String key, Object value1, Object value2) {
+  private void testMap(final Map map1, final Map map2, String key,
+                       Object value1, Object value2) {
     final Element element = element(key).in(map1);
     assertNotNull(element);
     assertTrue(element.isSpecific());

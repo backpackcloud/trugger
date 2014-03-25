@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -17,124 +17,34 @@
 package org.atatec.trugger.test.reflection;
 
 import org.atatec.trugger.reflection.ReflectionException;
-import org.atatec.trugger.selector.ConstructorSelector;
 import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTest;
-import org.atatec.trugger.test.SelectionTestAdapter;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class ConstructorSelectorTest {
 
-	static class AnnotatedSelectorTest {
+	static class TestObject {
 		@Flag
-		AnnotatedSelectorTest() {}
-		public AnnotatedSelectorTest(int i) {}
+    TestObject() {}
+		public TestObject(int i) {}
 	}
-
-	@Test
-  public void testNoSelector() {
-    assertResult(new SelectionTestAdapter(){
-      public Object createSelector() {
-        return reflect().constructor();
-      }
-    }, Object.class);
-    assertResult(new SelectionTestAdapter(){
-      public Object createSelector() {
-        return reflect().visible().constructor();
-      }
-    }, Object.class);
-  }
 
 	@Test(expected = ReflectionException.class)
 	public void testInsufficientSelector() {
-	  reflect().constructor().in(AnnotatedSelectorTest.class);
+	  reflect().constructor().in(TestObject.class);
 	}
 
 	@Test
 	public void testVisibleSelector() {
-    assertNotNull(reflect().visible().constructor().in(AnnotatedSelectorTest.class));
+    assertNotNull(reflect().visible().constructor().in(TestObject.class));
 	}
-
-	@Test
-	public void testAnnoatedSelector() {
-	  SelectionTest<ConstructorSelector, Constructor> selection = new SelectionTest<ConstructorSelector, Constructor>() {
-      public void makeSelections(ConstructorSelector selector) {
-        selector.annotated();
-      }
-      public ConstructorSelector createSelector() {
-        return reflect().constructor();
-      }
-      public void assertions(Constructor constructor) {
-        assertTrue(constructor.isAnnotationPresent(Flag.class));
-      }
-    };
-    assertResult(selection, AnnotatedSelectorTest.class);
-    assertNull(reflect().visible().constructor().annotated().in(AnnotatedSelectorTest.class));
-	}
-
-	@Test
-	public void testNotAnnoatedSelector() {
-	  SelectionTest<ConstructorSelector, Constructor> selection = new SelectionTest<ConstructorSelector, Constructor>() {
-      public void makeSelections(ConstructorSelector selector) {
-        selector.notAnnotated();
-      }
-      public ConstructorSelector createSelector() {
-        return reflect().constructor();
-      }
-      public void assertions(Constructor constructor) {
-        assertFalse(constructor.isAnnotationPresent(Flag.class));
-      }
-    };
-    assertResult(selection, AnnotatedSelectorTest.class);
-    assertNotNull(reflect().visible().constructor().notAnnotated().in(AnnotatedSelectorTest.class));
-	}
-
-	@Test
-  public void testAnnoatedWithSelector() {
-	  SelectionTest<ConstructorSelector, Constructor> selection = new SelectionTest<ConstructorSelector, Constructor>() {
-      public void makeSelections(ConstructorSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-      public ConstructorSelector createSelector() {
-        return reflect().constructor();
-      }
-      public void assertions(Constructor constructor) {
-        assertTrue(constructor.isAnnotationPresent(Flag.class));
-      }
-    };
-    assertResult(selection, AnnotatedSelectorTest.class);
-    assertNull(reflect().visible().constructor().annotatedWith(Flag.class).in(AnnotatedSelectorTest.class));
-  }
-
-  @Test
-  public void testNotAnnoatedWithSelector() {
-    SelectionTest<ConstructorSelector, Constructor> selection = new SelectionTest<ConstructorSelector, Constructor>() {
-      public void makeSelections(ConstructorSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-      public ConstructorSelector createSelector() {
-        return reflect().constructor();
-      }
-      public void assertions(Constructor constructor) {
-        assertFalse(constructor.isAnnotationPresent(Flag.class));
-      }
-    };
-    assertResult(selection, AnnotatedSelectorTest.class);
-    assertNotNull(reflect().visible().constructor().notAnnotatedWith(Flag.class).in(AnnotatedSelectorTest.class));
-  }
 
   @Test
   public void testPredicateSelector() {

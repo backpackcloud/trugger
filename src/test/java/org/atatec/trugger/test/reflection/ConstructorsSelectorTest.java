@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -16,189 +16,63 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.reflection.ReflectionPredicates;
-import org.atatec.trugger.selector.ConstructorsSelector;
 import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTestAdapter;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-import java.util.Set;
 import java.util.function.Predicate;
 
+import static junit.framework.Assert.assertEquals;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.*;
-import static org.junit.Assert.assertTrue;
 
-/** @author Marcelo Varella Barca Guimarães */
+/**
+ * @author Marcelo Varella Barca Guimarães
+ */
 public class ConstructorsSelectorTest {
 
-  static final Predicate ALWAYS_TRUE = el -> true;
-  static final Predicate ALWAYS_FALSE = el -> false;
+  static final Predicate ALL = el -> true;
+  static final Predicate NONE = el -> false;
 
-  static class AnnotatedSelectorTest {
+  static class TestObject {
     @Flag
-    AnnotatedSelectorTest() {
+    TestObject() {
     }
 
-    public AnnotatedSelectorTest(int i) {
+    public TestObject(int i) {
     }
   }
 
   @Test
   public void testNoSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-    }, AnnotatedSelectorTest.class, 2);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().visible().constructors();
-      }
-    }, AnnotatedSelectorTest.class, 1);
-  }
-
-  @Test
-  public void testAnnoatedSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.annotated();
-      }
-
-      public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.ANNOTATED);
-      }
-    }, AnnotatedSelectorTest.class, 1);
-    assertTrue(reflect().visible().constructors().annotated().in(AnnotatedSelectorTest.class).isEmpty());
-  }
-
-  @Test
-  public void testNotAnnoatedSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.notAnnotated();
-      }
-
-      public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
-      }
-    }, AnnotatedSelectorTest.class, 1);
-
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().visible().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.notAnnotated();
-      }
-
-      public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.NOT_ANNOTATED);
-      }
-    }, AnnotatedSelectorTest.class, 1);
-  }
-
-  @Test
-  public void testAnnoatedWithSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-
-      public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.isAnnotatedWith(Flag.class));
-      }
-    }, AnnotatedSelectorTest.class, 1);
-    assertTrue(
-      reflect().visible().constructors().annotatedWith(Flag.class)
-        .in(AnnotatedSelectorTest.class).isEmpty());
-  }
-
-  @Test
-  public void testNotAnnoatedWithSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-
-      public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.isNotAnnotatedWith(Flag.class));
-      }
-    }, AnnotatedSelectorTest.class, 1);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().visible().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-
-      public void assertions(Set<Constructor> set) {
-        assertMatch(set, ReflectionPredicates.isNotAnnotatedWith(Flag.class));
-      }
-    }, AnnotatedSelectorTest.class, 1);
+    assertEquals(
+        2,
+        reflect().constructors().in(TestObject.class).size()
+    );
+    assertEquals(
+        1,
+        reflect().visible().constructors().in(TestObject.class).size()
+    );
   }
 
   @Test
   public void testPredicateSelector() {
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.filter(ALWAYS_TRUE);
-      }
-    }, AnnotatedSelectorTest.class, 2);
-
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().visible().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.filter(ALWAYS_TRUE);
-      }
-    }, AnnotatedSelectorTest.class, 1);
-
-    assertNoResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.filter(ALWAYS_FALSE);
-      }
-    }, AnnotatedSelectorTest.class);
-
-    assertNoResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>() {
-      public ConstructorsSelector createSelector() {
-        return reflect().visible().constructors();
-      }
-
-      public void makeSelections(ConstructorsSelector selector) {
-        selector.filter(ALWAYS_FALSE);
-      }
-    }, AnnotatedSelectorTest.class);
+    assertEquals(
+        2,
+        reflect().constructors().filter(ALL).in(TestObject.class).size()
+    );
+    assertEquals(
+        1,
+        reflect().visible().constructors().filter(ALL).in(TestObject.class)
+            .size()
+    );
+    assertEquals(
+        0,
+        reflect().constructors().filter(NONE).in(TestObject.class).size()
+    );
+    assertEquals(
+        0,
+        reflect().visible().constructors().filter(NONE).in(TestObject.class)
+            .size()
+    );
   }
 
 }

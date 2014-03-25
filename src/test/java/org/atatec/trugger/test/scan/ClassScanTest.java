@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -41,7 +41,7 @@ import static org.junit.Assert.*;
 public class ClassScanTest {
 
   private String filePackageName = "org.atatec.trugger.test.scan.classes";
-  private String[] jarPackageNames = new String[] { "org.junit.runner", "org.easymock" };
+  private String[] jarPackageNames = new String[]{"org.junit.runner", "org.easymock"};
 
   private Predicate<Class> filePackagePredicate =
       element -> element.getPackage().getName().startsWith(filePackageName);
@@ -52,36 +52,36 @@ public class ClassScanTest {
   };
 
   private int interfaceTest(String... packages) {
-    Set<Class> interfaces =
-        findInterfaces().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(interfaces, ReflectionPredicates.INTERFACE.and(declare(PUBLIC)));
+    Set<Class> interfaces = find()
+        .filter(ReflectionPredicates.INTERFACE.and(declare(PUBLIC)))
+        .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
-    Set<Class> classes =
-        findClasses().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(classes, ReflectionPredicates.CLASS.and(declare(PUBLIC)));
+    Set<Class> classes = find()
+        .filter(ReflectionPredicates.CLASS.and(declare(PUBLIC)))
+        .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
-    Set<Class> annotations =
-        findAnnotations().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(annotations, ReflectionPredicates.ANNOTATION.and(declare(PUBLIC)));
+    Set<Class> annotations = find()
+        .filter(ReflectionPredicates.ANNOTATION.and(declare(PUBLIC)))
+        .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
-    Set<Class> enums =
-        findEnums().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(enums, ReflectionPredicates.ENUM.and(declare(PUBLIC)));
+    Set<Class> enums = find()
+        .filter(ReflectionPredicates.ENUM.and(declare(PUBLIC)))
+        .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return enums.size();
   }
 
   private int allTest(String... packages) {
     Set<Class> classes =
-        findAll().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+        find().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(classes, declare(PUBLIC));
     assertFalse(classes.isEmpty());
     return classes.size();
@@ -117,8 +117,8 @@ public class ClassScanTest {
   }
 
   private void scanLevelTest(String packageName) {
-    Set<Class> packageClasses = findAll().in(packageName);
-    Set<Class> subpackageClasses = findAll().recursively().in(packageName);
+    Set<Class> packageClasses = find().in(packageName);
+    Set<Class> subpackageClasses = find().recursively().in(packageName);
 
     assertTrue(packageClasses.size() < subpackageClasses.size());
   }
@@ -144,40 +144,8 @@ public class ClassScanTest {
   }
 
   @Test
-  public void testClassScanPacakgeInFile() {
-    Set<Class> set = findClasses().in(filePackageName);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testAnnotationScanPacakgeInFile() {
-    Set<Class> set = findAnnotations().in(filePackageName);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testEnumScanPacakgeInFile() {
-    Set<Class> set = findEnums().in(filePackageName);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyEnum.class));
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testInterfaceScanPacakgeInFile() {
-    Set<Class> set = findInterfaces().in(filePackageName);
-    assertEquals(1, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyInterface.class));
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testScanPacakgeInFile() {
-    Set<Class> set = findAll().in(filePackageName);
+  public void testScanPackageInFile() {
+    Set<Class> set = find().in(filePackageName);
     assertEquals(4, set.size());
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
@@ -188,48 +156,8 @@ public class ClassScanTest {
   }
 
   @Test
-  public void testClassScanSubPacakgeInFile() {
-    Set<Class> set = findClasses().recursively().in(filePackageName);
-    assertEquals(2, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyClass2.class));
-
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testAnnotationScanSubPacakgeInFile() {
-    Set<Class> set = findAnnotations().recursively().in(filePackageName);
-    assertEquals(2, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyAnnotation2.class));
-
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testClassEnumSubPacakgeInFile() {
-    Set<Class> set = findEnums().recursively().in(filePackageName);
-    assertEquals(2, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyEnum.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyEnum2.class));
-
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testInterfaceScanSubPacakgeInFile() {
-    Set<Class> set = findInterfaces().recursively().in(filePackageName);
-    assertEquals(2, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyInterface.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyInterface2.class));
-
-    assertMatch(set, filePackagePredicate);
-  }
-
-  @Test
-  public void testScanSubPacakgeInFile() {
-    Set<Class> set = findAll().recursively().in(filePackageName);
+  public void testScanSubPackageInFile() {
+    Set<Class> set = find().recursively().in(filePackageName);
     assertEquals(8, set.size());
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyClass2.class));
@@ -244,10 +172,12 @@ public class ClassScanTest {
   }
 
   @Test
-  public void testClassScanSubPacakgeInJar() {
-    Set<Class> set = findClasses().recursively().in(jarPackageNames);
+  public void testClassScanSubPackageInJar() {
+    Set<Class> set = find()
+        .filter(ReflectionPredicates.CLASS)
+        .recursively()
+        .in(jarPackageNames);
 
-    assertMatch(set, ReflectionPredicates.CLASS);
     assertMatch(set, jarPackagePredicate);
 
     assertTrue(set.contains(org.junit.runner.manipulation.NoTestsRemainException.class));
@@ -322,52 +252,8 @@ public class ClassScanTest {
   }
 
   @Test
-  public void testAnnotationScanSubPacakgeInJar() {
-    Set<Class> set = findAnnotations().recursively().in(jarPackageNames);
-
-    assertMatch(set, ReflectionPredicates.ANNOTATION);
-    assertMatch(set, jarPackagePredicate);
-
-    assertTrue(set.contains(org.junit.runner.RunWith.class));
-  }
-
-  @Test
-  public void testInterfaceScanSubPacakgeInJar() {
-    Set<Class> set = findInterfaces().recursively().in(jarPackageNames);
-
-    assertMatch(set, ReflectionPredicates.INTERFACE);
-    assertMatch(set, jarPackagePredicate);
-
-    assertTrue(set.contains(org.junit.runner.manipulation.Filterable.class));
-    assertTrue(set.contains(org.junit.runner.manipulation.Sortable.class));
-    assertTrue(set.contains(org.junit.runner.Describable.class));
-
-    assertTrue(set.contains(org.easymock.internal.ILegacyMatcherMethods.class));
-    assertTrue(set.contains(org.easymock.internal.ILegacyMethods.class));
-    assertTrue(set.contains(org.easymock.internal.IMocksBehavior.class));
-    assertTrue(set.contains(org.easymock.internal.IMocksControlState.class));
-    assertTrue(set.contains(org.easymock.internal.IProxyFactory.class));
-    assertTrue(set.contains(org.easymock.ArgumentsMatcher.class));
-    assertTrue(set.contains(org.easymock.IAnswer.class));
-    assertTrue(set.contains(org.easymock.IArgumentMatcher.class));
-    assertTrue(set.contains(org.easymock.IExpectationSetters.class));
-    assertTrue(set.contains(org.easymock.IMocksControl.class));
-  }
-
-  @Test
-  public void testEnumScanSubPacakgeInJar() {
-    Set<Class> set = findEnums().recursively().in(jarPackageNames);
-
-    assertMatch(set, ReflectionPredicates.ENUM);
-    assertMatch(set, jarPackagePredicate);
-
-    assertTrue(set.contains(org.easymock.CaptureType.class));
-    assertTrue(set.contains(org.easymock.LogicalOperator.class));
-  }
-
-  @Test
-  public void testScanSubPacakgeInJar() {
-    Set<Class> set = findAll().recursively().in(jarPackageNames);
+  public void testScanSubPackageInJar() {
+    Set<Class> set = find().recursively().in(jarPackageNames);
 
     assertMatch(set, jarPackagePredicate);
 

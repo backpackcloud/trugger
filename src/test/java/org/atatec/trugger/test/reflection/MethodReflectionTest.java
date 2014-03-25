@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -17,18 +17,12 @@
 package org.atatec.trugger.test.reflection;
 
 import org.atatec.trugger.reflection.Reflector;
-import org.atatec.trugger.test.Flag;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.atatec.trugger.reflection.Reflection.invoke;
-import static org.atatec.trugger.reflection.Reflection.method;
-import static org.atatec.trugger.reflection.Reflection.methods;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.atatec.trugger.reflection.Reflection.*;
+import static org.easymock.EasyMock.*;
 
 /**
  * A class for testing method reflection by the {@link Reflector}.
@@ -81,7 +75,6 @@ public class MethodReflectionTest {
   public void invokerForNoMethodTest() {
     replay(obj);
     invoke(method("notDeclared")).in(obj).withoutArgs();
-    invoke(methods().annotatedWith(Flag.class)).in(TestInterface.class).withoutArgs();
   }
 
 }

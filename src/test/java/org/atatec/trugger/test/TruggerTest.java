@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -17,7 +17,6 @@
 package org.atatec.trugger.test;
 
 import junit.framework.AssertionFailedError;
-import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
 import java.util.Collection;
@@ -118,65 +117,6 @@ public class TruggerTest {
         + e.getClass() + " thrown.");
     error.initCause(e);
     throw error;
-  }
-
-  public static void assertNoResult(Object result) {
-    if (result instanceof Collection) {
-      assertTrue(((Collection) result).isEmpty());
-    } else {
-      assertNull(result);
-    }
-  }
-
-  public static void assertResult(Object result) {
-    if (result instanceof Collection) {
-      assertFalse(((Collection) result).isEmpty());
-    } else {
-      assertNotNull(result);
-    }
-  }
-
-  public static void assertResult(Collection result, int count) {
-    assertResult(result);
-    assertEquals(count, result.size());
-  }
-
-  public static <T extends Result, E> void assertResult(SelectionTest<T, E> test, Object target) {
-    T result = test.createSelector();
-    test.makeSelections(result);
-    Object obj = result.in(target);
-    if (obj instanceof Collection) {
-      assertFalse(((Collection) obj).isEmpty());
-    } else {
-      assertNotNull(obj);
-    }
-  }
-
-  public static <T extends Result, E extends Collection> void assertResult(final SelectionTest<T, E> test, Object target, final int size) {
-    assertResult(new SelectionTest<T, E>() {
-      public T createSelector() {
-        return test.createSelector();
-      }
-
-      public void makeSelections(T selector) {
-        test.makeSelections(selector);
-      }
-
-      public void assertions(E col) {
-        assertEquals(size, col.size());
-      }
-    }, target);
-  }
-
-  public static <T extends Result, E> void assertNoResult(SelectionTest<T, E> test, Object target) {
-    T result = test.createSelector();
-    test.makeSelections(result);
-    Object obj = result.in(target);
-    if (obj instanceof Collection) {
-      assertTrue(((Collection) obj).isEmpty());
-    } else {
-      assertNull(obj);
-    }
   }
 
   public static ElementMock element() {

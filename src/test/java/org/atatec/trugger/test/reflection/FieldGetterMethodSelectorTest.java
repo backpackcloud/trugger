@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -16,19 +16,16 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.selector.FieldGetterMethodSelector;
 import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.SelectionTestAdapter;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertNoResult;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
+import static org.atatec.trugger.reflection.ReflectionPredicates.getterOf;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -60,134 +57,43 @@ public class FieldGetterMethodSelectorTest {
   }
 
   @Test
-  public void testNoSelector() {
-    assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-    }, this);
-    assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldHits);
-      }
-    }, this);
-    assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-    }, Object.class);
-  }
-
-  @Test
-  public void testAnnotatedSelector() {
-    assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.annotated();
-      }
-      public void assertions(Method method) {
-        assertTrue(method.getDeclaredAnnotations().length > 0);
-      }
-    }, this);
-    assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldHits);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.annotated();
-      }
-    }, this);
-  }
-
-  @Test
-  public void testNotAnnotatedSelector() {
-    assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldHits);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.notAnnotated();
-      }
-      public void assertions(Method method) {
-        assertTrue(method.getDeclaredAnnotations().length == 0);
-      }
-    }, this);
-    assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.notAnnotated();
-      }
-    }, this);
-  }
-
-  @Test
-  public void testAnnotatedWithSelector() {
-    assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-      public void assertions(Method method) {
-        assertTrue(method.isAnnotationPresent(Flag.class));
-      }
-    }, this);
-    assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldHits);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.annotatedWith(Flag.class);
-      }
-    }, this);
-  }
-
-  @Test
-  public void testNotAnnotatedWithSelector() {
-    assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldHits);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-      public void assertions(Method method) {
-        assertTrue(method.getDeclaredAnnotations().length == 0);
-      }
-    }, this);
-    assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.notAnnotatedWith(Flag.class);
-      }
-    }, this);
-  }
-
-  @Test
-  public void testPredicateSelector() {
-    assertResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.filter(el -> true);
-      }
-    }, this);
-    assertNoResult(new SelectionTestAdapter<FieldGetterMethodSelector, Method>(){
-      public FieldGetterMethodSelector createSelector() {
-        return reflect().getterOf(fieldCount);
-      }
-      public void makeSelections(FieldGetterMethodSelector selector) {
-        selector.filter(el -> false);
-      }
-    }, this);
+  public void test() {
+    assertFalse(
+        reflect().methods()
+            .filter(getterOf(fieldCount))
+            .in(this)
+            .isEmpty()
+    );
+    assertFalse(
+        reflect().methods()
+            .filter(getterOf(fieldHits))
+            .in(this)
+            .isEmpty()
+    );
+    assertFalse(
+        reflect().methods()
+            .filter(getterOf("count"))
+            .in(this)
+            .isEmpty()
+    );
+    assertFalse(
+        reflect().methods()
+            .filter(getterOf("hits"))
+            .in(this)
+            .isEmpty()
+    );
+    assertTrue(
+        reflect().methods()
+            .filter(getterOf(fieldCount))
+            .in(Object.class)
+            .isEmpty()
+    );
+    assertTrue(
+        reflect().methods()
+            .filter(getterOf(fieldHits))
+            .in(Object.class)
+            .isEmpty()
+    );
   }
 
 }

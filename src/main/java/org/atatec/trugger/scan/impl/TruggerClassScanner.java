@@ -72,7 +72,7 @@ public class TruggerClassScanner implements ClassScanner {
     return new TruggerClassesSelector(scanner).filter(ReflectionPredicates.INTERFACE);
   }
 
-  public ClassesSelector findAll() {
+  public ClassesSelector find() {
     return new TruggerClassesSelector(scanner);
   }
 

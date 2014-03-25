@@ -20,7 +20,7 @@ apply plugin: 'maven'
 
 configurations {
   project.group = "org.atatec"
-  project.version = "4.4"
+  project.version = "5.0"
 
   project.description = "Trugger is a project that helps you write code that anyone can read."
 

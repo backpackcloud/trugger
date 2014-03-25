@@ -53,55 +53,11 @@ public class ClassScan {
    * This method has the same effect as:
    * <p/>
    * <pre>
-   * newScan().findClasses();
+   * newScan().find();
    * </pre>
    */
-  public static ClassesSelector findClasses() {
-    return newScan().findClasses();
-  }
-
-  /**
-   * This method has the same effect as:
-   * <p/>
-   * <pre>
-   * newScan().findInterfaces();
-   * </pre>
-   */
-  public static ClassesSelector findInterfaces() {
-    return newScan().findInterfaces();
-  }
-
-  /**
-   * This method has the same effect as:
-   * <p/>
-   * <pre>
-   * newScan().findEnums();
-   * </pre>
-   */
-  public static ClassesSelector findEnums() {
-    return newScan().findEnums();
-  }
-
-  /**
-   * This method has the same effect as:
-   * <p/>
-   * <pre>
-   * newScan().findAnnotations();
-   * </pre>
-   */
-  public static ClassesSelector findAnnotations() {
-    return newScan().findAnnotations();
-  }
-
-  /**
-   * This method has the same effect as:
-   * <p/>
-   * <pre>
-   * newScan().findAll();
-   * </pre>
-   */
-  public static ClassesSelector findAll() {
-    return newScan().findAll();
+  public static ClassesSelector find() {
+    return newScan().find();
   }
 
 }

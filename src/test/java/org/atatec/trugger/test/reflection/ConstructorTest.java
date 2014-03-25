@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -16,21 +16,14 @@
  */
 package org.atatec.trugger.test.reflection;
 
-import org.atatec.trugger.selector.ConstructorSelector;
-import org.atatec.trugger.selector.ConstructorsSelector;
-import org.atatec.trugger.test.SelectionTestAdapter;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertResult;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -43,30 +36,27 @@ public class ConstructorTest {
 
   @Test
   public void testNotDeclaredConstructor() {
-    assertNotNull(reflect().constructor().withoutParameters().in(NoDeclaredConstructor.class));
-    assertNotNull(reflect().visible().constructor().withoutParameters().in(NoDeclaredConstructor.class));
-    assertResult(new SelectionTestAdapter<ConstructorSelector, Constructor>(){
-      public ConstructorSelector createSelector() {
-        return reflect().constructor();
-      }
-      public void makeSelections(ConstructorSelector selector) {
-        selector.withoutParameters();
-      }
-    }, NoDeclaredConstructor.class);
-    assertResult(new SelectionTestAdapter<ConstructorsSelector, Set<Constructor>>(){
-      public ConstructorsSelector createSelector() {
-        return reflect().constructors();
-      }
-      public void assertions(Set<Constructor> object) {
-        assertEquals(1, object.size());
-      }
-    }, NoDeclaredConstructor.class);
-    assertResult(reflect().constructors().in(NoDeclaredConstructor.class), 1);
+    assertNotNull(
+        reflect().constructor()
+            .withoutParameters()
+            .in(NoDeclaredConstructor.class)
+    );
+    assertNotNull(
+        reflect().visible().constructor()
+            .withoutParameters()
+            .in(NoDeclaredConstructor.class)
+    );
+    assertEquals(
+        1,
+        reflect().constructors().in(NoDeclaredConstructor.class).size()
+    );
   }
 
   @Test
   public void testInvoker() {
-    Constructor<?> constructor = reflect().constructor().withoutParameters().in(ArrayList.class);
+    Constructor<?> constructor = reflect().constructor()
+        .withoutParameters()
+        .in(ArrayList.class);
     assertNotNull(constructor);
     Object object = invoke(constructor).withoutArgs();
     assertTrue(object instanceof ArrayList);

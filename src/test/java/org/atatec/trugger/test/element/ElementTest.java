@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -23,6 +23,9 @@ import org.junit.Test;
 
 import java.util.Set;
 
+import static org.atatec.trugger.element.ElementPredicates.NON_SPECIFIC;
+import static org.atatec.trugger.element.ElementPredicates.annotatedWith;
+import static org.atatec.trugger.element.ElementPredicates.notAnnotatedWith;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
@@ -39,7 +42,9 @@ public class ElementTest {
 
   @Test
   public void elementTest() {
-    Element el = element("age").annotatedWith(Flag.class).in(TestObject.class);
+    Element el = element("age")
+        .filter(annotatedWith(Flag.class))
+        .in(TestObject.class);
     assertNotNull(el);
     assertEquals("age", el.name());
     assertEquals(TestObject.class, el.declaringClass());
@@ -49,7 +54,9 @@ public class ElementTest {
     assertTrue(el.isWritable());
     assertFalse(el.isSpecific());
 
-    el = element("age").notAnnotatedWith(Flag.class).in(TestObject.class);
+    el = element("age")
+        .filter(notAnnotatedWith(Flag.class))
+        .in(TestObject.class);
     assertNull(el);
 
     el = element("staticValue").in(TestObject.class);
@@ -101,7 +108,7 @@ public class ElementTest {
     elements = elements().in(t1);
     assertMatch(elements, ElementPredicates.SPECIFIC);
 
-    elements = elements().nonSpecific().in(TestObject.class);
+    elements = elements().filter(NON_SPECIFIC).in(TestObject.class);
     assertMatch(elements, ElementPredicates.NON_SPECIFIC);
   }
 

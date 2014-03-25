@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -25,12 +25,17 @@ import org.junit.Test;
 import java.util.Collection;
 import java.util.Set;
 
+import static org.atatec.trugger.element.ElementPredicates.NON_SPECIFIC;
+import static org.atatec.trugger.element.ElementPredicates.SPECIFIC;
+import static org.atatec.trugger.element.ElementPredicates.ofType;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.element.Elements.handle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-/** @author Marcelo Varella Barca Guimarães */
+/**
+ * @author Marcelo Varella Barca Guimarães
+ */
 public class HandleTest {
 
   public static class TestObject {
@@ -57,7 +62,9 @@ public class HandleTest {
 
   @Test
   public void testHandleForSpecificElements() {
-    Set<Element> elements = elements().ofType(String.class).specific().in(TestObject.class);
+    Set<Element> elements = elements()
+        .filter(ofType(String.class).and(SPECIFIC))
+        .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);
     Collection<String> strings = valueHandler.value();
     assertEquals(4, strings.size());
@@ -74,7 +81,9 @@ public class HandleTest {
 
   @Test
   public void testHandlerForNonSpecificElements() {
-    Set<Element> elements = elements().ofType(String.class).nonSpecific().in(TestObject.class);
+    Set<Element> elements = elements()
+        .filter(ofType(String.class).and(NON_SPECIFIC))
+        .in(TestObject.class);
     TestObject target = new TestObject();
     ValueHandler valueHandler = handle(elements, target);
     Collection<String> strings = valueHandler.value();
@@ -92,7 +101,9 @@ public class HandleTest {
 
   @Test(expected = HandlingException.class)
   public void testHandlingError() {
-    Set<Element> elements = elements().ofType(String.class).nonSpecific().in(TestObject.class);
+    Set<Element> elements = elements()
+        .filter(ofType(String.class).and(NON_SPECIFIC))
+        .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);
     valueHandler.value("");
   }

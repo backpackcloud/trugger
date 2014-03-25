@@ -116,7 +116,7 @@ public class ReflectionPredicates {
    *
    * @param parameterTypes the parameter types
    * @return a predicate to evaluate the parameter types.
-   * @since 4.4
+   * @since 5.0
    */
   public static Predicate<Method> withParameters(Class... parameterTypes) {
     return method -> Arrays.equals(method.getParameterTypes(), parameterTypes);
@@ -127,7 +127,7 @@ public class ReflectionPredicates {
    * no parameter.
    *
    * @return a predicate to evaluate the method.
-   * @since 4.4
+   * @since 5.0
    */
   public static Predicate<Method> withoutParameters() {
     return method -> method.getParameterTypes().length == 0;
@@ -171,7 +171,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element is
    * annotated with the specified Annotation.
    */
-  public static <T extends AnnotatedElement> Predicate<T> isAnnotatedWith(
+  public static <T extends AnnotatedElement> Predicate<T> annotatedWith(
       final Class<? extends Annotation> annotationType) {
     return element -> element.isAnnotationPresent(annotationType);
   }
@@ -180,13 +180,13 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>false</code> if the evaluated element is
    * annotated with the specified Annotation.
    */
-  public static <T extends AnnotatedElement> Predicate<T> isNotAnnotatedWith(
+  public static <T extends AnnotatedElement> Predicate<T> notAnnotatedWith(
       final Class<? extends Annotation> annotationType) {
-    return ReflectionPredicates.<T>isAnnotatedWith(annotationType).negate();
+    return ReflectionPredicates.<T>annotatedWith(annotationType).negate();
   }
 
   /**
-   * A predicate that returns <code>true</code> if the element has that annotations.
+   * A predicate that returns <code>true</code> if the element has annotations.
    */
   public static final Predicate<AnnotatedElement> ANNOTATED =
       element -> element.getDeclaredAnnotations().length > 0;

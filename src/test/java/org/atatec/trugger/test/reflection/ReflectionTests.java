@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Marcelo Varella Barca Guimarães
+ * Copyright 2009-2014 Marcelo Guimarães
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -52,14 +52,20 @@ public class ReflectionTests {
 
   private static class TestObject {
 
-    public TestObject(Collection c) {}
-    public TestObject(int i) {}
-    public TestObject() {}
+    public TestObject(Collection c) {
+    }
+
+    public TestObject(int i) {
+    }
+
+    public TestObject() {
+    }
 
   }
 
   private static class OtherTestObject {
-    public OtherTestObject(int i) {}
+    public OtherTestObject(int i) {
+    }
   }
 
   @Test
@@ -67,45 +73,40 @@ public class ReflectionTests {
     String string = newInstanceOf(String.class, "test");
     assertEquals("test", string);
     assertNotSame("test", string);
-    assertThrow(new Runnable(){
-      public void run() {
-        newInstanceOf(String.class, null, 1, 1);
-      }
-    }, ReflectionException.class);
+    assertThrow(ReflectionException.class, () -> {
+      newInstanceOf(String.class, null, 1, 1);
+    });
     assertNull(newInstanceOf(OtherTestObject.class));
     assertNotNull(newInstanceOf(TestObject.class));
     assertNotNull(newInstanceOf(TestObject.class, Collections.EMPTY_LIST));
     assertNotNull(newInstanceOf(TestObject.class, 15));
-    assertThrow(new Runnable(){
-      public void run() {
-        newInstanceOf(String.class, 1, 2, 3);
-      }
-    }, ReflectionException.class);
+    assertThrow(ReflectionException.class, () -> {
+      newInstanceOf(String.class, 1, 2, 3);
+    });
   }
 
-  private class GenericClass<E> {}
+  private class GenericClass<E> {
+  }
 
   @Test
   public void testGenericTypeResolver() throws Exception {
-    final Map<String, Integer> map = new HashMap<String, Integer>(){};
+    final Map<String, Integer> map = new HashMap<String, Integer>() {
+    };
     assertEquals(String.class, reflect().genericType("K").in(map));
     assertEquals(Integer.class, reflect().genericType("V").in(map));
 
-    GenericClass<String> genericClass = new GenericClass<String>(){};
+    GenericClass<String> genericClass = new GenericClass<String>() {
+    };
     assertEquals(String.class, reflect().genericType("E").in(genericClass));
     assertEquals(String.class, reflect().genericType().in(genericClass));
 
-    assertThrow(new Runnable(){
-      public void run() {
-        reflect().genericType().in(map);
-      }
-    }, ReflectionException.class);
+    assertThrow(ReflectionException.class, () -> {
+      reflect().genericType().in(map);
+    });
 
-    assertThrow(new Runnable(){
-      public void run() {
-        reflect().genericType().in(Object.class);
-      }
-    }, ReflectionException.class);
+    assertThrow(ReflectionException.class, () -> {
+      reflect().genericType().in(Object.class);
+    });
   }
 
 }
