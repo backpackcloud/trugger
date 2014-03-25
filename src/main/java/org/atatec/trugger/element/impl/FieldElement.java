@@ -21,7 +21,6 @@ import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.NonSpecificElementException;
 import org.atatec.trugger.reflection.Reflection;
-import org.atatec.trugger.util.HashBuilder;
 
 import java.lang.reflect.Field;
 
@@ -85,33 +84,6 @@ public final class FieldElement extends AbstractElement implements Element {
   @Override
   public boolean isSpecific() {
     return Reflection.isStatic(field);
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashBuilder(field).hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    FieldElement other = (FieldElement) obj;
-    if (field == null) {
-      if (other.field != null) {
-        return false;
-      }
-    } else if (!field.equals(other.field)) {
-      return false;
-    }
-    return true;
   }
 
 }

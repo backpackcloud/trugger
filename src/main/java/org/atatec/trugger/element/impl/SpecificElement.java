@@ -18,7 +18,6 @@ package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.util.HashBuilder;
 
 /**
  * A class that represents a {@link Element#isSpecific() specific} element.
@@ -57,38 +56,6 @@ public class SpecificElement extends DecoratedElement implements Element {
   @Override
   public void value(Object value) throws HandlingException {
     in(target).value(value);
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashBuilder(element).add(target).hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    SpecificElement other = (SpecificElement) obj;
-    if (element == null) {
-      if (other.element != null) {
-        return false;
-      }
-    } else if (!element.equals(other.element)) {
-      return false;
-    }
-    if (target == null) {
-      if (other.target != null) {
-        return false;
-      }
-    }
-    return target == other.target;
   }
 
 }

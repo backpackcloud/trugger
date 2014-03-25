@@ -40,7 +40,8 @@ import static org.junit.Assert.assertTrue;
 public class AnnotationElementTest {
 
   private Element getAnnotationElement(String name) {
-    //doing this we make sure that two properties having the same name will have diferent IDs
+    //doing this we make sure that two properties having the same name will have
+    // different IDs
     ElementFactory factory = new TruggerElementFactory();
     return factory.createElementSelector(name).in(TestAnnotation.class);
   }
@@ -51,13 +52,9 @@ public class AnnotationElementTest {
   @Test
   public void annotationElementTest() {
     Element element1 = getAnnotationElement("name");
-    Element element2 = getAnnotationElement("name");
+    Element element2;
     assertNotNull(element1);
     assertAnnotationElement(element1);
-    assertFalse(element1 == element2);
-    assertEquals(element1.hashCode(), element2.hashCode());
-    assertTrue(element1.equals(element2));
-    assertEquals(element1, element2);
 
     Collection<Element> elements = elements().in(TestAnnotation.class);
     for (Element prop : elements) {

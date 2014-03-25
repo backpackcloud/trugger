@@ -22,7 +22,6 @@ import org.atatec.trugger.element.UnreadableElementException;
 import org.atatec.trugger.element.UnwritableElementException;
 import org.atatec.trugger.element.impl.AbstractElement;
 import org.atatec.trugger.reflection.ReflectionException;
-import org.atatec.trugger.util.HashBuilder;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -30,10 +29,9 @@ import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static org.atatec.trugger.reflection.MethodPredicates.returns;
+import static org.atatec.trugger.reflection.MethodPredicates.*;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.MethodPredicates.*;
 
 /**
  * This class represents an object property.
@@ -141,26 +139,6 @@ final class ObjectProperty extends AbstractElement {
   @Override
   public Class<?> type() {
     return type;
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashBuilder(declaringClass).add(name()).hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final ObjectProperty other = (ObjectProperty) obj;
-    return declaringClass.equals(other.declaringClass) && name.equals(other.name);
   }
 
   private void searchForSetter() {

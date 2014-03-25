@@ -20,7 +20,6 @@ import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.UnwritableElementException;
-import org.atatec.trugger.util.HashBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -81,26 +80,6 @@ public final class AnnotationElement extends AbstractElement implements Element 
 
   public boolean isWritable() {
     return false;
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashBuilder(method).hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final AnnotationElement other = (AnnotationElement) obj;
-    return method.equals(other.method);
   }
 
 }

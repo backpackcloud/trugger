@@ -20,7 +20,6 @@ import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.UnwritableElementException;
-import org.atatec.trugger.util.HashBuilder;
 
 import java.util.ResourceBundle;
 
@@ -72,33 +71,6 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
   @Override
   public boolean isWritable() {
     return false;
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashBuilder(name).hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    ResourceBundleElement other = (ResourceBundleElement) obj;
-    if (name == null) {
-      if (other.name != null) {
-        return false;
-      }
-    } else if (!name.equals(other.name)) {
-      return false;
-    }
-    return true;
   }
 
 }

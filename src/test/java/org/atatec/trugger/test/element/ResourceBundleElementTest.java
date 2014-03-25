@@ -80,8 +80,6 @@ public class ResourceBundleElementTest {
     assertTrue(element.isReadable());
     assertFalse(element.isWritable());
     
-    assertEquals(element, element(key).in(bundle1));
-    
     assertThrow(HandlingException.class,
         () -> element.value("Don't modify!"));
     

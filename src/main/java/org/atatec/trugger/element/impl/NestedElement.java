@@ -20,7 +20,6 @@ import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
-import org.atatec.trugger.util.HashBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,26 +140,6 @@ public final class NestedElement extends AbstractElement implements Element {
   @Override
   public boolean isSpecific() {
     return getLast().isSpecific();
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashBuilder(path).hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final NestedElement other = (NestedElement) obj;
-    return path.equals(other.path);
   }
 
   static NestedElement createNestedElement(Object source, String elementsPath) {
