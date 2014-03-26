@@ -175,23 +175,6 @@ public class DefaultElementFinder implements Finder<Element> {
       return decorated.toString();
     }
 
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null) {
-        return false;
-      }
-      if (obj instanceof DefaultElementFinder.MergedElement) {
-        return ((DefaultElementFinder.MergedElement) obj).decorated.equals(decorated);
-      }
-      return decorated.equals(obj);
-    }
-
-    public int hashCode() {
-      return decorated.hashCode();
-    }
-
   }
 
 }

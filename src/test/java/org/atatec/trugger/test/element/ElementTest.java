@@ -17,23 +17,13 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
-import java.util.Set;
-
-import static org.atatec.trugger.element.ElementPredicates.NON_SPECIFIC;
 import static org.atatec.trugger.element.ElementPredicates.annotatedWith;
 import static org.atatec.trugger.element.ElementPredicates.notAnnotatedWith;
 import static org.atatec.trugger.element.Elements.element;
-import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -69,47 +59,6 @@ public class ElementTest {
     assertEquals(0.0, el.value(), 0e-4);
     el.value(1.5);
     assertEquals(1.5, el.value(), 0e-4);
-  }
-
-  @Test
-  public void equalsAndHashTest() {
-    Element el = element("age").in(TestObject.class);
-    Element el2 = element("age").in(TestObject.class);
-    assertTrue(el.equals(el2));
-    assertFalse(el.isSpecific());
-    assertFalse(el2.isSpecific());
-
-    el = element("age").in(TestObject.class);
-    el2 = element("age").in(TestObject.class);
-    assertTrue(el.equals(el2));
-    assertFalse(el.isSpecific());
-    assertFalse(el2.isSpecific());
-    assertMatch(el, ElementPredicates.NON_SPECIFIC);
-
-    TestObject t1 = new TestObject("name", "last name");
-    TestObject t2 = new TestObject("name", "last name");
-
-    el = element("age").in(t1);
-    el2 = element("age").in(t2);
-    assertFalse(el.equals(el2));
-    assertTrue(el.isSpecific());
-    assertTrue(el2.isSpecific());
-
-    el = element("age").in(t1);
-    el2 = element("age").in(t2);
-    assertFalse(el.equals(el2));
-    assertTrue(el.isSpecific());
-    assertTrue(el2.isSpecific());
-    assertMatch(el, ElementPredicates.SPECIFIC);
-
-    Set<Element> elements = elements().in(t1);
-    assertMatch(elements, ElementPredicates.SPECIFIC);
-
-    elements = elements().in(t1);
-    assertMatch(elements, ElementPredicates.SPECIFIC);
-
-    elements = elements().filter(NON_SPECIFIC).in(TestObject.class);
-    assertMatch(elements, ElementPredicates.NON_SPECIFIC);
   }
 
   @Test
