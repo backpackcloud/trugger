@@ -101,7 +101,7 @@ public class ElementCopyTest {
 
     copy().from(testObject).applying(toString).to(props);
     assertEquals("23", props.getProperty("age"));
-    assertEquals("null", props.getProperty("nickName"));
+    assertEquals(null, props.getProperty("nickName"));
     assertEquals("Marcelo", props.getProperty("name"));
     assertEquals("Guimaraes", props.getProperty("lastName"));
     assertEquals("1.9", props.getProperty("height"));

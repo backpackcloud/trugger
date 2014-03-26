@@ -12,6 +12,7 @@ Version 5.0
   - Removed the CompositeExceptionHandler (with lambdas, this
     feature can be achieved much more easily)
   - Immutable classes
+  - Element copies only applies functions to non null values (to prevent NPEs)
 - Minor Changes
   - Removed non used classes
 
