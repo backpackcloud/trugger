@@ -196,7 +196,7 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
      *
      * @return a reference to the builder.
      */
-    org.atatec.trugger.util.mock.AnnotationMock<T> to(E value);
+    AnnotationMock<T> to(E value);
   }
 
 }
