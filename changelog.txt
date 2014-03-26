@@ -13,6 +13,7 @@ Version 5.0
     feature can be achieved much more easily)
   - Immutable classes
   - Element copies only applies functions to non null values (to prevent NPEs)
+  - No more single selections (element, field, method) without specifying a name
 - Minor Changes
   - Removed non used classes
 
