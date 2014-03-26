@@ -59,7 +59,7 @@ public class InterceptionContextTest {
       }
     };
     Validator validator = Interception.intercept(Validator.class)
-        .of(notEmpty)
+        .on(notEmpty)
         .onCall(c -> {
           assertTrue(c.method().isAnnotationPresent(Flag.class));
           Method targetMethod = c.targetMethod();

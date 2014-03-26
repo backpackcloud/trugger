@@ -77,7 +77,7 @@ public class TruggerInterceptor implements InvocationHandler, Interceptor {
   }
 
   @Override
-  public TruggerInterceptor of(Object target) {
+  public TruggerInterceptor on(Object target) {
     Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
     return new TruggerInterceptor(
         target, classes.toArray(new Class[classes.size()]), classloader,

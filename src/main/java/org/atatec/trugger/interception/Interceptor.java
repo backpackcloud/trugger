@@ -40,7 +40,7 @@ public interface Interceptor {
    * @param target the target to intercept
    * @return a new Interceptor that uses the given target
    */
-  Interceptor of(Object target);
+  Interceptor on(Object target);
 
   /**
    * Defines the action to execute on method interception.
