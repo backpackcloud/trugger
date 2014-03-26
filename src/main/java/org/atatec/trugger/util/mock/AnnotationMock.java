@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger.util.mock;
 
-import org.atatec.trugger.interception.Interceptor;
+import org.atatec.trugger.interception.Interception;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
@@ -102,7 +102,7 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
   }
 
   private void initialize() {
-    this.annotation = Interceptor.intercept(annotationType)
+    this.annotation = Interception.intercept(annotationType)
         .onCall(context -> {
           Method method = context.method();
           String name = method.getName();

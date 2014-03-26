@@ -17,7 +17,7 @@
 package org.atatec.trugger.test.interception;
 
 import org.atatec.trugger.TruggerException;
-import org.atatec.trugger.interception.Interceptor;
+import org.atatec.trugger.interception.Interception;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -54,7 +54,7 @@ public class InterceptorTest {
 
   @Test
   public void testInterception() {
-    MyInterface obj = Interceptor.intercept(new InvocationTest())
+    MyInterface obj = Interception.intercept(new InvocationTest())
         .onCall(context -> context.invokeMethod())
         .proxy();
     Object argument = new Object();
@@ -63,7 +63,7 @@ public class InterceptorTest {
 
   @Test
   public void testInterfaceExceptionHandling() {
-    MyInterface obj = Interceptor.intercept(new ExceptionHandlingTest())
+    MyInterface obj = Interception.intercept(new ExceptionHandlingTest())
         .onCall(context -> context.invokeMethod())
         .onError((context, error) -> "pass")
         .proxy();
@@ -73,7 +73,7 @@ public class InterceptorTest {
 
   @Test(expected = TruggerException.class)
   public void testInterfaceInterception() {
-    MyInterface obj = Interceptor.intercept(MyInterface.class)
+    MyInterface obj = Interception.intercept(MyInterface.class)
         .onCall(context -> {throw new IllegalArgumentException();})
         .onError((context, error) -> {throw new TruggerException(error);})
         .proxy();

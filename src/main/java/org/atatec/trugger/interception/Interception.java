@@ -14,38 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.atatec.trugger.interception;
 
+import org.atatec.trugger.loader.ImplementationLoader;
+
 /**
- * Interface that defines an action while intercepting a method call.
+ * A class for helping create proxy instances
  *
- * @author Marcelo Guimarães
- * @since 4.1
+ * @since 5.0
  */
-@FunctionalInterface
-public interface Interception {
+public final class Interception {
+
+  private static final InterceptorFactory factory;
+
+  static {
+    factory = ImplementationLoader.get(InterceptorFactory.class);
+  }
+
+  private Interception() {
+  }
 
   /**
-   * Intercepts the method call.
+   * Creates an interceptor for the given interface
    *
-   * @param context the context of the interception
-   * @return a return value or <code>null</code> if the method is void.
-   * @throws Throwable if any error occurs
+   * @param interfaceClass the interface to intercept
+   * @return a component to configure the interception
    */
-  Object intercept(InterceptionContext context) throws Throwable;
+  public static Interceptor intercept(Class interfaceClass) {
+    return factory.createInterceptor(interfaceClass);
+  }
 
   /**
-   * Combines this interception with another one.
+   * Creates an interceptor for the given interfaces
    *
-   * @param other the other interception to execute after this
-   * @return the new Interception
+   * @param interfaces the interfaces to intercept
+   * @return a component to configure the interception
    */
-  default Interception andThen(Interception other) {
-    return context -> {
-      this.intercept(context);
-      return other.intercept(context);
-    };
+  public static Interceptor intercept(Class... interfaces) {
+    return factory.createInterceptor(interfaces);
+  }
+
+  /**
+   * Creates an interceptor for the given target.
+   *
+   * @param target the target to intercept
+   * @return a component to configure the interception
+   */
+  public static Interceptor intercept(Object target) {
+    return factory.createInterceptor(target);
   }
 
 }

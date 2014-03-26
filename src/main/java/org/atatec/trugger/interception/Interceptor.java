@@ -14,117 +14,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.atatec.trugger.interception;
 
-import org.atatec.trugger.reflection.Reflection;
-import org.atatec.trugger.util.Utils;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Set;
-
 /**
- * A base class to create Proxies to interfaces.
+ * Interface that defines a component capable of creating proxy objects
+ * to intercept methods.
  *
- * @author Marcelo Guimarães
- * @since 2.1
+ * @since 5.0
  */
-public final class Interceptor implements InvocationHandler {
+public interface Interceptor {
 
-  private final Object target;
-  private final Class[] interfaces;
-  private final ClassLoader classloader;
-  private final Interception action;
-  private final InterceptionFailHandler handler;
+  /**
+   * Defines the ClassLoader that should be used to create the proxy instance.
+   *
+   * @param classloader the ClassLoader to create the proxy
+   * @return a new Interceptor that uses the given ClassLoader
+   */
+  Interceptor with(ClassLoader classloader);
 
-  private Interceptor(Object target) {
-    Class<?> targetClass = Utils.resolveType(target);
-    this.classloader = targetClass.getClassLoader();
-    this.target = target;
-    Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
-    this.interfaces = classes.toArray(new Class[classes.size()]);
-    this.action = (context) -> context.invokeMethod();
-    this.handler = (context, error) -> {
-      throw error;
-    };
-  }
+  /**
+   * Defines the target object to intercept. The target will be forwarded to the
+   * handler by the {@link org.atatec.trugger.interception.InterceptionContext}.
+   *
+   * @param target the target to intercept
+   * @return a new Interceptor that uses the given target
+   */
+  Interceptor of(Object target);
 
-  private Interceptor(Class[] interfaces) {
-    this.interfaces = interfaces;
-    this.classloader = ClassLoader.getSystemClassLoader();
-    this.target = null;
-    this.action = (context) -> context.invokeMethod();
-    this.handler = (context, error) -> {
-      throw error;
-    };
-  }
+  /**
+   * Defines the action to execute on method interception.
+   *
+   * @param action the action to execute
+   * @return a new Interceptor that uses the given action
+   */
+  Interceptor onCall(InterceptionHandler action);
 
-  public Interceptor(Object target, Class[] interfaces, ClassLoader classloader,
-                     Interception action, InterceptionFailHandler handler) {
-    this.target = target;
-    this.interfaces = interfaces;
-    this.classloader = classloader;
-    this.action = action;
-    this.handler = handler;
-  }
+  /**
+   * Defines a handler to deal with errors in interception.
+   *
+   * @param handler the handler to use
+   * @return a new Interceptor that uses the given handler
+   */
+  Interceptor onError(InterceptionFailHandler handler);
 
-  public Interceptor with(ClassLoader classloader) {
-    return new Interceptor(
-        target, interfaces, classloader, action, handler
-    );
-  }
-
-  public Interceptor of(Object target) {
-    Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
-    return new Interceptor(
-        target, classes.toArray(new Class[classes.size()]), classloader,
-        action, handler
-    );
-  }
-
-  public Interceptor onCall(Interception action) {
-    return new Interceptor(
-        target, interfaces, classloader, action, handler
-    );
-  }
-
-  public Interceptor onError(InterceptionFailHandler handler) {
-    return new Interceptor(
-        target, interfaces, classloader, action, handler
-    );
-  }
-
-  public <E> E proxy() {
-    return (E) Proxy.newProxyInstance(classloader, interfaces, Interceptor.this);
-  }
-
-  @Override
-  public Object invoke(Object proxy, Method method, Object[] args)
-      throws Throwable {
-    InterceptionContext context = new InterceptionContext(target, proxy,
-        method, args);
-    try {
-      return action.intercept(context);
-    } catch (Throwable e) {
-      if (handler != null) {
-        return handler.handle(context, e);
-      } else {
-        throw e;
-      }
-    }
-  }
-
-  public static Interceptor intercept(Class interfaceClass) {
-    return new Interceptor(new Class[]{interfaceClass});
-  }
-
-  public static Interceptor intercept(Class... interfaces) {
-    return new Interceptor(interfaces);
-  }
-
-  public static Interceptor intercept(Object target) {
-    return new Interceptor(target);
-  }
+  /**
+   * Creates the proxy instance based on the components configured.
+   *
+   * @return the proxy instance
+   */
+  <E> E proxy();
 
 }

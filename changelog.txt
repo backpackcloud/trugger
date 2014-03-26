@@ -7,7 +7,8 @@ Version 5.0
   - Renamed Invoker#handlingExceptionsWith to onError
   - Unique searches no longer throws exceptions if two or
     more results are found
-  - Reformulated the Interception module
+  - Reformulated the Interception module, now the DSL implementation can be
+    changed
   - Removed the CompositeExceptionHandler (with lambdas, this
     feature can be achieved much more easily)
   - Immutable classes
