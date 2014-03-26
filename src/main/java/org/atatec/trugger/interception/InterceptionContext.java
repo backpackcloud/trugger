@@ -33,6 +33,7 @@ public interface InterceptionContext {
 
   /**
    * @return the arguments passed in the method invocation on the proxy instance
+   * or <code>null</code> if the method takes no parameters.
    */
   Object[] args();
 
@@ -46,6 +47,13 @@ public interface InterceptionContext {
    * invoked on the proxy instance
    */
   Method method();
+
+  /**
+   * @return the intercepted method declared on target
+   */
+  default Method targetMethod() {
+    return methodOn(target());
+  }
 
   /**
    * @return <code>null</code> if the method return type is an Object or a
