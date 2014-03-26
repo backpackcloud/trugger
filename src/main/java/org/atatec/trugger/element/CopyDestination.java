@@ -20,19 +20,26 @@ package org.atatec.trugger.element;
 import java.util.function.Function;
 
 /**
+ * Interface for defining a destination to a copy.
+ *
  * @author Marcelo Guimarães
  * @since 4.1
  */
 public interface CopyDestination {
 
   /**
-   * Executes the operation transforming the elements with the given function.
+   * Executes the given function to transform the elements before the copy.
    *
    * @param function the function to use.
+   * @return a new object that uses the given function
    */
   CopyDestination applying(Function<ElementCopy, ?> function);
 
-  /** Copies only the elements that are not <code>null</code>. */
+  /**
+   * Copies only the elements that are not <code>null</code>.
+   *
+   * @return a new object that don't copy null values
+   */
   CopyDestination notNull();
 
   /**
