@@ -16,16 +16,12 @@
  */
 package org.atatec.trugger.element.impl;
 
-import org.atatec.trugger.element.DestinationSelector;
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementCopier;
-import org.atatec.trugger.element.ElementCopy;
-import org.atatec.trugger.element.Elements;
+import org.atatec.trugger.element.*;
 import org.atatec.trugger.selector.ElementsSelector;
-import org.atatec.trugger.transformer.Transformer;
 import org.atatec.trugger.util.Utils;
 
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * The default implementation for the property copy operation.
@@ -35,7 +31,7 @@ import java.util.Set;
 public final class TruggerElementCopier implements ElementCopier, DestinationSelector {
 
   private ElementsSelector selector;
-  private Transformer<Object, ElementCopy> transformer;
+  private Function<ElementCopy, Object> function;
 
   private boolean copyNull = true;
 
@@ -66,8 +62,8 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
   }
 
   @Override
-  public DestinationSelector as(Transformer transformer) {
-    this.transformer = transformer;
+  public DestinationSelector applying(Function function) {
+    this.function = function;
     return this;
   }
 
@@ -78,7 +74,7 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
     } else {
       elements = selector.in(src);
     }
-    boolean transform = (transformer != null);
+    boolean transform = (function != null);
     Element destProperty;
     for (Element element : elements) {
       String name = element.name();
@@ -98,7 +94,7 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
     Object value = src.in(this.src).value();
     PropertyCopyImpl copy = new PropertyCopyImpl(src, dest, value);
     if (transform) {
-      value = transformer.transform(copy);
+      value = function.apply(copy);
     }
     if (value != null) {
       if (Utils.areAssignable(dest.type(), value.getClass())) {

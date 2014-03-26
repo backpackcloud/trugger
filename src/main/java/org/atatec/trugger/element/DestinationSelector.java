@@ -17,7 +17,7 @@
 
 package org.atatec.trugger.element;
 
-import org.atatec.trugger.transformer.Transformer;
+import java.util.function.Function;
 
 /**
  * @author Marcelo Guimarães
@@ -26,11 +26,11 @@ import org.atatec.trugger.transformer.Transformer;
 public interface DestinationSelector {
 
   /**
-   * Executes the operation transforming the elements with the given transformer.
+   * Executes the operation transforming the elements with the given function.
    *
-   * @param transformer the transformer to use.
+   * @param function the function to use.
    */
-  DestinationSelector as(Transformer<?, ElementCopy> transformer);
+  DestinationSelector applying(Function<ElementCopy, ?> function);
 
   /** Copies only the elements that are not <code>null</code>. */
   DestinationSelector notNull();

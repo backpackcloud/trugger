@@ -17,13 +17,13 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.ElementCopy;
-import org.atatec.trugger.transformer.Transformer;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
 
 import static org.atatec.trugger.element.Elements.copy;
 import static org.junit.Assert.assertEquals;
@@ -64,9 +64,10 @@ public class ElementCopyTest {
     assertNull(testObject.getNickName());
   }
 
-  private static class ToStringTransformer implements Transformer<String, ElementCopy> {
+  private static class ToStringTransformer
+      implements Function<ElementCopy, String> {
 
-    public String transform(ElementCopy object) {
+    public String apply(ElementCopy object) {
       return String.valueOf(object.value());
     }
   }
@@ -96,9 +97,9 @@ public class ElementCopyTest {
     assertEquals(80.2, (Double) map.get("weight"), 0.001);
 
     Properties props = new Properties();
-    Transformer<String, ElementCopy> string = new ToStringTransformer();
+    Function<ElementCopy, String> toString = new ToStringTransformer();
 
-    copy().from(testObject).as(string).to(props);
+    copy().from(testObject).applying(toString).to(props);
     assertEquals("23", props.getProperty("age"));
     assertEquals("null", props.getProperty("nickName"));
     assertEquals("Marcelo", props.getProperty("name"));
