@@ -21,8 +21,6 @@ import org.atatec.trugger.reflection.Reflection;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.atatec.trugger.reflection.Reflection.reflect;
 
@@ -33,22 +31,6 @@ import static org.atatec.trugger.reflection.Reflection.reflect;
  * @since 5.0
  */
 public class InterceptionContextImpl implements InterceptionContext {
-
-  private static final Map<Class<?>, Object> nullValues;
-
-  static {
-    nullValues = new HashMap<Class<?>, Object>() {{
-      put(byte.class, (byte) 0);
-      put(short.class, (short) 0);
-      put(int.class, 0);
-      put(long.class, 0L);
-      put(char.class, (char) 0);
-      put(float.class, 0f);
-      put(double.class, 0d);
-      put(boolean.class, false);
-    }};
-
-  }
 
   private final Object target;
 
@@ -135,11 +117,6 @@ public class InterceptionContextImpl implements InterceptionContext {
   @Override
   public Method method() {
     return method;
-  }
-
-  @Override
-  public Object nullReturn() {
-    return nullValues.get(method.getReturnType());
   }
 
 }

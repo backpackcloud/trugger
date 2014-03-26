@@ -56,13 +56,6 @@ public interface InterceptionContext {
   }
 
   /**
-   * @return <code>null</code> if the method return type is an Object or a
-   * default primitive value if it is primitive (false to boolean, 0 to long,
-   * ...).
-   */
-  Object nullReturn();
-
-  /**
    * Invokes the intercepted method on the {@link #target() target} object.
    *
    * @return the return of the method

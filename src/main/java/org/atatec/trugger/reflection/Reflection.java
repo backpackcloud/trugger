@@ -390,8 +390,8 @@ public final class Reflection {
       return true;
     };
     Optional<Constructor<?>> constructor = constructors.stream()
-      .filter(matchingConstructor)
-      .findAny();
+        .filter(matchingConstructor)
+        .findAny();
     if (constructor.isPresent()) {
       return invoke(constructor.get()).withArgs(constructorArguments);
     }

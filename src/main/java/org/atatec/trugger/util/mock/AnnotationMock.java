@@ -75,6 +75,22 @@ import static org.atatec.trugger.reflection.MethodPredicates.withoutParameters;
  */
 public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
 
+  private static final Map<Class<?>, Object> nullValues;
+
+  static {
+    nullValues = new HashMap<Class<?>, Object>() {{
+      put(byte.class, (byte) 0);
+      put(short.class, (short) 0);
+      put(int.class, 0);
+      put(long.class, 0L);
+      put(char.class, (char) 0);
+      put(float.class, 0f);
+      put(double.class, 0d);
+      put(boolean.class, false);
+    }};
+
+  }
+
   private final Class<T> annotationType;
   /**
    * The annotation for specifying the mappings.
@@ -108,9 +124,9 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
           String name = method.getName();
           if (!mocked) {
             lastCall = name;
+            return nullValues.get(method.getReturnType());
           }
-          return mappings.containsKey(name) ?
-              mappings.get(name) : context.nullReturn();
+          return mappings.get(name);
         })
         .proxy();
     this.mappings = new HashMap<>(15);
