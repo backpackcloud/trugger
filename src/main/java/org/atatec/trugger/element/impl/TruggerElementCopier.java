@@ -28,53 +28,58 @@ import java.util.function.Function;
  *
  * @author Marcelo Guimarães
  */
-public final class TruggerElementCopier implements ElementCopier, DestinationSelector {
+public final class TruggerElementCopier implements ElementCopier,
+    DestinationSelector {
 
-  private ElementsSelector selector;
-  private Function<ElementCopy, Object> function;
+  private final ElementsSelector selector;
+  private final Function<ElementCopy, Object> function;
+  private final boolean copyNull;
 
-  private boolean copyNull = true;
-
-  private Object src;
-  private Object dest;
+  private final Object src;
 
   public TruggerElementCopier() {
-
+    this.selector = Elements.elements();
+    this.function = copy -> copy.value();
+    this.copyNull = true;
+    this.src = null;
   }
 
   public TruggerElementCopier(ElementsSelector selector) {
     this.selector = selector;
+    this.function = copy -> copy.value();
+    this.copyNull = true;
+    this.src = null;
+  }
+
+  private TruggerElementCopier(ElementsSelector selector,
+                              Function<ElementCopy, Object> function,
+                              boolean copyNull,
+                              Object src) {
+    this.selector = selector;
+    this.function = function;
+    this.copyNull = copyNull;
+    this.src = src;
   }
 
   public DestinationSelector notNull() {
-    this.copyNull = false;
-    return this;
+    return new TruggerElementCopier(selector, function, false, src);
   }
 
   public DestinationSelector from(Object src) {
-    this.src = src;
-    return this;
-  }
-
-  public void to(Object object) {
-    dest = object;
-    startCopy();
+    return new TruggerElementCopier(selector, function, copyNull, src);
   }
 
   @Override
   public DestinationSelector applying(Function function) {
-    this.function = function;
-    return this;
+    return new TruggerElementCopier(selector, function, copyNull, src);
   }
 
-  private void startCopy() {
-    Set<Element> elements;
-    if (selector == null) {
-      elements = Elements.elements().in(src);
-    } else {
-      elements = selector.in(src);
-    }
-    boolean transform = (function != null);
+  public void to(Object object) {
+    startCopy(object);
+  }
+
+  private void startCopy(Object dest) {
+    Set<Element> elements = selector.in(src);
     Element destProperty;
     for (Element element : elements) {
       String name = element.name();
@@ -85,23 +90,21 @@ public final class TruggerElementCopier implements ElementCopier, DestinationSel
       }
       if (destProperty != null && element.isReadable()
           && destProperty.isWritable()) {
-        copy(transform, destProperty, element);
+        copy(destProperty, element, dest);
       }
     }
   }
 
-  private void copy(boolean transform, Element dest, Element src) {
-    Object value = src.in(this.src).value();
-    PropertyCopyImpl copy = new PropertyCopyImpl(src, dest, value);
-    if (transform) {
-      value = function.apply(copy);
-    }
+  private void copy(Element destElement, Element srcElement, Object dest) {
+    Object value = srcElement.in(this.src).value();
+    PropertyCopyImpl copy = new PropertyCopyImpl(srcElement, destElement, value);
+    value = function.apply(copy);
     if (value != null) {
-      if (Utils.areAssignable(dest.type(), value.getClass())) {
-        dest.in(this.dest).value(value);
+      if (Utils.areAssignable(destElement.type(), value.getClass())) {
+        destElement.in(dest).value(value);
       }
     } else if (copyNull) {
-      dest.in(this.dest).value(value);
+      destElement.in(dest).value(value);
     }
   }
 
