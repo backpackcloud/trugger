@@ -29,7 +29,7 @@ import java.util.function.Function;
  * @author Marcelo Guimarães
  */
 public final class TruggerElementCopier implements ElementCopier,
-    DestinationSelector {
+    CopyDestination {
 
   private final ElementsSelector selector;
   private final Function<ElementCopy, Object> function;
@@ -61,16 +61,16 @@ public final class TruggerElementCopier implements ElementCopier,
     this.src = src;
   }
 
-  public DestinationSelector notNull() {
+  public CopyDestination notNull() {
     return new TruggerElementCopier(selector, function, false, src);
   }
 
-  public DestinationSelector from(Object src) {
+  public CopyDestination from(Object src) {
     return new TruggerElementCopier(selector, function, copyNull, src);
   }
 
   @Override
-  public DestinationSelector applying(Function function) {
+  public CopyDestination applying(Function function) {
     return new TruggerElementCopier(selector, function, copyNull, src);
   }
 

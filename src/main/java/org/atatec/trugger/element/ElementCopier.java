@@ -36,6 +36,6 @@ public interface ElementCopier {
    * @param src
    *          the source object.
    */
-  DestinationSelector from(Object src);
+  CopyDestination from(Object src);
 
 }

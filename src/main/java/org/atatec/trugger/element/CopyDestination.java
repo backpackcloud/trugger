@@ -23,17 +23,17 @@ import java.util.function.Function;
  * @author Marcelo Guimarães
  * @since 4.1
  */
-public interface DestinationSelector {
+public interface CopyDestination {
 
   /**
    * Executes the operation transforming the elements with the given function.
    *
    * @param function the function to use.
    */
-  DestinationSelector applying(Function<ElementCopy, ?> function);
+  CopyDestination applying(Function<ElementCopy, ?> function);
 
   /** Copies only the elements that are not <code>null</code>. */
-  DestinationSelector notNull();
+  CopyDestination notNull();
 
   /**
    * Copy the elements to the given object.
