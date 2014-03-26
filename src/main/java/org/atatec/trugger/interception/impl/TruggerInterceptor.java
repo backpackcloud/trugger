@@ -112,11 +112,7 @@ public class TruggerInterceptor implements InvocationHandler, Interceptor {
     try {
       return action.intercept(context);
     } catch (Throwable e) {
-      if (handler != null) {
-        return handler.handle(context, e);
-      } else {
-        throw e;
-      }
+      return handler.handle(context, e);
     }
   }
 
