@@ -20,8 +20,10 @@ import org.atatec.trugger.TruggerException;
 import org.atatec.trugger.interception.Interception;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -74,10 +76,23 @@ public class InterceptorTest {
   @Test(expected = TruggerException.class)
   public void testInterfaceInterception() {
     MyInterface obj = Interception.intercept(MyInterface.class)
-        .onCall(context -> {throw new IllegalArgumentException();})
-        .onError((context, error) -> {throw new TruggerException(error);})
+        .onCall(context -> {
+          throw new IllegalArgumentException();
+        })
+        .onError((context, error) -> {
+          throw new TruggerException(error);
+        })
         .proxy();
     obj.doIt(null);
+  }
+
+  @Test
+  public void testInterfacesInterception() {
+    Object obj = Interception.intercept(Function.class, Predicate.class)
+        .onCall(context -> true)
+        .proxy();
+    assertTrue(((Function<Object, Boolean>) obj).apply(null));
+    assertTrue(((Predicate) obj).test(null));
   }
 
 }
