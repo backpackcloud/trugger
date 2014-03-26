@@ -41,7 +41,7 @@ public interface Interception {
    * @param other the other interception to execute after this
    * @return the new Interception
    */
-  default Interception and(Interception other) {
+  default Interception andThen(Interception other) {
     return context -> {
       this.intercept(context);
       return other.intercept(context);

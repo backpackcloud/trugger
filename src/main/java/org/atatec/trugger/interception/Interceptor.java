@@ -32,48 +32,67 @@ import java.util.Set;
  */
 public final class Interceptor implements InvocationHandler {
 
-  private Object target;
-  private Class[] interfaces;
-  private ClassLoader classloader;
-  private Interception action;
-  private InterceptionFailHandler handler;
+  private final Object target;
+  private final Class[] interfaces;
+  private final ClassLoader classloader;
+  private final Interception action;
+  private final InterceptionFailHandler handler;
 
   private Interceptor(Object target) {
     Class<?> targetClass = Utils.resolveType(target);
     this.classloader = targetClass.getClassLoader();
     this.target = target;
-    loadInterfaces();
+    Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
+    this.interfaces = classes.toArray(new Class[classes.size()]);
+    this.action = (context) -> context.invokeMethod();
+    this.handler = (context, error) -> {
+      throw error;
+    };
   }
 
   private Interceptor(Class[] interfaces) {
     this.interfaces = interfaces;
     this.classloader = ClassLoader.getSystemClassLoader();
+    this.target = null;
+    this.action = (context) -> context.invokeMethod();
+    this.handler = (context, error) -> {
+      throw error;
+    };
+  }
+
+  public Interceptor(Object target, Class[] interfaces, ClassLoader classloader,
+                     Interception action, InterceptionFailHandler handler) {
+    this.target = target;
+    this.interfaces = interfaces;
+    this.classloader = classloader;
+    this.action = action;
+    this.handler = handler;
   }
 
   public Interceptor with(ClassLoader classloader) {
-    this.classloader = classloader;
-    return this;
+    return new Interceptor(
+        target, interfaces, classloader, action, handler
+    );
   }
 
   public Interceptor of(Object target) {
-    this.target = target;
-    loadInterfaces();
-    return this;
-  }
-
-  private void loadInterfaces() {
     Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
-    interfaces = classes.toArray(new Class[classes.size()]);
+    return new Interceptor(
+        target, classes.toArray(new Class[classes.size()]), classloader,
+        action, handler
+    );
   }
 
   public Interceptor onCall(Interception action) {
-    this.action = action;
-    return this;
+    return new Interceptor(
+        target, interfaces, classloader, action, handler
+    );
   }
 
   public Interceptor onError(InterceptionFailHandler handler) {
-    this.handler = handler;
-    return this;
+    return new Interceptor(
+        target, interfaces, classloader, action, handler
+    );
   }
 
   public <E> E proxy() {
@@ -107,4 +126,5 @@ public final class Interceptor implements InvocationHandler {
   public static Interceptor intercept(Object target) {
     return new Interceptor(target);
   }
+
 }
