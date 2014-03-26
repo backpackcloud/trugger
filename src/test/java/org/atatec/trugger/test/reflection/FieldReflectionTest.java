@@ -18,16 +18,14 @@ package org.atatec.trugger.test.reflection;
 
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.reflection.Reflector;
+import org.atatec.trugger.test.Flag;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
-
+import static org.atatec.trugger.reflection.FieldPredicates.*;
 import static org.atatec.trugger.reflection.Reflection.field;
-import static org.atatec.trugger.reflection.Reflection.fields;
 import static org.atatec.trugger.reflection.Reflection.handle;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * A class for testing field reflection by the {@link Reflector}.
@@ -36,9 +34,15 @@ import static org.junit.Assert.assertNull;
  */
 public class FieldReflectionTest {
 
+  @Flag
   private String a;
   private String b;
   private String c;
+
+  @Flag
+  private int x;
+  private int y;
+  private Integer z;
 
   @Before
   public void initialize() {
@@ -57,20 +61,62 @@ public class FieldReflectionTest {
   }
 
   @Test
-  public void testHandlerForCollection() {
-    ValueHandler handler = handle(fields()).in(this);
-    Collection values = handler.value();
-    for (Object object : values) {
-      assertNull(object);
-    }
-    handler.value("string");
-    assertEquals("string", a);
-    assertEquals("string", b);
-    assertEquals("string", c);
-    values = handler.value();
-    for (Object object : values) {
-      assertEquals("string", object);
-    }
+  public void testPredicates() {
+    assertTrue(
+        ofType(String.class).test(
+            field("a").in(this)
+        )
+    );
+    assertTrue(
+        assignableTo(String.class).test(
+            field("b").in(this)
+        )
+    );
+    assertTrue(
+        assignableTo(CharSequence.class).test(
+            field("b").in(this)
+        )
+    );
+    assertFalse(
+        assignableTo(String.class).test(
+            field("x").in(this)
+        )
+    );
+    assertTrue(
+        ofType(int.class).test(
+            field("x").in(this)
+        )
+    );
+    assertTrue(
+        ofType(Integer.class).test(
+            field("z").in(this)
+        )
+    );
+    assertFalse(
+        ofType(Integer.class).test(
+            field("y").in(this)
+        )
+    );
+    assertTrue(
+        annotatedWith(Flag.class).test(
+            field("a").in(this)
+        )
+    );
+    assertTrue(
+        ANNOTATED.test(
+            field("a").in(this)
+        )
+    );
+    assertFalse(
+        annotatedWith(Flag.class).test(
+            field("b").in(this)
+        )
+    );
+    assertFalse(
+        ANNOTATED.test(
+            field("b").in(this)
+        )
+    );
   }
 
 }

@@ -151,24 +151,10 @@ public class MethodPredicates {
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated method
-   * has the return type assignable to the specified type.
-   */
-  public static Predicate<Method> returnsAssignableTo(Class returnType) {
-    return element -> returnType.isAssignableFrom(element.getReturnType());
-  }
-
-  /**
-   * A predicate that returns <code>true</code> if the element has annotations.
+   * A predicate that returns <code>true</code> if the method has annotations.
    */
   public static final Predicate<Method> ANNOTATED =
       element -> element.getDeclaredAnnotations().length > 0;
-
-  /**
-   * A predicate that returns <code>false</code> if the element has no
-   * annotations
-   */
-  public static final Predicate<Method> NOT_ANNOTATED = ANNOTATED.negate();
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated element
@@ -177,15 +163,6 @@ public class MethodPredicates {
   public static Predicate<Method> annotatedWith(
       final Class<? extends Annotation> annotationType) {
     return element -> element.isAnnotationPresent(annotationType);
-  }
-
-  /**
-   * @return a predicate that returns <code>false</code> if the evaluated
-   * element is annotated with the specified Annotation.
-   */
-  public static Predicate<Method> notAnnotatedWith(
-      final Class<? extends Annotation> annotationType) {
-    return annotatedWith(annotationType).negate();
   }
 
 }

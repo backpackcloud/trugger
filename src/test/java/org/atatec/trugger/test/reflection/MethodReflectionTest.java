@@ -17,11 +17,15 @@
 package org.atatec.trugger.test.reflection;
 
 import org.atatec.trugger.reflection.Reflector;
-import org.junit.After;
-import org.junit.Before;
+import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
-import static org.atatec.trugger.reflection.Reflection.*;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+import static org.atatec.trugger.reflection.Reflection.invoke;
+import static org.atatec.trugger.reflection.Reflection.method;
+import static org.atatec.trugger.reflection.MethodPredicates.ANNOTATED;
+import static org.atatec.trugger.reflection.MethodPredicates.annotatedWith;
 import static org.easymock.EasyMock.*;
 
 /**
@@ -32,37 +36,56 @@ import static org.easymock.EasyMock.*;
 public class MethodReflectionTest {
 
   static interface TestInterface {
+
     void doIt();
 
     void foo();
 
+    @Flag
     void bar();
-  }
 
-  private TestInterface obj;
-
-  @Before
-  public void before() {
-    obj = createMock(TestInterface.class);
-  }
-
-  @After
-  public void after() {
-    verify(obj);
   }
 
   @Test
   public void invokerTest() {
+    TestInterface obj = createMock(TestInterface.class);
     obj.doIt();
     expectLastCall().once();
     replay(obj);
     invoke(method("doIt")).in(obj).withoutArgs();
+    verify(obj);
   }
 
   @Test
   public void invokerForNoMethodTest() {
+    TestInterface obj = createMock(TestInterface.class);
     replay(obj);
     invoke(method("notDeclared")).in(obj).withoutArgs();
+    verify(obj);
+  }
+
+  @Test
+  public void predicatesTest() {
+    assertFalse(
+        ANNOTATED.test(
+            method("doIt").in(TestInterface.class)
+        )
+    );
+    assertFalse(
+        annotatedWith(Flag.class).test(
+            method("doIt").in(TestInterface.class)
+        )
+    );
+    assertTrue(
+        ANNOTATED.test(
+            method("bar").in(TestInterface.class)
+        )
+    );
+    assertTrue(
+        annotatedWith(Flag.class).test(
+            method("bar").in(TestInterface.class)
+        )
+    );
   }
 
 }

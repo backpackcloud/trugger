@@ -19,6 +19,7 @@ package org.atatec.trugger.reflection;
 
 import org.atatec.trugger.util.Utils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.function.Predicate;
 
@@ -35,18 +36,26 @@ public class FieldPredicates {
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated field is of the
-   *         given type.
+   * given type.
    */
   public static Predicate<Field> ofType(final Class type) {
-    return element -> type.equals(element.getType());
+    return field -> type.equals(field.getType());
   }
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated field is
-   *         assignable to the given type.
+   * assignable to the given type.
    */
   public static Predicate<Field> assignableTo(final Class type) {
-    return element -> Utils.areAssignable(type, element.getType());
+    return field -> Utils.areAssignable(type, field.getType());
+  }
+
+  public static Predicate<Field> ANNOTATED =
+      field -> field.getAnnotations().length > 0;
+
+  public static Predicate<Field> annotatedWith(
+      Class<? extends Annotation> annotationType) {
+    return field -> field.isAnnotationPresent(annotationType);
   }
 
 }

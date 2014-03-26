@@ -42,14 +42,16 @@ public class FileResourceFinder implements ResourceFinder {
     return "file";
   }
 
-  public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
-    Set<String> resources = new HashSet<String>(30);
+  public Set<String> find(URL resource, String packageName,
+                          ScanLevel scanLevel) {
+    Set<String> resources = new HashSet<>(30);
     String packagePath = DOT_PATTERN.matcher(packageName).replaceAll("/");
     findInDirectory(resources, resource, packagePath, scanLevel);
     return resources;
   }
 
-  private void findInDirectory(Set<String> resources, URL fullPath, String packagePath, ScanLevel scanLevel) {
+  private void findInDirectory(Set<String> resources, URL fullPath,
+                               String packagePath, ScanLevel scanLevel) {
     File directory;
     try {
       directory = new File(fullPath.toURI());
@@ -62,7 +64,8 @@ public class FileResourceFinder implements ResourceFinder {
         if (canInclude(scanLevel, file)) {
           if (file.isDirectory()) {
             try {
-              findInDirectory(resources, file.toURI().toURL(), packagePath + '/' + file.getName(), scanLevel);
+              findInDirectory(resources, file.toURI().toURL(),
+                  packagePath + '/' + file.getName(), scanLevel);
             } catch (MalformedURLException e) {
               throw new ClassScanningException(e);
             }
@@ -80,9 +83,8 @@ public class FileResourceFinder implements ResourceFinder {
    *
    * @param scanLevel    the scan level for the package.
    * @param resourceFile the file that represents this resource.
-   *
-   * @return <code>true</code> if the specified resource can be included in the found
-   *         resources.
+   * @return <code>true</code> if the specified resource can be included in the
+   * found resources.
    */
   private static boolean canInclude(ScanLevel scanLevel, File resourceFile) {
     return scanLevel != ScanLevel.PACKAGE || !resourceFile.isDirectory();
