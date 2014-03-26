@@ -64,10 +64,6 @@ public final class TruggerElementFactory implements ElementFactory {
     return new TruggerElementSelector(name, finder);
   }
 
-  public ElementSelector createElementSelector() {
-    return new TruggerNoNamedElementSelector(finder);
-  }
-
   /**
    * Returns a new {@link TruggerElementsSelector}.
    */

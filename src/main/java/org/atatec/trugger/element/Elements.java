@@ -63,16 +63,6 @@ public class Elements {
   }
 
   /**
-   * Selects an element without specifying a name.
-   *
-   * @return a component for selecting the element.
-   * @since 2.5
-   */
-  public static ElementSelector element() {
-    return factory.createElementSelector();
-  }
-
-  /**
    * Selects a set of elements.
    *
    * @return a component for selecting the elements.

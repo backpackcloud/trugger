@@ -48,15 +48,6 @@ public interface ElementFactory {
   ElementSelector createElementSelector(String name);
 
   /**
-   * Creates a selector for an {@link Element} object without specifying the name.
-   *
-   * @return the selector.
-   *
-   * @since 2.5
-   */
-  ElementSelector createElementSelector();
-
-  /**
    * Creates a selector for a set of {@link Element} objects.
    *
    * @return the selector.
