@@ -36,25 +36,21 @@ public class TruggerScanner implements Scanner {
   private static final Pattern SLASH_PATTERN = Pattern.compile("/");
 
   private final ClassScannerFactory factory;
-  private ClassLoader classLoader;
+  private final ClassLoader classLoader;
 
   public TruggerScanner(ClassScannerFactory factory, ClassLoader classLoader) {
     this.factory = factory;
     this.classLoader = classLoader;
   }
 
-  public void setClassLoader(ClassLoader classLoader) {
-    this.classLoader = classLoader;
-  }
-
   /**
    * Scans and returns the found classes in the specified package.
    *
-   * @param packageEntry
-   *          the package to scan.
+   * @param packageEntry the package to scan.
    * @return the classes found in the package
    */
-  public Set<Class> scanPackage(PackageScan packageEntry) throws IOException, ClassNotFoundException {
+  public Set<Class> scanPackage(PackageScan packageEntry) throws IOException,
+      ClassNotFoundException {
     String path = packageEntry.packageName().replace('.', '/');
     Enumeration<URL> resources = classLoader.getResources(path);
     Set<Class> classes = new HashSet<Class>(40);
@@ -63,11 +59,14 @@ public class TruggerScanner implements Scanner {
         URL resource = resources.nextElement();
         String protocol = resource.getProtocol();
         ResourceFinder finder = factory.finderFor(protocol);
-        Set<String> resourcesName = finder.find(resource, packageEntry.packageName(), packageEntry.scanLevel());
+        Set<String> resourcesName = finder.find(resource,
+            packageEntry.packageName(), packageEntry.scanLevel());
         for (String resourceName : resourcesName) {
           if (resourceName.endsWith(CLASS_EXTENSION)) {
             resourceName =
-                SLASH_PATTERN.matcher(resourceName).replaceAll(".").substring(0, resourceName.length() - CLASS_EXTENSION.length());
+                SLASH_PATTERN.matcher(resourceName).replaceAll(".")
+                    .substring(0,
+                        resourceName.length() - CLASS_EXTENSION.length());
             classes.add(Class.forName(resourceName, true, classLoader));
           }
         }

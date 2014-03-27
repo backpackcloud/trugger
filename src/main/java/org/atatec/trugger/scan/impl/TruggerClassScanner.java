@@ -36,7 +36,8 @@ import org.atatec.trugger.selector.ClassesSelector;
  */
 public class TruggerClassScanner implements ClassScanner {
 
-  private final Scanner scanner;
+  private final ClassScannerFactory factory;
+  private final ClassLoader classLoader;
 
   /**
    * Creates a new finder using the context class loader in the current Thread.
@@ -45,18 +46,19 @@ public class TruggerClassScanner implements ClassScanner {
     this(Thread.currentThread().getContextClassLoader(), factory);
   }
 
-  public TruggerClassScanner(ClassLoader classLoader, ClassScannerFactory factory) {
-    this.scanner = new TruggerScanner(factory, classLoader);
+  public TruggerClassScanner(ClassLoader classLoader,
+                             ClassScannerFactory factory) {
+    this.classLoader = classLoader;
+    this.factory = factory;
   }
 
   @Override
   public ClassScanner with(ClassLoader classLoader) {
-    this.scanner.setClassLoader(classLoader);
-    return this;
+    return new TruggerClassScanner(classLoader, factory);
   }
 
   public ClassesSelector find() {
-    return new TruggerClassesSelector(scanner);
+    return new TruggerClassesSelector(new TruggerScanner(factory, classLoader));
   }
 
 }

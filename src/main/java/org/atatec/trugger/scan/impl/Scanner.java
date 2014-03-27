@@ -29,20 +29,13 @@ import java.util.Set;
 public interface Scanner {
 
   /**
-   * Sets the class loader to use.
-   *
-   * @param classLoader
-   *          the class loader to use.
-   */
-  void setClassLoader(ClassLoader classLoader);
-
-  /**
    * Scans and returns the found classes in the specified package.
    *
    * @param packageEntry
    *          the package to scan.
    * @return the classes found in the package
    */
-  Set<Class> scanPackage(PackageScan packageEntry) throws IOException, ClassNotFoundException;
+  Set<Class> scanPackage(PackageScan packageEntry) throws IOException,
+      ClassNotFoundException;
 
 }
