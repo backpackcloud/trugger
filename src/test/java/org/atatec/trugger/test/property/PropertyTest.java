@@ -151,7 +151,7 @@ public class PropertyTest {
     o2.allAccess = "all1";
 
     ElementsSelector selection = Elements.elements()
-        .filter(ElementPredicates.ofType(boolean.class).negate());
+        .filter(ElementPredicates.type(boolean.class).negate());
 
     Elements.copy(selection).from(o1).notNull().to(o2);
 

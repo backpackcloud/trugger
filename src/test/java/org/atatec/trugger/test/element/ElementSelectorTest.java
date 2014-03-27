@@ -59,32 +59,13 @@ public class ElementSelectorTest {
     );
     assertSame(
         element,
-        select().filter(ANNOTATED).in(this)
+        select().filter(annotated()).in(this)
     );
     assertNull(
-        select().filter(notAnnotatedWith(Flag.class)).in(this)
+        select().filter(annotatedWith(Flag.class).negate()).in(this)
     );
     assertNull(
-        select().filter(NOT_ANNOTATED).in(this)
-    );
-  }
-
-  @Test
-  public void testNotAnnotatedAnnotatedSelector() {
-    element = mock(element());
-    assertSame(
-        element,
-        select().filter(notAnnotatedWith(Flag.class)).in(this)
-    );
-    assertSame(
-        element,
-        select().filter(NOT_ANNOTATED).in(this)
-    );
-    assertNull(
-        select().filter(annotatedWith(Flag.class)).in(this)
-    );
-    assertNull(
-        select().filter(ANNOTATED).in(this)
+        select().filter(annotated().negate()).in(this)
     );
   }
 
@@ -93,22 +74,7 @@ public class ElementSelectorTest {
     element = mock(element().readable());
     assertSame(
         element,
-        select().filter(READABLE).in(this)
-    );
-    assertNull(
-        select().filter(NON_READABLE).in(this)
-    );
-  }
-
-  @Test
-  public void testNonReadableSelector() {
-    element = mock(element().nonReadable());
-    assertSame(
-        element,
-        select().filter(NON_READABLE).in(this)
-    );
-    assertNull(
-        select().filter(READABLE).in(this)
+        select().filter(readable()).in(this)
     );
   }
 
@@ -117,22 +83,7 @@ public class ElementSelectorTest {
     element = mock(element().specific());
     assertSame(
         element,
-        select().filter(SPECIFIC).in(this)
-    );
-    assertNull(
-        select().filter(NON_SPECIFIC).in(this)
-    );
-  }
-
-  @Test
-  public void testNonSpecificSelector() {
-    element = mock(element().nonSpecific());
-    assertSame(
-        element,
-        select().filter(NON_SPECIFIC).in(this)
-    );
-    assertNull(
-        select().filter(SPECIFIC).in(this)
+        select().filter(specific()).in(this)
     );
   }
 
@@ -141,22 +92,15 @@ public class ElementSelectorTest {
     element = mock(element().writable());
     assertSame(
         element,
-        select().filter(WRITABLE).in(this)
-    );
-    assertNull(
-        select().filter(NON_WRITABLE).in(this)
+        select().filter(writable()).in(this)
     );
   }
 
   @Test
   public void testNonWritableSelector() {
     element = mock(element().nonWritable());
-    assertSame(
-        element,
-        select().filter(NON_WRITABLE).in(this)
-    );
     assertNull(
-        select().filter(WRITABLE).in(this)
+        select().filter(writable()).in(this)
     );
   }
 
@@ -165,22 +109,22 @@ public class ElementSelectorTest {
     element = mock(element().ofType(String.class));
     assertSame(
         element,
-        select().filter(ofType(String.class)).in(this)
+        select().filter(type(String.class)).in(this)
     );
     assertNull(
-        select().filter(ofType(Integer.class)).in(this)
+        select().filter(type(Integer.class)).in(this)
     );
     assertNull(
-        select().filter(ofType(CharSequence.class)).in(this)
+        select().filter(type(CharSequence.class)).in(this)
     );
 
     element = mock(element().ofType(int.class));
     assertSame(
         element,
-        select().filter(ofType(int.class)).in(this)
+        select().filter(type(int.class)).in(this)
     );
     assertNull(
-        select().filter(ofType(Integer.class)).in(this)
+        select().filter(type(Integer.class)).in(this)
     );
   }
 

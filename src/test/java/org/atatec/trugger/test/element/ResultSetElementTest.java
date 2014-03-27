@@ -69,7 +69,7 @@ public class ResultSetElementTest {
     
     elements = elements().in(resultSet);
     assertFalse(elements.isEmpty());
-    assertMatch(elements, ElementPredicates.SPECIFIC);
+    assertMatch(elements, ElementPredicates.specific());
     assertElements(elements, "name", "nickname", "age");
   }
   

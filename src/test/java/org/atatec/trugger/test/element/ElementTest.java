@@ -21,7 +21,6 @@ import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
 import static org.atatec.trugger.element.ElementPredicates.annotatedWith;
-import static org.atatec.trugger.element.ElementPredicates.notAnnotatedWith;
 import static org.atatec.trugger.element.Elements.element;
 import static org.junit.Assert.*;
 
@@ -45,7 +44,7 @@ public class ElementTest {
     assertFalse(el.isSpecific());
 
     el = element("age")
-        .filter(notAnnotatedWith(Flag.class))
+        .filter(annotatedWith(Flag.class).negate())
         .in(TestObject.class);
     assertNull(el);
 

@@ -40,7 +40,7 @@ public final class ElementPredicates {
    * given type.
    * @since 2.0
    */
-  public static Predicate<Element> ofType(Class<?> type) {
+  public static Predicate<Element> type(Class<?> type) {
     return element -> type.equals(element.type());
   }
 
@@ -52,22 +52,12 @@ public final class ElementPredicates {
     return ReflectionPredicates.annotatedWith(annotationType);
   }
 
-  public static Predicate<Element> notAnnotatedWith(
-      Class<? extends Annotation> annotationType) {
-    return annotatedWith(annotationType).negate();
-  }
-
   /**
    * A predicate that returns <code>true</code> if the element has annotations.
    */
-  public static Predicate<Element> ANNOTATED =
-      element -> element.getDeclaredAnnotations().length > 0;
-
-  /**
-   * A predicate that returns <code>true</code> if the element has
-   * no annotations.
-   */
-  public static Predicate<Element> NOT_ANNOTATED = ANNOTATED.negate();
+  public static Predicate<Element> annotated() {
+    return element -> element.getDeclaredAnnotations().length > 0;
+  }
 
   /**
    * @return a predicate that returns <code>true</code> if the element name
@@ -81,28 +71,22 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element is writable.
    */
-  public static final Predicate<Element> WRITABLE = element -> element.isWritable();
-
-  /**
-   * A predicate that returns <code>false</code> if the element is writable.
-   */
-  public static final Predicate<Element> NON_WRITABLE = WRITABLE.negate();
+  public static final Predicate<Element> writable() {
+    return element -> element.isWritable();
+  }
 
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
-  public static final Predicate<Element> READABLE = element -> element.isReadable();
-
-  /**
-   * A predicate that returns <code>false</code> if the element is readable.
-   */
-  public static final Predicate<Element> NON_READABLE = READABLE.negate();
+  public static final Predicate<Element> readable() {
+    return element -> element.isReadable();
+  }
 
   /**
    * @return a predicate that return <code>true</code> if the element is
    * assignable to the given type.
    */
-  public static Predicate<Element> assignableTo(final Class<?> type) {
+  public static Predicate<Element> assignableTo(Class<?> type) {
     return element -> Utils.areAssignable(type, element.type());
   }
 
@@ -110,12 +94,8 @@ public final class ElementPredicates {
    * A predicate that returns <code>true</code> if the element is
    * {@link Element#isSpecific() specific}.
    */
-  public static final Predicate<Element> SPECIFIC = element -> element.isSpecific();
-
-  /**
-   * A predicate that returns <code>true</code> if the element is not
-   * {@link Element#isSpecific() specific}.
-   */
-  public static final Predicate<Element> NON_SPECIFIC = SPECIFIC.negate();
+  public static final Predicate<Element> specific() {
+    return element -> element.isSpecific();
+  }
 
 }

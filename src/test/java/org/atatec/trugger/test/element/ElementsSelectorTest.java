@@ -61,29 +61,9 @@ public class ElementsSelectorTest {
     );
     assertElements(
         select()
-            .filter(ANNOTATED)
+            .filter(annotated())
             .in(this)
         , "annotated"
-    );
-  }
-
-  @Test
-  public void testNotAnnotatedSelector() {
-    finder = mock(elementFinder()
-        .add(element().named("annotated").annotatedWith(Flag.class))
-        .add(element().named("notAnnotated")));
-
-    assertElements(
-        select()
-            .filter(notAnnotatedWith(Flag.class))
-            .in(this)
-        , "notAnnotated"
-    );
-    assertElements(
-        select()
-            .filter(NOT_ANNOTATED)
-            .in(this)
-        , "notAnnotated"
     );
   }
 
@@ -95,23 +75,9 @@ public class ElementsSelectorTest {
 
     assertElements(
         select()
-            .filter(READABLE)
+            .filter(readable())
             .in(this)
         , "readable"
-    );
-  }
-
-  @Test
-  public void testNonReadableSelector() {
-    finder = mock(elementFinder()
-        .add(element().named("readable").readable())
-        .add(element().named("nonReadable").nonReadable()));
-
-    assertElements(
-        select()
-            .filter(NON_READABLE)
-            .in(this)
-        , "nonReadable"
     );
   }
 
@@ -123,23 +89,9 @@ public class ElementsSelectorTest {
 
     assertElements(
         select()
-            .filter(SPECIFIC)
+            .filter(specific())
             .in(this)
         , "specific"
-    );
-  }
-
-  @Test
-  public void testNonSpecificSelector() {
-    finder = mock(elementFinder()
-        .add(element().named("specific").specific())
-        .add(element().named("nonSpecific").nonSpecific()));
-
-    assertElements(
-        select()
-            .filter(NON_SPECIFIC)
-            .in(this)
-        , "nonSpecific"
     );
   }
 
@@ -151,28 +103,14 @@ public class ElementsSelectorTest {
 
     assertElements(
         select()
-            .filter(WRITABLE)
+            .filter(writable())
             .in(this)
         , "writable"
     );
   }
 
   @Test
-  public void testNonWritableSelector() {
-    finder = mock(elementFinder()
-        .add(element().named("writable").writable())
-        .add(element().named("nonWritable").nonWritable()));
-
-    assertElements(
-        select()
-            .filter(NON_WRITABLE)
-            .in(this)
-        , "nonWritable"
-    );
-  }
-
-  @Test
-  public void testOfTypeSelector() {
+  public void testTypeSelector() {
     finder = mock(elementFinder()
         .add(element().named("string").ofType(String.class))
         .add(element().named("stringBuilder").ofType(StringBuilder.class))
@@ -180,19 +118,19 @@ public class ElementsSelectorTest {
 
     assertElements(
         select()
-            .filter(ofType(String.class))
+            .filter(type(String.class))
             .in(this)
         , "string"
     );
     assertElements(
         select()
-            .filter(ofType(Integer.class))
+            .filter(type(Integer.class))
             .in(this)
         , "integer"
     );
     assertTrue(
         select()
-            .filter(ofType(CharSequence.class))
+            .filter(type(CharSequence.class))
             .in(this)
         .isEmpty()
     );

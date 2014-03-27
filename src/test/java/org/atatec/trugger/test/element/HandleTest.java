@@ -19,13 +19,15 @@ package org.atatec.trugger.test.element;
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
 import java.util.List;
 
-import static org.atatec.trugger.element.ElementPredicates.*;
+import static org.atatec.trugger.element.ElementPredicates.specific;
+import static org.atatec.trugger.element.ElementPredicates.type;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.element.Elements.handle;
 import static org.junit.Assert.assertEquals;
@@ -61,7 +63,7 @@ public class HandleTest {
   @Test
   public void testHandleForSpecificElements() {
     List<Element> elements = elements()
-        .filter(ofType(String.class).and(SPECIFIC))
+        .filter(type(String.class).and(specific()))
         .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);
     Collection<String> strings = valueHandler.value();
@@ -80,15 +82,13 @@ public class HandleTest {
   @Test
   public void testHandlerForNonSpecificElements() {
     List<Element> elements = elements()
-        .filter(ofType(String.class).and(NON_SPECIFIC))
+        .filter(type(String.class).and(specific().negate()))
         .in(TestObject.class);
     TestObject target = new TestObject();
     ValueHandler valueHandler = handle(elements, target);
     Collection<String> strings = valueHandler.value();
     assertEquals(4, strings.size());
-    for (String string : strings) {
-      assertNull(string);
-    }
+    strings.forEach(Assert::assertNull);
     valueHandler.value("value2");
     valueHandler = handle(elements, target);
     strings = valueHandler.value();
@@ -100,7 +100,7 @@ public class HandleTest {
   @Test(expected = HandlingException.class)
   public void testHandlingError() {
     List<Element> elements = elements()
-        .filter(ofType(String.class).and(NON_SPECIFIC))
+        .filter(type(String.class).and(specific().negate()))
         .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);
     valueHandler.value("");
