@@ -52,7 +52,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
       List<Method> declaredMethods = methods()
-          .filter((GETTER.or(SETTER)).and(nonStatic()))
+          .filter((getter().or(setter())).and(nonStatic()))
           .in(type);
       for (Method method : declaredMethods) {
         String name = Reflection.parsePropertyName(method);

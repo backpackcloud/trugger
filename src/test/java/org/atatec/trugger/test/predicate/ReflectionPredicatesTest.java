@@ -24,12 +24,9 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import static org.atatec.trugger.reflection.MethodPredicates.*;
 import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.MethodPredicates.GETTER;
 import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
-import static org.atatec.trugger.reflection.MethodPredicates.SETTER;
-import static org.atatec.trugger.reflection.MethodPredicates.getterOf;
-import static org.atatec.trugger.reflection.MethodPredicates.setterOf;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNotMatch;
 import static org.junit.Assert.assertFalse;
@@ -118,15 +115,15 @@ public class ReflectionPredicatesTest {
   public void testGoodGetters() throws NoSuchMethodException {
     Class c = GoodGetterTest.class;
 
-    assertMatch(c.getMethod("getValue"), GETTER);
+    assertMatch(c.getMethod("getValue"), getter());
     assertMatch(c.getMethod("getValue"), getterOf("value"));
     assertNotMatch(c.getMethod("getValue"), getterOf("getValue"));
 
-    assertMatch(c.getMethod("isValue"), GETTER);
+    assertMatch(c.getMethod("isValue"), getter());
     assertMatch(c.getMethod("isValue"), getterOf("value"));
     assertNotMatch(c.getMethod("isValue"), getterOf("Value"));
 
-    assertMatch(c.getMethod("value"), GETTER);
+    assertMatch(c.getMethod("value"), getter());
     assertMatch(c.getMethod("value"), getterOf("value"));
   }
 
@@ -170,26 +167,26 @@ public class ReflectionPredicatesTest {
   public void testBadGetters() throws NoSuchMethodException {
     Class c = BadGetterTest.class;
 
-    assertNotMatch(c.getDeclaredMethod("getValue"), GETTER);
+    assertNotMatch(c.getDeclaredMethod("getValue"), getter());
     assertNotMatch(c.getDeclaredMethod("getValue"), getterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("isValue"), GETTER);
+    assertNotMatch(c.getDeclaredMethod("isValue"), getter());
     assertNotMatch(c.getDeclaredMethod("isValue"), getterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("value"), GETTER);
+    assertNotMatch(c.getDeclaredMethod("value"), getter());
     assertNotMatch(c.getDeclaredMethod("value"), getterOf("value"));
 
-    assertNotMatch(c.getMethod("getSize", int.class), GETTER);
+    assertNotMatch(c.getMethod("getSize", int.class), getter());
     assertNotMatch(c.getMethod("getSize", int.class), getterOf("size"));
 
-    assertNotMatch(c.getMethod("isSize", int.class), GETTER);
+    assertNotMatch(c.getMethod("isSize", int.class), getter());
     assertNotMatch(c.getMethod("isSize", int.class), getterOf("size"));
 
-    assertNotMatch(c.getMethod("size", int.class), GETTER);
+    assertNotMatch(c.getMethod("size", int.class), getter());
     assertNotMatch(c.getMethod("size", int.class), getterOf("size"));
 
-    assertNotMatch(c.getMethod("get"), GETTER);
-    assertNotMatch(c.getMethod("is"), GETTER);
+    assertNotMatch(c.getMethod("get"), getter());
+    assertNotMatch(c.getMethod("is"), getter());
   }
 
   class GoodSetterTest {
@@ -201,7 +198,7 @@ public class ReflectionPredicatesTest {
   public void testGoodSetter() throws NoSuchMethodException {
     Class c = GoodSetterTest.class;
 
-    assertMatch(c.getMethod("setValue", int.class), SETTER);
+    assertMatch(c.getMethod("setValue", int.class), setter());
     assertMatch(c.getMethod("setValue", int.class), setterOf("value"));
     assertNotMatch(c.getMethod("setValue", int.class), setterOf("setValue"));
     assertNotMatch(c.getMethod("setValue", int.class), setterOf("Value"));
@@ -224,21 +221,21 @@ public class ReflectionPredicatesTest {
   public void testBadSetter() throws NoSuchMethodException {
     Class c = BadSetterTest.class;
 
-    assertNotMatch(c.getDeclaredMethod("setValue", int.class), SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", int.class), setter());
     assertNotMatch(c.getDeclaredMethod("setValue", int.class), setterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("setValue", long.class), SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", long.class), setter());
     assertNotMatch(c.getDeclaredMethod("setValue", long.class), setterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("setValue", double.class), SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", double.class), setter());
     assertNotMatch(c.getDeclaredMethod("setValue", double.class), setterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("setValue", boolean.class), SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", boolean.class), setter());
     assertNotMatch(c.getDeclaredMethod("setValue", boolean.class), setterOf("value"));
 
-    assertNotMatch(c.getDeclaredMethod("set", int.class), SETTER);
+    assertNotMatch(c.getDeclaredMethod("set", int.class), setter());
 
-    assertNotMatch(c.getDeclaredMethod("setValue", int.class), SETTER);
+    assertNotMatch(c.getDeclaredMethod("setValue", int.class), setter());
     assertNotMatch(c.getDeclaredMethod("setValue", int.class), setterOf("value"));
   }
 

@@ -49,29 +49,31 @@ public class MethodPredicates {
    * return an object. If the method has the prefix "is", then it must return a boolean
    * value.
    */
-  public static final Predicate<Method> GETTER = method -> {
-    if (!Modifier.isPublic(method.getModifiers())) {
-      return false;
-    }
-    String name = method.getName();
-    Class<?> returnType = method.getReturnType();
-    if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
-        (returnType == null || returnType.equals(void.class) ||
-            returnType.equals(Void.class))) {
-      return false;
-    }
-    if (TO_PATTERN.matcher(name).matches()) {
-      return false;
-    }
-    if (name.startsWith("get")) {
-      return GET_PATTERN.matcher(name).matches();
-    } else if (name.startsWith("is")) {
-      boolean returnBoolean = (Boolean.class.equals(returnType) ||
-          boolean.class.equals(returnType));
-      return returnBoolean && IS_PATTERN.matcher(name).matches();
-    }
-    return true;
-  };
+  public static final Predicate<Method> getter() {
+    return method -> {
+      if (!Modifier.isPublic(method.getModifiers())) {
+        return false;
+      }
+      String name = method.getName();
+      Class<?> returnType = method.getReturnType();
+      if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
+          (returnType == null || returnType.equals(void.class) ||
+              returnType.equals(Void.class))) {
+        return false;
+      }
+      if (TO_PATTERN.matcher(name).matches()) {
+        return false;
+      }
+      if (name.startsWith("get")) {
+        return GET_PATTERN.matcher(name).matches();
+      } else if (name.startsWith("is")) {
+        boolean returnBoolean = (Boolean.class.equals(returnType) ||
+            boolean.class.equals(returnType));
+        return returnBoolean && IS_PATTERN.matcher(name).matches();
+      }
+      return true;
+    };
+  }
 
   /**
    * A predicate that returns <code>true</code> if the evaluated method is a
@@ -80,25 +82,27 @@ public class MethodPredicates {
    * The method must have the "set" prefix, take one parameter and return no
    * value (a void method).
    */
-  public static final Predicate<Method> SETTER = method -> {
-    if (!Modifier.isPublic(method.getModifiers())) {
-      return false;
-    }
-    Class returnType = method.getReturnType();
-    if ((method.getParameterTypes().length != 1) ||
-        !(returnType == null || returnType.equals(void.class) ||
-            returnType.equals(Void.class))) {
-      return false;
-    }
-    return SET_PATTERN.matcher(method.getName()).matches();
-  };
+  public static final Predicate<Method> setter() {
+    return method -> {
+      if (!Modifier.isPublic(method.getModifiers())) {
+        return false;
+      }
+      Class returnType = method.getReturnType();
+      if ((method.getParameterTypes().length != 1) ||
+          !(returnType == null || returnType.equals(void.class) ||
+              returnType.equals(Void.class))) {
+        return false;
+      }
+      return SET_PATTERN.matcher(method.getName()).matches();
+    };
+  }
 
   /**
    * @return a predicate that returns <code>true</code> if a method is a getter
    * method for the specified property name.
    */
   public static Predicate<Method> getterOf(String propertyName) {
-    return GETTER.and(
+    return getter().and(
         method -> Reflection.parsePropertyName(method).equals(propertyName));
   }
 
@@ -107,7 +111,7 @@ public class MethodPredicates {
    * method for the specified property name.
    */
   public static Predicate<Method> setterOf(String propertyName) {
-    return SETTER.and(
+    return setter().and(
         method -> Reflection.parsePropertyName(method).equals(propertyName));
   }
 
@@ -151,10 +155,12 @@ public class MethodPredicates {
   }
 
   /**
-   * A predicate that returns <code>true</code> if the method has annotations.
+   * @return a predicate that returns <code>true</code> if the method has
+   * annotations.
    */
-  public static final Predicate<Method> ANNOTATED =
-      element -> element.getDeclaredAnnotations().length > 0;
+  public static final Predicate<Method> annotated() {
+    return element -> element.getDeclaredAnnotations().length > 0;
+  }
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated element

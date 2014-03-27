@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.atatec.trugger.reflection.MethodPredicates.ANNOTATED;
+import static org.atatec.trugger.reflection.MethodPredicates.annotated;
 import static org.atatec.trugger.reflection.MethodPredicates.annotatedWith;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.method;
@@ -84,7 +84,7 @@ public class MethodReflectionTest {
   @Test
   public void predicatesTest() {
     assertFalse(
-        ANNOTATED.test(
+        annotated().test(
             method("doIt").in(TestInterface.class)
         )
     );
@@ -94,7 +94,7 @@ public class MethodReflectionTest {
         )
     );
     assertTrue(
-        ANNOTATED.test(
+        annotated().test(
             method("bar").in(TestInterface.class)
         )
     );
