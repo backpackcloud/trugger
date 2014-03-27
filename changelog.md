@@ -21,6 +21,8 @@ of code changed and lots of modules gone to `/dev/null`.
   - Element copies only applies functions to non null values (to prevent *NPEs*)
   - No more single selections (element, field, method) without specifying a name
   - No more exception handlers for invocations (method and constructor)
+  - Removed `Reflection#newInstanceOf` method
+  - Changed the return of selections to `List`
 
 ### Minor Changes
   - Removed non used classes
