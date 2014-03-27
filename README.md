@@ -71,22 +71,79 @@ with Java 8.
 
 ### Multiple
 
-If you need to reflect a set of fields, use the `reflect().fields()`. The
-same features of a single reflect is available here.
+If you need to reflect a set of fields, use the `reflect().fields()`. The same
+features of a single reflect is available here.
 
 ~~~java
+List<Field> stringFields = reflect().fields()
+    .filter(field -> field.getType().equals(String.class))
+    .recursively()
+    .in(MyClass.class);
+~~~
 
+### Predicates
+
+There are some builtin predicates in the class `org.atatec.trugger.reflection
+.FieldPredicates`.
+
+~~~java
+List<Field> stringFields = reflect().fields()
+    .filter(type(String.class)) // a static import
+    .recursively()
+    .in(MyClass.class);
+~~~
+
+### Handling Values
+
+A field can have its value manipulated through the method `Reflection#handle`.
+It will create a handler to set and get the field's value without the verbosity
+of the Reflection API.
+
+~~~java
+//for static fields
+String value = handle(field).value();
+//for non static fields
+String value = handle(field).in(instance).value();
+
+//for static fields
+handle(field).value("new value");
+//for non static fields
+handle(field).in(instance).value("new value");
+~~~
+
+You can also use a a `FieldSelector`:
+
+~~~java
+String value = handle(field("name")).in(instance).value();
 ~~~
 
 ## Constructors
 
+### Single
+
+### Multiple
+
+### Predicates
+
+### Invocation
+
 ## Methods
+
+### Single
+
+### Multiple
+
+### Predicates
+
+### Invocation
 
 ## Generic Type
 
 # Class Scanning
 
 ## Basic Scanning
+
+## Predicates
 
 ## Defining a Protocol Handler
 
@@ -102,8 +159,6 @@ same features of a single reflect is available here.
 
 ## Annotation Mock
 
-## Class Hierarchy Iteration
-
 # Extending
 
 ## How To Implement the Fluent Interfaces
@@ -116,8 +171,10 @@ file in your **META-INF/services** directory with the factory implementation.
 
 The factory interfaces that can be customized are listed bellow:
 
-- org.atatec.trugger.element.ElementFactory
-- org.atatec.trugger.property.PropertyFactory
-- org.atatec.trugger.reflection.ReflectionFactory
-- org.atatec.trugger.scan.ClassScannerFactory
-- org.atatec.trugger.interception.InterceptorFactory
+- `org.atatec.trugger.element.ElementFactory`: used for reflecting elements
+- `org.atatec.trugger.property.PropertyFactory`: used for reflecting properties
+- `org.atatec.trugger.reflection.ReflectionFactory`: used for reflection in
+    general
+- `org.atatec.trugger.scan.ClassScannerFactory`: used for class scanning
+- `org.atatec.trugger.interception.InterceptorFactory`: used for method
+  interception
