@@ -97,37 +97,4 @@ public final class Utils {
     return to.isAssignableFrom(from);
   }
 
-
-  private static boolean checkAcceptance(Class<?> type, Class<?>[] classes) {
-    for (Class<?> acceptedType : classes) {
-      if (acceptedType.isAssignableFrom(type)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static boolean checkAcceptanceWithWrapper(Class<?> type, Class<?>[] classes) {
-    for (Class<?> acceptedType : classes) {
-      if (areAssignable(acceptedType, type)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Checks if the given objects are equals using the
-   * {@link Object#equals(Object)} method or the <code>==</code> operator if the
-   * first argument is <code>null</code>.
-   *
-   * @since 2.5
-   */
-  public static boolean areEquals(Object arg0, Object arg1) {
-    if (arg0 != null && arg1 != null) {
-      return arg0.equals(arg1);
-    }
-    return arg0 == arg1;
-  }
-
 }
