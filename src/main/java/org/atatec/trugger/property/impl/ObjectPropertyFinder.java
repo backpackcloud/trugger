@@ -24,7 +24,9 @@ import org.atatec.trugger.element.impl.ElementFinderHelper;
 import org.atatec.trugger.reflection.Reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +35,7 @@ import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.MethodPredicates.*;
 import static org.atatec.trugger.reflection.Reflection.*;
-import static org.atatec.trugger.reflection.ReflectionPredicates.nonStatic;
+import static org.atatec.trugger.reflection.ReflectionPredicates.declaring;
 
 /**
  * A default class for finding properties in objects.
@@ -51,8 +53,10 @@ public final class ObjectPropertyFinder implements Finder<Element> {
   private final ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
+      Predicate<Member> nonStatic = declaring(Modifier.STATIC).negate();
       List<Method> declaredMethods = methods()
-          .filter((getter().or(setter())).and(nonStatic()))
+          .filter(
+              (getter().or(setter())).and(nonStatic))
           .in(type);
       for (Method method : declaredMethods) {
         String name = Reflection.parsePropertyName(method);
@@ -61,7 +65,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
           map.put(prop.name(), prop);
         }
       }
-      List<Field> fields = fields().filter(nonStatic()).in(type);
+      List<Field> fields = fields().filter(nonStatic).in(type);
       for (Field field : fields) {
         if (!map.containsKey(field.getName())) {
           Method getter = searchMethod(type, getterOf(field));

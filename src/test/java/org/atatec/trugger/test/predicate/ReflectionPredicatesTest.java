@@ -25,8 +25,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import static org.atatec.trugger.reflection.MethodPredicates.*;
-import static org.atatec.trugger.reflection.ReflectionPredicates.ANNOTATED;
-import static org.atatec.trugger.reflection.ReflectionPredicates.NOT_ANNOTATED;
+import static org.atatec.trugger.reflection.ReflectionPredicates.annotated;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.atatec.trugger.test.TruggerTest.assertNotMatch;
 import static org.junit.Assert.assertFalse;
@@ -48,24 +47,19 @@ public class ReflectionPredicatesTest {
   @Test
   public void memberPredicatesTest() throws Exception {
     Field field = getClass().getDeclaredField("privateField");
-    assertTrue(ANNOTATED.test(field));
-    assertFalse(NOT_ANNOTATED.test(field));
-    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
-    assertMatch(field, ReflectionPredicates.declare(Modifier.STATIC));
+    assertTrue(annotated().test(field));
+    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC));
 
     field = getClass().getDeclaredField("defaultField");
-    assertFalse(ANNOTATED.test(field));
-    assertTrue(NOT_ANNOTATED.test(field));
-    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
-    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.STATIC));
+    assertFalse(annotated().test(field));
+    assertMatch(field, ReflectionPredicates.declaring(Modifier.FINAL).negate());
+    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC).negate());
 
     field = getClass().getDeclaredField("protectedField");
-    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.FINAL));
-    assertMatch(field, ReflectionPredicates.declare(Modifier.STATIC));
+    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC));
 
     field = getClass().getDeclaredField("publicField");
-    assertMatch(field, ReflectionPredicates.declare(Modifier.FINAL));
-    assertMatch(field, ReflectionPredicates.dontDeclare(Modifier.STATIC));
+    assertMatch(field, ReflectionPredicates.declaring(Modifier.FINAL));
   }
 
   private final class PrivateClass {
@@ -205,16 +199,27 @@ public class ReflectionPredicatesTest {
   }
 
   class BadSetterTest {
-    protected void setValue(int i) {}
-    private void setValue(long i) {}
-    void setValue(double i) {}
+    protected void setValue(int i) {
+    }
 
-    public void setValue(int i, int j) {}
-    public void value(int i) {}
+    private void setValue(long i) {
+    }
+
+    void setValue(double i) {
+    }
+
+    public void setValue(int i, int j) {
+    }
+
+    public void value(int i) {
+    }
+
     public int setValue(boolean b) {
       return 0;
     }
-    public void set(int i){}
+
+    public void set(int i) {
+    }
   }
 
   @Test
