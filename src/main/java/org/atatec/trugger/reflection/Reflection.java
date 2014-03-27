@@ -24,13 +24,12 @@ import org.atatec.trugger.loader.ImplementationLoader;
 import org.atatec.trugger.reflection.impl.MethodSelectorInvoker;
 import org.atatec.trugger.selector.*;
 import org.atatec.trugger.util.ClassIterator;
-import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An utility class for help the use of Reflection.
@@ -269,55 +268,6 @@ public final class Reflection {
    */
   public static Result<Invoker, Object> invoke(MethodSelector selector) {
     return new MethodSelectorInvoker(selector);
-  }
-
-  /**
-   * Creates a new instance of the given type by locating the proper constructor based on
-   * the given arguments.
-   *
-   * @param type                 the instance type
-   * @param constructorArguments the arguments to call the constructor.
-   * @return a new instance of the give type
-   * @since 2.5
-   */
-  public static <E> E newInstanceOf(final Class<E> type, final Object... constructorArguments) {
-
-    if (constructorArguments.length == 0) {
-      Constructor<?> constructor = reflect().constructor().withoutParameters().in(type);
-      return invoke(constructor).withoutArgs();
-    }
-    final Class<?>[] parameters = new Class[constructorArguments.length];
-    for (int i = 0; i < constructorArguments.length; i++) {
-      Object parameter = constructorArguments[i];
-      if (parameter != null) {
-        parameters[i] = Utils.resolveType(parameter);
-      }
-    }
-    Constructor<?> foundConstructor = reflect().constructor().withParameters(parameters).in(type);
-    if (foundConstructor != null) {
-      return invoke(foundConstructor).withArgs(constructorArguments);
-    }
-    List<Constructor<?>> constructors = reflect().constructors().in(type);
-    Predicate<Constructor<?>> matchingConstructor = constructor -> {
-      Class<?>[] parameterTypes = constructor.getParameterTypes();
-      if (parameterTypes.length != parameters.length) {
-        return false;
-      }
-      for (int i = 0; i < parameters.length; i++) {
-        Class<?> param = parameters[i];
-        if (param != null && !Utils.areAssignable(parameterTypes[i], param)) {
-          return false;
-        }
-      }
-      return true;
-    };
-    Optional<Constructor<?>> constructor = constructors.stream()
-        .filter(matchingConstructor)
-        .findAny();
-    if (constructor.isPresent()) {
-      return invoke(constructor.get()).withArgs(constructorArguments);
-    }
-    throw new ReflectionException("No constructor found");
   }
 
   /**

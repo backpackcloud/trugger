@@ -20,18 +20,13 @@ import org.atatec.trugger.reflection.ReflectionException;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.atatec.trugger.reflection.Reflection.newInstanceOf;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.Reflection.wrapperFor;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -61,28 +56,6 @@ public class ReflectionTests {
     public TestObject() {
     }
 
-  }
-
-  private static class OtherTestObject {
-    public OtherTestObject(int i) {
-    }
-  }
-
-  @Test
-  public void testNewInstanceOf() throws Exception {
-    String string = newInstanceOf(String.class, "test");
-    assertEquals("test", string);
-    assertNotSame("test", string);
-    assertThrow(ReflectionException.class, () -> {
-      newInstanceOf(String.class, null, 1, 1);
-    });
-    assertNull(newInstanceOf(OtherTestObject.class));
-    assertNotNull(newInstanceOf(TestObject.class));
-    assertNotNull(newInstanceOf(TestObject.class, Collections.EMPTY_LIST));
-    assertNotNull(newInstanceOf(TestObject.class, 15));
-    assertThrow(ReflectionException.class, () -> {
-      newInstanceOf(String.class, 1, 2, 3);
-    });
   }
 
   private class GenericClass<E> {
