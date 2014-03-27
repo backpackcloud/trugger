@@ -63,7 +63,7 @@ public class FieldReflectionTest {
   @Test
   public void testPredicates() {
     assertTrue(
-        ofType(String.class).test(
+        type(String.class).test(
             field("a").in(this)
         )
     );
@@ -83,17 +83,17 @@ public class FieldReflectionTest {
         )
     );
     assertTrue(
-        ofType(int.class).test(
+        type(int.class).test(
             field("x").in(this)
         )
     );
     assertTrue(
-        ofType(Integer.class).test(
+        type(Integer.class).test(
             field("z").in(this)
         )
     );
     assertFalse(
-        ofType(Integer.class).test(
+        type(Integer.class).test(
             field("y").in(this)
         )
     );
@@ -103,7 +103,7 @@ public class FieldReflectionTest {
         )
     );
     assertTrue(
-        ANNOTATED.test(
+        annotated().test(
             field("a").in(this)
         )
     );
@@ -113,7 +113,7 @@ public class FieldReflectionTest {
         )
     );
     assertFalse(
-        ANNOTATED.test(
+        annotated().test(
             field("b").in(this)
         )
     );

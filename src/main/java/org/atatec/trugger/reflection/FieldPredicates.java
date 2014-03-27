@@ -35,24 +35,33 @@ public class FieldPredicates {
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated field is of the
+   * @return a predicate that returns <code>true</code> if a field is of the
    * given type.
    */
-  public static Predicate<Field> ofType(final Class type) {
+  public static Predicate<Field> type(Class type) {
     return field -> type.equals(field.getType());
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated field is
-   * assignable to the given type.
+   * @return a predicate that returns <code>true</code> if a field is assignable
+   * to the given type.
    */
-  public static Predicate<Field> assignableTo(final Class type) {
+  public static Predicate<Field> assignableTo(Class type) {
     return field -> Utils.areAssignable(type, field.getType());
   }
 
-  public static Predicate<Field> ANNOTATED =
-      field -> field.getAnnotations().length > 0;
+  /**
+   * @return a predicate that returns <code>true</code> if a field has at least
+   * one annotation.
+   */
+  public static Predicate<Field> annotated() {
+    return field -> field.getAnnotations().length > 0;
+  }
 
+  /**
+   * @return a predicate that returns <code>true</code> if a field is annotated
+   * with the given annotation.
+   */
   public static Predicate<Field> annotatedWith(
       Class<? extends Annotation> annotationType) {
     return field -> field.isAnnotationPresent(annotationType);
