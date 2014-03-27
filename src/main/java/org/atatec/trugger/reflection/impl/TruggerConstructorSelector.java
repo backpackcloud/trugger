@@ -65,8 +65,8 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   public Constructor<?> in(Object target) throws ReflectionException {
     if (parameterTypes != null) {
       return (Constructor<?>)
-          new MemberSelector(registry.constructorFinder(parameterTypes), predicate)
-              .in(target);
+          new MemberSelector(registry.constructorFinder(parameterTypes),
+              predicate).in(target);
     }
     Set<Constructor<?>> constructors =
         new MembersSelector<>(registry.constructorsFinder()).in(target);
@@ -75,7 +75,8 @@ public class TruggerConstructorSelector implements ConstructorSelector {
           .filter(predicate)
           .findAny().orElse(null);
     } else if (constructors.size() > 1) {
-      throw new ReflectionException("More than one constructor found for " + target.getClass());
+      throw new ReflectionException("More than one constructor found for " +
+          target.getClass());
     } else {
       return constructors.iterator().next();
     }

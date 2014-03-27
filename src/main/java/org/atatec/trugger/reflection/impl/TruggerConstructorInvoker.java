@@ -16,9 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.Invoker;
-import org.atatec.trugger.exception.ExceptionHandler;
-import org.atatec.trugger.exception.ExceptionHandlers;
 import org.atatec.trugger.reflection.ConstructorInvoker;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.reflection.ReflectionException;
@@ -34,46 +31,26 @@ import java.lang.reflect.InvocationTargetException;
 public class TruggerConstructorInvoker implements ConstructorInvoker {
 
   private final Constructor<?> constructor;
-  private final ExceptionHandler handler;
 
   public TruggerConstructorInvoker(final Constructor<?> constructor) {
     if (!constructor.isAccessible()) {
       Reflection.setAccessible(constructor);
     }
     this.constructor = constructor;
-    this.handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
-  }
-
-  public TruggerConstructorInvoker(Constructor<?> constructor,
-                                   ExceptionHandler handler) {
-    this.constructor = constructor;
-    this.handler = handler;
   }
 
   public <E> E withArgs(Object... args) {
     try {
-      try {
-        return (E) constructor.newInstance(args);
-      } catch (InstantiationException e) {
-        throw new ReflectionException(e);
-      } catch (InvocationTargetException e) {
-        throw new ReflectionException(e.getCause());
-      } catch (IllegalAccessException e) {
-        throw new ReflectionException(e);
-      }
-    } catch (RuntimeException e) {
-      handler.handle(e);
-      return null;
+      return (E) constructor.newInstance(args);
+    } catch (InvocationTargetException e) {
+      throw new ReflectionException(e.getCause());
+    } catch (Exception e) {
+      throw new ReflectionException(e);
     }
   }
 
   public <E> E withoutArgs() {
     return withArgs();
-  }
-
-  @Override
-  public Invoker onError(ExceptionHandler handler) {
-    return new TruggerConstructorInvoker(constructor, handler);
   }
 
 }

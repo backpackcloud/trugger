@@ -16,9 +16,6 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import org.atatec.trugger.Invoker;
-import org.atatec.trugger.exception.ExceptionHandler;
-import org.atatec.trugger.exception.ExceptionHandlers;
 import org.atatec.trugger.reflection.MethodInvoker;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.reflection.ReflectionException;
@@ -35,52 +32,36 @@ public class TruggerMethodInvoker implements MethodInvoker {
 
   private final Method method;
   private final Object instance;
-  private final ExceptionHandler handler;
 
   public TruggerMethodInvoker(final Method method) {
     if (!method.isAccessible()) {
       Reflection.setAccessible(method);
     }
     this.method = method;
-    this.handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
     this.instance = null;
   }
 
-  public TruggerMethodInvoker(Method method, Object instance,
-                              ExceptionHandler handler) {
+  public TruggerMethodInvoker(Method method, Object instance) {
     this.method = method;
     this.instance = instance;
-    this.handler = handler;
   }
 
   public MethodInvoker in(Object instance) {
-    return new TruggerMethodInvoker(method, instance, handler);
+    return new TruggerMethodInvoker(method, instance);
   }
 
   public <E> E withArgs(Object... args) {
     try {
-      try {
-        return (E) method.invoke(instance, args);
-      } catch (InvocationTargetException e) {
-        throw new ReflectionException(e.getCause());
-      } catch (IllegalAccessException e) {
-        throw new ReflectionException(e);
-      } catch (IllegalArgumentException e) {
-        throw new ReflectionException(e);
-      }
-    } catch (RuntimeException e) {
-      handler.handle(e);
-      return null;
+      return (E) method.invoke(instance, args);
+    } catch (InvocationTargetException e) {
+      throw new ReflectionException(e.getCause());
+    } catch (Exception e) {
+      throw new ReflectionException(e);
     }
   }
 
   public <E> E withoutArgs() {
     return withArgs();
-  }
-
-  @Override
-  public Invoker onError(ExceptionHandler handler) {
-    return new TruggerMethodInvoker(method, instance, handler);
   }
 
 }

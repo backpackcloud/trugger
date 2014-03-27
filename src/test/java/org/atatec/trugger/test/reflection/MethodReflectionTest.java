@@ -27,7 +27,6 @@ import static org.atatec.trugger.reflection.MethodPredicates.ANNOTATED;
 import static org.atatec.trugger.reflection.MethodPredicates.annotatedWith;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.method;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.easymock.EasyMock.*;
 
 /**
@@ -64,16 +63,13 @@ public class MethodReflectionTest {
     obj.doIt();
     expectLastCall().andThrow(new IllegalArgumentException());
     replay(obj);
-    assertThrow(ReflectionException.class,
-        () -> invoke(method("doIt")).in(obj).withoutArgs()
-    );
+    try {
+      invoke(method("doIt")).in(obj).withoutArgs();
+      throw new AssertionError();
+    } catch (ReflectionException e) {
+      assertTrue(IllegalArgumentException.class.equals(e.getCause().getClass()));
+    }
 
-    assertThrow(NullPointerException.class,
-        () -> invoke(method("doIt"))
-            .in(obj)
-            .onError(e -> { throw new NullPointerException();})
-            .withoutArgs()
-    );
     verify(obj);
   }
 

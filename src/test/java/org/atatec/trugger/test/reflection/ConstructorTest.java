@@ -16,6 +16,7 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.reflection.ReflectionException;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.*;
 
 /**
@@ -30,7 +32,15 @@ import static org.junit.Assert.*;
  */
 public class ConstructorTest {
 
-  public static class NoDeclaredConstructor {
+  public static class ClassWithNoDeclaredConstructor {
+
+  }
+
+  public static class TestObject {
+
+    public TestObject() throws Throwable {
+      throw new IllegalArgumentException();
+    }
 
   }
 
@@ -39,16 +49,16 @@ public class ConstructorTest {
     assertNotNull(
         reflect().constructor()
             .withoutParameters()
-            .in(NoDeclaredConstructor.class)
+            .in(ClassWithNoDeclaredConstructor.class)
     );
     assertNotNull(
         reflect().visible().constructor()
             .withoutParameters()
-            .in(NoDeclaredConstructor.class)
+            .in(ClassWithNoDeclaredConstructor.class)
     );
     assertEquals(
         1,
-        reflect().constructors().in(NoDeclaredConstructor.class).size()
+        reflect().constructors().in(ClassWithNoDeclaredConstructor.class).size()
     );
   }
 
@@ -60,6 +70,19 @@ public class ConstructorTest {
     assertNotNull(constructor);
     Object object = invoke(constructor).withoutArgs();
     assertTrue(object instanceof ArrayList);
+  }
+
+  @Test
+  public void testExceptionHandling() {
+    Constructor<?> constructor = reflect().constructor().in(TestObject.class);
+    assertThrow(ReflectionException.class,
+        () -> invoke(constructor).withoutArgs()
+    );
+    try {
+      invoke(constructor).withoutArgs();
+    } catch (ReflectionException e) {
+      assertTrue(IllegalArgumentException.class.equals(e.getCause().getClass()));
+    }
   }
 
 }

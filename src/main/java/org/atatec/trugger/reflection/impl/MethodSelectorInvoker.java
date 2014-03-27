@@ -18,8 +18,6 @@
 package org.atatec.trugger.reflection.impl;
 
 import org.atatec.trugger.Invoker;
-import org.atatec.trugger.exception.ExceptionHandler;
-import org.atatec.trugger.exception.ExceptionHandlers;
 import org.atatec.trugger.reflection.MethodInvoker;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.selector.MethodSelector;
@@ -30,40 +28,31 @@ public class MethodSelectorInvoker implements MethodInvoker {
 
   private final MethodSelector selector;
   private final Object target;
-  private final ExceptionHandler handler;
 
   public MethodSelectorInvoker(MethodSelector selector) {
     this.selector = selector;
     this.target = null;
-    this.handler = ExceptionHandlers.DEFAULT_EXCEPTION_HANDLER;
   }
 
-  public MethodSelectorInvoker(MethodSelector selector, Object target,
-                               ExceptionHandler handler) {
+  public MethodSelectorInvoker(MethodSelector selector, Object target) {
     this.selector = selector;
     this.target = target;
-    this.handler = handler;
   }
 
   @Override
   public Invoker in(Object instance) {
-    return new MethodSelectorInvoker(selector, instance, handler);
+    return new MethodSelectorInvoker(selector, instance);
   }
 
   @Override
   public <E> E withArgs(Object... args) {
     Method method = selector.in(target);
-    return Reflection.invoke(method).in(target).onError(handler).withArgs(args);
+    return Reflection.invoke(method).in(target).withArgs(args);
   }
 
   @Override
   public <E> E withoutArgs() {
     return withArgs();
-  }
-
-  @Override
-  public Invoker onError(ExceptionHandler handler) {
-    return new MethodSelectorInvoker(selector, target, handler);
   }
 
 }

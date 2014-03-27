@@ -16,8 +16,6 @@
  */
 package org.atatec.trugger;
 
-import org.atatec.trugger.exception.ExceptionHandler;
-
 /**
  * Interface that defines a class capable of invoking a object with the possibility of
  * passing arguments.
@@ -40,13 +38,5 @@ public interface Invoker {
    * @return the invocation result.
    */
   <E> E withoutArgs();
-
-  /**
-   * Sets an exception handler to handle exceptions thrown while invoking.
-   *
-   * @return an invoker that uses the given handler
-   * @since 4.0
-   */
-  Invoker onError(ExceptionHandler handler);
 
 }

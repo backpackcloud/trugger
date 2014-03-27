@@ -19,7 +19,6 @@ package org.atatec.trugger.util;
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.Invoker;
 import org.atatec.trugger.ValueHandler;
-import org.atatec.trugger.exception.ExceptionHandler;
 import org.atatec.trugger.reflection.ConstructorInvoker;
 import org.atatec.trugger.reflection.FieldHandler;
 import org.atatec.trugger.reflection.MethodInvoker;
@@ -70,11 +69,6 @@ public final class Null {
       return null;
     }
 
-    @Override
-    public Invoker onError(ExceptionHandler handler) {
-      return this;
-    }
-
   };
 
   public static final MethodInvoker NULL_METHOD_INVOKER = new MethodInvoker() {
@@ -92,11 +86,6 @@ public final class Null {
     @Override
     public <E> E withoutArgs() {
       return null;
-    }
-
-    @Override
-    public Invoker onError(ExceptionHandler handler) {
-      return this;
     }
 
   };
@@ -140,11 +129,6 @@ public final class Null {
     @Override
     public <E> E withoutArgs() {
       return null;
-    }
-
-    @Override
-    public Invoker onError(ExceptionHandler handler) {
-      return this;
     }
 
   };
