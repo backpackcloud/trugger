@@ -76,6 +76,6 @@ task pom << {
 task dist(type: Zip, dependsOn: [clean, jar, sourcesJar, javadocJar, test, pom]) {
   from "$buildDir/libs"
   from "$buildDir/pom.xml"
-  from "changelog.txt"
+  from "changelog.md"
 }
 
