@@ -23,6 +23,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -78,7 +79,7 @@ final class TruggerBridgeMethodResolver {
       return bridgeMethod;
     }
     // Gather all methods with matching name and parameter size.
-    Set<Method> candidateMethods = methods().recursively()
+    List<Method> candidateMethods = methods().recursively()
       .filter(new SimpleBridgeCandidatePredicate())
       .in(bridgeMethod.getDeclaringClass());
 

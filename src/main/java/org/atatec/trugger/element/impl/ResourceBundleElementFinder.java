@@ -20,10 +20,7 @@ import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A finder for ResourceBundle elements.
@@ -33,12 +30,12 @@ import java.util.Set;
 public class ResourceBundleElementFinder implements Finder<Element> {
   
   @Override
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> {
       if (target instanceof Class<?>) {
-        return Collections.emptySet();
+        return Collections.emptyList();
       }
-      Set<Element> properties = new HashSet<Element>();
+      List<Element> properties = new ArrayList<>();
       ResourceBundle bundle = (ResourceBundle) target;
       for (String key : bundle.keySet()) {
         properties.add(new SpecificElement(new ResourceBundleElement(key), bundle));

@@ -19,7 +19,7 @@ package org.atatec.trugger.reflection.impl;
 import org.atatec.trugger.selector.MethodsSelector;
 
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -58,7 +58,7 @@ public class TruggerMethodsSelector implements MethodsSelector {
   }
 
   @Override
-  public Set<Method> in(Object target) {
+  public List<Method> in(Object target) {
     return new MembersSelector<>(finder, predicate, recursively).in(target);
   }
 }

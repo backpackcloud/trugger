@@ -20,8 +20,8 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Member;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -33,7 +33,8 @@ import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
  * @param <T> The member type.
  * @author Marcelo Guimarães
  */
-public class MembersSelector<T extends Member> implements Result<Set<T>, Object> {
+public class MembersSelector<T extends Member>
+    implements Result<List<T>, Object> {
 
   private final MembersFinder<T> finder;
   private final Predicate<? super T> predicate;
@@ -59,26 +60,25 @@ public class MembersSelector<T extends Member> implements Result<Set<T>, Object>
     this.useHierarchy = useHierarchy;
   }
 
-  public final Set<T> in(Object target) {
+  public final List<T> in(Object target) {
     if (useHierarchy) {
-      final Set<T> set = new HashSet<T>();
+      final List<T> list = new ArrayList<>();
       for (Class type : hierarchyOf(target)) {
-        set.addAll(finder.find(type));
+        list.addAll(finder.find(type));
       }
-      return applySelection(set);
+      return applySelection(list);
     }
     Class<?> type = Utils.resolveType(target);
-    Set<T> set = new HashSet<>(finder.find(type));
-    return applySelection(set);
+    return applySelection(finder.find(type));
   }
 
-  private Set<T> applySelection(final Set<T> set) {
+  private List<T> applySelection(final List<T> list) {
     if (predicate != null) {
-      return set.stream()
+      return list.stream()
           .filter(predicate)
-          .collect(Collectors.toSet());
+          .collect(Collectors.toList());
     }
-    return set;
+    return list;
   }
 
 }

@@ -19,7 +19,7 @@ package org.atatec.trugger.selector;
 import org.atatec.trugger.Result;
 
 import java.lang.reflect.Constructor;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface ConstructorsSelector extends PredicateSelector<Constructor<?>>,
-    Result<Set<Constructor<?>>, Object> {
+    Result<List<Constructor<?>>, Object> {
 
   ConstructorsSelector filter(Predicate<? super Constructor<?>> predicate);
 

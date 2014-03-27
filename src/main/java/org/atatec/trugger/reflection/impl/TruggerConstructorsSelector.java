@@ -19,7 +19,7 @@ package org.atatec.trugger.reflection.impl;
 import org.atatec.trugger.selector.ConstructorsSelector;
 
 import java.lang.reflect.Constructor;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -49,7 +49,7 @@ public final class TruggerConstructorsSelector implements ConstructorsSelector {
     return new TruggerConstructorsSelector(finder, predicate);
   }
 
-  public Set<Constructor<?>> in(Object target) {
+  public List<Constructor<?>> in(Object target) {
     return new MembersSelector<>(finder, predicate).in(target);
   }
 

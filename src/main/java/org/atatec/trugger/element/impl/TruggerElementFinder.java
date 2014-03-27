@@ -23,7 +23,7 @@ import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.registry.Registry.Entry;
 import org.atatec.trugger.util.Utils;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * A default implementation for an Element finder.
@@ -72,7 +72,7 @@ public final class TruggerElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> {
       Finder<Element> finder = getFinder(target);
       return finder.findAll().in(target);

@@ -19,7 +19,7 @@ package org.atatec.trugger.reflection.impl;
 import org.atatec.trugger.selector.FieldsSelector;
 
 import java.lang.reflect.Field;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -57,7 +57,7 @@ public class TruggerFieldsSelector implements FieldsSelector {
     return new TruggerFieldsSelector(finder, predicate, true);
   }
 
-  public Set<Field> in(Object target) {
+  public List<Field> in(Object target) {
     return new MembersSelector<>(finder, predicate, recursively).in(target);
   }
 

@@ -20,7 +20,7 @@ import org.atatec.trugger.element.*;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.util.Utils;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -79,7 +79,7 @@ public final class TruggerElementCopier implements ElementCopier,
   }
 
   private void startCopy(Object dest) {
-    Set<Element> elements = selector.in(src);
+    List<Element> elements = selector.in(src);
     Element destProperty;
     for (Element element : elements) {
       String name = element.name();

@@ -22,8 +22,8 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
 import java.lang.reflect.Array;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 /** @author Marcelo Guimarães */
 public class ArrayElementFinder implements Finder<Element> {
@@ -41,14 +41,14 @@ public class ArrayElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return array -> {
       int size = Array.getLength(array);
-      Set<Element> result = new LinkedHashSet<Element>(size);
+      Element[] result = new Element[size];
       for (int i = 0; i < size; i++) {
-        result.add(new ArrayElement(array,  i));
+        result[i] = new ArrayElement(array,  i);
       }
-      return result;
+      return Arrays.asList(result);
     };
   }
 

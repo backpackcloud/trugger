@@ -19,7 +19,7 @@ package org.atatec.trugger.selector;
 import org.atatec.trugger.Result;
 
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface MethodsSelector extends PredicateSelector<Method>,
-    RecursionSelector, Result<Set<Method>, Object> {
+    RecursionSelector, Result<List<Method>, Object> {
 
   MethodsSelector filter(Predicate<? super Method> predicate);
 

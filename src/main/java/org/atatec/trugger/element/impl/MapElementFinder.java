@@ -20,10 +20,7 @@ import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Marcelo Guimarães
@@ -31,12 +28,12 @@ import java.util.Set;
 public class MapElementFinder implements Finder<Element> {
   
   @Override
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> {
       if (target instanceof Class<?>) {
-        return Collections.emptySet();
+        return Collections.emptyList();
       }
-      Set<Element> properties = new HashSet<>();
+      List<Element> properties = new ArrayList<>();
       Map map = (Map) target;
       for (Object key : map.keySet()) {
         if (key instanceof String) {

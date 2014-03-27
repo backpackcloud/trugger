@@ -21,12 +21,13 @@ import org.atatec.trugger.element.Element;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.*;
+import static org.atatec.trugger.test.TruggerTest.assertElements;
+import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.*;
 
 /**
@@ -53,7 +54,7 @@ public class MapElementTest {
     
     map3.putAll(map1);
     
-    Set<Element> elements = elements().in(Map.class);
+    List<Element> elements = elements().in(Map.class);
     assertTrue(elements.isEmpty());
     
     elements = elements().in(map1);

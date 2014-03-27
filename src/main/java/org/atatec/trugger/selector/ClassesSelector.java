@@ -18,7 +18,7 @@ package org.atatec.trugger.selector;
 
 import org.atatec.trugger.scan.ClassScanResult;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @since 2.3
  */
 public interface ClassesSelector extends PredicateSelector<Class>,
-    RecursionSelector, ClassScanResult<Set<Class>> {
+    RecursionSelector, ClassScanResult<List<Class>> {
 
   ClassesSelector filter(Predicate<? super Class> predicate);
 

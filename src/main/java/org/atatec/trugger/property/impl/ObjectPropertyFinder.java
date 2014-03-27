@@ -27,16 +27,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
 
-import static org.atatec.trugger.reflection.Reflection.fields;
-import static org.atatec.trugger.reflection.Reflection.hierarchyOf;
-import static org.atatec.trugger.reflection.Reflection.methods;
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.ReflectionPredicates.*;
 import static org.atatec.trugger.reflection.MethodPredicates.*;
+import static org.atatec.trugger.reflection.Reflection.*;
+import static org.atatec.trugger.reflection.ReflectionPredicates.nonStatic;
 
 /**
  * A default class for finding properties in objects.
@@ -46,7 +43,7 @@ import static org.atatec.trugger.reflection.MethodPredicates.*;
 public final class ObjectPropertyFinder implements Finder<Element> {
 
   private Method searchMethod(Class type, Predicate<Method> predicate) {
-    Set<Method> candidates = reflect().methods().recursively()
+    List<Method> candidates = reflect().methods().recursively()
         .filter(predicate).in(type);
     return candidates.isEmpty() ? null : candidates.iterator().next();
   }
@@ -54,7 +51,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
   private final ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
-      Set<Method> declaredMethods = methods()
+      List<Method> declaredMethods = methods()
           .filter((GETTER.or(SETTER)).and(nonStatic()))
           .in(type);
       for (Method method : declaredMethods) {
@@ -64,7 +61,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
           map.put(prop.name(), prop);
         }
       }
-      Set<Field> fields = fields().filter(nonStatic()).in(type);
+      List<Field> fields = fields().filter(nonStatic()).in(type);
       for (Field field : fields) {
         if (!map.containsKey(field.getName())) {
           Method getter = searchMethod(type, getterOf(field));
@@ -90,7 +87,7 @@ public final class ObjectPropertyFinder implements Finder<Element> {
     };
   }
 
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> {
       final Map<String, Element> map = new HashMap<String, Element>();
       for (Class type : hierarchyOf(target)) {

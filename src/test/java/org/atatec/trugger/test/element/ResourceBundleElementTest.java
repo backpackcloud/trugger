@@ -20,8 +20,8 @@ import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
@@ -38,7 +38,7 @@ public class ResourceBundleElementTest {
   public void bundleElementsTest() {
     final ResourceBundle bundle1 = ResourceBundle.getBundle("org.atatec.trugger.test.element.bundle1");
     final ResourceBundle bundle2 = ResourceBundle.getBundle("org.atatec.trugger.test.element.bundle2");
-    Set<Element> elements = elements().in(ResourceBundle.class);
+    List<Element> elements = elements().in(ResourceBundle.class);
     assertTrue(elements.isEmpty());
     
     elements = elements().in(bundle1);

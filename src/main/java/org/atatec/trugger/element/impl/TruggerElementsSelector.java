@@ -20,7 +20,7 @@ import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.selector.ElementsSelector;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -50,10 +50,10 @@ public final class TruggerElementsSelector implements ElementsSelector {
     return new TruggerElementsSelector(finder, predicate);
   }
 
-  public Set<Element> in(Object target) {
-    Set<Element> elements = finder.findAll().in(target);
+  public List<Element> in(Object target) {
+    List<Element> elements = finder.findAll().in(target);
     if (predicate != null) {
-      return elements.stream().filter(predicate).collect(Collectors.toSet());
+      return elements.stream().filter(predicate).collect(Collectors.toList());
     }
     return elements;
   }

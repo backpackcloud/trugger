@@ -19,7 +19,7 @@ package org.atatec.trugger.selector;
 import org.atatec.trugger.Result;
 
 import java.lang.reflect.Field;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface FieldsSelector extends PredicateSelector<Field>,
-    RecursionSelector, Result<Set<Field>, Object> {
+    RecursionSelector, Result<List<Field>, Object> {
 
   FieldsSelector filter(Predicate<? super Field> predicate);
 

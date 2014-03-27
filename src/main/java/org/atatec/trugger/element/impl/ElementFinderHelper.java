@@ -18,9 +18,7 @@ package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.element.Element;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,13 +28,14 @@ import java.util.stream.Collectors;
  */
 public class ElementFinderHelper {
 
-	public static Set<Element> computeResult(Object target, Collection<Element> elements) {
+	public static List<Element> computeResult(Object target,
+                                         Collection<Element> elements) {
 		if (target instanceof Class<?>) {
-			return new HashSet<>(elements);
+			return new ArrayList<>(elements);
 		}
     return elements.stream().map(
       element -> new SpecificElement(element, target)
-    ).collect(Collectors.toSet());
+    ).collect(Collectors.toList());
 	}
 
 }

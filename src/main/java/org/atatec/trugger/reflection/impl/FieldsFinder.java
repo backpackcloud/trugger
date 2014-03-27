@@ -18,14 +18,14 @@ package org.atatec.trugger.reflection.impl;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Marcelo Guimarães
  */
 public class FieldsFinder implements MembersFinder<Field> {
   
-  public Collection<Field> find(Class<?> type) {
+  public List<Field> find(Class<?> type) {
     return Arrays.asList(type.getFields());
   }
   

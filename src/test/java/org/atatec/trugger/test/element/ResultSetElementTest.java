@@ -24,7 +24,7 @@ import org.junit.Test;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.List;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
@@ -64,7 +64,7 @@ public class ResultSetElementTest {
   
   @Test
   public void testElements() {
-    Set<Element> elements = elements().in(ResultSet.class);
+    List<Element> elements = elements().in(ResultSet.class);
     assertTrue(elements.isEmpty());
     
     elements = elements().in(resultSet);

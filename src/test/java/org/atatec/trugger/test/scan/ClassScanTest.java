@@ -23,7 +23,7 @@ import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.test.TruggerTest;
 import org.junit.Test;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 import static java.lang.reflect.Modifier.PUBLIC;
@@ -52,35 +52,35 @@ public class ClassScanTest {
   };
 
   private int interfaceTest(String... packages) {
-    Set<Class> interfaces = find()
+    List<Class> interfaces = find()
         .filter(ClassPredicates.INTERFACE.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
-    Set<Class> classes = find()
+    List<Class> classes = find()
         .filter(ClassPredicates.CLASS.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
-    Set<Class> annotations = find()
+    List<Class> annotations = find()
         .filter(ClassPredicates.ANNOTATION.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
-    Set<Class> enums = find()
+    List<Class> enums = find()
         .filter(ClassPredicates.ENUM.and(declare(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return enums.size();
   }
 
   private int allTest(String... packages) {
-    Set<Class> classes =
+    List<Class> classes =
         find().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     TruggerTest.assertMatch(classes, declare(PUBLIC));
     assertFalse(classes.isEmpty());
@@ -117,8 +117,8 @@ public class ClassScanTest {
   }
 
   private void scanLevelTest(String packageName) {
-    Set<Class> packageClasses = find().in(packageName);
-    Set<Class> subpackageClasses = find().recursively().in(packageName);
+    List<Class> packageClasses = find().in(packageName);
+    List<Class> subpackageClasses = find().recursively().in(packageName);
 
     assertTrue(packageClasses.size() < subpackageClasses.size());
   }
@@ -145,7 +145,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanPackageInFile() {
-    Set<Class> set = find().in(filePackageName);
+    List<Class> set = find().in(filePackageName);
     assertEquals(4, set.size());
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
@@ -157,7 +157,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanSubPackageInFile() {
-    Set<Class> set = find().recursively().in(filePackageName);
+    List<Class> set = find().recursively().in(filePackageName);
     assertEquals(8, set.size());
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
     assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyClass2.class));
@@ -173,7 +173,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassScanSubPackageInJar() {
-    Set<Class> set = find()
+    List<Class> set = find()
         .filter(ClassPredicates.CLASS)
         .recursively()
         .in(jarPackageNames);
@@ -253,7 +253,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanSubPackageInJar() {
-    Set<Class> set = find().recursively().in(jarPackageNames);
+    List<Class> set = find().recursively().in(jarPackageNames);
 
     assertMatch(set, jarPackagePredicate);
 

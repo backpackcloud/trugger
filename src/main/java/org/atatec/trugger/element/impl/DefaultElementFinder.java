@@ -25,10 +25,7 @@ import org.atatec.trugger.property.Properties;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.atatec.trugger.reflection.Reflection.field;
 import static org.atatec.trugger.reflection.Reflection.fields;
@@ -66,15 +63,15 @@ public class DefaultElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> {
       Map<String, Element> map = new HashMap<>();
       boolean specific = !(target instanceof Class);
       if (specific && target.getClass().isArray()) {
         return new ArrayElementFinder().findAll().in(target);
       }
-      Set<Element> properties = Properties.properties().in(target);
-      Set<Field> fields = fields().recursively().in(target);
+      List<Element> properties = Properties.properties().in(target);
+      List<Field> fields = fields().recursively().in(target);
 
       for (Element property : properties) {
         Element element = specific ? new SpecificElement(property, target) : property;
@@ -88,7 +85,7 @@ public class DefaultElementFinder implements Finder<Element> {
           map.put(field.getName(), new MergedElement(element, map.get(field.getName())));
         }
       }
-      return new HashSet<>(map.values());
+      return new ArrayList<>(map.values());
     };
   }
 

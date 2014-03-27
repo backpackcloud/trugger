@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger;
 
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -45,6 +45,6 @@ public interface Finder<T> {
    *
    * @return the component for selecting the target.
    */
-  Result<Set<T>, Object> findAll();
+  Result<List<T>, Object> findAll();
 
 }

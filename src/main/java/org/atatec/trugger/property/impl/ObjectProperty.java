@@ -26,7 +26,7 @@ import org.atatec.trugger.reflection.ReflectionException;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.MethodPredicates.*;
@@ -150,7 +150,7 @@ final class ObjectProperty extends AbstractElement {
   }
 
   private Method searchMethod(Predicate<Method> predicate) {
-    Set<Method> candidates = reflect().methods().recursively()
+    Collection<Method> candidates = reflect().methods().recursively()
         .filter(predicate).in(declaringClass);
     return candidates.isEmpty() ? null : candidates.iterator().next();
   }

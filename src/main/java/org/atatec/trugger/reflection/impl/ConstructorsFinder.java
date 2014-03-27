@@ -18,14 +18,14 @@ package org.atatec.trugger.reflection.impl;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Marcelo Guimarães
  */
 public class ConstructorsFinder implements MembersFinder<Constructor<?>> {
   
-  public Collection<Constructor<?>> find(Class<?> type) {
+  public List<Constructor<?>> find(Class<?> type) {
     return Arrays.asList(type.getConstructors());
   }
   

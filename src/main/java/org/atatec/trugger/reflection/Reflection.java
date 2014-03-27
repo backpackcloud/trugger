@@ -297,7 +297,7 @@ public final class Reflection {
     if (foundConstructor != null) {
       return invoke(foundConstructor).withArgs(constructorArguments);
     }
-    Set<Constructor<?>> constructors = reflect().constructors().in(type);
+    List<Constructor<?>> constructors = reflect().constructors().in(type);
     Predicate<Constructor<?>> matchingConstructor = constructor -> {
       Class<?>[] parameterTypes = constructor.getParameterTypes();
       if (parameterTypes.length != parameters.length) {

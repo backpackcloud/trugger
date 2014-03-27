@@ -21,14 +21,14 @@ import org.atatec.trugger.interception.Interception;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
 
+import static org.atatec.trugger.reflection.MethodPredicates.withoutParameters;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.reflection.ReflectionPredicates.named;
-import static org.atatec.trugger.reflection.MethodPredicates.withoutParameters;
 
 /**
  * A builder for creating mock {@link Annotation annotations}.
@@ -165,7 +165,7 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
       predicate = (predicate == null ? named(name) : predicate.or(named(name)));
     }
     Predicate<Member> unused = predicate.negate();
-    Set<Method> methods = reflect()
+    Collection<Method> methods = reflect()
         .methods()
         .filter(withoutParameters().and(unused))
         .in(annotationType);

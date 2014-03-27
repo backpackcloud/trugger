@@ -23,9 +23,7 @@ import org.atatec.trugger.element.Element;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Marcelo Guimarães
@@ -33,12 +31,12 @@ import java.util.Set;
 public class ResultSetElementFinder implements Finder<Element> {
 
   @Override
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> {
       if (target instanceof Class<?>) {
-        return Collections.emptySet();
+        return Collections.emptyList();
       }
-      Set<Element> elements = new HashSet<Element>();
+      List<Element> elements = new ArrayList<>();
       ResultSet resultSet = (ResultSet) target;
       try {
         ResultSetMetaData metaData = resultSet.getMetaData();

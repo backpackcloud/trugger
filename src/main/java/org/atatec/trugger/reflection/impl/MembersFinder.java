@@ -17,7 +17,7 @@
 package org.atatec.trugger.reflection.impl;
 
 import java.lang.reflect.Member;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface that defines a class capable of find {@link Member} objects.
@@ -33,6 +33,6 @@ public interface MembersFinder<T extends Member> {
    *          the type for searching the object.
    * @return the found object.
    */
-  Collection<T> find(Class<?> type);
+  List<T> find(Class<?> type);
   
 }

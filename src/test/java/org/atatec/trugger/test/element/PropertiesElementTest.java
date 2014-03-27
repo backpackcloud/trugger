@@ -16,18 +16,17 @@
  */
 package org.atatec.trugger.test.element;
 
+import org.atatec.trugger.element.Element;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Properties;
+
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.test.TruggerTest.assertElements;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Properties;
-import java.util.Set;
-
-import org.atatec.trugger.element.Element;
-
-import org.junit.Test;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -40,7 +39,7 @@ public class PropertiesElementTest {
     properties.setProperty("login", "admin");
     properties.setProperty("password", "admin");
     
-    Set<Element> elements = elements().in(properties);
+    List<Element> elements = elements().in(properties);
     assertElements(elements, "login", "password");
     
     Element element = element("login").in(properties);

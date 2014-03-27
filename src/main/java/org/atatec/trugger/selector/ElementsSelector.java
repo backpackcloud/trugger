@@ -19,7 +19,7 @@ package org.atatec.trugger.selector;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface ElementsSelector extends PredicateSelector<Element>,
-    Result<Set<Element>, Object> {
+    Result<List<Element>, Object> {
 
   ElementsSelector filter(Predicate<? super Element> predicate);
 

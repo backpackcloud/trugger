@@ -23,11 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
-import static org.atatec.trugger.element.ElementPredicates.NON_SPECIFIC;
-import static org.atatec.trugger.element.ElementPredicates.SPECIFIC;
-import static org.atatec.trugger.element.ElementPredicates.ofType;
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.element.Elements.handle;
 import static org.junit.Assert.assertEquals;
@@ -62,7 +60,7 @@ public class HandleTest {
 
   @Test
   public void testHandleForSpecificElements() {
-    Set<Element> elements = elements()
+    List<Element> elements = elements()
         .filter(ofType(String.class).and(SPECIFIC))
         .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);
@@ -81,7 +79,7 @@ public class HandleTest {
 
   @Test
   public void testHandlerForNonSpecificElements() {
-    Set<Element> elements = elements()
+    List<Element> elements = elements()
         .filter(ofType(String.class).and(NON_SPECIFIC))
         .in(TestObject.class);
     TestObject target = new TestObject();
@@ -101,7 +99,7 @@ public class HandleTest {
 
   @Test(expected = HandlingException.class)
   public void testHandlingError() {
-    Set<Element> elements = elements()
+    List<Element> elements = elements()
         .filter(ofType(String.class).and(NON_SPECIFIC))
         .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);

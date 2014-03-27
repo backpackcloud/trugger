@@ -22,10 +22,7 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.util.mock.MockBuilder;
 import org.easymock.EasyMock;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -92,11 +89,11 @@ public class ElementFinderMock implements MockBuilder<Finder<Element>> {
     }
   }
   
-  private class ElementsResult implements Result<Set<Element>, Object> {
+  private class ElementsResult implements Result<List<Element>, Object> {
     
     @Override
-    public Set<Element> in(Object target) {
-      return new HashSet<Element>(elements.values());
+    public List<Element> in(Object target) {
+      return new ArrayList<>(elements.values());
     }
     
   }

@@ -22,8 +22,8 @@ import org.atatec.trugger.element.Element;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.atatec.trugger.reflection.Reflection.methods;
 
@@ -39,7 +39,7 @@ public final class AnnotationElementFinder implements Finder<Element> {
   private ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
-      Set<Method> declaredMethods = methods().in(type);
+      List<Method> declaredMethods = methods().in(type);
       AnnotationElement prop;
       for (Method method : declaredMethods) {
         prop = new AnnotationElement(method);
@@ -48,7 +48,7 @@ public final class AnnotationElementFinder implements Finder<Element> {
     }
   };
 
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> {
       Collection<Element> elements = cache.get(target);
       return ElementFinderHelper.computeResult(target, elements);

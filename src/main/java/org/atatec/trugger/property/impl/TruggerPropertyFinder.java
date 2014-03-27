@@ -21,7 +21,7 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.AnnotationElementFinder;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * The default implementation for the PropertyFinder. It uses the
@@ -43,7 +43,7 @@ public class TruggerPropertyFinder implements Finder<Element> {
     finder = new ObjectPropertyFinder();
   }
   
-  public Result<Set<Element>, Object> findAll() {
+  public Result<List<Element>, Object> findAll() {
     return target -> finder.findAll().in(target);
   }
   

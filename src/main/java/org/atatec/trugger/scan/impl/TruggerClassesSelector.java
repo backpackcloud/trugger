@@ -22,10 +22,7 @@ import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.selector.ClassesSelector;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -59,16 +56,17 @@ public class TruggerClassesSelector implements ClassesSelector {
     return new TruggerClassesSelector(scanner, ScanLevel.SUBPACKAGES, predicate);
   }
 
-  public Set<Class> in(String... packageNames) throws ClassScanningException {
+  public List<Class> in(String... packageNames) throws ClassScanningException {
     return in(level.createScanPackages(packageNames));
   }
 
-  public Set<Class> in(PackageScan packageToScan) throws ClassScanningException {
+  public List<Class> in(PackageScan packageToScan) throws ClassScanningException {
     return in(Arrays.asList(packageToScan));
   }
 
-  public Set<Class> in(Collection<PackageScan> packagesToScan) throws ClassScanningException {
-    Set<Class> classes = new HashSet<>(40);
+  public List<Class> in(Collection<PackageScan> packagesToScan) throws
+      ClassScanningException {
+    List<Class> classes = new ArrayList<>(40);
     try {
       for (PackageScan entry : packagesToScan) {
         classes.addAll(scanner.scanPackage(entry));
@@ -79,7 +77,7 @@ public class TruggerClassesSelector implements ClassesSelector {
       throw new ClassScanningException(e);
     }
     if (predicate != null) {
-      return classes.stream().filter(predicate).collect(Collectors.toSet());
+      return classes.stream().filter(predicate).collect(Collectors.toList());
     }
     return classes;
   }

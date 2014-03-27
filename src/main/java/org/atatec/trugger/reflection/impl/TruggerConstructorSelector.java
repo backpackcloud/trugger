@@ -20,7 +20,7 @@ import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.selector.ConstructorSelector;
 
 import java.lang.reflect.Constructor;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -68,7 +68,7 @@ public class TruggerConstructorSelector implements ConstructorSelector {
           new MemberSelector(registry.constructorFinder(parameterTypes),
               predicate).in(target);
     }
-    Set<Constructor<?>> constructors =
+    List<Constructor<?>> constructors =
         new MembersSelector<>(registry.constructorsFinder()).in(target);
     if (predicate != null) {
       return constructors.stream()
