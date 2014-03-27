@@ -16,16 +16,18 @@
  */
 package org.atatec.trugger.test.reflection;
 
+import org.atatec.trugger.reflection.ReflectionException;
 import org.atatec.trugger.reflection.Reflector;
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.atatec.trugger.reflection.Reflection.invoke;
-import static org.atatec.trugger.reflection.Reflection.method;
 import static org.atatec.trugger.reflection.MethodPredicates.ANNOTATED;
 import static org.atatec.trugger.reflection.MethodPredicates.annotatedWith;
+import static org.atatec.trugger.reflection.Reflection.invoke;
+import static org.atatec.trugger.reflection.Reflection.method;
+import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.easymock.EasyMock.*;
 
 /**
@@ -53,6 +55,25 @@ public class MethodReflectionTest {
     expectLastCall().once();
     replay(obj);
     invoke(method("doIt")).in(obj).withoutArgs();
+    verify(obj);
+  }
+
+  @Test
+  public void invokerExceptionHandlerTest() {
+    TestInterface obj = createMock(TestInterface.class);
+    obj.doIt();
+    expectLastCall().andThrow(new IllegalArgumentException());
+    replay(obj);
+    assertThrow(ReflectionException.class,
+        () -> invoke(method("doIt")).in(obj).withoutArgs()
+    );
+
+    assertThrow(NullPointerException.class,
+        () -> invoke(method("doIt"))
+            .in(obj)
+            .onError(e -> { throw new NullPointerException();})
+            .withoutArgs()
+    );
     verify(obj);
   }
 

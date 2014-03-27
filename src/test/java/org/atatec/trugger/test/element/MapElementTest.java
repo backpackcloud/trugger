@@ -86,20 +86,9 @@ public class MapElementTest {
     assertTrue(element.isReadable());
     assertTrue(element.isWritable());
     
-    assertNothingThrow(new Runnable() {
-      
-      public void run() {
-        element.value("modified");
-      }
-    });
-    
-    assertNothingThrow(new Runnable() {
-      
-      public void run() {
-        element.in(map2).value("modified");
-      }
-    });
-    
+    element.value("modified");
+    element.in(map2).value("modified");
+
     assertEquals("modified", map1.get(key));
     assertEquals("modified", map2.get(key));
     assertEquals("modified", element.value());

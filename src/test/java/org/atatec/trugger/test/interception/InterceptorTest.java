@@ -20,6 +20,7 @@ import org.atatec.trugger.TruggerException;
 import org.atatec.trugger.interception.Interception;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -32,7 +33,7 @@ public class InterceptorTest {
 
   static interface MyInterface {
 
-    Object doIt(Object argument);
+    Object doIt(Object argument) throws IOException;
 
   }
 
@@ -55,7 +56,7 @@ public class InterceptorTest {
   }
 
   @Test
-  public void testInterception() {
+  public void testInterception() throws IOException {
     MyInterface obj = Interception.intercept(new InvocationTest())
         .onCall(context -> context.invokeMethod())
         .proxy();
@@ -64,7 +65,7 @@ public class InterceptorTest {
   }
 
   @Test
-  public void testInterfaceExceptionHandling() {
+  public void testInterfaceExceptionHandling() throws IOException {
     MyInterface obj = Interception.intercept(new ExceptionHandlingTest())
         .onCall(context -> context.invokeMethod())
         .onError((context, error) -> "pass")
@@ -74,13 +75,23 @@ public class InterceptorTest {
   }
 
   @Test(expected = TruggerException.class)
-  public void testInterfaceInterception() {
+  public void testInterfaceInterception() throws IOException {
     MyInterface obj = Interception.intercept(MyInterface.class)
         .onCall(context -> {
           throw new IllegalArgumentException();
         })
         .onError((context, error) -> {
           throw new TruggerException(error);
+        })
+        .proxy();
+    obj.doIt(null);
+  }
+
+  @Test(expected = IOException.class)
+  public void testException() throws IOException {
+    MyInterface obj = Interception.intercept(MyInterface.class)
+        .onCall(context -> {
+          throw new IOException();
         })
         .proxy();
     obj.doIt(null);

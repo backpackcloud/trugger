@@ -101,17 +101,6 @@ public class TruggerTest {
     }
   }
 
-  /**
-   * Tests if the given command does not throw anyThat exception.
-   */
-  public static void assertNothingThrow(Runnable command) {
-    try {
-      command.run();
-    } catch (Throwable e) {
-      throwError(e);
-    }
-  }
-
   private static void throwError(Throwable e) throws AssertionFailedError {
     AssertionFailedError error = new AssertionFailedError("Exception "
         + e.getClass() + " thrown.");
