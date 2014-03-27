@@ -38,42 +38,46 @@ public class ClassPredicates {
    * Predicate that returns <code>true</code> if a class is an <i>interface</i> and is not
    * an <i>annotation</i>.
    */
-  public static final Predicate<Class> INTERFACE =
-      ClassPredicates.declare(Modifier.INTERFACE).and(notAssignableTo(Annotation.class));
-  /**
-   * The negation of the {@link #INTERFACE} predicate.
-   */
-  public static final Predicate<Class> NOT_INTERFACE = INTERFACE.negate();
+  public static final Predicate<Class> interfaceType() {
+    return declaring(Modifier.INTERFACE)
+        .and(assignableTo(Annotation.class).negate());
+  }
+
   /**
    * Predicate that returns <code>true</code> if a class is an <i>enum</i>.
    */
-  public static final Predicate<Class> ENUM = element -> element.isEnum();
+  public static final Predicate<Class> enumType() {
+    return element -> element.isEnum();
+  }
 
-  /**
-   * The negation of the {@link #ENUM} predicate.
-   */
-  public static final Predicate<Class> NOT_ENUM = ENUM.negate();
   /**
    * Predicate that returns <code>true</code> if a class is an <i>annotation</i>.
    */
-  public static final Predicate<Class> ANNOTATION =
-      ClassPredicates.declare(Modifier.INTERFACE)
-          .and(assignableTo(Annotation.class));
-  /**
-   * The negation of the {@link #ANNOTATION} predicate.
-   */
-  public static final Predicate<Class> NOT_ANNOTATION = ANNOTATION.negate();
+  public static final Predicate<Class> annotationType() {
+    return declaring(Modifier.INTERFACE).and(assignableTo(Annotation.class));
+  }
+
   /**
    * Predicate that returns <code>true</code> if a class is not an <i>interface</i> and is
    * not an <i>enum</i>.
    */
-  public static final Predicate<Class> CLASS = NOT_INTERFACE.and(NOT_ENUM).and(NOT_ANNOTATION);
+  public static final Predicate<Class> classType() {
+    return interfaceType().or(enumType()).or(annotationType()).negate();
+  }
+
+  /**
+   * A predicate that checks if the given element is an array.
+   * @since 4.1
+   */
+  public static Predicate<Element> arrayType() {
+    return element -> element.type().isArray();
+  }
 
   /**
    * @return a predicate that returns <code>false</code> if the evaluated class has the
    * specified modifiers.
    */
-  public static Predicate<Class> declare(final int... modifiers) {
+  public static Predicate<Class> declaring(final int... modifiers) {
     return element -> {
       int elModifiers = element.getModifiers();
       for (int mod : modifiers) {
@@ -86,33 +90,11 @@ public class ClassPredicates {
   }
 
   /**
-   * @return a predicate that returns <code>false</code> if the evaluated class does not
-   * have the specified modifiers.
-   */
-  public static Predicate<Class> dontDeclare(int... modifiers) {
-    return declare(modifiers).negate();
-  }
-
-  /**
-   * A predicate that checks if the given element is an array.
-   * @since 4.1
-   */
-  public static Predicate<Element> ARRAY = element -> element.type().isArray();
-
-  /**
    * @return a predicate that returns <code>true</code> if the specified Class is
    * assignable from the evaluated element.
    */
   public static Predicate<Class> assignableTo(Class clazz) {
     return element -> clazz.isAssignableFrom(element);
-  }
-
-  /**
-   * @return a predicate that returns <code>true</code> if the specified Class is not
-   * assignable from the evaluated element.
-   */
-  public static Predicate<Class> notAssignableTo(final Class clazz) {
-    return assignableTo(clazz).negate();
   }
 
 }

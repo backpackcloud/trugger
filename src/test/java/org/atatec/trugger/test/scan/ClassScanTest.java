@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static java.lang.reflect.Modifier.PUBLIC;
-import static org.atatec.trugger.reflection.ClassPredicates.declare;
+import static org.atatec.trugger.reflection.ClassPredicates.declaring;
 import static org.atatec.trugger.scan.ClassScan.find;
 import static org.atatec.trugger.test.TruggerTest.assertMatch;
 import static org.junit.Assert.*;
@@ -53,36 +53,36 @@ public class ClassScanTest {
 
   private int interfaceTest(String... packages) {
     List<Class> interfaces = find()
-        .filter(ClassPredicates.INTERFACE.and(declare(PUBLIC)))
+        .filter(ClassPredicates.interfaceType().and(declaring(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return interfaces.size();
   }
 
   private int classesTest(String... packages) {
     List<Class> classes = find()
-        .filter(ClassPredicates.CLASS.and(declare(PUBLIC)))
+        .filter(ClassPredicates.classType().and(declaring(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return classes.size();
   }
 
   private int annotationsTest(String... packages) {
     List<Class> annotations = find()
-        .filter(ClassPredicates.ANNOTATION.and(declare(PUBLIC)))
+        .filter(ClassPredicates.annotationType().and(declaring(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return annotations.size();
   }
 
   private int enumsTest(String... packages) {
     List<Class> enums = find()
-        .filter(ClassPredicates.ENUM.and(declare(PUBLIC)))
+        .filter(ClassPredicates.enumType().and(declaring(PUBLIC)))
         .in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
     return enums.size();
   }
 
   private int allTest(String... packages) {
     List<Class> classes =
-        find().filter(declare(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
-    TruggerTest.assertMatch(classes, declare(PUBLIC));
+        find().filter(declaring(PUBLIC)).in(ScanLevel.SUBPACKAGES.createScanPackages(packages));
+    TruggerTest.assertMatch(classes, declaring(PUBLIC));
     assertFalse(classes.isEmpty());
     return classes.size();
   }
@@ -145,207 +145,207 @@ public class ClassScanTest {
 
   @Test
   public void testScanPackageInFile() {
-    List<Class> set = find().in(filePackageName);
-    assertEquals(4, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyEnum.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyInterface.class));
+    List<Class> list = find().in(filePackageName);
+    assertEquals(4, list.size());
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyEnum.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyInterface.class));
 
-    assertMatch(set, filePackagePredicate);
+    assertMatch(list, filePackagePredicate);
   }
 
   @Test
   public void testScanSubPackageInFile() {
-    List<Class> set = find().recursively().in(filePackageName);
-    assertEquals(8, set.size());
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyClass2.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyAnnotation2.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyEnum.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyEnum2.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.MyInterface.class));
-    assertTrue(set.contains(org.atatec.trugger.test.scan.classes.pack.MyInterface2.class));
+    List<Class> list = find().recursively().in(filePackageName);
+    assertEquals(8, list.size());
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.pack.MyClass2.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyAnnotation.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.pack.MyAnnotation2.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyEnum.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.pack.MyEnum2.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyInterface.class));
+    assertTrue(list.contains(org.atatec.trugger.test.scan.classes.pack.MyInterface2.class));
 
-    assertMatch(set, filePackagePredicate);
+    assertMatch(list, filePackagePredicate);
   }
 
   @Test
   public void testClassScanSubPackageInJar() {
-    List<Class> set = find()
-        .filter(ClassPredicates.CLASS)
+    List<Class> list = find()
+        .filter(ClassPredicates.classType())
         .recursively()
         .in(jarPackageNames);
 
-    assertMatch(set, jarPackagePredicate);
+    assertMatch(list, jarPackagePredicate);
 
-    assertTrue(set.contains(org.junit.runner.manipulation.NoTestsRemainException.class));
-    assertTrue(set.contains(org.junit.runner.manipulation.Sorter.class));
-    assertTrue(set.contains(org.junit.runner.notification.Failure.class));
-    assertTrue(set.contains(org.junit.runner.notification.RunListener.class));
-    assertTrue(set.contains(org.junit.runner.notification.RunNotifier.class));
-    assertTrue(set.contains(org.junit.runner.notification.StoppedByUserException.class));
-    assertTrue(set.contains(org.junit.runner.Computer.class));
-    assertTrue(set.contains(org.junit.runner.Description.class));
-    assertTrue(set.contains(org.junit.runner.JUnitCore.class));
-    assertTrue(set.contains(org.junit.runner.Request.class));
-    assertTrue(set.contains(org.junit.runner.Result.class));
-    assertTrue(set.contains(org.junit.runner.Runner.class));
+    assertTrue(list.contains(org.junit.runner.manipulation.NoTestsRemainException.class));
+    assertTrue(list.contains(org.junit.runner.manipulation.Sorter.class));
+    assertTrue(list.contains(org.junit.runner.notification.Failure.class));
+    assertTrue(list.contains(org.junit.runner.notification.RunListener.class));
+    assertTrue(list.contains(org.junit.runner.notification.RunNotifier.class));
+    assertTrue(list.contains(org.junit.runner.notification.StoppedByUserException.class));
+    assertTrue(list.contains(org.junit.runner.Computer.class));
+    assertTrue(list.contains(org.junit.runner.Description.class));
+    assertTrue(list.contains(org.junit.runner.JUnitCore.class));
+    assertTrue(list.contains(org.junit.runner.Request.class));
+    assertTrue(list.contains(org.junit.runner.Result.class));
+    assertTrue(list.contains(org.junit.runner.Runner.class));
 
-    assertTrue(set.contains(org.easymock.internal.matchers.And.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Any.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.ArrayEquals.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Captures.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Compare.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.CompareEqual.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.CompareTo.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Contains.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.EndsWith.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Equals.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.EqualsWithDelta.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Find.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.GreaterOrEqual.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.GreaterThan.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.InstanceOf.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.LessOrEqual.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.LessThan.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Matches.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Not.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.NotNull.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Null.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Or.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Same.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.StartsWith.class));
-    assertTrue(set.contains(org.easymock.internal.AlwaysMatcher.class));
-    assertTrue(set.contains(org.easymock.internal.ArgumentToString.class));
-    assertTrue(set.contains(org.easymock.internal.ArrayMatcher.class));
-    assertTrue(set.contains(org.easymock.internal.AssertionErrorWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.EasyMockProperties.class));
-    assertTrue(set.contains(org.easymock.internal.EqualsMatcher.class));
-    assertTrue(set.contains(org.easymock.internal.ErrorMessage.class));
-    assertTrue(set.contains(org.easymock.internal.ExpectedInvocation.class));
-    assertTrue(set.contains(org.easymock.internal.ExpectedInvocationAndResult.class));
-    assertTrue(set.contains(org.easymock.internal.ExpectedInvocationAndResults.class));
-    assertTrue(set.contains(org.easymock.internal.Invocation.class));
-    assertTrue(set.contains(org.easymock.internal.JavaProxyFactory.class));
-    assertTrue(set.contains(org.easymock.internal.LastControl.class));
-    assertTrue(set.contains(org.easymock.internal.LegacyMatcherProvider.class));
-    assertTrue(set.contains(org.easymock.internal.MethodSerializationWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.MockInvocationHandler.class));
-    assertTrue(set.contains(org.easymock.internal.MocksBehavior.class));
-    assertTrue(set.contains(org.easymock.internal.MocksControl.class));
-    assertTrue(set.contains(org.easymock.internal.ObjectMethodsFilter.class));
-    assertTrue(set.contains(org.easymock.internal.Range.class));
-    assertTrue(set.contains(org.easymock.internal.RecordState.class));
-    assertTrue(set.contains(org.easymock.internal.ReplayState.class));
-    assertTrue(set.contains(org.easymock.internal.Result.class));
-    assertTrue(set.contains(org.easymock.internal.Results.class));
-    assertTrue(set.contains(org.easymock.internal.RuntimeExceptionWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.ThrowableWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.UnorderedBehavior.class));
-    assertTrue(set.contains(org.easymock.AbstractMatcher.class));
-    assertTrue(set.contains(org.easymock.Capture.class));
-    assertTrue(set.contains(org.easymock.EasyMock.class));
-    assertTrue(set.contains(org.easymock.EasyMockSupport.class));
-    assertTrue(set.contains(org.easymock.MockControl.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.And.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Any.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.ArrayEquals.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Captures.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Compare.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.CompareEqual.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.CompareTo.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Contains.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.EndsWith.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Equals.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.EqualsWithDelta.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Find.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.GreaterOrEqual.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.GreaterThan.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.InstanceOf.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.LessOrEqual.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.LessThan.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Matches.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Not.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.NotNull.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Null.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Or.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Same.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.StartsWith.class));
+    assertTrue(list.contains(org.easymock.internal.AlwaysMatcher.class));
+    assertTrue(list.contains(org.easymock.internal.ArgumentToString.class));
+    assertTrue(list.contains(org.easymock.internal.ArrayMatcher.class));
+    assertTrue(list.contains(org.easymock.internal.AssertionErrorWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.EasyMockProperties.class));
+    assertTrue(list.contains(org.easymock.internal.EqualsMatcher.class));
+    assertTrue(list.contains(org.easymock.internal.ErrorMessage.class));
+    assertTrue(list.contains(org.easymock.internal.ExpectedInvocation.class));
+    assertTrue(list.contains(org.easymock.internal.ExpectedInvocationAndResult.class));
+    assertTrue(list.contains(org.easymock.internal.ExpectedInvocationAndResults.class));
+    assertTrue(list.contains(org.easymock.internal.Invocation.class));
+    assertTrue(list.contains(org.easymock.internal.JavaProxyFactory.class));
+    assertTrue(list.contains(org.easymock.internal.LastControl.class));
+    assertTrue(list.contains(org.easymock.internal.LegacyMatcherProvider.class));
+    assertTrue(list.contains(org.easymock.internal.MethodSerializationWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.MockInvocationHandler.class));
+    assertTrue(list.contains(org.easymock.internal.MocksBehavior.class));
+    assertTrue(list.contains(org.easymock.internal.MocksControl.class));
+    assertTrue(list.contains(org.easymock.internal.ObjectMethodsFilter.class));
+    assertTrue(list.contains(org.easymock.internal.Range.class));
+    assertTrue(list.contains(org.easymock.internal.RecordState.class));
+    assertTrue(list.contains(org.easymock.internal.ReplayState.class));
+    assertTrue(list.contains(org.easymock.internal.Result.class));
+    assertTrue(list.contains(org.easymock.internal.Results.class));
+    assertTrue(list.contains(org.easymock.internal.RuntimeExceptionWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.ThrowableWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.UnorderedBehavior.class));
+    assertTrue(list.contains(org.easymock.AbstractMatcher.class));
+    assertTrue(list.contains(org.easymock.Capture.class));
+    assertTrue(list.contains(org.easymock.EasyMock.class));
+    assertTrue(list.contains(org.easymock.EasyMockSupport.class));
+    assertTrue(list.contains(org.easymock.MockControl.class));
   }
 
   @Test
   public void testScanSubPackageInJar() {
-    List<Class> set = find().recursively().in(jarPackageNames);
+    List<Class> list = find().recursively().in(jarPackageNames);
 
-    assertMatch(set, jarPackagePredicate);
+    assertMatch(list, jarPackagePredicate);
 
-    assertTrue(set.contains(org.junit.runner.manipulation.NoTestsRemainException.class));
-    assertTrue(set.contains(org.junit.runner.manipulation.Sorter.class));
-    assertTrue(set.contains(org.junit.runner.notification.Failure.class));
-    assertTrue(set.contains(org.junit.runner.notification.RunListener.class));
-    assertTrue(set.contains(org.junit.runner.notification.RunNotifier.class));
-    assertTrue(set.contains(org.junit.runner.notification.StoppedByUserException.class));
-    assertTrue(set.contains(org.junit.runner.Computer.class));
-    assertTrue(set.contains(org.junit.runner.Description.class));
-    assertTrue(set.contains(org.junit.runner.JUnitCore.class));
-    assertTrue(set.contains(org.junit.runner.Request.class));
-    assertTrue(set.contains(org.junit.runner.Result.class));
-    assertTrue(set.contains(org.junit.runner.Runner.class));
+    assertTrue(list.contains(org.junit.runner.manipulation.NoTestsRemainException.class));
+    assertTrue(list.contains(org.junit.runner.manipulation.Sorter.class));
+    assertTrue(list.contains(org.junit.runner.notification.Failure.class));
+    assertTrue(list.contains(org.junit.runner.notification.RunListener.class));
+    assertTrue(list.contains(org.junit.runner.notification.RunNotifier.class));
+    assertTrue(list.contains(org.junit.runner.notification.StoppedByUserException.class));
+    assertTrue(list.contains(org.junit.runner.Computer.class));
+    assertTrue(list.contains(org.junit.runner.Description.class));
+    assertTrue(list.contains(org.junit.runner.JUnitCore.class));
+    assertTrue(list.contains(org.junit.runner.Request.class));
+    assertTrue(list.contains(org.junit.runner.Result.class));
+    assertTrue(list.contains(org.junit.runner.Runner.class));
 
-    assertTrue(set.contains(org.easymock.internal.matchers.And.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Any.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.ArrayEquals.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Captures.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Compare.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.CompareEqual.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.CompareTo.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Contains.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.EndsWith.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Equals.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.EqualsWithDelta.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Find.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.GreaterOrEqual.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.GreaterThan.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.InstanceOf.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.LessOrEqual.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.LessThan.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Matches.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Not.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.NotNull.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Null.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Or.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.Same.class));
-    assertTrue(set.contains(org.easymock.internal.matchers.StartsWith.class));
-    assertTrue(set.contains(org.easymock.internal.AlwaysMatcher.class));
-    assertTrue(set.contains(org.easymock.internal.ArgumentToString.class));
-    assertTrue(set.contains(org.easymock.internal.ArrayMatcher.class));
-    assertTrue(set.contains(org.easymock.internal.AssertionErrorWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.EasyMockProperties.class));
-    assertTrue(set.contains(org.easymock.internal.EqualsMatcher.class));
-    assertTrue(set.contains(org.easymock.internal.ErrorMessage.class));
-    assertTrue(set.contains(org.easymock.internal.ExpectedInvocation.class));
-    assertTrue(set.contains(org.easymock.internal.ExpectedInvocationAndResult.class));
-    assertTrue(set.contains(org.easymock.internal.ExpectedInvocationAndResults.class));
-    assertTrue(set.contains(org.easymock.internal.Invocation.class));
-    assertTrue(set.contains(org.easymock.internal.JavaProxyFactory.class));
-    assertTrue(set.contains(org.easymock.internal.LastControl.class));
-    assertTrue(set.contains(org.easymock.internal.LegacyMatcherProvider.class));
-    assertTrue(set.contains(org.easymock.internal.MethodSerializationWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.MockInvocationHandler.class));
-    assertTrue(set.contains(org.easymock.internal.MocksBehavior.class));
-    assertTrue(set.contains(org.easymock.internal.MocksControl.class));
-    assertTrue(set.contains(org.easymock.internal.ObjectMethodsFilter.class));
-    assertTrue(set.contains(org.easymock.internal.Range.class));
-    assertTrue(set.contains(org.easymock.internal.RecordState.class));
-    assertTrue(set.contains(org.easymock.internal.ReplayState.class));
-    assertTrue(set.contains(org.easymock.internal.Result.class));
-    assertTrue(set.contains(org.easymock.internal.Results.class));
-    assertTrue(set.contains(org.easymock.internal.RuntimeExceptionWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.ThrowableWrapper.class));
-    assertTrue(set.contains(org.easymock.internal.UnorderedBehavior.class));
-    assertTrue(set.contains(org.easymock.AbstractMatcher.class));
-    assertTrue(set.contains(org.easymock.Capture.class));
-    assertTrue(set.contains(org.easymock.EasyMock.class));
-    assertTrue(set.contains(org.easymock.EasyMockSupport.class));
-    assertTrue(set.contains(org.easymock.MockControl.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.And.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Any.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.ArrayEquals.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Captures.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Compare.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.CompareEqual.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.CompareTo.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Contains.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.EndsWith.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Equals.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.EqualsWithDelta.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Find.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.GreaterOrEqual.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.GreaterThan.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.InstanceOf.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.LessOrEqual.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.LessThan.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Matches.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Not.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.NotNull.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Null.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Or.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.Same.class));
+    assertTrue(list.contains(org.easymock.internal.matchers.StartsWith.class));
+    assertTrue(list.contains(org.easymock.internal.AlwaysMatcher.class));
+    assertTrue(list.contains(org.easymock.internal.ArgumentToString.class));
+    assertTrue(list.contains(org.easymock.internal.ArrayMatcher.class));
+    assertTrue(list.contains(org.easymock.internal.AssertionErrorWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.EasyMockProperties.class));
+    assertTrue(list.contains(org.easymock.internal.EqualsMatcher.class));
+    assertTrue(list.contains(org.easymock.internal.ErrorMessage.class));
+    assertTrue(list.contains(org.easymock.internal.ExpectedInvocation.class));
+    assertTrue(list.contains(org.easymock.internal.ExpectedInvocationAndResult.class));
+    assertTrue(list.contains(org.easymock.internal.ExpectedInvocationAndResults.class));
+    assertTrue(list.contains(org.easymock.internal.Invocation.class));
+    assertTrue(list.contains(org.easymock.internal.JavaProxyFactory.class));
+    assertTrue(list.contains(org.easymock.internal.LastControl.class));
+    assertTrue(list.contains(org.easymock.internal.LegacyMatcherProvider.class));
+    assertTrue(list.contains(org.easymock.internal.MethodSerializationWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.MockInvocationHandler.class));
+    assertTrue(list.contains(org.easymock.internal.MocksBehavior.class));
+    assertTrue(list.contains(org.easymock.internal.MocksControl.class));
+    assertTrue(list.contains(org.easymock.internal.ObjectMethodsFilter.class));
+    assertTrue(list.contains(org.easymock.internal.Range.class));
+    assertTrue(list.contains(org.easymock.internal.RecordState.class));
+    assertTrue(list.contains(org.easymock.internal.ReplayState.class));
+    assertTrue(list.contains(org.easymock.internal.Result.class));
+    assertTrue(list.contains(org.easymock.internal.Results.class));
+    assertTrue(list.contains(org.easymock.internal.RuntimeExceptionWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.ThrowableWrapper.class));
+    assertTrue(list.contains(org.easymock.internal.UnorderedBehavior.class));
+    assertTrue(list.contains(org.easymock.AbstractMatcher.class));
+    assertTrue(list.contains(org.easymock.Capture.class));
+    assertTrue(list.contains(org.easymock.EasyMock.class));
+    assertTrue(list.contains(org.easymock.EasyMockSupport.class));
+    assertTrue(list.contains(org.easymock.MockControl.class));
 
-    assertTrue(set.contains(org.junit.runner.RunWith.class));
+    assertTrue(list.contains(org.junit.runner.RunWith.class));
 
-    assertTrue(set.contains(org.junit.runner.manipulation.Filterable.class));
-    assertTrue(set.contains(org.junit.runner.manipulation.Sortable.class));
-    assertTrue(set.contains(org.junit.runner.Describable.class));
+    assertTrue(list.contains(org.junit.runner.manipulation.Filterable.class));
+    assertTrue(list.contains(org.junit.runner.manipulation.Sortable.class));
+    assertTrue(list.contains(org.junit.runner.Describable.class));
 
-    assertTrue(set.contains(org.easymock.internal.ILegacyMatcherMethods.class));
-    assertTrue(set.contains(org.easymock.internal.ILegacyMethods.class));
-    assertTrue(set.contains(org.easymock.internal.IMocksBehavior.class));
-    assertTrue(set.contains(org.easymock.internal.IMocksControlState.class));
-    assertTrue(set.contains(org.easymock.internal.IProxyFactory.class));
-    assertTrue(set.contains(org.easymock.ArgumentsMatcher.class));
-    assertTrue(set.contains(org.easymock.IAnswer.class));
-    assertTrue(set.contains(org.easymock.IArgumentMatcher.class));
-    assertTrue(set.contains(org.easymock.IExpectationSetters.class));
-    assertTrue(set.contains(org.easymock.IMocksControl.class));
+    assertTrue(list.contains(org.easymock.internal.ILegacyMatcherMethods.class));
+    assertTrue(list.contains(org.easymock.internal.ILegacyMethods.class));
+    assertTrue(list.contains(org.easymock.internal.IMocksBehavior.class));
+    assertTrue(list.contains(org.easymock.internal.IMocksControlState.class));
+    assertTrue(list.contains(org.easymock.internal.IProxyFactory.class));
+    assertTrue(list.contains(org.easymock.ArgumentsMatcher.class));
+    assertTrue(list.contains(org.easymock.IAnswer.class));
+    assertTrue(list.contains(org.easymock.IArgumentMatcher.class));
+    assertTrue(list.contains(org.easymock.IExpectationSetters.class));
+    assertTrue(list.contains(org.easymock.IMocksControl.class));
 
-    assertTrue(set.contains(org.easymock.CaptureType.class));
-    assertTrue(set.contains(org.easymock.LogicalOperator.class));
+    assertTrue(list.contains(org.easymock.CaptureType.class));
+    assertTrue(list.contains(org.easymock.LogicalOperator.class));
   }
 
 }

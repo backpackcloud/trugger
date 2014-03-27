@@ -76,17 +76,23 @@ public class ReflectionPredicatesTest {
 
   @Test
   public void classPredicatesTest() throws Exception {
-    assertMatch(PrivateClass.class, ClassPredicates.declare(Modifier.FINAL));
-    assertMatch(PrivateClass.class, ClassPredicates.dontDeclare(Modifier.STATIC));
+    assertMatch(PrivateClass.class, ClassPredicates.declaring(Modifier.FINAL));
+    assertMatch(PrivateClass.class, ClassPredicates.declaring(Modifier.STATIC)
+        .negate());
 
-    assertMatch(DefaultClass.class, ClassPredicates.dontDeclare(Modifier.FINAL));
-    assertMatch(DefaultClass.class, ClassPredicates.declare(Modifier.STATIC));
+    assertMatch(DefaultClass.class, ClassPredicates.declaring(Modifier.FINAL)
+        .negate());
+    assertMatch(DefaultClass.class, ClassPredicates.declaring(Modifier.STATIC));
 
-    assertMatch(ProtectedClass.class, ClassPredicates.dontDeclare(Modifier.FINAL));
-    assertMatch(ProtectedClass.class, ClassPredicates.dontDeclare(Modifier.STATIC));
+    assertMatch(ProtectedClass.class, ClassPredicates.declaring(Modifier.FINAL)
+        .negate());
+    assertMatch(ProtectedClass.class, ClassPredicates.declaring(Modifier.STATIC)
+        .negate());
 
-    assertMatch(PublicClass.class, ClassPredicates.dontDeclare(Modifier.FINAL));
-    assertMatch(PublicClass.class, ClassPredicates.dontDeclare(Modifier.STATIC));
+    assertMatch(PublicClass.class, ClassPredicates.declaring(Modifier.FINAL)
+        .negate());
+    assertMatch(PublicClass.class, ClassPredicates.declaring(Modifier.STATIC)
+        .negate());
   }
 
   class GoodGetterTest {
