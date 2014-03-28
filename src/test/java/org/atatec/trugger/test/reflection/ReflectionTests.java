@@ -23,8 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.Reflection.wrapperFor;
+import static org.atatec.trugger.reflection.Reflection.*;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
 

@@ -16,11 +16,8 @@
  */
 package org.atatec.trugger.reflection;
 
-import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.Invoker;
-import org.atatec.trugger.Result;
-import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.loader.ImplementationLoader;
+import org.atatec.trugger.reflection.impl.FieldSelectorHandler;
 import org.atatec.trugger.reflection.impl.MethodSelectorInvoker;
 import org.atatec.trugger.selector.*;
 import org.atatec.trugger.util.ClassIterator;
@@ -216,29 +213,8 @@ public final class Reflection {
    * @return the handler.
    * @since 2.8
    */
-  public static Result<ValueHandler, Object> handle(final FieldSelector selector) {
-    return new FieldHandler() {
-
-      private Object target;
-
-      @Override
-      public <E> E get() throws HandlingException {
-        Field field = selector.in(target);
-        return handle(field).in(target).get();
-      }
-
-      @Override
-      public void set(Object value) throws HandlingException {
-        Field field = selector.in(target);
-        handle(field).in(target).set(value);
-      }
-
-      @Override
-      public ValueHandler in(Object source) {
-        this.target = source;
-        return this;
-      }
-    };
+  public static FieldHandler handle(FieldSelector selector) {
+    return new FieldSelectorHandler(selector);
   }
 
   /**
@@ -266,7 +242,7 @@ public final class Reflection {
    * @return the invoker
    * @since 2.8
    */
-  public static Result<Invoker, Object> invoke(MethodSelector selector) {
+  public static MethodInvoker invoke(MethodSelector selector) {
     return new MethodSelectorInvoker(selector);
   }
 
