@@ -308,8 +308,8 @@ I think this is an ugly solution, but works.
 # Class Scanning
 
 Another cool feature Trugger has is the class scanning. Just give a package name
-and it scans for any classes in there. The class scanning feature starts at
-`org.atatec.trugger.scan.ClassScan`.
+and Trugger will scan it for finding classes. The class scanning feature
+starts at `org.atatec.trugger.scan.ClassScan`.
 
 The scanning starts in the method `ClassScan#scan`, which returns a
 `ClassScanner` that allows changing the ClassLoader and defining the package.
@@ -355,9 +355,14 @@ creating a `ResourceFinder` and registering it with the method
 resources in a given package and it must support a protocol. Trugger has a
 couple of finders registered to the following protocols:
 
+- **jar** - for resources in a jar file
+- **file** - for resources in the filesystem
 - **vfs** - for resources in jar files deployed on a JBoss AS 7.x
 - **vfszip** - for resources in jar files deployed on a JBoss AS 5.x and 6.x
 - **vfsfile** - for resources in files deployed on a JBoss AS 5.x and 6.x
+
+Any finder registered to an already supported protocol will override the
+registered finder.
 
 # Proxy Creation
 
