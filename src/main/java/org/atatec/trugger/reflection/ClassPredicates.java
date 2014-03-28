@@ -35,8 +35,15 @@ public class ClassPredicates {
   }
 
   /**
-   * Predicate that returns <code>true</code> if a class is an <i>interface</i> and is not
-   * an <i>annotation</i>.
+   * Returns a predicate that checks if a class is a subtype of another class
+   */
+  public static final Predicate<Class> subtypeOf(Class type) {
+    return c -> type.isAssignableFrom(c);
+  }
+
+  /**
+   * Predicate that returns <code>true</code> if a class is an <i>interface</i>
+   * and is not an <i>annotation</i>.
    */
   public static final Predicate<Class> interfaceType() {
     return declaring(Modifier.INTERFACE)
