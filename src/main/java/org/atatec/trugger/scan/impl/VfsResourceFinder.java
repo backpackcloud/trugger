@@ -18,14 +18,13 @@ package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.ResourceFinder;
-import org.atatec.trugger.scan.ScanLevel;
 import org.jboss.vfs.VFS;
 import org.jboss.vfs.VirtualFile;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -44,24 +43,32 @@ public class VfsResourceFinder implements ResourceFinder {
   }
 
   @Override
-  public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
+  public List<String> find(URL path, String packageName) throws IOException {
+    return find(path, packageName, false);
+  }
+
+  @Override
+  public List<String> deepFind(URL path, String packageName) throws IOException {
+    return find(path, packageName, true);
+  }
+
+  private List<String> find(URL resource, String packageName,
+                            boolean deepFind) {
     try {
       VirtualFile parent = VFS.getChild(resource.toURI());
       String packagePath = PACKAGE_PATTERN.matcher(packageName).replaceAll("/");
       List<VirtualFile> resources;
-      switch (scanLevel) {
-        case PACKAGE:
-          resources = parent.getChildren();
-          break;
-        case SUBPACKAGES:
-          resources = parent.getChildrenRecursively();
-          break;
-        default:
-          throw new ClassScanningException("Unknow scan level: %s", scanLevel);
+      if (deepFind) {
+        resources = parent.getChildrenRecursively();
+      } else {
+        resources = parent.getChildren();
       }
-      Set<String> result = new HashSet<String>(resources.size());
+      List<String> result = new ArrayList<>(resources.size());
       for (VirtualFile child : resources) {
-        result.add(String.format("%s/%s", packagePath, child.getPathNameRelativeTo(parent)));
+        result.add(String.format("%s/%s",
+                packagePath,
+                child.getPathNameRelativeTo(parent))
+        );
       }
       return result;
     } catch (Exception e) {

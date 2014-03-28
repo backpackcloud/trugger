@@ -308,7 +308,20 @@ I think this is an ugly solution, but works.
 
 # Class Scanning
 
-## Basic Scanning
+Another cool feature Trugger has is the class scanning. Just give a package name
+and it scans for any classes in there. The class scanning feature starts at
+`org.atatec.trugger.scan.ClassScan`.
+
+The scanning starts in the method `ClassScan#scan`, which returns a
+`ClassScanner` that allows changing the ClassLoader and defining the type of
+scan.
+
+~~~java
+// scans everything in the package
+List<Class> classes = scan().classes().in("my.package");
+// scans everything in the package and its subpackages
+List<Class> classes = scan().allClasses().in("my.package");
+~~~
 
 ## Predicates
 

@@ -17,7 +17,6 @@
 package org.atatec.trugger.scan;
 
 import org.atatec.trugger.loader.ImplementationLoader;
-import org.atatec.trugger.selector.ClassesSelector;
 
 /**
  * A helper class for finding classes.
@@ -39,7 +38,7 @@ public class ClassScan {
   /**
    * @return a new {@link ClassScanner}.
    */
-  public static ClassScanner newScan() {
+  public static ClassScanner scan() {
     return factory.createClassScanner();
   }
 
@@ -49,16 +48,6 @@ public class ClassScan {
    */
   public static void register(ResourceFinder... finders) {
     factory.register(finders);
-  }
-
-  /**
-   * This method has the same effect as:
-   * <pre>
-   * newScan().find();
-   * </pre>
-   */
-  public static ClassesSelector find() {
-    return newScan().find();
   }
 
 }

@@ -17,14 +17,13 @@
 package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ResourceFinder;
-import org.atatec.trugger.scan.ScanLevel;
 
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
@@ -43,13 +42,22 @@ public class JarResourceFinder implements ResourceFinder {
     return "jar";
   }
 
-  public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) throws IOException {
-    Set<String> resources = new HashSet<String>(30);
-    findInJar(resources, resource, packageName, scanLevel);
+  public List<String> find(URL resource, String packageName) throws IOException {
+    List<String> resources = new ArrayList<>(30);
+    findInJar(resources, resource, packageName, false);
     return resources;
   }
 
-  private void findInJar(Set<String> resources, URL resource, String packageName, ScanLevel scanLevel) throws IOException {
+  public List<String> deepFind(URL resource, String packageName) throws
+      IOException {
+    List<String> resources = new ArrayList<>(30);
+    findInJar(resources, resource, packageName, true);
+    return resources;
+  }
+
+  private void findInJar(List<String> resources, URL resource,
+                         String packageName, boolean deepFind)
+      throws IOException {
     packageName = DOT_PATTERN.matcher(packageName).replaceAll("/");
     JarURLConnection conn = (JarURLConnection) resource.openConnection();
     JarFile jarFile = conn.getJarFile();
@@ -62,7 +70,7 @@ public class JarResourceFinder implements ResourceFinder {
       }
       String resourceName = entry.getName();
       if (resourceName.startsWith(packageName)) {
-        if (canInclude(scanLevel, resourceName, packageName)) {
+        if (canInclude(deepFind, resourceName, packageName)) {
           resources.add(resourceName);
         }
       }
@@ -73,15 +81,12 @@ public class JarResourceFinder implements ResourceFinder {
    * Indicates if the specified resource can be included in the found
    * resources.
    *
-   * @param resourcePath
-   *            the path of the resource.
-   * @param packagePath
-   *            the package path that is scanned for resources.
    * @return <code>true</code> if the specified resource can be included in
-   *         the found resources.
+   * the found resources.
    */
-  private boolean canInclude(ScanLevel scanLevel, String resourcePath, String packagePath) {
-    if(scanLevel == ScanLevel.PACKAGE) {
+  private boolean canInclude(boolean deepFind, String resourcePath,
+                             String packagePath) {
+    if (!deepFind) {
       int start = packagePath.length() + 1;
       int end = resourcePath.indexOf('/', start);
       return resourcePath.startsWith(packagePath) && (end < 0);

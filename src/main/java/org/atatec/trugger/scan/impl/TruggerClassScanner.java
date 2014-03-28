@@ -16,10 +16,7 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.scan.ClassScanner;
-import org.atatec.trugger.scan.ClassScannerFactory;
-import org.atatec.trugger.scan.ResourceFinder;
-import org.atatec.trugger.scan.ScanLevel;
+import org.atatec.trugger.scan.*;
 import org.atatec.trugger.selector.ClassesSelector;
 
 /**
@@ -57,8 +54,14 @@ public class TruggerClassScanner implements ClassScanner {
     return new TruggerClassScanner(classLoader, factory);
   }
 
-  public ClassesSelector find() {
-    return new TruggerClassesSelector(new TruggerScanner(factory, classLoader));
+  public ClassesSelector classes() {
+    return new TruggerClassesSelector(
+        new TruggerScanner(factory, classLoader), false);
+  }
+
+  public ClassesSelector allClasses() {
+    return new TruggerClassesSelector(
+        new TruggerScanner(factory, classLoader), true);
   }
 
 }

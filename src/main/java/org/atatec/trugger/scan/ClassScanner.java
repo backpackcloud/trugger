@@ -28,17 +28,23 @@ import org.atatec.trugger.selector.ClassesSelector;
 public interface ClassScanner {
 
   /**
-   * Finds all the types (classes, enums, annotations and interfaces).
+   * Finds classes in a package
    *
    * @return a selector for the operation.
    */
-  ClassesSelector find();
+  ClassesSelector classes();
+
+  /**
+   * Finds classes in a package and in its subpackages.
+   *
+   * @return a selector for the operation.
+   */
+  ClassesSelector allClasses();
 
   /**
    * Sets the class loader to use.
    *
-   * @param classLoader
-   *          the class loader to use.
+   * @param classLoader the class loader to use.
    */
   ClassScanner with(ClassLoader classLoader);
 

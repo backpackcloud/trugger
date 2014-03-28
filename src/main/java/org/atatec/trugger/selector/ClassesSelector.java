@@ -16,7 +16,8 @@
  */
 package org.atatec.trugger.selector;
 
-import org.atatec.trugger.scan.ClassScanResult;
+import org.atatec.trugger.Result;
+import org.atatec.trugger.scan.ClassScanningException;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,10 +29,18 @@ import java.util.function.Predicate;
  * @since 2.3
  */
 public interface ClassesSelector extends PredicateSelector<Class>,
-    RecursionSelector, ClassScanResult<List<Class>> {
+    Result<List<Class>, String> {
 
   ClassesSelector filter(Predicate<? super Class> predicate);
 
-  ClassesSelector recursively();
+  /**
+   * Scans the packages for classes.
+   *
+   * @param packageName the package to scan.
+   * @return the search result.
+   * @throws ClassScanningException if an error occurs while scanning the
+   *                                packages.
+   */
+  List<Class> in(String packageName) throws ClassScanningException;
 
 }

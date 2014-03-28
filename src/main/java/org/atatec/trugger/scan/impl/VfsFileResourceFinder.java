@@ -18,12 +18,9 @@ package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.ResourceFinder;
-import org.atatec.trugger.scan.ScanLevel;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -44,13 +41,21 @@ public class VfsFileResourceFinder implements ResourceFinder {
   }
 
   @Override
-  public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
+  public List<String> find(URL resource, String packageName) {
     try {
       URL dirUrl = new URL(PATTERN.matcher(resource.toString()).replaceFirst("file"));
-      return fileResourceFinder.find(dirUrl, packageName, scanLevel);
-    } catch (MalformedURLException e) {
+      return fileResourceFinder.find(dirUrl, packageName);
+    } catch (Exception e) {
       throw new ClassScanningException(e);
-    } catch (IOException e) {
+    }
+  }
+
+  @Override
+  public List<String> deepFind(URL resource, String packageName) {
+    try {
+      URL dirUrl = new URL(PATTERN.matcher(resource.toString()).replaceFirst("file"));
+      return fileResourceFinder.deepFind(dirUrl, packageName);
+    } catch (Exception e) {
       throw new ClassScanningException(e);
     }
   }

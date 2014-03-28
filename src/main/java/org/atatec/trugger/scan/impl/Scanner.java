@@ -16,10 +16,8 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.scan.PackageScan;
-
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Interface that defines a scanner for a package entry.
@@ -31,11 +29,13 @@ public interface Scanner {
   /**
    * Scans and returns the found classes in the specified package.
    *
-   * @param packageEntry
-   *          the package to scan.
+   * @param packageName the package to scan.
    * @return the classes found in the package
    */
-  Set<Class> scanPackage(PackageScan packageEntry) throws IOException,
+  List<Class> scan(String packageName) throws IOException,
+      ClassNotFoundException;
+
+  List<Class> deepScan(String packageName) throws IOException,
       ClassNotFoundException;
 
 }

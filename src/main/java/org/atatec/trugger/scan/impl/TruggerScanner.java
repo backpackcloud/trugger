@@ -17,14 +17,13 @@
 package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScannerFactory;
-import org.atatec.trugger.scan.PackageScan;
 import org.atatec.trugger.scan.ResourceFinder;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -43,24 +42,34 @@ public class TruggerScanner implements Scanner {
     this.classLoader = classLoader;
   }
 
-  /**
-   * Scans and returns the found classes in the specified package.
-   *
-   * @param packageEntry the package to scan.
-   * @return the classes found in the package
-   */
-  public Set<Class> scanPackage(PackageScan packageEntry) throws IOException,
+  @Override
+  public List<Class> scan(String packageName) throws IOException,
       ClassNotFoundException {
-    String path = packageEntry.packageName().replace('.', '/');
+    return scan(packageName, false);
+  }
+
+  @Override
+  public List<Class> deepScan(String packageName) throws IOException,
+      ClassNotFoundException {
+    return scan(packageName, true);
+  }
+
+  private List<Class> scan(String packageName, boolean deepScan)
+      throws IOException, ClassNotFoundException {
+    String path = packageName.replace('.', '/');
     Enumeration<URL> resources = classLoader.getResources(path);
-    Set<Class> classes = new HashSet<Class>(40);
+    List<Class> classes = new ArrayList<>(40);
     if (resources.hasMoreElements()) {
       while (resources.hasMoreElements()) {
         URL resource = resources.nextElement();
         String protocol = resource.getProtocol();
         ResourceFinder finder = factory.finderFor(protocol);
-        Set<String> resourcesName = finder.find(resource,
-            packageEntry.packageName(), packageEntry.scanLevel());
+        List<String> resourcesName;
+        if (deepScan) {
+          resourcesName = finder.deepFind(resource, packageName);
+        } else {
+          resourcesName = finder.find(resource, packageName);
+        }
         for (String resourceName : resourcesName) {
           if (resourceName.endsWith(CLASS_EXTENSION)) {
             resourceName =
@@ -74,5 +83,4 @@ public class TruggerScanner implements Scanner {
     }
     return classes;
   }
-
 }

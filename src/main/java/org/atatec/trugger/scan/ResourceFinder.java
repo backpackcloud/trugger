@@ -18,7 +18,7 @@ package org.atatec.trugger.scan;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Interface that defines a class capable of find resources in a given
@@ -42,10 +42,20 @@ public interface ResourceFinder {
    *            the path to the resource.
    * @param packageName
    *            the package name to search for another resources.
-   * @param level
-   *            the level of the scan.
-   * @return a set of founded resources.
+   * @return a list of founded resources.
    */
-  Set<String> find(URL path, String packageName, ScanLevel level) throws IOException;
+  List<String> find(URL path, String packageName) throws IOException;
+
+  /**
+   * Returns a set of resource names present in the specified package and its
+   * subpackages on the given path.
+   *
+   * @param path
+   *            the path to the resource.
+   * @param packageName
+   *            the package name to search for another resources.
+   * @return a list of founded resources.
+   */
+  List<String> deepFind(URL path, String packageName) throws IOException;
 
 }

@@ -17,12 +17,9 @@
 package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
-import org.atatec.trugger.scan.PackageScan;
-import org.atatec.trugger.scan.ScanLevel;
 import org.atatec.trugger.selector.ClassesSelector;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,48 +29,35 @@ import java.util.stream.Collectors;
 public class TruggerClassesSelector implements ClassesSelector {
 
   private final Scanner scanner;
-  private final ScanLevel level;
+  private final boolean deepScan;
   private final Predicate<? super Class> predicate;
 
-  public TruggerClassesSelector(Scanner scanner) {
+  public TruggerClassesSelector(Scanner scanner, boolean deepScan) {
     this.scanner = scanner;
-    this.level = ScanLevel.PACKAGE;
+    this.deepScan = deepScan;
     this.predicate = null;
   }
 
-  public TruggerClassesSelector(Scanner scanner, ScanLevel level,
+  public TruggerClassesSelector(Scanner scanner, boolean deepScan,
                                 Predicate<? super Class> predicate) {
     this.scanner = scanner;
-    this.level = level;
+    this.deepScan = deepScan;
     this.predicate = predicate;
   }
 
   public ClassesSelector filter(Predicate<? super Class> predicate) {
-    return new TruggerClassesSelector(scanner, level, predicate);
+    return new TruggerClassesSelector(scanner, deepScan, predicate);
   }
 
-  public ClassesSelector recursively() {
-    return new TruggerClassesSelector(scanner, ScanLevel.SUBPACKAGES, predicate);
-  }
-
-  public List<Class> in(String... packageNames) throws ClassScanningException {
-    return in(level.createScanPackages(packageNames));
-  }
-
-  public List<Class> in(PackageScan packageToScan) throws ClassScanningException {
-    return in(Arrays.asList(packageToScan));
-  }
-
-  public List<Class> in(Collection<PackageScan> packagesToScan) throws
-      ClassScanningException {
-    List<Class> classes = new ArrayList<>(40);
+  public List<Class> in(String packageName) throws ClassScanningException {
+    List<Class> classes;
     try {
-      for (PackageScan entry : packagesToScan) {
-        classes.addAll(scanner.scanPackage(entry));
+      if (deepScan) {
+        classes = scanner.deepScan(packageName);
+      } else {
+        classes = scanner.scan(packageName);
       }
-    } catch (IOException e) {
-      throw new ClassScanningException(e);
-    } catch (ClassNotFoundException e) {
+    } catch (Exception e) {
       throw new ClassScanningException(e);
     }
     if (predicate != null) {

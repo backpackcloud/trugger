@@ -18,10 +18,10 @@ package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.ResourceFinder;
-import org.atatec.trugger.scan.ScanLevel;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -44,13 +44,26 @@ public class VfsZipResourceFinder implements ResourceFinder {
   }
 
   @Override
-  public Set<String> find(URL resource, String packageName, ScanLevel scanLevel) {
+  public List<String> find(URL path, String packageName) throws IOException {
+    return find(path, packageName, false);
+  }
+
+  @Override
+  public List<String> deepFind(URL path, String packageName) throws IOException {
+    return find(path, packageName, true);
+  }
+
+  public List<String> find(URL resource, String packageName, boolean deepFind) {
     try {
       String url = VSFZIP_PATTERN.matcher(resource.toString()).replaceFirst("jar:file");
       String path = '/' + PACKAGE_PATTERN.matcher(packageName).replaceAll("/");
       url = url.replaceFirst(path, '!' + path);
       URL dirUrl = new URL(url);
-      return jarResourceFinder.find(dirUrl, packageName, scanLevel);
+      if (deepFind) {
+        return jarResourceFinder.deepFind(dirUrl, packageName);
+      } else {
+        return jarResourceFinder.find(dirUrl, packageName);
+      }
     } catch (Exception e) {
       throw new ClassScanningException(e);
     }

@@ -18,14 +18,13 @@ package org.atatec.trugger.scan.impl;
 
 import org.atatec.trugger.scan.ClassScanningException;
 import org.atatec.trugger.scan.ResourceFinder;
-import org.atatec.trugger.scan.ScanLevel;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -42,16 +41,22 @@ public class FileResourceFinder implements ResourceFinder {
     return "file";
   }
 
-  public Set<String> find(URL resource, String packageName,
-                          ScanLevel scanLevel) {
-    Set<String> resources = new HashSet<>(30);
+  public List<String> find(URL resource, String packageName) {
+    List<String> resources = new ArrayList<>(30);
     String packagePath = DOT_PATTERN.matcher(packageName).replaceAll("/");
-    findInDirectory(resources, resource, packagePath, scanLevel);
+    findInDirectory(resources, resource, packagePath, false);
     return resources;
   }
 
-  private void findInDirectory(Set<String> resources, URL fullPath,
-                               String packagePath, ScanLevel scanLevel) {
+  public List<String> deepFind(URL resource, String packageName) {
+    List<String> resources = new ArrayList<>(30);
+    findInDirectory(resources, resource, packageName, true);
+    return resources;
+  }
+
+  private void findInDirectory(List<String> resources, URL fullPath,
+                               String packageName, boolean deepFind) {
+    String packagePath = DOT_PATTERN.matcher(packageName).replaceAll("/");
     File directory;
     try {
       directory = new File(fullPath.toURI());
@@ -61,11 +66,11 @@ public class FileResourceFinder implements ResourceFinder {
     File[] files = directory.listFiles();
     if (files != null) {
       for (File file : files) {
-        if (canInclude(scanLevel, file)) {
+        if (canInclude(deepFind, file)) {
           if (file.isDirectory()) {
             try {
               findInDirectory(resources, file.toURI().toURL(),
-                  packagePath + '/' + file.getName(), scanLevel);
+                  packagePath + '/' + file.getName(), deepFind);
             } catch (MalformedURLException e) {
               throw new ClassScanningException(e);
             }
@@ -81,13 +86,11 @@ public class FileResourceFinder implements ResourceFinder {
   /**
    * Indicates if the specified resource can be included in the found resources.
    *
-   * @param scanLevel    the scan level for the package.
-   * @param resourceFile the file that represents this resource.
    * @return <code>true</code> if the specified resource can be included in the
    * found resources.
    */
-  private static boolean canInclude(ScanLevel scanLevel, File resourceFile) {
-    return scanLevel != ScanLevel.PACKAGE || !resourceFile.isDirectory();
+  private static boolean canInclude(boolean deepFind, File resourceFile) {
+    return deepFind || !resourceFile.isDirectory();
   }
 
 }

@@ -24,6 +24,7 @@ of code changed and lots of modules gone to `/dev/null`.
   - Removed `Reflection#newInstanceOf` method
   - Changed the return of selections to `List`
   - Renamed get and set methods in `ValueHandler`
+  - Reformulated Class Scan module
 
 ### Minor Changes
   - Removed non used classes
