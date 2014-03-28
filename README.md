@@ -31,9 +31,11 @@ are required by Trugger at runtime.
 
 ## How To Build
 
-Just make sure you have [Gradle]<http://gradle.org/>. The markdown files are
-converted at build time using [pandoc]<http://johnmacfarlane.net/pandoc/README.html>
-so you should have it too.
+Just make sure you have [Gradle][]. The markdown files are converted at build
+ time using [pandoc][] so you should have it too.
+
+[gradle]: <http://gradle.org>
+[pandoc]: <http://johnmacfarlane.net/pandoc/README.html>
 
 ## How To Contribute
 
