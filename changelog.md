@@ -6,6 +6,8 @@ This is a huge update. I'm going to focus on keep this project simple and
 easy to maintain (since I don't have money to put a great effort on it). Lots
 of code changed and lots of modules gone to `/dev/null`.
 
+This release is also the first one to have a README with a basic guide.
+
 ### Major Changes
 
   - Java 8 support
@@ -17,7 +19,7 @@ of code changed and lots of modules gone to `/dev/null`.
   - Unique searches no longer throws exceptions if two or more results are found
   - Reformulated the Interception module, now the DSL implementation can be
     changed
-  - **Immutable classes** (this is a good one)
+  - Immutable classes
   - Element copies only applies functions to non null values (to prevent *NPEs*)
   - No more single selections (element, field, method) without specifying a name
   - No more exception handlers for invocations (method and constructor)
@@ -25,7 +27,7 @@ of code changed and lots of modules gone to `/dev/null`.
   - Changed the return of selections to `List`
   - Renamed get and set methods in `ValueHandler`
   - Reformulated Class Scan module
-  - `recursively` changed to `deep` (and also its class to `DeepSelector`)
+  - `recursively` changed to `deep` and belongs now to `DeepSelector`
 
 ### Minor Changes
   - Removed non used classes

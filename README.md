@@ -313,19 +313,52 @@ and it scans for any classes in there. The class scanning feature starts at
 `org.atatec.trugger.scan.ClassScan`.
 
 The scanning starts in the method `ClassScan#scan`, which returns a
-`ClassScanner` that allows changing the ClassLoader and defining the type of
-scan.
+`ClassScanner` that allows changing the ClassLoader and defining the package.
 
 ~~~java
-// scans everything in the package
 List<Class> classes = scan().classes().in("my.package");
-// scans everything in the package and its subpackages
+~~~
+
+This will return every class in the package `my.package`. To do a deep scan and
+also return the classes in subpackages, use the `deep` method:
+
+~~~java
 List<Class> classes = scan().classes().deep().in("my.package");
+~~~
+
+You can also filter the classes with the method `filter`:
+
+~~~java
+List<Class> classes = scan().classes()
+  .deep()
+  .filter(c -> c.isAnnotatedWith(Entity.class))
+  .in("my.package");
 ~~~
 
 ## Predicates
 
-## Defining a Protocol Handler
+A set of useful predicates to deal with classes can be found at
+`org.atatec.trugger.reflection.ClassPredicates`:
+
+~~~java
+List<Class> classes = scan().classes()
+  .deep()
+  .filter(annotatedWith(Entity.class)) //static import
+  .in("my.package");
+~~~
+
+## Resource Finders for Protocols
+
+The search is performed based on protocols. The basic protocols are `file` and
+`jar` and are supported by Trugger. More specific protocols can be handled by
+creating a `ResourceFinder` and registering it with the method
+`ClassScan#register`. A `ResourceFinder` is responsible for finding any
+resources in a given package and it must support a protocol. Trugger has a
+couple of finders registered to the following protocols:
+
+- **vfs** - for resources in jar files deployed on a JBoss AS 7.x
+- **vfszip** - for resources in jar files deployed on a JBoss AS 5.x and 6.x
+- **vfsfile** - for resources in files deployed on a JBoss AS 5.x and 6.x
 
 # Proxy Creation
 
