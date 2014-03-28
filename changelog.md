@@ -301,9 +301,8 @@ Three modules removed since I don't have time/money to maintain them.
 
 ### Major changes:
 
-  Requirements:
-    - Java 6
-    - Easy mock (only for mock package).
+  - Java 6
+  - Easy mock dependency (only for mock package).
   - Renamed method `getPredicate` to `predicate` in PredicateBuilder class.
   - Removed the prefix `all` from `Reflector` and `Elements` methods.
   - Corrected misspelling of method `isEmpty` *(epic fail)*.

@@ -7,8 +7,8 @@ classes)
 
 ## What a hell does the name trugger mean?
 
-When I was learning java, I've choose "Atatec" (Ataxexe Technology) to be my
-company's name (kidding, of course) and then I send a message to my friend Ives:
+When I was learning java, I choosed "Atatec" (*Ataxexe Technology*) to be the
+name of my fictitious company and then I sent a message to my friend Ives:
 
 > Atatec
 
