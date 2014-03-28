@@ -62,7 +62,7 @@ public class TruggerFieldHandler implements FieldHandler {
     this.instance = instance;
   }
   
-  public <E> E value() throws HandlingException {
+  public <E> E get() throws HandlingException {
     try {
       return (E) field.get(instance);
     } catch (IllegalAccessException e) {
@@ -70,7 +70,7 @@ public class TruggerFieldHandler implements FieldHandler {
     }
   }
   
-  public void value(Object value) throws HandlingException {
+  public void set(Object value) throws HandlingException {
     try {
       field.set(instance, value);
     } catch (IllegalAccessException e) {

@@ -50,32 +50,32 @@ public class ArrayElementTest {
     Element element = Elements.element("0").in(ints);
     assertEquals(int.class, element.type());
     assertEquals(int[].class, element.declaringClass());
-    assertEquals(0, (int) element.value());
+    assertEquals(0, (int) element.get());
 
     element = Elements.element("2").in(ints);
     assertEquals(int.class, element.type());
     assertEquals(int[].class, element.declaringClass());
-    assertEquals(12, (int) element.value());
+    assertEquals(12, (int) element.get());
 
     element = Elements.element("ints.1").in(this);
     assertEquals(int.class, element.type());
     assertEquals(ArrayElementTest.class, element.declaringClass());
-    assertEquals(10, (int) element.value());
+    assertEquals(10, (int) element.get());
 
     element = Elements.element("0").in(objects);
     assertEquals(TestObject.class, element.type());
     assertEquals(TestObject[].class, element.declaringClass());
-    TestObject o = element.value();
+    TestObject o = element.get();
     assertEquals("name", o.getName());
     assertEquals("lastname", o.getLastName());
 
     element = Elements.element("object").in(map);
-    o = element.value();
+    o = element.get();
     assertEquals("name", o.getName());
     assertEquals("lastname", o.getLastName());
 
     element = Elements.element("map.object").in(this);
-    o = element.value();
+    o = element.get();
     assertEquals("name", o.getName());
     assertEquals("lastname", o.getLastName());
   }
@@ -83,16 +83,16 @@ public class ArrayElementTest {
   @Test
   public void testReferencedElements() {
     Element element = Elements.element("first").in(ints);
-    assertEquals(0, (int) element.value());
+    assertEquals(0, (int) element.get());
 
     element = Elements.element("last").in(ints);
-    assertEquals(33, (int) element.value());
+    assertEquals(33, (int) element.get());
 
     element = Elements.element("first").in(objects);
-    TestObject a = element.value();
+    TestObject a = element.get();
 
     element = Elements.element("last").in(objects);
-    TestObject b = element.value();
+    TestObject b = element.get();
 
     assertSame(a, b);
   }

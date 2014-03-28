@@ -37,12 +37,12 @@ public class NonSpecificElementTest {
 
   @Test(expected = NonSpecificElementException.class)
   public void testRead() throws Exception {
-    element.value();
+    element.get();
   }
 
   @Test(expected = NonSpecificElementException.class)
   public void testWrite() throws Exception {
-    element.value(null);
+    element.set(null);
   }
 
 }

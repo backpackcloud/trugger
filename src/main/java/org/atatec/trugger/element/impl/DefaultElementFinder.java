@@ -114,22 +114,22 @@ public class DefaultElementFinder implements Finder<Element> {
     public ValueHandler in(final Object target) {
       return new ValueHandler() {
 
-        public void value(Object value) throws HandlingException {
-          forWrite.in(target).value(value);
+        public void set(Object value) throws HandlingException {
+          forWrite.in(target).set(value);
         }
 
-        public <E> E value() throws HandlingException {
-          return forRead.in(target).value();
+        public <E> E get() throws HandlingException {
+          return forRead.in(target).get();
         }
       };
     }
 
-    public <E> E value() throws HandlingException {
-      return forRead.value();
+    public <E> E get() throws HandlingException {
+      return forRead.get();
     }
 
-    public void value(Object value) throws HandlingException {
-      forWrite.value(value);
+    public void set(Object value) throws HandlingException {
+      forWrite.set(value);
     }
 
     public Class declaringClass() {

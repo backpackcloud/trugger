@@ -96,15 +96,15 @@ public final class TruggerElementCopier implements ElementCopier,
   }
 
   private void copy(Element destElement, Element srcElement, Object dest) {
-    Object value = srcElement.in(this.src).value();
+    Object value = srcElement.in(this.src).get();
     PropertyCopyImpl copy = new PropertyCopyImpl(srcElement, destElement, value);
     if (value != null) {
       value = function.apply(copy);
       if (Utils.areAssignable(destElement.type(), value.getClass())) {
-        destElement.in(dest).value(value);
+        destElement.in(dest).set(value);
       }
     } else if (copyNull) {
-      destElement.in(dest).value(value);
+      destElement.in(dest).set(value);
     }
   }
 

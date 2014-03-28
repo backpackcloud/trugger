@@ -89,13 +89,13 @@ public class ResultSetElementTest {
     assertTrue(nickname.isSpecific());
     assertTrue(age.isSpecific());
     
-    assertEquals("John", name.value());
-    assertEquals("kranck", nickname.value());
-    assertEquals(26, (int) age.value());
+    assertEquals("John", name.get());
+    assertEquals("kranck", nickname.get());
+    assertEquals(26, (int) age.get());
     resultSet.next();
-    assertEquals("Justin", name.value());
-    assertEquals("tropper", nickname.value());
-    assertEquals(27, (int) age.value());
+    assertEquals("Justin", name.get());
+    assertEquals("tropper", nickname.get());
+    assertEquals(27, (int) age.get());
   }
   
 }

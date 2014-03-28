@@ -68,7 +68,7 @@ public class PropertyTest {
     assertFalse(property1.isWritable());
     assertEquals(String.class, property1.type());
     assertTrue(property1.isAnnotationPresent(Flag.class));
-    assertEquals("test", property1.in(test).value());
+    assertEquals("test", property1.in(test).get());
 
     property1 = getProperty("price", test);
     assertFalse(property1.equals(property2));
@@ -78,7 +78,7 @@ public class PropertyTest {
     assertFalse(property1.isWritable());
     assertEquals(double.class, property1.type());
     assertFalse(property1.isAnnotationPresent(Flag.class));
-    Double value = property1.in(test).value();
+    Double value = property1.in(test).get();
     assertEquals(15.00, value.doubleValue(), 0.01);
     assertEqualsAndHash(property1, property2);
 
@@ -90,9 +90,9 @@ public class PropertyTest {
     assertTrue(property1.isWritable());
     assertEquals(boolean.class, property1.type());
     assertFalse(property1.isAnnotationPresent(Flag.class));
-    assertEquals(false, property1.in(test).value());
-    property1.in(test).value(true);
-    assertEquals(true, property1.in(test).value());
+    assertEquals(false, property1.in(test).get());
+    property1.in(test).set(true);
+    assertEquals(true, property1.in(test).get());
     assertEqualsAndHash(property1, property2);
 
     property1 = getProperty("class", test);
@@ -113,8 +113,8 @@ public class PropertyTest {
     assertTrue(property1.isWritable());
     assertEquals(long.class, property1.type());
     assertFalse(property1.isAnnotationPresent(Flag.class));
-    property1.in(test).value(10L);
-    assertEquals(10L, (long) property1.in(test).value());
+    property1.in(test).set(10L);
+    assertEquals(10L, (long) property1.in(test).get());
     assertEqualsAndHash(property1, property2);
 
     property1 = getProperty("otherFieldProp", test);
@@ -125,13 +125,13 @@ public class PropertyTest {
     assertFalse(property1.isWritable());
     assertEquals(long.class, property1.type());
     assertFalse(property1.isAnnotationPresent(Flag.class));
-    assertEquals(10L, (long) property1.in(test).value());
+    assertEquals(10L, (long) property1.in(test).get());
     assertEqualsAndHash(property1, property2);
   }
 
   @Test(expected = UnwritableElementException.class)
   public void unwritablePropertyTest() {
-    getProperty("readable").in(test).value(new Object());
+    getProperty("readable").in(test).set(new Object());
   }
 
   @Test
@@ -139,8 +139,8 @@ public class PropertyTest {
     Element property = getProperty("allAccess");
     assertNotNull(property);
     Object value = new Object();
-    property.in(test).value(value);
-    assertSame(value, property.in(test).value());
+    property.in(test).set(value);
+    assertSame(value, property.in(test).get());
   }
 
   @Test

@@ -66,8 +66,8 @@ public class AnnotationElementTest {
     TestAnnotation annotation = AnnotationTestClass.class.getAnnotation(TestAnnotation.class);
     final Element specific = element("bool").in(annotation);
     assertEquals(boolean.class, specific.type());
-    assertEquals(false, specific.value());
-    assertThrow(HandlingException.class, () -> specific.value(true));
+    assertEquals(false, specific.get());
+    assertThrow(HandlingException.class, () -> specific.set(true));
   }
 
   private void assertAnnotationElement(Element element) {

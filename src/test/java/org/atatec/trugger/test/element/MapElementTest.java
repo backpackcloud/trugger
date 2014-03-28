@@ -68,8 +68,8 @@ public class MapElementTest {
     
     final Element element = element("obj.bundle.framework").in(map3);
     assertTrue(element.isSpecific());
-    assertEquals("trugger", element.value());
-    assertThrow(HandlingException.class, () -> element.value("none"));
+    assertEquals("trugger", element.get());
+    assertThrow(HandlingException.class, () -> element.set("none"));
   }
   
   private void testMap(final Map map1, final Map map2, String key,
@@ -80,20 +80,20 @@ public class MapElementTest {
     
     assertEquals(Map.class, element.declaringClass());
     
-    assertEquals(value1, element.value());
+    assertEquals(value1, element.get());
     assertEquals(key, element.name());
-    assertEquals(value1, element.in(map1).value());
-    assertEquals(value2, element.in(map2).value());
+    assertEquals(value1, element.in(map1).get());
+    assertEquals(value2, element.in(map2).get());
     assertTrue(element.isReadable());
     assertTrue(element.isWritable());
     
-    element.value("modified");
-    element.in(map2).value("modified");
+    element.set("modified");
+    element.in(map2).set("modified");
 
     assertEquals("modified", map1.get(key));
     assertEquals("modified", map2.get(key));
-    assertEquals("modified", element.value());
-    assertEquals("modified", element.in(map1).value());
-    assertEquals("modified", element.in(map2).value());
+    assertEquals("modified", element.get());
+    assertEquals("modified", element.in(map1).get());
+    assertEquals("modified", element.in(map2).get());
   }
 }

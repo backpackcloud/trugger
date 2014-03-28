@@ -45,9 +45,9 @@ public class PropertiesElementTest {
     Element element = element("login").in(properties);
     assertEquals(String.class, element.type());
     assertEquals("login", element.name());
-    assertEquals("admin", element.value());
-    element.value("guest");
-    assertEquals("guest", element.value());
+    assertEquals("admin", element.get());
+    element.set("guest");
+    assertEquals("guest", element.get());
     assertEquals("guest", properties.getProperty("login"));
     
     assertTrue(element.isReadable());

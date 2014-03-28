@@ -16,11 +16,11 @@
  */
 package org.atatec.trugger.element;
 
-import java.lang.reflect.AnnotatedElement;
-
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.ValueHandler;
+
+import java.lang.reflect.AnnotatedElement;
 
 /**
  * Interface that defines an element of a class or an object.
@@ -28,7 +28,8 @@ import org.atatec.trugger.ValueHandler;
  * @author Marcelo Guimarães
  * @since 1.2
  */
-public interface Element extends AnnotatedElement, Result<ValueHandler, Object>, ValueHandler {
+public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
+    ValueHandler {
 
   /**
    * @return the Class object representing the class or interface that declares
@@ -71,8 +72,8 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
 
   /**
    * Checks if this element is specific for a target. If this method returns
-   * <code>true</code>, then the methods {@link #value()} and
-   * {@link #value(Object)} can be used.
+   * <code>true</code>, then the methods {@link #get()} and
+   * {@link #set(Object)} can be used.
    *
    * @return <code>true</code> if this element is specific for a target.
    * @since 2.0
@@ -92,12 +93,12 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
    * Returns the value if this element is {@link #isSpecific() specific}.
    */
   @Override
-  <E> E value() throws HandlingException;
+  <E> E get() throws HandlingException;
 
   /**
    * Sets the value if this element is {@link #isSpecific() specific}.
    */
   @Override
-  void value(Object value) throws HandlingException;
+  void set(Object value) throws HandlingException;
 
 }

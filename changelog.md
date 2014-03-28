@@ -23,6 +23,7 @@ of code changed and lots of modules gone to `/dev/null`.
   - No more exception handlers for invocations (method and constructor)
   - Removed `Reflection#newInstanceOf` method
   - Changed the return of selections to `List`
+  - Renamed get and set methods in `ValueHandler`
 
 ### Minor Changes
   - Removed non used classes

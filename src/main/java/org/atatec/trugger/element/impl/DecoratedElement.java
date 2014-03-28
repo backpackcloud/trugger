@@ -72,13 +72,13 @@ public class DecoratedElement implements Element {
   }
 
   @Override
-  public void value(Object value) throws HandlingException {
-    in(target()).value(value);
+  public void set(Object value) throws HandlingException {
+    in(target()).set(value);
   }
 
   @Override
-  public <E> E value() throws HandlingException {
-    return in(target()).value();
+  public <E> E get() throws HandlingException {
+    return in(target()).get();
   }
 
   @Override

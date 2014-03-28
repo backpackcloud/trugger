@@ -49,13 +49,13 @@ public class SpecificElement extends DecoratedElement implements Element {
   }
 
   @Override
-  public Object value() throws HandlingException {
-    return in(target).value();
+  public Object get() throws HandlingException {
+    return in(target).get();
   }
 
   @Override
-  public void value(Object value) throws HandlingException {
-    in(target).value(value);
+  public void set(Object value) throws HandlingException {
+    in(target).set(value);
   }
 
 }

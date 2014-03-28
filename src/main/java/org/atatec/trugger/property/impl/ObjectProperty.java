@@ -100,7 +100,7 @@ final class ObjectProperty extends AbstractElement {
   public ValueHandler in(final Object target) {
     return new ValueHandler() {
 
-      public <E> E value() throws HandlingException {
+      public <E> E get() throws HandlingException {
         if (!isReadable()) {
           throw new UnreadableElementException(name);
         }
@@ -111,7 +111,7 @@ final class ObjectProperty extends AbstractElement {
         }
       }
 
-      public void value(Object value) throws HandlingException {
+      public void set(Object value) throws HandlingException {
         if (!isWritable()) {
           throw new UnwritableElementException(name);
         }

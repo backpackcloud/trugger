@@ -53,15 +53,15 @@ public class ResourceBundleElementTest {
     
     assertNotNull(nested);
     assertFalse(nested.isSpecific());
-    assertEquals("trugger", nested.in(new BundleBean()).value());
+    assertEquals("trugger", nested.in(new BundleBean()).get());
     
     assertThrow(HandlingException.class, () -> {
-      element("undefined").in(bundle1).value();
+      element("undefined").in(bundle1).get();
     });
     
     assertThrow(IllegalArgumentException.class, () -> {
       Element element = element("undefined").in(ResourceBundle.class);
-      element.in(new Object()).value();
+      element.in(new Object()).get();
     });
   }
   
@@ -74,17 +74,17 @@ public class ResourceBundleElementTest {
     assertEquals(ResourceBundle.class, element.declaringClass());
     
     assertEquals(key, element.name());
-    assertEquals(value1, element.value());
-    assertEquals(value1, element.in(bundle1).value());
-    assertEquals(value2, element.in(bundle2).value());
+    assertEquals(value1, element.get());
+    assertEquals(value1, element.in(bundle1).get());
+    assertEquals(value2, element.in(bundle2).get());
     assertTrue(element.isReadable());
     assertFalse(element.isWritable());
     
     assertThrow(HandlingException.class,
-        () -> element.value("Don't modify!"));
+        () -> element.set("Don't modify!"));
     
     assertThrow(HandlingException.class,
-        () -> element.in(bundle2).value("Don't modify!"));
+        () -> element.in(bundle2).set("Don't modify!"));
     
   }
 }

@@ -222,15 +222,15 @@ public final class Reflection {
       private Object target;
 
       @Override
-      public <E> E value() throws HandlingException {
+      public <E> E get() throws HandlingException {
         Field field = selector.in(target);
-        return handle(field).in(target).value();
+        return handle(field).in(target).get();
       }
 
       @Override
-      public void value(Object value) throws HandlingException {
+      public void set(Object value) throws HandlingException {
         Field field = selector.in(target);
-        handle(field).in(target).value(value);
+        handle(field).in(target).set(value);
       }
 
       @Override

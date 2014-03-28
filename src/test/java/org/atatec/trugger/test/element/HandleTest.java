@@ -66,14 +66,14 @@ public class HandleTest {
         .filter(type(String.class).and(specific()))
         .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);
-    Collection<String> strings = valueHandler.value();
+    Collection<String> strings = valueHandler.get();
     assertEquals(4, strings.size());
     for (String string : strings) {
       assertNull(string);
     }
-    valueHandler.value("value");
+    valueHandler.set("value");
     valueHandler = handle(elements);
-    strings = valueHandler.value();
+    strings = valueHandler.get();
     for (String string : strings) {
       assertEquals("value", string);
     }
@@ -86,12 +86,12 @@ public class HandleTest {
         .in(TestObject.class);
     TestObject target = new TestObject();
     ValueHandler valueHandler = handle(elements, target);
-    Collection<String> strings = valueHandler.value();
+    Collection<String> strings = valueHandler.get();
     assertEquals(4, strings.size());
     strings.forEach(Assert::assertNull);
-    valueHandler.value("value2");
+    valueHandler.set("value2");
     valueHandler = handle(elements, target);
-    strings = valueHandler.value();
+    strings = valueHandler.get();
     for (String string : strings) {
       assertEquals("value2", string);
     }
@@ -103,7 +103,7 @@ public class HandleTest {
         .filter(type(String.class).and(specific().negate()))
         .in(TestObject.class);
     ValueHandler valueHandler = handle(elements);
-    valueHandler.value("");
+    valueHandler.set("");
   }
 
 }

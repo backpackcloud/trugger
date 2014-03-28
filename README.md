@@ -100,14 +100,14 @@ of the Reflection API.
 
 ~~~java
 //for static fields
-String value = handle(field).value();
+String value = handle(field).get();
 //for non static fields
-String value = handle(field).in(instance).value();
+String value = handle(field).in(instance).get();
 
 //for static fields
-handle(field).value("new value");
+handle(field).set("new value");
 //for non static fields
-handle(field).in(instance).value("new value");
+handle(field).in(instance).set("new value");
 ~~~
 
 You can also use a a `FieldSelector`:

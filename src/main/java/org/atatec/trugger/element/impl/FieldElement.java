@@ -53,17 +53,17 @@ public final class FieldElement extends AbstractElement implements Element {
   }
 
   @Override
-  public Object value() throws HandlingException {
+  public Object get() throws HandlingException {
     if(isSpecific()) {
-      return in(null).value();
+      return in(null).get();
     }
     throw new NonSpecificElementException();
   }
 
   @Override
-  public void value(Object value) throws HandlingException {
+  public void set(Object value) throws HandlingException {
     if (isSpecific()) {
-      in(null).value(value);
+      in(null).set(value);
     } else {
       throw new NonSpecificElementException();
     }

@@ -99,17 +99,17 @@ public class Elements {
     return new ValueHandler() {
 
       @Override
-      public void value(Object value) throws HandlingException {
+      public void set(Object value) throws HandlingException {
         for (Element element : elements) {
-          element.value(value);
+          element.set(value);
         }
       }
 
       @Override
-      public <E> E value() throws HandlingException {
+      public <E> E get() throws HandlingException {
         Collection result = new ArrayList();
         for (Element element : elements) {
-          result.add(element.value());
+          result.add(element.get());
         }
         return (E) result;
       }
@@ -131,17 +131,17 @@ public class Elements {
     return new ValueHandler() {
 
       @Override
-      public void value(Object value) throws HandlingException {
+      public void set(Object value) throws HandlingException {
         for (Element element : elements) {
-          element.in(target).value(value);
+          element.in(target).set(value);
         }
       }
 
       @Override
-      public <E> E value() throws HandlingException {
+      public <E> E get() throws HandlingException {
         Collection result = new ArrayList();
         for (Element element : elements) {
-          result.add(element.in(target).value());
+          result.add(element.in(target).get());
         }
         return (E) result;
       }

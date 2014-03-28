@@ -55,9 +55,9 @@ public class ElementTest {
     assertTrue(el.isWritable());
     TestObject.staticValue = 0.0;
 
-    assertEquals(0.0, el.value(), 0e-4);
-    el.value(1.5);
-    assertEquals(1.5, el.value(), 0e-4);
+    assertEquals(0.0, el.get(), 0e-4);
+    el.set(1.5);
+    assertEquals(1.5, el.get(), 0e-4);
   }
 
   @Test
@@ -93,17 +93,17 @@ public class ElementTest {
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(5, (int) element.in(o).value());
-    element.in(o).value(5);
-    assertEquals(10, (int) element.in(o).value());
+    assertEquals(5, (int) element.in(o).get());
+    element.in(o).set(5);
+    assertEquals(10, (int) element.in(o).get());
 
     element = element("i").in(o);
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(10, (int) element.value());
-    element.value(10);
-    assertEquals(15, (int) element.value());
+    assertEquals(10, (int) element.get());
+    element.set(10);
+    assertEquals(15, (int) element.get());
 
     //------------------------------------------//
 
@@ -111,13 +111,13 @@ public class ElementTest {
     assertFalse(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(20, (int) element.in(o).value());
+    assertEquals(20, (int) element.in(o).get());
 
     element = element("j").in(o);
     assertTrue(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(20, (int) element.value());
+    assertEquals(20, (int) element.get());
 
     //------------------------------------------//
 
@@ -125,17 +125,17 @@ public class ElementTest {
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(0, (int) element.in(o).value());
-    element.in(o).value(15);
-    assertEquals(30, (int) element.in(o).value());
+    assertEquals(0, (int) element.in(o).get());
+    element.in(o).set(15);
+    assertEquals(30, (int) element.in(o).get());
 
     element = element("k").in(o);
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(30, (int) element.value());
-    element.value(40);
-    assertEquals(55, (int) element.value());
+    assertEquals(30, (int) element.get());
+    element.set(40);
+    assertEquals(55, (int) element.get());
   }
 
 }
