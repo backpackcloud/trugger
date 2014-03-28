@@ -176,7 +176,7 @@ A few useful predicates are included in the class
 
 ~~~java
 List<Constructor> constructors = reflect().constructors()
-  .filter(annotated())
+  .filter(annotated()) // a static import
   .in(MyClass.class);
 ~~~
 
@@ -241,7 +241,7 @@ A set of predicates to deal with methods is in
 
 ~~~java
 List<Method> methods = reflect().methods()
-  .filter(annotatedWith(PostConstruct.class))
+  .filter(annotatedWith(PostConstruct.class)) // a static import
   .deep()
   .in(MyClass.class);
 ~~~
@@ -268,8 +268,7 @@ int number = invoke(parseInt).withArgs("10");
 Note that you can also use a `MethodSelector`:
 
 ~~~java
-Method toString = reflect().method("toString").in(String.class);
-invoke(toString).in("A string").withoutArgs();
+invoke(method("toString")).in("A string").withoutArgs();
 ~~~
 
 ## Generic Type
