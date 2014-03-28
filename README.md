@@ -7,9 +7,8 @@ classes)
 
 ## What a hell does the name trugger mean?
 
-When I was learning java, I came up with the name "Atatec" (Ataxexe
-Technology) for my company (kidding, of couse) and then I send a message to my
-friend Ives:
+When I was learning java, I've choose "Atatec" (Ataxexe Technology) to be my
+company's name (kidding, of course) and then I send a message to my friend Ives:
 
 > Atatec
 
@@ -17,7 +16,7 @@ And the response was:
 
 > trugger
 
-When I ask him why he came up with this response, he said:
+When I asked him why he came up with this, he said:
 
 > Isn't that the name of that special kick in Street Fighter?
 
@@ -83,8 +82,8 @@ List<Field> stringFields = reflect().fields()
 
 ### Predicates
 
-There are some builtin predicates in the class `org.atatec.trugger.reflection
-.FieldPredicates`.
+There are some builtin predicates in the class
+`org.atatec.trugger.reflection.FieldPredicates`.
 
 ~~~java
 List<Field> stringFields = reflect().fields()
@@ -114,6 +113,7 @@ handle(field).in(instance).value("new value");
 You can also use a a `FieldSelector`:
 
 ~~~java
+// static import Reflection#field
 String value = handle(field("name")).in(instance).value();
 ~~~
 
@@ -121,11 +121,62 @@ String value = handle(field("name")).in(instance).value();
 
 ### Single
 
+To reflect a constructor, use `reflect().constructor()` and specify the
+parameter types and optionally a filter. If the class has only one constructor,
+it can be reflected without supplying the parameter types.
+
+~~~java
+Constructor constructor = reflect()
+  .constructor().withParameters(String.class).in(MyClass.class);
+
+Constructor constructor = reflect().constructor()
+  .withoutParameters().in(MyClass.class);
+
+Constructor constructor = reflect().constructor()
+  .filter(c -> c.isAnnotationPresent(SomeAnnotation.class))
+  .withParameters(String.class).in(MyClass.class);
+
+Constructor constructor = reflect().constructor().in(MyClass.class)
+~~~
+
 ### Multiple
+
+A set of constructors can be reflected by using `reflect().constructors()`. As
+in fields, the features in single reflection are present in multiple reflection.
+
+~~~java
+List<Constructor> constructors = reflect().constructors().in(MyClass.class);
+
+List<Constructor> constructors = reflect().constructors()
+  .filter(c -> c.getParameterCount() == 2)
+  .in(MyClass.class);
+~~~
+
+Note that in multiple selection you cannot specify the parameter types directly
+in the fluent interface (for obvious reasons).
 
 ### Predicates
 
+A few useful predicates are included in the class
+`org.atatec.trugger.reflection.ConstructorPredicates`
+
+~~~java
+List<Constructor> constructors = reflect().constructors()
+  .filter(annotated())
+  .in(MyClass.class);
+~~~
+
 ### Invocation
+
+To invoke a constructor you need an `Invoker`. The method `Reflection#invoke`
+returns a Invoker for a constructor. Specify the parameters and the constructor
+will be invoked.
+
+~~~java
+Constructor c = reflect().constructor()
+  .withParameters(String.class).in(String.class)
+String name = invoke(c).withArgs("Trugger");
+~~~
 
 ## Methods
 
