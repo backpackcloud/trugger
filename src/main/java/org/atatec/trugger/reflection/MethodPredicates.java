@@ -151,7 +151,7 @@ public class MethodPredicates {
    * has the specified type as the return type.
    */
   public static Predicate<Method> returns(Class returnType) {
-    return element -> element.getReturnType().equals(returnType);
+    return method -> method.getReturnType().equals(returnType);
   }
 
   /**
@@ -159,7 +159,7 @@ public class MethodPredicates {
    * annotations.
    */
   public static final Predicate<Method> annotated() {
-    return element -> element.getDeclaredAnnotations().length > 0;
+    return method -> method.getDeclaredAnnotations().length > 0;
   }
 
   /**
@@ -168,7 +168,7 @@ public class MethodPredicates {
    */
   public static Predicate<Method> annotatedWith(
       final Class<? extends Annotation> annotationType) {
-    return element -> element.isAnnotationPresent(annotationType);
+    return method -> method.isAnnotationPresent(annotationType);
   }
 
 }

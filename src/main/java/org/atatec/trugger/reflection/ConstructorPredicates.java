@@ -17,8 +17,8 @@
 
 package org.atatec.trugger.reflection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.function.Predicate;
 
 /**
@@ -33,11 +33,24 @@ public class ConstructorPredicates {
   }
 
   /**
-   * @return a predicate that returns <code>true</code> if the evaluated constructor takes
-   * the specified parameters.
+   * @return a predicate that returns <code>true</code> if the method has
+   * annotations.
+   *
+   * @since 5.0
    */
-  public static Predicate<Constructor> takes(final Class... parameterTypes) {
-    return element -> Arrays.equals(element.getParameterTypes(), parameterTypes);
+  public static final Predicate<Constructor> annotated() {
+    return c -> c.getDeclaredAnnotations().length > 0;
+  }
+
+  /**
+   * @return a predicate that returns <code>true</code> if the evaluated element
+   * is annotated with the specified Annotation.
+   *
+   * @since 5.0
+   */
+  public static Predicate<Constructor> annotatedWith(
+      Class<? extends Annotation> annotationType) {
+    return c -> c.isAnnotationPresent(annotationType);
   }
 
 }
