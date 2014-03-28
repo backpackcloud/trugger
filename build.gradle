@@ -73,9 +73,18 @@ task pom << {
   }.writeTo("$buildDir/pom.xml")
 }
 
-task dist(type: Zip, dependsOn: [clean, jar, sourcesJar, javadocJar, test, pom]) {
+task pdf(type: Exec) {
+  commandLine 'pandoc', '--toc', '--toc-depth=2' ,'-S', '-s', '-o',
+      "$buildDir/trugger.pdf", '--highlight-style=kate', 'README.md',
+      'changelog.md'
+}
+
+task dist(type: Zip,
+    dependsOn: [clean, jar, sourcesJar, javadocJar, test, pom, pdf]) {
   from "$buildDir/libs"
   from "$buildDir/pom.xml"
+  from "$buildDir/trugger.pdf"
   from "changelog.md"
+  from "README.md"
 }
 
