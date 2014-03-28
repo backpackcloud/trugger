@@ -35,13 +35,6 @@ public interface ClassScanner {
   ClassesSelector classes();
 
   /**
-   * Finds classes in a package and in its subpackages.
-   *
-   * @return a selector for the operation.
-   */
-  ClassesSelector allClasses();
-
-  /**
    * Sets the class loader to use.
    *
    * @param classLoader the class loader to use.

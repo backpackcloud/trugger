@@ -29,9 +29,16 @@ import java.util.function.Predicate;
  * @since 2.3
  */
 public interface ClassesSelector extends PredicateSelector<Class>,
-    Result<List<Class>, String> {
+    DeepSelector, Result<List<Class>, String> {
 
   ClassesSelector filter(Predicate<? super Class> predicate);
+
+  /**
+   * Scans the subpackages in addition to the given package
+   *
+   * @return a new selector that will scan subpackages too
+   */
+  ClassesSelector deep();
 
   /**
    * Scans the packages for classes.

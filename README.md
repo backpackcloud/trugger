@@ -320,7 +320,7 @@ scan.
 // scans everything in the package
 List<Class> classes = scan().classes().in("my.package");
 // scans everything in the package and its subpackages
-List<Class> classes = scan().allClasses().in("my.package");
+List<Class> classes = scan().classes().deep().in("my.package");
 ~~~
 
 ## Predicates

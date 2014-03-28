@@ -32,9 +32,9 @@ public class TruggerClassesSelector implements ClassesSelector {
   private final boolean deepScan;
   private final Predicate<? super Class> predicate;
 
-  public TruggerClassesSelector(Scanner scanner, boolean deepScan) {
+  public TruggerClassesSelector(Scanner scanner) {
     this.scanner = scanner;
-    this.deepScan = deepScan;
+    this.deepScan = false;
     this.predicate = null;
   }
 
@@ -43,6 +43,11 @@ public class TruggerClassesSelector implements ClassesSelector {
     this.scanner = scanner;
     this.deepScan = deepScan;
     this.predicate = predicate;
+  }
+
+  @Override
+  public ClassesSelector deep() {
+    return new TruggerClassesSelector(scanner, true, predicate);
   }
 
   public ClassesSelector filter(Predicate<? super Class> predicate) {

@@ -21,13 +21,6 @@ import org.atatec.trugger.selector.ClassesSelector;
 
 /**
  * A default class finder.
- * <p>
- * This class uses the {@link ScanLevel#PACKAGE} as the default scan level and
- * uses the {@link ResourceFinder finders} below:
- * <ul>
- * <li> {@link FileResourceFinder} - for classes in the file system.
- * <li> {@link JarResourceFinder} - for classes in jar files.
- * </ul>
  *
  * @author Marcelo Guimarães
  */
@@ -55,13 +48,7 @@ public class TruggerClassScanner implements ClassScanner {
   }
 
   public ClassesSelector classes() {
-    return new TruggerClassesSelector(
-        new TruggerScanner(factory, classLoader), false);
-  }
-
-  public ClassesSelector allClasses() {
-    return new TruggerClassesSelector(
-        new TruggerScanner(factory, classLoader), true);
+    return new TruggerClassesSelector(new TruggerScanner(factory, classLoader));
   }
 
 }

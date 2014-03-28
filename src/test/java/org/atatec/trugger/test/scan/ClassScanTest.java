@@ -50,28 +50,28 @@ public class ClassScanTest {
   };
 
   private int interfaceTest(String packageName) {
-    List<Class> interfaces = scan().allClasses()
+    List<Class> interfaces = scan().classes().deep()
         .filter(ClassPredicates.interfaceType().and(declaring(PUBLIC)))
         .in(packageName);
     return interfaces.size();
   }
 
   private int classesTest(String packageName) {
-    List<Class> classes = scan().allClasses()
+    List<Class> classes = scan().classes().deep()
         .filter(ClassPredicates.classType().and(declaring(PUBLIC)))
         .in(packageName);
     return classes.size();
   }
 
   private int annotationsTest(String packageName) {
-    List<Class> annotations = scan().allClasses()
+    List<Class> annotations = scan().classes().deep()
         .filter(ClassPredicates.annotationType().and(declaring(PUBLIC)))
         .in(packageName);
     return annotations.size();
   }
 
   private int enumsTest(String packageName) {
-    List<Class> enums = scan().allClasses()
+    List<Class> enums = scan().classes().deep()
         .filter(ClassPredicates.enumType().and(declaring(PUBLIC)))
         .in(packageName);
     return enums.size();
@@ -79,7 +79,7 @@ public class ClassScanTest {
 
   private int allTest(String packageName) {
     List<Class> classes =  scan().
-        allClasses().filter(declaring(PUBLIC)).in(packageName);
+        classes().deep().filter(declaring(PUBLIC)).in(packageName);
     TruggerTest.assertMatch(classes, declaring(PUBLIC));
     assertFalse(classes.isEmpty());
     return classes.size();
@@ -116,7 +116,7 @@ public class ClassScanTest {
 
   private void scanLevelTest(String packageName) {
     List<Class> packageClasses = scan().classes().in(packageName);
-    List<Class> subpackageClasses = scan().allClasses().in(packageName);
+    List<Class> subpackageClasses = scan().classes().deep().in(packageName);
 
     assertTrue(packageClasses.size() < subpackageClasses.size());
   }
@@ -135,7 +135,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanSubPackageInFile() {
-    List<Class> list = scan().allClasses().in(filePackageName);
+    List<Class> list = scan().classes().deep().in(filePackageName);
     assertEquals(8, list.size());
     assertTrue(list.contains(org.atatec.trugger.test.scan.classes.MyClass.class));
     assertTrue(list.contains(org.atatec.trugger.test.scan.classes.pack.MyClass2.class));
@@ -151,7 +151,7 @@ public class ClassScanTest {
 
   @Test
   public void testClassScanSubPackageInJar() {
-    List<Class> list = scan().allClasses()
+    List<Class> list = scan().classes().deep()
         .filter(ClassPredicates.classType())
         .in(jarPackageName);
 
@@ -173,7 +173,7 @@ public class ClassScanTest {
 
   @Test
   public void testScanSubPackageInJar() {
-    List<Class> list = scan().allClasses().in(jarPackageName);
+    List<Class> list = scan().classes().deep().in(jarPackageName);
 
     assertMatch(list, jarPackagePredicate);
 
