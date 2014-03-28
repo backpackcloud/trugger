@@ -53,7 +53,7 @@ public class TruggerFieldsSelector implements FieldsSelector {
   }
 
   @Override
-  public FieldsSelector recursively() {
+  public FieldsSelector deep() {
     return new TruggerFieldsSelector(finder, predicate, true);
   }
 

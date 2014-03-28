@@ -150,7 +150,7 @@ final class ObjectProperty extends AbstractElement {
   }
 
   private Method searchMethod(Predicate<Method> predicate) {
-    Collection<Method> candidates = reflect().methods().recursively()
+    Collection<Method> candidates = reflect().methods().deep()
         .filter(predicate).in(declaringClass);
     return candidates.isEmpty() ? null : candidates.iterator().next();
   }

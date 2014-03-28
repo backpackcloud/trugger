@@ -45,7 +45,7 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.declaring;
 public final class ObjectPropertyFinder implements Finder<Element> {
 
   private Method searchMethod(Class type, Predicate<Method> predicate) {
-    List<Method> candidates = reflect().methods().recursively()
+    List<Method> candidates = reflect().methods().deep()
         .filter(predicate).in(type);
     return candidates.isEmpty() ? null : candidates.iterator().next();
   }

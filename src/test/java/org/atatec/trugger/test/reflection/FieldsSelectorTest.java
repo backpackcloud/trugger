@@ -66,7 +66,7 @@ public class FieldsSelectorTest {
         reflect().fields().in(ExtendedClassTest.class).isEmpty()
     );
     assertFalse(
-        reflect().fields().recursively().in(ExtendedClassTest.class).isEmpty()
+        reflect().fields().deep().in(ExtendedClassTest.class).isEmpty()
     );
   }
 

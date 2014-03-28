@@ -53,7 +53,7 @@ public class MethodSelectorTest {
     Object obj = new Object() {
     }; // anonymous class
     assertNull(reflect().method("toString").in(obj));
-    assertNotNull(reflect().method("toString").recursively().in(obj));
+    assertNotNull(reflect().method("toString").deep().in(obj));
   }
 
   @Test

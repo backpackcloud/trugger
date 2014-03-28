@@ -28,10 +28,10 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface FieldsSelector extends PredicateSelector<Field>,
-    RecursionSelector, Result<List<Field>, Object> {
+    DeepSelector, Result<List<Field>, Object> {
 
   FieldsSelector filter(Predicate<? super Field> predicate);
 
-  FieldsSelector recursively();
+  FieldsSelector deep();
 
 }

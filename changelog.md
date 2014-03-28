@@ -25,6 +25,7 @@ of code changed and lots of modules gone to `/dev/null`.
   - Changed the return of selections to `List`
   - Renamed get and set methods in `ValueHandler`
   - Reformulated Class Scan module
+  - `recursively` changed to `deep` (and also its class to `DeepSelector`)
 
 ### Minor Changes
   - Removed non used classes

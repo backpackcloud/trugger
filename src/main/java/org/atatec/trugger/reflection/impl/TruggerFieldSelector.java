@@ -53,7 +53,7 @@ public class TruggerFieldSelector implements FieldSelector {
     return new TruggerFieldSelector(name, registry, predicate, recursively);
   }
 
-  public FieldSelector recursively() {
+  public FieldSelector deep() {
     return new TruggerFieldSelector(name, registry, predicate, true);
   }
 

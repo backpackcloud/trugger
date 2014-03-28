@@ -64,14 +64,14 @@ and you will find a nice fluent interface there with the methods `reflect`,
 Reflecting a field is done with the code `reflect().field(field name)`. You can
 also apply a filter by using the method `filter` and the target class (or
 object) by using the method `in`. If you need a recursive search through the
-entire target class hierarchy, just use the method `recursively`.
+entire target class hierarchy, just use the method `deep`.
 
 Here is some examples (assuming a `static import`):
 
 ```java
 Field value = reflect().field("value").in(String.class);
 
-Field name = reflect().field("name").recursively().in(MyClass.class);
+Field name = reflect().field("name").deep().in(MyClass.class);
 
 Field id = reflect().field("id")
     .filter(field -> field.getType().equals(Long.class))
@@ -89,7 +89,7 @@ features of a single reflect is available here.
 ~~~java
 List<Field> stringFields = reflect().fields()
     .filter(field -> field.getType().equals(String.class))
-    .recursively()
+    .deep()
     .in(MyClass.class);
 ~~~
 
@@ -101,7 +101,7 @@ There are some builtin predicates in the class
 ~~~java
 List<Field> stringFields = reflect().fields()
     .filter(type(String.class)) // a static import
-    .recursively()
+    .deep()
     .in(MyClass.class);
 ~~~
 
@@ -211,10 +211,10 @@ Method someMethod = reflect().method("foo")
   .in(instance);
 ~~~
 
-As in field reflection, you can do a deep search with `recursively`.
+As in field reflection, you can do a deep search with `deep`.
 
 ~~~java
-Method toString = reflect().method("toString").recursively().in(MyClass.class);
+Method toString = reflect().method("toString").deep().in(MyClass.class);
 ~~~
 
 ### Multiple
@@ -230,7 +230,7 @@ Deep search and filtering are also supported:
 ~~~java
 List<Method> methods = reflect().methods()
   .filter(method -> method.isAnnotationPresent(PostConstruct.class)
-  .recursively()
+  .deep()
   .in(MyClass.class);
 ~~~
 
@@ -242,7 +242,7 @@ A set of predicates to deal with methods is in
 ~~~java
 List<Method> methods = reflect().methods()
   .filter(annotatedWith(PostConstruct.class))
-  .recursively()
+  .deep()
   .in(MyClass.class);
 ~~~
 

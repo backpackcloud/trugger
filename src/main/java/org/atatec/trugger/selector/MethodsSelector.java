@@ -28,10 +28,10 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface MethodsSelector extends PredicateSelector<Method>,
-    RecursionSelector, Result<List<Method>, Object> {
+    DeepSelector, Result<List<Method>, Object> {
 
   MethodsSelector filter(Predicate<? super Method> predicate);
 
-  MethodsSelector recursively();
+  MethodsSelector deep();
 
 }

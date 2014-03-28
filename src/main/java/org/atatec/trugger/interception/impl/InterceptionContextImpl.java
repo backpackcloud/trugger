@@ -90,7 +90,7 @@ public class InterceptionContextImpl implements InterceptionContext {
     Class<?>[] parameterTypes = method.getParameterTypes();
     Method targetMethod = reflect()
         .method(name)
-        .recursively()
+        .deep()
         .withParameters(parameterTypes)
         .in(target);
     if (targetMethod.isBridge()) {

@@ -53,7 +53,7 @@ public class TruggerMethodsSelector implements MethodsSelector {
   }
 
   @Override
-  public MethodsSelector recursively() {
+  public MethodsSelector deep() {
     return new TruggerMethodsSelector(finder, predicate, true);
   }
 

@@ -17,20 +17,20 @@
 package org.atatec.trugger.selector;
 
 /**
- * Interface that defines a selector that allows recursively operations.
+ * Interface that defines a selector that allows deep operations.
  *
  * @author Marcelo Guimarães
- * @since 1.2
+ * @since 5.0
  */
-public interface RecursionSelector {
+public interface DeepSelector {
 
   /**
-   * Makes use of recursion for select objects.
-   * <p>
-   * If the result is a single object, then the first one will be returned.
+   * Selects using a deep operation. If the selection is for a single object
+   * and the deep operation founds more than one, the first one will be
+   * returned.
    *
-   * @return a new selector with recursion enabled
+   * @return a new selector with deep selection enabled
    */
-  RecursionSelector recursively();
+  DeepSelector deep();
 
 }

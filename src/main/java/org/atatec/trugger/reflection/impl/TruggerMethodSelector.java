@@ -62,7 +62,7 @@ public class TruggerMethodSelector implements MethodSelector {
     return withParameters();
   }
 
-  public MethodSelector recursively() {
+  public MethodSelector deep() {
     return new TruggerMethodSelector(name, registry, parameterTypes,
         true, predicate);
   }

@@ -79,7 +79,7 @@ final class TruggerBridgeMethodResolver {
       return bridgeMethod;
     }
     // Gather all methods with matching name and parameter size.
-    List<Method> candidateMethods = methods().recursively()
+    List<Method> candidateMethods = methods().deep()
       .filter(new SimpleBridgeCandidatePredicate())
       .in(bridgeMethod.getDeclaringClass());
 

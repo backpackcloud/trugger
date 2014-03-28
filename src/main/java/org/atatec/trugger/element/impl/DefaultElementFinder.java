@@ -51,7 +51,7 @@ public class DefaultElementFinder implements Finder<Element> {
       if (property != null) {
         propertyElement = specific ? new SpecificElement(property, target) : property;
       }
-      Field field = field(name).recursively().in(target);
+      Field field = field(name).deep().in(target);
       if (field != null) {
         fieldElement = specific ? new SpecificElement(new FieldElement(field), target) : new FieldElement(field);
       }
@@ -71,7 +71,7 @@ public class DefaultElementFinder implements Finder<Element> {
         return new ArrayElementFinder().findAll().in(target);
       }
       List<Element> properties = Properties.properties().in(target);
-      List<Field> fields = fields().recursively().in(target);
+      List<Field> fields = fields().deep().in(target);
 
       for (Element property : properties) {
         Element element = specific ? new SpecificElement(property, target) : property;
