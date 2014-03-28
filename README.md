@@ -21,13 +21,24 @@ When I asked him why he came up with this, he said:
 > Isn't that the name of that special kick in Street Fighter?
 
 The special kick mentioned is the *Tatsumaki Senpuu Kyaku* and Ken says
-something like "atatec trugger" (at least here in Brazil) when he does the kick.
+something like "atatec trugger" (at least in Portuguese) when he does the kick.
 So the name Trugger became my first choice when I start to write this framework.
 
-# How To Use
+## How To Use
 
-Just put the jar file on your **classpath** and you're done. Trugger does not
-require any dependency at runtime.
+Just put the jar file on your **classpath** and you're done. No dependencies
+are required by Trugger at runtime.
+
+## How To Build
+
+Just make sure you have [Gradle]<http://gradle.org/>. The markdown files are
+converted at build time using [pandoc]<http://johnmacfarlane.net/pandoc/README.html>
+so you should have it too.
+
+## How To Contribute
+
+Just fork the project, do some stuff and send me a pull request. You can also
+fire an issue or tell your friends to use Trugger.
 
 ## About Maven Repository
 
@@ -96,17 +107,18 @@ List<Field> stringFields = reflect().fields()
 
 A field can have its value manipulated through the method `Reflection#handle`.
 It will create a handler to set and get the field's value without the verbosity
-of the Reflection API.
+of the Reflection API. To handle static fields, you can call the handler methods
+directly:
 
 ~~~java
-//for static fields
 String value = handle(field).get();
-//for non static fields
-String value = handle(field).in(instance).get();
-
-//for static fields
 handle(field).set("new value");
-//for non static fields
+~~~
+
+For instance fields, just specify an instance using the method `in`:
+
+~~~java
+String value = handle(field).in(instance).get();
 handle(field).in(instance).set("new value");
 ~~~
 
@@ -182,13 +194,115 @@ String name = invoke(c).withArgs("Trugger");
 
 ### Single
 
+To reflect a single method, just pass it name to `Reflection#method`. Filtering
+is allowed and you can specify parameter types too.
+
+~~~java
+Method toString = reflect().method("toString").in(Object.class);
+
+Method remove = reflect().method("remove")
+  .withParameters(Object.class, Object.class)
+  .in(Map.class);
+
+Method someMethod = reflect().method("foo")
+  .filter(method -> method.isAnnotationPresent(PostConstruct.class))
+  .in(instance);
+~~~
+
+As in field reflection, you can do a deep search with `recursively`.
+
+~~~java
+Method toString = reflect().method("toString").recursively().in(MyClass.class);
+~~~
+
 ### Multiple
+
+A set of methods can be reflected by using `Reflection#methods`:
+
+~~~java
+List<Method> methods = reflect().methods().in(Object.class);
+~~~
+
+Deep search and filtering are also supported:
+
+~~~java
+List<Method> methods = reflect().methods()
+  .filter(method -> method.isAnnotationPresent(PostConstruct.class)
+  .recursively()
+  .in(MyClass.class);
+~~~
 
 ### Predicates
 
+A set of predicates to deal with methods is in
+`org.atatec.trugger.reflection.MethodPredicates`:
+
+~~~java
+List<Method> methods = reflect().methods()
+  .filter(annotatedWith(PostConstruct.class))
+  .recursively()
+  .in(MyClass.class);
+~~~
+
 ### Invocation
 
+To invoke a method, use the Invoker returned by `Reflection#invoke`. Instance
+methods needs an instance provided using the method `in`:
+
+~~~java
+Method toString = reflect().method("toString").in(String.class);
+invoke(toString).in("A string").withoutArgs();
+~~~
+
+Static methods don't need it:
+
+~~~java
+Method parseInt = reflect().method("parseInt")
+  .withParameters(String.class)
+  .in(Integer.class);
+int number = invoke(parseInt).withArgs("10");
+~~~
+
+Note that you can also use a `MethodSelector`:
+
+~~~java
+Method toString = reflect().method("toString").in(String.class);
+invoke(toString).in("A string").withoutArgs();
+~~~
+
 ## Generic Type
+
+Generic declarations in a class are present in the bytecode. Trugger can reflect
+them by using the method `genericType`. Suppose we have this interface:
+
+~~~java
+public interface Repository<T> {
+  // ... some useful methods here
+}
+~~~
+
+A generic base implementation can use that **T**:
+
+~~~java
+public class BaseRepository<T> {
+
+  private final Class<T> type;
+
+  protected BaseRepository() {
+    this.type = reflect().genericType("T").in(this);
+  }
+}
+~~~
+
+The constructor was declared `protected` to warn that this will only work for
+subclasses (it is a Java limitation). A workaround to use this trick in a
+variable-like way is by declaring an anonymous class:
+
+~~~java
+Repository<MyType> repo = new BaseRepository<MyType>(){};
+~~~
+
+I think this is an ugly solution, but works.
 
 # Class Scanning
 
