@@ -530,6 +530,7 @@ Trugger has custom element finders for a set of java core classes:
 - `ResourceBundle`: keys are used as the elements
 - `Properties`: keys are used as the elements
 - `ResultSet`: the column names are used as the elements
+- `Annotation`: the methods as used as elements
 
 It is important to have clear that since this elements are instance specific,
 the elements should be queried by passing an instance instead of a class for
