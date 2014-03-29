@@ -46,7 +46,7 @@ import static org.atatec.trugger.reflection.ReflectionPredicates.named;
  * Resource resource = new AnnotationMock&lt;Resource&gt;(){{
  *       map(&quot;name&quot;).to(annotation.name());
  *       map(false).to(annotation.shareable());
- *     }}.mock();
+ *     }}.createMock();
  * String name = resource.name(); //returns &quot;name&quot;
  * boolean shareable = resource.shareable(); //return false
  * String mappedName = resource.mappedName(); //returns &quot;&quot; because it is the

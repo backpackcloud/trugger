@@ -427,9 +427,14 @@ intercepted can be retrieve by using `targetMethod`.
 
 ## What is an Element?
 
-An element in Trugger is a Property or a Field. Trugger encapsulate this two
-concepts in a element. This allows manipulate private fields and properties
-in the same way without bothering you with the way of handling the value.
+An element is any value that an object holds. It may be accessible through a
+field, invoking a method (a getter or a setter) or even a specific way like
+the `Map#get` method.
+
+A basic element in Trugger is a Property or a Field. Trugger tries to find a
+getter and a setter method for the element name and a field with the same name.
+This allows manipulate private fields and properties in the same way without
+bothering you with the way of handling the value.
 
 ## Obtaining an Element
 
@@ -485,11 +490,94 @@ copy(elements().filter(annotatedWith(MyAnnotation.class)))
 
 ## Nested Elements
 
+Nested elements are supported using a **"."** to separate the elements:
+
+~~~java
+Element element = element("address.street").in(Customer.class);
+
+value = element.in(customer).get();
+~~~
+
+You can use any level of nesting:
+
+~~~java
+Element element = element("customer.address.street").in(Response.class);
+
+value = element.in(response).get();
+~~~
+
 ## Custom Elements
+
+Some classes have a custom definition of elements. A `Map` has their keys as
+elements, an `Array` has their indexes as elements an so on. Elements are found
+by an element finder (a class that implements `Finder<Element>`) and you can
+write a custom element finder and register it using the registry available
+through the method `Elements#registry`.
+
+Trugger has custom element finders for a set of java core classes:
+
+- `Map`: keys are used as the elements
+- `Array`: indexes are used as the elements
+- `ResourceBundle`: keys are used as the elements
+- `Properties`: keys are used as the elements
+- `ResultSet`: the column names are used as the elements
+
+It is important to have clear that since this elements are instance specific,
+the elements should be queried by passing an instance instead of a class for
+the method `in` or an empty list will be returned. For a single elements, you
+may pass a class or an instance but using an instance is better because you can
+call the handling methods directly.
+
+You can also use this custom element finders to copy elements easily:
+
+~~~java
+// this will copy every element from the result set to the instance
+copy().from(resultSet).to(myEntity);
+~~~
 
 # Utilities
 
 ## Annotation Mock
+
+Annotations are interfaces and mocking it should be as easy as mocking an
+interface. The problem is the default values that can be omitted. Trugger has
+an utility module to help mocking and annotation by using the interception
+module.
+
+To create a mock, you should start by creating an anonymous class that extends
+`org.atatec.trugger.util.mock.AnnotationMock` and maps the elements in a block
+code inside the class using the methods `map` and `to`.
+
+~~~java
+Resource resource = new AnnotationMock<Resource>(){{
+    map("name").to(annotation.name());
+    map(false).to(annotation.shareable());
+}}.createMock();
+
+//returns "name"
+String name = resource.name();
+
+//return false
+boolean shareable = resource.shareable();
+
+//returns "" because it is the default value
+String mappedName = resource.mappedName();
+
+// returns javax.annotation.Resource class
+Class<? extends Annotation> type = resource.annotationType();
+~~~
+
+If you don't like the anonymous class style, you can still use the classic
+style.
+
+~~~java
+AnnotationMock<Resource> mock = new AnnotationMock<>(Resource.class);
+
+mock.map("name").to(annotation.name());
+mock.map(false).to(annotation.shareable());
+
+Resource resource = mock.createMock();
+~~~
 
 # Extending
 
