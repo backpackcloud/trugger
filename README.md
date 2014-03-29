@@ -344,6 +344,11 @@ List<Class> classes = scan().classes()
   .deep()
   .filter(annotatedWith(Entity.class)) //static import
   .in("my.package");
+
+List<Class> classes = scan().classes()
+  .deep()
+  .filter(subtypeOf(Repository.class)) //static import
+  .in("my.package");
 ~~~
 
 ## Resource Finders for Protocols
@@ -365,6 +370,57 @@ Any finder registered to an already supported protocol will override the
 registered finder.
 
 # Proxy Creation
+
+A proxy object is created using a interception handler and optionally a fail
+handler. The DSL exposed starts at `org.atatec.trugger.interception.Interception`
+with the method `intercept` and lets you define one or more interfaces to
+intercept. Additionally, you can set a target and its interfaces will be used.
+After the behaviour specification, use the method `proxy` to create the proxy
+instance.
+
+~~~java
+SomeInterface proxy = Interception.intercept(SomeInterface.class)
+  .onCall(context -> logger.info("method intercepted: " + context.method())
+  .proxy();
+
+proxy.doSomething();
+~~~
+
+The interception logic happens in the handler passed through the method
+`onCall`. The handler receives a context, which contains all information about
+the intercepted method. A fail handler can also be set using the method
+`onFail`.
+
+~~~java
+SomeInterface proxy = Interception.intercept(SomeInterface.class)
+  // sets a target to delegate the call using the context object
+  .on(instance)
+  // delegates the call to the target - this is the default behaviour
+  .onCall(context -> context.invoke())
+  //
+  .onFail(context, throwable -> somethingToHandleTheFail(throwable))
+  .proxy();
+
+proxy.doSomething();
+~~~
+
+The fail handler has access to the context so you can delegate the method to
+the target again (if a timeout occurs, for example).
+
+## The Interception Context
+
+The interception context holds everything related to the method interception,
+included:
+
+- The arguments passed
+- The method intercepted
+- The declared method intercepted in the target instance
+- The proxy instance
+- The target instance (may be null if not specified when creating the proxy)
+
+The context can be used to delegate the method call to the target (using
+`invoke`) or to another instance (using `invokeOn`). The declared method
+intercepted can be retrieve by using `targetMethod`.
 
 # Elements of an Object
 
