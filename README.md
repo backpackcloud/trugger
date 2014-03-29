@@ -488,6 +488,15 @@ copy(elements().filter(annotatedWith(MyAnnotation.class)))
   .to(anotherObject);
 ~~~
 
+Or filter the copy directly using `filter`
+
+~~~java
+copy(elements().filter(annotatedWith(MyAnnotation.class)))
+  .from(object)
+  .filter(copy -> copy.dest().isAnnotationPresent(MyAnnotation.class))
+  .to(anotherObject);
+~~~
+
 ## Nested Elements
 
 Nested elements are supported using a **"."** to separate the elements:

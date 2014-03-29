@@ -22,6 +22,7 @@ import org.atatec.trugger.util.Utils;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * The default implementation for the property copy operation.
@@ -33,6 +34,7 @@ public final class TruggerElementCopier implements ElementCopier,
 
   private final ElementsSelector selector;
   private final Function<ElementCopy, Object> function;
+  private final Predicate<? super ElementCopy> predicate;
   private final boolean copyNull;
 
   private final Object src;
@@ -41,6 +43,7 @@ public final class TruggerElementCopier implements ElementCopier,
     this.selector = Elements.elements();
     this.function = copy -> copy.value();
     this.copyNull = true;
+    this.predicate = copy -> true;
     this.src = null;
   }
 
@@ -48,30 +51,41 @@ public final class TruggerElementCopier implements ElementCopier,
     this.selector = selector;
     this.function = copy -> copy.value();
     this.copyNull = true;
+    this.predicate = copy -> true;
     this.src = null;
   }
 
   private TruggerElementCopier(ElementsSelector selector,
-                              Function<ElementCopy, Object> function,
-                              boolean copyNull,
-                              Object src) {
+                               Function<ElementCopy, Object> function,
+                               Predicate<? super ElementCopy> predicate,
+                               boolean copyNull,
+                               Object src) {
     this.selector = selector;
     this.function = function;
+    this.predicate = predicate;
     this.copyNull = copyNull;
     this.src = src;
   }
 
   public CopyDestination notNull() {
-    return new TruggerElementCopier(selector, function, false, src);
+    return new TruggerElementCopier(selector, function, predicate, false, src);
   }
 
   public CopyDestination from(Object src) {
-    return new TruggerElementCopier(selector, function, copyNull, src);
+    return
+        new TruggerElementCopier(selector, function, predicate, copyNull, src);
+  }
+
+  @Override
+  public CopyDestination filter(Predicate<? super ElementCopy> predicate) {
+    return
+        new TruggerElementCopier(selector, function, predicate, copyNull, src);
   }
 
   @Override
   public CopyDestination applying(Function function) {
-    return new TruggerElementCopier(selector, function, copyNull, src);
+    return new TruggerElementCopier(selector, function, predicate, copyNull,
+        src);
   }
 
   public void to(Object object) {
@@ -98,13 +112,15 @@ public final class TruggerElementCopier implements ElementCopier,
   private void copy(Element destElement, Element srcElement, Object dest) {
     Object value = srcElement.in(this.src).get();
     PropertyCopyImpl copy = new PropertyCopyImpl(srcElement, destElement, value);
-    if (value != null) {
-      value = function.apply(copy);
-      if (Utils.areAssignable(destElement.type(), value.getClass())) {
+    if (predicate.test(copy)) {
+      if (value != null) {
+        value = function.apply(copy);
+        if (Utils.areAssignable(destElement.type(), value.getClass())) {
+          destElement.in(dest).set(value);
+        }
+      } else if (copyNull) {
         destElement.in(dest).set(value);
       }
-    } else if (copyNull) {
-      destElement.in(dest).set(value);
     }
   }
 
@@ -122,7 +138,7 @@ public final class TruggerElementCopier implements ElementCopier,
       this.value = value;
     }
 
-    public Element sourceElement() {
+    public Element src() {
       return from;
     }
 
@@ -130,7 +146,7 @@ public final class TruggerElementCopier implements ElementCopier,
       return value;
     }
 
-    public Element destinationElement() {
+    public Element dest() {
       return to;
     }
 

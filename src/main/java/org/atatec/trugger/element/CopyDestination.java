@@ -17,7 +17,10 @@
 
 package org.atatec.trugger.element;
 
+import org.atatec.trugger.selector.PredicateSelector;
+
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Interface for defining a destination to a copy.
@@ -25,7 +28,7 @@ import java.util.function.Function;
  * @author Marcelo Guimarães
  * @since 4.1
  */
-public interface CopyDestination {
+public interface CopyDestination extends PredicateSelector<ElementCopy> {
 
   /**
    * Executes the given function to transform the elements before the copy.
@@ -34,6 +37,15 @@ public interface CopyDestination {
    * @return a new object that uses the given function
    */
   CopyDestination applying(Function<ElementCopy, ?> function);
+
+  /**
+   * Filter the elements to copy by testing with the given predicate.
+   *
+   * @param predicate
+   *          the predicate to match.
+   * @return
+   */
+  CopyDestination filter(Predicate<? super ElementCopy> predicate);
 
   /**
    * Copies only the elements that are not <code>null</code>.

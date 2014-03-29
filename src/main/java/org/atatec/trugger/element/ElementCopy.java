@@ -32,13 +32,13 @@ public interface ElementCopy {
   /**
    * @return the source element.
    */
-  Element sourceElement();
+  Element src();
 
   /**
    * @return the element that may receive the value. Note that this element may
-   *         be the {@link #sourceElement() source element} if the targets are
+   *         be the {@link #src() source element} if the targets are
    *         from the same class.
    */
-  Element destinationElement();
+  Element dest();
 
 }

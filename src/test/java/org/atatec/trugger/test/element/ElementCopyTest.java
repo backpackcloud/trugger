@@ -87,14 +87,18 @@ public class ElementCopyTest {
     assertNull(testObject.getNickName());
 
     Map<String, Object> map = new HashMap<String, Object>();
+    map.put("weight", 10.0);
 
-    copy().from(testObject).to(map);
+    copy().from(testObject)
+        .filter(copy -> !copy.src().name().equals("weight"))
+        .to(map);
+
     assertEquals(23, map.get("age"));
     assertEquals(null, map.get("nickName"));
     assertEquals("Marcelo", map.get("name"));
     assertEquals("Guimaraes", map.get("lastName"));
     assertEquals(1.9, (Double) map.get("height"), 0.001);
-    assertEquals(80.2, (Double) map.get("weight"), 0.001);
+    assertEquals(10.0, (Double) map.get("weight"), 0.001);
 
     Properties props = new Properties();
     Function<ElementCopy, String> toString = new ToStringTransformer();
