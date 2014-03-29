@@ -1,14 +1,10 @@
 # Overview
 
-Trugger is a framework that helps you write code that anyone can read. The
-idea is to provide a set of fluent interfaces to deal with operations related
-to reflection (such as creating proxies, reflecting members and scanning
-classes)
+Trugger is a framework that helps you write code that anyone can read. The idea is to provide a set of fluent interfaces to deal with operations related to reflection (such as creating proxies, reflecting members and scanning classes)
 
 ## What a hell does the name trugger mean?
 
-When I was learning java, I choosed "Atatec" (*Ataxexe Technology*) to be the
-name of my fictitious company and then I sent a message to my friend Ives:
+When I was learning java, I choosed "Atatec" (*Ataxexe Technology*) to be the name of my fictitious company and then I sent a message to my friend Ives:
 
 > Atatec
 
@@ -20,51 +16,38 @@ When I asked him why he came up with this, he said:
 
 > Isn't that the name of that special kick in Street Fighter?
 
-The special kick mentioned is the *Tatsumaki Senpuu Kyaku* and Ken says
-something like "atatec trugger" (at least in Portuguese) when he does the kick.
-So the name Trugger became my first choice when I start to write this framework.
+The special kick mentioned is the *Tatsumaki Senpuu Kyaku* and Ken says something like "atatec trugger" (at least in Portuguese) when he does the kick. So the name Trugger became my first choice when I start to write this framework.
 
 ## How To Use
 
-Just put the jar file on your **classpath** and you're done. No dependencies
-are required by Trugger at runtime.
+Just put the jar file on your **classpath** and you're done. No dependencies are required by Trugger at runtime.
 
 ## How To Build
 
-Just make sure you have [Gradle][]. The markdown files are converted at build
- time using [pandoc][] so you should have it too.
+Just make sure you have [Gradle][]. The markdown files are converted at build time using [pandoc][] so you should have it to build the distribution files.
 
 [gradle]: <http://gradle.org>
 [pandoc]: <http://johnmacfarlane.net/pandoc/README.html>
 
 ## How To Contribute
 
-Just fork the project, do some stuff and send me a pull request. You can also
-fire an issue or tell your friends to use Trugger.
+Just fork the project, do some stuff and send me a pull request. You can also fire an issue or tell your friends to use Trugger.
 
 ## About Maven Repository
 
-Trugger currently is not in the Maven Central Repository, but a pom is generated
-and distributed in the download so you can import it on your local repository.
+Trugger currently is not in the Maven Central Repository, but a pom is generated and distributed in the download so you can import it on your local repository.
 
 # Reflection
 
-The Reflection module was the first one to show up in Trugger, it allows simple
-and much less verbose use of the Reflection API to reflect constructors,
-methods, fields and generic type declarations.
+The Reflection module was the first one to show up in Trugger, it allows simple and much less verbose use of the Reflection API to reflect constructors, methods, fields and generic type declarations.
 
-The base class of this module is `org.atatec.trugger.reflection.Reflection`
-and you will find a nice fluent interface there with the methods `reflect`,
-`invoke` and `handle`.
+The base class of this module is `Reflection` and you will find a nice fluent interface there with the methods `reflect`, `invoke` and `handle`.
 
 ## Fields
 
 ### Single
 
-Reflecting a field is done with the code `reflect().field(field name)`. You can
-also apply a filter by using the method `filter` and the target class (or
-object) by using the method `in`. If you need a recursive search through the
-entire target class hierarchy, just use the method `deep`.
+Reflecting a field is done with the code `reflect().field(field name)`. You can also apply a filter by using the method `filter` and the target class (or object) by using the method `in`. If you need a recursive search through the entire target class hierarchy, just use the method `deep`.
 
 Here is some examples (assuming a `static import`):
 
@@ -78,13 +61,11 @@ Field id = reflect().field("id")
     .in(someInstance);
 ```
 
-The `filter` method receive a `java.util.function.Predicate` to stay in touch
-with Java 8.
+The `filter` method receive a `java.util.function.Predicate` to stay in touch with Java 8.
 
 ### Multiple
 
-If you need to reflect a set of fields, use the `reflect().fields()`. The same
-features of a single reflect is available here.
+If you need to reflect a set of fields, use the `reflect().fields()`. The same features of a single reflect is available here.
 
 ~~~java
 List<Field> stringFields = reflect().fields()
@@ -96,7 +77,7 @@ List<Field> stringFields = reflect().fields()
 ### Predicates
 
 There are some builtin predicates in the class
-`org.atatec.trugger.reflection.FieldPredicates`.
+`FieldPredicates`.
 
 ~~~java
 List<Field> stringFields = reflect().fields()
@@ -107,10 +88,7 @@ List<Field> stringFields = reflect().fields()
 
 ### Handling Values
 
-A field can have its value manipulated through the method `Reflection#handle`.
-It will create a handler to set and get the field's value without the verbosity
-of the Reflection API. To handle static fields, you can call the handler methods
-directly:
+A field can have its value manipulated through the method `Reflection#handle`. It will create a handler to set and get the field's value without the verbosity of the Reflection API. To handle static fields, you can call the handler methods directly:
 
 ~~~java
 String value = handle(field).get();
@@ -135,9 +113,7 @@ String value = handle(field("name")).in(instance).value();
 
 ### Single
 
-To reflect a constructor, use `reflect().constructor()` and specify the
-parameter types and optionally a filter. If the class has only one constructor,
-it can be reflected without supplying the parameter types.
+To reflect a constructor, use `reflect().constructor()` and specify the parameter types and optionally a filter. If the class has only one constructor, it can be reflected without supplying the parameter types.
 
 ~~~java
 Constructor constructor = reflect()
@@ -155,8 +131,7 @@ Constructor constructor = reflect().constructor().in(MyClass.class)
 
 ### Multiple
 
-A set of constructors can be reflected by using `reflect().constructors()`. As
-in fields, the features in single reflection are present in multiple reflection.
+A set of constructors can be reflected by using `reflect().constructors()`. As in fields, the features in single reflection are present in multiple reflection.
 
 ~~~java
 List<Constructor> constructors = reflect().constructors().in(MyClass.class);
@@ -166,13 +141,11 @@ List<Constructor> constructors = reflect().constructors()
   .in(MyClass.class);
 ~~~
 
-Note that in multiple selection you cannot specify the parameter types directly
-in the fluent interface (for obvious reasons).
+Note that in multiple selection you cannot specify the parameter types directly in the fluent interface (for obvious reasons).
 
 ### Predicates
 
-A few useful predicates are included in the class
-`org.atatec.trugger.reflection.ConstructorPredicates`
+A few useful predicates are included in the class `ConstructorPredicates`.
 
 ~~~java
 List<Constructor> constructors = reflect().constructors()
@@ -182,9 +155,7 @@ List<Constructor> constructors = reflect().constructors()
 
 ### Invocation
 
-To invoke a constructor you need an `Invoker`. The method `Reflection#invoke`
-returns a Invoker for a constructor. Specify the parameters and the constructor
-will be invoked.
+To invoke a constructor you need an `Invoker`. The method `Reflection#invoke` returns a Invoker for a constructor. Specify the parameters and the constructor will be invoked.
 
 ~~~java
 Constructor c = reflect().constructor()
@@ -196,8 +167,7 @@ String name = invoke(c).withArgs("Trugger");
 
 ### Single
 
-To reflect a single method, just pass it name to `Reflection#method`. Filtering
-is allowed and you can specify parameter types too.
+To reflect a single method, just pass it name to `Reflection#method`. Filtering is allowed and you can specify parameter types too.
 
 ~~~java
 Method toString = reflect().method("toString").in(Object.class);
@@ -236,8 +206,7 @@ List<Method> methods = reflect().methods()
 
 ### Predicates
 
-A set of predicates to deal with methods is in
-`org.atatec.trugger.reflection.MethodPredicates`:
+A set of predicates to deal with methods is in `MethodPredicates`:
 
 ~~~java
 List<Method> methods = reflect().methods()
@@ -248,8 +217,7 @@ List<Method> methods = reflect().methods()
 
 ### Invocation
 
-To invoke a method, use the Invoker returned by `Reflection#invoke`. Instance
-methods needs an instance provided using the method `in`:
+To invoke a method, use the Invoker returned by `Reflection#invoke`. Instance methods needs an instance provided using the method `in`:
 
 ~~~java
 Method toString = reflect().method("toString").in(String.class);
@@ -273,8 +241,7 @@ invoke(method("toString")).in("A string").withoutArgs();
 
 ## Generic Type
 
-Generic declarations in a class are present in the bytecode. Trugger can reflect
-them by using the method `genericType`. Suppose we have this interface:
+Generic declarations in a class are present in the bytecode. Trugger can reflect them by using the method `genericType`. Suppose we have this interface:
 
 ~~~java
 public interface Repository<T> {
@@ -295,9 +262,7 @@ public class BaseRepository<T> {
 }
 ~~~
 
-The constructor was declared `protected` to warn that this will only work for
-subclasses (it is a Java limitation). A workaround to use this trick in a
-variable-like way is by declaring an anonymous class:
+The constructor was declared `protected` to warn that this will only work for subclasses (it is a Java limitation). A workaround to use this trick in a variable-like way is by declaring an anonymous class:
 
 ~~~java
 Repository<MyType> repo = new BaseRepository<MyType>(){};
@@ -307,19 +272,15 @@ I think this is an ugly solution, but works.
 
 # Class Scanning
 
-Another cool feature Trugger has is the class scanning. Just give a package name
-and Trugger will scan it for finding classes. The class scanning feature
-starts at `org.atatec.trugger.scan.ClassScan`.
+Another cool feature Trugger has is the class scanning. Just give a package name and Trugger will scan it for finding classes. The class scanning feature starts at `ClassScan`.
 
-The scanning starts in the method `ClassScan#scan`, which returns a
-`ClassScanner` that allows changing the ClassLoader and defining the package.
+The scanning starts in the method `ClassScan#scan`, which returns a `ClassScanner` that allows changing the ClassLoader and defining the package.
 
 ~~~java
 List<Class> classes = scan().classes().in("my.package");
 ~~~
 
-This will return every class in the package `my.package`. To do a deep scan and
-also return the classes in subpackages, use the `deep` method:
+This will return every class in the package `my.package`. To do a deep scan and also return the classes in subpackages, use the `deep` method:
 
 ~~~java
 List<Class> classes = scan().classes().deep().in("my.package");
@@ -336,8 +297,7 @@ List<Class> classes = scan().classes()
 
 ## Predicates
 
-In `org.atatec.trugger.reflection.ClassPredicates` is a set of useful predicates
-to deal with classes.
+In `ClassPredicates` is a set of useful predicates to deal with classes.
 
 ~~~java
 List<Class> classes = scan().classes()
@@ -353,12 +313,7 @@ List<Class> classes = scan().classes()
 
 ## Resource Finders for Protocols
 
-The search is performed based on protocols. The basic protocols are `file` and
-`jar` and are supported by Trugger. More specific protocols can be handled by
-creating a `ResourceFinder` and registering it with the method
-`ClassScan#register`. A `ResourceFinder` is responsible for finding any
-resources in a given package and it must support a protocol. Trugger has a
-couple of finders registered to the following protocols:
+The search is performed based on protocols. The basic protocols are `file` and `jar` and are supported by Trugger. More specific protocols can be handled by creating a `ResourceFinder` and registering it with the method `ClassScan#register`. A `ResourceFinder` is responsible for finding any resources in a given package and it must support a protocol. Trugger has a couple of finders registered to the following protocols:
 
 - **jar** - for resources in a jar file
 - **file** - for resources in the filesystem
@@ -371,12 +326,7 @@ registered finder.
 
 # Proxy Creation
 
-A proxy object is created using a interception handler and optionally a fail
-handler. The DSL exposed starts at `org.atatec.trugger.interception.Interception`
-with the method `intercept` and lets you define one or more interfaces to
-intercept. Additionally, you can set a target and its interfaces will be used.
-After the behaviour specification, use the method `proxy` to create the proxy
-instance.
+A proxy object is created using a interception handler and optionally a fail handler. The DSL exposed starts at `Interception` with the method `intercept` and lets you define one or more interfaces to intercept. Additionally, you can set a target and its interfaces will be used. After the behaviour specification, use the method `proxy` to create the proxy instance.
 
 ~~~java
 SomeInterface proxy = Interception.intercept(SomeInterface.class)
@@ -387,10 +337,7 @@ SomeInterface proxy = Interception.intercept(SomeInterface.class)
 proxy.doSomething();
 ~~~
 
-The interception logic happens in the handler passed through the method
-`onCall`. The handler receives a context, which contains all information about
-the intercepted method. A fail handler can also be set using the method
-`onFail`.
+The interception logic happens in the handler passed through the method `onCall`. The handler receives a context, which contains all information about the intercepted method. A fail handler can also be set using the method `onFail`.
 
 ~~~java
 SomeInterface proxy = Interception.intercept(SomeInterface.class)
@@ -405,13 +352,11 @@ SomeInterface proxy = Interception.intercept(SomeInterface.class)
 proxy.doSomething();
 ~~~
 
-The fail handler has access to the context so you can delegate the method to
-the target again (if a timeout occurs, for example).
+The fail handler has access to the context so you can delegate the method to the target again (if a timeout occurs, for example).
 
 ## The Interception Context
 
-The interception context holds everything related to the method interception,
-included:
+The interception context holds everything related to the method interception, included:
 
 - The arguments passed
 - The method intercepted
@@ -419,29 +364,19 @@ included:
 - The proxy instance
 - The target instance (may be null if not specified when creating the proxy)
 
-The context can be used to delegate the method call to the target (using
-`invoke`) or to another instance (using `invokeOn`). The declared method
-intercepted can be retrieve by using `targetMethod`.
+The context can be used to delegate the method call to the target (using `invoke`) or to another instance (using `invokeOn`). The declared method intercepted can be retrieve by using `targetMethod`.
 
 # Elements of an Object
 
 ## What is an Element?
 
-An element is any value that an object holds. It may be accessible through a
-field, invoking a method (a getter or a setter) or even a specific way like
-the `Map#get` method.
+An element is any value that an object holds. It may be accessible through a field, invoking a method (a getter or a setter) or even a specific way like the `Map#get` method.
 
-A basic element in Trugger is a Property or a Field. Trugger tries to find a
-getter and a setter method for the element name and a field with the same name.
-This allows manipulate private fields and properties in the same way without
-bothering you with the way of handling the value.
+A basic element in Trugger is a Property or a Field. Trugger tries to find a getter and a setter method for the element name and a field with the same name. This allows manipulate private fields and properties in the same way without bothering you with the way of handling the value.
 
 ## Obtaining an Element
 
-An element is obtained using the method `element` in
-`org.atatec.trugger.element.Elements`. The same features of a field reflection
-is here with the addition of getting an element without specifying a name.
-A set of predicates are present in `org.atatec.trugger.element.ElementPredicates`.
+An element is obtained using the method `element` in `Elements`. The same features of a field reflection is here with the addition of getting an element without specifying a name. A set of predicates are present in `ElementPredicates`.
 
 ~~~java
 Element value = element("value").in(MyClass.class);
@@ -457,22 +392,19 @@ List<Element> strings = elements()
 
 ## Copying Elements
 
-The elements of an object can be copied to another object, even if they are
-from different types. The DSL starts at the method `copy`:
+The elements of an object can be copied to another object, even if they are from different types. The DSL starts at the method `copy`:
 
 ~~~java
 copy().from(object).to(anotherObject);
 ~~~
 
-This will copy every element. To restrict the copy to non null values, use the
-`notNull` method:
+This will copy every element. To restrict the copy to non null values, use the `notNull` method:
 
 ~~~java
 copy().from(object).notNull().to(anotherObject);
 ~~~
 
-You can also apply a function to transform the values before assigning them to
-the target object (useful when copying values to a different type of object).
+You can also apply a function to transform the values before assigning them to the target object (useful when copying values to a different type of object).
 
 ~~~java
 copy().from(object)
@@ -517,11 +449,7 @@ value = element.in(response).get();
 
 ## Custom Elements
 
-Some classes have a custom definition of elements. A `Map` has their keys as
-elements, an `Array` has their indexes as elements an so on. Elements are found
-by an element finder (a class that implements `Finder<Element>`) and you can
-write a custom element finder and register it using the registry available
-through the method `Elements#registry`.
+Some classes have a custom definition of elements. A `Map` has their keys as elements, an `Array` has their indexes as elements an so on. Elements are found by an element finder (a class that implements `Finder<Element>`) and you can write a custom element finder and register it using the registry available through the method `Elements#registry`.
 
 Trugger has custom element finders for a set of java core classes:
 
@@ -532,11 +460,7 @@ Trugger has custom element finders for a set of java core classes:
 - `ResultSet`: the column names are used as the elements
 - `Annotation`: the methods as used as elements
 
-It is important to have clear that since this elements are instance specific,
-the elements should be queried by passing an instance instead of a class for
-the method `in` or an empty list will be returned. For a single elements, you
-may pass a class or an instance but using an instance is better because you can
-call the handling methods directly.
+It is important to have clear that since this elements are instance specific, the elements should be queried by passing an instance instead of a class for the method `in` or an empty list will be returned. For a single elements, you may pass a class or an instance but using an instance is better because you can call the handling methods directly.
 
 You can also use this custom element finders to copy elements easily:
 
@@ -549,14 +473,9 @@ copy().from(resultSet).to(myEntity);
 
 ## Annotation Mock
 
-Annotations are interfaces and mocking it should be as easy as mocking an
-interface. The problem is the default values that can be omitted. Trugger has
-an utility module to help mocking and annotation by using the interception
-module.
+Annotations are interfaces and mocking it should be as easy as mocking an interface. The problem is the default values that can be omitted. Trugger has an utility module to help mocking and annotation by using the interception module.
 
-To create a mock, you should start by creating an anonymous class that extends
-`org.atatec.trugger.util.mock.AnnotationMock` and maps the elements in a block
-code inside the class using the methods `map` and `to`.
+To create a mock, you should start by creating an anonymous class that extends `mock.AnnotationMock` and maps the elements in a block code inside the class using the methods `map` and `to`.
 
 ~~~java
 Resource resource = new AnnotationMock<Resource>(){{
@@ -593,18 +512,12 @@ Resource resource = mock.createMock();
 
 ## How To Implement the Fluent Interfaces
 
-The fluent interfaces are always defined through java interfaces and may be
-customized by your own implementation. Trugger uses a `ServiceLoader` to load
-a factory that knows the implementations to instantiate,
-so you can override the implementation of any fluent interface by defining a
-file in your **META-INF/services** directory with the factory implementation.
+The fluent interfaces are always defined through java interfaces and may be customized by your own implementation. Trugger uses a `ServiceLoader` to load a factory that knows the implementations to instantiate, so you can override the implementation of any fluent interface by defining a file in your **META-INF/services** directory with the factory implementation.
 
 The factory interfaces that can be customized are listed bellow:
 
-- `org.atatec.trugger.element.ElementFactory`: used for reflecting elements
-- `org.atatec.trugger.property.PropertyFactory`: used for reflecting properties
-- `org.atatec.trugger.reflection.ReflectionFactory`: used for reflection in
-    general
-- `org.atatec.trugger.scan.ClassScannerFactory`: used for class scanning
-- `org.atatec.trugger.interception.InterceptorFactory`: used for method
-  interception
+- `ElementFactory`: used for reflecting elements
+- `PropertyFactory`: used for reflecting properties
+- `ReflectionFactory`: used for reflection in general
+- `ClassScannerFactory`: used for class scanning
+- `InterceptorFactory`: used for method interception
