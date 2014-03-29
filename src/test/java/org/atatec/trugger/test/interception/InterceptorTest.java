@@ -58,7 +58,7 @@ public class InterceptorTest {
   @Test
   public void testInterception() throws IOException {
     MyInterface obj = Interception.intercept(new InvocationTest())
-        .onCall(context -> context.invokeMethod())
+        .onCall(context -> context.invoke())
         .proxy();
     Object argument = new Object();
     assertSame(argument, obj.doIt(argument));
@@ -67,8 +67,8 @@ public class InterceptorTest {
   @Test
   public void testInterfaceExceptionHandling() throws IOException {
     MyInterface obj = Interception.intercept(new ExceptionHandlingTest())
-        .onCall(context -> context.invokeMethod())
-        .onError((context, error) -> "pass")
+        .onCall(context -> context.invoke())
+        .onFail((context, error) -> "pass")
         .proxy();
 
     assertEquals("pass", obj.doIt(null));
@@ -80,7 +80,7 @@ public class InterceptorTest {
         .onCall(context -> {
           throw new IllegalArgumentException();
         })
-        .onError((context, error) -> {
+        .onFail((context, error) -> {
           throw new TruggerException(error);
         })
         .proxy();

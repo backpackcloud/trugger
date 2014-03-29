@@ -56,7 +56,7 @@ public interface Interceptor {
    * @param handler the handler to use
    * @return a new Interceptor that uses the given handler
    */
-  Interceptor onError(InterceptionFailHandler handler);
+  Interceptor onFail(InterceptionFailHandler handler);
 
   /**
    * Creates the proxy instance based on the components configured.

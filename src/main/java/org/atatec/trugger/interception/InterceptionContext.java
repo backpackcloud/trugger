@@ -61,7 +61,7 @@ public interface InterceptionContext {
    * @return the return of the method
    * @throws Throwable if an error occurs in the method.
    */
-  Object invokeMethod() throws Throwable;
+  Object invoke() throws Throwable;
 
   /**
    * Invokes the intercepted method on the given target object.
@@ -70,7 +70,7 @@ public interface InterceptionContext {
    * @return the return of the method
    * @throws Throwable if an error occurs in the method.
    */
-  Object invokeMethod(Object target) throws Throwable;
+  Object invokeOn(Object target) throws Throwable;
 
   /**
    * @param target the target to get the method.

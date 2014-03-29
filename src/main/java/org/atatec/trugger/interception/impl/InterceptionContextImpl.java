@@ -69,12 +69,12 @@ public class InterceptionContextImpl implements InterceptionContext {
   }
 
   @Override
-  public Object invokeMethod() throws Throwable {
-    return invokeMethod(target);
+  public Object invoke() throws Throwable {
+    return invokeOn(target);
   }
 
   @Override
-  public Object invokeMethod(Object target) throws Throwable {
+  public Object invokeOn(Object target) throws Throwable {
     try {
       Method targetMethod = methodOn(target);
       Reflection.setAccessible(targetMethod);

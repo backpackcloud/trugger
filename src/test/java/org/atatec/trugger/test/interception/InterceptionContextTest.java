@@ -67,7 +67,7 @@ public class InterceptionContextTest {
           assertTrue(targetMethod.getParameters()[0]
               .isAnnotationPresent(Flag.class));
           assertSame(notEmpty, c.target());
-          return c.invokeMethod();
+          return c.invoke();
         }).proxy();
     assertFalse(validator.validate(""));
     assertTrue(validator.validate("non empty"));
