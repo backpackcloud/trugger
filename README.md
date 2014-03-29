@@ -336,8 +336,8 @@ List<Class> classes = scan().classes()
 
 ## Predicates
 
-A set of useful predicates to deal with classes can be found at
-`org.atatec.trugger.reflection.ClassPredicates`:
+In `org.atatec.trugger.reflection.ClassPredicates` is a set of useful predicates
+to deal with classes.
 
 ~~~java
 List<Class> classes = scan().classes()
@@ -380,7 +380,8 @@ instance.
 
 ~~~java
 SomeInterface proxy = Interception.intercept(SomeInterface.class)
-  .onCall(context -> logger.info("method intercepted: " + context.method())
+  .onCall(context -> logger.info("method intercepted: "
+    + context.method())
   .proxy();
 
 proxy.doSomething();
@@ -395,10 +396,10 @@ the intercepted method. A fail handler can also be set using the method
 SomeInterface proxy = Interception.intercept(SomeInterface.class)
   // sets a target to delegate the call using the context object
   .on(instance)
-  // delegates the call to the target - this is the default behaviour
+  // delegates the call to the target (this is the default behaviour)
   .onCall(context -> context.invoke())
-  //
-  .onFail(context, throwable -> somethingToHandleTheFail(throwable))
+  // handles any error occurred
+  .onFail(context, throwable -> handleTheFail(throwable))
   .proxy();
 
 proxy.doSomething();
@@ -426,7 +427,64 @@ intercepted can be retrieve by using `targetMethod`.
 
 ## What is an Element?
 
-## Creating a Custom Element Finder
+An element in Trugger is a Property or a Field. Trugger encapsulate this two
+concepts in a element. This allows manipulate private fields and properties
+in the same way without bothering you with the way of handling the value.
+
+## Obtaining an Element
+
+An element is obtained using the method `element` in
+`org.atatec.trugger.element.Elements`. The same features of a field reflection
+is here with the addition of getting an element without specifying a name.
+A set of predicates are present in `org.atatec.trugger.element.ElementPredicates`.
+
+~~~java
+Element value = element("value").in(MyClass.class);
+
+Element id = element()
+  .filter(annotatedWith(Id.class)) // static import
+  .in(MyClass.class);
+
+List<Element> strings = elements()
+  .filter(type(String.class) // static import
+  .in(MyClass.class);
+~~~
+
+## Copying Elements
+
+The elements of an object can be copied to another object, even if they are
+from different types. The DSL starts at the method `copy`:
+
+~~~java
+copy().from(object).to(anotherObject);
+~~~
+
+This will copy every element. To restrict the copy to non null values, use the
+`notNull` method:
+
+~~~java
+copy().from(object).notNull().to(anotherObject);
+~~~
+
+You can also apply a function to transform the values before assigning them to
+the target object (useful when copying values to a different type of object).
+
+~~~java
+copy().from(object)
+  .applying(copy -> copy.value().toString())
+  .to(anotherObject);
+~~~
+
+To filter the elements to copy, just give a selector to the `copy` method:
+
+~~~java
+copy(elements().filter(annotatedWith(MyAnnotation.class)))
+  .from(object)
+  .to(anotherObject);
+
+## Nested Elements
+
+## Custom Elements
 
 # Utilities
 
