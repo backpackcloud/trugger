@@ -481,6 +481,7 @@ To filter the elements to copy, just give a selector to the `copy` method:
 copy(elements().filter(annotatedWith(MyAnnotation.class)))
   .from(object)
   .to(anotherObject);
+~~~
 
 ## Nested Elements
 
