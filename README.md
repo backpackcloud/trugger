@@ -346,7 +346,7 @@ SomeInterface proxy = Interception.intercept(SomeInterface.class)
   // delegates the call to the target (this is the default behaviour)
   .onCall(context -> context.invoke())
   // handles any error occurred
-  .onFail(context, throwable -> handleTheFail(throwable))
+  .onFail((context, throwable) -> handleTheFail(throwable))
   .proxy();
 
 proxy.doSomething();
