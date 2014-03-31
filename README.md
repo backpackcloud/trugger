@@ -508,6 +508,33 @@ mock.map(false).to(annotation.shareable());
 Resource resource = mock.createMock();
 ~~~
 
+## Context Factories
+
+If you need a lightweight component to invoke a constructor with a predicate based logic to resolve the parameter values, you can use the `ContextFactory`.
+
+A `ContextFactory` is a factory that maps a predicate that evaluates parameters to an object or supplier. After creating a `ContextFactory`, you can manipulate the context through the `#context` method. A set of predicates can be found in `ParameterPredicates` class.
+
+~~~java
+ContextFactory factory = new ContextFactory();
+factory.context()
+  //static imports
+  .put(myImplementation, type(MyInterface.class))
+  .put(someObject, name("component"))
+  .put(parameter ->
+    resolve(parameter.getAnnotation(MyAnnotation.class)),
+    annotatedWith(MyAnnotation.class))
+  .put(() -> availableWorker(), type(MyWorker.class));
+~~~
+
+The above factory will:
+
+1. use `myImplementation` for any parameter of the type `MyInterface`
+1. use `someObject` for any parameter named *"component"*
+1. use the return of `resolve` with the annotation `MyAnnotation` for any parameter annotated with `MyAnnotation`
+1. use the return of `availableWorker` to any parameter of type `MyWorker`
+
+This steps will be done with every public constructor of a type, if a constructor has one parameter that cannot be resolved to an object, then the next constructor will be used and if there is no more constructors to use, an exception is thrown.
+
 # Extending
 
 ## How To Implement the Fluent Interfaces

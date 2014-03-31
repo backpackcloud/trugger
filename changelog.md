@@ -28,6 +28,7 @@ This release is also the first one to have a README with a basic guide.
   - Renamed get and set methods in `ValueHandler`
   - Reformulated Class Scan module
   - `recursively` changed to `deep` and belongs now to `DeepSelector`
+  - ContextFactory utility class
 
 ### Minor Changes
   - Removed non used classes
