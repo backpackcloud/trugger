@@ -29,11 +29,14 @@ public class ClassPredicatesTest {
   public void testSubtypePredicate() {
     assertMatch(Exception.class, subtypeOf(Throwable.class));
     assertNotMatch(Throwable.class, subtypeOf(Exception.class));
+    assertNotMatch(Throwable.class, subtypeOf(Throwable.class));
   }
 
   @Test
-  public void testTypesPredicate() {
-
+  public void testTypePredicate() {
+    assertNotMatch(Exception.class, type(Throwable.class));
+    assertNotMatch(Throwable.class, type(Exception.class));
+    assertMatch(Throwable.class, type(Throwable.class));
   }
 
 }

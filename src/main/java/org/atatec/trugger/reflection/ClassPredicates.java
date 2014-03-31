@@ -34,11 +34,15 @@ public class ClassPredicates {
   private ClassPredicates() {
   }
 
+  public static final Predicate<Class> type(Class type) {
+    return c -> c.equals(type);
+  }
+
   /**
    * Returns a predicate that checks if a class is a subtype of another class
    */
   public static final Predicate<Class> subtypeOf(Class type) {
-    return c -> type.isAssignableFrom(c);
+    return c -> !c.equals(type) && type.isAssignableFrom(c);
   }
 
   /**
