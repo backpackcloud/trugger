@@ -533,7 +533,7 @@ The above factory will:
 1. use the return of `resolve` with the annotation `MyAnnotation` for any parameter annotated with `MyAnnotation`
 1. use the return of `availableWorker` to any parameter of type `MyWorker`
 
-This steps will be done with every public constructor of a type, if a constructor has one parameter that cannot be resolved to an object, then the next constructor will be used and if there is no more constructors to use, an exception is thrown.
+These steps will be done with every public constructor of a type, if a constructor has one parameter that cannot be resolved to an object, then the next constructor will be used and if there is no more constructors to use, an exception is thrown.
 
 # Extending
 
