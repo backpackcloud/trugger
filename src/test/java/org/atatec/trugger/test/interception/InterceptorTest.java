@@ -17,13 +17,15 @@
 package org.atatec.trugger.test.interception;
 
 import org.atatec.trugger.TruggerException;
-import org.atatec.trugger.interception.Interception;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static org.atatec.trugger.interception.Interception.intercept;
+import static org.atatec.trugger.interception.InterceptionHandler.delegate;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 /**
@@ -57,7 +59,7 @@ public class InterceptorTest {
 
   @Test
   public void testInterception() throws IOException {
-    MyInterface obj = Interception.intercept(new InvocationTest())
+    MyInterface obj = intercept(new InvocationTest())
         .onCall(context -> context.invoke())
         .proxy();
     Object argument = new Object();
@@ -66,7 +68,7 @@ public class InterceptorTest {
 
   @Test
   public void testInterfaceExceptionHandling() throws IOException {
-    MyInterface obj = Interception.intercept(new ExceptionHandlingTest())
+    MyInterface obj = intercept(new ExceptionHandlingTest())
         .onCall(context -> context.invoke())
         .onFail((context, error) -> "pass")
         .proxy();
@@ -76,7 +78,7 @@ public class InterceptorTest {
 
   @Test(expected = TruggerException.class)
   public void testInterfaceInterception() throws IOException {
-    MyInterface obj = Interception.intercept(MyInterface.class)
+    MyInterface obj = intercept(MyInterface.class)
         .onCall(context -> {
           throw new IllegalArgumentException();
         })
@@ -89,7 +91,7 @@ public class InterceptorTest {
 
   @Test(expected = IOException.class)
   public void testException() throws IOException {
-    MyInterface obj = Interception.intercept(MyInterface.class)
+    MyInterface obj = intercept(MyInterface.class)
         .onCall(context -> {
           throw new IOException();
         })
@@ -99,11 +101,29 @@ public class InterceptorTest {
 
   @Test
   public void testInterfacesInterception() {
-    Object obj = Interception.intercept(Function.class, Predicate.class)
+    Object obj = intercept(Function.class, Predicate.class)
         .onCall(context -> true)
         .proxy();
     assertTrue(((Function<Object, Boolean>) obj).apply(null));
     assertTrue(((Predicate) obj).test(null));
+  }
+
+  @Test
+  public void testComposition() throws Exception {
+    MyInterface obj = createMock(MyInterface.class);
+    expect(obj.doIt("test")).andReturn(null);
+    replay(obj);
+
+    MyInterface proxy = intercept(MyInterface.class)
+        .on(obj)
+        .onCall(delegate().andThen(
+            context -> "notNull"
+        ))
+        .proxy();
+
+    assertNotNull(proxy.doIt("test"));
+
+    verify(obj);
   }
 
 }

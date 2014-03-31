@@ -43,20 +43,16 @@ public class TruggerInterceptor implements InvocationHandler, Interceptor {
     this.target = target;
     Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
     this.interfaces = classes.toArray(new Class[classes.size()]);
-    this.action = (context) -> context.invoke();
-    this.handler = (context, error) -> {
-      throw error;
-    };
+    this.action = InterceptionHandler.delegate();
+    this.handler = InterceptionFailHandler.throwError();
   }
 
   public TruggerInterceptor(Class[] interfaces) {
     this.interfaces = interfaces;
     this.classloader = ClassLoader.getSystemClassLoader();
     this.target = null;
-    this.action = (context) -> context.invoke();
-    this.handler = (context, error) -> {
-      throw error;
-    };
+    this.action = InterceptionHandler.delegate();
+    this.handler = InterceptionFailHandler.throwError();
   }
 
   public TruggerInterceptor(Object target, Class[] interfaces,

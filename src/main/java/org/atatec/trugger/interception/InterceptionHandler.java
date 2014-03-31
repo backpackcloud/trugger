@@ -48,4 +48,11 @@ public interface InterceptionHandler {
     };
   }
 
+  /**
+   * Returns a handler that delegates the intercepted method to the target.
+   */
+  static InterceptionHandler delegate() {
+    return context -> context.invoke();
+  }
+
 }

@@ -34,4 +34,13 @@ public interface InterceptionFailHandler {
    */
   Object handle(InterceptionContext context, Throwable error) throws Throwable;
 
+  /**
+   * Returns a handler that throws all exceptions.
+   */
+  static InterceptionFailHandler throwError() {
+    return (context, error) -> {
+      throw error;
+    };
+  }
+
 }
