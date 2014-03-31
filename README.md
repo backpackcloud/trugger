@@ -512,7 +512,7 @@ Resource resource = mock.createMock();
 
 If you need a lightweight component to invoke a constructor with a predicate based logic to resolve the parameter values, you can use the `ContextFactory`.
 
-A `ContextFactory` is a factory that maps a predicate that evaluates parameters to an object or supplier. After creating a `ContextFactory`, you can manipulate the context through the `#context` method. A set of predicates can be found in `ParameterPredicates` class.
+A `ContextFactory` is a factory that maps a predicate that evaluates parameters to an object or supplier. After creating a `ContextFactory`, you can manipulate the context through the `#context` method and create an object with the `create` method. A set of predicates can be found in `ParameterPredicates` class.
 
 ~~~java
 ContextFactory factory = new ContextFactory();
