@@ -29,6 +29,8 @@ import java.util.List;
 import static org.atatec.trugger.util.mock.Mock.annotation;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class ComponentFactoryTest {
 
@@ -47,17 +49,41 @@ public class ComponentFactoryTest {
   @Test
   public void testListCreate() {
     Element element = new ElementMock()
-        .annotatedWith(mock(annotation(ToString.class)))
+        .annotatedWith(mock(annotation(Flag.class)))
         .annotatedWith(mock(annotation(ToNull.class)))
         .annotatedWith(mock(annotation(Resource.class)))
+        .annotatedWith(mock(annotation(ToString.class)))
+        .createMock();
+
+    ComponentFactory<ConverterClass, Converter> factory
+        = new ComponentFactory<>(ConverterClass.class);
+
+    List<Converter> converters = factory.createAll(element);
+    assertEquals(2, converters.size());
+  }
+
+  @Test
+  public void testElementCreate() {
+    Element element = new ElementMock()
+        .annotatedWith(mock(annotation(Resource.class)))
+        .annotatedWith(mock(annotation(ToString.class)))
+        .annotatedWith(mock(annotation(ToNull.class)))
         .annotatedWith(mock(annotation(Flag.class)))
         .createMock();
 
     ComponentFactory<ConverterClass, Converter> factory
         = new ComponentFactory<>(ConverterClass.class);
 
-    List<Converter> converters = factory.create(element);
-    assertEquals(2, converters.size());
+    Converter converter = factory.create(element);
+    assertNotNull(converter);
+
+    element = new ElementMock()
+        .annotatedWith(mock(annotation(Resource.class)))
+        .annotatedWith(mock(annotation(Flag.class)))
+        .createMock();
+
+    converter = factory.create(element);
+    assertNull(converter);
   }
 
 }

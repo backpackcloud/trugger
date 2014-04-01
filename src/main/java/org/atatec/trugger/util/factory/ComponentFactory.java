@@ -124,6 +124,26 @@ public class ComponentFactory<T extends Annotation, E> {
   }
 
   /**
+   * Creates a component using the first annotation that maps to a component.
+   *
+   * Use this method if only one component is allowed by target.
+   *
+   * @param element  the element to search for annotations
+   * @return the created component or <code>null</code> if no annotations in the
+   * element could create a component.
+   */
+  public E create(AnnotatedElement element) {
+    E component;
+    for (Annotation annotation : element.getAnnotations()) {
+      component = create(annotation);
+      if (component != null) {
+        return component;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Creates a list of components based on the annotations of the given element.
    *
    * @param element the element to search for annotations
@@ -131,7 +151,7 @@ public class ComponentFactory<T extends Annotation, E> {
    * annotations present in the given element.
    * @see #create(java.lang.annotation.Annotation)
    */
-  public List<E> create(AnnotatedElement element) {
+  public List<E> createAll(AnnotatedElement element) {
     List result = new ArrayList<>();
     E component;
     for (Annotation annotation : element.getAnnotations()) {

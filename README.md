@@ -590,14 +590,20 @@ ComponentFactory<ComponentClass, Component> factory =
 Component component = factory.create(annotation);
 ~~~
 
-Alternatively, you can get a list of components by passing an `AnnotatedElement`:
+Alternatively, you can get a list of components by passing an `AnnotatedElement`
+to the method `#createAll`:
 
 ~~~java
 Element = Elements.element("aField").in(myObject);
-List<Component> components = factory.create(element);
+List<Component> components = factory.createAll(element);
 ~~~
 
-These two factories may be a core of some object processor (like a validation).
+Or creating a single one by passing an `AnnotatedElement` to the method `#create`:
+
+~~~java
+Element = Elements.element("aField").in(myObject);
+Component component = factory.create(element);
+~~~
 
 # Extending
 
