@@ -22,6 +22,7 @@ import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import static junit.framework.Assert.*;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
@@ -44,6 +45,7 @@ public class InterceptionContextTest {
           assertNull(c.target());
           assertEquals("validate", c.method().getName());
           assertTrue(c.method().isAnnotationPresent(Flag.class));
+          assertTrue(Proxy.isProxyClass(c.proxy().getClass()));
           return true;
         }).proxy();
 
