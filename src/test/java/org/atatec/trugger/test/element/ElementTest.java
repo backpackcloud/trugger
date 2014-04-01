@@ -20,7 +20,11 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
+import java.io.Serializable;
+
 import static org.atatec.trugger.element.ElementPredicates.annotatedWith;
+import static org.atatec.trugger.element.ElementPredicates.assignableTo;
+import static org.atatec.trugger.element.ElementPredicates.type;
 import static org.atatec.trugger.element.Elements.element;
 import static org.junit.Assert.*;
 
@@ -64,6 +68,20 @@ public class ElementTest {
   public void testNullSpecificElement() {
     Element el = element("non_existent").in(new Object());
     assertNull(el);
+  }
+
+  @Test
+  public void testSingleSelection() {
+    assertNotNull(
+        element().filter(type(int.class)).in(TestObject.class)
+    );
+    assertNull(
+        element().filter(type(Serializable.class)).in(TestObject.class)
+    );
+    // should return the first element found, no matter what is
+    assertNotNull(
+        element().filter(assignableTo(Serializable.class)).in(TestObject.class)
+    );
   }
 
   private static class ForMergedTest {

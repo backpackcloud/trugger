@@ -72,6 +72,15 @@ public class Elements {
   }
 
   /**
+   * Selects a single element.
+   *
+   * @return a component for selecting the element.
+   */
+  public static ElementSelector element() {
+    return new SingleElementSelector();
+  }
+
+  /**
    * Copies elements through objects.
    */
   public static ElementCopier copy() {
