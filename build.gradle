@@ -62,6 +62,16 @@ task pom << {
       groupId 'org.atatec.trugger'
       artifactId 'trugger'
       packaging 'jar'
+
+      name 'trugger'
+      description project.description
+
+      url 'https://github.com/ataxexe'
+
+      scm {
+        url 'git@github.com:ataxexe/trugger.git'
+      }
+
       licenses {
         license {
           name 'The Apache Software License, Version 2.0'
