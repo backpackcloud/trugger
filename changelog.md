@@ -29,6 +29,7 @@ This release is also the first one to have a README with a basic guide.
   - Reformulated Class Scan module
   - `recursively` changed to `deep` and belongs now to `DeepSelector`
   - ContextFactory utility class
+  - ComponentFactory utility class
 
 ### Minor Changes
   - Removed non used classes
