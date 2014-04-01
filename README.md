@@ -1,6 +1,8 @@
 # Overview
 
-Trugger is a framework that helps you write code that anyone can read. The idea is to provide a set of fluent interfaces to deal with operations related to reflection (such as creating proxies, reflecting members and scanning classes)
+Trugger is a framework that helps you write code that anyone can read. The idea is to provide a set of fluent interfaces to deal with operations related to reflection (such as creating proxies, reflecting members and scanning classes).
+
+Trugger is intended to be a base for creating infrastructure code. While it is not an IoC container, for example, it could be a part of the core of an IoC container.
 
 ## What a hell does the name trugger mean?
 
