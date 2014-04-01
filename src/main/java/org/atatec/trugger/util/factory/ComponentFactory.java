@@ -35,8 +35,8 @@ import static org.atatec.trugger.util.factory.ParameterPredicates.type;
  * Given the example below:
  * <p>
  * <pre>
- *  @ValidatorClass(NotNullValidator.class)
- *  public @interface NotNull {
+ *  &#64;ValidatorClass(NotNullValidator.class)
+ *  public &#64;interface NotNull {
  *
  *  }
  * </pre>
@@ -86,7 +86,7 @@ public class ComponentFactory<T extends Annotation, E> {
    * <pre>
    *   factory.configureContextWith(
    *     defaults().andThen(
-   *       (context, annotation) -> yourConfigurations
+   *       (context, annotation) -&gt; yourConfigurations
    *     )
    *   );
    * </pre>
@@ -158,13 +158,13 @@ public class ComponentFactory<T extends Annotation, E> {
    * annotation and the annotation itself. For example:
    * <p>
    * <pre>
-   *   @ComponentClass(MyComponent.class)
-   *   public @interface MyAnnotation {
+   *   &#64;ComponentClass(MyComponent.class)
+   *   public &#64;interface MyAnnotation {
    *     boolean check();
    *     String name();
    *   }
    *
-   *   @MyAnnotation(check = false, name = "someName")
+   *   &#64;MyAnnotation(check = false, name = "someName")
    *   private String someField;
    * </pre>
    * <p>
