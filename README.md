@@ -529,11 +529,73 @@ factory.context()
 The above factory will:
 
 1. use `myImplementation` for any parameter of the type `MyInterface`
-1. use `someObject` for any parameter named *"component"*
-1. use the return of `resolve` with the annotation `MyAnnotation` for any parameter annotated with `MyAnnotation`
-1. use the return of `availableWorker` to any parameter of type `MyWorker`
+2. use `someObject` for any parameter named *"component"*
+3. use the return of `resolve` with the annotation `MyAnnotation` for any parameter annotated with `MyAnnotation`
+4. use the return of `availableWorker` to any parameter of type `MyWorker`
 
 These steps will be done with every public constructor of a type, if a constructor has one parameter that cannot be resolved to an object, then the next constructor will be used and if there is no more constructors to use, an exception is thrown.
+
+## Component Factories
+
+Component factories allows creating components defined by annotations. Suppose
+you have:
+
+~~~java
+public @interface ComponentClass {
+
+  Class<? extends Component> value();
+
+}
+
+@ComponentClass(MyComponentImplementation.class)
+public @interface MyComponent {
+
+  String name();
+
+}
+
+//inside a class
+
+@MyComponent(name = "myName")
+private String aField;
+~~~
+
+The annotation in `aField` can be used to create an instance of `MyComponentImplementation`. The context used to create any components are:
+
+1. Every property of the annotation with their specific types (in that case, the property `name` with the value *"myName"* to a parameter named `name` and of type `String`)
+2. The annotation itself with its type (in that case, the `MyComponent` annotation to the type `MyComponent`)
+
+Since the annotation is used as the context, you can have a constructor in the component implementation that receives the annotation instead of its properties. This is useful if you don't want to compile your code with `-parameters` parameter.
+
+This behaviour is completely replaceable by using the method `configureContextWith`. To add behaviour to the default one, compose the `ComponentFactory#defaults` with your behaviour:
+
+~~~java
+factory.configureContextWith(
+  defaults().andThen(
+    (context, annotation) -> yourConfigurations
+  )
+);
+~~~
+
+To instantiate a component, just use a code like this one:
+
+~~~java
+ComponentFactory<ComponentClass, Component> factory =
+  new ComponentFactory(ComponentClass.class);
+
+// get the annotation from the field
+
+Component component = factory.create(annotation);
+~~~
+
+Alternatively, you can get a list of components by passing an `AnnotatedElement`:
+
+~~~java
+Element = Elements.element("aField").in(myObject);
+List<Component> components = factory.create(element);
+~~~
+
+These two factories may be a core of some object processor (like a validation).
 
 # Extending
 

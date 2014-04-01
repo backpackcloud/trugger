@@ -17,8 +17,14 @@
 
 package org.atatec.trugger.test.factory;
 
+import org.atatec.trugger.element.Element;
+import org.atatec.trugger.test.ElementMock;
+import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.util.factory.ComponentFactory;
 import org.junit.Test;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 import static org.atatec.trugger.util.mock.Mock.annotation;
 import static org.atatec.trugger.util.mock.Mock.mock;
@@ -27,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 public class ComponentFactoryTest {
 
   @Test
-  public void testConverter() {
+  public void testCreate() {
     ToString annotation = mock(annotation(ToString.class));
 
     ComponentFactory<ConverterClass, Converter> factory
@@ -36,6 +42,22 @@ public class ComponentFactoryTest {
     Converter converter = factory.create(annotation);
     assertEquals("10", converter.convert(10));
     assertEquals("null", converter.convert(null));
+  }
+
+  @Test
+  public void testListCreate() {
+    Element element = new ElementMock()
+        .annotatedWith(mock(annotation(ToString.class)))
+        .annotatedWith(mock(annotation(ToNull.class)))
+        .annotatedWith(mock(annotation(Resource.class)))
+        .annotatedWith(mock(annotation(Flag.class)))
+        .createMock();
+
+    ComponentFactory<ConverterClass, Converter> factory
+        = new ComponentFactory<>(ConverterClass.class);
+
+    List<Converter> converters = factory.create(element);
+    assertEquals(2, converters.size());
   }
 
 }

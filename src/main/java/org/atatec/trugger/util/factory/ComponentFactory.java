@@ -21,7 +21,10 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import static org.atatec.trugger.util.factory.ParameterPredicates.name;
 import static org.atatec.trugger.util.factory.ParameterPredicates.type;
@@ -50,6 +53,7 @@ public class ComponentFactory<T extends Annotation, E> {
 
   private final Class<T> annotationType;
   private final String classElement;
+  private BiConsumer<Context, Annotation> contextConsumer;
 
   /**
    * Creates a new factory that searches for the implementation by looking at
@@ -71,6 +75,31 @@ public class ComponentFactory<T extends Annotation, E> {
   public ComponentFactory(Class<T> annotationType, String classElement) {
     this.annotationType = annotationType;
     this.classElement = classElement;
+    configureContextWith(defaults());
+  }
+
+  /**
+   * Changes the way the context is configured by replacing the consumer.
+   * <p>
+   * You can add behaviour by composing the default consumer:
+   * <p>
+   * <pre>
+   *   factory.configureContextWith(
+   *     defaults().andThen(
+   *       (context, annotation) -> yourConfigurations
+   *     )
+   *   );
+   * </pre>
+   *
+   * @param consumer the consumer to use for configuring the context to create
+   *                 the components.
+   * @return a reference to this object
+   * @see #defaults()
+   */
+  public ComponentFactory configureContextWith(
+      BiConsumer<Context, Annotation> consumer) {
+    this.contextConsumer = consumer;
+    return this;
   }
 
   /**
@@ -78,6 +107,52 @@ public class ComponentFactory<T extends Annotation, E> {
    * <p>
    * If the annotation type <code>T</code> is present in the given annotation,
    * then the implementation defined will be instantiated.
+   *
+   * @param annotation the annotation to check if the component can be created.
+   * @return the created component or <code>null</code> if the annotation is not
+   * annotated with the required annotation.
+   */
+  public E create(Annotation annotation) {
+    Class<?> type = annotation.annotationType();
+    if (type.isAnnotationPresent(annotationType)) {
+      T classAnnotation = type.getAnnotation(annotationType);
+      Element element = Elements.element(classElement).in(classAnnotation);
+      Class<? extends E> typeToCreate = element.get();
+      return create(annotation, typeToCreate);
+    }
+    return null;
+  }
+
+  /**
+   * Creates a list of components based on the annotations of the given element.
+   *
+   * @param element the element to search for annotations
+   * @return a list of all components that can be instantiated from the
+   * annotations present in the given element.
+   * @see #create(java.lang.annotation.Annotation)
+   */
+  public List<E> create(AnnotatedElement element) {
+    List result = new ArrayList<>();
+    E component;
+    for (Annotation annotation : element.getAnnotations()) {
+      component = create(annotation);
+      if (component != null) {
+        result.add(component);
+      }
+    }
+    return result;
+  }
+
+  private E create(Annotation annotation, Class<? extends E> classToCreate) {
+    ContextFactory factory = new ContextFactory();
+    Context context = factory.context();
+    contextConsumer.accept(context, annotation);
+    return factory.create(classToCreate);
+  }
+
+  /**
+   * Returns the default consumer to configure the context for creating
+   * components.
    * <p>
    * The context for creating the component is composed by the elements of the
    * annotation and the annotation itself. For example:
@@ -104,30 +179,16 @@ public class ComponentFactory<T extends Annotation, E> {
    * of the same type</li>
    * </ul>
    *
-   * @param annotation the annotation to check if the component can be created.
-   * @return the created component
-   * @throws CreateException if the component cannot be created
+   * @return the default consumer to configure the context
    */
-  public E create(Annotation annotation) {
-    Class type = annotation.annotationType();
-    if (type.isAnnotationPresent(annotationType)) {
-      Annotation classAnnotation = type.getAnnotation(annotationType);
-      Element element = Elements.element(classElement).in(classAnnotation);
-      Class<? extends E> typeToCreate = element.get();
-      return create(annotation, typeToCreate);
-    }
-    throw new CreateException("Could not create an object");
-  }
-
-  private E create(Annotation annotation, Class<? extends E> classToCreate) {
-    ContextFactory factory = new ContextFactory();
-    Context context = factory.context();
-    context.put(annotation, type(annotation.annotationType()));
-    List<Element> elements = Elements.elements().in(annotation);
-    for (Element el : elements) {
-      context.put(() -> el.get(), name(el.name()).and(type(el.type())));
-    }
-    return factory.create(classToCreate);
+  public static BiConsumer<Context, Annotation> defaults() {
+    return (context, annotation) -> {
+      context.put(annotation, type(annotation.annotationType()));
+      List<Element> elements = Elements.elements().in(annotation);
+      for (Element el : elements) {
+        context.put(() -> el.get(), name(el.name()).and(type(el.type())));
+      }
+    };
   }
 
 }
