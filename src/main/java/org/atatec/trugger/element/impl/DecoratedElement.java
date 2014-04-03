@@ -95,16 +95,6 @@ public class DecoratedElement implements Element {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    return element.equals(obj);
-  }
-
-  @Override
-  public int hashCode() {
-    return element.hashCode();
-  }
-
-  @Override
   public String toString() {
     return element.toString();
   }
