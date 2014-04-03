@@ -17,16 +17,20 @@
 package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.HandlingException;
+import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
+
+import java.lang.annotation.Annotation;
 
 /**
  * A class that represents a {@link Element#isSpecific() specific} element.
  *
  * @author Marcelo Guimarães
  */
-public class SpecificElement extends DecoratedElement implements Element {
+public class SpecificElement implements Element {
 
-  protected final Object target;
+  private final Object target;
+  private final Element element;
 
   /**
    * @param element
@@ -35,7 +39,7 @@ public class SpecificElement extends DecoratedElement implements Element {
    *          the target for this specific element.
    */
   public SpecificElement(Element element, Object target) {
-    super(element);
+    this.element = element;
     this.target = target;
   }
 
@@ -56,6 +60,47 @@ public class SpecificElement extends DecoratedElement implements Element {
   @Override
   public void set(Object value) throws HandlingException {
     in(target).set(value);
+  }
+
+  public Class declaringClass() {
+    return element.declaringClass();
+  }
+
+  public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+    return element.getAnnotation(annotationClass);
+  }
+
+  public Annotation[] getAnnotations() {
+    return element.getAnnotations();
+  }
+
+  public Annotation[] getDeclaredAnnotations() {
+    return element.getDeclaredAnnotations();
+  }
+
+  public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+    return element.isAnnotationPresent(annotationClass);
+  }
+
+  public String name() {
+    return element.name();
+  }
+
+  public Class type() {
+    return element.type();
+  }
+
+  @Override
+  public ValueHandler in(Object target) {
+    return element.in(target);
+  }
+
+  public boolean isReadable() {
+    return element.isReadable();
+  }
+
+  public boolean isWritable() {
+    return element.isWritable();
   }
 
 }
