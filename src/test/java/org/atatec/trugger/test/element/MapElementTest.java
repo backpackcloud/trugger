@@ -20,6 +20,7 @@ import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,59 +35,59 @@ import static org.junit.Assert.*;
  * @author Marcelo Varella Barca Guimarães
  */
 public class MapElementTest {
-  
+
   @Test
   public void mapElementTest() {
     Map<String, Object> map1 = new HashMap<String, Object>();
     Map<String, Object> map2 = new HashMap<String, Object>();
     Map<String, Object> map3 = new HashMap<String, Object>();
     BundleBean obj = new BundleBean();
-    
+
     map1.put("foo", "bar");
     map1.put("framework", "trugger");
     map1.put("author", "marcelo");
     map1.put("obj", obj);
-    
+
     map2.put("foo", "bar2");
     map2.put("framework", "trugger2");
     map2.put("author", "marcelo2");
     map2.put("obj", obj);
-    
+
     map3.putAll(map1);
-    
+
     List<Element> elements = elements().in(Map.class);
     assertTrue(elements.isEmpty());
-    
+
     elements = elements().in(map1);
     assertFalse(elements.isEmpty());
-    
+
     assertElements(elements, "foo", "framework", "author", "obj");
-    
+
     testMap(map1, map2, "foo", "bar", "bar2");
     testMap(map1, map2, "framework", "trugger", "trugger2");
     testMap(map1, map2, "author", "marcelo", "marcelo2");
-    
+
     Element element = element("obj.bundle.framework").in(map3);
     assertTrue(element.isSpecific());
     assertEquals("trugger", element.get());
     assertThrow(HandlingException.class, () -> element.set("none"));
   }
-  
+
   private void testMap(final Map map1, final Map map2, String key,
                        Object value1, Object value2) {
     final Element element = element(key).in(map1);
     assertNotNull(element);
     assertTrue(element.isSpecific());
-    
+
     assertEquals(Map.class, element.declaringClass());
-    
+
     assertEquals(value1, element.get());
     assertEquals(key, element.name());
     assertEquals(value1, element.in(map1).get());
     assertEquals(value2, element.in(map2).get());
     assertTrue(element.isReadable());
     assertTrue(element.isWritable());
-    
+
     element.set("modified");
     element.in(map2).set("modified");
 
@@ -96,4 +97,17 @@ public class MapElementTest {
     assertEquals("modified", element.in(map1).get());
     assertEquals("modified", element.in(map2).get());
   }
+
+  @Test
+  public void testHandlingExceptions() {
+    Map<String, String> map = new HashMap<>();
+    map.put("key", "value");
+    map = Collections.unmodifiableMap(map);
+    Element element = element("none").in(map);
+    assertThrow(HandlingException.class, () -> element.get());
+    assertThrow(HandlingException.class, () -> element.set("value"));
+    assertThrow(IllegalArgumentException.class, () -> element.in("").set("value"));
+  }
+
+
 }
