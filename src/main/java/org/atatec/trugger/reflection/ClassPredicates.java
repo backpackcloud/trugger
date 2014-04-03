@@ -17,8 +17,6 @@
 
 package org.atatec.trugger.reflection;
 
-import org.atatec.trugger.element.Element;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
@@ -80,8 +78,8 @@ public class ClassPredicates {
    * A predicate that checks if the given element is an array.
    * @since 4.1
    */
-  public static Predicate<Element> arrayType() {
-    return element -> element.type().isArray();
+  public static Predicate<Class> arrayType() {
+    return type -> type.isArray();
   }
 
   /**
