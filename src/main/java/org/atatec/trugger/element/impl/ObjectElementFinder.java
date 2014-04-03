@@ -23,10 +23,8 @@ import org.atatec.trugger.reflection.Reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.atatec.trugger.reflection.MethodPredicates.getter;
 import static org.atatec.trugger.reflection.MethodPredicates.setter;
@@ -90,8 +88,12 @@ public final class ObjectElementFinder implements Finder<Element> {
         }
       }
       Collection<Element> elements = map.values();
-      return ElementFinderHelper.computeResult(target, elements);
+      if (target instanceof Class<?>) {
+        return new ArrayList<>(elements);
+      }
+      return elements.stream().map(
+          element -> new SpecificElement(element, target)
+      ).collect(Collectors.toList());
     };
   }
-
 }

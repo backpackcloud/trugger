@@ -21,9 +21,11 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.atatec.trugger.reflection.Reflection.methods;
 
@@ -51,7 +53,12 @@ public final class AnnotationElementFinder implements Finder<Element> {
   public Result<List<Element>, Object> findAll() {
     return target -> {
       Collection<Element> elements = cache.get(target);
-      return ElementFinderHelper.computeResult(target, elements);
+      if (target instanceof Class<?>) {
+        return new ArrayList<>(elements);
+      }
+      return elements.stream().map(
+          element -> new SpecificElement(element, target)
+      ).collect(Collectors.toList());
     };
   }
 
