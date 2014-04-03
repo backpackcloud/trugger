@@ -16,33 +16,20 @@
  */
 package org.atatec.trugger.test.general;
 
-import static org.atatec.trugger.util.Utils.areAssignable;
-import static org.atatec.trugger.util.Utils.isEmpty;
-import static org.atatec.trugger.util.Utils.objectClass;
-import static org.atatec.trugger.util.Utils.resolveType;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.atatec.trugger.test.Flag;
+import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 
-import org.atatec.trugger.test.Flag;
-
-import org.junit.Test;
+import static org.atatec.trugger.util.Utils.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 @Flag
 public class UtilsTest {
-
-  @Test
-  public void testIsEmpty() {
-    assertTrue(isEmpty(""));
-    assertTrue(isEmpty("  "));
-    assertTrue(isEmpty(null));
-    assertFalse(isEmpty(" a "));
-  }
 
   @Test
   public void testResolveType() {

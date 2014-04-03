@@ -51,18 +51,6 @@ public final class Utils {
   }
 
   /**
-   * Check if the specified {@link CharSequence} is empty or <code>null</code>.
-   *
-   * @param sequence
-   *          the value to check.
-   * @return <code>true</code> if the sequence has a significant content (not
-   *         only spaces) or <code>false</code> if it does not.
-   */
-  public static boolean isEmpty(CharSequence sequence) {
-    return (sequence == null) || (sequence.toString().trim().isEmpty());
-  }
-
-  /**
    * Given <code>c</code> the <code>object</code> class, returns the wrapper
    * class for <code>c</code> if <code>c</code> is a primitive class, returns
    * <code>c</code> otherwise.
