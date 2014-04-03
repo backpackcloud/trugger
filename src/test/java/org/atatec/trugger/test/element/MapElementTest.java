@@ -109,5 +109,15 @@ public class MapElementTest {
     assertThrow(IllegalArgumentException.class, () -> element.in("").set("value"));
   }
 
+  @Test
+  public void testNonSpecificElements() {
+    Element element = element("key").in(Map.class);
+    assertNotNull(element);
+    assertThrow(HandlingException.class, () -> element.get());
+    Map<String, String> map = new HashMap<>();
+    element.in(map).set("value");
+    assertEquals("value", map.get("key"));
+  }
+
 
 }

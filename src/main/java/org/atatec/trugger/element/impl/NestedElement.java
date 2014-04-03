@@ -66,7 +66,10 @@ public final class NestedElement extends AbstractElement implements Element {
 
   public boolean isWritable() {
     if (path.size() > 1) {
+      // tests every element on the path to see if they are readable
       for (Element property : path.subList(0, path.size() - 1)) {
+        // if the element is not readable, then the path to the last
+        // element is not reachable
         if (!property.isReadable()) {
           return false;
         }
@@ -149,6 +152,9 @@ public final class NestedElement extends AbstractElement implements Element {
     Object _source = source;
     for (String string : names) {
       element = Elements.element(string).in(_source);
+      if (element == null) {
+        return null;
+      }
       path.add(element);
       _source = element.isSpecific() ? element.get() : element.type();
       //if the next source is null, the element will no longer be specific
