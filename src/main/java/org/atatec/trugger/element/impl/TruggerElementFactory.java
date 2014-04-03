@@ -31,6 +31,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+
+import static org.atatec.trugger.reflection.ClassPredicates.arrayType;
+import static org.atatec.trugger.reflection.ClassPredicates.assignableTo;
 
 /**
  * A default implementation for ElementFactory.
@@ -40,20 +44,27 @@ import java.util.ResourceBundle;
 public final class TruggerElementFactory implements ElementFactory {
 
 	private Finder<Element> finder;
-	private final MapRegistry<Class<?>, Finder<Element>> registry;
+	private final MapRegistry<Predicate<Class>, Finder<Element>> registry;
 
 	public TruggerElementFactory() {
-	  registry = new MapRegistry<Class<?>, Finder<Element>>(new LinkedHashMap());
-    registry.register(new AnnotationElementFinder()).to(Annotation.class);
-    registry.register(new PropertiesElementFinder()).to(Properties.class);
-    registry.register(new ResourceBundleElementFinder()).to(ResourceBundle.class);
-    registry.register(new ResultSetElementFinder()).to(ResultSet.class);
-    registry.register(new MapElementFinder()).to(Map.class);
+	  registry = new MapRegistry<Predicate<Class>, Finder<Element>>(new LinkedHashMap());
+    registry.register(new AnnotationElementFinder())
+        .to(assignableTo(Annotation.class));
+    registry.register(new PropertiesElementFinder())
+        .to(assignableTo(Properties.class));
+    registry.register(new ResourceBundleElementFinder())
+        .to(assignableTo(ResourceBundle.class));
+    registry.register(new ResultSetElementFinder())
+        .to(assignableTo(ResultSet.class));
+    registry.register(new MapElementFinder())
+        .to(assignableTo(Map.class).and(assignableTo(Properties.class).negate()));
+    registry.register(new ArrayElementFinder())
+        .to(arrayType());
 
-    finder = new TruggerElementFinder(new DefaultElementFinder(), registry);
+    finder = new TruggerElementFinder(new ObjectElementFinder(), registry);
 	}
 
-	public Registry<Class<?>, Finder<Element>> registry() {
+	public Registry<Predicate<Class>, Finder<Element>> registry() {
 	  return registry;
 	}
 

@@ -31,7 +31,6 @@ import java.util.ServiceLoader;
  *
  * <ul>
  * <li>org.atatec.trugger.element.ElementFactory</li>
- * <li>org.atatec.trugger.property.PropertyFactory</li>
  * <li>org.atatec.trugger.reflection.ReflectionFactory</li>
  * <li>org.atatec.trugger.scan.ClassScannerFactory</li>
  * <li>org.atatec.trugger.interception.InterceptorFactory</li>

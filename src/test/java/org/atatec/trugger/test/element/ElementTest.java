@@ -94,7 +94,7 @@ public class ElementTest {
 
   @Test
   public void staticElementTest() {
-    Element el = element("staticValue").in(TestObject.class);
+    Element el = element("staticValue").in(new TestObject("", ""));
     assertEquals("staticValue", el.name());
     assertTrue(el.isSpecific());
     assertTrue(el.isReadable());

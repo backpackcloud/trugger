@@ -20,10 +20,10 @@ import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.registry.Registry;
-import org.atatec.trugger.registry.Registry.Entry;
 import org.atatec.trugger.util.Utils;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * A default implementation for an Element finder.
@@ -32,30 +32,20 @@ import java.util.List;
  */
 public final class TruggerElementFinder implements Finder<Element> {
 
-  private final Registry<Class<?>, Finder<Element>> registry;
+  private final Registry<Predicate<Class>, Finder<Element>> registry;
   private final Finder<Element> defaultFinder;
 
   public TruggerElementFinder(Finder<Element> defaultFinder,
-                              Registry<Class<?>, Finder<Element>> registry) {
+                              Registry<Predicate<Class>, Finder<Element>> registry) {
     this.registry = registry;
     this.defaultFinder = defaultFinder;
   }
 
   private Finder<Element> getFinder(Object target) {
-    Class<?> type = Utils.resolveType(target);
-    if (registry.hasRegistryFor(type)) {
-      return registry.registryFor(type);
-    }
-    // trying to avoid the loop below
-    Class<?> superclass = type.getSuperclass();
-    if ((superclass != null) && registry.hasRegistryFor(superclass)) {
-      return registry.registryFor(superclass);
-    }
-    for (Entry<Class<?>, Finder<Element>> entry : registry.entries()) {
-      if (entry.key().isAssignableFrom(type)) {
-        Finder<Element> finder = entry.value();
-        registry.register(finder).to(type);
-        return finder;
+    Class type = Utils.resolveType(target);
+    for (Registry.Entry<Predicate<Class>, Finder<Element>> entry : registry.entries()) {
+      if(entry.key().test(type)) {
+        return entry.value();
       }
     }
     return defaultFinder;

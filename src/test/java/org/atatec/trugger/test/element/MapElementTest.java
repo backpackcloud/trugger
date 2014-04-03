@@ -66,7 +66,7 @@ public class MapElementTest {
     testMap(map1, map2, "framework", "trugger", "trugger2");
     testMap(map1, map2, "author", "marcelo", "marcelo2");
     
-    final Element element = element("obj.bundle.framework").in(map3);
+    Element element = element("obj.bundle.framework").in(map3);
     assertTrue(element.isSpecific());
     assertEquals("trugger", element.get());
     assertThrow(HandlingException.class, () -> element.set("none"));

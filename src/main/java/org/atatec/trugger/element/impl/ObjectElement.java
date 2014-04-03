@@ -14,24 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.property.impl;
+package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.UnreadableElementException;
 import org.atatec.trugger.element.UnwritableElementException;
-import org.atatec.trugger.element.impl.AbstractElement;
 import org.atatec.trugger.reflection.ReflectionException;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.MethodPredicates.*;
-import static org.atatec.trugger.reflection.Reflection.invoke;
-import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.reflection.Reflection.*;
 
 /**
  * This class represents an object property.
@@ -49,21 +45,31 @@ import static org.atatec.trugger.reflection.Reflection.reflect;
  *
  * @author Marcelo Guimarães
  */
-final class ObjectProperty extends AbstractElement {
+public final class ObjectElement extends AbstractElement {
 
   private Field field;
   private Method getter;
   private Method setter;
   private Class<?> type;
   private Class<?> declaringClass;
-  private boolean readable;
-  private boolean writable;
+
+  public ObjectElement(Field field) {
+    super(field.getName());
+    this.field = field;
+    this.type = field.getType();
+    this.declaringClass = field.getDeclaringClass();
+    searchForGetter();
+    searchForSetter();
+    this.type = getter != null ? getter.getReturnType() :
+        setter != null ? setter.getReturnType() : field.getType();
+    searchForAnnotatedElement();
+  }
 
   /**
-   * Creates a new ObjectProperty based on the specified method. Only a getter
+   * Creates a new ObjectElement based on the specified method. Only a getter
    * or a setter.
    */
-  ObjectProperty(Method method, String name) {
+  public ObjectElement(Method method, String name) {
     super(name);
     declaringClass = method.getDeclaringClass();
     boolean isGetter = method.getParameterTypes().length == 0;
@@ -78,23 +84,6 @@ final class ObjectProperty extends AbstractElement {
     }
     field = reflect().field(name).in(declaringClass);
     searchForAnnotatedElement();
-    initialize();
-  }
-
-  ObjectProperty(Field field, Method getter, Method setter) {
-    super(field.getName());
-    this.field = field;
-    this.getter = getter;
-    this.setter = setter;
-    declaringClass = field.getDeclaringClass();
-    type = getter != null ? getter.getReturnType() : setter != null ? setter.getReturnType() : field.getType();
-    searchForAnnotatedElement();
-    initialize();
-  }
-
-  private void initialize() {
-    readable = getter != null;
-    writable = setter != null;
   }
 
   public ValueHandler in(final Object target) {
@@ -105,7 +94,11 @@ final class ObjectProperty extends AbstractElement {
           throw new UnreadableElementException(name);
         }
         try {
-          return invoke(getter).in(target).withoutArgs();
+          if (getter != null) {
+            return invoke(getter).in(target).withoutArgs();
+          } else {
+            return handle(field).in(target).get();
+          }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());
         }
@@ -116,7 +109,11 @@ final class ObjectProperty extends AbstractElement {
           throw new UnwritableElementException(name);
         }
         try {
-          invoke(setter).in(target).withArgs(value);
+          if (setter != null) {
+            invoke(setter).in(target).withArgs(value);
+          } else {
+            handle(field).in(target).set(value);
+          }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());
         }
@@ -125,11 +122,12 @@ final class ObjectProperty extends AbstractElement {
   }
 
   public boolean isReadable() {
-    return readable;
+    return getter != null || field != null;
   }
 
   public boolean isWritable() {
-    return writable;
+    return setter != null ||
+        (field != null && !Modifier.isFinal(field.getModifiers()));
   }
 
   public Class<?> declaringClass() {

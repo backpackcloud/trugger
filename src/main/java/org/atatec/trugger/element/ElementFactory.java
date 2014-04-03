@@ -21,6 +21,8 @@ import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 
+import java.util.function.Predicate;
+
 /**
  * Interface that defines a factory for {@link Element} objects operations.
  *
@@ -36,7 +38,7 @@ public interface ElementFactory {
    *
    * @since 2.3
    */
-  Registry<Class<?>, Finder<Element>> registry();
+  Registry<Predicate<Class>, Finder<Element>> registry();
 
   /**
    * Creates a selector for an {@link Element} object.

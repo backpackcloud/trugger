@@ -17,15 +17,12 @@
 package org.atatec.trugger.element;
 
 import org.atatec.trugger.Finder;
-import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.loader.ImplementationLoader;
 import org.atatec.trugger.registry.Registry;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.function.Predicate;
 
 /**
  * A class for helping {@link Element} selection.
@@ -48,7 +45,7 @@ public class Elements {
    * @return the registry.
    * @since 2.3
    */
-  public static Registry<Class<?>, Finder<Element>> registry() {
+  public static Registry<Predicate<Class>, Finder<Element>> registry() {
     return factory.registry();
   }
 
@@ -92,69 +89,6 @@ public class Elements {
    */
   public static ElementCopier copy(ElementsSelector selector) {
     return factory.createElementCopier(selector);
-  }
-
-  /**
-   * Handles a collection of {@link Element#isSpecific() specific} elements.
-   * <p>
-   * This ValueHandler can set a common value to all elements and retrieve a
-   * Collection of all element values.
-   *
-   * @param elements the elements to handle
-   * @return a ValueHandler for handle multiple Element objects.
-   * @since 2.4
-   */
-  public static ValueHandler handle(final Collection<Element> elements) {
-    return new ValueHandler() {
-
-      @Override
-      public void set(Object value) throws HandlingException {
-        for (Element element : elements) {
-          element.set(value);
-        }
-      }
-
-      @Override
-      public <E> E get() throws HandlingException {
-        Collection result = new ArrayList();
-        for (Element element : elements) {
-          result.add(element.get());
-        }
-        return (E) result;
-      }
-    };
-  }
-
-  /**
-   * Handles a collection of {@link Element#isSpecific() non specific} elements.
-   * <p>
-   * This ValueHandler can set a common value to all elements and retrieve a Collection of
-   * all element values.
-   *
-   * @param elements the elements to handle
-   * @param target   the target
-   * @return a ValueHandler for handle multiple Element objects.
-   * @since 2.4
-   */
-  public static ValueHandler handle(final Collection<Element> elements, final Object target) {
-    return new ValueHandler() {
-
-      @Override
-      public void set(Object value) throws HandlingException {
-        for (Element element : elements) {
-          element.in(target).set(value);
-        }
-      }
-
-      @Override
-      public <E> E get() throws HandlingException {
-        Collection result = new ArrayList();
-        for (Element element : elements) {
-          result.add(element.in(target).get());
-        }
-        return (E) result;
-      }
-    };
   }
 
 }

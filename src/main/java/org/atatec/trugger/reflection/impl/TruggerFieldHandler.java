@@ -16,12 +16,12 @@
  */
 package org.atatec.trugger.reflection.impl;
 
-import java.lang.reflect.Field;
-
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.reflection.FieldHandler;
 import org.atatec.trugger.reflection.Reflection;
+
+import java.lang.reflect.Field;
 
 /**
  * Implementation for the FieldHandler interface.
@@ -65,7 +65,7 @@ public class TruggerFieldHandler implements FieldHandler {
   public <E> E get() throws HandlingException {
     try {
       return (E) field.get(instance);
-    } catch (IllegalAccessException e) {
+    } catch (Exception e) {
       throw new HandlingException(e);
     }
   }
@@ -73,7 +73,7 @@ public class TruggerFieldHandler implements FieldHandler {
   public void set(Object value) throws HandlingException {
     try {
       field.set(instance, value);
-    } catch (IllegalAccessException e) {
+    } catch (Exception e) {
       throw new HandlingException(e);
     }
   }

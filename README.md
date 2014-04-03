@@ -456,11 +456,11 @@ Some classes have a custom definition of elements. A `Map` has their keys as ele
 Trugger has custom element finders for a set of java core classes:
 
 - `Map`: keys are used as the elements
-- `Array`: indexes are used as the elements
 - `ResourceBundle`: keys are used as the elements
 - `Properties`: keys are used as the elements
 - `ResultSet`: the column names are used as the elements
 - `Annotation`: the methods as used as elements
+- Arrays: indexes are used as the elements (and also two special names, *first* and *last*)
 
 It is important to have clear that since this elements are instance specific, the elements should be queried by passing an instance instead of a class for the method `in` or an empty list will be returned. For a single elements, you may pass a class or an instance but using an instance is better because you can call the handling methods directly.
 
@@ -614,7 +614,6 @@ The fluent interfaces are always defined through java interfaces and may be cust
 The factory interfaces that can be customized are listed bellow:
 
 - `ElementFactory`: used for reflecting elements
-- `PropertyFactory`: used for reflecting properties
 - `ReflectionFactory`: used for reflection in general
 - `ClassScannerFactory`: used for class scanning
 - `InterceptorFactory`: used for method interception

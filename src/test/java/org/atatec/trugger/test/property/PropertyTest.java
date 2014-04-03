@@ -20,8 +20,6 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.element.UnwritableElementException;
-import org.atatec.trugger.property.PropertyFactory;
-import org.atatec.trugger.property.impl.TruggerPropertyFactory;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.test.Flag;
 import org.junit.Before;
@@ -38,14 +36,12 @@ public class PropertyTest {
 
   private TestObject test;
 
-  private Element getProperty(String name) {
-    return getProperty(name, TestObject.class);
+  private Element getElement(String name) {
+    return getElement(name, TestObject.class);
   }
 
-  private Element getProperty(String name, Object target) {
-    //doing this we make sure that two properties having the same name will have diferent IDs
-    PropertyFactory factory = new TruggerPropertyFactory();
-    return factory.createPropertySelector(name).in(target);
+  private Element getElement(String name, Object target) {
+    return Elements.element(name).in(target);
   }
 
   @Before
@@ -53,16 +49,9 @@ public class PropertyTest {
     test = new TestObject("test", 10, 15.00, false, null);
   }
 
-  private void assertEqualsAndHash(Element property1, Element property2) {
-    // assertEquals(property1.hashCode(), property2.hashCode());
-    // assertTrue(property1.equals(property2));
-    // assertEquals(property1, property2);
-  }
-
   @Test
   public void propertyTest() {
-    Element property1 = getProperty("name", test);
-    Element property2 = getProperty("name", test);
+    Element property1 = getElement("name", test);
     assertNotNull(property1);
     assertTrue(property1.isReadable());
     assertFalse(property1.isWritable());
@@ -70,9 +59,7 @@ public class PropertyTest {
     assertTrue(property1.isAnnotationPresent(Flag.class));
     assertEquals("test", property1.in(test).get());
 
-    property1 = getProperty("price", test);
-    assertFalse(property1.equals(property2));
-    property2 = getProperty("price", test);
+    property1 = getElement("price", test);
     assertNotNull(property1);
     assertTrue(property1.isReadable());
     assertFalse(property1.isWritable());
@@ -80,11 +67,8 @@ public class PropertyTest {
     assertFalse(property1.isAnnotationPresent(Flag.class));
     Double value = property1.in(test).get();
     assertEquals(15.00, value.doubleValue(), 0.01);
-    assertEqualsAndHash(property1, property2);
 
-    property1 = getProperty("active", test);
-    assertFalse(property1.equals(property2));
-    property2 = getProperty("active", test);
+    property1 = getElement("active", test);
     assertNotNull(property1);
     assertTrue(property1.isReadable());
     assertTrue(property1.isWritable());
@@ -93,21 +77,15 @@ public class PropertyTest {
     assertEquals(false, property1.in(test).get());
     property1.in(test).set(true);
     assertEquals(true, property1.in(test).get());
-    assertEqualsAndHash(property1, property2);
 
-    property1 = getProperty("class", test);
-    assertFalse(property1.equals(property2));
-    property2 = getProperty("class", test);
+    property1 = getElement("class", test);
     assertNotNull(property1);
     assertTrue(property1.isReadable());
     assertFalse(property1.isWritable());
-    assertEqualsAndHash(property1, property2);
 
-    assertNull(getProperty("age"));
+    assertNotNull(getElement("age"));
 
-    property1 = getProperty("fieldProp", test);
-    assertFalse(property1.equals(property2));
-    property2 = getProperty("fieldProp", test);
+    property1 = getElement("fieldProp", test);
     assertNotNull(property1);
     assertTrue(property1.isReadable());
     assertTrue(property1.isWritable());
@@ -115,28 +93,24 @@ public class PropertyTest {
     assertFalse(property1.isAnnotationPresent(Flag.class));
     property1.in(test).set(10L);
     assertEquals(10L, (long) property1.in(test).get());
-    assertEqualsAndHash(property1, property2);
 
-    property1 = getProperty("otherFieldProp", test);
-    assertFalse(property1.equals(property2));
-    property2 = getProperty("otherFieldProp", test);
+    property1 = getElement("otherFieldProp", test);
     assertNotNull(property1);
     assertTrue(property1.isReadable());
-    assertFalse(property1.isWritable());
+    assertTrue(property1.isWritable());
     assertEquals(long.class, property1.type());
     assertFalse(property1.isAnnotationPresent(Flag.class));
     assertEquals(10L, (long) property1.in(test).get());
-    assertEqualsAndHash(property1, property2);
   }
 
   @Test(expected = UnwritableElementException.class)
   public void unwritablePropertyTest() {
-    getProperty("readable").in(test).set(new Object());
+    getElement("readable").in(test).set(new Object());
   }
 
   @Test
   public void allAccessPropertyTest() {
-    Element property = getProperty("allAccess");
+    Element property = getElement("allAccess");
     assertNotNull(property);
     Object value = new Object();
     property.in(test).set(value);

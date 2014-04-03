@@ -14,66 +14,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.property.impl;
+package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.impl.ClassElementsCache;
-import org.atatec.trugger.element.impl.ElementFinderHelper;
 import org.atatec.trugger.reflection.Reflection;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
-import static org.atatec.trugger.reflection.MethodPredicates.*;
+import static org.atatec.trugger.reflection.MethodPredicates.getter;
+import static org.atatec.trugger.reflection.MethodPredicates.setter;
 import static org.atatec.trugger.reflection.Reflection.*;
-import static org.atatec.trugger.reflection.ReflectionPredicates.declaring;
 
 /**
  * A default class for finding properties in objects.
  *
  * @author Marcelo Guimarães
  */
-public final class ObjectPropertyFinder implements Finder<Element> {
-
-  private Method searchMethod(Class type, Predicate<Method> predicate) {
-    List<Method> candidates = reflect().methods().deep()
-        .filter(predicate).in(type);
-    return candidates.isEmpty() ? null : candidates.iterator().next();
-  }
+public final class ObjectElementFinder implements Finder<Element> {
 
   private final ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
-      Predicate<Member> nonStatic = declaring(Modifier.STATIC).negate();
       List<Method> declaredMethods = methods()
           .filter(
-              (getter().or(setter())).and(nonStatic))
+              getter().or(setter()))
           .in(type);
       for (Method method : declaredMethods) {
         String name = Reflection.parsePropertyName(method);
         if (!map.containsKey(name)) {
-          ObjectProperty prop = new ObjectProperty(method, name);
+          ObjectElement prop = new ObjectElement(method, name);
           map.put(prop.name(), prop);
         }
       }
-      List<Field> fields = fields().filter(nonStatic).in(type);
+      List<Field> fields = fields().in(type);
       for (Field field : fields) {
         if (!map.containsKey(field.getName())) {
-          Method getter = searchMethod(type, getterOf(field));
-          Method setter = searchMethod(type, setterOf(field));
-          if ((getter != null) || (setter != null)) {
-            ObjectProperty prop = new ObjectProperty(field, getter, setter);
-            map.put(prop.name(), prop);
-          }
+          ObjectElement prop = new ObjectElement(field);
+          map.put(prop.name(), prop);
         }
       }
     }
@@ -84,7 +68,8 @@ public final class ObjectPropertyFinder implements Finder<Element> {
       for (Class type : hierarchyOf(target)) {
         Element element = cache.get(type, propertyName);
         if (element != null) {
-          return element;
+          return target instanceof Class ?
+              element : new SpecificElement(element, target);
         }
       }
       return null;

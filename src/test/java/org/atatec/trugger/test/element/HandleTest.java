@@ -17,21 +17,11 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.List;
-
-import static org.atatec.trugger.element.ElementPredicates.specific;
-import static org.atatec.trugger.element.ElementPredicates.type;
-import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.element.Elements.handle;
+import static org.atatec.trugger.element.Elements.element;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -40,70 +30,44 @@ public class HandleTest {
 
   public static class TestObject {
 
-    String a;
-    String b;
-    String c;
-    String d;
+    String string;
 
-    static String e;
-    static String f;
-    static String g;
-    static String h;
-
-  }
-
-  @Before
-  public void before() {
-    TestObject.e = null;
-    TestObject.f = null;
-    TestObject.g = null;
-    TestObject.h = null;
   }
 
   @Test
   public void testHandleForSpecificElements() {
-    List<Element> elements = elements()
-        .filter(type(String.class).and(specific()))
-        .in(TestObject.class);
-    ValueHandler valueHandler = handle(elements);
-    Collection<String> strings = valueHandler.get();
-    assertEquals(4, strings.size());
-    for (String string : strings) {
-      assertNull(string);
-    }
-    valueHandler.set("value");
-    valueHandler = handle(elements);
-    strings = valueHandler.get();
-    for (String string : strings) {
-      assertEquals("value", string);
-    }
+    TestObject obj = new TestObject();
+    obj.string = "test";
+
+    Element element = element().in(obj);
+
+    assertEquals("test", element.get());
+
+    element.set("other value");
+
+    assertEquals("other value", obj.string);
   }
 
   @Test
   public void testHandlerForNonSpecificElements() {
-    List<Element> elements = elements()
-        .filter(type(String.class).and(specific().negate()))
-        .in(TestObject.class);
-    TestObject target = new TestObject();
-    ValueHandler valueHandler = handle(elements, target);
-    Collection<String> strings = valueHandler.get();
-    assertEquals(4, strings.size());
-    strings.forEach(Assert::assertNull);
-    valueHandler.set("value2");
-    valueHandler = handle(elements, target);
-    strings = valueHandler.get();
-    for (String string : strings) {
-      assertEquals("value2", string);
-    }
+    TestObject obj = new TestObject();
+    obj.string = "test";
+
+    Element element = element().in(TestObject.class);
+
+    assertEquals("test", element.in(obj).get());
+
+    element.in(obj).set("other value");
+
+    assertEquals("other value", obj.string);
   }
 
   @Test(expected = HandlingException.class)
   public void testHandlingError() {
-    List<Element> elements = elements()
-        .filter(type(String.class).and(specific().negate()))
-        .in(TestObject.class);
-    ValueHandler valueHandler = handle(elements);
-    valueHandler.set("");
+    TestObject obj = new TestObject();
+    Element element = element().in(obj);
+
+    element.set(10);
   }
 
 }

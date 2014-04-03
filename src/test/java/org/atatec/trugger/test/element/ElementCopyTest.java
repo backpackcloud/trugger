@@ -103,7 +103,7 @@ public class ElementCopyTest {
     Properties props = new Properties();
     Function<ElementCopy, String> toString = new ToStringTransformer();
 
-    copy().from(testObject).applying(toString).to(props);
+    copy().from(testObject).notNull().applying(toString).to(props);
     assertEquals("23", props.getProperty("age"));
     assertEquals(null, props.getProperty("nickName"));
     assertEquals("Marcelo", props.getProperty("name"));
