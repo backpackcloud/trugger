@@ -23,10 +23,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertSame;
 
 /** @author Marcelo Varella Barca Guimarães */
 public class ArrayElementTest {
@@ -46,11 +47,29 @@ public class ArrayElementTest {
   }
 
   @Test
+  public void testFindingAll() {
+    List<Element> elements = Elements.elements().in(ints);
+    assertEquals(4, elements.size());
+    assertEquals(0, (int) elements.get(0).get());
+    assertEquals(10, (int) elements.get(1).get());
+    assertEquals(12, (int) elements.get(2).get());
+    assertEquals(33, (int) elements.get(3).get());
+  }
+
+  @Test
   public void testIndexElements() {
     Element element = Elements.element("0").in(ints);
+
+    assertTrue(element.isReadable());
+    assertTrue(element.isWritable());
+
     assertEquals(int.class, element.type());
     assertEquals(int[].class, element.declaringClass());
     assertEquals(0, (int) element.get());
+
+    element.set(15);
+
+    assertEquals(15, (int) element.get());
 
     element = Elements.element("2").in(ints);
     assertEquals(int.class, element.type());

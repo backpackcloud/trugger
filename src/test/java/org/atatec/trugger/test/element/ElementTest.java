@@ -17,6 +17,7 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.NonSpecificElementException;
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
@@ -26,7 +27,9 @@ import static org.atatec.trugger.element.ElementPredicates.annotatedWith;
 import static org.atatec.trugger.element.ElementPredicates.assignableTo;
 import static org.atatec.trugger.element.ElementPredicates.type;
 import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -39,6 +42,14 @@ public class ElementTest {
         .filter(annotatedWith(Flag.class))
         .in(TestObject.class);
     assertNotNull(el);
+    assertEquals(
+        1,
+        el.getAnnotations().length
+    );
+    assertEquals(
+        Flag.class,
+        el.getAnnotation(Flag.class).annotationType()
+    );
     assertEquals("age", el.name());
     assertEquals(TestObject.class, el.declaringClass());
     assertEquals(1, el.getDeclaredAnnotations().length);
@@ -46,13 +57,44 @@ public class ElementTest {
     assertTrue(el.isReadable());
     assertTrue(el.isWritable());
     assertFalse(el.isSpecific());
+    assertNull(el.target());
 
-    el = element("age")
-        .filter(annotatedWith(Flag.class).negate())
-        .in(TestObject.class);
-    assertNull(el);
+    assertThrow(NonSpecificElementException.class,
+        () -> el.get());
+    assertThrow(NonSpecificElementException.class,
+        () -> el.set(14));
+  }
 
-    el = element("staticValue").in(TestObject.class);
+  @Test
+  public void specificElementTest() {
+    Element el = element("age")
+        .filter(annotatedWith(Flag.class))
+        .in(new TestObject("", ""));
+    assertNotNull(el);
+    assertEquals(
+        1,
+        el.getAnnotations().length
+    );
+    assertEquals(
+        Flag.class,
+        el.getAnnotation(Flag.class).annotationType()
+    );
+    assertEquals("age", el.name());
+    assertEquals(TestObject.class, el.declaringClass());
+    assertEquals(1, el.getDeclaredAnnotations().length);
+    assertTrue(el.isAnnotationPresent(Flag.class));
+    assertTrue(el.isReadable());
+    assertTrue(el.isWritable());
+    assertTrue(el.isSpecific());
+    assertNotNull(el.target());
+
+    el.set(14);
+    assertEquals(14, (int) el.get());
+  }
+
+  @Test
+  public void staticElementTest() {
+    Element el = element("staticValue").in(TestObject.class);
     assertEquals("staticValue", el.name());
     assertTrue(el.isSpecific());
     assertTrue(el.isReadable());
