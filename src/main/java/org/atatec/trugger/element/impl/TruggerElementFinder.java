@@ -35,7 +35,8 @@ public final class TruggerElementFinder implements Finder<Element> {
   private final Registry<Class<?>, Finder<Element>> registry;
   private final Finder<Element> defaultFinder;
 
-  public TruggerElementFinder(Finder<Element> defaultFinder, Registry<Class<?>, Finder<Element>> registry) {
+  public TruggerElementFinder(Finder<Element> defaultFinder,
+                              Registry<Class<?>, Finder<Element>> registry) {
     this.registry = registry;
     this.defaultFinder = defaultFinder;
   }
@@ -45,8 +46,8 @@ public final class TruggerElementFinder implements Finder<Element> {
     if (registry.hasRegistryFor(type)) {
       return registry.registryFor(type);
     }
-    Class<?> superclass = type.getSuperclass();
     // trying to avoid the loop below
+    Class<?> superclass = type.getSuperclass();
     if ((superclass != null) && registry.hasRegistryFor(superclass)) {
       return registry.registryFor(superclass);
     }

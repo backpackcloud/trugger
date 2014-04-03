@@ -145,15 +145,15 @@ public final class NestedElement extends AbstractElement implements Element {
   static NestedElement createNestedElement(Object source, String elementsPath) {
     String[] names = DOT_PATTERN.split(elementsPath);
     List<Element> path = new ArrayList<Element>(names.length);
-    Element property;
+    Element element;
     Object _source = source;
     for (String string : names) {
-      property = Elements.element(string).in(_source);
-      path.add(property);
-      _source = property.isSpecific() ? property.get() : property.type();
-      //if the next source is null, the property will no longer be specific
+      element = Elements.element(string).in(_source);
+      path.add(element);
+      _source = element.isSpecific() ? element.get() : element.type();
+      //if the next source is null, the element will no longer be specific
       if (_source == null) {
-        _source = property.type(); //use the type instead of the value
+        _source = element.type(); //use the type instead of the value
       }
     }
     return new NestedElement(elementsPath, path, source);
