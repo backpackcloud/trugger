@@ -17,13 +17,16 @@
 package org.atatec.trugger.test.reflection;
 
 import org.atatec.trugger.reflection.ReflectionException;
+import org.atatec.trugger.reflection.impl.TruggerFieldsSelector;
 import org.junit.Test;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static org.atatec.trugger.reflection.Reflection.*;
+import static org.atatec.trugger.reflection.Reflection.reflect;
+import static org.atatec.trugger.reflection.Reflection.wrapperFor;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -126,6 +129,13 @@ public class ReflectionTests {
     assertEquals(
         2, reflect().declared().methods().in(DeclaredTest.class).size()
     );
+  }
+
+  @Test
+  public void testInterfacesReflection() {
+    List<Class> interfaces =
+        reflect().interfaces().in(TruggerFieldsSelector.class);
+    assertEquals(4, interfaces.size());
   }
 
 }
