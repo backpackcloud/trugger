@@ -41,7 +41,7 @@ public class MethodSelectorTest {
   @Test
   public void testNoSelector() {
     assertNotNull(
-        reflect().method("foo").in(TestObject.class)
+        reflect().method("foo").withoutParameters().in(TestObject.class)
     );
     assertNotNull(
         reflect().method("bar").in(TestObject.class)

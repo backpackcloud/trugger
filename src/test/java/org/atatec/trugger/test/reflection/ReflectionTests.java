@@ -26,6 +26,7 @@ import java.util.Map;
 import static org.atatec.trugger.reflection.Reflection.*;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -79,6 +80,52 @@ public class ReflectionTests {
     assertThrow(ReflectionException.class, () -> {
       reflect().genericType().in(Object.class);
     });
+  }
+
+  public static class DeclaredTest {
+
+    public String name;
+    private String phone;
+
+    public DeclaredTest() {
+
+    }
+
+    private DeclaredTest(String name) {
+
+    }
+
+    public void foo() {
+
+    }
+
+    private void bar() {
+
+    }
+
+  }
+
+  @Test
+  public void testDeclared() {
+    assertEquals(
+        1, reflect().visible().constructors().in(DeclaredTest.class).size()
+    );
+    assertEquals(
+        1, reflect().visible().fields().in(DeclaredTest.class).size()
+    );
+    assertTrue(
+        reflect().visible().methods().in(DeclaredTest.class).size() > 1
+    );
+
+    assertEquals(
+        2, reflect().declared().constructors().in(DeclaredTest.class).size()
+    );
+    assertEquals(
+        2, reflect().declared().fields().in(DeclaredTest.class).size()
+    );
+    assertEquals(
+        2, reflect().declared().methods().in(DeclaredTest.class).size()
+    );
   }
 
 }
