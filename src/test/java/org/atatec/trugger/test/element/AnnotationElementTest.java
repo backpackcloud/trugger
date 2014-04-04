@@ -19,20 +19,19 @@ package org.atatec.trugger.test.element;
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementFactory;
+import org.atatec.trugger.element.impl.AnnotationElement;
 import org.atatec.trugger.element.impl.TruggerElementFactory;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
+import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -47,7 +46,8 @@ public class AnnotationElementTest {
   }
 
   @TestAnnotation(bool = false, name = "name", number = 1)
-  private class AnnotationTestClass {}
+  private class AnnotationTestClass {
+  }
 
   @Test
   public void annotationElementTest() {
@@ -82,6 +82,30 @@ public class AnnotationElementTest {
     TestAnnotation annotation = AnnotationTestClass.class.getAnnotation(TestAnnotation.class);
     Element el = element("non_existent").in(annotation);
     assertNull(el);
+  }
+
+  public static class HandlingTest {
+    public void method() {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  class HandlingTestNotAccess {
+    public void method() {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  @Test
+  public void testHandlingException() {
+    Method method = reflect().method("method").in(HandlingTest.class);
+    AnnotationElement element = new AnnotationElement(method);
+    assertThrow(HandlingException.class, element,
+        (el) -> el.in(new HandlingTest()).get());
+
+    method = reflect().method("method").in(new HandlingTestNotAccess());
+    assertThrow(HandlingException.class, element,
+        (el) -> el.in(new HandlingTestNotAccess()).get());
   }
 
 }

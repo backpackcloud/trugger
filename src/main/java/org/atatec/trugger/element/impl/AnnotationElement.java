@@ -58,7 +58,7 @@ public final class AnnotationElement extends AbstractElement implements Element 
           return (E) method.invoke(target);
         } catch (InvocationTargetException e) {
           throw new HandlingException(e.getCause());
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
           throw new HandlingException(e);
         }
       }

@@ -40,6 +40,21 @@ public final class ObjectElementFinder implements Finder<Element> {
   private final ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
+      loadUsingFields(type, map);
+      loadUsingMethods(type, map);
+    }
+
+    private void loadUsingFields(Class type, Map<String, Element> map) {
+      List<Field> fields = fields().in(type);
+      for (Field field : fields) {
+        if (!map.containsKey(field.getName())) {
+          ObjectElement prop = new ObjectElement(field);
+          map.put(prop.name(), prop);
+        }
+      }
+    }
+
+    private void loadUsingMethods(Class type, Map<String, Element> map) {
       List<Method> declaredMethods = methods()
           .filter(
               getter().or(setter()))
@@ -48,13 +63,6 @@ public final class ObjectElementFinder implements Finder<Element> {
         String name = Reflection.parsePropertyName(method);
         if (!map.containsKey(name)) {
           ObjectElement prop = new ObjectElement(method, name);
-          map.put(prop.name(), prop);
-        }
-      }
-      List<Field> fields = fields().in(type);
-      for (Field field : fields) {
-        if (!map.containsKey(field.getName())) {
-          ObjectElement prop = new ObjectElement(field);
           map.put(prop.name(), prop);
         }
       }

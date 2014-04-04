@@ -23,13 +23,10 @@ import org.junit.Test;
 
 import java.io.Serializable;
 
-import static org.atatec.trugger.element.ElementPredicates.annotatedWith;
-import static org.atatec.trugger.element.ElementPredicates.assignableTo;
-import static org.atatec.trugger.element.ElementPredicates.type;
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Marcelo Varella Barca Guimarães

@@ -22,6 +22,7 @@ import org.atatec.trugger.element.Element;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static org.junit.Assert.*;
@@ -92,6 +93,20 @@ public class TruggerTest {
                                  Runnable command) {
     try {
       command.run();
+      throw new AssertionFailedError("No exception thrown.");
+    } catch (Throwable e) {
+      if (exception.isAssignableFrom(e.getClass())) {
+        return;
+      }
+      throwError(e);
+    }
+  }
+
+  public static <E> void assertThrow(Class<? extends Throwable> exception,
+                                 E object,
+                                 Consumer<E> consumer) {
+    try {
+      consumer.accept(object);
       throw new AssertionFailedError("No exception thrown.");
     } catch (Throwable e) {
       if (exception.isAssignableFrom(e.getClass())) {
