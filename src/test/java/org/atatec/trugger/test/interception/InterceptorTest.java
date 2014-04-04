@@ -60,6 +60,7 @@ public class InterceptorTest {
   @Test
   public void testInterception() throws IOException {
     MyInterface obj = intercept(new InvocationTest())
+        .with(ClassLoader.getSystemClassLoader())
         .onCall(context -> context.invoke())
         .proxy();
     Object argument = new Object();
