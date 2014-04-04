@@ -18,12 +18,15 @@ package org.atatec.trugger.element.impl;
 
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
+import org.atatec.trugger.TruggerException;
 import org.atatec.trugger.element.Element;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Marcelo Guimarães
@@ -47,7 +50,7 @@ public class ResultSetElementFinder implements Finder<Element> {
           );
         }
       } catch (SQLException e) {
-        throw new RuntimeException(e);
+        throw new TruggerException(e);
       }
       return elements;
     };

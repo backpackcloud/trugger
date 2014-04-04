@@ -16,8 +16,11 @@
  */
 package org.atatec.trugger.test.element;
 
+import org.atatec.trugger.HandlingException;
+import org.atatec.trugger.TruggerException;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementPredicates;
+import org.atatec.trugger.element.UnwritableElementException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,8 +31,7 @@ import java.util.List;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.atatec.trugger.test.TruggerTest.assertMatch;
+import static org.atatec.trugger.test.TruggerTest.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -39,40 +41,51 @@ import static org.junit.Assert.*;
 public class ResultSetElementTest {
 
   private ResultSet resultSet;
-  
+
   @Before
   public void initialize() throws SQLException {
     resultSet = createMock(ResultSet.class);
-    
+
     ResultSetMetaData metadata = createMock(ResultSetMetaData.class);
     expect(metadata.getColumnCount()).andReturn(3).anyTimes();
     expect(metadata.getColumnName(1)).andReturn("name").anyTimes();
     expect(metadata.getColumnName(2)).andReturn("nickname").anyTimes();
     expect(metadata.getColumnName(3)).andReturn("age").anyTimes();
-    
+
     expect(resultSet.getMetaData()).andReturn(metadata).anyTimes();
     expect(resultSet.getObject("name")).andReturn("John").times(1);
+    expect(resultSet.getObject(1)).andReturn("John").times(1);
+    expect(resultSet.getObject(1)).andThrow(new SQLException()).times(1);
     expect(resultSet.getObject("name")).andReturn("Justin").times(1);
     expect(resultSet.getObject("nickname")).andReturn("kranck").times(1);
     expect(resultSet.getObject("nickname")).andReturn("tropper").times(1);
     expect(resultSet.getObject("age")).andReturn(26).times(1);
     expect(resultSet.getObject("age")).andReturn(27).times(1);
     expect(resultSet.next()).andReturn(true).times(1);
-    
+
     replay(metadata, resultSet);
   }
-  
+
+  @Test(expected = TruggerException.class)
+  public void testError() throws Exception {
+    resultSet = createMock(ResultSet.class);
+    expect(resultSet.getMetaData()).andThrow(new SQLException()).anyTimes();
+    replay(resultSet);
+
+    elements().in(resultSet);
+  }
+
   @Test
   public void testElements() {
     List<Element> elements = elements().in(ResultSet.class);
     assertTrue(elements.isEmpty());
-    
+
     elements = elements().in(resultSet);
     assertFalse(elements.isEmpty());
     assertMatch(elements, ElementPredicates.specific());
     assertElements(elements, "name", "nickname", "age");
   }
-  
+
   @Test
   public void testElement() throws SQLException {
     Element name = element("name").in(ResultSet.class);
@@ -81,14 +94,14 @@ public class ResultSetElementTest {
     assertFalse(name.isSpecific());
     assertFalse(nickname.isSpecific());
     assertFalse(age.isSpecific());
-    
+
     name = element("name").in(resultSet);
     nickname = element("nickname").in(resultSet);
     age = element("age").in(resultSet);
     assertTrue(name.isSpecific());
     assertTrue(nickname.isSpecific());
     assertTrue(age.isSpecific());
-    
+
     assertEquals("John", name.get());
     assertEquals("kranck", nickname.get());
     assertEquals(26, (int) age.get());
@@ -96,6 +109,15 @@ public class ResultSetElementTest {
     assertEquals("Justin", name.get());
     assertEquals("tropper", nickname.get());
     assertEquals(27, (int) age.get());
+
+    name = element("1").in(resultSet);
+    assertTrue(name.isReadable());
+    assertFalse(name.isWritable());
+    assertEquals("John", name.get());
+    assertEquals(ResultSet.class, name.declaringClass());
+    assertThrow(HandlingException.class, name, (el) -> el.get());
+    assertThrow(UnwritableElementException.class, name, (el) -> el.set(""));
+    assertThrow(HandlingException.class, name, (el) -> el.in("").get());
   }
-  
+
 }

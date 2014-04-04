@@ -48,12 +48,14 @@ public final class ResultSetElement extends AbstractElement implements Element {
       return new ValueHandler() {
 
         public void set(Object value) throws HandlingException {
-          throw new UnwritableElementException("Cannot write a value in a ResultSet");
+          throw new UnwritableElementException(
+              "Cannot write a value in a ResultSet");
         }
 
         public <E> E get() throws HandlingException {
           try {
-            if (DIGITS_PATTERN.matcher(name).matches()) { //if the name is the column index
+            //if the name is the column index
+            if (DIGITS_PATTERN.matcher(name).matches()) {
               return (E) resultSet.getObject(Integer.parseInt(name));
             }
             return (E) resultSet.getObject(name);
