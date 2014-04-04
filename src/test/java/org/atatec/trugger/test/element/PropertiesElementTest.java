@@ -16,6 +16,7 @@
  */
 package org.atatec.trugger.test.element;
 
+import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
 import org.junit.Test;
 
@@ -25,6 +26,7 @@ import java.util.Properties;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.test.TruggerTest.assertElements;
+import static org.atatec.trugger.test.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -41,6 +43,8 @@ public class PropertiesElementTest {
     
     List<Element> elements = elements().in(properties);
     assertElements(elements, "login", "password");
+    elements = elements().in(Properties.class);
+    assertTrue(elements.isEmpty());
     
     Element element = element("login").in(properties);
     assertEquals(String.class, element.type());
@@ -52,5 +56,13 @@ public class PropertiesElementTest {
     
     assertTrue(element.isReadable());
     assertTrue(element.isWritable());
+    assertThrow(HandlingException.class, element,
+        (el) -> el.set(new Object()));
+    assertThrow(IllegalArgumentException.class, element,
+        (el) -> el.in(new Object()).set(""));
+
+    element = element("login").in(Properties.class);
+    assertEquals(String.class, element.type());
+    assertEquals(Properties.class, element.declaringClass());
   }
 }
