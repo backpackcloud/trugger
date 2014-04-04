@@ -22,7 +22,7 @@ import org.atatec.trugger.selector.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Interface that defines a class that encapsulates the reflection using an automata to
@@ -128,7 +128,7 @@ public interface Reflector {
    *
    * @return the component used for selection.
    */
-  Result<Set<Class<?>>, Object> interfaces();
+  Result<List<Class>, Object> interfaces();
 
   /**
    * Reflects the generic type parameter declared in a target.

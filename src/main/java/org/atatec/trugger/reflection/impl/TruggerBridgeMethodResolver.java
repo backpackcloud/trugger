@@ -25,7 +25,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.Reflection.method;
@@ -158,7 +157,10 @@ final class TruggerBridgeMethodResolver {
         superclass = superclass.getSuperclass();
       }
       // Search interfaces.
-      Set<Class<?>> interfaces = Reflection.reflect().interfaces().in(bridgeMethod.getDeclaringClass()); //changed
+      // changed to use trugger api
+      List<Class> interfaces = Reflection.reflect()
+          .interfaces()
+          .in(bridgeMethod.getDeclaringClass());
       for (Class anInterface : interfaces) {
         Method method = searchForMatch(anInterface);
         if ((method != null) && !method.isBridge()) {

@@ -24,9 +24,7 @@ import org.atatec.trugger.util.Utils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -80,27 +78,27 @@ public class TruggerReflector implements Reflector {
     return new TruggerMethodsSelector(registry.methodsFinder());
   }
 
-  public Result<Set<Class<?>>, Object> interfaces() {
-    return new Result<Set<Class<?>>, Object>() {
+  public Result<List<Class>, Object> interfaces() {
+    return new Result<List<Class>, Object>() {
 
-      private void loop(Class<?> interf, Set<Class<?>> set) {
-        set.add(interf);
-        for (Class<?> extendedInterfaces : interf.getInterfaces()) {
-          loop(extendedInterfaces, set);
+      private void loop(Class interf, Collection<Class> interfaces) {
+        interfaces.add(interf);
+        for (Class extendedInterfaces : interf.getInterfaces()) {
+          loop(extendedInterfaces, interfaces);
         }
       }
 
-      public Set<Class<?>> in(Object target) {
+      public List<Class> in(Object target) {
         Class<?> objectClass = Utils.resolveType(target);
-        Set<Class<?>> set = new HashSet<Class<?>>(30);
-        for (Class<?> c = objectClass;
+        Set<Class> set = new HashSet<>(30);
+        for (Class c = objectClass;
              (c != null) && !Object.class.equals(c);
              c = c.getSuperclass()) {
-          for (Class<?> interf : c.getInterfaces()) {
+          for (Class interf : c.getInterfaces()) {
             loop(interf, set);
           }
         }
-        return set;
+        return new ArrayList<>(set);
       }
     };
   }

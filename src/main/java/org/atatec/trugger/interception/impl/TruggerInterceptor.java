@@ -27,7 +27,7 @@ import org.atatec.trugger.util.Utils;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Set;
+import java.util.List;
 
 public class TruggerInterceptor implements InvocationHandler, Interceptor {
 
@@ -41,7 +41,7 @@ public class TruggerInterceptor implements InvocationHandler, Interceptor {
     Class<?> targetClass = Utils.resolveType(target);
     this.classloader = targetClass.getClassLoader();
     this.target = target;
-    Set<Class<?>> classes = Reflection.reflect().interfaces().in(target);
+    List<Class> classes = Reflection.reflect().interfaces().in(target);
     this.interfaces = classes.toArray(new Class[classes.size()]);
     this.action = InterceptionHandler.delegate();
     this.handler = InterceptionFailHandler.throwError();
