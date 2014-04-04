@@ -23,26 +23,28 @@ import java.lang.annotation.Annotation;
  * improve code readability.
  * <p>
  * Example:
- * 
+ * <p>
  * <pre>
  * import static org.atatec.trugger.util.mock.Mock.*;
  * // ...
- * 
+ *
  * Resource mock = mock(annotation(Resource.class);
  * </pre>
- * 
+ *
  * @author Marcelo Guimarães
  * @since 2.0
  */
 public class Mock {
-  
+
+  private Mock() {
+
+  }
+
   /**
    * Builds a new mock using the given builder.
-   * 
-   * @param builder
-   *          the builder to create the mock.
-   * @param <T>
-   *          the mock object type
+   *
+   * @param builder the builder to create the mock.
+   * @param <T>     the mock object type
    * @return the created mock object.
    */
   public static <T> T mock(MockBuilder<T> builder) {
@@ -50,8 +52,7 @@ public class Mock {
   }
 
   /**
-   * @param annotationType
-   *          the annotation type
+   * @param annotationType the annotation type
    * @return a new mock builder for {@link Annotation}.
    * @since 2.1
    */
