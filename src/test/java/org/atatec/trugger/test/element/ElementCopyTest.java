@@ -26,6 +26,7 @@ import java.util.Properties;
 import java.util.function.Function;
 
 import static org.atatec.trugger.element.Elements.copy;
+import static org.atatec.trugger.element.Elements.elements;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -62,6 +63,18 @@ public class ElementCopyTest {
     assertEquals(80.2, o2.getWeight(), 0.01);
     assertEquals("Nick", o2.getNickName());
     assertNull(testObject.getNickName());
+
+
+    testObject.age = 50;
+    testObject.setWeight(50);
+    copy().from(testObject)
+        .notNull()
+        .filter(copy -> copy.dest().name().equals("age"))
+        .to(o2);
+
+    assertEquals(testObject.getAge(), o2.getAge());
+    assertEquals(testObject.getHeight(), o2.getHeight(), 0.001);
+    assertEquals(80.2, o2.getWeight(), 0.01);
   }
 
   private static class ToStringTransformer
@@ -146,7 +159,7 @@ public class ElementCopyTest {
 
     object1.setName("name");
 
-    copy().from(object1).to(object2);
+    copy(elements()).from(object1).to(object2);
 
     assertEquals(0, object2.getName());
   }

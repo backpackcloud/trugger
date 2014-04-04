@@ -61,8 +61,4 @@ public class TruggerElementSelector implements ElementSelector {
     return element;
   }
 
-  protected Finder<Element> finder() {
-    return finder;
-  }
-
 }
