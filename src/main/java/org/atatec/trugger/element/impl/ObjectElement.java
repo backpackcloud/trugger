@@ -61,7 +61,7 @@ public final class ObjectElement extends AbstractElement {
     searchForGetter();
     searchForSetter();
     this.type = getter != null ? getter.getReturnType() :
-        setter != null ? setter.getReturnType() : field.getType();
+        setter != null ? setter.getParameterTypes()[0] : field.getType();
     searchForAnnotatedElement();
   }
 
