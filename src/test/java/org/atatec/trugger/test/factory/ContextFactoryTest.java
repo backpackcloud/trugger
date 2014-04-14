@@ -22,9 +22,9 @@ import org.atatec.trugger.util.factory.ContextFactory;
 import org.atatec.trugger.util.factory.CreateException;
 import org.junit.Test;
 
-import static org.atatec.trugger.util.factory.ParameterPredicates.annotatedWith;
-import static org.atatec.trugger.util.factory.ParameterPredicates.name;
-import static org.atatec.trugger.util.factory.ParameterPredicates.type;
+import static org.atatec.trugger.reflection.ParameterPredicates.annotatedWith;
+import static org.atatec.trugger.reflection.ParameterPredicates.name;
+import static org.atatec.trugger.reflection.ParameterPredicates.type;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
