@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.atatec.trugger.util.factory;
+package org.atatec.trugger.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
