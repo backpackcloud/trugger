@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import static org.atatec.trugger.util.factory.ParameterPredicates.name;
-import static org.atatec.trugger.util.factory.ParameterPredicates.type;
+import static org.atatec.trugger.reflection.ParameterPredicates.name;
+import static org.atatec.trugger.reflection.ParameterPredicates.type;
 
 /**
  * A factory to create components specified by annotations.
