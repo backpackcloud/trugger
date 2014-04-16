@@ -51,7 +51,7 @@ public class ContextFactory {
    */
   public ContextFactory(Context context) {
     this.context = context;
-    createWith((constructor, args) -> invoke(constructor).withArgs(args));
+    toCreate(defaults());
   }
 
   /**
@@ -69,7 +69,7 @@ public class ContextFactory {
    * @param function the function to use for creating the objects.
    * @return a reference to this object
    */
-  public ContextFactory createWith(
+  public ContextFactory toCreate(
       BiFunction<Constructor, Object[], Object> function) {
     this.createFunction = function;
     return this;
@@ -111,6 +111,16 @@ public class ContextFactory {
       }
     }
     return (E) createFunction.apply(constructor, args);
+  }
+
+  /**
+   * The default function to create objects. This function basically invokes
+   * the constructor with the given arguments.
+   *
+   * @return the default function used to create objects.
+   */
+  public static BiFunction<Constructor, Object[], Object> defaults() {
+    return (constructor, args) -> invoke(constructor).withArgs(args);
   }
 
 }

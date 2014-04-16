@@ -22,9 +22,11 @@ import org.atatec.trugger.element.Elements;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 import static org.atatec.trugger.reflection.ParameterPredicates.name;
 import static org.atatec.trugger.reflection.ParameterPredicates.type;
@@ -54,6 +56,7 @@ public class ComponentFactory<T extends Annotation, E> {
   private final Class<T> annotationType;
   private final String classElement;
   private BiConsumer<Context, Annotation> contextConsumer;
+  private BiFunction<Constructor, Object[], Object> createFunction;
 
   /**
    * Creates a new factory that searches for the implementation by looking at
@@ -75,7 +78,20 @@ public class ComponentFactory<T extends Annotation, E> {
   public ComponentFactory(Class<T> annotationType, String classElement) {
     this.annotationType = annotationType;
     this.classElement = classElement;
-    configureContextWith(defaults());
+    toConfigure(defaults());
+    toCreate(ContextFactory.defaults());
+  }
+
+  /**
+   * Sets the function used to create the objects.
+   *
+   * @param createFunction the function to use
+   * @return a reference to this object.
+   */
+  public ComponentFactory toCreate(BiFunction<Constructor, Object[], Object>
+                                       createFunction) {
+    this.createFunction = createFunction;
+    return this;
   }
 
   /**
@@ -84,7 +100,7 @@ public class ComponentFactory<T extends Annotation, E> {
    * You can add behaviour by composing the default consumer:
    * <p>
    * <pre>
-   *   factory.configureContextWith(
+   *   factory.toConfigure(
    *     defaults().andThen(
    *       (context, annotation) -&gt; yourConfigurations
    *     )
@@ -96,7 +112,7 @@ public class ComponentFactory<T extends Annotation, E> {
    * @return a reference to this object
    * @see #defaults()
    */
-  public ComponentFactory configureContextWith(
+  public ComponentFactory toConfigure(
       BiConsumer<Context, Annotation> consumer) {
     this.contextConsumer = consumer;
     return this;
@@ -125,10 +141,10 @@ public class ComponentFactory<T extends Annotation, E> {
 
   /**
    * Creates a component using the first annotation that maps to a component.
-   *
+   * <p>
    * Use this method if only one component is allowed by target.
    *
-   * @param element  the element to search for annotations
+   * @param element the element to search for annotations
    * @return the created component or <code>null</code> if no annotations in the
    * element could create a component.
    */
@@ -167,7 +183,7 @@ public class ComponentFactory<T extends Annotation, E> {
     ContextFactory factory = new ContextFactory();
     Context context = factory.context();
     contextConsumer.accept(context, annotation);
-    return factory.create(classToCreate);
+    return factory.toCreate(createFunction).create(classToCreate);
   }
 
   /**
