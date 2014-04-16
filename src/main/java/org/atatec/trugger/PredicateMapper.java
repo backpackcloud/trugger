@@ -20,7 +20,7 @@ package org.atatec.trugger;
 import java.util.function.Predicate;
 
 /**
- * An interface that maps something to a predicate inside a fluent interface.
+ * Interface that maps something to a predicate inside a fluent interface.
  *
  * @since 5.0
  */
