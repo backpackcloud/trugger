@@ -16,6 +16,7 @@
  */
 package org.atatec.trugger.util.mock;
 
+import org.atatec.trugger.ObjectMapper;
 import org.atatec.trugger.interception.Interception;
 
 import java.lang.annotation.Annotation;
@@ -144,17 +145,13 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
   /**
    * Maps the given value to an annotation property.
    *
-   * @param <E>   The value type
    * @param value the value
    * @return the component for selecting the property.
    */
-  public <E> Mapper<E, T> map(final E value) {
-    return new Mapper<E, T>() {
-
-      public org.atatec.trugger.util.mock.AnnotationMock<T> to(E expected) {
-        mappings.put(lastCall, value);
-        return org.atatec.trugger.util.mock.AnnotationMock.this;
-      }
+  public ObjectMapper<Object, AnnotationMock<T>> map(Object value) {
+    return expected -> {
+      mappings.put(lastCall, value);
+      return AnnotationMock.this;
     };
   }
 
@@ -179,24 +176,6 @@ public class AnnotationMock<T extends Annotation> implements MockBuilder<T> {
     mocked = true;
     lastCall = null;
     return annotation;
-  }
-
-  /**
-   * Interface for defining the annotation property .
-   *
-   * @param <E> The value type.
-   * @param <T> The annotation type.
-   * @author Marcelo Guimarães
-   * @since 2.1
-   */
-  public static interface Mapper<E, T extends Annotation> {
-
-    /**
-     * Selects the property to map the previous defined value.
-     *
-     * @return a reference to the builder.
-     */
-    AnnotationMock<T> to(E value);
   }
 
 }
