@@ -520,12 +520,15 @@ A `ContextFactory` is a factory that maps a predicate that evaluates parameters 
 ContextFactory factory = new ContextFactory();
 factory.context()
   //static imports
-  .put(myImplementation, type(MyInterface.class))
-  .put(someObject, name("component"))
-  .put(parameter ->
-    resolve(parameter.getAnnotation(MyAnnotation.class)),
-    annotatedWith(MyAnnotation.class))
-  .put(() -> availableWorker(), type(MyWorker.class));
+  .use(myImplementation)
+    .when(type(MyInterface.class))
+  .use(someObject)
+    .when(name("component"))
+  .use(parameter ->
+      resolve(parameter.getAnnotation(MyAnnotation.class)))
+    .when(annotatedWith(MyAnnotation.class))
+  .use(() -> availableWorker())
+    .when(type(MyWorker.class));
 ~~~
 
 The above factory will:

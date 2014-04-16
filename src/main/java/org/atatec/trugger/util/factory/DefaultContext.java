@@ -17,6 +17,8 @@
 
 package org.atatec.trugger.util.factory;
 
+import org.atatec.trugger.PredicateMapper;
+
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,20 +35,21 @@ public class DefaultContext implements Context {
   }
 
   @Override
-  public Context put(Object object, Predicate<Parameter> predicate) {
-    return put((parameter) -> object, predicate);
+  public PredicateMapper<Parameter, Context> use(Object object) {
+    return use((parameter) -> object);
   }
 
   @Override
-  public Context put(Supplier supplier, Predicate<Parameter> predicate) {
-    return put(parameter -> supplier.get(), predicate);
+  public PredicateMapper<Parameter, Context> use(Supplier supplier) {
+    return use(parameter -> supplier.get());
   }
 
   @Override
-  public Context put(Function<Parameter, Object> function,
-                     Predicate<Parameter> predicate) {
-    entries.add(new Entry(function, predicate));
-    return this;
+  public PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function) {
+    return (predicate) -> {
+      entries.add(new Entry(function, predicate));
+      return DefaultContext.this;
+    };
   }
 
   @Override

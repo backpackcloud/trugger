@@ -219,10 +219,10 @@ public class ComponentFactory<T extends Annotation, E> {
    */
   public static BiConsumer<Context, Annotation> defaults() {
     return (context, annotation) -> {
-      context.put(annotation, type(annotation.annotationType()));
+      context.use(annotation).when(type(annotation.annotationType()));
       List<Element> elements = Elements.elements().in(annotation);
       for (Element el : elements) {
-        context.put(() -> el.get(), name(el.name()).and(type(el.type())));
+        context.use(() -> el.get()).when(name(el.name()).and(type(el.type())));
       }
     };
   }

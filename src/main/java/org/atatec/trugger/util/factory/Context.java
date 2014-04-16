@@ -17,9 +17,10 @@
 
 package org.atatec.trugger.util.factory;
 
+import org.atatec.trugger.PredicateMapper;
+
 import java.lang.reflect.Parameter;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -34,30 +35,27 @@ public interface Context {
    * Adds the given object to the context by binding it to the given predicate.
    *
    * @param object    the object to add
-   * @param predicate the predicate related to the object
-   * @return a reference to the context
+   * @return a component to select the condition
    */
-  Context put(Object object, Predicate<Parameter> predicate);
+  PredicateMapper<Parameter, Context> use(Object object);
 
   /**
    * Adds the object supplied by the given supplier by binding it to the given
    * predicate.
    *
    * @param supplier  the supplier to create the object
-   * @param predicate the predicate related to the object
-   * @return a reference to the context
+   * @return a component to select the condition
    */
-  Context put(Supplier supplier, Predicate<Parameter> predicate);
+  PredicateMapper<Parameter, Context> use(Supplier supplier);
 
   /**
    * Adds the object returned by the given function by binding it to the given
    * predicate.
    *
    * @param function   the function to use
-   * @param predicate  the predicate related to the object
-   * @return a reference to the context
+   * @return a component to select the condition
    */
-  Context put(Function<Parameter, Object> function, Predicate<Parameter> predicate);
+  PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function);
 
   /**
    * Tries to resolve the given parameter to a object using the predicates

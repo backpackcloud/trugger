@@ -46,10 +46,10 @@ public class ContextFactoryTest {
   public void testTypeContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .put("none", type(CharSequence.class))
-        .put("a string", type(String.class))
-        .put(15, type(Integer.class))
-        .put(() -> 10, type(int.class));
+        .use("none").when(type(CharSequence.class))
+        .use("a string").when(type(String.class))
+        .use(15).when(type(Integer.class))
+        .use(() -> 10).when(type(int.class));
     TestObject obj = factory.create(TestObject.class);
     assertNotNull(obj);
     assertEquals("a string", obj.string);
@@ -62,8 +62,8 @@ public class ContextFactoryTest {
     factory.context()
         // problems to build with "-parameters" in gradle
         // problems to coverage in idea using "-parameters"
-        .put("a string", name("arg0"))
-        .put(10, name("arg1"));
+        .use("a string").when(name("arg0"))
+        .use(10).when(name("arg1"));
     TestObject obj = factory.create(TestObject.class);
     assertNotNull(obj);
     assertEquals("a string", obj.string);
@@ -74,8 +74,8 @@ public class ContextFactoryTest {
   public void testAnnotationContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .put("a string", annotatedWith(Flag.class).negate())
-        .put(10, annotatedWith(Flag.class));
+        .use("a string").when(annotatedWith(Flag.class).negate())
+        .use(10).when(annotatedWith(Flag.class));
     TestObject obj = factory.create(TestObject.class);
     assertNotNull(obj);
     assertEquals("a string", obj.string);
@@ -86,8 +86,8 @@ public class ContextFactoryTest {
   public void testInsufficientContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .put("a string", type(Integer.class))
-        .put(10, annotatedWith(Flag.class));
+        .use("a string").when(type(Integer.class))
+        .use(10).when(annotatedWith(Flag.class));
     TestObject obj = factory.create(TestObject.class);
     assertNotNull(obj);
     assertEquals("a string", obj.string);
