@@ -18,7 +18,6 @@ package org.atatec.trugger;
 
 import java.util.List;
 
-
 /**
  * Interface that defines a class capable of search a source for specific
  * objects.
