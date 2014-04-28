@@ -21,7 +21,7 @@ This release is also the first one to have a README with a basic guide.
     changed
   - Immutable classes
   - Element copies only applies functions to non null values (to prevent *NPEs*)
-  - No more single selections (element, field, method) without specifying a name
+  - No more single selections for field and method without specifying a name
   - No more exception handlers for invocations (method and constructor)
   - Removed `Reflection#newInstanceOf` method
   - Changed the return of selections to `List`
