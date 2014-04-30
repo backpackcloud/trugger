@@ -18,7 +18,9 @@
 package org.atatec.trugger.validation.impl;
 
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.interception.Interception;
 import org.atatec.trugger.util.factory.ComponentFactory;
+import org.atatec.trugger.util.factory.ContextFactory;
 import org.atatec.trugger.validation.ValidationEngine;
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.ValidatorClass;
@@ -36,18 +38,28 @@ import static org.atatec.trugger.reflection.ParameterPredicates.type;
  */
 public class ValidatorFactoryImpl implements ValidatorFactory {
 
-  @Override
-  public Validator create(Annotation annotation) {
+  private ComponentFactory<ValidatorClass, Validator> createFactory() {
     ComponentFactory<ValidatorClass, Validator> factory =
         new ComponentFactory<>(ValidatorClass.class);
+    factory.toCreate(ContextFactory.defaults().andThen(
+        validator -> Interception.intercept(Validator.class)
+            .on(validator)
+            .onCall(new ValidatorInterceptor(this))
+            .proxy()
+    ));
+    return factory;
+  }
+
+  @Override
+  public Validator create(Annotation annotation) {
+    ComponentFactory<ValidatorClass, Validator> factory = createFactory();
     return factory.create(annotation);
   }
 
   @Override
   public Validator create(Annotation annotation, Element element,
                           Object target, ValidationEngine engine) {
-    ComponentFactory<ValidatorClass, Validator> factory =
-        new ComponentFactory<>(ValidatorClass.class);
+    ComponentFactory<ValidatorClass, Validator> factory = createFactory();
     factory.toConfigure(ComponentFactory.defaults().andThen(
         (context, an) -> {
           context.use(element).when(type(Element.class));

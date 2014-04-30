@@ -137,4 +137,12 @@ public class ValidationTest {
         .isConstraintViolated(NotNull.class));
   }
 
+  @Test
+  public void testArgumentsValidator() {
+    ValidationResult result = new Validation().validate(new Purchase());
+
+    assertTrue(result.isElementInvalid("customer"));
+    assertFalse(result.invalidElement("customer").isConstraintViolated(Valid.class));
+  }
+
 }
