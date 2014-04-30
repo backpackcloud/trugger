@@ -39,6 +39,15 @@ public final class ParameterPredicates {
   }
 
   /**
+   * Returns a predicate that accepts parameters compatible with the given type.
+   *
+   * @since 5.1
+   */
+  public static Predicate<Parameter> assignableTo(Class type) {
+    return parameter -> type.isAssignableFrom(parameter.getType());
+  }
+
+  /**
    * Returns a predicate that accepts parameters with the given name.
    * <p>
    * Note that the code must be compiled with <code>-parameters</code> or
