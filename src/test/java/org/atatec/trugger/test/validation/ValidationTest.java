@@ -117,7 +117,7 @@ public class ValidationTest {
 
   @Test
   public void testSimpleValidation() {
-    ValidationResult result = new Validation().validate(invalidCustomer);
+    ValidationResult result = Validation.engine().validate(invalidCustomer);
     assertTrue(result.isInvalid());
     assertFalse(result.isValid());
 
@@ -139,7 +139,7 @@ public class ValidationTest {
 
   @Test
   public void testDeepValidation() {
-    ValidationResult result = new Validation().validate(invalidPurchase);
+    ValidationResult result = Validation.engine().validate(invalidPurchase);
 
     assertTrue(result.isInvalid());
     assertTrue(result.isElementInvalid("customer"));
@@ -152,7 +152,7 @@ public class ValidationTest {
 
   @Test
   public void testArgumentsValidator() {
-    ValidationResult result = new Validation().validate(new Purchase());
+    ValidationResult result = Validation.engine().validate(new Purchase());
 
     assertTrue(result.isElementInvalid("customer"));
     assertFalse(result.invalidElement("customer").isConstraintViolated(Valid.class));
@@ -161,14 +161,14 @@ public class ValidationTest {
   @Test
   public void testDomainValidator() {
     Item item = new Item();
-    ValidationResult result = new Validation().validate(item);
+    ValidationResult result = Validation.engine().validate(item);
     assertTrue(result.isInvalid());
     assertTrue(result.isElementInvalid("product"));
     assertTrue(result.invalidElement("product")
         .isConstraintViolated(ValidAndNotNull.class));
 
     item.product = new Product();
-    result = new Validation().validate(item);
+    result = Validation.engine().validate(item);
     assertTrue(result.isInvalid());
     assertTrue(result.isElementInvalid("product"));
     assertTrue(result.invalidElement("product")

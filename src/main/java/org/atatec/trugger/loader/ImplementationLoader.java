@@ -24,16 +24,17 @@ import java.util.ServiceLoader;
 /**
  * A class used for loading implementations for the DSLs exposed by this
  * framework.
- *
+ * <p>
  * Since this class uses a {@link ServiceLoader} for custom loading, you can
  * define your own implementations by using a file in the META-INF/services
  * directory. The implementations that can be customized are:
- *
+ * <p>
  * <ul>
  * <li>org.atatec.trugger.element.ElementFactory</li>
  * <li>org.atatec.trugger.reflection.ReflectionFactory</li>
  * <li>org.atatec.trugger.scan.ClassScannerFactory</li>
  * <li>org.atatec.trugger.interception.InterceptorFactory</li>
+ * <li>org.atatec.trugger.validation.ValidationFactory</li>
  * </ul>
  *
  * @author Marcelo Guimarães

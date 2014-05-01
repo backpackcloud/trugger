@@ -17,240 +17,41 @@
 
 package org.atatec.trugger.validation;
 
-import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.Result;
-import org.atatec.trugger.ValueHandler;
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.Elements;
-import org.atatec.trugger.selector.ElementsSelector;
-import org.atatec.trugger.validation.impl.DefaultValidatorFactory;
-
-import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import org.atatec.trugger.loader.ImplementationLoader;
 
 /**
- * A default implementation of a validation engine.
- * <p>
- * This class checks against constraints that defines
- * {@link Validator validators} to check them.
+ * A class to handle validations of objects based on their element constraints.
  *
  * @since 5.1
  */
-public class Validation implements ValidationEngine {
+public class Validation {
 
-  private final ValidatorFactory factory;
+  private static final ValidationFactory factory;
+
+  static {
+    factory = ImplementationLoader.get(ValidationFactory.class);
+  }
+
+  private Validation() {
+
+  }
 
   /**
-   * Creates a new engine using the given factory to create validators.
+   * Returns the engine for doing validations.
    *
-   * @param factory the factory to use for creating validators
+   * @return the engine for doing validations.
    */
-  public Validation(ValidatorFactory factory) {
-    this.factory = factory;
+  public static ValidationEngine engine() {
+    return factory.createValidationEngine();
   }
 
   /**
-   * Creates a new engine using the {@link org.atatec.trugger.validation.impl.DefaultValidatorFactory default factory}
+   * Returns the factory to create validators.
+   *
+   * @return the factory to create validators.
    */
-  public Validation() {
-    this(new DefaultValidatorFactory());
-  }
-
-  @Override
-  public Result<ValidationResult, Object> validate(ElementsSelector selector) {
-    return (target) -> {
-      //todo use a map to store targets and prevent circular validations
-      ValidationResultImpl result = new ValidationResultImpl(target);
-      for (Element element : selector.in(target)) {
-        Object value = element.in(target).get();
-        ValidationEngine engine = _selector ->
-            _target -> {
-              ValidationResult _result = Validation.this
-                  .validate(_selector).in(_target);
-              if (_result.target() == value) {
-                String parent = element.name();
-                for (InvalidElement invalidElement : _result.invalidElements()) {
-                  String newName = String.format(
-                      "%s.%s", parent, invalidElement.name()
-                  );
-                  Element nestedElement = Elements.element(newName).in(target);
-                  result.invalidElements.put(newName,
-                      new InvalidElementImpl(
-                          nestedElement,
-                          invalidElement.invalidValue(),
-                          invalidElement.violatedConstraints())
-                  );
-                }
-              }
-              return _result;
-            };
-        InvalidElementImpl invalidElement = new InvalidElementImpl(element, value);
-        boolean valid = true;
-        for (Annotation annotation : element.getAnnotations()) {
-          Validator validator = factory
-              .create(annotation, element, target, engine);
-          if (validator != null && !validator.isValid(value)) {
-            invalidElement.violatedConstraints
-                .put(annotation.annotationType(), annotation);
-            valid = false;
-          }
-        }
-        if (!valid) {
-          result.invalidElements.put(invalidElement.name(), invalidElement);
-        }
-      }
-      return result;
-    };
-  }
-
-  private class ValidationResultImpl implements ValidationResult {
-
-    private final Object target;
-    private final Map<String, InvalidElement> invalidElements;
-
-    private ValidationResultImpl(Object target) {
-      this.target = target;
-      this.invalidElements = new HashMap<>();
-    }
-
-    @Override
-    public boolean isValid() {
-      return invalidElements.isEmpty();
-    }
-
-    @Override
-    public boolean isElementInvalid(String name) {
-      return invalidElements.containsKey(name);
-    }
-
-    @Override
-    public Object target() {
-      return target;
-    }
-
-    @Override
-    public InvalidElement invalidElement(String name) {
-      return invalidElements.get(name);
-    }
-
-    @Override
-    public Collection<InvalidElement> invalidElements() {
-      return Collections.unmodifiableCollection(invalidElements.values());
-    }
-  }
-
-  private class InvalidElementImpl implements InvalidElement {
-
-    private final Element element;
-    private final Object invalidValue;
-    private final Map<Class<? extends Annotation>, Annotation> violatedConstraints;
-
-    private InvalidElementImpl(Element element, Object invalidValue) {
-      this.element = element;
-      this.invalidValue = invalidValue;
-      this.violatedConstraints = new HashMap<>();
-    }
-
-    private InvalidElementImpl(
-        Element element,
-        Object invalidValue,
-        Collection<Annotation> violatedConstraints) {
-      this.element = element;
-      this.invalidValue = invalidValue;
-      this.violatedConstraints = new HashMap<>();
-      for (Annotation violatedConstraint : violatedConstraints) {
-        this.violatedConstraints
-            .put(violatedConstraint.annotationType(), violatedConstraint);
-      }
-    }
-
-    @Override
-    public Annotation violatedConstraint(Class<? extends Annotation> constraint) {
-      return violatedConstraints.get(constraint);
-    }
-
-    @Override
-    public boolean isConstraintViolated(Class<? extends Annotation> constraint) {
-      return violatedConstraints.containsKey(constraint);
-    }
-
-    @Override
-    public Object invalidValue() {
-      return invalidValue;
-    }
-
-    @Override
-    public Collection<Annotation> violatedConstraints() {
-      return Collections.unmodifiableCollection(violatedConstraints.values());
-    }
-
-    @Override
-    public Class declaringClass() {
-      return element.declaringClass();
-    }
-
-    @Override
-    public String name() {
-      return element.name();
-    }
-
-    @Override
-    public Class type() {
-      return element.type();
-    }
-
-    @Override
-    public boolean isReadable() {
-      return element.isReadable();
-    }
-
-    @Override
-    public boolean isWritable() {
-      return element.isWritable();
-    }
-
-    @Override
-    public ValueHandler in(Object target) {
-      return element.in(target);
-    }
-
-    @Override
-    public boolean isSpecific() {
-      return element.isSpecific();
-    }
-
-    @Override
-    public <E> E target() {
-      return element.target();
-    }
-
-    @Override
-    public <E> E get() throws HandlingException {
-      return element.get();
-    }
-
-    @Override
-    public void set(Object value) throws HandlingException {
-      element.set(value);
-    }
-
-    @Override
-    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-      return element.getAnnotation(annotationClass);
-    }
-
-    @Override
-    public Annotation[] getAnnotations() {
-      return element.getAnnotations();
-    }
-
-    @Override
-    public Annotation[] getDeclaredAnnotations() {
-      return element.getDeclaredAnnotations();
-    }
+  public static ValidatorFactory factory() {
+    return factory.createValidatorFactory();
   }
 
 }

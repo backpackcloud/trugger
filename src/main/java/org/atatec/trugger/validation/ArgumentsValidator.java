@@ -17,8 +17,6 @@
 
 package org.atatec.trugger.validation;
 
-import org.atatec.trugger.validation.impl.DefaultValidatorFactory;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
@@ -34,11 +32,10 @@ public class ArgumentsValidator {
   private final ValidatorFactory factory;
 
   /**
-   * Creates a new instance using the {@link DefaultValidatorFactory default}
-   * factory.
+   * Creates a new instance using the default factory.
    */
   public ArgumentsValidator() {
-    this(new DefaultValidatorFactory());
+    this(Validation.factory());
   }
 
   /**
@@ -59,7 +56,7 @@ public class ArgumentsValidator {
    * @return <code>true</code> if all arguments are valid or none of the
    * parameters has constraints.
    */
-  public boolean isValid(Executable executable, Object[] args) {
+  public boolean isValid(Executable executable, Object... args) {
     int i = 0;
     Validator validator;
     for (Parameter parameter : executable.getParameters()) {

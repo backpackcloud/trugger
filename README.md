@@ -620,3 +620,4 @@ The factory interfaces that can be customized are listed bellow:
 - `ReflectionFactory`: used for reflection in general
 - `ClassScannerFactory`: used for class scanning
 - `InterceptorFactory`: used for method interception
+- `ValidationFactory`: used for validation

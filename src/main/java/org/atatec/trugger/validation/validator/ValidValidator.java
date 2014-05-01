@@ -31,11 +31,10 @@ public class ValidValidator implements Validator {
   private final ValidationEngine engine;
 
   /**
-   * Creates a new validator using the {@link Validation default} engine to
-   * validate the values.
+   * Creates a new validator using the default engine to validate the values.
    */
   public ValidValidator() {
-    this(new Validation());
+    this(Validation.engine());
   }
 
   /**
