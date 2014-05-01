@@ -17,13 +17,9 @@
 
 package org.atatec.trugger.interception;
 
-import org.atatec.trugger.validation.Validator;
+import org.atatec.trugger.validation.ArgumentsValidator;
 import org.atatec.trugger.validation.ValidatorFactory;
 import org.atatec.trugger.validation.impl.DefaultValidatorFactory;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Executable;
-import java.lang.reflect.Parameter;
 
 /**
  * An interception handler that validates method arguments using a
@@ -36,13 +32,14 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
   private final ValidatorFactory factory;
   private final InterceptionHandler validHandler;
   private final InterceptionHandler inValidHandler;
+  private final ArgumentsValidator argumentsValidator;
 
   /**
    * Creates a new interceptor that invokes the target method if the arguments
    * are valid and throws a <code>IllegalArgumentException</code> in case of
    * any invalid argument.
    * <p>
-   * Validators are created by the {@link org.atatec.trugger.validation.impl.DefaultValidatorFactory default}
+   * Validators are created by the {@link DefaultValidatorFactory default}
    * validator factory.
    */
   public ValidationInterceptionHandler() {
@@ -58,6 +55,7 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    */
   public ValidationInterceptionHandler(ValidatorFactory factory) {
     this.factory = factory;
+    this.argumentsValidator = new ArgumentsValidator(factory);
     this.validHandler = (context) -> context.invoke();
     this.inValidHandler = (context) -> {
       throw new IllegalArgumentException();
@@ -65,9 +63,11 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
   }
 
   private ValidationInterceptionHandler(ValidatorFactory factory,
+                                        ArgumentsValidator argumentsValidator,
                                         InterceptionHandler validHandler,
                                         InterceptionHandler inValidHandler) {
     this.factory = factory;
+    this.argumentsValidator = argumentsValidator;
     this.validHandler = validHandler;
     this.inValidHandler = inValidHandler;
   }
@@ -79,7 +79,8 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    * @return a new interceptor that uses the given handler.
    */
   public ValidationInterceptionHandler onValid(InterceptionHandler handler) {
-    return new ValidationInterceptionHandler(factory, handler, inValidHandler);
+    return new ValidationInterceptionHandler(
+        factory, argumentsValidator, handler, inValidHandler);
   }
 
   /**
@@ -89,42 +90,19 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    * @return a new interceptor that uses the given handler.
    */
   public ValidationInterceptionHandler onInvalid(InterceptionHandler handler) {
-    return new ValidationInterceptionHandler(factory, validHandler, handler);
+    return new ValidationInterceptionHandler(
+        factory, argumentsValidator, validHandler, handler);
   }
 
   @Override
   public Object intercept(InterceptionContext context) throws Throwable {
     boolean valid = true;
     if (context.target() != null) {
-      valid &= isValid(context.targetMethod(), context.args());
+      valid &= argumentsValidator.isValid(context.targetMethod(), context.args());
     }
-    valid &= isValid(context.method(), context.args());
+    valid &= argumentsValidator.isValid(context.method(), context.args());
     return valid ? validHandler.intercept(context) :
         inValidHandler.intercept(context);
-  }
-
-  /**
-   * Checks if the arguments are valid using the annotations defined in the
-   * parameters.
-   *
-   * @param executable the executable to extract the parameters
-   * @param args       the arguments passed
-   * @return <code>true</code> if all arguments are valid or none of the
-   * parameters has constraints.
-   */
-  private boolean isValid(Executable executable, Object[] args) {
-    int i = 0;
-    Validator validator;
-    for (Parameter parameter : executable.getParameters()) {
-      for (Annotation annotation : parameter.getAnnotations()) {
-        validator = factory.create(annotation);
-        if (validator != null && !validator.isValid(args[i])) {
-          return false;
-        }
-      }
-      i++;
-    }
-    return true;
   }
 
 }
