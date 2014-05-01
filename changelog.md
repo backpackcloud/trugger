@@ -4,8 +4,8 @@
 
 This release marks the reborn of **Validation** module in a different way. The
 validation module now is a simple solution for manually validating objects
-(useful in backend processing). It is not a implementation for the *JSR-303* nor
-a competitor.
+(useful in backend processing). It is not an implementation for the *JSR-303*
+nor a competitor.
 
 ### New Modules
 
@@ -16,10 +16,14 @@ a competitor.
   - `InterceptionHandler` for validating method arguments using the Validation
     module.
 
+### Major Changes
+
+  - Predicate for parameters assignable to a given type (use with caution)
+
 ### Minor Changes
 
   - Context Factories now sorts the constructors descending using their
-  parameter counts
+    parameter counts
 
 ## Version 5.0
 
