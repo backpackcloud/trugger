@@ -20,6 +20,7 @@ package org.atatec.trugger.util.factory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -87,6 +88,8 @@ public class ContextFactory {
     List<Constructor<?>> constructors = reflect().constructors()
         .filter(declaring(Modifier.PUBLIC))
         .in(type);
+    Collections.sort(constructors,
+        (c1, c2) -> c2.getParameterCount() - c1.getParameterCount());
     E result;
     for (Constructor<?> constructor : constructors) {
       result = tryCreate(constructor);
