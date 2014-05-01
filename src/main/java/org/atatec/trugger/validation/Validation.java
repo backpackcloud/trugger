@@ -23,7 +23,7 @@ import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.selector.ElementsSelector;
-import org.atatec.trugger.validation.impl.ValidatorFactoryImpl;
+import org.atatec.trugger.validation.impl.DefaultValidatorFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -53,10 +53,10 @@ public class Validation implements ValidationEngine {
   }
 
   /**
-   * Creates a new engine using the {@link ValidatorFactoryImpl default factory}
+   * Creates a new engine using the {@link org.atatec.trugger.validation.impl.DefaultValidatorFactory default factory}
    */
   public Validation() {
-    this(new ValidatorFactoryImpl());
+    this(new DefaultValidatorFactory());
   }
 
   @Override
@@ -65,25 +65,28 @@ public class Validation implements ValidationEngine {
       //todo use a map to store targets and prevent circular validations
       ValidationResultImpl result = new ValidationResultImpl(target);
       for (Element element : selector.in(target)) {
+        Object value = element.in(target).get();
         ValidationEngine engine = _selector ->
             _target -> {
               ValidationResult _result = Validation.this
                   .validate(_selector).in(_target);
-              String parent = element.name();
-              for (InvalidElement invalidElement : _result.invalidElements()) {
-                String newName = String.format(
-                    "%s.%s", parent, invalidElement.name()
-                );
-                result.invalidElements.put(newName,
-                    new InvalidElementImpl(
-                        Elements.element(newName).in(target),
-                        invalidElement.invalidValue(),
-                        invalidElement.violatedConstraints())
-                );
+              if (_result.target() == value) {
+                String parent = element.name();
+                for (InvalidElement invalidElement : _result.invalidElements()) {
+                  String newName = String.format(
+                      "%s.%s", parent, invalidElement.name()
+                  );
+                  Element nestedElement = Elements.element(newName).in(target);
+                  result.invalidElements.put(newName,
+                      new InvalidElementImpl(
+                          nestedElement,
+                          invalidElement.invalidValue(),
+                          invalidElement.violatedConstraints())
+                  );
+                }
               }
               return _result;
             };
-        Object value = element.in(target).get();
         InvalidElementImpl invalidElement = new InvalidElementImpl(element, value);
         boolean valid = true;
         for (Annotation annotation : element.getAnnotations()) {

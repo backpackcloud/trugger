@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
-package org.atatec.trugger.validation.validator.impl;
+package org.atatec.trugger.validation.validator;
 
 import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationEngine;
 import org.atatec.trugger.validation.Validator;
-import org.atatec.trugger.validation.validator.NotNull;
 
 /**
  * Validator that checks if the value is valid by validating its elements.

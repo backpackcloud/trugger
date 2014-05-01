@@ -37,7 +37,7 @@ import static org.atatec.trugger.reflection.Reflection.invoke;
  *
  * @since 5.1
  */
-public class ValidatorFactoryImpl implements ValidatorFactory {
+public class DefaultValidatorFactory implements ValidatorFactory {
 
   private ComponentFactory<ValidatorClass, Validator> createFactory() {
     ComponentFactory<ValidatorClass, Validator> factory =
@@ -69,7 +69,11 @@ public class ValidatorFactoryImpl implements ValidatorFactory {
         (context, an) -> {
           context.use(element).when(type(Element.class));
           context.use(engine).when(type(ValidationEngine.class));
-          context.use(target).when(assignableTo(target.getClass()));
+          context.use(target).when(assignableTo(target.getClass())
+              .or(type(Object.class)));
+          context.use(an).when(type(Annotation.class));
+          context.use(DefaultValidatorFactory.this)
+              .when(type(ValidatorFactory.class));
         }
     ));
     return factory.create(annotation);

@@ -19,7 +19,7 @@ package org.atatec.trugger.interception;
 
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.ValidatorFactory;
-import org.atatec.trugger.validation.impl.ValidatorFactoryImpl;
+import org.atatec.trugger.validation.impl.DefaultValidatorFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Executable;
@@ -42,11 +42,11 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    * are valid and throws a <code>IllegalArgumentException</code> in case of
    * any invalid argument.
    * <p>
-   * Validators are created by the {@link ValidatorFactoryImpl default}
+   * Validators are created by the {@link org.atatec.trugger.validation.impl.DefaultValidatorFactory default}
    * validator factory.
    */
   public ValidationInterceptionHandler() {
-    this(new ValidatorFactoryImpl());
+    this(new DefaultValidatorFactory());
   }
 
   /**

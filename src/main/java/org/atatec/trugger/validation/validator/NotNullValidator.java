@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.atatec.trugger.validation.validator.impl;
+package org.atatec.trugger.validation.validator;
 
 import org.atatec.trugger.validation.Validator;
 

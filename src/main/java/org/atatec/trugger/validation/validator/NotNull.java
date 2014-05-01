@@ -18,7 +18,6 @@
 package org.atatec.trugger.validation.validator;
 
 import org.atatec.trugger.validation.ValidatorClass;
-import org.atatec.trugger.validation.validator.impl.NotNullValidator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

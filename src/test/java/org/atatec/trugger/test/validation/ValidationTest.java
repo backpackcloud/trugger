@@ -20,11 +20,15 @@ package org.atatec.trugger.test.validation;
 import org.atatec.trugger.validation.InvalidElement;
 import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationResult;
+import org.atatec.trugger.validation.ValidatorClass;
+import org.atatec.trugger.validation.validator.DomainValidator;
 import org.atatec.trugger.validation.validator.NotNull;
 import org.atatec.trugger.validation.validator.Valid;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,14 @@ import static org.junit.Assert.*;
  *
  */
 public class ValidationTest {
+
+  @NotNull
+  @Valid
+  @ValidatorClass(DomainValidator.class)
+  @Retention(RetentionPolicy.RUNTIME)
+  public static @interface ValidAndNotNull {
+
+  }
 
   //no getters and setters...keeping it simple
 
@@ -48,12 +60,13 @@ public class ValidationTest {
 
   public static class Item {
 
-    @NotNull
+    @ValidAndNotNull
     public Product product;
 
     public int quantity;
 
     public double total() {
+      if (product == null) return 0;
       return product.price * quantity;
     }
 
@@ -143,6 +156,27 @@ public class ValidationTest {
 
     assertTrue(result.isElementInvalid("customer"));
     assertFalse(result.invalidElement("customer").isConstraintViolated(Valid.class));
+  }
+
+  @Test
+  public void testDomainValidator() {
+    Item item = new Item();
+    ValidationResult result = new Validation().validate(item);
+    assertTrue(result.isInvalid());
+    assertTrue(result.isElementInvalid("product"));
+    assertTrue(result.invalidElement("product")
+        .isConstraintViolated(ValidAndNotNull.class));
+
+    item.product = new Product();
+    result = new Validation().validate(item);
+    assertTrue(result.isInvalid());
+    assertTrue(result.isElementInvalid("product"));
+    assertTrue(result.invalidElement("product")
+        .isConstraintViolated(ValidAndNotNull.class));
+
+    assertTrue(result.isElementInvalid("product.description"));
+    assertTrue(result.invalidElement("product.description")
+        .isConstraintViolated(NotNull.class));
   }
 
 }
