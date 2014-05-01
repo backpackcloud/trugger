@@ -26,7 +26,9 @@ import org.junit.Test;
 import java.util.function.Function;
 
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -71,6 +73,23 @@ public class ValidationInterceptionTest {
 
     assertThrow(IllegalArgumentException.class,
         () -> function.apply(null));
+  }
+
+  public static interface MyInterface {
+
+    boolean doIt(@NotNull Object object);
+
+  }
+
+  @Test
+  public void testInterfaceAnnotations() {
+    MyInterface test = Interception.intercept(MyInterface.class)
+        .onCall(new ValidationInterceptionHandler()
+            .onValid(context -> true)
+            .onInvalid(context -> false))
+        .proxy();
+    assertTrue(test.doIt(new Object()));
+    assertFalse(test.doIt(null));
   }
 
 }

@@ -94,9 +94,13 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
 
   @Override
   public Object intercept(InterceptionContext context) throws Throwable {
-    return isValid(context.targetMethod(), context.args()) &&
-        isValid(context.method(), context.args()) ?
-        validHandler.intercept(context) : inValidHandler.intercept(context);
+    boolean valid = true;
+    if (context.target() != null) {
+      valid &= isValid(context.targetMethod(), context.args());
+    }
+    valid &= isValid(context.method(), context.args());
+    return valid ? validHandler.intercept(context) :
+        inValidHandler.intercept(context);
   }
 
   /**
