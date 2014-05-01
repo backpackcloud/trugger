@@ -17,6 +17,7 @@
 
 package org.atatec.trugger.validation.validator.impl;
 
+import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.ValidationEngine;
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.validator.NotNull;
@@ -29,6 +30,14 @@ import org.atatec.trugger.validation.validator.NotNull;
 public class ValidValidator implements Validator {
 
   private final ValidationEngine engine;
+
+  /**
+   * Creates a new validator using the {@link Validation default} engine to
+   * validate the values.
+   */
+  public ValidValidator() {
+    this(new Validation());
+  }
 
   /**
    * Creates a new validator using the given engine to validate the values.
