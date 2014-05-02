@@ -57,31 +57,19 @@ public class TruggerValidationEngine implements ValidationEngine {
     return (target) -> {
       ValidationResultImpl result = new ValidationResultImpl(target);
       for (Element element : selector.in(target)) {
-        Object value = element.in(target).get();
-        ValidationEngine engine = _selector ->
-            _target -> {
-              ValidationResult _result = TruggerValidationEngine.this
-                  .validate(_selector).in(_target);
-              if (_result.target() == value) {
-                String parent = element.name();
-                for (InvalidElement invalidElement : _result.invalidElements()) {
-                  String newName = String.format(
-                      "%s.%s", parent, invalidElement.name()
-                  );
-                  Element nestedElement = Elements.element(newName).in(target);
-                  result.invalidElements.put(newName,
-                      new InvalidElementImpl(
-                          nestedElement,
-                          invalidElement.invalidValue(),
-                          invalidElement.violatedConstraints())
-                  );
-                }
-              }
-              return _result;
-            };
-        InvalidElementImpl invalidElement = new InvalidElementImpl(element, value);
+        Object value = null;
+        NestedValidationEngine engine =
+            new NestedValidationEngine(result, element, target);
+        InvalidElementImpl invalidElement =
+            new InvalidElementImpl(element, value);
         boolean valid = true;
+        boolean valueProcessed = false;
         for (Annotation annotation : element.getAnnotations()) {
+          if (!valueProcessed) {
+            value = element.in(target).get();
+            engine.setValue(value);
+            valueProcessed = true;
+          }
           Validator validator = factory
               .create(annotation, element, target, engine);
           if (validator != null && !validator.isValid(value)) {
@@ -96,6 +84,50 @@ public class TruggerValidationEngine implements ValidationEngine {
       }
       return result;
     };
+  }
+
+  private class NestedValidationEngine implements ValidationEngine {
+
+    private final ValidationResultImpl result;
+    private final Element element;
+    private final Object target;
+    private Object value;
+
+    public NestedValidationEngine(ValidationResultImpl result,
+                                  Element element,
+                                  Object target) {
+      this.result = result;
+      this.element = element;
+      this.target = target;
+    }
+
+    public void setValue(Object value) {
+      this.value = value;
+    }
+
+    @Override
+    public Result<ValidationResult, Object> validate(ElementsSelector selector) {
+      return _target -> {
+        ValidationResult _result = TruggerValidationEngine.this
+            .validate(selector).in(_target);
+        if (_result.target() == value) {
+          String parent = element.name();
+          for (InvalidElement invalidElement : _result.invalidElements()) {
+            String newName = String.format(
+                "%s.%s", parent, invalidElement.name()
+            );
+            Element nestedElement = Elements.element(newName).in(target);
+            result.invalidElements.put(newName,
+                new InvalidElementImpl(
+                    nestedElement,
+                    invalidElement.invalidValue(),
+                    invalidElement.violatedConstraints())
+            );
+          }
+        }
+        return _result;
+      };
+    }
   }
 
   private class ValidationResultImpl implements ValidationResult {
