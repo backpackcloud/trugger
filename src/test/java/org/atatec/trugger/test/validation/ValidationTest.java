@@ -105,6 +105,9 @@ public class ValidationTest {
   Customer invalidCustomer;
   Purchase invalidPurchase;
 
+  Item validItem;
+  Product validProduct;
+
   @Before
   public void initialize() {
     invalidCustomer = new Customer();
@@ -113,10 +116,18 @@ public class ValidationTest {
 
     invalidPurchase = new Purchase();
     invalidPurchase.customer = invalidCustomer;
+
+    validProduct = new Product();
+    validProduct.price = 25.90;
+    validProduct.description = "Thing";
+
+    validItem = new Item();
+    validItem.quantity = 1;
+    validItem.product = validProduct;
   }
 
   @Test
-  public void testSimpleValidation() {
+  public void testInvalidSimpleValidation() {
     ValidationResult result = Validation.engine().validate(invalidCustomer);
     assertTrue(result.isInvalid());
     assertFalse(result.isValid());
@@ -138,7 +149,7 @@ public class ValidationTest {
   }
 
   @Test
-  public void testDeepValidation() {
+  public void testInvalidDeepValidation() {
     ValidationResult result = Validation.engine().validate(invalidPurchase);
 
     assertTrue(result.isInvalid());
@@ -151,7 +162,7 @@ public class ValidationTest {
   }
 
   @Test
-  public void testArgumentsValidator() {
+  public void testInvalidArgumentsValidator() {
     ValidationResult result = Validation.engine().validate(new Purchase());
 
     assertTrue(result.isElementInvalid("customer"));
@@ -159,7 +170,7 @@ public class ValidationTest {
   }
 
   @Test
-  public void testDomainValidator() {
+  public void testInvalidDomainValidator() {
     Item item = new Item();
     ValidationResult result = Validation.engine().validate(item);
     assertTrue(result.isInvalid());
@@ -177,6 +188,14 @@ public class ValidationTest {
     assertTrue(result.isElementInvalid("product.description"));
     assertTrue(result.invalidElement("product.description")
         .isConstraintViolated(NotNull.class));
+  }
+
+  @Test
+  public void testValidDomainValidator() {
+    ValidationResult result = Validation.engine().validate(validItem);
+
+    assertTrue(result.isValid());
+    assertTrue(result.invalidElements().isEmpty());
   }
 
 }
