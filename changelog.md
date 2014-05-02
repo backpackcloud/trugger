@@ -15,6 +15,7 @@ nor a competitor.
 
   - `InterceptionHandler` for validating method arguments using the Validation
     module.
+  - New element finder for lists behaving as the element finder for arrays.
 
 ### Major Changes
 
