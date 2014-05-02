@@ -17,16 +17,15 @@
 
 package org.atatec.trugger.validation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Indicates the validator that implements the constraint.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
+@Documented
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidatorClass {

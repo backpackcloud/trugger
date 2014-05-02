@@ -42,6 +42,7 @@ import java.lang.annotation.Annotation;
  * </pre>
  * This validator is useful to create domain constraints and simplify coding.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class DomainValidator implements Validator {

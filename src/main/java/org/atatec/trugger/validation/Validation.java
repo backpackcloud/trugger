@@ -22,6 +22,7 @@ import org.atatec.trugger.loader.ImplementationLoader;
 /**
  * A class to handle validations of objects based on their element constraints.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class Validation {

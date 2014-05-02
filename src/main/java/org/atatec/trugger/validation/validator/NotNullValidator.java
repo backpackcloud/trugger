@@ -22,6 +22,7 @@ import org.atatec.trugger.validation.Validator;
 /**
  * Validator that accepts only non null values.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class NotNullValidator implements Validator {

@@ -25,6 +25,7 @@ import java.lang.reflect.Parameter;
  * A class to help validating arguments of methods and constructors using a
  * {@link ValidatorFactory}.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class ArgumentsValidator {

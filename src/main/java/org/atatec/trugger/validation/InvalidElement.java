@@ -25,6 +25,7 @@ import java.util.Collection;
 /**
  * Interface that represents an invalid element.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public interface InvalidElement extends Element {

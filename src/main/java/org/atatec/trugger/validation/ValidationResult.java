@@ -22,6 +22,7 @@ import java.util.Collection;
 /**
  * Interface that defines a validation result.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public interface ValidationResult {

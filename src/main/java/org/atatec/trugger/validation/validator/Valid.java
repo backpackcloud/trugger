@@ -19,14 +19,17 @@ package org.atatec.trugger.validation.validator;
 
 import org.atatec.trugger.validation.ValidatorClass;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
  * Indicates that the element must be valid using a validation engine.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @ValidatorClass(ValidValidator.class)
 public @interface Valid {

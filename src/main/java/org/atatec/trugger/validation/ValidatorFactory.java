@@ -24,6 +24,7 @@ import java.lang.annotation.Annotation;
 /**
  * Interface that defines a factory to create {@link Validator} objects.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public interface ValidatorFactory {

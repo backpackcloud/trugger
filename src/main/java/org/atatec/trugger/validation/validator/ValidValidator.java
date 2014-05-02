@@ -24,6 +24,7 @@ import org.atatec.trugger.validation.Validator;
 /**
  * Validator that checks if the value is valid by validating its elements.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class ValidValidator implements Validator {

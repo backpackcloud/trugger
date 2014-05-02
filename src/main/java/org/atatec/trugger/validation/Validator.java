@@ -20,6 +20,7 @@ package org.atatec.trugger.validation;
 /**
  * Interface that defines a validator for objects.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public interface Validator<T> {

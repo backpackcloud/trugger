@@ -19,14 +19,17 @@ package org.atatec.trugger.validation.validator;
 
 import org.atatec.trugger.validation.ValidatorClass;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
  * Indicates that the element must not be <code>null</code>.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @ValidatorClass(NotNullValidator.class)
 public @interface NotNull {

@@ -22,7 +22,10 @@ import org.atatec.trugger.validation.ValidationFactory;
 import org.atatec.trugger.validation.ValidatorFactory;
 
 /**
+ * The default validation factory.
  *
+ * @author Marcelo Guimarães
+ * @since 5.1
  */
 public class TruggerValidationFactory implements ValidationFactory {
 

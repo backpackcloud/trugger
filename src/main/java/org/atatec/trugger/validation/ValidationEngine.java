@@ -29,6 +29,7 @@ import org.atatec.trugger.selector.ElementsSelector;
  * This is not a replacement for the Bean Validation spec, is only a way to
  * simplify validations that should be done programatically.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public interface ValidationEngine {

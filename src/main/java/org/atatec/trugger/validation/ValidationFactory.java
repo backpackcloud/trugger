@@ -18,12 +18,25 @@
 package org.atatec.trugger.validation;
 
 /**
+ * A factory to create components for doing validations.
  *
+ * @author Marcelo Guimarães
+ * @since 5.1
  */
 public interface ValidationFactory {
 
+  /**
+   * Returns the validation engine to perform target validations.
+   *
+   * @return the validation engine to perform target validations.
+   */
   ValidationEngine createValidationEngine();
 
+  /**
+   * Returns the validator factory to create validator components.
+   *
+   * @return the validator factory to create validator components.
+   */
   ValidatorFactory createValidatorFactory();
 
 }

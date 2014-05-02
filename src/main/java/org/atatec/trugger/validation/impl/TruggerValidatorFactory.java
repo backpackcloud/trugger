@@ -35,6 +35,7 @@ import static org.atatec.trugger.reflection.Reflection.invoke;
 /**
  * Default validator factory implementation.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class TruggerValidatorFactory implements ValidatorFactory {
