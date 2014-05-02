@@ -460,6 +460,7 @@ Trugger has custom element finders for a set of java core classes:
 - `Properties`: keys are used as the elements
 - `ResultSet`: the column names are used as the elements
 - `Annotation`: the methods as used as elements
+- `List`: indexes are used as the elements (and also two special names, *first* and *last*)
 - Arrays: indexes are used as the elements (and also two special names, *first* and *last*)
 
 It is important to have clear that since this elements are instance specific, the elements should be queried by passing an instance instead of a class for the method `in` or an empty list will be returned. For a single elements, you may pass a class or an instance but using an instance is better because you can call the handling methods directly.

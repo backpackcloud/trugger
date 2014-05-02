@@ -27,10 +27,7 @@ import org.atatec.trugger.selector.ElementsSelector;
 
 import java.lang.annotation.Annotation;
 import java.sql.ResultSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static org.atatec.trugger.reflection.ClassPredicates.arrayType;
@@ -43,11 +40,11 @@ import static org.atatec.trugger.reflection.ClassPredicates.assignableTo;
  */
 public final class TruggerElementFactory implements ElementFactory {
 
-	private Finder<Element> finder;
-	private final MapRegistry<Predicate<Class>, Finder<Element>> registry;
+  private Finder<Element> finder;
+  private final MapRegistry<Predicate<Class>, Finder<Element>> registry;
 
-	public TruggerElementFactory() {
-	  registry = new MapRegistry<Predicate<Class>, Finder<Element>>(new LinkedHashMap());
+  public TruggerElementFactory() {
+    registry = new MapRegistry<Predicate<Class>, Finder<Element>>(new LinkedHashMap());
     registry.register(new AnnotationElementFinder())
         .to(assignableTo(Annotation.class));
     registry.register(new PropertiesElementFinder())
@@ -60,13 +57,15 @@ public final class TruggerElementFactory implements ElementFactory {
         .to(assignableTo(Map.class).and(assignableTo(Properties.class).negate()));
     registry.register(new ArrayElementFinder())
         .to(arrayType());
+    registry.register(new ListElementFinder())
+        .to(assignableTo(List.class));
 
     finder = new TruggerElementFinder(new ObjectElementFinder(), registry);
-	}
+  }
 
-	public Registry<Predicate<Class>, Finder<Element>> registry() {
-	  return registry;
-	}
+  public Registry<Predicate<Class>, Finder<Element>> registry() {
+    return registry;
+  }
 
   /**
    * Returns a new {@link TruggerElementSelector}.
