@@ -17,21 +17,23 @@
 
 package org.atatec.trugger.test.validation;
 
-import org.atatec.trugger.validation.InvalidElement;
-import org.atatec.trugger.validation.Validation;
-import org.atatec.trugger.validation.ValidationResult;
-import org.atatec.trugger.validation.ValidatorClass;
+import org.atatec.trugger.validation.*;
 import org.atatec.trugger.validation.validator.DomainValidator;
 import org.atatec.trugger.validation.validator.NotNull;
 import org.atatec.trugger.validation.validator.Valid;
+import org.atatec.trugger.validation.validator.Valids;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static org.atatec.trugger.util.mock.Mock.annotation;
+import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.*;
 
 /**
@@ -66,7 +68,6 @@ public class ValidationTest {
     public int quantity;
 
     public double total() {
-      if (product == null) return 0;
       return product.price * quantity;
     }
 
@@ -78,6 +79,7 @@ public class ValidationTest {
     public String number;
 
     @NotNull
+    @Valid
     public List<Item> items = new ArrayList<>();
 
     @Valid
@@ -196,6 +198,49 @@ public class ValidationTest {
 
     assertTrue(result.isValid());
     assertTrue(result.invalidElements().isEmpty());
+  }
+
+  private ValidatorFactory factory = Validation.factory();
+
+  @Test
+  public void testNotNullValidator() {
+    Validator validator = factory.create(mock(annotation(NotNull.class)));
+
+    assertTrue(validator.isValid(""));
+    assertFalse(validator.isValid(null));
+  }
+
+  @Test
+  public void testValidValidator() {
+    Validator validator = factory.create(mock(annotation(Valid.class)));
+    assertFalse(validator.isValid(invalidCustomer));
+    assertTrue(validator.isValid(validItem));
+  }
+
+  @Test
+  public void testValidsValidator() {
+    Validator validator = factory.create(mock(annotation(Valids.class)));
+
+    List list = new ArrayList<>();
+    list.add(validItem);
+    list.add(invalidCustomer);
+    assertFalse(validator.isValid(list));
+    list.remove(1);
+    assertTrue(validator.isValid(list));
+
+    Object[] objects = new Object[]{validItem, invalidCustomer};
+    assertFalse(validator.isValid(objects));
+    objects[1] = validProduct;
+    assertTrue(validator.isValid(objects));
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("item", validItem);
+    map.put("customer", invalidCustomer);
+    assertFalse(validator.isValid(map));
+    map.remove("customer");
+    assertTrue(validator.isValid(map));
+
+    assertTrue(validator.isValid(null));
   }
 
 }
