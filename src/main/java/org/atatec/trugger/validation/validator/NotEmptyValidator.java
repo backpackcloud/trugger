@@ -29,6 +29,7 @@ import java.util.Map;
  * This validator applies to CharSequences (like strings), Collections,
  * Maps and Arrays.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class NotEmptyValidator implements Validator {

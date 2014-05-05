@@ -27,6 +27,7 @@ import java.util.Map;
 /**
  * Validator for items of an array, a collection or a map.
  *
+ * @author Marcelo Guimarães
  * @since 5.1
  */
 public class ValidsValidator implements Validator {
