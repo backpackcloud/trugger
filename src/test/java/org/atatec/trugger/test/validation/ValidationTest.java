@@ -18,19 +18,14 @@
 package org.atatec.trugger.test.validation;
 
 import org.atatec.trugger.validation.*;
-import org.atatec.trugger.validation.validator.DomainValidator;
-import org.atatec.trugger.validation.validator.NotNull;
-import org.atatec.trugger.validation.validator.Valid;
-import org.atatec.trugger.validation.validator.Valids;
+import org.atatec.trugger.validation.validator.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.atatec.trugger.util.mock.Mock.annotation;
 import static org.atatec.trugger.util.mock.Mock.mock;
@@ -202,6 +197,10 @@ public class ValidationTest {
 
   private ValidatorFactory factory = Validation.factory();
 
+  private Validator validatorFor(Class<? extends Annotation> type) {
+    return factory.create(mock(annotation(type)));
+  }
+
   @Test
   public void testNotNullValidator() {
     Validator validator = factory.create(mock(annotation(NotNull.class)));
@@ -241,6 +240,28 @@ public class ValidationTest {
     assertTrue(validator.isValid(map));
 
     assertTrue(validator.isValid(null));
+  }
+
+  @Test
+  public void testNotEmptyValidator() {
+    Validator validator = validatorFor(NotEmpty.class);
+
+    assertTrue(validator.isValid(" "));  // strings are not trimmed
+    assertTrue(validator.isValid("non empty"));
+    assertTrue(validator.isValid(null)); // this is for NotNull to check
+
+    assertFalse(validator.isValid(""));
+
+    assertTrue(validator.isValid(new int[]{1, 2, 3}));
+    assertFalse(validator.isValid(new int[0]));
+
+    assertTrue(validator.isValid(Arrays.asList(0, 1, 2, 3)));
+    assertFalse(validator.isValid(Collections.emptyList()));
+
+    Map<String, String> map = new HashMap<>();
+    map.put("key", "value");
+    assertTrue(validator.isValid(map));
+    assertFalse(validator.isValid(Collections.emptyMap()));
   }
 
 }
