@@ -21,10 +21,7 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.interception.Interception;
 import org.atatec.trugger.interception.ValidationInterceptionHandler;
 import org.atatec.trugger.util.factory.ComponentFactory;
-import org.atatec.trugger.validation.ValidationEngine;
-import org.atatec.trugger.validation.Validator;
-import org.atatec.trugger.validation.ValidatorClass;
-import org.atatec.trugger.validation.ValidatorFactory;
+import org.atatec.trugger.validation.*;
 
 import java.lang.annotation.Annotation;
 
@@ -45,12 +42,16 @@ public class TruggerValidatorFactory implements ValidatorFactory {
         new ComponentFactory<>(ValidatorClass.class);
     factory.toCreate(
         (constructor, args) -> {
-          Validator validator = invoke(constructor).withArgs(args);
-          return Interception.intercept(Validator.class)
-              .on(validator)
-              .onCall(new ValidationInterceptionHandler(this)
-                  .onInvalid(context -> true))
-              .proxy();
+          ArgumentsValidator argumentsValidator = new ArgumentsValidator(this);
+          if (argumentsValidator.isValid(constructor, args)) {
+            Validator validator = invoke(constructor).withArgs(args);
+            return Interception.intercept(Validator.class)
+                .on(validator)
+                .onCall(new ValidationInterceptionHandler(this)
+                    .onInvalid(context -> true))
+                .proxy();
+          }
+          return null;
         }
     );
     return factory;
