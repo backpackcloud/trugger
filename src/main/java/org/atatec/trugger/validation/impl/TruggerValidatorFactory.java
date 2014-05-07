@@ -81,26 +81,23 @@ public class TruggerValidatorFactory implements ValidatorFactory {
           context.use(TruggerValidatorFactory.this)
               .when(type(ValidatorFactory.class));
 
-          Class<? extends Annotation> type = annotation.annotationType();
-          if (type.isAnnotationPresent(UseReferences.class)) {
-            List<Element> elements = Elements.elements()
-                .filter(ElementPredicates.annotatedWith(TargetElement.class))
-                .in(annotation);
-            for (Element annotationElement : elements) {
-              TargetElement targetElement = annotationElement
-                  .getAnnotation(TargetElement.class);
-              Object value = Elements.element(annotationElement.get())
-                  .in(target)
-                  .get();
-              if (value != null) {
-                context.use(value)
-                    .when(
-                        assignableTo(targetElement.value())
-                            .or(named(annotationElement.name()))
-                    );
-              }
-            }
-          }
+          List<Element> elements = Elements.elements().in(annotation);
+          elements.stream()
+              .filter(ElementPredicates.annotatedWith(TargetElement.class))
+              .forEach(annotationElement -> {
+                TargetElement targetElement = annotationElement
+                    .getAnnotation(TargetElement.class);
+                Object value = Elements.element(annotationElement.get())
+                    .in(target).get();
+                if (value != null) {
+                  context.use(value).when(assignableTo(targetElement.value())
+                      .or(named(annotationElement.name())));
+                }
+              });
+          // force injection when "-parameters" are not used in compilation
+          elements.stream().forEach(
+              el -> context.use(() -> el.get()).when(type(el.type()))
+          );
         }
     ));
     return factory.create(annotation);

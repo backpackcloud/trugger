@@ -18,6 +18,7 @@
 package org.atatec.trugger.test.validation;
 
 import org.atatec.trugger.ObjectMapper;
+import org.atatec.trugger.element.Element;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.Validation;
@@ -71,6 +72,10 @@ public abstract class BaseValidatorTest<E extends Annotation> {
 
   protected final void createValidator() {
     validator = factory.create(builder.createMock());
+  }
+
+  protected final void createValidator(Element element, Object target) {
+    validator = factory.create(builder.createMock(), element, target, Validation.engine());
   }
 
 }
