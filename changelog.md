@@ -14,12 +14,16 @@ nor a competitor.
 ### New Features
 
   - `InterceptionHandler` for validating method arguments using the Validation
-    module.
-  - New element finder for lists behaving as the element finder for arrays.
+    module
+  - Component `ArgumentsValidator` for validating arguments of constructors
+    and methods
+  - New element finder for lists behaving as the element finder for arrays
 
 ### Major Changes
 
   - Predicate for parameters assignable to a given type (use with caution)
+  - Predicate for primitive array types
+  - Method `ParameterPredicates#name` renamed to `named`
 
 ### Minor Changes
 
