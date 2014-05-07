@@ -24,6 +24,8 @@ nor a competitor.
   - Predicate for parameters assignable to a given type (use with caution)
   - Predicate for primitive array types
   - Method `ParameterPredicates#name` renamed to `named`
+  - `Context` now throws an `UnresolvableValueException` instead of returning
+    null to indicate an unresolvable value.
 
 ### Minor Changes
 

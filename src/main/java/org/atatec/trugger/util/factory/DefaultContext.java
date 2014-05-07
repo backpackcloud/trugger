@@ -59,7 +59,7 @@ public class DefaultContext implements Context {
         return entry.function.apply(parameter);
       }
     }
-    return null;
+    throw new UnresolvableValueException();
   }
 
   private static class Entry {

@@ -106,11 +106,11 @@ public class ContextFactory {
     Object arg;
     int i = 0;
     for (Parameter parameter : constructor.getParameters()) {
-      arg = context.resolve(parameter);
-      if (arg == null) {
-        return null;
-      } else {
+      try {
+        arg = context.resolve(parameter);
         args[i++] = arg;
+      } catch (UnresolvableValueException e) {
+        return null;
       }
     }
     return (E) createFunction.apply(constructor, args);

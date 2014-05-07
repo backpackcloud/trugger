@@ -55,7 +55,11 @@ public class TruggerValidatorFactory implements ValidatorFactory {
                     .onInvalid(context -> true))
                 .proxy();
           }
-          return null;
+          // there is no way to validate the value using this validator
+          // so lets say that the value is not invalid (this is not the same
+          // as saying that the value is valid according to the validation
+          // API definitions)
+          return (Validator) value -> true;
         }
     );
     return factory;
@@ -76,6 +80,7 @@ public class TruggerValidatorFactory implements ValidatorFactory {
           context.use(element).when(type(Element.class));
           context.use(engine).when(type(ValidationEngine.class));
           context.use(target).when(assignableTo(target.getClass())
+
               .or(type(Object.class)));
           context.use(an).when(type(Annotation.class));
           context.use(TruggerValidatorFactory.this)

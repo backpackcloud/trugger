@@ -34,7 +34,7 @@ public interface Context {
   /**
    * Adds the given object to the context by binding it to the given predicate.
    *
-   * @param object    the object to add
+   * @param object the object to add
    * @return a component to select the condition
    */
   PredicateMapper<Parameter, Context> use(Object object);
@@ -43,7 +43,7 @@ public interface Context {
    * Adds the object supplied by the given supplier by binding it to the given
    * predicate.
    *
-   * @param supplier  the supplier to create the object
+   * @param supplier the supplier to create the object
    * @return a component to select the condition
    */
   PredicateMapper<Parameter, Context> use(Supplier supplier);
@@ -52,7 +52,7 @@ public interface Context {
    * Adds the object returned by the given function by binding it to the given
    * predicate.
    *
-   * @param function   the function to use
+   * @param function the function to use
    * @return a component to select the condition
    */
   PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function);
@@ -62,9 +62,9 @@ public interface Context {
    * added to the context.
    *
    * @param parameter the parameter to resolve the value
-   * @return the resolved value or <code>null</code> no predicate matches the
-   * given parameter.
+   * @return the resolved value.
+   * @throws UnresolvableValueException if the value cannot be resolved
    */
-  Object resolve(Parameter parameter);
+  Object resolve(Parameter parameter) throws UnresolvableValueException;
 
 }
