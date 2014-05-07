@@ -20,10 +20,12 @@ package org.atatec.trugger.validation.validator;
 import org.atatec.trugger.validation.Validator;
 
 /**
+ * Validator that checks a minimum size requirement.
+ *
  * @author Marcelo Guimarães
  * @since 5.1
  */
-public class MinValidator implements Validator<Number> {
+public class MinValidator extends BaseSizeValidator implements Validator {
 
   private final double minValue;
   private final boolean inclusive;
@@ -37,9 +39,7 @@ public class MinValidator implements Validator<Number> {
     this(constraint.value(), constraint.inclusive());
   }
 
-  @Override
-  public boolean isValid(Number number) {
-    double value = number.doubleValue();
+  protected boolean checkValue(double value) {
     return inclusive ? value >= minValue : value > minValue;
   }
 

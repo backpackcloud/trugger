@@ -20,10 +20,12 @@ package org.atatec.trugger.validation.validator;
 import org.atatec.trugger.validation.Validator;
 
 /**
+ * Validator that checks a maximum size requirement.
+ *
  * @author Marcelo Guimarães
  * @since 5.1
  */
-public class MaxValidator implements Validator<Number> {
+public class MaxValidator extends BaseSizeValidator implements Validator {
 
   private final double maxValue;
   private final boolean inclusive;
@@ -38,8 +40,7 @@ public class MaxValidator implements Validator<Number> {
   }
 
   @Override
-  public boolean isValid(Number number) {
-    double value = number.doubleValue();
+  protected boolean checkValue(double value) {
     return inclusive ? value <= maxValue : value < maxValue;
   }
 
