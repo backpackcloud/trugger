@@ -17,16 +17,20 @@
 
 package org.atatec.trugger.test.validation;
 
-import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.*;
-import org.atatec.trugger.validation.validator.*;
+import org.atatec.trugger.validation.validator.DomainValidator;
+import org.atatec.trugger.validation.validator.NotNull;
+import org.atatec.trugger.validation.validator.Valid;
+import org.atatec.trugger.validation.validator.Valids;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.atatec.trugger.util.mock.Mock.annotation;
 import static org.atatec.trugger.util.mock.Mock.mock;
@@ -35,7 +39,7 @@ import static org.junit.Assert.*;
 /**
  *
  */
-public class ValidationTest {
+public class ValidationTest extends BaseValidatorTest {
 
   @NotNull
   @Valid
@@ -196,20 +200,6 @@ public class ValidationTest {
     assertTrue(result.invalidElements().isEmpty());
   }
 
-  private ValidatorFactory factory = Validation.factory();
-
-  private Validator validatorFor(Class<? extends Annotation> type) {
-    return factory.create(mock(annotation(type)));
-  }
-
-  @Test
-  public void testNotNullValidator() {
-    Validator validator = factory.create(mock(annotation(NotNull.class)));
-
-    assertTrue(validator.isValid(""));
-    assertFalse(validator.isValid(null));
-  }
-
   @Test
   public void testValidValidator() {
     Validator validator = factory.create(mock(annotation(Valid.class)));
@@ -241,76 +231,6 @@ public class ValidationTest {
     assertTrue(validator.isValid(map));
 
     assertTrue(validator.isValid(null));
-  }
-
-  @Test
-  public void testNotEmptyValidator() {
-    Validator validator = validatorFor(NotEmpty.class);
-
-    assertTrue(validator.isValid(" "));  // strings are not trimmed
-    assertTrue(validator.isValid("non empty"));
-    assertTrue(validator.isValid(null)); // this is for NotNull to check
-
-    assertFalse(validator.isValid(""));
-
-    assertTrue(validator.isValid(new int[]{1, 2, 3}));
-    assertFalse(validator.isValid(new int[0]));
-
-    assertTrue(validator.isValid(Arrays.asList(0, 1, 2, 3)));
-    assertFalse(validator.isValid(Collections.emptyList()));
-
-    Map<String, String> map = new HashMap<>();
-    map.put("key", "value");
-    assertTrue(validator.isValid(map));
-    assertFalse(validator.isValid(Collections.emptyMap()));
-  }
-
-  @Test
-  public void testMaxValidator() {
-    Max constraint = new AnnotationMock<Max>() {{
-      map(10.0).to(annotation.value());
-      map(true).to(annotation.inclusive());
-    }}.createMock();
-    Validator validator = factory.create(constraint);
-
-    assertTrue(validator.isValid(10));
-    assertTrue(validator.isValid(9));
-    assertFalse(validator.isValid(10.001));
-
-    constraint = new AnnotationMock<Max>() {{
-      map(-10.0).to(annotation.value());
-      map(false).to(annotation.inclusive());
-    }}.createMock();
-    validator = factory.create(constraint);
-
-    assertFalse(validator.isValid(-10));
-    assertFalse(validator.isValid(9));
-    assertTrue(validator.isValid(-10.001));
-    assertTrue(validator.isValid(-14));
-  }
-
-  @Test
-  public void testMinValidator() {
-    Min constraint = new AnnotationMock<Min>() {{
-      map(10.0).to(annotation.value());
-      map(true).to(annotation.inclusive());
-    }}.createMock();
-    Validator validator = factory.create(constraint);
-
-    assertTrue(validator.isValid(10));
-    assertFalse(validator.isValid(9));
-    assertTrue(validator.isValid(10.001));
-
-    constraint = new AnnotationMock<Min>() {{
-      map(-10.0).to(annotation.value());
-      map(false).to(annotation.inclusive());
-    }}.createMock();
-    validator = factory.create(constraint);
-
-    assertFalse(validator.isValid(-10));
-    assertTrue(validator.isValid(9));
-    assertFalse(validator.isValid(-10.001));
-    assertFalse(validator.isValid(-14));
   }
 
 }
