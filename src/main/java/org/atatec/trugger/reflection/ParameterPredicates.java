@@ -53,7 +53,7 @@ public final class ParameterPredicates {
    * Note that the code must be compiled with <code>-parameters</code> or
    * the parameter names will be in a argX format.
    */
-  public static Predicate<Parameter> name(String name) {
+  public static Predicate<Parameter> named(String name) {
     return parameter -> parameter.getName().equals(name);
   }
 

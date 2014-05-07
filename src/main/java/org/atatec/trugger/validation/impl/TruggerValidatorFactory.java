@@ -29,7 +29,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import static org.atatec.trugger.reflection.ParameterPredicates.assignableTo;
-import static org.atatec.trugger.reflection.ParameterPredicates.name;
+import static org.atatec.trugger.reflection.ParameterPredicates.named;
 import static org.atatec.trugger.reflection.ParameterPredicates.type;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 
@@ -96,7 +96,7 @@ public class TruggerValidatorFactory implements ValidatorFactory {
                 context.use(value)
                     .when(
                         assignableTo(targetElement.value())
-                            .or(name(annotationElement.name()))
+                            .or(named(annotationElement.name()))
                     );
               }
             }

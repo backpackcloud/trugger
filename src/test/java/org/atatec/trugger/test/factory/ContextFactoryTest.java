@@ -23,7 +23,7 @@ import org.atatec.trugger.util.factory.CreateException;
 import org.junit.Test;
 
 import static org.atatec.trugger.reflection.ParameterPredicates.annotatedWith;
-import static org.atatec.trugger.reflection.ParameterPredicates.name;
+import static org.atatec.trugger.reflection.ParameterPredicates.named;
 import static org.atatec.trugger.reflection.ParameterPredicates.type;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -62,8 +62,8 @@ public class ContextFactoryTest {
     factory.context()
         // problems to build with "-parameters" in gradle
         // problems to coverage in idea using "-parameters"
-        .use("a string").when(name("arg0"))
-        .use(10).when(name("arg1"));
+        .use("a string").when(named("arg0"))
+        .use(10).when(named("arg1"));
     TestObject obj = factory.create(TestObject.class);
     assertNotNull(obj);
     assertEquals("a string", obj.string);

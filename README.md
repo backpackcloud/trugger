@@ -524,7 +524,7 @@ factory.context()
   .use(myImplementation)
     .when(type(MyInterface.class))
   .use(someObject)
-    .when(name("component"))
+    .when(named("component"))
   .use(parameter ->
       resolve(parameter.getAnnotation(MyAnnotation.class)))
     .when(annotatedWith(MyAnnotation.class))

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import static org.atatec.trugger.reflection.ParameterPredicates.name;
+import static org.atatec.trugger.reflection.ParameterPredicates.named;
 import static org.atatec.trugger.reflection.ParameterPredicates.type;
 
 /**
@@ -222,7 +222,7 @@ public class ComponentFactory<T extends Annotation, E> {
       context.use(annotation).when(type(annotation.annotationType()));
       List<Element> elements = Elements.elements().in(annotation);
       for (Element el : elements) {
-        context.use(() -> el.get()).when(name(el.name()).and(type(el.type())));
+        context.use(() -> el.get()).when(named(el.name()).and(type(el.type())));
       }
     };
   }
