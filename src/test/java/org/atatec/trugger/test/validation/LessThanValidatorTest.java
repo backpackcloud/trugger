@@ -47,4 +47,22 @@ public class LessThanValidatorTest extends BaseValidatorTest<LessThan> {
     assertInvalid(35);
   }
 
+  @Test
+  public void testValidIfEquals() {
+    Map<String, Integer> map = new HashMap<>();
+    map.put("y", 20);
+
+    map("y").to(constraint.value());
+    map(true).to(constraint.orEqual());
+
+    createValidator(
+        element().named("x").annotatedWith(constraint).createMock(),
+        map
+    );
+
+    assertValid(10);
+    assertValid(20);
+    assertInvalid(35);
+  }
+
 }
