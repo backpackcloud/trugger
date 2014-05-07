@@ -42,11 +42,11 @@ public class NotEmptyValidator implements Validator {
   }
 
   private void initialize() {
-    validator.map(CharSequence.class).to(string -> string.length() > 0);
-    validator.map(Collection.class).to(collection -> collection.size() > 0);
-    validator.map(Map.class).to(map -> map.size() > 0);
-    validator.mapPrimitiveArray().to(array -> Array.getLength(array) > 0);
-    validator.mapArray().to(array -> array.length > 0);
+    validator.map(CharSequence.class).to(string -> string.length() > 0)
+        .map(Collection.class).to(collection -> collection.size() > 0)
+        .map(Map.class).to(map -> map.size() > 0)
+        .mapArray().to(array -> array.length > 0)
+        .mapOthers().to(array -> Array.getLength(array) > 0);
   }
 
   @Override

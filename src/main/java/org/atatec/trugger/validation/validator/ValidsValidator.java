@@ -46,9 +46,9 @@ public class ValidsValidator implements Validator {
   }
 
   private void initialize() {
-    validator.map(Collection.class).to(this::checkCollection);
-    validator.mapArray().to(this::checkArray);
-    validator.map(Map.class).to(this::checkMap);
+    validator.map(Collection.class).to(this::checkCollection)
+        .mapArray().to(this::checkArray)
+        .map(Map.class).to(this::checkMap);
   }
 
   @Override

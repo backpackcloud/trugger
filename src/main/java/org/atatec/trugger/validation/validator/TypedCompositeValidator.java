@@ -26,6 +26,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static org.atatec.trugger.reflection.ClassPredicates.arrayType;
+import static org.atatec.trugger.reflection.ClassPredicates.primitiveArrayType;
+
 /**
  * A composite validator that selects the most suitable validator based on the
  * target value's type.
@@ -36,6 +39,10 @@ import java.util.function.Predicate;
 public class TypedCompositeValidator implements Validator {
 
   private Map<Predicate<Class>, Validator> map = new LinkedHashMap<>();
+  private Validator generic = value -> {
+    throw new IllegalArgumentException("Cannot determine validator to use " +
+        "for type " + Utils.resolveType(value));
+  };
 
   /**
    * Maps a validator to use when the value is assignable to the given type.
@@ -58,19 +65,19 @@ public class TypedCompositeValidator implements Validator {
    */
   public ObjectMapper<Validator<Object[]>, TypedCompositeValidator> mapArray() {
     return value -> {
-      map.put(ClassPredicates.arrayType(), value);
+      map.put(arrayType().and(primitiveArrayType().negate()), value);
       return TypedCompositeValidator.this;
     };
   }
 
   /**
-   * Maps a validator to use when the value is an array.
+   * Maps a validator to the other object types.
    *
    * @return a component to select the validator.
    */
-  public ObjectMapper<Validator<Object>, TypedCompositeValidator> mapPrimitiveArray() {
+  public ObjectMapper<Validator<Object>, TypedCompositeValidator> mapOthers() {
     return value -> {
-      map.put(ClassPredicates.primitiveArrayType(), value);
+      generic = value;
       return TypedCompositeValidator.this;
     };
   }
@@ -83,8 +90,7 @@ public class TypedCompositeValidator implements Validator {
         return entry.getValue().isValid(value);
       }
     }
-    throw new IllegalArgumentException("Cannot determine validator to use " +
-        "for type " + type);
+    return generic.isValid(value);
   }
 
 }
