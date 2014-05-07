@@ -20,7 +20,10 @@ package org.atatec.trugger.validation.validator;
 import org.atatec.trugger.validation.Validator;
 
 /**
+ * Validator that checks if the value is less than another value.
+ *
  * @author Marcelo Guimarães
+ * @since 5.1
  */
 public class LessThanValidator implements Validator<Comparable> {
 
