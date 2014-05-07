@@ -17,7 +17,6 @@
 
 package org.atatec.trugger.test.validation;
 
-import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.validator.NotEmpty;
 import org.junit.Test;
 
@@ -26,34 +25,29 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 /**
  * @author Marcelo Guimarães
  */
-public class NotEmptyValidatorTest extends BaseValidatorTest {
+public class NotEmptyValidatorTest extends BaseValidatorTest<NotEmpty> {
 
   @Test
   public void testNotEmptyValidator() {
-    Validator validator = validatorFor(NotEmpty.class);
+    assertValid(" ");  // strings are not trimmed
+    assertValid("non empty");
+    assertValid(null); // this is for NotNull to check
 
-    assertTrue(validator.isValid(" "));  // strings are not trimmed
-    assertTrue(validator.isValid("non empty"));
-    assertTrue(validator.isValid(null)); // this is for NotNull to check
+    assertInvalid("");
 
-    assertFalse(validator.isValid(""));
+    assertValid(new int[]{1, 2, 3});
+    assertInvalid(new int[0]);
 
-    assertTrue(validator.isValid(new int[]{1, 2, 3}));
-    assertFalse(validator.isValid(new int[0]));
-
-    assertTrue(validator.isValid(Arrays.asList(0, 1, 2, 3)));
-    assertFalse(validator.isValid(Collections.emptyList()));
+    assertValid(Arrays.asList(0, 1, 2, 3));
+    assertInvalid(Collections.emptyList());
 
     Map<String, String> map = new HashMap<>();
     map.put("key", "value");
-    assertTrue(validator.isValid(map));
-    assertFalse(validator.isValid(Collections.emptyMap()));
+    assertValid(map);
+    assertInvalid(Collections.emptyMap());
   }
 
 }

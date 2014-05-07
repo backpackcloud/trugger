@@ -17,24 +17,60 @@
 
 package org.atatec.trugger.test.validation;
 
+import org.atatec.trugger.ObjectMapper;
+import org.atatec.trugger.reflection.Reflection;
+import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.Validation;
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.ValidatorFactory;
+import org.junit.Before;
 
 import java.lang.annotation.Annotation;
 
-import static org.atatec.trugger.util.mock.Mock.annotation;
-import static org.atatec.trugger.util.mock.Mock.mock;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Guimarães
  */
-public abstract class BaseValidatorTest {
+public abstract class BaseValidatorTest<E extends Annotation> {
 
-  protected final ValidatorFactory factory = Validation.factory();
+  private final ValidatorFactory factory = Validation.factory();
+  private final Class<E> constraintType;
+  private AnnotationMock<E> builder;
+  protected E constraint;
+  private Validator validator;
 
-  protected final Validator validatorFor(Class<? extends Annotation> type) {
-    return factory.create(mock(annotation(type)));
+  protected BaseValidatorTest() {
+    constraintType = Reflection.reflect().genericType("E").in(this);
+  }
+
+  @Before
+  public void initialize() {
+    builder = new AnnotationMock<>(constraintType);
+    constraint = builder.annotation();
+  }
+
+  protected final ObjectMapper<Object, AnnotationMock<E>> map(Object value) {
+    return builder.map(value);
+  }
+
+  protected void assertValid(Object value) {
+    if (validator == null) {
+      createValidator();
+    }
+    assertTrue(validator.isValid(value));
+  }
+
+  protected void assertInvalid(Object value) {
+    if (validator == null) {
+      createValidator();
+    }
+    assertFalse(validator.isValid(value));
+  }
+
+  protected final void createValidator() {
+    validator = factory.create(builder.createMock());
   }
 
 }

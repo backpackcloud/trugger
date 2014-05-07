@@ -25,6 +25,7 @@ import org.atatec.trugger.validation.validator.Valids;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.atatec.trugger.util.mock.Mock.annotation;
+import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.*;
 
 /**
@@ -124,6 +127,10 @@ public class ValidationTest extends BaseValidatorTest {
     validItem = new Item();
     validItem.quantity = 1;
     validItem.product = validProduct;
+  }
+
+  private Validator validatorFor(Class<? extends Annotation> type) {
+    return Validation.factory().create(mock(annotation(type)));
   }
 
   @Test

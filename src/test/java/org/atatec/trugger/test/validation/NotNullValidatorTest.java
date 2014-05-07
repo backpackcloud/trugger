@@ -17,26 +17,18 @@
 
 package org.atatec.trugger.test.validation;
 
-import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.validator.NotNull;
 import org.junit.Test;
-
-import static org.atatec.trugger.util.mock.Mock.annotation;
-import static org.atatec.trugger.util.mock.Mock.mock;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Guimarães
  */
-public class NotNullValidatorTest extends BaseValidatorTest {
+public class NotNullValidatorTest extends BaseValidatorTest<NotNull> {
 
   @Test
   public void testNotNullValidator() {
-    Validator validator = factory.create(mock(annotation(NotNull.class)));
-
-    assertTrue(validator.isValid(""));
-    assertFalse(validator.isValid(null));
+    assertValid("");
+    assertInvalid(null);
   }
 
 }

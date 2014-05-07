@@ -17,8 +17,6 @@
 
 package org.atatec.trugger.test.validation;
 
-import org.atatec.trugger.util.mock.AnnotationMock;
-import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.validator.Min;
 import org.junit.Test;
 
@@ -27,45 +25,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 /**
  * @author Marcelo Guimarães
  */
-public class MinValidatorTest extends BaseValidatorTest {
+public class MinValidatorTest extends BaseValidatorTest<Min> {
 
   @Test
-  public void testMinValidator() {
-    Min constraint = new AnnotationMock<Min>() {{
-      map(10.0).to(annotation.value());
-      map(true).to(annotation.inclusive());
-    }}.createMock();
-    Validator validator = factory.create(constraint);
+  public void testPositiveValue() {
+    map(10.0).to(constraint.value());
 
-    assertTrue(validator.isValid(10));
-    assertFalse(validator.isValid(9));
-    assertTrue(validator.isValid(10.001));
+    assertValid(10);
+    assertInvalid(9);
+    assertValid(10.001);
+  }
 
-    constraint = new AnnotationMock<Min>() {{
-      map(-10.0).to(annotation.value());
-      map(false).to(annotation.inclusive());
-    }}.createMock();
-    validator = factory.create(constraint);
+  @Test
+  public void testNegativeValue() {
+    map(-10.0).to(constraint.value());
 
-    assertFalse(validator.isValid(-10));
-    assertTrue(validator.isValid(9));
-    assertFalse(validator.isValid(-10.001));
-    assertFalse(validator.isValid(-14));
+    assertValid(-10);
+    assertValid(9);
+    assertInvalid(-10.001);
+    assertInvalid(-14);
   }
 
   @Test
   public void testTypes() {
-    Min constraint = new AnnotationMock<Min>() {{
-      map(2.0).to(annotation.value());
-      map(true).to(annotation.inclusive());
-    }}.createMock();
-    Validator validator = factory.create(constraint);
+    map(2.0).to(constraint.value());
 
     Object[] validArray = new Object[2];
     Object[] invalidArray = new Object[1];
@@ -87,32 +73,37 @@ public class MinValidatorTest extends BaseValidatorTest {
     String validString = "abc";
     String invalidString = "";
 
-    assertTrue(validator.isValid(null));
+    assertValid(null);
 
-    assertTrue(validator.isValid(validArray));
-    assertTrue(validator.isValid(validList));
-    assertTrue(validator.isValid(validMap));
-    assertTrue(validator.isValid(validPrimitiveArray));
-    assertTrue(validator.isValid(validString));
+    assertValid(validArray);
+    assertValid(validList);
+    assertValid(validMap);
+    assertValid(validPrimitiveArray);
+    assertValid(validString);
 
-    assertFalse(validator.isValid(invalidArray));
-    assertFalse(validator.isValid(invalidList));
-    assertFalse(validator.isValid(invalidMap));
-    assertFalse(validator.isValid(invalidPrimitiveArray));
-    assertFalse(validator.isValid(invalidString));
+    assertInvalid(invalidArray);
+    assertInvalid(invalidList);
+    assertInvalid(invalidMap);
+    assertInvalid(invalidPrimitiveArray);
+    assertInvalid(invalidString);
   }
 
   @Test
   public void testDelta() {
-    Min constraint = new AnnotationMock<Min>() {{
-      map(2.0).to(annotation.value());
-      map(1.0).to(annotation.delta());
-      map(true).to(annotation.inclusive());
-    }}.createMock();
-    Validator validator = factory.create(constraint);
+    map(2.0).to(constraint.value());
+    map(1.0).to(constraint.delta());
 
-    assertTrue(validator.isValid(new Object[1]));
-    assertFalse(validator.isValid(new Object[0]));
+    assertValid(new Object[1]);
+    assertInvalid(new Object[0]);
+  }
+
+  @Test
+  public void testInclusive() {
+    map(2.0).to(constraint.value());
+    map(false).to(constraint.inclusive());
+
+    assertValid(new Object[3]);
+    assertInvalid(new Object[2]);
   }
 
 }
