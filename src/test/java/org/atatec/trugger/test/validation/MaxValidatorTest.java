@@ -22,6 +22,11 @@ import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.validator.Max;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -38,6 +43,8 @@ public class MaxValidatorTest extends BaseValidatorTest {
     }}.createMock();
     Validator validator = factory.create(constraint);
 
+    assertTrue(validator.isValid(null));
+
     assertTrue(validator.isValid(10));
     assertTrue(validator.isValid(9));
     assertFalse(validator.isValid(10.001));
@@ -52,6 +59,64 @@ public class MaxValidatorTest extends BaseValidatorTest {
     assertFalse(validator.isValid(9));
     assertTrue(validator.isValid(-10.001));
     assertTrue(validator.isValid(-14));
+  }
+
+  @Test
+  public void testTypes() {
+    Max constraint = new AnnotationMock<Max>() {{
+      map(2.0).to(annotation.value());
+      map(true).to(annotation.inclusive());
+    }}.createMock();
+    Validator validator = factory.create(constraint);
+
+    Object[] validArray = new Object[2];
+    Object[] invalidArray = new Object[3];
+
+    Map validMap = new HashMap() {{
+      put(0, 1);
+      put(1, 1);
+    }};
+    Map invalidMap = new HashMap() {{
+      put(0, 1);
+      put(1, 1);
+      put(2, 1);
+    }};
+
+    List validList = Arrays.asList(1, 2);
+    List invalidList = Arrays.asList(1, 2, 3);
+
+    int[] validPrimitiveArray = new int[2];
+    int[] invalidPrimitiveArray = new int[3];
+
+    String validString = "";
+    String invalidString = "abc";
+
+    assertTrue(validator.isValid(null));
+
+    assertTrue(validator.isValid(validArray));
+    assertTrue(validator.isValid(validList));
+    assertTrue(validator.isValid(validMap));
+    assertTrue(validator.isValid(validPrimitiveArray));
+    assertTrue(validator.isValid(validString));
+
+    assertFalse(validator.isValid(invalidArray));
+    assertFalse(validator.isValid(invalidList));
+    assertFalse(validator.isValid(invalidMap));
+    assertFalse(validator.isValid(invalidPrimitiveArray));
+    assertFalse(validator.isValid(invalidString));
+  }
+
+  @Test
+  public void testDelta() {
+    Max constraint = new AnnotationMock<Max>() {{
+      map(2.0).to(annotation.value());
+      map(1.0).to(annotation.delta());
+      map(true).to(annotation.inclusive());
+    }}.createMock();
+    Validator validator = factory.create(constraint);
+
+    assertTrue(validator.isValid(new Object[3]));
+    assertFalse(validator.isValid(new Object[4]));
   }
 
 }

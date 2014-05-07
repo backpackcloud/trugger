@@ -32,12 +32,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.atatec.trugger.util.mock.Mock.annotation;
-import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.*;
 
 /**
- *
+ * @author Marcelo Guimarães
  */
 public class ValidationTest extends BaseValidatorTest {
 
@@ -202,14 +200,14 @@ public class ValidationTest extends BaseValidatorTest {
 
   @Test
   public void testValidValidator() {
-    Validator validator = factory.create(mock(annotation(Valid.class)));
+    Validator validator = validatorFor(Valid.class);
     assertFalse(validator.isValid(invalidCustomer));
     assertTrue(validator.isValid(validItem));
   }
 
   @Test
   public void testValidsValidator() {
-    Validator validator = factory.create(mock(annotation(Valids.class)));
+    Validator validator = validatorFor(Valids.class);
 
     List list = new ArrayList<>();
     list.add(validItem);
