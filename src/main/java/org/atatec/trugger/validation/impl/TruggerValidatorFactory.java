@@ -89,10 +89,8 @@ public class TruggerValidatorFactory implements ValidatorFactory {
                     .getAnnotation(TargetElement.class);
                 Object value = Elements.element(annotationElement.get())
                     .in(target).get();
-                if (value != null) {
-                  context.use(value).when(assignableTo(targetElement.value())
-                      .or(named(annotationElement.name())));
-                }
+                context.use(value).when(assignableTo(targetElement.value())
+                    .or(named(annotationElement.name())));
               });
           // force injection when "-parameters" are not used in compilation
           elements.stream().forEach(
