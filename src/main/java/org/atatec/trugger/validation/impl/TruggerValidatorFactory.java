@@ -18,14 +18,18 @@
 package org.atatec.trugger.validation.impl;
 
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.ElementPredicates;
+import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.interception.Interception;
 import org.atatec.trugger.interception.ValidationInterceptionHandler;
 import org.atatec.trugger.util.factory.ComponentFactory;
 import org.atatec.trugger.validation.*;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 import static org.atatec.trugger.reflection.ParameterPredicates.assignableTo;
+import static org.atatec.trugger.reflection.ParameterPredicates.name;
 import static org.atatec.trugger.reflection.ParameterPredicates.type;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 
@@ -76,6 +80,27 @@ public class TruggerValidatorFactory implements ValidatorFactory {
           context.use(an).when(type(Annotation.class));
           context.use(TruggerValidatorFactory.this)
               .when(type(ValidatorFactory.class));
+
+          Class<? extends Annotation> type = annotation.annotationType();
+          if (type.isAnnotationPresent(UseReferences.class)) {
+            List<Element> elements = Elements.elements()
+                .filter(ElementPredicates.annotatedWith(TargetElement.class))
+                .in(annotation);
+            for (Element annotationElement : elements) {
+              TargetElement targetElement = annotationElement
+                  .getAnnotation(TargetElement.class);
+              Object value = Elements.element(annotationElement.get())
+                  .in(target)
+                  .get();
+              if (value != null) {
+                context.use(value)
+                    .when(
+                        assignableTo(targetElement.value())
+                            .or(name(annotationElement.name()))
+                    );
+              }
+            }
+          }
         }
     ));
     return factory.create(annotation);
