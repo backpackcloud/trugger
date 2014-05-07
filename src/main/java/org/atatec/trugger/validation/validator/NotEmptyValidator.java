@@ -34,27 +34,24 @@ import java.util.Map;
  */
 public class NotEmptyValidator implements Validator {
 
+  private final TypedCompositeValidator validator;
+
+  public NotEmptyValidator() {
+    this.validator = new TypedCompositeValidator();
+    initialize();
+  }
+
+  private void initialize() {
+    validator.map(CharSequence.class).to(string -> string.length() > 0);
+    validator.map(Collection.class).to(collection -> collection.size() > 0);
+    validator.map(Map.class).to(map -> map.size() > 0);
+    validator.mapPrimitiveArray().to(array -> Array.getLength(array) > 0);
+    validator.mapArray().to(array -> array.length > 0);
+  }
+
   @Override
   public boolean isValid(@NotNull Object value) {
-    if (value instanceof CharSequence)
-      return isValid((CharSequence) value);
-    if (value instanceof Collection)
-      return isValid((Collection) value);
-    if (value instanceof Map)
-      return isValid((Map) value);
-    return Array.getLength(value) > 0;
-  }
-
-  private boolean isValid(CharSequence string) {
-    return string.length() > 0;
-  }
-
-  private boolean isValid(Collection collection) {
-    return !collection.isEmpty();
-  }
-
-  private boolean isValid(Map map) {
-    return !map.isEmpty();
+    return validator.isValid(value);
   }
 
 }

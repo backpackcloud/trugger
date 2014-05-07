@@ -32,8 +32,36 @@ public class ClassPredicates {
   private ClassPredicates() {
   }
 
+  /**
+   * Returns a predicate that checks if a class is of the given type.
+   */
   public static final Predicate<Class> type(Class type) {
     return c -> c.equals(type);
+  }
+
+  /**
+   * Returns a predicate that checks if a class is of a primitive type.
+   *
+   * @since 5.1
+   */
+  public static final Predicate<Class> primitiveType() {
+    return type(int.class)
+        .or(type(double.class))
+        .or(type(boolean.class))
+        .or(type(char.class))
+        .or(type(long.class))
+        .or(type(float.class))
+        .or(type(short.class))
+        .or(type(byte.class));
+  }
+
+  /**
+   * Returns a predicate that checks if a class is of a primitive array type.
+   *
+   * @since 5.1
+   */
+  public static final Predicate<Class> primitiveArrayType() {
+    return arrayType().and(type -> primitiveType().test(type.getComponentType()));
   }
 
   /**
@@ -76,6 +104,7 @@ public class ClassPredicates {
 
   /**
    * A predicate that checks if the given element is an array.
+   *
    * @since 4.1
    */
   public static Predicate<Class> arrayType() {

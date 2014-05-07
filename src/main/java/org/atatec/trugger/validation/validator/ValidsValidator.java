@@ -33,6 +33,7 @@ import java.util.Map;
 public class ValidsValidator implements Validator {
 
   private final ValidationEngine engine;
+  private final TypedCompositeValidator validator;
 
   public ValidsValidator() {
     this(Validation.engine());
@@ -40,35 +41,40 @@ public class ValidsValidator implements Validator {
 
   public ValidsValidator(ValidationEngine engine) {
     this.engine = engine;
+    this.validator = new TypedCompositeValidator();
+    initialize();
+  }
+
+  private void initialize() {
+    validator.map(Collection.class).to(collection -> {
+      for (Object o : collection) {
+        if (engine.validate(o).isInvalid()) {
+          return false;
+        }
+      }
+      return true;
+    });
+    validator.mapArray().to(array -> {
+      for (Object o : array) {
+        if (engine.validate(o).isInvalid()) {
+          return false;
+        }
+      }
+      return true;
+    });
+    validator.map(Map.class).to(map -> {
+      for (Object o : map.values()) {
+        if (engine.validate(o).isInvalid()) {
+          return false;
+        }
+      }
+      return true;
+    });
   }
 
   @Override
   public boolean isValid(@NotNull Object value) {
-    if (value instanceof Collection) {
-      return isValid((Collection) value);
-    } else if (value instanceof Map) {
-      return isValid(((Map) value).values());
-    } else { // assume an array type
-      return isValid((Object[]) value);
-    }
-  }
-
-  private boolean isValid(Object[] value) {
-    for (Object o : value) {
-      if (engine.validate(o).isInvalid()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private boolean isValid(Collection value) {
-    for (Object o : value) {
-      if (engine.validate(o).isInvalid()) {
-        return false;
-      }
-    }
-    return true;
+    return validator.isValid(value);
   }
 
 }
