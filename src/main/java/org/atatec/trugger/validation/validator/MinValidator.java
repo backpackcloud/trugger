@@ -29,18 +29,20 @@ public class MinValidator extends BaseSizeValidator implements Validator {
 
   private final double minValue;
   private final boolean inclusive;
+  private final double delta;
 
-  public MinValidator(double value, boolean inclusive) {
+  public MinValidator(double value, boolean inclusive, double delta) {
     this.minValue = value;
     this.inclusive = inclusive;
+    this.delta = delta;
   }
 
   public MinValidator(Min constraint) {
-    this(constraint.value(), constraint.inclusive());
+    this(constraint.value(), constraint.inclusive(), constraint.delta());
   }
 
   protected boolean checkValue(double value) {
-    return inclusive ? value >= minValue : value > minValue;
+    return inclusive ? value + delta >= minValue : value + delta > minValue;
   }
 
 }

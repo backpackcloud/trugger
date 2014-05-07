@@ -40,6 +40,11 @@ public @interface Min {
   double value();
 
   /**
+   * The delta to compare the values (in case of float point values)
+   */
+  double delta() default 0;
+
+  /**
    * Sets if the minimum value is included in the valid range (in case of float
    * point values)
    */

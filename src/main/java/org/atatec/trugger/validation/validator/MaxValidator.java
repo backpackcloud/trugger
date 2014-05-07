@@ -29,19 +29,21 @@ public class MaxValidator extends BaseSizeValidator implements Validator {
 
   private final double maxValue;
   private final boolean inclusive;
+  private final double delta;
 
-  public MaxValidator(double value, boolean inclusive) {
+  public MaxValidator(double value, boolean inclusive, double delta) {
     this.maxValue = value;
     this.inclusive = inclusive;
+    this.delta = delta;
   }
 
   public MaxValidator(Max constraint) {
-    this(constraint.value(), constraint.inclusive());
+    this(constraint.value(), constraint.inclusive(), constraint.delta());
   }
 
   @Override
   protected boolean checkValue(double value) {
-    return inclusive ? value <= maxValue : value < maxValue;
+    return inclusive ? value - delta <= maxValue : value - delta < maxValue;
   }
 
 }
