@@ -46,35 +46,41 @@ public class ValidsValidator implements Validator {
   }
 
   private void initialize() {
-    validator.map(Collection.class).to(collection -> {
-      for (Object o : collection) {
-        if (engine.validate(o).isInvalid()) {
-          return false;
-        }
-      }
-      return true;
-    });
-    validator.mapArray().to(array -> {
-      for (Object o : array) {
-        if (engine.validate(o).isInvalid()) {
-          return false;
-        }
-      }
-      return true;
-    });
-    validator.map(Map.class).to(map -> {
-      for (Object o : map.values()) {
-        if (engine.validate(o).isInvalid()) {
-          return false;
-        }
-      }
-      return true;
-    });
+    validator.map(Collection.class).to(this::checkCollection);
+    validator.mapArray().to(this::checkArray);
+    validator.map(Map.class).to(this::checkMap);
   }
 
   @Override
   public boolean isValid(@NotNull Object value) {
     return validator.isValid(value);
+  }
+
+  private boolean checkCollection(Collection collection) {
+    for (Object o : collection) {
+      if (engine.validate(o).isInvalid()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean checkArray(Object[] array) {
+    for (Object o : array) {
+      if (engine.validate(o).isInvalid()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean checkMap(Map map) {
+    for (Object o : map.values()) {
+      if (engine.validate(o).isInvalid()) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }
