@@ -17,6 +17,7 @@
 
 package org.atatec.trugger.test.validation;
 
+import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.*;
 import org.atatec.trugger.validation.validator.*;
 import org.junit.Before;
@@ -262,6 +263,54 @@ public class ValidationTest {
     map.put("key", "value");
     assertTrue(validator.isValid(map));
     assertFalse(validator.isValid(Collections.emptyMap()));
+  }
+
+  @Test
+  public void testMaxValidator() {
+    Max constraint = new AnnotationMock<Max>() {{
+      map(10.0).to(annotation.value());
+      map(true).to(annotation.inclusive());
+    }}.createMock();
+    Validator validator = factory.create(constraint);
+
+    assertTrue(validator.isValid(10));
+    assertTrue(validator.isValid(9));
+    assertFalse(validator.isValid(10.001));
+
+    constraint = new AnnotationMock<Max>() {{
+      map(-10.0).to(annotation.value());
+      map(false).to(annotation.inclusive());
+    }}.createMock();
+    validator = factory.create(constraint);
+
+    assertFalse(validator.isValid(-10));
+    assertFalse(validator.isValid(9));
+    assertTrue(validator.isValid(-10.001));
+    assertTrue(validator.isValid(-14));
+  }
+
+  @Test
+  public void testMinValidator() {
+    Min constraint = new AnnotationMock<Min>() {{
+      map(10.0).to(annotation.value());
+      map(true).to(annotation.inclusive());
+    }}.createMock();
+    Validator validator = factory.create(constraint);
+
+    assertTrue(validator.isValid(10));
+    assertFalse(validator.isValid(9));
+    assertTrue(validator.isValid(10.001));
+
+    constraint = new AnnotationMock<Min>() {{
+      map(-10.0).to(annotation.value());
+      map(false).to(annotation.inclusive());
+    }}.createMock();
+    validator = factory.create(constraint);
+
+    assertFalse(validator.isValid(-10));
+    assertTrue(validator.isValid(9));
+    assertFalse(validator.isValid(-10.001));
+    assertFalse(validator.isValid(-14));
   }
 
 }
