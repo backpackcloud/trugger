@@ -31,12 +31,12 @@ import java.lang.annotation.Annotation;
  * the example bellow:
  * <p>
  * <pre>{@code
- *  @NotNull
- *  @NotEmpty
- *  @SomeConstraint
- *  @ValidatorClass(DomainValidator.class)
- *  @Retention(RetentionPolicy.RUNTIME)
- *  public @interface MyConstraint {
+ *  &#64;NotNull
+ *  &#64;NotEmpty
+ *  &#64;SomeConstraint
+ *  &#64;ValidatorClass(DomainValidator.class)
+ *  &#64;Retention(RetentionPolicy.RUNTIME)
+ *  public &#64;interface MyConstraint {
  *  }
  * }
  * </pre>
