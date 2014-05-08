@@ -15,23 +15,15 @@
  * limitations under the License.
  */
 
-package org.atatec.trugger.validation.validator;
+package org.atatec.trugger.validation;
 
-import org.atatec.trugger.validation.Shared;
-import org.atatec.trugger.validation.Validator;
+import java.lang.annotation.*;
 
 /**
- * Validator that accepts only non null values.
- *
  * @author Marcelo Guimarães
- * @since 5.1
  */
-@Shared
-public class NotNullValidator implements Validator {
-
-  @Override
-  public boolean isValid(Object value) {
-    return value != null;
-  }
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Shared {
 
 }

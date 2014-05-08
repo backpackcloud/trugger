@@ -17,6 +17,7 @@
 
 package org.atatec.trugger.validation.validator;
 
+import org.atatec.trugger.validation.Shared;
 import org.atatec.trugger.validation.Validator;
 
 import java.lang.reflect.Array;
@@ -32,6 +33,7 @@ import java.util.Map;
  * @author Marcelo Guimarães
  * @since 5.1
  */
+@Shared
 public class NotEmptyValidator implements Validator {
 
   private final TypedCompositeValidator validator;

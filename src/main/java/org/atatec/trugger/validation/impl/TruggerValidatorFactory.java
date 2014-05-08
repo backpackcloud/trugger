@@ -27,10 +27,10 @@ import org.atatec.trugger.validation.*;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static org.atatec.trugger.reflection.ParameterPredicates.assignableTo;
-import static org.atatec.trugger.reflection.ParameterPredicates.named;
-import static org.atatec.trugger.reflection.ParameterPredicates.type;
+import static org.atatec.trugger.reflection.ParameterPredicates.*;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 
 /**
@@ -41,7 +41,13 @@ import static org.atatec.trugger.reflection.Reflection.invoke;
  */
 public class TruggerValidatorFactory implements ValidatorFactory {
 
-  private ComponentFactory<ValidatorClass, Validator> createFactory() {
+  private final Map<Class<? extends Annotation>, Validator> shared;
+
+  public TruggerValidatorFactory() {
+    shared = new ConcurrentHashMap<>();
+  }
+
+  private ComponentFactory<ValidatorClass, Validator> createFactory(Annotation annotation) {
     ComponentFactory<ValidatorClass, Validator> factory =
         new ComponentFactory<>(ValidatorClass.class);
     factory.toCreate(
@@ -49,11 +55,15 @@ public class TruggerValidatorFactory implements ValidatorFactory {
           ArgumentsValidator argumentsValidator = new ArgumentsValidator(this);
           if (argumentsValidator.isValid(constructor, args)) {
             Validator validator = invoke(constructor).withArgs(args);
-            return Interception.intercept(Validator.class)
+            Validator proxy = Interception.intercept(Validator.class)
                 .on(validator)
                 .onCall(new ValidationInterceptionHandler(this)
                     .onInvalid(context -> true))
                 .proxy();
+            if (validator.getClass().isAnnotationPresent(Shared.class)) {
+              shared.put(annotation.annotationType(), proxy);
+            }
+            return proxy;
           }
           // there is no way to validate the value using this validator
           // so lets say that the value is not invalid (this is not the same
@@ -67,14 +77,22 @@ public class TruggerValidatorFactory implements ValidatorFactory {
 
   @Override
   public Validator create(Annotation annotation) {
-    ComponentFactory<ValidatorClass, Validator> factory = createFactory();
-    return factory.create(annotation);
+    Class<? extends Annotation> type = annotation.annotationType();
+    if (shared.containsKey(type)) {
+      return shared.get(type);
+    }
+    return createFactory(annotation).create(annotation);
   }
 
   @Override
   public Validator create(Annotation annotation, Element element,
                           Object target, ValidationEngine engine) {
-    ComponentFactory<ValidatorClass, Validator> factory = createFactory();
+    Class<? extends Annotation> type = annotation.annotationType();
+    if (shared.containsKey(type)) {
+      return shared.get(type);
+    }
+    ComponentFactory<ValidatorClass, Validator> factory =
+        createFactory(annotation);
     factory.toConfigure(ComponentFactory.defaults().andThen(
         (context, an) -> {
           context.use(element).when(type(Element.class));
