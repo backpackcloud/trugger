@@ -18,10 +18,7 @@
 package org.atatec.trugger.test.validation;
 
 import org.atatec.trugger.validation.*;
-import org.atatec.trugger.validation.validator.DomainValidator;
-import org.atatec.trugger.validation.validator.NotNull;
-import org.atatec.trugger.validation.validator.Valid;
-import org.atatec.trugger.validation.validator.Valids;
+import org.atatec.trugger.validation.validator.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,8 +52,10 @@ public class ValidationTest extends BaseValidatorTest {
   public static class Product {
 
     @NotNull
+    @NotEmpty
     public String description;
 
+    @Min(0)
     public double price;
 
   }
@@ -66,6 +65,7 @@ public class ValidationTest extends BaseValidatorTest {
     @ValidAndNotNull
     public Product product;
 
+    @Min(1)
     public int quantity;
 
     public double total() {
@@ -77,10 +77,11 @@ public class ValidationTest extends BaseValidatorTest {
   public static class Purchase {
 
     @NotNull
+    @NotEmpty
     public String number;
 
     @NotNull
-    @Valid
+    @Valids
     public List<Item> items = new ArrayList<>();
 
     @Valid
@@ -107,7 +108,11 @@ public class ValidationTest extends BaseValidatorTest {
 
   Customer invalidCustomer;
   Purchase invalidPurchase;
+  Item invalidItem;
+  Product invalidProduct;
 
+  Customer validCustomer;
+  Purchase validPurchase;
   Item validItem;
   Product validProduct;
 
@@ -117,6 +122,12 @@ public class ValidationTest extends BaseValidatorTest {
     invalidCustomer.name = "Marcelo";
     invalidCustomer.phone = "9013901031";
 
+    validCustomer = new Customer();
+    validCustomer.name = "Marcelo";
+    validCustomer.phone = "9013901031";
+    validCustomer.email = "myemail@server.com";
+    validCustomer.address = "some address";
+
     invalidPurchase = new Purchase();
     invalidPurchase.customer = invalidCustomer;
 
@@ -124,9 +135,27 @@ public class ValidationTest extends BaseValidatorTest {
     validProduct.price = 25.90;
     validProduct.description = "Thing";
 
+    invalidProduct = new Product();
+    invalidProduct.price = 0;
+    invalidProduct.description = "";
+
     validItem = new Item();
     validItem.quantity = 1;
     validItem.product = validProduct;
+
+    invalidItem = new Item();
+    invalidItem.quantity = 0;
+    invalidItem.product = invalidProduct;
+
+    validPurchase = new Purchase();
+    validPurchase.customer = validCustomer;
+    validPurchase.items.add(validItem);
+    validPurchase.number = "AB201030ADBA00113";
+
+    invalidPurchase = new Purchase();
+    invalidPurchase.customer = invalidCustomer;
+    invalidPurchase.items.add(validItem);
+    invalidPurchase.items.add(invalidItem);
   }
 
   private Validator validatorFor(Class<? extends Annotation> type) {
@@ -236,6 +265,12 @@ public class ValidationTest extends BaseValidatorTest {
     assertTrue(validator.isValid(map));
 
     assertTrue(validator.isValid(null));
+  }
+
+  @Test
+  public void testValidation() {
+    assertTrue(Validation.engine().validate(validPurchase).isValid());
+    assertFalse(Validation.engine().validate(invalidPurchase).isValid());
   }
 
 }
