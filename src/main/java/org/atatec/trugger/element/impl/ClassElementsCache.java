@@ -49,8 +49,8 @@ public abstract class ClassElementsCache {
     Map<String, Element> elementMap = map.get(type);
     if (elementMap == null) {
       elementMap = new HashMap<>(20);
-      map.put(type, elementMap);
       loadElements(type, elementMap);
+      map.put(type, elementMap);
     }
     return elementMap;
   }
