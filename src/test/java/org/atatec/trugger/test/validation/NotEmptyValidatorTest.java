@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertSame;
+
 /**
  * @author Marcelo Guimarães
  */
@@ -48,6 +50,11 @@ public class NotEmptyValidatorTest extends BaseValidatorTest<NotEmpty> {
     map.put("key", "value");
     assertValid(map);
     assertInvalid(Collections.emptyMap());
+  }
+
+  @Test
+  public void testSharedValidator() {
+    assertSame(newValidator(), newValidator());
   }
 
 }

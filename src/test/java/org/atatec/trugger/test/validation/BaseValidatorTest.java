@@ -74,6 +74,10 @@ public abstract class BaseValidatorTest<E extends Annotation> {
     validator = factory.create(builder.createMock());
   }
 
+  protected final Validator newValidator() {
+    return factory.create(builder.createMock());
+  }
+
   protected final void createValidator(Element element, Object target) {
     validator = factory.create(builder.createMock(), element, target, Validation.engine());
   }
