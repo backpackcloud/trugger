@@ -82,8 +82,7 @@ public class TruggerValidationEngine implements ValidationEngine {
         } else {
           engine = this;
         }
-        Validator validator = factory
-            .create(annotation, element, target, engine);
+        Validator validator = factory.create(annotation, element, target, engine);
         if (validator != null && !validator.isValid(value)) {
           invalidElement.addViolatedConstraint(type, annotation);
           valid = false;

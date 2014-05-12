@@ -23,7 +23,10 @@ import org.atatec.trugger.validation.InvalidElement;
 import org.atatec.trugger.validation.ValidationEngine;
 import org.atatec.trugger.validation.ValidationResult;
 
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -57,11 +60,34 @@ public class MergeValidationEngine implements ValidationEngine {
 
   @Override
   public ValidationResult validate(Object target) {
+    if (target instanceof List) {
+      ValidationResultImpl result = new ValidationResultImpl(target);
+      AtomicInteger index = new AtomicInteger(0);
+      for (Object o : (List) target) {
+        _validate(o, String.valueOf(index) + ".",
+            (el) -> result.invalidElements.put(index.toString(), el));
+        index.incrementAndGet();
+      }
+      /*if (result.isInvalid()) {
+        invalidElements.put(element.name(),
+            new InvalidElementImpl(element, target, null)
+        );
+      }*/
+      return result;
+    }
+    return _validate(target, "", (el) -> {
+      return;
+    });
+  }
+
+  private ValidationResult _validate(Object target, String mod,
+                                     Consumer<InvalidElement> consumer) {
     String parent = element.name();
     ValidationResult result = engine.filter(filter).validate(target);
     for (InvalidElement invalidElement : result.invalidElements()) {
+      consumer.accept(invalidElement);
       String newName = String.format(
-          "%s.%s", parent, invalidElement.name()
+          "%s.%s%s", parent, mod, invalidElement.name()
       );
       Element nestedElement = Elements.element(newName).in(target);
       invalidElements.put(newName,
