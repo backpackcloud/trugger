@@ -226,6 +226,8 @@ public class ValidationTest extends BaseValidatorTest {
     assertTrue(result.isElementInvalid("product.description"));
     assertTrue(result.invalidElement("product.description")
         .isConstraintViolated(NotNull.class));
+    assertNotNull(result.invalidElement("product.description")
+        .violatedConstraint(NotNull.class));
   }
 
   @Test
@@ -292,6 +294,11 @@ public class ValidationTest extends BaseValidatorTest {
     purchase.items.add(new Item());
 
     assertFalse(engine.validate(purchase).isInvalid());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testMultiTypeNotConfigured() {
+    new MultiTypeValidator().isValid(new Object());
   }
 
 }
