@@ -34,6 +34,8 @@ import static org.atatec.trugger.util.mock.Mock.annotation;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.*;
 
+import static org.atatec.trugger.element.ElementPredicates.type;
+
 /**
  * @author Marcelo Guimarães
  */
@@ -269,8 +271,27 @@ public class ValidationTest extends BaseValidatorTest {
 
   @Test
   public void testValidation() {
-    assertFalse(Validation.engine().validate(validPurchase).isInvalid());
-    assertTrue(Validation.engine().validate(invalidPurchase).isInvalid());
+    ValidationResult result = Validation.engine().validate(validPurchase);
+    assertFalse(result.isInvalid());
+    assertSame(validPurchase, result.target());
+
+    result = Validation.engine().validate(invalidPurchase);
+    assertTrue(result.isInvalid());
+    assertSame(invalidPurchase, result.target());
+  }
+
+  @Test
+  public void testFilterForward() {
+    ValidationEngine engine = Validation.engine()
+        .filter(type(String.class).or(type(Item.class)));
+    Purchase purchase = new Purchase();
+    purchase.number = "01309429";
+    purchase.items.add(new Item());
+    purchase.items.add(new Item());
+    purchase.items.add(new Item());
+    purchase.items.add(new Item());
+
+    assertFalse(engine.validate(purchase).isInvalid());
   }
 
 }
