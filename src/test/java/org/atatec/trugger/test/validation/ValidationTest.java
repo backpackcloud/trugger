@@ -282,6 +282,11 @@ public class ValidationTest extends BaseValidatorTest {
     assertSame(invalidPurchase, result.target());
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testMultiTypeNotConfigured() {
+    new MultiTypeValidator().isValid(new Object());
+  }
+
   @Test
   public void testFilterForward() {
     ValidationEngine engine = Validation.engine()
@@ -296,9 +301,35 @@ public class ValidationTest extends BaseValidatorTest {
     assertFalse(engine.validate(purchase).isInvalid());
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testMultiTypeNotConfigured() {
-    new MultiTypeValidator().isValid(new Object());
+  @MergeElements
+  @ValidatorClass(MyValidator.class)
+  @Retention(RetentionPolicy.RUNTIME)
+  public static @interface MyConstraint {
+
+  }
+
+  public static class MyValidator implements Validator {
+
+    private final ValidationEngine engine;
+
+    public MyValidator(ValidationEngine engine) {
+      this.engine = engine;
+    }
+
+    @Override
+    public boolean isValid(@NotNull Object value) {
+      ValidationResult result = engine.filter(el -> false).validate(value);
+      return !result.isInvalid();
+    }
+  }
+
+  @Test
+  public void testFilterOverride() {
+    Object test = new Object() {
+      @MyConstraint
+      Customer customer = new Customer();
+    };
+    assertFalse(Validation.engine().validate(test).isInvalid());
   }
 
 }
