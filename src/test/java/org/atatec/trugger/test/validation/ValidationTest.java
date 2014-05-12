@@ -41,6 +41,7 @@ public class ValidationTest extends BaseValidatorTest {
 
   @NotNull
   @Valid
+  @MergeElements
   @ValidatorClass(DomainValidator.class)
   @Retention(RetentionPolicy.RUNTIME)
   public static @interface ValidAndNotNull {
@@ -166,7 +167,6 @@ public class ValidationTest extends BaseValidatorTest {
   public void testInvalidSimpleValidation() {
     ValidationResult result = Validation.engine().validate(invalidCustomer);
     assertTrue(result.isInvalid());
-    assertFalse(result.isValid());
 
     assertTrue(result.isElementInvalid("email"));
     assertTrue(result.isElementInvalid("address"));
@@ -230,7 +230,7 @@ public class ValidationTest extends BaseValidatorTest {
   public void testValidDomainValidator() {
     ValidationResult result = Validation.engine().validate(validItem);
 
-    assertTrue(result.isValid());
+    assertFalse(result.isInvalid());
     assertTrue(result.invalidElements().isEmpty());
   }
 
@@ -269,8 +269,8 @@ public class ValidationTest extends BaseValidatorTest {
 
   @Test
   public void testValidation() {
-    assertTrue(Validation.engine().validate(validPurchase).isValid());
-    assertFalse(Validation.engine().validate(invalidPurchase).isValid());
+    assertFalse(Validation.engine().validate(validPurchase).isInvalid());
+    assertTrue(Validation.engine().validate(invalidPurchase).isInvalid());
   }
 
 }

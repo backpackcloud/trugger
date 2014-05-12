@@ -17,9 +17,9 @@
 
 package org.atatec.trugger.validation;
 
-import org.atatec.trugger.Result;
-import org.atatec.trugger.element.Elements;
-import org.atatec.trugger.selector.ElementsSelector;
+import org.atatec.trugger.element.Element;
+
+import java.util.function.Predicate;
 
 /**
  * Interface that defines an engine capable of validating elements of an object
@@ -35,13 +35,12 @@ import org.atatec.trugger.selector.ElementsSelector;
 public interface ValidationEngine {
 
   /**
-   * Validates only the elements denoted by the given selector.
+   * Validates only the elements that matches the given filter.
    *
-   * @param selector the selector to filter the elements.
-   * @return the component to specify the validation target and obtaining
-   * the validation result.
+   * @param filter the filter to restrict the elements.
+   * @return a new ValidationEngine that uses the given filter.
    */
-  Result<ValidationResult, Object> validate(ElementsSelector selector);
+  ValidationEngine filter(Predicate<Element> filter);
 
   /**
    * Validates all elements in the given target.
@@ -49,8 +48,6 @@ public interface ValidationEngine {
    * @param target the target to validate.
    * @return the validation result.
    */
-  default ValidationResult validate(Object target) {
-    return validate(Elements.elements()).in(target);
-  }
+  ValidationResult validate(Object target);
 
 }

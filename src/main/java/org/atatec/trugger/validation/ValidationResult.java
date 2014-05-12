@@ -51,10 +51,6 @@ public interface ValidationResult {
    */
   boolean isElementInvalid(String name);
 
-  boolean isValid();
-
-  default boolean isInvalid() {
-    return !isValid();
-  }
+  boolean isInvalid();
 
 }

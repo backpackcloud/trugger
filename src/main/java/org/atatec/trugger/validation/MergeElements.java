@@ -15,24 +15,19 @@
  * limitations under the License.
  */
 
-package org.atatec.trugger.validation.validator;
+package org.atatec.trugger.validation;
 
-import org.atatec.trugger.validation.MergeElements;
-import org.atatec.trugger.validation.ValidatorClass;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.*;
 
 /**
- * Indicates that the element must be valid using a validation engine.
+ * Indicates that this constraint perform validations that should merge the
+ * invalid elements into the elements of the main validation.
  *
  * @author Marcelo Guimarães
  * @since 5.1
  */
 @Documented
-@MergeElements
 @Retention(RetentionPolicy.RUNTIME)
-@ValidatorClass(ValidValidator.class)
-public @interface Valid {
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface MergeElements {
 }

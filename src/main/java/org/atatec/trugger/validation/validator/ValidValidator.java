@@ -49,7 +49,7 @@ public class ValidValidator implements Validator {
 
   @Override
   public boolean isValid(@NotNull Object value) {
-    return engine.validate(value).isValid();
+    return !engine.validate(value).isInvalid();
   }
 
 }
