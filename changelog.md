@@ -5,11 +5,13 @@
 This release marks the reborn of **Validation** module in a different way. The
 validation module now is a simple solution for manually validating objects
 (useful in backend processing). It is not an implementation for the *JSR-303*
-nor a competitor.
+nor a competitor but it includes features that I always want in a validation
+engine to help creating elegant validators with less code.
 
 ### New Modules
 
-  - Validation
+  - Validation (completely from scratch and much better than the old and ugly
+  validation module)
 
 ### New Features
 
