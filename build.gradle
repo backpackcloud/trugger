@@ -84,9 +84,9 @@ task pom << {
 }
 
 task pdf(type: Exec) {
-  commandLine 'pandoc', '--toc', '--toc-depth=2' ,'-S', '-s', '-o',
-      "$buildDir/trugger.pdf", '--highlight-style=kate', 'README.md',
-      'changelog.md'
+  commandLine 'pandoc', '-S', '-s', '-o',
+      "$buildDir/trugger.pdf", '--highlight-style=kate', 'trugger.md',
+      'README.md', 'changelog.md'
 }
 
 task dist(type: Zip,
