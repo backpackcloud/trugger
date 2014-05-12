@@ -68,11 +68,6 @@ public class MergeValidationEngine implements ValidationEngine {
             (el) -> result.invalidElements.put(index.toString(), el));
         index.incrementAndGet();
       }
-      /*if (result.isInvalid()) {
-        invalidElements.put(element.name(),
-            new InvalidElementImpl(element, target, null)
-        );
-      }*/
       return result;
     }
     return _validate(target, "", (el) -> {
