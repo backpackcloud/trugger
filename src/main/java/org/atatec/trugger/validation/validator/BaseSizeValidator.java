@@ -31,10 +31,10 @@ import java.util.Map;
  */
 public abstract class BaseSizeValidator implements Validator {
 
-  private final TypedCompositeValidator validator;
+  private final MultiTypeValidator validator;
 
   public BaseSizeValidator() {
-    this.validator = new TypedCompositeValidator();
+    this.validator = new MultiTypeValidator();
     initialize();
   }
 

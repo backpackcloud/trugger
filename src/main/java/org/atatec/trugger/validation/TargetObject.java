@@ -22,9 +22,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
+ * Indicates that the object being validated should be passed to the validator.
+ *
  * @author Marcelo Guimarães
+ * @since 5.1
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UseReferences {
+public @interface TargetObject {
+
 }

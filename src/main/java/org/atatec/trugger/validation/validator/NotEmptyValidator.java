@@ -36,10 +36,10 @@ import java.util.Map;
 @Shared
 public class NotEmptyValidator implements Validator {
 
-  private final TypedCompositeValidator validator;
+  private final MultiTypeValidator validator;
 
   public NotEmptyValidator() {
-    this.validator = new TypedCompositeValidator();
+    this.validator = new MultiTypeValidator();
     initialize();
   }
 

@@ -22,6 +22,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
+ * Indicates that an element from the target object should be passed to the
+ * validator.
+ *
  * @author Marcelo Guimarães
  * @since 5.1
  */
@@ -30,8 +33,8 @@ import java.lang.annotation.RetentionPolicy;
 public @interface TargetElement {
 
   /**
-   * Maps the type of the target element that the annotated element refers.
+   * Maps the name of the dependency to associate the target element.
    */
-  Class value() default Object.class;
+  String value() default "";
 
 }

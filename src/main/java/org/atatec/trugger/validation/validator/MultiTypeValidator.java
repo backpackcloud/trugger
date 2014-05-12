@@ -31,18 +31,30 @@ import static org.atatec.trugger.reflection.ClassPredicates.primitiveArrayType;
 
 /**
  * A composite validator that selects the most suitable validator based on the
- * target value's type.
+ * type of the target value.
  *
  * @author Marcelo Guimarães
  * @since 5.1
  */
-public class TypedCompositeValidator implements Validator {
+public class MultiTypeValidator implements Validator {
 
   private Map<Predicate<Class>, Validator> map = new LinkedHashMap<>();
   private Validator generic = value -> {
     throw new IllegalArgumentException("Cannot determine validator to use " +
         "for type " + Utils.resolveType(value));
   };
+
+  public MultiTypeValidator() {
+    initialize();
+  }
+
+  /**
+   * A convenient method to initialize the mappings in case of using this
+   * validator as a superclass.
+   */
+  protected void initialize() {
+
+  }
 
   /**
    * Maps a validator to use when the value is assignable to the given type.
@@ -51,10 +63,10 @@ public class TypedCompositeValidator implements Validator {
    * @param <E>  the type
    * @return a component to select the validator.
    */
-  public <E> ObjectMapper<Validator<E>, TypedCompositeValidator> map(Class<E> type) {
+  public final <E> ObjectMapper<Validator<E>, MultiTypeValidator> map(Class<E> type) {
     return value -> {
       map.put(ClassPredicates.assignableTo(type), value);
-      return TypedCompositeValidator.this;
+      return MultiTypeValidator.this;
     };
   }
 
@@ -63,10 +75,10 @@ public class TypedCompositeValidator implements Validator {
    *
    * @return a component to select the validator.
    */
-  public ObjectMapper<Validator<Object[]>, TypedCompositeValidator> mapArray() {
+  public final ObjectMapper<Validator<Object[]>, MultiTypeValidator> mapArray() {
     return value -> {
       map.put(arrayType().and(primitiveArrayType().negate()), value);
-      return TypedCompositeValidator.this;
+      return MultiTypeValidator.this;
     };
   }
 
@@ -75,15 +87,16 @@ public class TypedCompositeValidator implements Validator {
    *
    * @return a component to select the validator.
    */
-  public ObjectMapper<Validator<Object>, TypedCompositeValidator> mapOthers() {
+  public final ObjectMapper<Validator<Object>, MultiTypeValidator> mapOthers() {
     return value -> {
       generic = value;
-      return TypedCompositeValidator.this;
+      return MultiTypeValidator.this;
     };
   }
 
   @Override
-  public boolean isValid(Object value) {
+  // @NotNull if this validator is used with inheritance
+  public final boolean isValid(@NotNull Object value) {
     Class type = Utils.resolveType(value);
     for (Map.Entry<Predicate<Class>, Validator> entry : map.entrySet()) {
       if (entry.getKey().test(type)) {

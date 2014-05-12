@@ -18,7 +18,6 @@
 package org.atatec.trugger.validation.validator;
 
 import org.atatec.trugger.validation.TargetElement;
-import org.atatec.trugger.validation.UseReferences;
 import org.atatec.trugger.validation.ValidatorClass;
 
 import java.lang.annotation.Documented;
@@ -32,12 +31,11 @@ import java.lang.annotation.RetentionPolicy;
  * @since 5.1
  */
 @Documented
-@UseReferences
 @Retention(RetentionPolicy.RUNTIME)
 @ValidatorClass(GreaterThanValidator.class)
 public @interface GreaterThan {
 
-  @TargetElement(Comparable.class) String value();
+  @TargetElement("reference") String value();
 
   boolean orEqual() default false;
 

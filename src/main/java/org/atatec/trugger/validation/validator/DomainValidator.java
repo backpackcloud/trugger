@@ -18,6 +18,7 @@
 package org.atatec.trugger.validation.validator;
 
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.validation.TargetObject;
 import org.atatec.trugger.validation.ValidationEngine;
 import org.atatec.trugger.validation.Validator;
 import org.atatec.trugger.validation.ValidatorFactory;
@@ -54,7 +55,7 @@ public class DomainValidator implements Validator {
   private final ValidationEngine engine;
 
   public DomainValidator(ValidatorFactory factory, Annotation annotation,
-                         Object target, Element element,
+                         @TargetObject Object target, Element element,
                          ValidationEngine engine) {
     this.factory = factory;
     this.annotation = annotation;

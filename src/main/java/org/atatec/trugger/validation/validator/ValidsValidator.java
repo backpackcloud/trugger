@@ -33,7 +33,7 @@ import java.util.Map;
 public class ValidsValidator implements Validator {
 
   private final ValidationEngine engine;
-  private final TypedCompositeValidator validator;
+  private final MultiTypeValidator validator;
 
   public ValidsValidator() {
     this(Validation.engine());
@@ -41,7 +41,7 @@ public class ValidsValidator implements Validator {
 
   public ValidsValidator(ValidationEngine engine) {
     this.engine = engine;
-    this.validator = new TypedCompositeValidator();
+    this.validator = new MultiTypeValidator();
     initialize();
   }
 

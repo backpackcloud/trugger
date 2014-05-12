@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.reflection.ParameterPredicates.*;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 
@@ -97,9 +98,7 @@ public class TruggerValidatorFactory implements ValidatorFactory {
         (context, an) -> {
           context.use(element).when(type(Element.class));
           context.use(engine).when(type(ValidationEngine.class));
-          context.use(target).when(assignableTo(target.getClass())
-
-              .or(type(Object.class)));
+          context.use(target).when(annotatedWith(TargetObject.class));
           context.use(an).when(type(Annotation.class));
           context.use(TruggerValidatorFactory.this)
               .when(type(ValidatorFactory.class));
@@ -110,15 +109,22 @@ public class TruggerValidatorFactory implements ValidatorFactory {
               .forEach(annotationElement -> {
                 TargetElement targetElement = annotationElement
                     .getAnnotation(TargetElement.class);
-                Object value = Elements.element(annotationElement.get())
-                    .in(target).get();
-                context.use(value).when(assignableTo(targetElement.value())
-                    .or(named(annotationElement.name())));
+                context.use(() -> element(annotationElement.get())
+                    .in(target).get())
+                    .when(named(targetElement.value()));
               });
+
           // force injection when "-parameters" are not used in compilation
           elements.stream().forEach(
               el -> context.use(() -> el.get()).when(type(el.type()))
           );
+          elements.stream()
+              .filter(ElementPredicates.annotatedWith(TargetElement.class))
+              .forEach(annotationElement -> {
+                Element tgElement = element(annotationElement.get()).in(target);
+                context.use(() -> tgElement.get())
+                    .when(e -> tgElement.type().isAssignableFrom(e.getType()));
+              });
         }
     ));
     return factory.create(annotation);

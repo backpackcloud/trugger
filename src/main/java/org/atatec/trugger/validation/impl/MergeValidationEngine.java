@@ -27,7 +27,11 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 /**
+ * A validation engine that merges the invalid elements with the main validation
+ * result.
+ *
  * @author Marcelo Guimarães
+ * @since 5.1
  */
 public class MergeValidationEngine implements ValidationEngine {
 
