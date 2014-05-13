@@ -24,7 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicates that the annotated element should follow a given pattern.
+ * Indicates that the annotated element should follow a given pattern. If the
+ * element is not a String, its String representation (<code>toString</code>)
+ * will be used.
  *
  * @author Marcelo Guimarães
  * @since 5.1

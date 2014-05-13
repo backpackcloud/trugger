@@ -25,7 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicates that the element must be valid using a validation engine.
+ * Indicates that the element must be valid using a validation engine and its
+ * invalid elements will be included in the validation result.
+ *
+ * This constraint also applies to Lists and Arrays but can lead to a overhead
+ * in case of many items because of the invalid elements inclusion.
  *
  * @author Marcelo Guimarães
  * @since 5.1

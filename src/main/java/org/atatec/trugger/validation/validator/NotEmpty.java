@@ -24,7 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicates that the element must not be <code>null</code>.
+ * Indicates that the element must not be empty. This constraint applies to
+ * Strings, Collections, Arrays and Maps.
  *
  * @author Marcelo Guimarães
  * @since 5.1

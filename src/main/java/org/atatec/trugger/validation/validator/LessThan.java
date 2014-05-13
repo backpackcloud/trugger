@@ -25,7 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicates that the value should be less than another value.
+ * Indicates that the value should be less than another value. This constraint
+ * applies to any Comparable object.
  *
  * @author Marcelo Guimarães
  * @since 5.1

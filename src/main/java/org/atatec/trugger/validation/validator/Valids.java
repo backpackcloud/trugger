@@ -27,6 +27,8 @@ import java.lang.annotation.RetentionPolicy;
  * Indicates that all items must be valid. This annotation applies to
  * collections arrays and map values.
  *
+ * Note that this constraint will not report which items are invalid.
+ *
  * @author Marcelo Guimarães
  * @since 5.1
  */

@@ -24,7 +24,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Constraint that defines a maximum value that an element should have.
+ * Constraint that defines a maximum value that an element should have. This
+ * constraint applies to:
+ * <p>
+ * <ul>
+ * <li>Numbers: checks the number value</li>
+ * <li>Array: checks the array length</li>
+ * <li>Collection: checks the collection size</li>
+ * <li>Map: checks the map size</li>
+ * <li>String: checks the string length</li>
+ * <li></li>
+ * </ul>
  *
  * @author Marcelo Guimarães
  * @since 5.1
