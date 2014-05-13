@@ -77,8 +77,7 @@ public class TruggerValidationEngine implements ValidationEngine {
     ValidationEngine engine;
     for (Element element : elements) {
       Object value = null;
-      InvalidElementImpl invalidElement =
-          new InvalidElementImpl(element, value);
+      InvalidElementImpl invalidElement = null;
       boolean valid = true;
       boolean valueProcessed = false;
       for (Annotation annotation : element.getAnnotations()) {
@@ -94,6 +93,7 @@ public class TruggerValidationEngine implements ValidationEngine {
         if (validator != null) {
           if (!valueProcessed) {
             value = element.in(target).get();
+            invalidElement = new InvalidElementImpl(element, value);
             valueProcessed = true;
           }
           if (!validator.isValid(value)) {
