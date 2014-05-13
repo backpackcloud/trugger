@@ -65,14 +65,19 @@ class ValidationResultImpl implements ValidationResult {
   }
 
   void add(int index, Object value, ValidationResultImpl result) {
-    for (InvalidElement element : result.invalidElements()) {
-      String name = String.format("%d.%s", index, element.name());
-      InvalidElement invalid = new InvalidElementImpl(
-          Elements.element(name).in(target),
-          value,
-          element.violatedConstraints()
-      );
-      invalidElements.put(name, invalid);
+    if (result.isInvalid()) {
+      invalidElements.put(String.valueOf(index), new InvalidElementImpl(
+          Elements.element(String.valueOf(index)).in(target),
+          value
+      ));
+      for (InvalidElement element : result.invalidElements()) {
+        String name = String.format("%d.%s", index, element.name());
+        invalidElements.put(name, new InvalidElementImpl(
+            Elements.element(name).in(target),
+            element.invalidValue(),
+            element.violatedConstraints()
+        ));
+      }
     }
   }
 

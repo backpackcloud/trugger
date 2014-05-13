@@ -27,6 +27,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -56,7 +58,7 @@ public class ValidValidationTest extends BaseValidatorTest<Valid> {
   @Test
   public void test() {
     projects.add(new Project("Marcelo", "Trugger"));
-    projects.add(new Project(null, null));
+    projects.add(new Project(null, ""));
     projects.add(new Project("Marcelo", "Robobundle"));
     projects.add(new Project("Marcelo", "Soda"));
 
@@ -65,9 +67,12 @@ public class ValidValidationTest extends BaseValidatorTest<Valid> {
     assertTrue(result.isInvalid());
 
     assertTrue(result.isElementInvalid("projects"));
-    //assertTrue(result.isElementInvalid("projects.1"));
+    assertTrue(result.isElementInvalid("projects.1"));
     assertTrue(result.isElementInvalid("projects.1.name"));
     assertTrue(result.isElementInvalid("projects.1.author"));
+
+    assertNull(result.invalidElement("projects.1.author").get());
+    assertEquals("", result.invalidElement("projects.1.name").get());
 
     testResultElements(result);
 
@@ -75,7 +80,7 @@ public class ValidValidationTest extends BaseValidatorTest<Valid> {
 
     assertTrue(result.isInvalid());
 
-    //assertTrue(result.isElementInvalid("1"));
+    assertTrue(result.isElementInvalid("1"));
     assertTrue(result.isElementInvalid("1.name"));
     assertTrue(result.isElementInvalid("1.author"));
   }

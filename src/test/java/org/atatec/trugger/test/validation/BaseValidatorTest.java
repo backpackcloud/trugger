@@ -19,6 +19,7 @@ package org.atatec.trugger.test.validation;
 
 import org.atatec.trugger.ObjectMapper;
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.reflection.Reflection;
 import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.*;
@@ -26,8 +27,7 @@ import org.junit.Before;
 
 import java.lang.annotation.Annotation;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Guimarães
@@ -83,6 +83,9 @@ public abstract class BaseValidatorTest<E extends Annotation> {
   protected final void testResultElements(ValidationResult result) {
     for (InvalidElement invalidElement : result.invalidElements()) {
       assertTrue(result.isElementInvalid(invalidElement.name()));
+      Element element = Elements.element(invalidElement.name()).in(result.target());
+      assertNotNull(element);
+      assertSame(invalidElement.invalidValue(), element.get());
     }
   }
 

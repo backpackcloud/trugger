@@ -46,10 +46,8 @@ class InvalidElementImpl implements InvalidElement {
     this.violatedConstraints = new HashMap<>();
   }
 
-  InvalidElementImpl(
-      Element element,
-      Object invalidValue,
-      Collection<Annotation> violatedConstraints) {
+  InvalidElementImpl(Element element, Object invalidValue,
+                     Collection<Annotation> violatedConstraints) {
     this.element = element;
     this.invalidValue = invalidValue;
     this.violatedConstraints = new HashMap<>();
@@ -70,7 +68,7 @@ class InvalidElementImpl implements InvalidElement {
   }
 
   void addViolatedConstraint(Class<? extends Annotation> constraint,
-                                    Annotation annotation) {
+                             Annotation annotation) {
     violatedConstraints.put(constraint, annotation);
   }
 

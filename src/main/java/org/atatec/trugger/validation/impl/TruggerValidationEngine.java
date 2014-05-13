@@ -67,6 +67,13 @@ public class TruggerValidationEngine implements ValidationEngine {
         result.add(i++, o, _validate(o));
       }
       return result;
+    } else if (target.getClass().isArray()) {
+      ValidationResultImpl result = new ValidationResultImpl(target);
+      int i = 0;
+      for (Object o : (Object[]) target) {
+        result.add(i++, o, _validate(o));
+      }
+      return result;
     }
     return _validate(target);
   }

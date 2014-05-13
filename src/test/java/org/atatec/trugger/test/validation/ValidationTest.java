@@ -183,11 +183,12 @@ public class ValidationTest extends BaseValidatorTest {
     InvalidElement invalidElement = result.invalidElement("address");
     assertNotNull(invalidElement);
     assertEquals(null, invalidElement.invalidValue());
+
+    testResultElements(result);
+
     invalidCustomer.address = "New address set";
     assertEquals(null, invalidElement.invalidValue());
     assertTrue(invalidElement.isConstraintViolated(NotNull.class));
-
-    testResultElements(result);
   }
 
   @Test
@@ -223,6 +224,8 @@ public class ValidationTest extends BaseValidatorTest {
     assertTrue(result.isElementInvalid("product"));
     assertTrue(result.invalidElement("product")
         .isConstraintViolated(ValidAndNotNull.class));
+
+    testResultElements(result);
 
     item.product = new Product();
     result = Validation.engine().validate(item);
