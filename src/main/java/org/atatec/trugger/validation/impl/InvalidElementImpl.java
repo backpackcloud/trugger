@@ -51,9 +51,8 @@ class InvalidElementImpl implements InvalidElement {
     this.element = element;
     this.invalidValue = invalidValue;
     this.violatedConstraints = new HashMap<>();
-    for (Annotation violatedConstraint : violatedConstraints) {
-      this.violatedConstraints
-          .put(violatedConstraint.annotationType(), violatedConstraint);
+    for (Annotation constraint : violatedConstraints) {
+      this.violatedConstraints.put(constraint.annotationType(), constraint);
     }
   }
 
