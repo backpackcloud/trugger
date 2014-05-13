@@ -93,10 +93,12 @@ public class TruggerValidationEngine implements ValidationEngine {
         if (validator != null) {
           if (!valueProcessed) {
             value = element.in(target).get();
-            invalidElement = new InvalidElementImpl(element, value);
             valueProcessed = true;
           }
           if (!validator.isValid(value)) {
+            if (invalidElement == null) {
+              invalidElement = new InvalidElementImpl(element, value);
+            }
             invalidElement.addViolatedConstraint(type, annotation);
             valid = false;
           }
