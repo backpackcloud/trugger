@@ -65,9 +65,19 @@ public class ValidValidationTest extends BaseValidatorTest<Valid> {
     assertTrue(result.isInvalid());
 
     assertTrue(result.isElementInvalid("projects"));
-    assertTrue(result.isElementInvalid("projects.1"));
+    //assertTrue(result.isElementInvalid("projects.1"));
     assertTrue(result.isElementInvalid("projects.1.name"));
     assertTrue(result.isElementInvalid("projects.1.author"));
+
+    testResultElements(result);
+
+    result = Validation.engine().validate(projects);
+
+    assertTrue(result.isInvalid());
+
+    //assertTrue(result.isElementInvalid("1"));
+    assertTrue(result.isElementInvalid("1.name"));
+    assertTrue(result.isElementInvalid("1.author"));
   }
 
 }

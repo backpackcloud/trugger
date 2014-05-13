@@ -17,6 +17,7 @@
 
 package org.atatec.trugger.validation.impl;
 
+import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.validation.InvalidElement;
 import org.atatec.trugger.validation.ValidationResult;
 
@@ -61,6 +62,18 @@ class ValidationResultImpl implements ValidationResult {
   @Override
   public Collection<InvalidElement> invalidElements() {
     return Collections.unmodifiableCollection(invalidElements.values());
+  }
+
+  void add(int index, Object value, ValidationResultImpl result) {
+    for (InvalidElement element : result.invalidElements()) {
+      String name = String.format("%d.%s", index, element.name());
+      InvalidElement invalid = new InvalidElementImpl(
+          Elements.element(name).in(target),
+          value,
+          element.violatedConstraints()
+      );
+      invalidElements.put(name, invalid);
+    }
   }
 
 }

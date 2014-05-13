@@ -17,6 +17,7 @@
 
 package org.atatec.trugger.test.validation;
 
+import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.validation.*;
 import org.atatec.trugger.validation.validator.*;
 import org.junit.Before;
@@ -71,6 +72,7 @@ public class ValidationTest extends BaseValidatorTest {
     @Min(1)
     public int quantity;
 
+    @Flag
     public double total() {
       return product.price * quantity;
     }
@@ -184,6 +186,8 @@ public class ValidationTest extends BaseValidatorTest {
     invalidCustomer.address = "New address set";
     assertEquals(null, invalidElement.invalidValue());
     assertTrue(invalidElement.isConstraintViolated(NotNull.class));
+
+    testResultElements(result);
   }
 
   @Test
@@ -197,6 +201,8 @@ public class ValidationTest extends BaseValidatorTest {
         .isConstraintViolated(Valid.class));
     assertTrue(result.invalidElement("customer.address")
         .isConstraintViolated(NotNull.class));
+
+    testResultElements(result);
   }
 
   @Test
@@ -205,6 +211,8 @@ public class ValidationTest extends BaseValidatorTest {
 
     assertTrue(result.isElementInvalid("customer"));
     assertFalse(result.invalidElement("customer").isConstraintViolated(Valid.class));
+
+    testResultElements(result);
   }
 
   @Test
@@ -228,6 +236,8 @@ public class ValidationTest extends BaseValidatorTest {
         .isConstraintViolated(NotNull.class));
     assertNotNull(result.invalidElement("product.description")
         .violatedConstraint(NotNull.class));
+
+    testResultElements(result);
   }
 
   @Test

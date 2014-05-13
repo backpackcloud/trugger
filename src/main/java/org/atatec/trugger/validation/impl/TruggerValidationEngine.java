@@ -22,7 +22,7 @@ import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.validation.*;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -60,6 +60,18 @@ public class TruggerValidationEngine implements ValidationEngine {
 
   @Override
   public ValidationResult validate(Object target) {
+    if (target instanceof List) {
+      ValidationResultImpl result = new ValidationResultImpl(target);
+      int i = 0;
+      for (Object o : (List) target) {
+        result.add(i++, o, _validate(o));
+      }
+      return result;
+    }
+    return _validate(target);
+  }
+
+  private ValidationResultImpl _validate(Object target) {
     ValidationResultImpl result = new ValidationResultImpl(target);
     List<Element> elements = Elements.elements().filter(filter).in(target);
     ValidationEngine engine;
@@ -70,22 +82,24 @@ public class TruggerValidationEngine implements ValidationEngine {
       boolean valid = true;
       boolean valueProcessed = false;
       for (Annotation annotation : element.getAnnotations()) {
-        if (!valueProcessed) {
-          value = element.in(target).get();
-          valueProcessed = true;
-        }
         Class<? extends Annotation> type = annotation.annotationType();
         if (type.isAnnotationPresent(MergeElements.class)) {
           engine = new MergeValidationEngine(
-              this, result.invalidElements, element, filter
+              this, result.invalidElements, element, filter, target
           );
         } else {
           engine = this;
         }
         Validator validator = factory.create(annotation, element, target, engine);
-        if (validator != null && !validator.isValid(value)) {
-          invalidElement.addViolatedConstraint(type, annotation);
-          valid = false;
+        if (validator != null) {
+          if (!valueProcessed) {
+            value = element.in(target).get();
+            valueProcessed = true;
+          }
+          if (!validator.isValid(value)) {
+            invalidElement.addViolatedConstraint(type, annotation);
+            valid = false;
+          }
         }
       }
       if (!valid) {

@@ -23,10 +23,7 @@ import org.atatec.trugger.validation.InvalidElement;
 import org.atatec.trugger.validation.ValidationEngine;
 import org.atatec.trugger.validation.ValidationResult;
 
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -42,52 +39,36 @@ public class MergeValidationEngine implements ValidationEngine {
   private final Map<String, InvalidElement> invalidElements;
   private final Element element;
   private final Predicate<Element> filter;
+  private final Object mainTarget;
 
   public MergeValidationEngine(ValidationEngine engine,
                                Map<String, InvalidElement> invalidElements,
                                Element element,
-                               Predicate<Element> filter) {
+                               Predicate<Element> filter,
+                               Object target) {
     this.engine = engine;
     this.invalidElements = invalidElements;
     this.element = element;
     this.filter = filter;
+    this.mainTarget = target;
   }
 
   @Override
   public ValidationEngine filter(Predicate<Element> filter) {
-    return new MergeValidationEngine(engine, invalidElements, element, filter);
+    return new MergeValidationEngine(engine, invalidElements, element, filter, mainTarget);
   }
 
   @Override
   public ValidationResult validate(Object target) {
-    if (target instanceof List) {
-      ValidationResultImpl result = new ValidationResultImpl(target);
-      AtomicInteger index = new AtomicInteger(0);
-      for (Object o : (List) target) {
-        _validate(o, String.valueOf(index) + ".",
-            (el) -> result.invalidElements.put(index.toString(), el));
-        index.incrementAndGet();
-      }
-      return result;
-    }
-    return _validate(target, "", (el) -> {
-      return;
-    });
-  }
-
-  private ValidationResult _validate(Object target, String mod,
-                                     Consumer<InvalidElement> consumer) {
     String parent = element.name();
     ValidationResult result = engine.filter(filter).validate(target);
     for (InvalidElement invalidElement : result.invalidElements()) {
-      consumer.accept(invalidElement);
       String newName = String.format(
-          "%s.%s%s", parent, mod, invalidElement.name()
+          "%s.%s", parent, invalidElement.name()
       );
-      Element nestedElement = Elements.element(newName).in(target);
+      Element nestedElement = Elements.element(newName).in(mainTarget);
       invalidElements.put(newName,
-          new InvalidElementImpl(
-              nestedElement,
+          new InvalidElementImpl(nestedElement,
               invalidElement.invalidValue(),
               invalidElement.violatedConstraints())
       );
