@@ -727,7 +727,7 @@ public class NotEmptyValidator extends MultiTypeValidator {
 
 ### Validation of arguments
 
-Take a look at the first instruction in the validation method of PatternValidator. That check can be a pain if you doesn't like boilerplate code. To avoid that you can use validations in parameter declared in `isValid` method.
+Take a look at the first instruction in the validation method of `PatternValidator`. That check can be a pain if you doesn't like boilerplate code. To avoid that you can use validations in parameter declared in `isValid` method.
 
 ~~~java
   public boolean isValid(@NotNull CharSequence value) {
@@ -853,6 +853,10 @@ public @interface Valid {
 ~~~
 
 This will make the ValidationEngine passed to the validator to incorporate the invalid elements into the invalid result using nested elements without changing any code in the validator.
+
+### Shared Validators
+
+If your validator is thread safe, you can mark it to be shared across every validation by using the annotation `@Shared` on it. Keep in mind that validators that uses constraint properties or dependencies related to the current validation (like a validation engine) will not behave well if they are shared.
 
 ## Domain Validations
 
