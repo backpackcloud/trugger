@@ -20,8 +20,6 @@ package org.atatec.trugger.test.validation;
 import org.atatec.trugger.validation.validator.NotNull;
 import org.junit.Test;
 
-import static org.junit.Assert.assertSame;
-
 /**
  * @author Marcelo Guimarães
  */
@@ -35,7 +33,7 @@ public class NotNullValidatorTest extends BaseValidatorTest<NotNull> {
 
   @Test
   public void testSharedValidator() {
-    assertSame(newValidator(), newValidator());
+    assertSharedValidator();
   }
 
 }

@@ -89,4 +89,9 @@ public abstract class BaseValidatorTest<E extends Annotation> {
     }
   }
 
+  protected final void assertSharedValidator() {
+    assertSame(Validation.factory().create(builder.createMock()),
+        Validation.factory().create(builder.createMock()));
+  }
+
 }

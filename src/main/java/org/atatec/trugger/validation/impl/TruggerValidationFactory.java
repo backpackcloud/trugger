@@ -29,6 +29,8 @@ import org.atatec.trugger.validation.ValidatorFactory;
  */
 public class TruggerValidationFactory implements ValidationFactory {
 
+  private final ValidatorFactory factory = new TruggerValidatorFactory();
+
   @Override
   public ValidationEngine createValidationEngine() {
     return new TruggerValidationEngine(createValidatorFactory());
@@ -36,7 +38,7 @@ public class TruggerValidationFactory implements ValidationFactory {
 
   @Override
   public ValidatorFactory createValidatorFactory() {
-    return new TruggerValidatorFactory();
+    return factory;
   }
 
 }

@@ -20,10 +20,16 @@ package org.atatec.trugger.validation;
 import java.lang.annotation.*;
 
 /**
+ * Indicates that the validator should be shared with all validations. Use this
+ * in validators that don't have dependencies (usually validators with a default
+ * constructor and no properties).
+ *
  * @author Marcelo Guimarães
+ * @since 5.1
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 public @interface Shared {
 
 }
