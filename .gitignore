@@ -1,4 +1,5 @@
 .gradle
 trugger.iws
+.idea/workspace.xml
 build
 out
