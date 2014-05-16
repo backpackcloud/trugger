@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: jboss-logging-3.0.0.CR1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.0.0.CR1/f3e5929b4c4d5aea2caff56b2ad67c3bcd5da55d/jboss-logging-3.0.0.CR1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.0.0.CR1/8c3bc33bd1e4574c083f047ade1424626b9f512b/jboss-logging-3.0.0.CR1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: jboss-vfs-3.1.0.Final">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jboss-vfs/3.1.0.Final/d234479ff4ce2282789dedf378b052cde00bb543/jboss-vfs-3.1.0.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jboss-vfs/3.1.0.Final/9a7d9835a70481dd322601a8c173a83130490c1a/jboss-vfs-3.1.0.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
