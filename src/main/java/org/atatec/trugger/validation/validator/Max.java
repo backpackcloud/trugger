@@ -50,7 +50,7 @@ public @interface Max {
   double value();
 
   /**
-   * The delta to compare the values (in case of float point values)
+   * The delta to compare the values
    */
   double delta() default 0;
 
