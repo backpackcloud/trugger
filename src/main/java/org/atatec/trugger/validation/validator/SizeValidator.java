@@ -22,6 +22,7 @@ import org.atatec.trugger.validation.Validator;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Base class for validators that compares object lengths and sizes.
@@ -29,11 +30,13 @@ import java.util.Map;
  * @author Marcelo Guimarães
  * @since 5.1
  */
-public abstract class BaseSizeValidator implements Validator {
+public class SizeValidator implements Validator {
 
   private final MultiTypeValidator validator;
+  private final Function<Double, Boolean> function;
 
-  public BaseSizeValidator() {
+  public SizeValidator(Function<Double, Boolean> checkFunction) {
+    this.function = checkFunction;
     this.validator = new MultiTypeValidator();
     initialize();
   }
@@ -44,10 +47,13 @@ public abstract class BaseSizeValidator implements Validator {
         .map(Map.class).to(map -> checkValue(map.size()))
         .map(CharSequence.class).to(string -> checkValue(string.length()))
         .mapArray().to(array -> checkValue(array.length))
+        // assume that any other type is a primitive array type
         .mapOthers().to(array -> checkValue(Array.getLength(array)));
   }
 
-  protected abstract boolean checkValue(double value);
+  private boolean checkValue(double value) {
+    return function.apply(value);
+  }
 
   @Override
   public final boolean isValid(@NotNull Object value) {

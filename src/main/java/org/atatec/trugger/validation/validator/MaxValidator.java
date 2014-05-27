@@ -25,16 +25,14 @@ import org.atatec.trugger.validation.Validator;
  * @author Marcelo Guimarães
  * @since 5.1
  */
-public class MaxValidator extends BaseSizeValidator implements Validator {
+public class MaxValidator implements Validator {
 
-  private final double maxValue;
-  private final boolean inclusive;
-  private final double delta;
+  private final Validator sizeValidator;
 
   public MaxValidator(double value, boolean inclusive, double delta) {
-    this.maxValue = value;
-    this.inclusive = inclusive;
-    this.delta = delta;
+    this.sizeValidator = new SizeValidator(
+        size -> inclusive ? size - delta <= value : size - delta < value
+    );
   }
 
   public MaxValidator(Max constraint) {
@@ -42,8 +40,8 @@ public class MaxValidator extends BaseSizeValidator implements Validator {
   }
 
   @Override
-  protected boolean checkValue(double value) {
-    return inclusive ? value - delta <= maxValue : value - delta < maxValue;
+  public boolean isValid(Object value) {
+    return sizeValidator.isValid(value);
   }
 
 }

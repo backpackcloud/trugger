@@ -25,24 +25,23 @@ import org.atatec.trugger.validation.Validator;
  * @author Marcelo Guimarães
  * @since 5.1
  */
-public class MinValidator extends BaseSizeValidator implements Validator {
+public class MinValidator implements Validator {
 
-  private final double minValue;
-  private final boolean inclusive;
-  private final double delta;
+  private final Validator sizeValidator;
 
   public MinValidator(double value, boolean inclusive, double delta) {
-    this.minValue = value;
-    this.inclusive = inclusive;
-    this.delta = delta;
+    this.sizeValidator = new SizeValidator(
+        size -> inclusive ? size + delta >= value : size + delta > value
+    );
   }
 
   public MinValidator(Min constraint) {
     this(constraint.value(), constraint.inclusive(), constraint.delta());
   }
 
-  protected boolean checkValue(double value) {
-    return inclusive ? value + delta >= minValue : value + delta > minValue;
+  @Override
+  public boolean isValid(Object value) {
+    return sizeValidator.isValid(value);
   }
 
 }
