@@ -18,19 +18,21 @@ package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementFactory;
 import org.atatec.trugger.element.impl.AnnotationElement;
-import org.atatec.trugger.element.impl.TruggerElementFactory;
+import org.atatec.trugger.test.Scenario;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
+import java.lang.annotation.Documented;
 import java.lang.reflect.Method;
-import java.util.Collection;
 
+import static org.atatec.trugger.element.ElementPredicates.readable;
+import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
+import static org.atatec.trugger.test.Specs.*;
 import static org.junit.Assert.*;
 
 /**
@@ -38,31 +40,40 @@ import static org.junit.Assert.*;
  */
 public class AnnotationElementTest {
 
-  private Element getAnnotationElement(String name) {
-    //doing this we make sure that two properties having the same name will have
-    // different IDs
-    ElementFactory factory = new TruggerElementFactory();
-    return factory.createElementSelector(name).in(TestAnnotation.class);
-  }
-
   @TestAnnotation(bool = false, name = "name", number = 1)
   private class AnnotationTestClass {
   }
 
   @Test
+  public void finderShouldReturnReadableElement() {
+    Scenario.given(element("name").in(TestAnnotation.class))
+        .thenIt(shouldNotBeNull())
+        .and(shouldBe(readable()));
+  }
+
+  @Test
+  public void finderShouldReturnNonWritableElement() {
+    Scenario.given(element("name").in(TestAnnotation.class))
+        .thenIt(shouldNotBeNull())
+        .and(shouldNotBe(writable()));
+  }
+
+  @Test
+  public void finderShouldReturnEmptyCollectionForAnnotationsWithoutElements() {
+    Scenario.given(elements().in(Documented.class))
+        .thenIt(shouldBeEmpty());
+  }
+
+  @Test
+  public void finderShouldReturnNonEmptyCollectionForAnnotationsWithElements() {
+    Scenario.given(elements().in(TestAnnotation.class))
+        .thenIt(shouldNotBeEmpty())
+        .thenEach(shouldNotBe(writable()))
+        .andEach(shouldBe(readable()));
+  }
+
+  @Test
   public void annotationElementTest() {
-    Element element1 = getAnnotationElement("name");
-    Element element2;
-    assertNotNull(element1);
-    assertAnnotationElement(element1);
-
-    Collection<Element> elements = elements().in(TestAnnotation.class);
-    for (Element prop : elements) {
-      assertAnnotationElement(prop);
-    }
-    element2 = getAnnotationElement("bool");
-    assertFalse(element1.equals(element2));
-
     TestAnnotation annotation = AnnotationTestClass.class.getAnnotation(TestAnnotation.class);
     final Element specific = element("bool").in(annotation);
     assertEquals(boolean.class, specific.type());
