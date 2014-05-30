@@ -44,18 +44,6 @@ public class MultiTypeValidator implements Validator {
         "for type " + Utils.resolveType(value));
   };
 
-  public MultiTypeValidator() {
-    initialize();
-  }
-
-  /**
-   * A convenient method to initialize the mappings in case of using this
-   * validator as a superclass.
-   */
-  protected void initialize() {
-
-  }
-
   /**
    * Maps a validator to use when the value is assignable to the given type.
    *
@@ -95,8 +83,11 @@ public class MultiTypeValidator implements Validator {
   }
 
   @Override
-  // @NotNull if this validator is used with inheritance
-  public final boolean isValid(@NotNull Object value) {
+  public final boolean isValid(Object value) {
+    if (value == null) {
+      // do not validate null values
+      return true;
+    }
     Class type = Utils.resolveType(value);
     for (Map.Entry<Predicate<Class>, Validator> entry : map.entrySet()) {
       if (entry.getKey().test(type)) {
