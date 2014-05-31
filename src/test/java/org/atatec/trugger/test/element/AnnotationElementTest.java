@@ -18,23 +18,22 @@ package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.impl.AnnotationElement;
-import org.atatec.trugger.test.TestScenario;
+import org.atatec.trugger.element.NonSpecificElementException;
 import org.atatec.trugger.test.Should;
+import org.atatec.trugger.test.TestScenario;
 import org.atatec.trugger.util.mock.AnnotationMock;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
-import java.lang.reflect.Method;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.atatec.trugger.element.ElementPredicates.readable;
 import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -42,7 +41,7 @@ import static org.junit.Assert.*;
 public class AnnotationElementTest {
 
   private Annotation annotation() {
-    //@TestAnnotation(bool = false, name = "name", number = 1)
+    // @TestAnnotation(bool = false, name = "name", number = 1)
     return new AnnotationMock<TestAnnotation>() {{
       map(false).to(annotation.bool());
       map("name").to(annotation.name());
@@ -50,16 +49,45 @@ public class AnnotationElementTest {
     }}.createMock();
   }
 
+  private Consumer<Element> shouldHaveAValue() {
+    return (element) -> assertNotNull(element.value());
+  }
+
+  private Consumer<Element> attempToChangeValue() {
+    return (element) -> element.set("a value");
+  }
+
+  private Function<Element, Object> elementValue() {
+    return (element) -> element.value();
+  }
+
+  private Consumer<Element> attempToGetValue() {
+    return (element) -> element.value();
+  }
+
   @Test
   public void finderShouldReturnReadableElement() {
+    TestScenario.given(element("name").in(annotation()))
+        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())))
+        .the(elementValue(), Should.be("name"));
+
     TestScenario.given(element("name").in(TestAnnotation.class))
-        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())));
+        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())))
+        .then(attempToGetValue(), Should.raise(NonSpecificElementException.class));
   }
 
   @Test
   public void finderShouldReturnNonWritableElement() {
-    TestScenario.given(element("name").in(TestAnnotation.class))
-        .thenIt(Should.NOT_BE_NULL.andThen(Should.notBe(writable())));
+    TestScenario.given(element("name").in(annotation()))
+        .thenIt(Should.NOT_BE_NULL.andThen(Should.notBe(writable())))
+        .the(elementValue(), Should.be("name"))
+        .then(attempToChangeValue(), Should.raise(HandlingException.class));
+  }
+
+  @Test
+  public void finderShouldReturnNullIfElementDoesNotExists() {
+    TestScenario.given(element("non_existent").in(TestAnnotation.class))
+        .thenIt(Should.BE_NULL);
   }
 
   @Test
@@ -70,57 +98,21 @@ public class AnnotationElementTest {
 
   @Test
   public void finderShouldReturnNonEmptyCollectionForAnnotationsWithElements() {
-    TestScenario.given(elements().in(TestAnnotation.class))
+    TestScenario.given(elements().in(annotation()))
         .thenIt(Should.NOT_BE_EMPTY)
         .each(Element.class, Should.notBe(writable()))
-        .each(Element.class, Should.be(readable()));
+        .each(Element.class, Should.be(readable()))
+        .each(Element.class, shouldHaveAValue());
   }
 
   @Test
-  public void annotationElementTest() {
+  public void testAnnotationElementAttributes() {
     TestScenario.given(element("bool").in(annotation()))
         .the(Element::type, Should.be(boolean.class))
-        .the(Element::value, Should.BE_FALSE)
-
-        .then((el) -> el.set(true), Should.raise(HandlingException.class));
-  }
-
-  private void assertAnnotationElement(Element element) {
-    assertNotNull(element);
-    assertTrue(Annotation.class.isAssignableFrom(element.declaringClass()));
-    assertTrue(element.isReadable());
-    assertFalse(element.isWritable());
-  }
-
-  @Test
-  public void testNullSpecificElement() {
-    //TestAnnotation annotation = AnnotationTestClass.class.getAnnotation(TestAnnotation.class);
-    //Element el = element("non_existent").in(annotation);
-    //assertNull(el);
-  }
-
-  public static class HandlingTest {
-    public void method() {
-      throw new IllegalArgumentException();
-    }
-  }
-
-  class HandlingTestNotAccess {
-    public void method() {
-      throw new IllegalArgumentException();
-    }
-  }
-
-  @Test
-  public void testHandlingException() {
-    Method method = reflect().method("method").in(HandlingTest.class);
-    AnnotationElement element = new AnnotationElement(method);
-    assertThrow(HandlingException.class, element,
-        (el) -> el.in(new HandlingTest()).value());
-
-    method = reflect().method("method").in(new HandlingTestNotAccess());
-    assertThrow(HandlingException.class, element,
-        (el) -> el.in(new HandlingTestNotAccess()).value());
+        .the(elementValue(), Should.BE_FALSE)
+        .the(Element::declaringClass, Should.be(TestAnnotation.class))
+        .the(Element::name, Should.be("bool"))
+        .the(Element::isSpecific, Should.BE_TRUE);
   }
 
 }
