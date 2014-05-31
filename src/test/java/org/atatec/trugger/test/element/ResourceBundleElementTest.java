@@ -53,15 +53,15 @@ public class ResourceBundleElementTest {
     
     assertNotNull(nested);
     assertFalse(nested.isSpecific());
-    assertEquals("trugger", nested.in(new BundleBean()).get());
+    assertEquals("trugger", nested.in(new BundleBean()).value());
     
     assertThrow(HandlingException.class, () -> {
-      element("undefined").in(bundle1).get();
+      element("undefined").in(bundle1).value();
     });
     
     assertThrow(IllegalArgumentException.class, () -> {
       Element element = element("undefined").in(ResourceBundle.class);
-      element.in(new Object()).get();
+      element.in(new Object()).value();
     });
   }
   
@@ -74,9 +74,9 @@ public class ResourceBundleElementTest {
     assertEquals(ResourceBundle.class, element.declaringClass());
     
     assertEquals(key, element.name());
-    assertEquals(value1, element.get());
-    assertEquals(value1, element.in(bundle1).get());
-    assertEquals(value2, element.in(bundle2).get());
+    assertEquals(value1, element.value());
+    assertEquals(value1, element.in(bundle1).value());
+    assertEquals(value2, element.in(bundle2).value());
     assertTrue(element.isReadable());
     assertFalse(element.isWritable());
     

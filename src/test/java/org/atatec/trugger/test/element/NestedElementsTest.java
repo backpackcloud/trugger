@@ -90,11 +90,11 @@ public class NestedElementsTest {
     assertTrue(line.isReadable());
     assertTrue(line.isWritable());
     assertTrue(line.isSpecific());
-    assertNull(line.get());
+    assertNull(line.value());
 
     line.set("Address line");
 
-    assertEquals("Address line", line.get());
+    assertEquals("Address line", line.value());
   }
 
 }

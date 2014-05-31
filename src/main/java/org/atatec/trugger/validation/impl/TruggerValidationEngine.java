@@ -99,7 +99,7 @@ public class TruggerValidationEngine implements ValidationEngine {
         Validator validator = factory.create(annotation, element, target, engine);
         if (validator != null) {
           if (!valueProcessed) {
-            value = element.in(target).get();
+            value = element.in(target).value();
             valueProcessed = true;
           }
           if (!validator.isValid(value)) {

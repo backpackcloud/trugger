@@ -47,7 +47,7 @@ public class MapElement extends AbstractElement implements Element {
         }
 
         @Override
-        public <E> E get() throws HandlingException {
+        public <E> E value() throws HandlingException {
           if (map.containsKey(name)) {
             return (E) map.get(name);
           }

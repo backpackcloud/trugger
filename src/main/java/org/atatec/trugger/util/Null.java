@@ -92,7 +92,7 @@ public final class Null {
 
   public static final ValueHandler NULL_VALUE_HANDLER = new ValueHandler() {
     @Override
-    public <E> E get() throws HandlingException {
+    public <E> E value() throws HandlingException {
       return null;
     }
 
@@ -105,7 +105,7 @@ public final class Null {
   public static final FieldHandler NULL_FIELD_HANDLER = new FieldHandler() {
 
     @Override
-    public <E> E get() throws HandlingException {
+    public <E> E value() throws HandlingException {
       return null;
     }
 

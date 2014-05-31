@@ -50,10 +50,10 @@ public class ArrayElementTest {
   public void testFindingAll() {
     List<Element> elements = Elements.elements().in(ints);
     assertEquals(4, elements.size());
-    assertEquals(0, (int) elements.get(0).get());
-    assertEquals(10, (int) elements.get(1).get());
-    assertEquals(12, (int) elements.get(2).get());
-    assertEquals(33, (int) elements.get(3).get());
+    assertEquals(0, (int) elements.get(0).value());
+    assertEquals(10, (int) elements.get(1).value());
+    assertEquals(12, (int) elements.get(2).value());
+    assertEquals(33, (int) elements.get(3).value());
   }
 
   @Test
@@ -65,36 +65,36 @@ public class ArrayElementTest {
 
     assertEquals(int.class, element.type());
     assertEquals(int[].class, element.declaringClass());
-    assertEquals(0, (int) element.get());
+    assertEquals(0, (int) element.value());
 
     element.set(15);
 
-    assertEquals(15, (int) element.get());
+    assertEquals(15, (int) element.value());
 
     element = Elements.element("2").in(ints);
     assertEquals(int.class, element.type());
     assertEquals(int[].class, element.declaringClass());
-    assertEquals(12, (int) element.get());
+    assertEquals(12, (int) element.value());
 
     element = Elements.element("ints.1").in(this);
     assertEquals(int.class, element.type());
     assertEquals(ArrayElementTest.class, element.declaringClass());
-    assertEquals(10, (int) element.get());
+    assertEquals(10, (int) element.value());
 
     element = Elements.element("0").in(objects);
     assertEquals(TestObject.class, element.type());
     assertEquals(TestObject[].class, element.declaringClass());
-    TestObject o = element.get();
+    TestObject o = element.value();
     assertEquals("name", o.getName());
     assertEquals("lastname", o.getLastName());
 
     element = Elements.element("object").in(map);
-    o = element.get();
+    o = element.value();
     assertEquals("name", o.getName());
     assertEquals("lastname", o.getLastName());
 
     element = Elements.element("map.object").in(this);
-    o = element.get();
+    o = element.value();
     assertEquals("name", o.getName());
     assertEquals("lastname", o.getLastName());
   }
@@ -102,16 +102,16 @@ public class ArrayElementTest {
   @Test
   public void testReferencedElements() {
     Element element = Elements.element("first").in(ints);
-    assertEquals(0, (int) element.get());
+    assertEquals(0, (int) element.value());
 
     element = Elements.element("last").in(ints);
-    assertEquals(33, (int) element.get());
+    assertEquals(33, (int) element.value());
 
     element = Elements.element("first").in(objects);
-    TestObject a = element.get();
+    TestObject a = element.value();
 
     element = Elements.element("last").in(objects);
-    TestObject b = element.get();
+    TestObject b = element.value();
 
     assertSame(a, b);
   }

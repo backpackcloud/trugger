@@ -102,22 +102,22 @@ public class ResultSetElementTest {
     assertTrue(nickname.isSpecific());
     assertTrue(age.isSpecific());
 
-    assertEquals("John", name.get());
-    assertEquals("kranck", nickname.get());
-    assertEquals(26, (int) age.get());
+    assertEquals("John", name.value());
+    assertEquals("kranck", nickname.value());
+    assertEquals(26, (int) age.value());
     resultSet.next();
-    assertEquals("Justin", name.get());
-    assertEquals("tropper", nickname.get());
-    assertEquals(27, (int) age.get());
+    assertEquals("Justin", name.value());
+    assertEquals("tropper", nickname.value());
+    assertEquals(27, (int) age.value());
 
     name = element("1").in(resultSet);
     assertTrue(name.isReadable());
     assertFalse(name.isWritable());
-    assertEquals("John", name.get());
+    assertEquals("John", name.value());
     assertEquals(ResultSet.class, name.declaringClass());
-    assertThrow(HandlingException.class, name, (el) -> el.get());
+    assertThrow(HandlingException.class, name, (el) -> el.value());
     assertThrow(UnwritableElementException.class, name, (el) -> el.set(""));
-    assertThrow(HandlingException.class, name, (el) -> el.in("").get());
+    assertThrow(HandlingException.class, name, (el) -> el.in("").value());
   }
 
 }

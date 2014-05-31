@@ -52,7 +52,7 @@ public final class ResultSetElement extends AbstractElement implements Element {
               "Cannot write a value in a ResultSet");
         }
 
-        public <E> E get() throws HandlingException {
+        public <E> E value() throws HandlingException {
           try {
             //if the name is the column index
             if (DIGITS_PATTERN.matcher(name).matches()) {

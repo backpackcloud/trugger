@@ -53,7 +53,7 @@ public final class AnnotationElement extends AbstractElement implements Element 
   public ValueHandler in(final Object target) {
     return new ValueHandler() {
 
-      public <E> E get() throws HandlingException {
+      public <E> E value() throws HandlingException {
         try {
           return (E) method.invoke(target);
         } catch (InvocationTargetException e) {

@@ -37,7 +37,7 @@ public class NonSpecificElementTest {
 
   @Test(expected = NonSpecificElementException.class)
   public void testRead() throws Exception {
-    element.get();
+    element.value();
   }
 
   @Test(expected = NonSpecificElementException.class)

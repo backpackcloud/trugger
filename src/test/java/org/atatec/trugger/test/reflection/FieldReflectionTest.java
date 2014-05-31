@@ -54,10 +54,10 @@ public class FieldReflectionTest {
   @Test
   public void testHandler() {
     ValueHandler handler = handle(field("a")).in(this);
-    assertNull(handler.get());
+    assertNull(handler.value());
     handler.set("string");
     assertEquals("string", a);
-    assertEquals("string", handler.get());
+    assertEquals("string", handler.value());
   }
 
   @Test

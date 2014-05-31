@@ -76,7 +76,7 @@ public class ArrayElement extends AbstractElement implements Element {
   public ValueHandler in(final Object array) {
     return new ValueHandler() {
       @Override
-      public <E> E get() throws HandlingException {
+      public <E> E value() throws HandlingException {
         return (E) Array.get(array, index);
       }
 

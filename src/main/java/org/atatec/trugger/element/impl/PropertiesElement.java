@@ -49,7 +49,7 @@ public class PropertiesElement extends AbstractElement implements Element {
         }
 
         @Override
-        public <E> E get() throws HandlingException {
+        public <E> E value() throws HandlingException {
           return (E) props.getProperty(name);
         }
       };

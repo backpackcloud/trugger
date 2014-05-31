@@ -41,9 +41,9 @@ public class FieldSelectorHandler implements FieldHandler {
   }
 
   @Override
-  public <E> E get() throws HandlingException {
+  public <E> E value() throws HandlingException {
     Field field = selector.in(target);
-    return Reflection.handle(field).in(target).get();
+    return Reflection.handle(field).in(target).value();
   }
 
   @Override

@@ -41,7 +41,7 @@ public class HandleTest {
 
     Element element = element().in(obj);
 
-    assertEquals("test", element.get());
+    assertEquals("test", element.value());
 
     element.set("other value");
 
@@ -55,7 +55,7 @@ public class HandleTest {
 
     Element element = element().in(TestObject.class);
 
-    assertEquals("test", element.in(obj).get());
+    assertEquals("test", element.in(obj).value());
 
     element.in(obj).set("other value");
 

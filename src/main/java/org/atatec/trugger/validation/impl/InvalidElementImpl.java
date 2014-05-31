@@ -122,8 +122,8 @@ class InvalidElementImpl implements InvalidElement {
   }
 
   @Override
-  public <E> E get() throws HandlingException {
-    return element.get();
+  public <E> E value() throws HandlingException {
+    return element.value();
   }
 
   @Override

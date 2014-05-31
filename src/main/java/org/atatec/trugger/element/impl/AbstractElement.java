@@ -98,9 +98,9 @@ public abstract class AbstractElement implements Element {
   }
 
   @Override
-  public <E> E get() throws HandlingException {
+  public <E> E value() throws HandlingException {
     if (isSpecific()) {
-      return in(target()).get();
+      return in(target()).value();
     }
     throw new NonSpecificElementException();
   }

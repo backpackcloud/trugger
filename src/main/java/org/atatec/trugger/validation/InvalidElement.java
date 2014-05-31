@@ -33,7 +33,7 @@ public interface InvalidElement extends Element {
   /**
    * Returns the invalid value.
    * <p>
-   * Note that this method may not return the same value as {@link #get()}
+   * Note that this method may not return the same value as {@link #value()}
    * because the element value may change after the validation.
    *
    * @return the invalid value of the element

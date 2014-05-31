@@ -181,7 +181,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock withSpecificValue(Object value) {
-    expect(element.get()).andReturn(value).anyTimes();
+    expect(element.value()).andReturn(value).anyTimes();
     return specific();
   }
 

@@ -110,7 +110,7 @@ public final class TruggerElementCopier implements ElementCopier,
   }
 
   private void copy(Element destElement, Element srcElement, Object dest) {
-    Object value = srcElement.in(this.src).get();
+    Object value = srcElement.in(this.src).value();
     PropertyCopyImpl copy = new PropertyCopyImpl(srcElement, destElement, value);
     if (predicate.test(copy)) {
       if (value != null) {

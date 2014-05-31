@@ -19,7 +19,9 @@ package org.atatec.trugger.test.element;
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.AnnotationElement;
-import org.atatec.trugger.test.Scenario;
+import org.atatec.trugger.test.TestScenario;
+import org.atatec.trugger.test.Should;
+import org.atatec.trugger.util.mock.AnnotationMock;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
@@ -32,7 +34,6 @@ import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.reflection.Reflection.reflect;
 import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.atatec.trugger.test.Specs.*;
 import static org.junit.Assert.*;
 
 /**
@@ -40,45 +41,49 @@ import static org.junit.Assert.*;
  */
 public class AnnotationElementTest {
 
-  @TestAnnotation(bool = false, name = "name", number = 1)
-  private class AnnotationTestClass {
+  private Annotation annotation() {
+    //@TestAnnotation(bool = false, name = "name", number = 1)
+    return new AnnotationMock<TestAnnotation>() {{
+      map(false).to(annotation.bool());
+      map("name").to(annotation.name());
+      map(1).to(annotation.number());
+    }}.createMock();
   }
 
   @Test
   public void finderShouldReturnReadableElement() {
-    Scenario.given(element("name").in(TestAnnotation.class))
-        .thenIt(shouldNotBeNull())
-        .and(shouldBe(readable()));
+    TestScenario.given(element("name").in(TestAnnotation.class))
+        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())));
   }
 
   @Test
   public void finderShouldReturnNonWritableElement() {
-    Scenario.given(element("name").in(TestAnnotation.class))
-        .thenIt(shouldNotBeNull())
-        .and(shouldNotBe(writable()));
+    TestScenario.given(element("name").in(TestAnnotation.class))
+        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(writable())));
   }
 
   @Test
   public void finderShouldReturnEmptyCollectionForAnnotationsWithoutElements() {
-    Scenario.given(elements().in(Documented.class))
-        .thenIt(shouldBeEmpty());
+    TestScenario.given(elements().in(Documented.class))
+        .thenIt(Should.BE_EMPTY);
   }
 
   @Test
   public void finderShouldReturnNonEmptyCollectionForAnnotationsWithElements() {
-    Scenario.given(elements().in(TestAnnotation.class))
-        .thenIt(shouldNotBeEmpty())
-        .thenEach(shouldNotBe(writable()))
-        .andEach(shouldBe(readable()));
+    TestScenario.given(elements().in(TestAnnotation.class))
+        .thenIt(Should.NOT_BE_EMPTY)
+        .each(Element.class, Should.notBe(writable()))
+        .each(Element.class, Should.be(readable()));
   }
 
   @Test
   public void annotationElementTest() {
-    TestAnnotation annotation = AnnotationTestClass.class.getAnnotation(TestAnnotation.class);
-    final Element specific = element("bool").in(annotation);
-    assertEquals(boolean.class, specific.type());
-    assertEquals(false, specific.get());
-    assertThrow(HandlingException.class, () -> specific.set(true));
+    TestScenario.given(element("bool").in(annotation()))
+        .the(Element::type, Should.be(boolean.class))
+        .the(Element::value, Should.BE_FALSE)
+
+        .when((el) -> el.set(true))
+        .thenIt(Should.raise(HandlingException.class));
   }
 
   private void assertAnnotationElement(Element element) {
@@ -90,9 +95,9 @@ public class AnnotationElementTest {
 
   @Test
   public void testNullSpecificElement() {
-    TestAnnotation annotation = AnnotationTestClass.class.getAnnotation(TestAnnotation.class);
-    Element el = element("non_existent").in(annotation);
-    assertNull(el);
+    //TestAnnotation annotation = AnnotationTestClass.class.getAnnotation(TestAnnotation.class);
+    //Element el = element("non_existent").in(annotation);
+    //assertNull(el);
   }
 
   public static class HandlingTest {
@@ -112,11 +117,11 @@ public class AnnotationElementTest {
     Method method = reflect().method("method").in(HandlingTest.class);
     AnnotationElement element = new AnnotationElement(method);
     assertThrow(HandlingException.class, element,
-        (el) -> el.in(new HandlingTest()).get());
+        (el) -> el.in(new HandlingTest()).value());
 
     method = reflect().method("method").in(new HandlingTestNotAccess());
     assertThrow(HandlingException.class, element,
-        (el) -> el.in(new HandlingTestNotAccess()).get());
+        (el) -> el.in(new HandlingTestNotAccess()).value());
   }
 
 }

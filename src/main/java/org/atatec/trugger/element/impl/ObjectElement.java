@@ -89,7 +89,7 @@ public final class ObjectElement extends AbstractElement {
   public ValueHandler in(final Object target) {
     return new ValueHandler() {
 
-      public <E> E get() throws HandlingException {
+      public <E> E value() throws HandlingException {
         if (!isReadable()) {
           throw new UnreadableElementException(name);
         }
@@ -97,7 +97,7 @@ public final class ObjectElement extends AbstractElement {
           if (getter != null) {
             return invoke(getter).in(target).withoutArgs();
           } else {
-            return handle(field).in(target).get();
+            return handle(field).in(target).value();
           }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());

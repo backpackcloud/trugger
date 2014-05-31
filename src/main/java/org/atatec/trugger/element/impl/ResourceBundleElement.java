@@ -47,7 +47,7 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
         }
 
         @Override
-        public <E> E get() throws HandlingException {
+        public <E> E value() throws HandlingException {
           if (bundle.containsKey(name)) {
             return (E) bundle.getObject(name);
           }

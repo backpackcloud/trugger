@@ -53,8 +53,8 @@ public class SpecificElement implements Element {
   }
 
   @Override
-  public Object get() throws HandlingException {
-    return in(target).get();
+  public Object value() throws HandlingException {
+    return in(target).value();
   }
 
   @Override

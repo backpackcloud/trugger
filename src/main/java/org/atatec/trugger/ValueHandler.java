@@ -31,7 +31,7 @@ public interface ValueHandler {
    * @throws HandlingException
    *           if anything go wrong.
    */
-  <E> E get() throws HandlingException;
+  <E> E value() throws HandlingException;
   
   /**
    * Tries to set the value.

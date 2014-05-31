@@ -133,7 +133,7 @@ public class ComponentFactory<T extends Annotation, E> {
     if (type.isAnnotationPresent(annotationType)) {
       T classAnnotation = type.getAnnotation(annotationType);
       Element element = Elements.element(classElement).in(classAnnotation);
-      Class<? extends E> typeToCreate = element.get();
+      Class<? extends E> typeToCreate = element.value();
       return create(annotation, typeToCreate);
     }
     return null;
@@ -222,7 +222,7 @@ public class ComponentFactory<T extends Annotation, E> {
       context.use(annotation).when(type(annotation.annotationType()));
       List<Element> elements = Elements.elements().in(annotation);
       for (Element el : elements) {
-        context.use(() -> el.get()).when(named(el.name()).and(type(el.type())));
+        context.use(() -> el.value()).when(named(el.name()).and(type(el.type())));
       }
     };
   }

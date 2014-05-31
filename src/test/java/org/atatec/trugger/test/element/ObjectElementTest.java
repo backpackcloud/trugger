@@ -48,13 +48,13 @@ public class ObjectElementTest {
   public void testHandlingExceptions() {
     Element name = element("name").in(new HandlingTestObject());
     assertFalse(name.isReadable());
-    assertThrow(UnreadableElementException.class, () -> name.get());
+    assertThrow(UnreadableElementException.class, () -> name.value());
     assertThrow(HandlingException.class, () -> name.set("a name"));
 
     Element info = element("info").in(new HandlingTestObject());
     assertFalse(info.isWritable());
     assertThrow(UnwritableElementException.class, () -> info.set("info"));
-    assertThrow(HandlingException.class, () -> info.get());
+    assertThrow(HandlingException.class, () -> info.value());
   }
 
   class AnnotationPrecedenceTest {

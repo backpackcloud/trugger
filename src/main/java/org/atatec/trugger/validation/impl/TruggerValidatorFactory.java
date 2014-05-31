@@ -109,20 +109,20 @@ public class TruggerValidatorFactory implements ValidatorFactory {
               .forEach(annotationElement -> {
                 TargetElement targetElement = annotationElement
                     .getAnnotation(TargetElement.class);
-                context.use(() -> element(annotationElement.get())
-                    .in(target).get())
+                context.use(() -> element(annotationElement.value())
+                    .in(target).value())
                     .when(named(targetElement.value()));
               });
 
           // force injection when "-parameters" are not used in compilation
           elements.stream().forEach(
-              el -> context.use(() -> el.get()).when(type(el.type()))
+              el -> context.use(() -> el.value()).when(type(el.type()))
           );
           elements.stream()
               .filter(ElementPredicates.annotatedWith(TargetElement.class))
               .forEach(annotationElement -> {
-                Element tgElement = element(annotationElement.get()).in(target);
-                context.use(() -> tgElement.get())
+                Element tgElement = element(annotationElement.value()).in(target);
+                context.use(() -> tgElement.value())
                     .when(e -> tgElement.type().isAssignableFrom(e.getType()));
               });
         }

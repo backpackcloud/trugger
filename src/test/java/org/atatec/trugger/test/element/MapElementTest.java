@@ -69,7 +69,7 @@ public class MapElementTest {
 
     Element element = element("obj.bundle.framework").in(map3);
     assertTrue(element.isSpecific());
-    assertEquals("trugger", element.get());
+    assertEquals("trugger", element.value());
     assertThrow(HandlingException.class, () -> element.set("none"));
   }
 
@@ -81,10 +81,10 @@ public class MapElementTest {
 
     assertEquals(Map.class, element.declaringClass());
 
-    assertEquals(value1, element.get());
+    assertEquals(value1, element.value());
     assertEquals(key, element.name());
-    assertEquals(value1, element.in(map1).get());
-    assertEquals(value2, element.in(map2).get());
+    assertEquals(value1, element.in(map1).value());
+    assertEquals(value2, element.in(map2).value());
     assertTrue(element.isReadable());
     assertTrue(element.isWritable());
 
@@ -93,9 +93,9 @@ public class MapElementTest {
 
     assertEquals("modified", map1.get(key));
     assertEquals("modified", map2.get(key));
-    assertEquals("modified", element.get());
-    assertEquals("modified", element.in(map1).get());
-    assertEquals("modified", element.in(map2).get());
+    assertEquals("modified", element.value());
+    assertEquals("modified", element.in(map1).value());
+    assertEquals("modified", element.in(map2).value());
   }
 
   @Test
@@ -104,7 +104,7 @@ public class MapElementTest {
     map.put("key", "value");
     map = Collections.unmodifiableMap(map);
     Element element = element("none").in(map);
-    assertThrow(HandlingException.class, () -> element.get());
+    assertThrow(HandlingException.class, () -> element.value());
     assertThrow(HandlingException.class, () -> element.set("value"));
     assertThrow(IllegalArgumentException.class, () -> element.in("").set("value"));
   }
@@ -113,7 +113,7 @@ public class MapElementTest {
   public void testNonSpecificElements() {
     Element element = element("key").in(Map.class);
     assertNotNull(element);
-    assertThrow(HandlingException.class, () -> element.get());
+    assertThrow(HandlingException.class, () -> element.value());
     Map<String, String> map = new HashMap<>();
     element.in(map).set("value");
     assertEquals("value", map.get("key"));

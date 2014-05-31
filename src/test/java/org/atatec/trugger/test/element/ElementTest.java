@@ -57,7 +57,7 @@ public class ElementTest {
     assertNull(el.target());
 
     assertThrow(NonSpecificElementException.class,
-        () -> el.get());
+        () -> el.value());
     assertThrow(NonSpecificElementException.class,
         () -> el.set(14));
   }
@@ -86,7 +86,7 @@ public class ElementTest {
     assertNotNull(el.target());
 
     el.set(14);
-    assertEquals(14, (int) el.get());
+    assertEquals(14, (int) el.value());
   }
 
   @Test
@@ -98,9 +98,9 @@ public class ElementTest {
     assertTrue(el.isWritable());
     TestObject.staticValue = 0.0;
 
-    assertEquals(0.0, el.get(), 0e-4);
+    assertEquals(0.0, el.value(), 0e-4);
     el.set(1.5);
-    assertEquals(1.5, el.get(), 0e-4);
+    assertEquals(1.5, el.value(), 0e-4);
   }
 
   @Test
@@ -150,17 +150,17 @@ public class ElementTest {
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(5, (int) element.in(o).get());
+    assertEquals(5, (int) element.in(o).value());
     element.in(o).set(5);
-    assertEquals(10, (int) element.in(o).get());
+    assertEquals(10, (int) element.in(o).value());
 
     element = element("i").in(o);
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(10, (int) element.get());
+    assertEquals(10, (int) element.value());
     element.set(10);
-    assertEquals(15, (int) element.get());
+    assertEquals(15, (int) element.value());
 
     //------------------------------------------//
 
@@ -168,13 +168,13 @@ public class ElementTest {
     assertFalse(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(20, (int) element.in(o).get());
+    assertEquals(20, (int) element.in(o).value());
 
     element = element("j").in(o);
     assertTrue(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(20, (int) element.get());
+    assertEquals(20, (int) element.value());
 
     //------------------------------------------//
 
@@ -182,17 +182,17 @@ public class ElementTest {
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(0, (int) element.in(o).get());
+    assertEquals(0, (int) element.in(o).value());
     element.in(o).set(15);
-    assertEquals(30, (int) element.in(o).get());
+    assertEquals(30, (int) element.in(o).value());
 
     element = element("k").in(o);
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(30, (int) element.get());
+    assertEquals(30, (int) element.value());
     element.set(40);
-    assertEquals(55, (int) element.get());
+    assertEquals(55, (int) element.value());
   }
 
 }

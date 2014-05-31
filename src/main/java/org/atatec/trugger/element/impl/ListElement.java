@@ -73,7 +73,7 @@ public class ListElement extends AbstractElement implements Element {
   public ValueHandler in(final Object list) {
     return new ValueHandler() {
       @Override
-      public <E> E get() throws HandlingException {
+      public <E> E value() throws HandlingException {
         try {
           return (E) ((List) list).get(index);
         } catch (Exception e) {
