@@ -1,31 +1,26 @@
 package org.atatec.trugger.test;
 
-import org.atatec.trugger.loader.ImplementationLoader;
-
-import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
+ * Interface that defines a common set of methods to use
+ * BDD without a specific framework. This is a helper interface
+ * that can be extended
+ *
  * @author Marcelo Guimarães
  * @since 5.1
  */
-public class Scenario {
+public interface Scenario<T> {
 
-  private static final ScenarioFactory factory;
+  Scenario<T> when(Consumer<T> operation);
 
-  static {
-    factory = ImplementationLoader.get(ScenarioFactory.class);
-  }
+  Scenario<T> then(Consumer<T> operation, Consumer<? extends Throwable> tests);
 
-  public static <T> ObjectScenario<T> given(T object) {
-    return factory.createObjectScenario(object);
-  }
+  Scenario<T> thenIt(Consumer<? super T> tests);
 
-  public static <T> IterableScenario<T> given(Iterable<T> object) {
-    return factory.createIterableScenario(object);
-  }
+  Scenario<T> the(Function<T, ?> function, Consumer<?> tests);
 
-  public static <T> CollectionScenario<T> given(Collection<T> object) {
-    return factory.createCollectionScenario(object);
-  }
+  <E> Scenario<T> each(Class<E> type, Consumer<? super E> tests);
 
 }

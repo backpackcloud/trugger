@@ -59,7 +59,7 @@ public class AnnotationElementTest {
   @Test
   public void finderShouldReturnNonWritableElement() {
     TestScenario.given(element("name").in(TestAnnotation.class))
-        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(writable())));
+        .thenIt(Should.NOT_BE_NULL.andThen(Should.notBe(writable())));
   }
 
   @Test
@@ -82,8 +82,7 @@ public class AnnotationElementTest {
         .the(Element::type, Should.be(boolean.class))
         .the(Element::value, Should.BE_FALSE)
 
-        .when((el) -> el.set(true))
-        .thenIt(Should.raise(HandlingException.class));
+        .then((el) -> el.set(true), Should.raise(HandlingException.class));
   }
 
   private void assertAnnotationElement(Element element) {

@@ -28,6 +28,7 @@ engine to help creating elegant validators with less code.
   - Method `ParameterPredicates#name` renamed to `named`
   - `Context` now throws an `UnresolvableValueException` instead of returning
     null to indicate an unresolvable value.
+  - Changed `ValueHandler#get` to `#value`
 
 ### Minor Changes
 
