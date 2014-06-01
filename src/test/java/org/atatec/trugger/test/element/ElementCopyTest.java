@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.atatec.trugger.element.Elements.copy;
+import static org.atatec.trugger.element.Elements.elements;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -54,6 +55,14 @@ public class ElementCopyTest {
 
   private Function<TestObject, ?> nickName() {
     return (obj) -> obj.getNickName();
+  }
+
+  private Function<TestObject, ?> name() {
+    return (obj) -> obj.getName();
+  }
+
+  private Function<TestObject, ?> lastName() {
+    return (obj) -> obj.getLastName();
   }
 
   private Function<TestObject, ?> weight() {
@@ -141,6 +150,18 @@ public class ElementCopyTest {
         .the(property("lastName"), Should.be("Guimaraes"))
         .the(property("height"), Should.be("1.9"))
         .the(property("weight"), Should.be("80.2"));
+  }
+
+  @Test
+  public void testCopyWithSelector() {
+    TestScenario.given(new TestObject("John", "Smith"))
+        .when(o -> copy(elements().filter(e -> false)).from(testObject).to(o))
+        .the(name(), Should.be("John"))
+        .the(lastName(), Should.be("Smith"))
+        .the(nickName(), Should.BE_NULL)
+        .the(age(), Should.be(0))
+        .the(height(), Should.be(0.0))
+        .the(weight(), Should.be(0.0));
   }
 
 }
