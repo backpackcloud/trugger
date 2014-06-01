@@ -17,7 +17,7 @@ public class ScenarioImpl<T> implements Scenario<T> {
   }
 
   @Override
-  public Scenario<T> when(Consumer<T> operation) {
+  public Scenario<T> when(Consumer<? super T> operation) {
     operation.accept(target);
     return this;
   }

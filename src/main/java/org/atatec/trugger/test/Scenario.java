@@ -13,14 +13,25 @@ import java.util.function.Function;
  */
 public interface Scenario<T> {
 
-  Scenario<T> when(Consumer<T> operation);
+  Scenario<T> when(Consumer<? super T> operation);
 
-  Scenario<T> then(Consumer<T> operation, Consumer<? extends Throwable> tests);
-
-  Scenario<T> thenIt(Consumer<? super T> tests);
+  Scenario<T> then(Consumer<? super T> operation,
+                   Consumer<? extends Throwable> tests);
 
   Scenario<T> the(Function<T, ?> function, Consumer<?> tests);
 
   <E> Scenario<T> each(Class<E> type, Consumer<? super E> tests);
+
+  default Scenario<T> thenIt(Consumer<? super T> tests) {
+    return when(tests);
+  }
+
+  default Scenario<T> and(Consumer<? super T> consumer) {
+    return when(consumer);
+  }
+
+  default Scenario<T> it(Consumer<? super T> tests) {
+    return when(tests);
+  }
 
 }

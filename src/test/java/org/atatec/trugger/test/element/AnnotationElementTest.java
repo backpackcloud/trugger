@@ -26,61 +26,44 @@ import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static org.atatec.trugger.element.ElementPredicates.readable;
 import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class AnnotationElementTest {
+public class AnnotationElementTest extends BaseElementTest {
 
   private Annotation annotation() {
     // @TestAnnotation(bool = false, name = "name", number = 1)
     return new AnnotationMock<TestAnnotation>() {{
       map(false).to(annotation.bool());
-      map("name").to(annotation.name());
+      map("some name").to(annotation.name());
       map(1).to(annotation.number());
     }}.createMock();
-  }
-
-  private Consumer<Element> shouldHaveAValue() {
-    return (element) -> assertNotNull(element.value());
-  }
-
-  private Consumer<Element> attempToChangeValue() {
-    return (element) -> element.set("a value");
-  }
-
-  private Function<Element, Object> elementValue() {
-    return (element) -> element.value();
-  }
-
-  private Consumer<Element> attempToGetValue() {
-    return (element) -> element.value();
   }
 
   @Test
   public void finderShouldReturnReadableElement() {
     TestScenario.given(element("name").in(annotation()))
-        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())))
-        .the(elementValue(), Should.be("name"));
+        .the(Element::name, Should.be("name"))
+        .the(Element::value, Should.be("some name"))
+        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())));
 
     TestScenario.given(element("name").in(TestAnnotation.class))
-        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())))
+        .it(Should.NOT_BE_NULL.andThen(Should.be(readable())))
         .then(attempToGetValue(), Should.raise(NonSpecificElementException.class));
   }
 
   @Test
   public void finderShouldReturnNonWritableElement() {
     TestScenario.given(element("name").in(annotation()))
-        .thenIt(Should.NOT_BE_NULL.andThen(Should.notBe(writable())))
-        .the(elementValue(), Should.be("name"))
+        .the(Element::value, Should.be("some name"))
+        .the(Element::name, Should.be("name"))
+        .it(Should.NOT_BE_NULL.andThen(Should.notBe(writable())))
         .then(attempToChangeValue(), Should.raise(HandlingException.class));
   }
 
@@ -109,7 +92,7 @@ public class AnnotationElementTest {
   public void testAnnotationElementAttributes() {
     TestScenario.given(element("bool").in(annotation()))
         .the(Element::type, Should.be(boolean.class))
-        .the(elementValue(), Should.BE_FALSE)
+        .the(Element::value, Should.BE_FALSE)
         .the(Element::declaringClass, Should.be(TestAnnotation.class))
         .the(Element::name, Should.be("bool"))
         .the(Element::isSpecific, Should.BE_TRUE);

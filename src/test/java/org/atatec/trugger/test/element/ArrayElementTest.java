@@ -18,102 +18,91 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.Elements;
+import org.atatec.trugger.test.Should;
+import org.atatec.trugger.test.TestScenario;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Function;
 
-import static junit.framework.Assert.*;
-import static junit.framework.Assert.assertEquals;
+import static org.atatec.trugger.element.ElementPredicates.readable;
+import static org.atatec.trugger.element.ElementPredicates.writable;
+import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.element.Elements.elements;
 
-/** @author Marcelo Varella Barca Guimarães */
-public class ArrayElementTest {
+/**
+ * @author Marcelo Varella Barca Guimarães
+ */
+public class ArrayElementTest extends BaseElementTest {
 
   private int[] ints;
 
   private TestObject[] objects;
 
-  private Map<String, TestObject> map;
+  private int index;
+
+  private Function<List<Element>, ?> first() {
+    return (list) -> list.get(index).value();
+  }
+
+  private Function<List<Element>, ?> next() {
+    return (list) -> list.get(++index).value();
+  }
 
   @Before
   public void initialize() {
     ints = new int[]{0, 10, 12, 33};
     objects = new TestObject[]{new TestObject("name", "lastname")};
-    map = new HashMap<String, TestObject>();
-    map.put("object", objects[0]);
+    index = 0;
   }
 
   @Test
   public void testFindingAll() {
-    List<Element> elements = Elements.elements().in(ints);
-    assertEquals(4, elements.size());
-    assertEquals(0, (int) elements.get(0).value());
-    assertEquals(10, (int) elements.get(1).value());
-    assertEquals(12, (int) elements.get(2).value());
-    assertEquals(33, (int) elements.get(3).value());
+    TestScenario.given(elements().in(ints))
+        .the(List::size, Should.be(4))
+        .the(first(), Should.be(0))
+        .the(next(), Should.be(10))
+        .the(next(), Should.be(12))
+        .the(next(), Should.be(33));
   }
 
   @Test
   public void testIndexElements() {
-    Element element = Elements.element("0").in(ints);
+    TestScenario.given(element("0").in(ints))
+        .thenIt(Should.be(readable()))
+        .thenIt(Should.be(writable()))
+        .the(type(), Should.be(int.class))
+        .the(declaringClass(), Should.be(int[].class))
+        .the(value(), Should.be(0))
 
-    assertTrue(element.isReadable());
-    assertTrue(element.isWritable());
+        .when(valueIsSetTo(15))
+        .the(value(), Should.be(15));
 
-    assertEquals(int.class, element.type());
-    assertEquals(int[].class, element.declaringClass());
-    assertEquals(0, (int) element.value());
+    TestScenario.given(element("ints.1").in(this))
+        .thenIt(Should.be(readable()))
+        .thenIt(Should.be(writable()))
+        .the(type(), Should.be(int.class))
+        .the(declaringClass(), Should.be(ArrayElementTest.class))
+        .the(value(), Should.be(10))
 
-    element.set(15);
+        .when(valueIsSetTo(15))
+        .the(value(), Should.be(15));
 
-    assertEquals(15, (int) element.value());
-
-    element = Elements.element("2").in(ints);
-    assertEquals(int.class, element.type());
-    assertEquals(int[].class, element.declaringClass());
-    assertEquals(12, (int) element.value());
-
-    element = Elements.element("ints.1").in(this);
-    assertEquals(int.class, element.type());
-    assertEquals(ArrayElementTest.class, element.declaringClass());
-    assertEquals(10, (int) element.value());
-
-    element = Elements.element("0").in(objects);
-    assertEquals(TestObject.class, element.type());
-    assertEquals(TestObject[].class, element.declaringClass());
-    TestObject o = element.value();
-    assertEquals("name", o.getName());
-    assertEquals("lastname", o.getLastName());
-
-    element = Elements.element("object").in(map);
-    o = element.value();
-    assertEquals("name", o.getName());
-    assertEquals("lastname", o.getLastName());
-
-    element = Elements.element("map.object").in(this);
-    o = element.value();
-    assertEquals("name", o.getName());
-    assertEquals("lastname", o.getLastName());
+    TestScenario.given(element("0").in(objects))
+        .thenIt(Should.be(readable()))
+        .thenIt(Should.be(writable()))
+        .the(type(), Should.be(TestObject.class))
+        .the(declaringClass(), Should.be(TestObject[].class));
   }
 
   @Test
   public void testReferencedElements() {
-    Element element = Elements.element("first").in(ints);
-    assertEquals(0, (int) element.value());
+    TestScenario.given(element("first").in(ints))
+        .the(value(), Should.be(0));
 
-    element = Elements.element("last").in(ints);
-    assertEquals(33, (int) element.value());
-
-    element = Elements.element("first").in(objects);
-    TestObject a = element.value();
-
-    element = Elements.element("last").in(objects);
-    TestObject b = element.value();
-
-    assertSame(a, b);
+    TestScenario.given(element("last").in(ints))
+        .the(value(), Should.be(33));
   }
 
 }
