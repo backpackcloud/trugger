@@ -17,18 +17,16 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.ElementCopy;
+import org.atatec.trugger.test.Should;
+import org.atatec.trugger.test.TestScenario;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.atatec.trugger.element.Elements.copy;
-import static org.atatec.trugger.element.Elements.elements;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -36,6 +34,10 @@ import static org.junit.Assert.assertNull;
 public class ElementCopyTest {
 
   private TestObject testObject;
+
+  private Function<Properties, String> property(String name) {
+    return props -> props.getProperty(name);
+  }
 
   @Before
   public void init() {
@@ -46,35 +48,67 @@ public class ElementCopyTest {
     testObject.setNickName(null);
   }
 
+  private Function<TestObject, ?> age() {
+    return (obj) -> obj.getAge();
+  }
+
+  private Function<TestObject, ?> nickName() {
+    return (obj) -> obj.getNickName();
+  }
+
+  private Function<TestObject, ?> weight() {
+    return (obj) -> obj.getWeight();
+  }
+
+  private Function<TestObject, ?> height() {
+    return (obj) -> obj.getHeight();
+  }
+
+  private Consumer<TestObject> ageIsSetTo(int value) {
+    return (obj) -> obj.setAge(value);
+  }
+
+  private Consumer<TestObject> weightIsSetTo(double value) {
+    return (obj) -> obj.setWeight(value);
+  }
+
+  private Consumer<TestObject> nickNameIsSetTo(String nick) {
+    return (obj) -> obj.setNickName(nick);
+  }
+
+  private Consumer<TestObject> elementsAreCopiedFrom(TestObject o) {
+    return (obj) -> copy().from(o).notNull().to(obj);
+  }
+
+  private Consumer<TestObject> elementsButAgeAreCopiedFrom(TestObject o) {
+    return (obj) -> copy().from(o).notNull()
+        .filter(copy -> !copy.dest().name().equals("age"))
+        .to(obj);
+  }
+
   @Test
   public void testCopyToSame() {
-    TestObject o2 = new TestObject("Marcelo", "Guimaraes");
+    TestScenario.given(new TestObject("Marcelo", "Guimaraes"))
+        .when(weightIsSetTo(30.4))
+        .and(nickNameIsSetTo("Nick"))
+        .and(elementsAreCopiedFrom(testObject))
+        .the(age(), Should.be(testObject.getAge()).andThen(Should.be(23)))
+        .the(height(), Should.be(testObject.getHeight()).andThen(Should.be(1.9)))
+        .the(weight(), Should.be(testObject.getWeight()).andThen(Should.be(80.2)))
+        .the(nickName(), Should.notBe(testObject.getNickName()).andThen(Should.be("Nick")));
+  }
 
-    o2.setNickName("Nick");
-    o2.setWeight(30.4);
-
-    copy().from(testObject).notNull().to(o2);
-
-    assertEquals(testObject.getAge(), o2.getAge());
-    assertEquals(23, o2.getAge());
-    assertEquals(testObject.getHeight(), o2.getHeight(), 0.001);
-    assertEquals(1.9, o2.getHeight(), 0.01);
-    assertEquals(testObject.getWeight(), o2.getWeight(), 0.01);
-    assertEquals(80.2, o2.getWeight(), 0.01);
-    assertEquals("Nick", o2.getNickName());
-    assertNull(testObject.getNickName());
-
-
-    testObject.age = 50;
-    testObject.setWeight(50);
-    copy().from(testObject)
-        .notNull()
-        .filter(copy -> copy.dest().name().equals("age"))
-        .to(o2);
-
-    assertEquals(testObject.getAge(), o2.getAge());
-    assertEquals(testObject.getHeight(), o2.getHeight(), 0.001);
-    assertEquals(80.2, o2.getWeight(), 0.01);
+  @Test
+  public void testFilterCopy() {
+    TestScenario.given(new TestObject("Marcelo", "Guimaraes"))
+        .when(weightIsSetTo(30.4))
+        .and(nickNameIsSetTo("Nick"))
+        .and(ageIsSetTo(25))
+        .and(elementsButAgeAreCopiedFrom(testObject))
+        .the(age(), Should.notBe(testObject.getAge()).andThen(Should.be(25)))
+        .the(height(), Should.be(testObject.getHeight()).andThen(Should.be(1.9)))
+        .the(weight(), Should.be(testObject.getWeight()).andThen(Should.be(80.2)))
+        .the(nickName(), Should.notBe(testObject.getNickName()).andThen(Should.be("Nick")));
   }
 
   private static class ToStringTransformer
@@ -86,82 +120,27 @@ public class ElementCopyTest {
   }
 
   @Test
-  public void testCopyToDifferent() {
-    OtherTestObject o2 = new OtherTestObject();
+  public void testCopyToDifferentTypes() {
+    TestScenario.given(new OtherTestObject())
+        .when(obj -> obj.setNickName("Nick"))
+        .and(obj -> obj.setWeight(30.4))
+        .and(obj -> copy().from(testObject).to(obj))
 
-    o2.setNickName("Nick");
-    o2.setWeight(30.4);
+        .the(obj -> obj.getWeight(), Should.be(testObject.getWeight()))
+        .the(obj -> obj.getNickName(), Should.be(testObject.getNickName()));
 
-    copy().from(testObject).to(o2);
-
-    assertEquals(testObject.getWeight(), o2.getWeight(), 0.001);
-    assertEquals(80.2, o2.getWeight(), 0.01);
-    assertNull(o2.getNickName());
-    assertNull(testObject.getNickName());
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("weight", 10.0);
-
-    copy().from(testObject)
-        .filter(copy -> !copy.src().name().equals("weight"))
-        .to(map);
-
-    assertEquals(23, map.get("age"));
-    assertEquals(null, map.get("nickName"));
-    assertEquals("Marcelo", map.get("name"));
-    assertEquals("Guimaraes", map.get("lastName"));
-    assertEquals(1.9, (Double) map.get("height"), 0.001);
-    assertEquals(10.0, (Double) map.get("weight"), 0.001);
-
-    Properties props = new Properties();
-    Function<ElementCopy, String> toString = new ToStringTransformer();
-
-    copy().from(testObject).notNull().applying(toString).to(props);
-    assertEquals("23", props.getProperty("age"));
-    assertEquals(null, props.getProperty("nickName"));
-    assertEquals("Marcelo", props.getProperty("name"));
-    assertEquals("Guimaraes", props.getProperty("lastName"));
-    assertEquals("1.9", props.getProperty("height"));
-    assertEquals("80.2", props.getProperty("weight"));
-  }
-
-  static class Object1 {
-
-    private String name;
-
-    public String getName() {
-      return name;
-    }
-
-    public void setName(String name) {
-      this.name = name;
-    }
-
-  }
-
-  static class Object2 {
-
-    private int name;
-
-    public void setName(int name) {
-      this.name = name;
-    }
-
-    public int getName() {
-      return name;
-    }
-  }
-
-  @Test
-  public void testCopyWithSameNameButDifferentTypes() throws Exception {
-    Object1 object1 = new Object1();
-    Object2 object2 = new Object2();
-
-    object1.setName("name");
-
-    copy(elements()).from(object1).to(object2);
-
-    assertEquals(0, object2.getName());
+    TestScenario.given(new Properties())
+        .when(props -> copy()
+            .from(testObject)
+            .notNull()
+            .applying(new ToStringTransformer())
+            .to(props))
+        .the(property("age"), Should.be("23"))
+        .the(property("nickName"), Should.BE_NULL)
+        .the(property("name"), Should.be("Marcelo"))
+        .the(property("lastName"), Should.be("Guimaraes"))
+        .the(property("height"), Should.be("1.9"))
+        .the(property("weight"), Should.be("80.2"));
   }
 
 }

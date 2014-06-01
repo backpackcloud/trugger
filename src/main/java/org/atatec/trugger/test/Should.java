@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static org.atatec.trugger.test.Assertions.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Guimarães
@@ -36,27 +36,27 @@ public class Should {
   }
 
   public static Consumer beNull() {
-    return (obj) -> Assertions.assertNull(obj);
+    return (obj) -> assertNull(obj);
   }
 
   public static Consumer notBeNull() {
-    return (obj) -> Assertions.assertNotNull(obj);
+    return (obj) -> assertNotNull(obj);
   }
 
   public static Consumer be(Object value) {
-    return (obj) -> Assertions.assertEquals(value, obj);
+    return (obj) -> assertEquals(value, obj);
   }
 
   public static Consumer notBe(Object value) {
-    return (obj) -> Assertions.assertNotEquals(value, obj);
+    return (obj) -> assertNotEquals(value, obj);
   }
 
   public static Consumer be(Predicate predicate) {
-    return (obj) -> Assertions.assertTrue(predicate.test(obj));
+    return (obj) -> assertTrue(predicate.test(obj));
   }
 
   public static Consumer notBe(Predicate predicate) {
-    return (obj) -> Assertions.assertFalse(predicate.test(obj));
+    return (obj) -> assertFalse(predicate.test(obj));
   }
 
   public static Consumer<Collection> beEmpty() {
@@ -69,7 +69,7 @@ public class Should {
 
   public static Consumer raise(Class<? extends Throwable> exception) {
     return (error) -> {
-      if(exception != null) {
+      if (exception != null) {
         assertTrue(exception.isAssignableFrom(error.getClass()));
       } else {
         throw new AssertionError("No Exception was thrown.");
