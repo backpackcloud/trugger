@@ -22,6 +22,8 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.TruggerElementSelector;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.test.Flag;
+import org.atatec.trugger.test.Should;
+import org.atatec.trugger.test.TestScenario;
 import org.junit.Test;
 
 import static org.atatec.trugger.element.ElementPredicates.*;
@@ -46,27 +48,22 @@ public class ElementSelectorTest {
     replay(finder);
   }
 
-  private ElementSelector select() {
+  private ElementSelector selector() {
     return new TruggerElementSelector("name", finder);
   }
 
   @Test
   public void testAnnotatedSelector() {
     element = mock(element().annotatedWith(Flag.class));
-    assertSame(
-        element,
-        select().filter(annotatedWith(Flag.class)).in(this)
-    );
-    assertSame(
-        element,
-        select().filter(annotated()).in(this)
-    );
-    assertNull(
-        select().filter(annotatedWith(Flag.class).negate()).in(this)
-    );
-    assertNull(
-        select().filter(annotated().negate()).in(this)
-    );
+    TestScenario.given(selector())
+        .the(selector -> selector.filter(annotatedWith(Flag.class)).in(this),
+            Should.be(element))
+        .the(selector -> selector.filter(annotated()).in(this),
+            Should.be(element))
+        .the(selector -> selector.filter(annotatedWith(Flag.class).negate()).in(this),
+            Should.BE_NULL)
+        .the(selector -> selector.filter(annotated().negate()).in(this),
+            Should.BE_NULL);
   }
 
   @Test
@@ -74,7 +71,7 @@ public class ElementSelectorTest {
     element = mock(element().readable());
     assertSame(
         element,
-        select().filter(readable()).in(this)
+        selector().filter(readable()).in(this)
     );
   }
 
@@ -83,7 +80,7 @@ public class ElementSelectorTest {
     element = mock(element().specific());
     assertSame(
         element,
-        select().filter(specific()).in(this)
+        selector().filter(specific()).in(this)
     );
   }
 
@@ -92,7 +89,7 @@ public class ElementSelectorTest {
     element = mock(element().writable());
     assertSame(
         element,
-        select().filter(writable()).in(this)
+        selector().filter(writable()).in(this)
     );
   }
 
@@ -100,7 +97,7 @@ public class ElementSelectorTest {
   public void testNonWritableSelector() {
     element = mock(element().nonWritable());
     assertNull(
-        select().filter(writable()).in(this)
+        selector().filter(writable()).in(this)
     );
   }
 
@@ -109,22 +106,22 @@ public class ElementSelectorTest {
     element = mock(element().ofType(String.class));
     assertSame(
         element,
-        select().filter(type(String.class)).in(this)
+        selector().filter(type(String.class)).in(this)
     );
     assertNull(
-        select().filter(type(Integer.class)).in(this)
+        selector().filter(type(Integer.class)).in(this)
     );
     assertNull(
-        select().filter(type(CharSequence.class)).in(this)
+        selector().filter(type(CharSequence.class)).in(this)
     );
 
     element = mock(element().ofType(int.class));
     assertSame(
         element,
-        select().filter(type(int.class)).in(this)
+        selector().filter(type(int.class)).in(this)
     );
     assertNull(
-        select().filter(type(Integer.class)).in(this)
+        selector().filter(type(Integer.class)).in(this)
     );
   }
 
@@ -133,24 +130,24 @@ public class ElementSelectorTest {
     element = mock(element().ofType(String.class));
     assertSame(
         element,
-        select().filter(assignableTo(String.class)).in(this)
+        selector().filter(assignableTo(String.class)).in(this)
     );
     assertNull(
-        select().filter(assignableTo(Integer.class)).in(this)
+        selector().filter(assignableTo(Integer.class)).in(this)
     );
     assertSame(
         element,
-        select().filter(assignableTo(CharSequence.class)).in(this)
+        selector().filter(assignableTo(CharSequence.class)).in(this)
     );
 
     element = mock(element().ofType(int.class));
     assertSame(
         element,
-        select().filter(assignableTo(Integer.class)).in(this)
+        selector().filter(assignableTo(Integer.class)).in(this)
     );
     assertSame(
         element,
-        select().filter(assignableTo(int.class)).in(this)
+        selector().filter(assignableTo(int.class)).in(this)
     );
   }
 

@@ -34,12 +34,6 @@ public class ScenarioImpl<T> implements Scenario<T> {
   }
 
   @Override
-  public Scenario<T> thenIt(Consumer<? super T> tests) {
-    tests.accept(target);
-    return this;
-  }
-
-  @Override
   public Scenario<T> the(Function function, Consumer test) {
     Object result = function.apply(target);
     test.accept(result);

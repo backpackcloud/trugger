@@ -24,15 +24,14 @@ public interface Scenario<T> {
   /**
    * Defines an operation that will throw an exception.
    *
-   * @param operation the operation the operation to do with the target
+   * @param operation the operation to do with the target
    * @param test      the test to do with the raised exception (if no exception
    *                  is thrown, a <code>null</code> value will be given to this
    *                  consumer
    * @return a reference to this object.
    * @see Should#raise(Class)
    */
-  Scenario<T> then(Consumer<? super T> operation,
-                   Consumer<? extends Throwable> test);
+  Scenario<T> then(Consumer<? super T> operation, Consumer<?> test);
 
   /**
    * Defines a test for some target operation that returns a value.
@@ -43,7 +42,7 @@ public interface Scenario<T> {
    * @return a reference to this object
    * @see org.atatec.trugger.test.Should
    */
-  Scenario<T> the(Function<T, ?> function, Consumer<?> test);
+  Scenario<T> the(Function<? super T, ?> function, Consumer<?> test);
 
   /**
    * Defines a test for each element of the target. This requires an
@@ -105,6 +104,18 @@ public interface Scenario<T> {
    * @return a reference to this object
    */
   default Scenario<T> the(Object value, Consumer test) {
+    test.accept(value);
+    return this;
+  }
+
+  /**
+   * Defines a test to do with a value.
+   *
+   * @param value the value to test
+   * @param test  the test to do with the value
+   * @return a reference to this object
+   */
+  default Scenario<T> then(Object value, Consumer test) {
     test.accept(value);
     return this;
   }
