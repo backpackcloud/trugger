@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../kodo/kodo.iml" filepath="$PROJECT_DIR$/../kodo/kodo.iml" />
       <module fileurl="file://$PROJECT_DIR$/trugger.iml" filepath="$PROJECT_DIR$/trugger.iml" />
     </modules>
   </component>

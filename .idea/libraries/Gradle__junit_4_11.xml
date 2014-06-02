@@ -4,8 +4,6 @@
       <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.ideaLibSources/junit-4.11-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>
