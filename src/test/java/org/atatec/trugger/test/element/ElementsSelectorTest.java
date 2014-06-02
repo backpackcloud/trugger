@@ -21,12 +21,18 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.TruggerElementsSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.test.Flag;
+import org.atatec.trugger.test.Should;
+import org.atatec.trugger.test.TestScenario;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertTrue;
+import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.test.TruggerTest.*;
 import static org.atatec.trugger.util.mock.Mock.mock;
+import static org.easymock.EasyMock.verify;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -35,8 +41,27 @@ public class ElementsSelectorTest {
 
   private Finder<Element> finder;
 
-  private ElementsSelector select() {
+  private ElementsSelector selector() {
     return new TruggerElementsSelector(finder);
+  }
+
+  private Consumer<Collection<Element>> shouldHave(String... names) {
+    return (collection) -> assertElements(collection, names);
+  }
+
+  private void testPredicate(Predicate<? super Element> predicate,
+                             String... names) {
+    TestScenario.given(selector())
+        .the(selector -> selector.filter(predicate).in(this),
+            shouldHave(names));
+    verify(finder);
+  }
+
+  private void testFailPredicate(Predicate<? super Element> predicate) {
+    TestScenario.given(selector())
+        .the(selector -> selector.filter(predicate).in(this),
+            Should.BE_EMPTY);
+    verify(finder);
   }
 
   @Test
@@ -44,7 +69,7 @@ public class ElementsSelectorTest {
     finder = mock(elementFinder()
         .add(element().named("foo"))
         .add(element().named("bar")));
-    assertElements(select().in(this), "foo", "bar");
+    testPredicate(el -> true, "foo", "bar");
   }
 
   @Test
@@ -52,19 +77,8 @@ public class ElementsSelectorTest {
     finder = mock(elementFinder()
         .add(element().named("annotated").annotatedWith(Flag.class))
         .add(element().named("notAnnotated")));
-
-    assertElements(
-        select()
-            .filter(annotatedWith(Flag.class))
-            .in(this)
-        , "annotated"
-    );
-    assertElements(
-        select()
-            .filter(annotated())
-            .in(this)
-        , "annotated"
-    );
+    testPredicate(annotatedWith(Flag.class), "annotated");
+    testPredicate(annotated(), "annotated");
   }
 
   @Test
@@ -72,13 +86,7 @@ public class ElementsSelectorTest {
     finder = mock(elementFinder()
         .add(element().named("readable").readable())
         .add(element().named("nonReadable").nonReadable()));
-
-    assertElements(
-        select()
-            .filter(readable())
-            .in(this)
-        , "readable"
-    );
+    testPredicate(readable(), "readable");
   }
 
   @Test
@@ -86,13 +94,7 @@ public class ElementsSelectorTest {
     finder = mock(elementFinder()
         .add(element().named("specific").specific())
         .add(element().named("nonSpecific").nonSpecific()));
-
-    assertElements(
-        select()
-            .filter(specific())
-            .in(this)
-        , "specific"
-    );
+    testPredicate(specific(), "specific");
   }
 
   @Test
@@ -100,13 +102,7 @@ public class ElementsSelectorTest {
     finder = mock(elementFinder()
         .add(element().named("writable").writable())
         .add(element().named("nonWritable").nonWritable()));
-
-    assertElements(
-        select()
-            .filter(writable())
-            .in(this)
-        , "writable"
-    );
+    testPredicate(writable(), "writable");
   }
 
   @Test
@@ -115,32 +111,10 @@ public class ElementsSelectorTest {
         .add(element().named("string").ofType(String.class))
         .add(element().named("stringBuilder").ofType(StringBuilder.class))
         .add(element().named("integer").ofType(Integer.class)));
-
-    assertElements(
-        select()
-            .filter(type(String.class))
-            .in(this)
-        , "string"
-    );
-    assertElements(
-        select()
-            .filter(type(Integer.class))
-            .in(this)
-        , "integer"
-    );
-    assertTrue(
-        select()
-            .filter(type(CharSequence.class))
-            .in(this)
-        .isEmpty()
-    );
-
-    assertElements(
-        select()
-            .filter(assignableTo(CharSequence.class))
-            .in(this)
-        , "string", "stringBuilder"
-    );
+    testPredicate(type(String.class), "string");
+    testPredicate(type(Integer.class), "integer");
+    testFailPredicate(type(CharSequence.class));
+    testPredicate(assignableTo(CharSequence.class), "string", "stringBuilder");
   }
 
   @Test
@@ -149,13 +123,8 @@ public class ElementsSelectorTest {
         .add(element().named("elementA"))
         .add(element().named("elementB"))
         .add(element().named("elementC")));
-
-    assertElements(
-        select()
-            .filter(named("elementA", "elementC", "elementD"))
-            .in(this)
-        , "elementA", "elementC"
-    );
+    testPredicate(named("elementA", "elementC", "elementD"),
+        "elementA", "elementC");
   }
 
 }
