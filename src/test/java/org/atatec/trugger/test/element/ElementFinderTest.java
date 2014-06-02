@@ -22,14 +22,16 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.reflection.ClassPredicates;
+import org.atatec.trugger.test.Should;
+import org.atatec.trugger.test.TestScenario;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -54,16 +56,19 @@ public class ElementFinderTest {
     private String field;
   }
 
+  private Consumer<? super Class<Elements>> testFinderIsRegistered() {
+    return (elements) -> Elements.registry().register(new MyFinder())
+        .to(ClassPredicates.type(TestFinder.class));
+  }
+
   @Test
   public void testRegistry() {
-    assertNotNull(element("field").in(TestFinder.class));
-    assertFalse(elements().in(TestFinder.class).isEmpty());
-
-    Elements.registry().register(new MyFinder())
-        .to(ClassPredicates.type(TestFinder.class));
-
-    assertNull(element("field").in(TestFinder.class));
-    assertTrue(elements().in(TestFinder.class).isEmpty());
+    TestScenario.given(Elements.class)
+        .the(element("field").in(TestFinder.class), Should.NOT_BE_NULL)
+        .the(elements().in(TestFinder.class), Should.NOT_BE_EMPTY)
+        .when(testFinderIsRegistered())
+        .the(element("field").in(TestFinder.class), Should.BE_NULL)
+        .the(elements().in(TestFinder.class), Should.BE_EMPTY);
   }
 
 }

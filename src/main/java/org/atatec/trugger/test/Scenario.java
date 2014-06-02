@@ -97,4 +97,9 @@ public interface Scenario<T> {
     return when(tests);
   }
 
+  default Scenario<T> the(Object value, Consumer test) {
+    test.accept(value);
+    return this;
+  }
+
 }
