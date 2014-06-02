@@ -26,12 +26,12 @@ import org.atatec.trugger.test.Should;
 import org.atatec.trugger.test.TestScenario;
 import org.junit.Test;
 
+import java.util.function.Predicate;
+
 import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.test.TruggerTest.element;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -52,103 +52,75 @@ public class ElementSelectorTest {
     return new TruggerElementSelector("name", finder);
   }
 
+  private void testPredicate(Predicate<? super Element> predicate) {
+    TestScenario.given(selector())
+        .the(selector -> selector.filter(predicate).in(this),
+            Should.be(element))
+        .the(selector -> selector.filter(predicate.negate()).in(this),
+            Should.BE_NULL);
+    verify(finder);
+  }
+
+  private void testFailPredicate(Predicate<? super Element> predicate) {
+    TestScenario.given(selector())
+        .the(selector -> selector.filter(predicate).in(this),
+            Should.BE_NULL);
+    verify(finder);
+  }
+
   @Test
   public void testAnnotatedSelector() {
     element = mock(element().annotatedWith(Flag.class));
-    TestScenario.given(selector())
-        .the(selector -> selector.filter(annotatedWith(Flag.class)).in(this),
-            Should.be(element))
-        .the(selector -> selector.filter(annotated()).in(this),
-            Should.be(element))
-        .the(selector -> selector.filter(annotatedWith(Flag.class).negate()).in(this),
-            Should.BE_NULL)
-        .the(selector -> selector.filter(annotated().negate()).in(this),
-            Should.BE_NULL);
+    testPredicate(annotatedWith(Flag.class));
+    testPredicate(annotated());
   }
 
   @Test
   public void testReadableSelector() {
     element = mock(element().readable());
-    assertSame(
-        element,
-        selector().filter(readable()).in(this)
-    );
+    testPredicate(readable());
   }
 
   @Test
   public void testSpecificSelector() {
     element = mock(element().specific());
-    assertSame(
-        element,
-        selector().filter(specific()).in(this)
-    );
+    testPredicate(specific());
   }
 
   @Test
   public void testWritableSelector() {
     element = mock(element().writable());
-    assertSame(
-        element,
-        selector().filter(writable()).in(this)
-    );
+    testPredicate(writable());
   }
 
   @Test
   public void testNonWritableSelector() {
     element = mock(element().nonWritable());
-    assertNull(
-        selector().filter(writable()).in(this)
-    );
+    testPredicate(writable().negate());
   }
 
   @Test
   public void testOfTypeSelector() {
     element = mock(element().ofType(String.class));
-    assertSame(
-        element,
-        selector().filter(type(String.class)).in(this)
-    );
-    assertNull(
-        selector().filter(type(Integer.class)).in(this)
-    );
-    assertNull(
-        selector().filter(type(CharSequence.class)).in(this)
-    );
+    testPredicate(type(String.class));
+    testFailPredicate(type(Integer.class));
+    testFailPredicate(type(CharSequence.class));
 
     element = mock(element().ofType(int.class));
-    assertSame(
-        element,
-        selector().filter(type(int.class)).in(this)
-    );
-    assertNull(
-        selector().filter(type(Integer.class)).in(this)
-    );
+    testPredicate(type(int.class));
+    testFailPredicate(type(Integer.class));
   }
 
   @Test
   public void testAssignableToSelector() {
     element = mock(element().ofType(String.class));
-    assertSame(
-        element,
-        selector().filter(assignableTo(String.class)).in(this)
-    );
-    assertNull(
-        selector().filter(assignableTo(Integer.class)).in(this)
-    );
-    assertSame(
-        element,
-        selector().filter(assignableTo(CharSequence.class)).in(this)
-    );
+    testPredicate(assignableTo(String.class));
+    testPredicate(assignableTo(CharSequence.class));
+    testFailPredicate(assignableTo(Integer.class));
 
     element = mock(element().ofType(int.class));
-    assertSame(
-        element,
-        selector().filter(assignableTo(Integer.class)).in(this)
-    );
-    assertSame(
-        element,
-        selector().filter(assignableTo(int.class)).in(this)
-    );
+    testPredicate(assignableTo(Integer.class));
+    testPredicate(assignableTo(int.class));
   }
 
 }
