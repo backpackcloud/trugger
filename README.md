@@ -93,14 +93,14 @@ List<Field> stringFields = reflect().fields()
 A field can have its value manipulated through the method `Reflection#handle`. It will create a handler to set and get the field's value without the verbosity of the Reflection API. To handle static fields, you can call the handler methods directly:
 
 ~~~java
-String value = handle(field).get();
+String value = handle(field).value();
 handle(field).set("new value");
 ~~~
 
 For instance fields, just specify an instance using the method `in`:
 
 ~~~java
-String value = handle(field).in(instance).get();
+String value = handle(field).in(instance).value();
 handle(field).in(instance).set("new value");
 ~~~
 
@@ -438,7 +438,7 @@ Nested elements are supported using a **"."** to separate the elements:
 ~~~java
 Element element = element("address.street").in(Customer.class);
 
-value = element.in(customer).get();
+value = element.in(customer).value();
 ~~~
 
 You can use any level of nesting:
@@ -446,7 +446,7 @@ You can use any level of nesting:
 ~~~java
 Element element = element("customer.address.street").in(Response.class);
 
-value = element.in(response).get();
+value = element.in(response).value();
 ~~~
 
 ## Custom Elements
