@@ -26,7 +26,8 @@ import java.util.function.Predicate;
  * 
  * @author Marcelo Guimarães
  */
-public interface ElementSelector extends PredicateSelector<Element>, Result<Element, Object> {
+public interface ElementSelector extends PredicateSelector<Element>,
+    Result<Element, Object> {
   
   ElementSelector filter(Predicate<? super Element> predicate);
   
