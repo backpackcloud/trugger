@@ -23,12 +23,12 @@ public class ScenarioImpl<T> implements Scenario<T> {
   }
 
   @Override
-  public Scenario<T> then(Consumer operation, Consumer tests) {
+  public Scenario<T> then(Consumer operation, Consumer test) {
     try {
       operation.accept(target);
-      tests.accept(null);
+      test.accept(null);
     } catch (Throwable t) {
-      tests.accept(t);
+      test.accept(t);
     }
     return this;
   }
@@ -40,15 +40,14 @@ public class ScenarioImpl<T> implements Scenario<T> {
   }
 
   @Override
-  public Scenario<T> the(Function function, Consumer tests) {
+  public Scenario<T> the(Function function, Consumer test) {
     Object result = function.apply(target);
-    tests.accept(result);
+    test.accept(result);
     return this;
   }
 
-  @Override
-  public <E> Scenario<T> each(Class<E> type, Consumer<? super E> tests) {
-    ((Iterable) target).forEach(tests);
+  public Scenario<T> each(Consumer test) {
+    ((Iterable) target).forEach(test);
     return this;
   }
 

@@ -83,9 +83,9 @@ public class AnnotationElementTest extends BaseElementTest {
   public void finderShouldReturnNonEmptyCollectionForAnnotationsWithElements() {
     TestScenario.given(elements().in(annotation()))
         .thenIt(Should.NOT_BE_EMPTY)
-        .each(Element.class, Should.notBe(writable()))
-        .each(Element.class, Should.be(readable()))
-        .each(Element.class, shouldHaveAValue());
+        .each(Should.notBe(writable()))
+        .each(Should.be(readable()))
+        .each(shouldHaveAValue());
   }
 
   @Test
