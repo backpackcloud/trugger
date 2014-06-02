@@ -97,6 +97,13 @@ public interface Scenario<T> {
     return when(tests);
   }
 
+  /**
+   * Defines a test to do with a value.
+   *
+   * @param value the value to test
+   * @param test  the test to do with the value
+   * @return a reference to this object
+   */
   default Scenario<T> the(Object value, Consumer test) {
     test.accept(value);
     return this;
