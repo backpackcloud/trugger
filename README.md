@@ -26,7 +26,7 @@ Just put the jar file on your **classpath** and you're done. No dependencies are
 
 ## How To Build
 
-Just make sure you have [Gradle][]. The markdown files are converted at build time using [pandoc][] so you should have it to build the distribution files.
+Just make sure you have [Gradle][] and execute the `gradle dist` command. The markdown files are converted at build time using [pandoc][] so you should have it to build the distribution files. You can also use the command `gradle jar` to build only the binaries.
 
 [gradle]: <http://gradle.org>
 [pandoc]: <http://johnmacfarlane.net/pandoc/README.html>

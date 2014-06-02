@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: kodo-0.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/kodo/kodo/0.1/kodo-0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/kodo/kodo/0.1/kodo-0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
