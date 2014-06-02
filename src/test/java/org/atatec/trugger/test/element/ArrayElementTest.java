@@ -18,8 +18,8 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.test.Should;
-import org.atatec.trugger.test.TestScenario;
+import org.kodo.Should;
+import org.kodo.TestScenario;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ import static org.atatec.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ArrayElementTest extends BaseElementTest {
+public class ArrayElementTest implements BaseElementTest {
 
   private int[] ints;
 

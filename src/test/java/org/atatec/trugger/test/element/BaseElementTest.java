@@ -10,33 +10,33 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author Marcelo Guimarães
  */
-public abstract class BaseElementTest {
+public interface BaseElementTest {
 
-  protected Consumer<Element> valueIsSetTo(Object value) {
+  default Consumer<Element> valueIsSetTo(Object value) {
     return (element) -> element.set(value);
   }
 
-  protected Consumer<Element> shouldHaveAValue() {
+  default Consumer<Element> shouldHaveAValue() {
     return (element) -> assertNotNull(element.value());
   }
 
-  protected Consumer<Element> attempToChangeValue() {
+  default Consumer<Element> attempToChangeValue() {
     return (element) -> element.set("a value");
   }
 
-  protected Consumer<Element> attempToGetValue() {
+  default Consumer<Element> attempToGetValue() {
     return (element) -> element.value();
   }
 
-  protected Function<Element, ?> type() {
+  default Function<Element, ?> type() {
     return (element) -> element.type();
   }
 
-  protected Function<Element, ?> value() {
+  default Function<Element, ?> value() {
     return (element) -> element.value();
   }
 
-  protected Function<Element, ?> declaringClass() {
+  default Function<Element, ?> declaringClass() {
     return (element) -> element.declaringClass();
   }
 

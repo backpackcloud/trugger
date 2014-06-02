@@ -117,7 +117,7 @@ public class ElementTest {
     assertNull(
         element().filter(type(Serializable.class)).in(TestObject.class)
     );
-    // should return the first element found, no matter what is
+    // should return the first element found, no matter what it is
     assertNotNull(
         element().filter(assignableTo(Serializable.class)).in(TestObject.class)
     );

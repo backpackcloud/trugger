@@ -17,8 +17,8 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.ElementCopy;
-import org.atatec.trugger.test.Should;
-import org.atatec.trugger.test.TestScenario;
+import org.kodo.Should;
+import org.kodo.TestScenario;
 import org.junit.Before;
 import org.junit.Test;
 

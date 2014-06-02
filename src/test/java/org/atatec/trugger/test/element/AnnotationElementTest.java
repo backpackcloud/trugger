@@ -19,8 +19,8 @@ package org.atatec.trugger.test.element;
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.NonSpecificElementException;
-import org.atatec.trugger.test.Should;
-import org.atatec.trugger.test.TestScenario;
+import org.kodo.Should;
+import org.kodo.TestScenario;
 import org.atatec.trugger.util.mock.AnnotationMock;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ import static org.atatec.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class AnnotationElementTest extends BaseElementTest {
+public class AnnotationElementTest implements BaseElementTest {
 
   private Annotation annotation() {
     // @TestAnnotation(bool = false, name = "name", number = 1)

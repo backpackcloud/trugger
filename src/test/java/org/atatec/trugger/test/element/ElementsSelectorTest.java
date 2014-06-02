@@ -21,8 +21,8 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.TruggerElementsSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.test.Flag;
-import org.atatec.trugger.test.Should;
-import org.atatec.trugger.test.TestScenario;
+import org.kodo.Should;
+import org.kodo.TestScenario;
 import org.junit.Test;
 
 import java.util.Collection;
