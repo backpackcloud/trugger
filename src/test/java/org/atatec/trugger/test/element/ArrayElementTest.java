@@ -18,10 +18,9 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.Element;
-import org.kodo.Should;
-import org.kodo.TestScenario;
 import org.junit.Before;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.util.List;
 import java.util.function.Function;
@@ -30,6 +29,8 @@ import static org.atatec.trugger.element.ElementPredicates.readable;
 import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.be;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -60,49 +61,49 @@ public class ArrayElementTest implements BaseElementTest {
   @Test
   public void testFindingAll() {
     TestScenario.given(elements().in(ints))
-        .the(List::size, Should.be(4))
-        .the(first(), Should.be(0))
-        .the(next(), Should.be(10))
-        .the(next(), Should.be(12))
-        .the(next(), Should.be(33));
+        .the(List::size, should(be(4)))
+        .the(first(), should(be(0)))
+        .the(next(), should(be(10)))
+        .the(next(), should(be(12)))
+        .the(next(), should(be(33)));
   }
 
   @Test
   public void testIndexElements() {
     TestScenario.given(element("0").in(ints))
-        .thenIt(Should.be(readable()))
-        .thenIt(Should.be(writable()))
-        .the(type(), Should.be(int.class))
-        .the(declaringClass(), Should.be(int[].class))
-        .the(value(), Should.be(0))
+        .thenIt(should(be(readable())))
+        .thenIt(should(be(writable())))
+        .the(type(), should(be(int.class)))
+        .the(declaringClass(), should(be(int[].class)))
+        .the(value(), should(be(0)))
 
         .when(valueIsSetTo(15))
-        .the(value(), Should.be(15));
+        .the(value(), should(be(15)));
 
     TestScenario.given(element("ints.1").in(this))
-        .thenIt(Should.be(readable()))
-        .thenIt(Should.be(writable()))
-        .the(type(), Should.be(int.class))
-        .the(declaringClass(), Should.be(ArrayElementTest.class))
-        .the(value(), Should.be(10))
+        .thenIt(should(be(readable())))
+        .thenIt(should(be(writable())))
+        .the(type(), should(be(int.class)))
+        .the(declaringClass(), should(be(ArrayElementTest.class)))
+        .the(value(), should(be(10)))
 
         .when(valueIsSetTo(15))
-        .the(value(), Should.be(15));
+        .the(value(), should(be(15)));
 
     TestScenario.given(element("0").in(objects))
-        .thenIt(Should.be(readable()))
-        .thenIt(Should.be(writable()))
-        .the(type(), Should.be(TestObject.class))
-        .the(declaringClass(), Should.be(TestObject[].class));
+        .thenIt(should(be(readable())))
+        .thenIt(should(be(writable())))
+        .the(type(), should(be(TestObject.class)))
+        .the(declaringClass(), should(be(TestObject[].class)));
   }
 
   @Test
   public void testReferencedElements() {
     TestScenario.given(element("first").in(ints))
-        .the(value(), Should.be(0));
+        .the(value(), should(be(0)));
 
     TestScenario.given(element("last").in(ints))
-        .the(value(), Should.be(33));
+        .the(value(), should(be(33)));
   }
 
 }

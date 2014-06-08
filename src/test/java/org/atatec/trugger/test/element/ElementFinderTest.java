@@ -22,9 +22,8 @@ import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.reflection.ClassPredicates;
-import org.kodo.Should;
-import org.kodo.TestScenario;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +31,8 @@ import java.util.function.Consumer;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.*;
 
 /**
  *
@@ -64,11 +65,11 @@ public class ElementFinderTest {
   @Test
   public void testRegistry() {
     TestScenario.given(Elements.class)
-        .the(element("field").in(TestFinder.class), Should.NOT_BE_NULL)
-        .the(elements().in(TestFinder.class), Should.NOT_BE_EMPTY)
+        .the(element("field").in(TestFinder.class), should(notBe(NULL)))
+        .the(elements().in(TestFinder.class), should(notBe(EMPTY)))
         .when(testFinderIsRegistered())
-        .the(element("field").in(TestFinder.class), Should.BE_NULL)
-        .the(elements().in(TestFinder.class), Should.BE_EMPTY);
+        .the(element("field").in(TestFinder.class), should(be(NULL)))
+        .the(elements().in(TestFinder.class), should(be(EMPTY)));
   }
 
 }

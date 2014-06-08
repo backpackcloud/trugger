@@ -19,10 +19,9 @@ package org.atatec.trugger.test.element;
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.NonSpecificElementException;
-import org.kodo.Should;
-import org.kodo.TestScenario;
 import org.atatec.trugger.util.mock.AnnotationMock;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
@@ -31,6 +30,8 @@ import static org.atatec.trugger.element.ElementPredicates.readable;
 import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -49,53 +50,56 @@ public class AnnotationElementTest implements BaseElementTest {
   @Test
   public void finderShouldReturnReadableElement() {
     TestScenario.given(element("name").in(annotation()))
-        .the(Element::name, Should.be("name"))
-        .the(Element::value, Should.be("some name"))
-        .thenIt(Should.NOT_BE_NULL.andThen(Should.be(readable())));
+        .the(Element::name, should(be("name")))
+        .the(Element::value, should(be("some name")))
+        .thenIt(should(be(NOT_NULL)))
+        .and(should(be(readable())));
 
     TestScenario.given(element("name").in(TestAnnotation.class))
-        .it(Should.NOT_BE_NULL.andThen(Should.be(readable())))
-        .then(attempToGetValue(), Should.raise(NonSpecificElementException.class));
+        .it(should(be(NOT_NULL)))
+        .and(should(be(readable())))
+        .then(attempToGetValue(), should(raise(NonSpecificElementException.class)));
   }
 
   @Test
   public void finderShouldReturnNonWritableElement() {
     TestScenario.given(element("name").in(annotation()))
-        .the(Element::value, Should.be("some name"))
-        .the(Element::name, Should.be("name"))
-        .it(Should.NOT_BE_NULL.andThen(Should.notBe(writable())))
-        .then(attempToChangeValue(), Should.raise(HandlingException.class));
+        .the(Element::value, should(be("some name")))
+        .the(Element::name, should(be("name")))
+        .thenIt(should(be(NOT_NULL)))
+        .and(should(notBe(writable())))
+        .then(attempToChangeValue(), should(raise(HandlingException.class)));
   }
 
   @Test
   public void finderShouldReturnNullIfElementDoesNotExists() {
     TestScenario.given(element("non_existent").in(TestAnnotation.class))
-        .thenIt(Should.BE_NULL);
+        .thenIt(should(be(NULL)));
   }
 
   @Test
   public void finderShouldReturnEmptyCollectionForAnnotationsWithoutElements() {
     TestScenario.given(elements().in(Documented.class))
-        .thenIt(Should.BE_EMPTY);
+        .thenIt(should(be(EMPTY)));
   }
 
   @Test
   public void finderShouldReturnNonEmptyCollectionForAnnotationsWithElements() {
     TestScenario.given(elements().in(annotation()))
-        .thenIt(Should.NOT_BE_EMPTY)
-        .each(Should.notBe(writable()))
-        .each(Should.be(readable()))
+        .thenIt(should(notBe(EMPTY)))
+        .each(should(notBe(writable())))
+        .each(should(be(readable())))
         .each(shouldHaveAValue());
   }
 
   @Test
   public void testAnnotationElementAttributes() {
     TestScenario.given(element("bool").in(annotation()))
-        .the(Element::type, Should.be(boolean.class))
-        .the(Element::value, Should.BE_FALSE)
-        .the(Element::declaringClass, Should.be(TestAnnotation.class))
-        .the(Element::name, Should.be("bool"))
-        .the(Element::isSpecific, Should.BE_TRUE);
+        .the(Element::type, should(be(boolean.class)))
+        .the(Element::value, should(be(FALSE)))
+        .the(Element::declaringClass, should(be(TestAnnotation.class)))
+        .the(Element::name, should(be("bool")))
+        .the(Element::isSpecific, should(be(TRUE)));
   }
 
 }

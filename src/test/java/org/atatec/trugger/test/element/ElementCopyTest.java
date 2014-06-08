@@ -17,10 +17,9 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.ElementCopy;
-import org.kodo.Should;
-import org.kodo.TestScenario;
 import org.junit.Before;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.util.Properties;
 import java.util.function.Consumer;
@@ -28,6 +27,8 @@ import java.util.function.Function;
 
 import static org.atatec.trugger.element.Elements.copy;
 import static org.atatec.trugger.element.Elements.elements;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -101,10 +102,11 @@ public class ElementCopyTest {
         .when(weightIsSetTo(30.4))
         .and(nickNameIsSetTo("Nick"))
         .and(elementsAreCopiedFrom(testObject))
-        .the(age(), Should.be(testObject.getAge()).andThen(Should.be(23)))
-        .the(height(), Should.be(testObject.getHeight()).andThen(Should.be(1.9)))
-        .the(weight(), Should.be(testObject.getWeight()).andThen(Should.be(80.2)))
-        .the(nickName(), Should.notBe(testObject.getNickName()).andThen(Should.be("Nick")));
+        .the(age(), should(be(testObject.getAge())).andThen(should(be(23))))
+        .the(height(), should(be(testObject.getHeight())).andThen(should(be(1.9))))
+        .the(weight(), should(be(testObject.getWeight())).andThen(should(be(80.2))))
+        .the(nickName(), should(notBe(testObject.getNickName()))
+            .andThen(should(be("Nick"))));
   }
 
   @Test
@@ -114,10 +116,11 @@ public class ElementCopyTest {
         .and(nickNameIsSetTo("Nick"))
         .and(ageIsSetTo(25))
         .and(elementsButAgeAreCopiedFrom(testObject))
-        .the(age(), Should.notBe(testObject.getAge()).andThen(Should.be(25)))
-        .the(height(), Should.be(testObject.getHeight()).andThen(Should.be(1.9)))
-        .the(weight(), Should.be(testObject.getWeight()).andThen(Should.be(80.2)))
-        .the(nickName(), Should.notBe(testObject.getNickName()).andThen(Should.be("Nick")));
+        .the(age(), should(notBe(testObject.getAge())).andThen(should(be(25))))
+        .the(height(), should(be(testObject.getHeight())).andThen(should(be(1.9))))
+        .the(weight(), should(be(testObject.getWeight())).andThen(should(be(80.2))))
+        .the(nickName(), should(notBe(testObject.getNickName()))
+            .andThen(should(be("Nick"))));
   }
 
   private static class ToStringTransformer
@@ -135,8 +138,8 @@ public class ElementCopyTest {
         .and(obj -> obj.setWeight(30.4))
         .and(obj -> copy().from(testObject).to(obj))
 
-        .the(obj -> obj.getWeight(), Should.be(testObject.getWeight()))
-        .the(obj -> obj.getNickName(), Should.be(testObject.getNickName()));
+        .the(obj -> obj.getWeight(), should(be(testObject.getWeight())))
+        .the(obj -> obj.getNickName(), should(be(testObject.getNickName())));
 
     TestScenario.given(new Properties())
         .when(props -> copy()
@@ -144,24 +147,24 @@ public class ElementCopyTest {
             .notNull()
             .applying(new ToStringTransformer())
             .to(props))
-        .the(property("age"), Should.be("23"))
-        .the(property("nickName"), Should.BE_NULL)
-        .the(property("name"), Should.be("Marcelo"))
-        .the(property("lastName"), Should.be("Guimaraes"))
-        .the(property("height"), Should.be("1.9"))
-        .the(property("weight"), Should.be("80.2"));
+        .the(property("age"), should(be("23")))
+        .the(property("nickName"), should(be(NULL)))
+        .the(property("name"), should(be("Marcelo")))
+        .the(property("lastName"), should(be("Guimaraes")))
+        .the(property("height"), should(be("1.9")))
+        .the(property("weight"), should(be("80.2")));
   }
 
   @Test
   public void testCopyWithSelector() {
     TestScenario.given(new TestObject("John", "Smith"))
         .when(o -> copy(elements().filter(e -> false)).from(testObject).to(o))
-        .the(name(), Should.be("John"))
-        .the(lastName(), Should.be("Smith"))
-        .the(nickName(), Should.BE_NULL)
-        .the(age(), Should.be(0))
-        .the(height(), Should.be(0.0))
-        .the(weight(), Should.be(0.0));
+        .the(name(), should(be("John")))
+        .the(lastName(), should(be("Smith")))
+        .the(nickName(), should(be(NULL)))
+        .the(age(), should(be(0)))
+        .the(height(), should(be(0.0)))
+        .the(weight(), should(be(0.0)));
   }
 
 }

@@ -21,9 +21,8 @@ import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.impl.TruggerElementsSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.test.Flag;
-import org.kodo.Should;
-import org.kodo.TestScenario;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -33,6 +32,9 @@ import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.test.TruggerTest.*;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.easymock.EasyMock.verify;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.EMPTY;
+import static org.kodo.Spec.be;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -60,7 +62,7 @@ public class ElementsSelectorTest {
   private void testFailPredicate(Predicate<? super Element> predicate) {
     TestScenario.given(selector())
         .the(selector -> selector.filter(predicate).in(this),
-            Should.BE_EMPTY);
+            should(be(EMPTY)));
     verify(finder);
   }
 
