@@ -17,21 +17,21 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import static org.atatec.trugger.element.Elements.element;
-import static org.junit.Assert.assertEquals;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.be;
+import static org.kodo.Spec.raise;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class HandleTest {
+public class HandleTest implements BaseElementTest {
 
   public static class TestObject {
-
     String string;
-
   }
 
   @Test
@@ -39,13 +39,11 @@ public class HandleTest {
     TestObject obj = new TestObject();
     obj.string = "test";
 
-    Element element = element().in(obj);
-
-    assertEquals("test", element.value());
-
-    element.set("other value");
-
-    assertEquals("other value", obj.string);
+    TestScenario.given(element().in(obj))
+        .the(value(), should(be("test")))
+        .when(valueIsSetTo("other value"))
+        .the(value(), should(be("other value")))
+        .the(obj.string, should(be("other value")));
   }
 
   @Test
@@ -53,21 +51,18 @@ public class HandleTest {
     TestObject obj = new TestObject();
     obj.string = "test";
 
-    Element element = element().in(TestObject.class);
-
-    assertEquals("test", element.in(obj).value());
-
-    element.in(obj).set("other value");
-
-    assertEquals("other value", obj.string);
+    TestScenario.given(element().in(TestObject.class))
+        .the(valueIn(obj), should(be("test")))
+        .when(valueIsSetTo("other value", obj))
+        .the(valueIn(obj), should(be("other value")))
+        .the(obj.string, should(be("other value")));
   }
 
-  @Test(expected = HandlingException.class)
+  @Test
   public void testHandlingError() {
     TestObject obj = new TestObject();
-    Element element = element().in(obj);
-
-    element.set(10);
+    TestScenario.given(element().in(obj))
+        .then(attempToSetValueTo(10), should(raise(HandlingException.class)));
   }
 
 }

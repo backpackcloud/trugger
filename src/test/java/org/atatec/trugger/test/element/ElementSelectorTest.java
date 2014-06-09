@@ -25,6 +25,7 @@ import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 import org.kodo.TestScenario;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static org.atatec.trugger.element.ElementPredicates.*;
@@ -55,11 +56,16 @@ public class ElementSelectorTest {
   }
 
   private void testPredicate(Predicate<? super Element> predicate) {
+    Function<ElementSelector, Object> filtered =
+        selector -> selector.filter(predicate).in(this);
+    Function<ElementSelector, Object> inversedFiltered =
+        selector -> selector.filter(predicate.negate()).in(this);
+
     TestScenario.given(selector())
-        .the(selector -> selector.filter(predicate).in(this),
-            should(be(element)))
-        .the(selector -> selector.filter(predicate.negate()).in(this),
+        .the(filtered, should(be(element)))
+        .the(inversedFiltered,
             should(be(NULL)));
+
     verify(finder);
   }
 

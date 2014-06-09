@@ -133,13 +133,21 @@ public class ElementCopyTest {
 
   @Test
   public void testCopyToDifferentTypes() {
-    TestScenario.given(new OtherTestObject())
-        .when(obj -> obj.setNickName("Nick"))
-        .and(obj -> obj.setWeight(30.4))
-        .and(obj -> copy().from(testObject).to(obj))
+    Consumer<OtherTestObject> nickNameIsChanged = obj -> obj.setNickName("Nick");
+    Consumer<OtherTestObject> weightIsChanged = obj -> obj.setWeight(30.4);
+    Consumer<OtherTestObject> elementsAreCopiedFromTestObject =
+        obj -> copy().from(testObject).to(obj);
 
-        .the(obj -> obj.getWeight(), should(be(testObject.getWeight())))
-        .the(obj -> obj.getNickName(), should(be(testObject.getNickName())));
+    Function<OtherTestObject, Object> weight = obj -> obj.getWeight();
+    Function<OtherTestObject, Object> nickName = obj -> obj.getNickName();
+
+    TestScenario.given(new OtherTestObject())
+        .when(nickNameIsChanged)
+        .and(weightIsChanged)
+        .and(elementsAreCopiedFromTestObject)
+
+        .the(weight, should(be(testObject.getWeight())))
+        .the(nickName, should(be(testObject.getNickName())));
 
     TestScenario.given(new Properties())
         .when(props -> copy()

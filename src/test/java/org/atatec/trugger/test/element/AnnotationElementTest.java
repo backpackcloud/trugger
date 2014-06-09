@@ -17,7 +17,6 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.NonSpecificElementException;
 import org.atatec.trugger.util.mock.AnnotationMock;
 import org.junit.Test;
@@ -50,8 +49,8 @@ public class AnnotationElementTest implements BaseElementTest {
   @Test
   public void finderShouldReturnReadableElement() {
     TestScenario.given(element("name").in(annotation()))
-        .the(Element::name, should(be("name")))
-        .the(Element::value, should(be("some name")))
+        .the(name(), should(be("name")))
+        .the(value(), should(be("some name")))
         .thenIt(should(be(NOT_NULL)))
         .and(should(be(readable())));
 
@@ -64,8 +63,8 @@ public class AnnotationElementTest implements BaseElementTest {
   @Test
   public void finderShouldReturnNonWritableElement() {
     TestScenario.given(element("name").in(annotation()))
-        .the(Element::value, should(be("some name")))
-        .the(Element::name, should(be("name")))
+        .the(value(), should(be("some name")))
+        .the(name(), should(be("name")))
         .thenIt(should(be(NOT_NULL)))
         .and(should(notBe(writable())))
         .then(attempToChangeValue(), should(raise(HandlingException.class)));
@@ -95,11 +94,11 @@ public class AnnotationElementTest implements BaseElementTest {
   @Test
   public void testAnnotationElementAttributes() {
     TestScenario.given(element("bool").in(annotation()))
-        .the(Element::type, should(be(boolean.class)))
-        .the(Element::value, should(be(FALSE)))
-        .the(Element::declaringClass, should(be(TestAnnotation.class)))
-        .the(Element::name, should(be("bool")))
-        .the(Element::isSpecific, should(be(TRUE)));
+        .the(type(), should(be(boolean.class)))
+        .the(value(), should(be(FALSE)))
+        .the(declaringClass(), should(be(TestAnnotation.class)))
+        .the(name(), should(be("bool")))
+        .the(specific(), should(be(TRUE)));
   }
 
 }

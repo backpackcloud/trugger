@@ -16,12 +16,20 @@ public interface BaseElementTest {
     return (element) -> element.set(value);
   }
 
+  default Consumer<Element> valueIsSetTo(Object value, Object target) {
+    return (element) -> element.in(target).set(value);
+  }
+
   default Consumer<Element> shouldHaveAValue() {
     return (element) -> assertNotNull(element.value());
   }
 
   default Consumer<Element> attempToChangeValue() {
     return (element) -> element.set("a value");
+  }
+
+  default Consumer<Element> attempToSetValueTo(Object value) {
+    return (element) -> element.set(value);
   }
 
   default Consumer<Element> attempToGetValue() {
@@ -32,8 +40,20 @@ public interface BaseElementTest {
     return (element) -> element.type();
   }
 
+  default Function<Element, ?> name() {
+    return (element) -> element.name();
+  }
+
   default Function<Element, ?> value() {
     return (element) -> element.value();
+  }
+
+  default Function<Element, ?> specific() {
+    return (element) -> element.isSpecific();
+  }
+
+  default Function<Element, ?> valueIn(Object target) {
+    return (element) -> element.in(target).value();
   }
 
   default Function<Element, ?> declaringClass() {
