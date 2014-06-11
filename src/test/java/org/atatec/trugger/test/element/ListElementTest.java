@@ -17,21 +17,25 @@
 
 package org.atatec.trugger.test.element;
 
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.Elements;
 import org.junit.Before;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static org.atatec.trugger.element.ElementPredicates.readable;
+import static org.atatec.trugger.element.ElementPredicates.writable;
+import static org.atatec.trugger.element.Elements.element;
+import static org.atatec.trugger.element.Elements.elements;
+import static org.atatec.trugger.test.TruggerTest.SIZE;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.be;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ListElementTest {
+public class ListElementTest implements ElementSpecs {
 
   private List<Integer> ints;
 
@@ -39,72 +43,60 @@ public class ListElementTest {
 
   @Before
   public void initialize() {
-    ints = new ArrayList();
-    ints.add(0);
-    ints.add(10);
-    ints.add(12);
-    ints.add(33);
+    ints = Arrays.asList(0, 10, 12, 33);
     objects = Arrays.asList(new TestObject("name", "lastname"));
   }
 
   @Test
   public void testFindingAll() {
-    List<Element> elements = Elements.elements().in(ints);
-    assertEquals(4, elements.size());
-    assertEquals(0, (int) elements.get(0).value());
-    assertEquals(10, (int) elements.get(1).value());
-    assertEquals(12, (int) elements.get(2).value());
-    assertEquals(33, (int) elements.get(3).value());
+    TestScenario.given(elements().in(ints))
+        .the(SIZE, should(be(4)))
+        .the(elementAt(0), should(be(0)))
+        .the(elementAt(1), should(be(10)))
+        .the(elementAt(2), should(be(12)))
+        .the(elementAt(3), should(be(33)));
   }
 
   @Test
   public void testIndexElements() {
-    Element element = Elements.element("0").in(ints);
+    TestScenario.given(element("0").in(ints))
+        .it(should(be(readable())))
+        .it(should(be(writable())))
+        .the(type(), should(be(Object.class)))
+        .the(declaringClass(), should(be(List.class)))
+        .the(value(), should(be(0)))
 
-    assertTrue(element.isReadable());
-    assertTrue(element.isWritable());
+        .when(valueIsSetTo(15))
+        .the(value(), should(be(15)));
 
-    assertEquals(Object.class, element.type());
-    assertEquals(List.class, element.declaringClass());
-    assertEquals(0, (int) element.value());
+    TestScenario.given(element("2").in(ints))
+        .the(type(), should(be(Object.class)))
+        .the(declaringClass(), should(be(List.class)))
+        .the(value(), should(be(12)));
 
-    element.set(15);
+    TestScenario.given(element("ints.1").in(this))
+        .the(type(), should(be(Object.class)))
+        .the(declaringClass(), should(be(ListElementTest.class)))
+        .the(value(), should(be(10)));
 
-    assertEquals(15, (int) element.value());
-
-    element = Elements.element("2").in(ints);
-    assertEquals(Object.class, element.type());
-    assertEquals(List.class, element.declaringClass());
-    assertEquals(12, (int) element.value());
-
-    element = Elements.element("ints.1").in(this);
-    assertEquals(Object.class, element.type());
-    assertEquals(ListElementTest.class, element.declaringClass());
-    assertEquals(10, (int) element.value());
-
-    element = Elements.element("0").in(objects);
-    assertEquals(Object.class, element.type());
-    assertEquals(List.class, element.declaringClass());
-    TestObject o = element.value();
-    assertEquals("name", o.getName());
-    assertEquals("lastname", o.getLastName());
+    TestScenario.given(element("0").in(objects))
+        .the(type(), should(be(Object.class)))
+        .the(declaringClass(), should(be(List.class)))
+        .the(valueOf("name"), should(be("name")))
+        .the(valueOf("lastName"), should(be("lastname")));
   }
 
   @Test
   public void testReferencedElements() {
-    Element element = Elements.element("first").in(ints);
-    assertEquals(0, (int) element.value());
+    TestScenario.given(element("first").in(ints))
+        .the(value(), should(be(0)));
 
-    element = Elements.element("last").in(ints);
-    assertEquals(33, (int) element.value());
+    TestScenario.given(element("last").in(ints))
+        .the(value(), should(be(33)));
 
-    element = Elements.element("first").in(objects);
-    TestObject a = element.value();
-
-    element = Elements.element("last").in(objects);
-    TestObject b = element.value();
-
-    assertSame(a, b);
+    Object lastElementValue = element("last").in(objects).value();
+    TestScenario.given(element("first").in(objects))
+        .the(value(), should(be(lastElementValue)));
   }
 
 }

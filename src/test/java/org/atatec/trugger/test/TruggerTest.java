@@ -21,8 +21,10 @@ import org.atatec.trugger.element.Element;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static org.junit.Assert.*;
@@ -34,6 +36,12 @@ import static org.junit.Assert.*;
  * @author Marcelo Varella Barca Guimarães
  */
 public class TruggerTest {
+
+  public static final Function<Collection, Integer> SIZE = collection -> collection.size();
+
+  public static Function<List, ?> valueAt(int index) {
+    return list -> list.get(index);
+  }
 
   /**
    * Tests the collection elements with the given predicate.
@@ -103,8 +111,8 @@ public class TruggerTest {
   }
 
   public static <E> void assertThrow(Class<? extends Throwable> exception,
-                                 E object,
-                                 Consumer<E> consumer) {
+                                     E object,
+                                     Consumer<E> consumer) {
     try {
       consumer.accept(object);
       throw new AssertionFailedError("No exception thrown.");

@@ -28,7 +28,7 @@ import static org.kodo.Spec.raise;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class HandleTest implements BaseElementTest {
+public class HandleTest implements ElementSpecs {
 
   public static class TestObject {
     String string;

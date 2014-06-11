@@ -17,85 +17,49 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import static org.atatec.trugger.element.ElementPredicates.readable;
+import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.*;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.*;
+
+import static org.atatec.trugger.test.TruggerTest.SIZE;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class MapElementTest {
+public class MapElementTest implements ElementSpecs {
 
   @Test
   public void mapElementTest() {
-    Map<String, Object> map1 = new HashMap<String, Object>();
-    Map<String, Object> map2 = new HashMap<String, Object>();
-    Map<String, Object> map3 = new HashMap<String, Object>();
-    BundleBean obj = new BundleBean();
+    Map<String, Object> map = new HashMap<>();
+    map.put("key", "some value");
 
-    map1.put("foo", "bar");
-    map1.put("framework", "trugger");
-    map1.put("author", "marcelo");
-    map1.put("obj", obj);
+    TestScenario.given(element("key").in(map))
+        .it(should(be(readable())))
+        .it(should(be(writable())))
+        .the(type(), should(be(Object.class)))
+        .the(declaringClass(), should(be(Map.class)))
+        .the(value(), should(be("some value")))
+        .when(valueIsSetTo("other value"))
+        .the(value(), should(be("other value")));
 
-    map2.put("foo", "bar2");
-    map2.put("framework", "trugger2");
-    map2.put("author", "marcelo2");
-    map2.put("obj", obj);
+    map.put("other key", "other value");
 
-    map3.putAll(map1);
+    TestScenario.given(elements().in(map))
+        .the(SIZE, should(be(2)))
+        .it(should(have(elementsNamed("key", "other key"))));
 
-    List<Element> elements = elements().in(Map.class);
-    assertTrue(elements.isEmpty());
-
-    elements = elements().in(map1);
-    assertFalse(elements.isEmpty());
-
-    assertElements(elements, "foo", "framework", "author", "obj");
-
-    testMap(map1, map2, "foo", "bar", "bar2");
-    testMap(map1, map2, "framework", "trugger", "trugger2");
-    testMap(map1, map2, "author", "marcelo", "marcelo2");
-
-    Element element = element("obj.bundle.framework").in(map3);
-    assertTrue(element.isSpecific());
-    assertEquals("trugger", element.value());
-    assertThrow(HandlingException.class, () -> element.set("none"));
-  }
-
-  private void testMap(final Map map1, final Map map2, String key,
-                       Object value1, Object value2) {
-    final Element element = element(key).in(map1);
-    assertNotNull(element);
-    assertTrue(element.isSpecific());
-
-    assertEquals(Map.class, element.declaringClass());
-
-    assertEquals(value1, element.value());
-    assertEquals(key, element.name());
-    assertEquals(value1, element.in(map1).value());
-    assertEquals(value2, element.in(map2).value());
-    assertTrue(element.isReadable());
-    assertTrue(element.isWritable());
-
-    element.set("modified");
-    element.in(map2).set("modified");
-
-    assertEquals("modified", map1.get(key));
-    assertEquals("modified", map2.get(key));
-    assertEquals("modified", element.value());
-    assertEquals("modified", element.in(map1).value());
-    assertEquals("modified", element.in(map2).value());
+    TestScenario.given(elements().in(Map.class))
+        .it(should(be(EMPTY)));
   }
 
   @Test
@@ -103,20 +67,22 @@ public class MapElementTest {
     Map<String, String> map = new HashMap<>();
     map.put("key", "value");
     map = Collections.unmodifiableMap(map);
-    Element element = element("none").in(map);
-    assertThrow(HandlingException.class, () -> element.value());
-    assertThrow(HandlingException.class, () -> element.set("value"));
-    assertThrow(IllegalArgumentException.class, () -> element.in("").set("value"));
+
+    TestScenario.given(element("none").in(map))
+        .then(attempToGetValue(), should(raise(HandlingException.class)))
+        .then(attempToChangeValue(), should(raise(HandlingException.class)))
+        .then(setValueTo("value", "target"), should(raise(IllegalArgumentException.class)));
   }
 
   @Test
   public void testNonSpecificElements() {
-    Element element = element("key").in(Map.class);
-    assertNotNull(element);
-    assertThrow(HandlingException.class, () -> element.value());
     Map<String, String> map = new HashMap<>();
-    element.in(map).set("value");
-    assertEquals("value", map.get("key"));
+
+    TestScenario.given(element("key").in(Map.class))
+        .it(should(notBe(NULL)))
+        .then(attempToGetValue(), should(raise(HandlingException.class)))
+        .when(valueIsSetTo("value", map))
+        .then(map.get("key"), should(be("value")));
   }
 
 

@@ -1,16 +1,22 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.Elements;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Marcelo Guimarães
  */
-public interface BaseElementTest {
+public interface ElementSpecs {
 
   default Consumer<Element> valueIsSetTo(Object value) {
     return (element) -> element.set(value);
@@ -58,6 +64,40 @@ public interface BaseElementTest {
 
   default Function<Element, ?> declaringClass() {
     return (element) -> element.declaringClass();
+  }
+
+  default Function<Element, ?> valueOf(String elementName) {
+    return (element) -> Elements.element(elementName).in(element.value()).value();
+  }
+
+  default Function<List, ?> elementAt(int index) {
+    return list -> ((Element) list.get(index)).value();
+  }
+
+  default Consumer<Element> setValueTo(Object value) {
+    return (element) -> element.set(value);
+  }
+
+  default Consumer<Element> setValueTo(Object value, Object target) {
+    return (element) -> element.in(target).set(value);
+  }
+
+  default Predicate<Collection<Element>> elementsNamed(String... names) {
+    return (collection) -> {
+      Set<String> elNames = new HashSet<String>(collection.size());
+      for (Element el : collection) {
+        elNames.add(el.name());
+      }
+      if( names.length != elNames.size()) {
+        return false;
+      }
+      for (String name : names) {
+        if (!elNames.contains(name)) {
+          return false;
+        }
+      }
+      return true;
+    };
   }
 
 }

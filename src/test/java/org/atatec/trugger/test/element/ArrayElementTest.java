@@ -35,7 +35,7 @@ import static org.kodo.Spec.be;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ArrayElementTest implements BaseElementTest {
+public class ArrayElementTest implements ElementSpecs {
 
   private int[] ints;
 

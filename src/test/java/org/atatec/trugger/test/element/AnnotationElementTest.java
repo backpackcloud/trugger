@@ -35,7 +35,7 @@ import static org.kodo.Spec.*;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class AnnotationElementTest implements BaseElementTest {
+public class AnnotationElementTest implements ElementSpecs {
 
   private Annotation annotation() {
     // @TestAnnotation(bool = false, name = "name", number = 1)
