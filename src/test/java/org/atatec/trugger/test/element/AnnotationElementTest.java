@@ -26,6 +26,7 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 
 import static org.atatec.trugger.element.ElementPredicates.readable;
+import static org.atatec.trugger.element.ElementPredicates.specific;
 import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
@@ -98,7 +99,7 @@ public class AnnotationElementTest implements ElementSpecs {
         .the(value(), should(be(FALSE)))
         .the(declaringClass(), should(be(TestAnnotation.class)))
         .the(name(), should(be("bool")))
-        .the(specific(), should(be(TRUE)));
+        .it(should(be(specific())));
   }
 
 }

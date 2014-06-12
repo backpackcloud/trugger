@@ -17,16 +17,20 @@
 
 package org.atatec.trugger.test.element;
 
-import org.atatec.trugger.element.Element;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.util.Date;
 import java.util.Properties;
 
+import static org.atatec.trugger.element.ElementPredicates.readable;
+import static org.atatec.trugger.element.ElementPredicates.specific;
+import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
-import static org.junit.Assert.*;
+import static org.kodo.Scenario.should;
+import static org.kodo.Spec.*;
 
-public class NestedElementsTest {
+public class NestedElementsTest implements ElementSpecs {
 
   class Ticket {
     private Customer customer;
@@ -58,26 +62,26 @@ public class NestedElementsTest {
 
   @Test
   public void testNestedElementCreating() {
-    Element phone = element("customer.phone").in(Ticket.class);
-    assertNotNull(phone);
-    assertTrue(phone.isReadable());
-    assertTrue(phone.isWritable());
-    assertFalse(phone.isSpecific());
+    TestScenario.given(element("customer.phone").in(Ticket.class))
+        .it(should(notBe(NULL)))
+        .it(should(be(readable())))
+        .it(should(be(writable())))
+        .it(should(notBe(specific())));
 
-    Element element = element("customer.credential").in(Ticket.class);
-    assertNull(element);
+    TestScenario.given(element("customer.credential").in(Ticket.class))
+        .it(should(be(NULL)));
 
-    Element info = element("customer.info").in(new Ticket());
-    assertNotNull(info);
-    assertFalse(info.isReadable());
-    assertTrue(info.isWritable());
-    assertFalse(info.isSpecific());
+    TestScenario.given(element("customer.info").in(new Ticket()))
+        .it(should(notBe(NULL)))
+        .it(should(notBe(readable())))
+        .it(should(be(writable())))
+        .it(should(notBe(specific())));
 
-    Element properties = element("customer.info.properties").in(new Ticket());
-    assertNotNull(properties);
-    assertFalse(properties.isReadable());
-    assertFalse(properties.isWritable());
-    assertFalse(properties.isSpecific());
+    TestScenario.given(element("customer.info.properties").in(new Ticket()))
+        .it(should(notBe(NULL)))
+        .it(should(notBe(readable())))
+        .it(should(notBe(writable())))
+        .it(should(notBe(specific())));
   }
 
   @Test
@@ -86,15 +90,14 @@ public class NestedElementsTest {
     ticket.customer = new Customer();
     ticket.customer.address = new Address();
 
-    Element line = element("customer.address.line").in(ticket);
-    assertTrue(line.isReadable());
-    assertTrue(line.isWritable());
-    assertTrue(line.isSpecific());
-    assertNull(line.value());
+    TestScenario.given(element("customer.address.line").in(ticket))
+        .it(should(be(readable())))
+        .it(should(be(writable())))
+        .it(should(be(specific())))
+        .the(value(), should(be(NULL)))
 
-    line.set("Address line");
-
-    assertEquals("Address line", line.value());
+        .when(valueIsSetTo("Address line"))
+        .the(value(), should(be("Address line")));
   }
 
 }

@@ -54,10 +54,6 @@ public interface ElementSpecs {
     return (element) -> element.value();
   }
 
-  default Function<Element, ?> specific() {
-    return (element) -> element.isSpecific();
-  }
-
   default Function<Element, ?> valueIn(Object target) {
     return (element) -> element.in(target).value();
   }
