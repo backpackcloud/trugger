@@ -99,28 +99,28 @@ public class ElementCopyTest {
   @Test
   public void testCopyToSame() {
     TestScenario.given(new TestObject("Marcelo", "Guimaraes"))
-        .when(weightIsSetTo(30.4))
-        .and(nickNameIsSetTo("Nick"))
-        .and(elementsAreCopiedFrom(testObject))
-        .the(age(), should(be(testObject.getAge())).andThen(should(be(23))))
-        .the(height(), should(be(testObject.getHeight())).andThen(should(be(1.9))))
-        .the(weight(), should(be(testObject.getWeight())).andThen(should(be(80.2))))
+        .when(weightIsSetTo(30.4)
+            .andThen(nickNameIsSetTo("Nick"))
+            .andThen(elementsAreCopiedFrom(testObject)))
+        .the(age(), should(be(testObject.getAge())).and(should(be(23))))
+        .the(height(), should(be(testObject.getHeight())).and(should(be(1.9))))
+        .the(weight(), should(be(testObject.getWeight())).and(should(be(80.2))))
         .the(nickName(), should(notBe(testObject.getNickName()))
-            .andThen(should(be("Nick"))));
+            .and(should(be("Nick"))));
   }
 
   @Test
   public void testFilterCopy() {
     TestScenario.given(new TestObject("Marcelo", "Guimaraes"))
-        .when(weightIsSetTo(30.4))
-        .and(nickNameIsSetTo("Nick"))
-        .and(ageIsSetTo(25))
-        .and(elementsButAgeAreCopiedFrom(testObject))
-        .the(age(), should(notBe(testObject.getAge())).andThen(should(be(25))))
-        .the(height(), should(be(testObject.getHeight())).andThen(should(be(1.9))))
-        .the(weight(), should(be(testObject.getWeight())).andThen(should(be(80.2))))
+        .when(weightIsSetTo(30.4)
+            .andThen(nickNameIsSetTo("Nick"))
+            .andThen(ageIsSetTo(25))
+            .andThen(elementsButAgeAreCopiedFrom(testObject)))
+        .the(age(), should(notBe(testObject.getAge())).and(should(be(25))))
+        .the(height(), should(be(testObject.getHeight())).and(should(be(1.9))))
+        .the(weight(), should(be(testObject.getWeight())).and(should(be(80.2))))
         .the(nickName(), should(notBe(testObject.getNickName()))
-            .andThen(should(be("Nick"))));
+            .and(should(be("Nick"))));
   }
 
   private static class ToStringTransformer
@@ -142,9 +142,9 @@ public class ElementCopyTest {
     Function<OtherTestObject, Object> nickName = obj -> obj.getNickName();
 
     TestScenario.given(new OtherTestObject())
-        .when(nickNameIsChanged)
-        .and(weightIsChanged)
-        .and(elementsAreCopiedFromTestObject)
+        .when(nickNameIsChanged
+            .andThen(weightIsChanged)
+            .andThen(elementsAreCopiedFromTestObject))
 
         .the(weight, should(be(testObject.getWeight())))
         .the(nickName, should(be(testObject.getNickName())));

@@ -11,8 +11,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static org.junit.Assert.*;
-
 /**
  * @author Marcelo Guimarães
  */
@@ -26,8 +24,8 @@ public interface ElementSpecs {
     return (element) -> element.in(target).set(value);
   }
 
-  default Consumer<Element> shouldHaveAValue() {
-    return (element) -> assertNotNull(element.value());
+  default Predicate<Element> aValue() {
+    return (element) -> element.value() != null;
   }
 
   default Consumer<Element> attempToChangeValue() {

@@ -18,28 +18,27 @@ package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
+import org.atatec.trugger.element.ElementPredicates;
 import org.atatec.trugger.element.impl.TruggerElementsSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 import org.kodo.TestScenario;
 
-import java.util.Collection;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static org.atatec.trugger.element.ElementPredicates.*;
-import static org.atatec.trugger.test.TruggerTest.*;
+import static org.atatec.trugger.test.TruggerTest.element;
+import static org.atatec.trugger.test.TruggerTest.elementFinder;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.easymock.EasyMock.verify;
 import static org.kodo.Scenario.should;
-import static org.kodo.Spec.EMPTY;
-import static org.kodo.Spec.be;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ElementsSelectorTest {
+public class ElementsSelectorTest implements ElementSpecs {
 
   private Finder<Element> finder;
 
@@ -47,15 +46,10 @@ public class ElementsSelectorTest {
     return new TruggerElementsSelector(finder);
   }
 
-  private Consumer<Collection<Element>> shouldHave(String... names) {
-    return (collection) -> assertElements(collection, names);
-  }
-
   private void testPredicate(Predicate<? super Element> predicate,
                              String... names) {
-    TestScenario.given(selector())
-        .the(selector -> selector.filter(predicate).in(this),
-            shouldHave(names));
+    TestScenario.given(selector().filter(predicate).in(this))
+        .it(should(have(elementsNamed(names))));
     verify(finder);
   }
 
@@ -113,9 +107,9 @@ public class ElementsSelectorTest {
         .add(element().named("string").ofType(String.class))
         .add(element().named("stringBuilder").ofType(StringBuilder.class))
         .add(element().named("integer").ofType(Integer.class)));
-    testPredicate(type(String.class), "string");
-    testPredicate(type(Integer.class), "integer");
-    testFailPredicate(type(CharSequence.class));
+    testPredicate(ElementPredicates.type(String.class), "string");
+    testPredicate(ElementPredicates.type(Integer.class), "integer");
+    testFailPredicate(ElementPredicates.type(CharSequence.class));
     testPredicate(assignableTo(CharSequence.class), "string", "stringBuilder");
   }
 

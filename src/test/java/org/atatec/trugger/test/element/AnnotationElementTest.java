@@ -89,7 +89,7 @@ public class AnnotationElementTest implements ElementSpecs {
         .thenIt(should(notBe(EMPTY)))
         .each(should(notBe(writable())))
         .each(should(be(readable())))
-        .each(shouldHaveAValue());
+        .each(should(have(aValue())));
   }
 
   @Test
