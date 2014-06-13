@@ -21,9 +21,7 @@ import org.junit.Test;
 import org.kodo.TestScenario;
 
 import static org.atatec.trugger.element.Elements.element;
-import static org.kodo.Scenario.should;
-import static org.kodo.Spec.be;
-import static org.kodo.Spec.raise;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães

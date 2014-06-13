@@ -23,11 +23,8 @@ import org.kodo.TestScenario;
 import java.util.Date;
 import java.util.Properties;
 
-import static org.atatec.trugger.element.ElementPredicates.readable;
-import static org.atatec.trugger.element.ElementPredicates.specific;
-import static org.atatec.trugger.element.ElementPredicates.writable;
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.element;
-import static org.kodo.Scenario.should;
 import static org.kodo.Spec.*;
 
 public class NestedElementsTest implements ElementSpecs {

@@ -25,12 +25,9 @@ import org.kodo.TestScenario;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 
-import static org.atatec.trugger.element.ElementPredicates.readable;
-import static org.atatec.trugger.element.ElementPredicates.specific;
-import static org.atatec.trugger.element.ElementPredicates.writable;
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.kodo.Scenario.should;
 import static org.kodo.Spec.*;
 
 /**

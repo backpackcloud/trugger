@@ -28,10 +28,8 @@ import static org.atatec.trugger.element.ElementPredicates.readable;
 import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.kodo.Scenario.should;
-import static org.kodo.Spec.*;
-
 import static org.atatec.trugger.test.TruggerTest.SIZE;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães

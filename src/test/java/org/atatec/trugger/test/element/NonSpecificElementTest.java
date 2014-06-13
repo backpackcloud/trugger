@@ -16,12 +16,12 @@
  */
 package org.atatec.trugger.test.element;
 
-import static org.atatec.trugger.element.Elements.element;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.NonSpecificElementException;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.atatec.trugger.element.Elements.element;
 
 /**
  * @author Marcelo Varella Barca Guimarães

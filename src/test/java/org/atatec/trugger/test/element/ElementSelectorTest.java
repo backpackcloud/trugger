@@ -32,9 +32,7 @@ import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.test.TruggerTest.element;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.easymock.EasyMock.*;
-import static org.kodo.Scenario.should;
-import static org.kodo.Spec.NULL;
-import static org.kodo.Spec.be;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães

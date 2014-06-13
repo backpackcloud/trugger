@@ -32,7 +32,6 @@ import static org.atatec.trugger.test.TruggerTest.element;
 import static org.atatec.trugger.test.TruggerTest.elementFinder;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.easymock.EasyMock.verify;
-import static org.kodo.Scenario.should;
 import static org.kodo.Spec.*;
 
 /**

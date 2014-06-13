@@ -27,7 +27,6 @@ import java.util.function.Function;
 
 import static org.atatec.trugger.element.Elements.copy;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.kodo.Scenario.should;
 import static org.kodo.Spec.*;
 
 /**

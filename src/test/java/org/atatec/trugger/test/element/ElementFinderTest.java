@@ -31,7 +31,6 @@ import java.util.function.Consumer;
 
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.kodo.Scenario.should;
 import static org.kodo.Spec.*;
 
 /**
