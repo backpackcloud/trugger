@@ -18,31 +18,33 @@ package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.NonSpecificElementException;
-import org.junit.Before;
 import org.junit.Test;
+import org.kodo.TestScenario;
+
+import java.util.Map;
 
 import static org.atatec.trugger.element.Elements.element;
+import static org.kodo.Spec.raise;
+import static org.kodo.Spec.should;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class NonSpecificElementTest {
+public class NonSpecificElementTest implements ElementSpecs {
 
-  private Element element;
+  private Element nonSpecificElement =
+      element("nonSpecificElement").in(Map.class);
 
-  @Before
-  public void init() {
-    element = element("element").in(NonSpecificElementTest.class);
-  }
-
-  @Test(expected = NonSpecificElementException.class)
+  @Test
   public void testRead() throws Exception {
-    element.value();
+    TestScenario.given(nonSpecificElement)
+        .then(attempToGetValue(), should(raise(NonSpecificElementException.class)));
   }
 
-  @Test(expected = NonSpecificElementException.class)
+  @Test
   public void testWrite() throws Exception {
-    element.set(null);
+    TestScenario.given(nonSpecificElement)
+        .then(attempToChangeValue(), should(raise(NonSpecificElementException.class)));
   }
 
 }
