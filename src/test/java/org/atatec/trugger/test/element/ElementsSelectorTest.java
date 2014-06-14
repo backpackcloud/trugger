@@ -106,9 +106,9 @@ public class ElementsSelectorTest implements ElementSpecs {
         .add(element().named("string").ofType(String.class))
         .add(element().named("stringBuilder").ofType(StringBuilder.class))
         .add(element().named("integer").ofType(Integer.class)));
-    testPredicate(ElementPredicates.type(String.class), "string");
-    testPredicate(ElementPredicates.type(Integer.class), "integer");
-    testFailPredicate(ElementPredicates.type(CharSequence.class));
+    testPredicate(ElementPredicates.ofType(String.class), "string");
+    testPredicate(ElementPredicates.ofType(Integer.class), "integer");
+    testFailPredicate(ElementPredicates.ofType(CharSequence.class));
     testPredicate(assignableTo(CharSequence.class), "string", "stringBuilder");
   }
 

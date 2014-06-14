@@ -112,10 +112,10 @@ public class ElementTest {
   @Test
   public void testSingleSelection() {
     assertNotNull(
-        element().filter(type(int.class)).in(TestObject.class)
+        element().filter(ofType(int.class)).in(TestObject.class)
     );
     assertNull(
-        element().filter(type(Serializable.class)).in(TestObject.class)
+        element().filter(ofType(Serializable.class)).in(TestObject.class)
     );
     // should return the first element found, no matter what it is
     assertNotNull(

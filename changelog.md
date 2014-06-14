@@ -29,6 +29,7 @@ engine to help creating elegant validators with less code.
   - `Context` now throws an `UnresolvableValueException` instead of returning
     null to indicate an unresolvable value.
   - Changed `ValueHandler#get` to `#value`
+  - Renamed `ElementPredicates#type` to `ofType`
 
 ### Minor Changes
 

@@ -40,7 +40,7 @@ public final class ElementPredicates {
    * given type.
    * @since 2.0
    */
-  public static Predicate<Element> type(Class<?> type) {
+  public static Predicate<Element> ofType(Class<?> type) {
     return element -> type.equals(element.type());
   }
 

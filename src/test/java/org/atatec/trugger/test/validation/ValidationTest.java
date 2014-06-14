@@ -35,7 +35,7 @@ import static org.atatec.trugger.util.mock.Mock.annotation;
 import static org.atatec.trugger.util.mock.Mock.mock;
 import static org.junit.Assert.*;
 
-import static org.atatec.trugger.element.ElementPredicates.type;
+import static org.atatec.trugger.element.ElementPredicates.ofType;
 
 /**
  * @author Marcelo Guimarães
@@ -303,7 +303,7 @@ public class ValidationTest extends BaseValidatorTest {
   @Test
   public void testFilterForward() {
     ValidationEngine engine = Validation.engine()
-        .filter(type(String.class).or(type(Item.class)));
+        .filter(ofType(String.class).or(ofType(Item.class)));
     Purchase purchase = new Purchase();
     purchase.number = "01309429";
     purchase.items.add(new Item());

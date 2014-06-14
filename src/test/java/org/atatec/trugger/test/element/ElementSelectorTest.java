@@ -108,13 +108,13 @@ public class ElementSelectorTest {
   @Test
   public void testOfTypeSelector() {
     element = mock(element().ofType(String.class));
-    testPredicate(type(String.class));
-    testFailPredicate(type(Integer.class));
-    testFailPredicate(type(CharSequence.class));
+    testPredicate(ofType(String.class));
+    testFailPredicate(ofType(Integer.class));
+    testFailPredicate(ofType(CharSequence.class));
 
     element = mock(element().ofType(int.class));
-    testPredicate(type(int.class));
-    testFailPredicate(type(Integer.class));
+    testPredicate(ofType(int.class));
+    testFailPredicate(ofType(Integer.class));
   }
 
   @Test
