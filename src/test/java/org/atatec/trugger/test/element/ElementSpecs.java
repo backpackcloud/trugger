@@ -94,4 +94,8 @@ public interface ElementSpecs {
     };
   }
 
+  default Function elementNamed(String name) {
+    return obj -> Elements.element(name).in(obj);
+  }
+
 }

@@ -18,20 +18,20 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.UnreadableElementException;
 import org.atatec.trugger.element.UnwritableElementException;
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.element;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.*;
+import static org.kodo.Spec.*;
 
 /**
  *
  */
-public class ObjectElementTest {
+public class ObjectElementTest implements ElementSpecs {
 
   class HandlingTestObject {
 
@@ -46,15 +46,15 @@ public class ObjectElementTest {
 
   @Test
   public void testHandlingExceptions() {
-    Element name = element("name").in(new HandlingTestObject());
-    assertFalse(name.isReadable());
-    assertThrow(UnreadableElementException.class, () -> name.value());
-    assertThrow(HandlingException.class, () -> name.set("a name"));
+    TestScenario.given(element("name").in(new HandlingTestObject()))
+        .it(should(notBe(readable())))
+        .then(attempToGetValue(), should(raise(UnreadableElementException.class)))
+        .and(attempToChangeValue(), should(raise(HandlingException.class)));
 
-    Element info = element("info").in(new HandlingTestObject());
-    assertFalse(info.isWritable());
-    assertThrow(UnwritableElementException.class, () -> info.set("info"));
-    assertThrow(HandlingException.class, () -> info.value());
+    TestScenario.given(element("info").in(new HandlingTestObject()))
+        .it(should(notBe(writable())))
+        .then(attempToChangeValue(), should(raise(UnwritableElementException.class)))
+        .and(attempToChangeValue(), should(raise(HandlingException.class)));
   }
 
   class AnnotationPrecedenceTest {
@@ -93,14 +93,10 @@ public class ObjectElementTest {
 
   @Test
   public void testAnnotationPrecedence() {
-    Element name = element("name").in(AnnotationPrecedenceTest.class);
-    assertTrue(name.isAnnotationPresent(Flag.class));
-
-    Element phone = element("phone").in(AnnotationPrecedenceTest.class);
-    assertTrue(phone.isAnnotationPresent(Flag.class));
-
-    Element address = element("address").in(AnnotationPrecedenceTest.class);
-    assertTrue(address.isAnnotationPresent(Flag.class));
+    TestScenario.given(AnnotationPrecedenceTest.class)
+        .the(elementNamed("name"), should(be(annotatedWith(Flag.class))))
+        .the(elementNamed("phone"), should(be(annotatedWith(Flag.class))))
+        .the(elementNamed("address"), should(be(annotatedWith(Flag.class))));
   }
 
   class TypeTest {
@@ -125,14 +121,10 @@ public class ObjectElementTest {
 
   @Test
   public void testType() {
-    Element name = element("name").in(TypeTest.class);
-    assertEquals(String.class, name.type());
-
-    Element phone = element("phone").in(TypeTest.class);
-    assertEquals(String.class, phone.type());
-
-    Element address = element("address").in(TypeTest.class);
-    assertEquals(String.class, address.type());
+    TestScenario.given(TypeTest.class)
+        .the(elementNamed("name"), should(be(ofType(String.class))))
+        .the(elementNamed("phone"), should(be(ofType(String.class))))
+        .the(elementNamed("address"), should(be(ofType(String.class))));
   }
 
 }
