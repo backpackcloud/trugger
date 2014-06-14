@@ -17,52 +17,45 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
-import java.util.List;
 import java.util.Properties;
 
+import static org.atatec.trugger.element.ElementPredicates.readable;
+import static org.atatec.trugger.element.ElementPredicates.writable;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class PropertiesElementTest {
-  
+public class PropertiesElementTest implements ElementSpecs {
+
   @Test
   public void propertiesElementTest() {
     Properties properties = new Properties();
     properties.setProperty("login", "admin");
     properties.setProperty("password", "admin");
-    
-    List<Element> elements = elements().in(properties);
-    assertElements(elements, "login", "password");
-    elements = elements().in(Properties.class);
-    assertTrue(elements.isEmpty());
-    
-    Element element = element("login").in(properties);
-    assertEquals(String.class, element.type());
-    assertEquals("login", element.name());
-    assertEquals("admin", element.value());
-    element.set("guest");
-    assertEquals("guest", element.value());
-    assertEquals("guest", properties.getProperty("login"));
-    
-    assertTrue(element.isReadable());
-    assertTrue(element.isWritable());
-    assertThrow(HandlingException.class, element,
-        (el) -> el.set(new Object()));
-    assertThrow(IllegalArgumentException.class, element,
-        (el) -> el.in(new Object()).set(""));
 
-    element = element("login").in(Properties.class);
-    assertEquals(String.class, element.type());
-    assertEquals(Properties.class, element.declaringClass());
+    TestScenario.given(elements().in(properties))
+        .it(should(have(elementsNamed("login", "password"))));
+
+    TestScenario.given(elements().in(Properties.class))
+        .it(should(be(EMPTY)));
+
+    TestScenario.given(element("login").in(properties))
+        .the(type(), should(be(String.class)))
+        .the(name(), should(be("login")))
+        .the(value(), should(be("admin")))
+        .the(declaringClass(), should(be(Properties.class)))
+        .it(should(be(readable())))
+        .it(should(be(writable())))
+        .when(valueIsSetTo("guest"))
+        .the(value(), should(be("guest")))
+        .and(properties.getProperty("login"), should(be("guest")))
+        .then(settingValueTo(new Object()), should(raise(HandlingException.class)))
+        .and(settingValueTo("", new Object()), should(raise(IllegalArgumentException.class)));
   }
 }

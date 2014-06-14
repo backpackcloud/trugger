@@ -69,7 +69,7 @@ public class MapElementTest implements ElementSpecs {
     TestScenario.given(element("none").in(map))
         .then(attempToGetValue(), should(raise(HandlingException.class)))
         .then(attempToChangeValue(), should(raise(HandlingException.class)))
-        .then(setValueTo("value", "target"), should(raise(IllegalArgumentException.class)));
+        .then(settingValueTo("value", "target"), should(raise(IllegalArgumentException.class)));
   }
 
   @Test

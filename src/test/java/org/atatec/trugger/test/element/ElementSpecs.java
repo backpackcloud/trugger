@@ -32,7 +32,7 @@ public interface ElementSpecs {
     return (element) -> element.set("a value");
   }
 
-  default Consumer<Element> attempToSetValueTo(Object value) {
+  default Consumer<Element> settingValueTo(Object value) {
     return (element) -> element.set(value);
   }
 
@@ -68,11 +68,7 @@ public interface ElementSpecs {
     return list -> ((Element) list.get(index)).value();
   }
 
-  default Consumer<Element> setValueTo(Object value) {
-    return (element) -> element.set(value);
-  }
-
-  default Consumer<Element> setValueTo(Object value, Object target) {
+  default Consumer<Element> settingValueTo(Object value, Object target) {
     return (element) -> element.in(target).set(value);
   }
 

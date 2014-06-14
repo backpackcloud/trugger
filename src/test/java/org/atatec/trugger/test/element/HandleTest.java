@@ -60,7 +60,7 @@ public class HandleTest implements ElementSpecs {
   public void testHandlingError() {
     TestObject obj = new TestObject();
     TestScenario.given(element().in(obj))
-        .then(attempToSetValueTo(10), should(raise(HandlingException.class)));
+        .then(settingValueTo(10), should(raise(HandlingException.class)));
   }
 
 }
