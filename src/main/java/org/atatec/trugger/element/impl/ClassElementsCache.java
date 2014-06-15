@@ -34,9 +34,7 @@ public abstract class ClassElementsCache {
   private SoftReference<Map<Class, Map<String, Element>>> ref;
 
   public ClassElementsCache() {
-    this.ref = new SoftReference<>(
-      new ConcurrentHashMap<>(50)
-    );
+    this.ref = new SoftReference<>(new ConcurrentHashMap<>(50));
   }
 
   private Map<String, Element> getMap(Object target) {
