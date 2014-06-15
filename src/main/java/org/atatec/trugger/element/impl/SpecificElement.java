@@ -33,10 +33,8 @@ public class SpecificElement implements Element {
   private final Element element;
 
   /**
-   * @param element
-   *          the specific element.
-   * @param target
-   *          the target for this specific element.
+   * @param element the specific element.
+   * @param target  the target for this specific element.
    */
   public SpecificElement(Element element, Object target) {
     this.element = element;
@@ -101,6 +99,11 @@ public class SpecificElement implements Element {
 
   public boolean isWritable() {
     return element.isWritable();
+  }
+
+  @Override
+  public String toString() {
+    return element.toString();
   }
 
 }

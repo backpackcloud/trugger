@@ -45,52 +45,22 @@ public class AnnotationElementTest implements ElementSpecs {
   }
 
   @Test
-  public void finderShouldReturnReadableElement() {
+  public void testElementSpecs() {
     TestScenario.given(element("name").in(annotation()))
         .the(name(), should(be("name")))
         .the(value(), should(be("some name")))
+        .the(stringRepresentation(), should(be("name : java.lang.String")))
         .thenIt(should(be(NOT_NULL)))
-        .and(should(be(readable())));
+        .and(should(notBe(writable())))
+        .and(should(be(readable())))
+        .then(attempToChangeValue(), should(raise(HandlingException.class)));
 
     TestScenario.given(element("name").in(TestAnnotation.class))
         .it(should(be(NOT_NULL)))
+        .and(should(notBe(writable())))
         .and(should(be(readable())))
         .then(attempToGetValue(), should(raise(NonSpecificElementException.class)));
-  }
 
-  @Test
-  public void finderShouldReturnNonWritableElement() {
-    TestScenario.given(element("name").in(annotation()))
-        .the(value(), should(be("some name")))
-        .the(name(), should(be("name")))
-        .thenIt(should(be(NOT_NULL)))
-        .and(should(notBe(writable())))
-        .then(attempToChangeValue(), should(raise(HandlingException.class)));
-  }
-
-  @Test
-  public void finderShouldReturnNullIfElementDoesNotExists() {
-    TestScenario.given(element("non_existent").in(TestAnnotation.class))
-        .thenIt(should(be(NULL)));
-  }
-
-  @Test
-  public void finderShouldReturnEmptyCollectionForAnnotationsWithoutElements() {
-    TestScenario.given(elements().in(Documented.class))
-        .thenIt(should(be(EMPTY)));
-  }
-
-  @Test
-  public void finderShouldReturnNonEmptyCollectionForAnnotationsWithElements() {
-    TestScenario.given(elements().in(annotation()))
-        .thenIt(should(notBe(EMPTY)))
-        .each(should(notBe(writable())))
-        .each(should(be(readable())))
-        .each(should(have(aValue())));
-  }
-
-  @Test
-  public void testAnnotationElementAttributes() {
     TestScenario.given(element("bool").in(annotation()))
         .the(type(), should(be(boolean.class)))
         .the(value(), should(be(FALSE)))
@@ -100,9 +70,53 @@ public class AnnotationElementTest implements ElementSpecs {
   }
 
   @Test
+  public void testElements() {
+    TestScenario.given(elements().in(annotation()))
+        .thenIt(should(notBe(EMPTY)))
+        .each(should(notBe(writable())))
+        .each(should(be(readable())))
+        .each(should(have(aValue())));
+  }
+
+  @Test
   public void testNoElementFound() {
-    TestScenario.given(element("notExist").in(annotation()))
+    TestScenario.given(element("non_existent").in(annotation()))
         .it(should(be(NULL)));
+
+    TestScenario.given(element("non_existent").in(TestAnnotation.class))
+        .thenIt(should(be(NULL)));
+
+    TestScenario.given(elements().in(Documented.class))
+        .thenIt(should(be(EMPTY)));
+  }
+
+  @Test
+  public void testInvokeErrors() {
+    TestAnnotation annotation = new TestAnnotation() {
+
+      @Override
+      public boolean bool() {
+        return false;
+      }
+
+      @Override
+      public String name() {
+        throw new RuntimeException();
+      }
+
+      @Override
+      public int number() {
+        throw new IllegalArgumentException();
+      }
+
+      @Override
+      public Class<? extends Annotation> annotationType() {
+        return TestAnnotation.class;
+      }
+    };
+
+    TestScenario.given(element("name").in(annotation))
+        .then(attempToGetValue(), should(raise(HandlingException.class)));
   }
 
 }

@@ -16,6 +16,10 @@ import java.util.function.Predicate;
  */
 public interface ElementSpecs {
 
+  default Function<Element, String> stringRepresentation() {
+    return el -> el.toString();
+  }
+
   default Consumer<Element> valueIsSetTo(Object value) {
     return (element) -> element.set(value);
   }
