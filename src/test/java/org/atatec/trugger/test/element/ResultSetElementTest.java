@@ -17,6 +17,7 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
+import org.atatec.trugger.TruggerException;
 import org.junit.Before;
 import org.junit.Test;
 import org.kodo.TestScenario;
@@ -49,7 +50,8 @@ public class ResultSetElementTest implements ElementSpecs {
     when(metadata.getColumnName(2)).thenReturn("nickname");
     when(metadata.getColumnName(3)).thenReturn("age");
 
-    when(resultSet.getMetaData()).thenReturn(metadata);
+    when(resultSet.getMetaData())
+        .thenReturn(metadata);
     when(resultSet.getObject("name"))
         .thenReturn("John")
         .thenReturn("Justin")
@@ -69,6 +71,13 @@ public class ResultSetElementTest implements ElementSpecs {
     TestScenario.given(elements().in(resultSet))
         .it(should(have(elementsNamed("name", "nickname", "age"))))
         .each(should(be(specific())));
+  }
+
+  @Test(expected = TruggerException.class)
+  public void testMetadataError() throws SQLException {
+    when(resultSet.getMetaData()).thenThrow(new SQLException());
+
+    elements().in(resultSet);
   }
 
   @Test
