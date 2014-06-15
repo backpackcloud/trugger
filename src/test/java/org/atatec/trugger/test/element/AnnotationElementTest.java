@@ -99,4 +99,10 @@ public class AnnotationElementTest implements ElementSpecs {
         .it(should(be(specific())));
   }
 
+  @Test
+  public void testNoElementFound() {
+    TestScenario.given(element("notExist").in(annotation()))
+        .it(should(be(NULL)));
+  }
+
 }
