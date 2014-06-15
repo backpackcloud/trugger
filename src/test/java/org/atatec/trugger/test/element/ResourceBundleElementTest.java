@@ -17,74 +17,58 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.element.Element;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
-import java.util.List;
 import java.util.ResourceBundle;
 
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.assertElements;
-import static org.atatec.trugger.test.TruggerTest.assertThrow;
-import static org.junit.Assert.*;
+import static org.kodo.Spec.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ResourceBundleElementTest {
-  
+public class ResourceBundleElementTest implements ElementSpecs {
+
+  private ResourceBundle bundle =
+      ResourceBundle.getBundle("org.atatec.trugger.test.element.bundle");
+
   @Test
-  public void bundleElementsTest() {
-    final ResourceBundle bundle1 = ResourceBundle.getBundle("org.atatec.trugger.test.element.bundle1");
-    final ResourceBundle bundle2 = ResourceBundle.getBundle("org.atatec.trugger.test.element.bundle2");
-    List<Element> elements = elements().in(ResourceBundle.class);
-    assertTrue(elements.isEmpty());
-    
-    elements = elements().in(bundle1);
-    assertFalse(elements.isEmpty());
-    assertElements(elements, "foo", "framework", "author");
-    
-    testBundle(bundle1, bundle2, "foo", "bar", "bar2");
-    testBundle(bundle1, bundle2, "framework", "trugger", "trugger2");
-    testBundle(bundle1, bundle2, "author", "marcelo", "marcelo2");
-    
-    Element nested = element("bundle.framework").in(BundleBean.class);
-    
-    assertNotNull(nested);
-    assertFalse(nested.isSpecific());
-    assertEquals("trugger", nested.in(new BundleBean()).value());
-    
-    assertThrow(HandlingException.class, () -> {
-      element("undefined").in(bundle1).value();
-    });
-    
-    assertThrow(IllegalArgumentException.class, () -> {
-      Element element = element("undefined").in(ResourceBundle.class);
-      element.in(new Object()).value();
-    });
+  public void testElement() {
+    TestScenario.given(element("foo").in(bundle))
+        .the(name(), should(be("foo")))
+        .the(value(), should(be("bar")))
+        .the(declaringClass(), should(be(ResourceBundle.class)))
+        .it(should(be(readable())))
+        .it(should(notBe(writable())))
+        .it(should(be(specific())))
+        .then(attempToChangeValue(), should(raise(HandlingException.class)))
+        .then(gettingValueIn(new Object()),
+            should(raise(IllegalArgumentException.class)));
+
+    TestScenario.given(element("foo").in(ResourceBundle.class))
+        .the(name(), should(be("foo")))
+        .the(declaringClass(), should(be(ResourceBundle.class)))
+        .it(should(be(readable())))
+        .it(should(notBe(writable())))
+        .it(should(notBe(specific())))
+        .then(attempToChangeValue(), should(raise(HandlingException.class)))
+        .then(gettingValue(), should(raise(HandlingException.class)));
+
+    TestScenario.given(element("not-present").in(bundle))
+        .then(attempToGetValue(), should(raise(HandlingException.class)));
   }
-  
-  private void testBundle(final ResourceBundle bundle1, final ResourceBundle bundle2, String key, String value1,
-      String value2) {
-    final Element element = element(key).in(bundle1);
-    assertNotNull(element);
-    assertTrue(element.isSpecific());
-    
-    assertEquals(ResourceBundle.class, element.declaringClass());
-    
-    assertEquals(key, element.name());
-    assertEquals(value1, element.value());
-    assertEquals(value1, element.in(bundle1).value());
-    assertEquals(value2, element.in(bundle2).value());
-    assertTrue(element.isReadable());
-    assertFalse(element.isWritable());
-    
-    assertThrow(HandlingException.class,
-        () -> element.set("Don't modify!"));
-    
-    assertThrow(HandlingException.class,
-        () -> element.in(bundle2).set("Don't modify!"));
-    
+
+  @Test
+  public void testElements() {
+    TestScenario.given(elements().in(bundle))
+        .it(should(notBe(EMPTY)))
+        .it(should(have(elementsNamed("foo", "framework", "author"))));
+
+    TestScenario.given(elements().in(ResourceBundle.class))
+        .it(should(be(EMPTY)));
   }
+
 }

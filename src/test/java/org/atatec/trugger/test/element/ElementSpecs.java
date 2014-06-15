@@ -72,6 +72,14 @@ public interface ElementSpecs {
     return (element) -> element.in(target).set(value);
   }
 
+  default Consumer<Element> gettingValue() {
+    return (element) -> element.value();
+  }
+
+  default Consumer<Element> gettingValueIn(Object target) {
+    return (element) -> element.in(target).value();
+  }
+
   default Predicate<Collection<Element>> elementsNamed(String... names) {
     return (collection) -> {
       Set<String> elNames = new HashSet<String>(collection.size());
