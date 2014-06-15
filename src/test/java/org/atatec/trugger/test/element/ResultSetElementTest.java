@@ -17,29 +17,25 @@
 package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
-import org.atatec.trugger.TruggerException;
-import org.atatec.trugger.element.Element;
-import org.atatec.trugger.element.ElementPredicates;
-import org.atatec.trugger.element.UnwritableElementException;
 import org.junit.Before;
 import org.junit.Test;
+import org.kodo.TestScenario;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.List;
 
+import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
-import static org.atatec.trugger.test.TruggerTest.*;
-import static org.junit.Assert.*;
+import static org.kodo.Spec.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ResultSetElementTest {
+public class ResultSetElementTest implements ElementSpecs {
 
   private ResultSet resultSet;
 
@@ -54,68 +50,73 @@ public class ResultSetElementTest {
     when(metadata.getColumnName(3)).thenReturn("age");
 
     when(resultSet.getMetaData()).thenReturn(metadata);
-    when(resultSet.getObject("name")).thenReturn("John");
-    when(resultSet.getObject(1)).thenReturn("John");
-    when(resultSet.getObject(1)).thenThrow(new SQLException());
-    when(resultSet.getObject("name")).thenReturn("Justin");
-    when(resultSet.getObject("nickname")).thenReturn("kranck");
-    when(resultSet.getObject("nickname")).thenReturn("tropper");
-    when(resultSet.getObject("age")).thenReturn(26);
-    when(resultSet.getObject("age")).thenReturn(27);
+    when(resultSet.getObject("name"))
+        .thenReturn("John")
+        .thenReturn("Justin")
+        .thenThrow(new SQLException());
+    when(resultSet.getObject(1))
+        .thenReturn("John")
+        .thenReturn("Justin")
+        .thenThrow(new SQLException());
     when(resultSet.next()).thenReturn(true);
-  }
-
-  @Test(expected = TruggerException.class)
-  public void testError() throws Exception {
-    resultSet = mock(ResultSet.class);
-    when(resultSet.getMetaData()).thenThrow(new SQLException());
-
-    elements().in(resultSet);
   }
 
   @Test
   public void testElements() {
-    List<Element> elements = elements().in(ResultSet.class);
-    assertTrue(elements.isEmpty());
+    TestScenario.given(elements().in(ResultSet.class))
+        .it(should(be(EMPTY)));
 
-    elements = elements().in(resultSet);
-    assertFalse(elements.isEmpty());
-    assertMatch(elements, ElementPredicates.specific());
-    assertElements(elements, "name", "nickname", "age");
+    TestScenario.given(elements().in(resultSet))
+        .it(should(have(elementsNamed("name", "nickname", "age"))))
+        .each(should(be(specific())));
   }
 
   @Test
-  public void testElement() throws SQLException {
-    Element name = element("name").in(ResultSet.class);
-    Element nickname = element("nickname").in(ResultSet.class);
-    Element age = element("age").in(ResultSet.class);
-    assertFalse(name.isSpecific());
-    assertFalse(nickname.isSpecific());
-    assertFalse(age.isSpecific());
+  public void testNamedElement() throws SQLException {
+    TestScenario.given(element("name").in(ResultSet.class))
+        .it(should(notBe(specific())));
 
-    name = element("name").in(resultSet);
-    nickname = element("nickname").in(resultSet);
-    age = element("age").in(resultSet);
-    assertTrue(name.isSpecific());
-    assertTrue(nickname.isSpecific());
-    assertTrue(age.isSpecific());
+    TestScenario.given(element("name").in(resultSet))
+        .the(declaringClass(), should(be(ResultSet.class)))
+        .it(should(be(readable())))
+        .it(should(notBe(writable())))
+        .the(value(), should(be("John")))
 
-    assertEquals("John", name.value());
-    assertEquals("kranck", nickname.value());
-    assertEquals(26, (int) age.value());
-    resultSet.next();
-    assertEquals("Justin", name.value());
-    assertEquals("tropper", nickname.value());
-    assertEquals(27, (int) age.value());
+        .when(retrievingNextRow())
 
-    name = element("1").in(resultSet);
-    assertTrue(name.isReadable());
-    assertFalse(name.isWritable());
-    assertEquals("John", name.value());
-    assertEquals(ResultSet.class, name.declaringClass());
-    assertThrow(HandlingException.class, name, (el) -> el.value());
-    assertThrow(UnwritableElementException.class, name, (el) -> el.set(""));
-    assertThrow(HandlingException.class, name, (el) -> el.in("").value());
+        .the(value(), should(be("Justin")))
+        .then(attempToChangeValue(), should(raise(HandlingException.class)))
+        .then(gettingValueIn(new Object()), should(raise(HandlingException.class)))
+        .then(gettingValue(), should(raise(HandlingException.class)));
+  }
+
+  @Test
+  public void testIndexedElement() throws SQLException {
+    TestScenario.given(element("1").in(ResultSet.class))
+        .it(should(notBe(specific())));
+
+    TestScenario.given(element("1").in(resultSet))
+        .the(declaringClass(), should(be(ResultSet.class)))
+        .it(should(be(readable())))
+        .it(should(notBe(writable())))
+        .the(value(), should(be("John")))
+
+        .when(retrievingNextRow())
+
+        .the(value(), should(be("Justin")))
+        .then(attempToChangeValue(), should(raise(HandlingException.class)))
+        .then(gettingValueIn(new Object()), should(raise(HandlingException.class)))
+        .then(gettingValue(), should(raise(HandlingException.class)));
+  }
+
+  private Runnable retrievingNextRow() {
+    return () -> {
+      try {
+        resultSet.next();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    };
   }
 
 }
