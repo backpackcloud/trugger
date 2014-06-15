@@ -32,8 +32,9 @@ import java.util.List;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
 import static org.atatec.trugger.test.TruggerTest.*;
-import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -44,33 +45,30 @@ public class ResultSetElementTest {
 
   @Before
   public void initialize() throws SQLException {
-    resultSet = createMock(ResultSet.class);
+    resultSet = mock(ResultSet.class);
 
-    ResultSetMetaData metadata = createMock(ResultSetMetaData.class);
-    expect(metadata.getColumnCount()).andReturn(3).anyTimes();
-    expect(metadata.getColumnName(1)).andReturn("name").anyTimes();
-    expect(metadata.getColumnName(2)).andReturn("nickname").anyTimes();
-    expect(metadata.getColumnName(3)).andReturn("age").anyTimes();
+    ResultSetMetaData metadata = mock(ResultSetMetaData.class);
+    when(metadata.getColumnCount()).thenReturn(3);
+    when(metadata.getColumnName(1)).thenReturn("name");
+    when(metadata.getColumnName(2)).thenReturn("nickname");
+    when(metadata.getColumnName(3)).thenReturn("age");
 
-    expect(resultSet.getMetaData()).andReturn(metadata).anyTimes();
-    expect(resultSet.getObject("name")).andReturn("John").times(1);
-    expect(resultSet.getObject(1)).andReturn("John").times(1);
-    expect(resultSet.getObject(1)).andThrow(new SQLException()).times(1);
-    expect(resultSet.getObject("name")).andReturn("Justin").times(1);
-    expect(resultSet.getObject("nickname")).andReturn("kranck").times(1);
-    expect(resultSet.getObject("nickname")).andReturn("tropper").times(1);
-    expect(resultSet.getObject("age")).andReturn(26).times(1);
-    expect(resultSet.getObject("age")).andReturn(27).times(1);
-    expect(resultSet.next()).andReturn(true).times(1);
-
-    replay(metadata, resultSet);
+    when(resultSet.getMetaData()).thenReturn(metadata);
+    when(resultSet.getObject("name")).thenReturn("John");
+    when(resultSet.getObject(1)).thenReturn("John");
+    when(resultSet.getObject(1)).thenThrow(new SQLException());
+    when(resultSet.getObject("name")).thenReturn("Justin");
+    when(resultSet.getObject("nickname")).thenReturn("kranck");
+    when(resultSet.getObject("nickname")).thenReturn("tropper");
+    when(resultSet.getObject("age")).thenReturn(26);
+    when(resultSet.getObject("age")).thenReturn(27);
+    when(resultSet.next()).thenReturn(true);
   }
 
   @Test(expected = TruggerException.class)
   public void testError() throws Exception {
-    resultSet = createMock(ResultSet.class);
-    expect(resultSet.getMetaData()).andThrow(new SQLException()).anyTimes();
-    replay(resultSet);
+    resultSet = mock(ResultSet.class);
+    when(resultSet.getMetaData()).thenThrow(new SQLException());
 
     elements().in(resultSet);
   }
