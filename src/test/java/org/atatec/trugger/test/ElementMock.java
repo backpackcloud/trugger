@@ -20,16 +20,16 @@ import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.util.mock.Mock;
 import org.atatec.trugger.util.mock.MockBuilder;
-import org.easymock.IAnswer;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.atatec.trugger.util.mock.Mock.annotation;
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * A class for helping creation of simple {@link Element} mocks.
@@ -43,19 +43,20 @@ public class ElementMock implements MockBuilder<Element> {
   private final Element element;
   private final List<Annotation> annotations;
 
-  private class AnnotationsAnswer implements IAnswer<Annotation[]> {
+  private class AnnotationsAnswer implements Answer<Annotation[]> {
 
-    public Annotation[] answer() {
+    @Override
+    public Annotation[] answer(InvocationOnMock invocation) throws Throwable {
       return annotations.toArray(new Annotation[annotations.size()]);
     }
   }
 
   public ElementMock() {
-    element = createNiceMock(Element.class);
-    annotations = new ArrayList<Annotation>();
-    IAnswer<Annotation[]> answer = new AnnotationsAnswer();
-    expect(element.getAnnotations()).andAnswer(answer).anyTimes();
-    expect(element.getDeclaredAnnotations()).andAnswer(answer).anyTimes();
+    element = mock(Element.class);
+    annotations = new ArrayList<>();
+    Answer<Annotation[]> returnAnnotations = new AnnotationsAnswer();
+    when(element.getAnnotations()).then(returnAnnotations);
+    when(element.getDeclaredAnnotations()).then(returnAnnotations);
   }
 
   /**
@@ -66,7 +67,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock named(String name) {
-    expect(element.name()).andReturn(name).anyTimes();
+    when(element.name()).thenReturn(name);
     return this;
   }
 
@@ -80,8 +81,8 @@ public class ElementMock implements MockBuilder<Element> {
    */
   public ElementMock annotatedWith(Class<? extends Annotation> type) {
     Annotation mock = Mock.mock(annotation(type));
-    expect(element.isAnnotationPresent(type)).andReturn(true).anyTimes();
-    expect((Annotation) element.getAnnotation(type)).andReturn(mock).anyTimes();
+    when(element.isAnnotationPresent(type)).thenReturn(true);
+    when((Annotation) element.getAnnotation(type)).thenReturn(mock);
     annotations.add(mock);
     return this;
   }
@@ -95,8 +96,10 @@ public class ElementMock implements MockBuilder<Element> {
    * @since 2.1
    */
   public ElementMock annotatedWith(Annotation annotation) {
-    expect(element.isAnnotationPresent(annotation.annotationType())).andReturn(true).anyTimes();
-    expect((Annotation) element.getAnnotation(annotation.annotationType())).andReturn(annotation).anyTimes();
+    when(element.isAnnotationPresent(annotation.annotationType()))
+        .thenReturn(true);
+    when((Annotation) element.getAnnotation(annotation.annotationType()))
+        .thenReturn(annotation);
     annotations.add(annotation);
     return this;
   }
@@ -107,7 +110,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock nonReadable() {
-    expect(element.isReadable()).andReturn(false).anyTimes();
+    when(element.isReadable()).thenReturn(false);
     return this;
   }
 
@@ -117,7 +120,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock nonSpecific() {
-    expect(element.isSpecific()).andReturn(false).anyTimes();
+    when(element.isSpecific()).thenReturn(false);
     return this;
   }
 
@@ -127,7 +130,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock nonWritable() {
-    expect(element.isWritable()).andReturn(false).anyTimes();
+    when(element.isWritable()).thenReturn(false);
     return this;
   }
 
@@ -139,7 +142,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock ofType(Class type) {
-    expect(element.type()).andReturn(type).anyTimes();
+    when(element.type()).thenReturn(type);
     return this;
   }
 
@@ -149,7 +152,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock readable() {
-    expect(element.isReadable()).andReturn(true).anyTimes();
+    when(element.isReadable()).thenReturn(true);
     return this;
   }
 
@@ -159,7 +162,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock specific() {
-    expect(element.isSpecific()).andReturn(true).anyTimes();
+    when(element.isSpecific()).thenReturn(true);
     return this;
   }
 
@@ -169,7 +172,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock writable() {
-    expect(element.isWritable()).andReturn(true).anyTimes();
+    when(element.isWritable()).thenReturn(true);
     return this;
   }
 
@@ -181,7 +184,7 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock withSpecificValue(Object value) {
-    expect(element.value()).andReturn(value).anyTimes();
+    when(element.value()).thenReturn(value);
     return specific();
   }
 
@@ -195,13 +198,12 @@ public class ElementMock implements MockBuilder<Element> {
    * @return a reference to this object.
    */
   public ElementMock withHandler(Object target, ValueHandler handler) {
-    expect(element.in(target)).andReturn(handler).anyTimes();
+    when(element.in(target)).thenReturn(handler);
     return this;
   }
 
   @Override
   public Element createMock() {
-    replay(element);
     return element;
   }
 
