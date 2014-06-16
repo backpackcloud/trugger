@@ -37,7 +37,7 @@ engine to help creating elegant validators with less code.
 
   - Context Factories now sorts the constructors descending using their
     parameter counts
-  - EasyMock replaced with Mockito
+  - EasyMock replaced by Mockito
 
 ## Version 5.0
 
