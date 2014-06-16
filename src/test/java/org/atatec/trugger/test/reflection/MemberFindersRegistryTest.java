@@ -22,8 +22,8 @@ import org.atatec.trugger.reflection.impl.MemberFindersRegistry;
 import org.atatec.trugger.reflection.impl.VisibleMemberFindersRegistry;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /** @author Marcelo Varella Barca Guimarães */
 public class MemberFindersRegistryTest {
