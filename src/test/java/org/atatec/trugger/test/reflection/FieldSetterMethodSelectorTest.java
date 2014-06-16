@@ -23,11 +23,11 @@ import org.junit.Test;
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
 
-import static junit.framework.Assert.assertTrue;
+import static org.atatec.trugger.reflection.MethodPredicates.setterOf;
 import static org.atatec.trugger.reflection.Reflection.field;
 import static org.atatec.trugger.reflection.Reflection.reflect;
-import static org.atatec.trugger.reflection.MethodPredicates.setterOf;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Marcelo Varella Barca Guimarães
