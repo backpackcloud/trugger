@@ -21,8 +21,8 @@ import org.atatec.trugger.reflection.Reflector;
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.atatec.trugger.reflection.MethodPredicates.annotated;
 import static org.atatec.trugger.reflection.MethodPredicates.annotatedWith;
 import static org.atatec.trugger.reflection.Reflection.invoke;
