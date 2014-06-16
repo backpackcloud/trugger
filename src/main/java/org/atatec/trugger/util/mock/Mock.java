@@ -28,7 +28,7 @@ import java.lang.annotation.Annotation;
  * import static org.atatec.trugger.util.mock.Mock.*;
  * // ...
  *
- * Resource mock = mock(annotation(Resource.class);
+ * Resource mock = mock(annotation(Resource.class));
  * </pre>
  *
  * @author Marcelo Guimarães
