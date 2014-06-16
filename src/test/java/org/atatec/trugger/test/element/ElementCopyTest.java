@@ -25,8 +25,11 @@ import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static org.atatec.trugger.element.ElementPredicates.named;
 import static org.atatec.trugger.element.Elements.copy;
 import static org.atatec.trugger.element.Elements.elements;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.kodo.Spec.*;
 
 /**
@@ -172,6 +175,39 @@ public class ElementCopyTest {
         .the(age(), should(be(0)))
         .the(height(), should(be(0.0)))
         .the(weight(), should(be(0.0)));
+  }
+
+  @Test
+  public void testFilter() {
+    copy(elements().filter(named("name")))
+        .from(testObject)
+        .filter(copy -> assertFilterForDifferentType(copy))
+        .to(new Properties());
+
+    copy(elements().filter(named("name")))
+        .from(testObject)
+        .filter(copy -> assertFilterForSameType(copy))
+        .to(new TestObject(null, null));
+  }
+
+  private void assertFilter(ElementCopy copy) {
+    assertEquals("name", copy.src().name());
+    assertEquals("name", copy.dest().name());
+    assertEquals("Marcelo", copy.src().value());
+    assertEquals(String.class, copy.src().type());
+    assertEquals(String.class, copy.dest().type());
+  }
+
+  private boolean assertFilterForDifferentType(ElementCopy copy) {
+    assertFilter(copy);
+    assertNotEquals(copy.src().declaringClass(), copy.dest().declaringClass());
+    return true;
+  }
+
+  private boolean assertFilterForSameType(ElementCopy copy) {
+    assertFilter(copy);
+    assertEquals(copy.src().declaringClass(), copy.dest().declaringClass());
+    return true;
   }
 
 }
