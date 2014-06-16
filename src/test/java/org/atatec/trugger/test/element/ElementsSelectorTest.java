@@ -30,8 +30,6 @@ import java.util.function.Predicate;
 import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.test.TruggerTest.element;
 import static org.atatec.trugger.test.TruggerTest.elementFinder;
-import static org.atatec.trugger.util.mock.Mock.mock;
-import static org.easymock.EasyMock.verify;
 import static org.kodo.Spec.*;
 
 /**
@@ -49,63 +47,64 @@ public class ElementsSelectorTest implements ElementSpecs {
                              String... names) {
     TestScenario.given(selector().filter(predicate).in(this))
         .it(should(have(elementsNamed(names))));
-    verify(finder);
   }
 
   private void testFailPredicate(Predicate<? super Element> predicate) {
     TestScenario.given(selector())
         .the(selector -> selector.filter(predicate).in(this),
             should(be(EMPTY)));
-    verify(finder);
   }
 
   @Test
   public void testNoSelector() {
-    finder = mock(elementFinder()
+    finder = elementFinder()
         .add(element().named("foo"))
-        .add(element().named("bar")));
+        .add(element().named("bar"))
+        .createMock();
     testPredicate(el -> true, "foo", "bar");
   }
 
   @Test
   public void testAnnotatedSelector() {
-    finder = mock(elementFinder()
+    finder = elementFinder()
         .add(element().named("annotated").annotatedWith(Flag.class))
-        .add(element().named("notAnnotated")));
+        .add(element().named("notAnnotated")).createMock();
     testPredicate(annotatedWith(Flag.class), "annotated");
     testPredicate(annotated(), "annotated");
   }
 
   @Test
   public void testReadableSelector() {
-    finder = mock(elementFinder()
+    finder = elementFinder()
         .add(element().named("readable").readable())
-        .add(element().named("nonReadable").nonReadable()));
+        .add(element().named("nonReadable").nonReadable()).createMock();
     testPredicate(readable(), "readable");
   }
 
   @Test
   public void testSpecificSelector() {
-    finder = mock(elementFinder()
+    finder = elementFinder()
         .add(element().named("specific").specific())
-        .add(element().named("nonSpecific").nonSpecific()));
+        .add(element().named("nonSpecific").nonSpecific()).createMock();
     testPredicate(specific(), "specific");
   }
 
   @Test
   public void testWritableSelector() {
-    finder = mock(elementFinder()
+    finder = elementFinder()
         .add(element().named("writable").writable())
-        .add(element().named("nonWritable").nonWritable()));
+        .add(element().named("nonWritable").nonWritable())
+        .createMock();
     testPredicate(writable(), "writable");
   }
 
   @Test
   public void testTypeSelector() {
-    finder = mock(elementFinder()
+    finder = elementFinder()
         .add(element().named("string").ofType(String.class))
         .add(element().named("stringBuilder").ofType(StringBuilder.class))
-        .add(element().named("integer").ofType(Integer.class)));
+        .add(element().named("integer").ofType(Integer.class))
+        .createMock();
     testPredicate(ElementPredicates.ofType(String.class), "string");
     testPredicate(ElementPredicates.ofType(Integer.class), "integer");
     testFailPredicate(ElementPredicates.ofType(CharSequence.class));
@@ -114,10 +113,11 @@ public class ElementsSelectorTest implements ElementSpecs {
 
   @Test
   public void testNamedSelector() {
-    finder = mock(elementFinder()
+    finder = elementFinder()
         .add(element().named("elementA"))
         .add(element().named("elementB"))
-        .add(element().named("elementC")));
+        .add(element().named("elementC"))
+        .createMock();
     testPredicate(named("elementA", "elementC", "elementD"),
         "elementA", "elementC");
   }

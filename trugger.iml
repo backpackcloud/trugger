@@ -14,7 +14,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Gradle: jboss-vfs-3.1.0.Final" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jboss-logging-3.0.0.CR1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: easymock-2.5.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit-4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: kodo-0.3" level="project" />

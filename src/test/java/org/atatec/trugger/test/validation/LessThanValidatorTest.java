@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.atatec.trugger.test.TruggerTest.element;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Marcelo Guimarães
@@ -35,7 +36,7 @@ public class LessThanValidatorTest extends BaseValidatorTest<LessThan> {
     Map<String, Integer> map = new HashMap<>();
     map.put("y", 20);
 
-    map("y").to(constraint.value());
+    when(constraint.value()).thenReturn("y");
 
     createValidator(
         element().named("x").annotatedWith(constraint).createMock(),
@@ -52,8 +53,8 @@ public class LessThanValidatorTest extends BaseValidatorTest<LessThan> {
     Map<String, Integer> map = new HashMap<>();
     map.put("y", 20);
 
-    map("y").to(constraint.value());
-    map(true).to(constraint.orEqual());
+    when(constraint.value()).thenReturn("y");
+    when(constraint.orEqual()).thenReturn(true);
 
     createValidator(
         element().named("x").annotatedWith(constraint).createMock(),
@@ -70,7 +71,7 @@ public class LessThanValidatorTest extends BaseValidatorTest<LessThan> {
     Map<String, Integer> map = new HashMap<>();
     map.put("y", null);
 
-    map("y").to(constraint.value());
+    when(constraint.value()).thenReturn("y");
 
     createValidator(
         element().named("x").annotatedWith(constraint).createMock(),

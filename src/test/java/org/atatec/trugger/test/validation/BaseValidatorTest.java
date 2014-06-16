@@ -17,16 +17,15 @@
 
 package org.atatec.trugger.test.validation;
 
-import org.atatec.trugger.ObjectMapper;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.Elements;
 import org.atatec.trugger.reflection.Reflection;
-import org.atatec.trugger.util.mock.AnnotationMock;
 import org.atatec.trugger.validation.*;
 import org.junit.Before;
 
 import java.lang.annotation.Annotation;
 
+import static org.atatec.trugger.test.AnnotationMock.mockAnnotation;
 import static org.junit.Assert.*;
 
 /**
@@ -36,7 +35,6 @@ public abstract class BaseValidatorTest<E extends Annotation> {
 
   private final ValidatorFactory factory = Validation.factory();
   private final Class<E> constraintType;
-  private AnnotationMock<E> builder;
   protected E constraint;
   private Validator validator;
 
@@ -46,22 +44,17 @@ public abstract class BaseValidatorTest<E extends Annotation> {
 
   @Before
   public void initialize() {
-    builder = new AnnotationMock<>(constraintType);
-    constraint = builder.annotation();
+    constraint = mockAnnotation(constraintType);
   }
 
-  protected final ObjectMapper<Object, AnnotationMock<E>> map(Object value) {
-    return builder.map(value);
-  }
-
-  protected void assertValid(Object value) {
+  protected final void assertValid(Object value) {
     if (validator == null) {
       createValidator();
     }
     assertTrue(validator.isValid(value));
   }
 
-  protected void assertInvalid(Object value) {
+  protected final void assertInvalid(Object value) {
     if (validator == null) {
       createValidator();
     }
@@ -69,15 +62,15 @@ public abstract class BaseValidatorTest<E extends Annotation> {
   }
 
   protected final void createValidator() {
-    validator = factory.create(builder.createMock());
+    validator = factory.create(constraint);
   }
 
   protected final Validator newValidator() {
-    return factory.create(builder.createMock());
+    return factory.create(constraint);
   }
 
   protected final void createValidator(Element element, Object target) {
-    validator = factory.create(builder.createMock(), element, target, Validation.engine());
+    validator = factory.create(constraint, element, target, Validation.engine());
   }
 
   protected final void testResultElements(ValidationResult result) {
@@ -90,8 +83,8 @@ public abstract class BaseValidatorTest<E extends Annotation> {
   }
 
   protected final void assertSharedValidator() {
-    assertSame(Validation.factory().create(builder.createMock()),
-        Validation.factory().create(builder.createMock()));
+    assertSame(Validation.factory().create(constraint),
+        Validation.factory().create(constraint));
   }
 
 }

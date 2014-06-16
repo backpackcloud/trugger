@@ -18,7 +18,6 @@ package org.atatec.trugger.test.element;
 
 import org.atatec.trugger.HandlingException;
 import org.atatec.trugger.element.NonSpecificElementException;
-import org.atatec.trugger.util.mock.AnnotationMock;
 import org.junit.Test;
 import org.kodo.TestScenario;
 
@@ -28,7 +27,9 @@ import java.lang.annotation.Documented;
 import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.element.Elements.element;
 import static org.atatec.trugger.element.Elements.elements;
+import static org.atatec.trugger.test.AnnotationMock.mockAnnotation;
 import static org.kodo.Spec.*;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -36,12 +37,12 @@ import static org.kodo.Spec.*;
 public class AnnotationElementTest implements ElementSpecs {
 
   private Annotation annotation() {
-    // @TestAnnotation(bool = false, name = "name", number = 1)
-    return new AnnotationMock<TestAnnotation>() {{
-      map(false).to(annotation.bool());
-      map("some name").to(annotation.name());
-      map(1).to(annotation.number());
-    }}.createMock();
+    // @TestAnnotation(bool = false, name = "some name", number = 1)
+    TestAnnotation annotation = mockAnnotation(TestAnnotation.class);
+    when(annotation.bool()).thenReturn(false);
+    when(annotation.name()).thenReturn("some name");
+    when(annotation.number()).thenReturn(1);
+    return annotation;
   }
 
   @Test

@@ -18,8 +18,6 @@ package org.atatec.trugger.test;
 
 import org.atatec.trugger.ValueHandler;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.util.mock.Mock;
-import org.atatec.trugger.util.mock.MockBuilder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -27,7 +25,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.atatec.trugger.util.mock.Mock.annotation;
+import static org.atatec.trugger.test.AnnotationMock.mockAnnotation;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,10 +33,9 @@ import static org.mockito.Mockito.when;
  * A class for helping creation of simple {@link Element} mocks.
  *
  * @author Marcelo Varella Barca Guimarães
- * @see org.atatec.trugger.util.mock.Mock#mock(org.atatec.trugger.util.mock.MockBuilder)
  * @since 2.0
  */
-public class ElementMock implements MockBuilder<Element> {
+public class ElementMock {
 
   private final Element element;
   private final List<Annotation> annotations;
@@ -62,8 +59,7 @@ public class ElementMock implements MockBuilder<Element> {
   /**
    * Sets the name for this element.
    *
-   * @param name
-   *          the desired name.
+   * @param name the desired name.
    * @return a reference to this object.
    */
   public ElementMock named(String name) {
@@ -72,15 +68,13 @@ public class ElementMock implements MockBuilder<Element> {
   }
 
   /**
-   * Sets an annotation to this element. The real annotation will be a mock
-   * created by {@link org.atatec.trugger.util.mock.AnnotationMock}.
+   * Sets an annotation to this element. The real annotation will be a mock.
    *
-   * @param type
-   *          the annotation type.
+   * @param type the annotation type.
    * @return a reference to this object.
    */
   public ElementMock annotatedWith(Class<? extends Annotation> type) {
-    Annotation mock = Mock.mock(annotation(type));
+    Annotation mock = mockAnnotation(type);
     when(element.isAnnotationPresent(type)).thenReturn(true);
     when((Annotation) element.getAnnotation(type)).thenReturn(mock);
     annotations.add(mock);
@@ -90,8 +84,7 @@ public class ElementMock implements MockBuilder<Element> {
   /**
    * Sets an annotation to this element.
    *
-   * @param annotation
-   *          the annotation.
+   * @param annotation the annotation.
    * @return a reference to this object.
    * @since 2.1
    */
@@ -137,8 +130,7 @@ public class ElementMock implements MockBuilder<Element> {
   /**
    * Sets the element type.
    *
-   * @param type
-   *          the element type.
+   * @param type the element type.
    * @return a reference to this object.
    */
   public ElementMock ofType(Class type) {
@@ -179,8 +171,7 @@ public class ElementMock implements MockBuilder<Element> {
   /**
    * Sets the specific value for the element and {@link #specific()}.
    *
-   * @param value
-   *          the specific value.
+   * @param value the specific value.
    * @return a reference to this object.
    */
   public ElementMock withSpecificValue(Object value) {
@@ -191,10 +182,8 @@ public class ElementMock implements MockBuilder<Element> {
   /**
    * Sets the handler for the given target.
    *
-   * @param target
-   *          the target related to the handler.
-   * @param handler
-   *          the handler for the given target.
+   * @param target  the target related to the handler.
+   * @param handler the handler for the given target.
    * @return a reference to this object.
    */
   public ElementMock withHandler(Object target, ValueHandler handler) {
@@ -202,7 +191,6 @@ public class ElementMock implements MockBuilder<Element> {
     return this;
   }
 
-  @Override
   public Element createMock() {
     return element;
   }

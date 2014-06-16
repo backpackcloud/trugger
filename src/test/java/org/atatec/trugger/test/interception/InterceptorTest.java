@@ -25,8 +25,10 @@ import java.util.function.Predicate;
 
 import static org.atatec.trugger.interception.Interception.intercept;
 import static org.atatec.trugger.interception.InterceptionHandler.delegate;
-import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -111,9 +113,8 @@ public class InterceptorTest {
 
   @Test
   public void testComposition() throws Exception {
-    MyInterface obj = createMock(MyInterface.class);
-    expect(obj.doIt("test")).andReturn(null);
-    replay(obj);
+    MyInterface obj = mock(MyInterface.class);
+    when(obj.doIt("test")).thenReturn(null);
 
     MyInterface proxy = intercept(MyInterface.class)
         .on(obj)
@@ -124,7 +125,7 @@ public class InterceptorTest {
 
     assertNotNull(proxy.doIt("test"));
 
-    verify(obj);
+    verify(obj).doIt("test");
   }
 
 }

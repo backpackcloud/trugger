@@ -20,6 +20,8 @@ package org.atatec.trugger.test.validation;
 import org.atatec.trugger.validation.validator.Pattern;
 import org.junit.Test;
 
+import static org.mockito.Mockito.when;
+
 /**
  * @author Marcelo Guimarães
  */
@@ -27,7 +29,7 @@ public class PatternValidatorTest extends BaseValidatorTest<Pattern> {
 
   @Test
   public void testPattern() {
-    map("\\d+").to(constraint.value());
+    when(constraint.value()).thenReturn("\\d+");
 
     assertValid("146356");
     assertInvalid(new StringBuilder("146 356"));
@@ -36,8 +38,8 @@ public class PatternValidatorTest extends BaseValidatorTest<Pattern> {
 
   @Test
   public void testPatternWithFlags() {
-    map("[a-g]+").to(constraint.value());
-    map(java.util.regex.Pattern.CASE_INSENSITIVE).to(constraint.flags());
+    when(constraint.value()).thenReturn("[a-g]+");
+    when(constraint.flags()).thenReturn(java.util.regex.Pattern.CASE_INSENSITIVE);
 
     assertValid("abcGCD");
     assertInvalid("aBcK");

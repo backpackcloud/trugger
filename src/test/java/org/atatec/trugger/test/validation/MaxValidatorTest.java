@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.Mockito.when;
+
 /**
  * @author Marcelo Guimarães
  */
@@ -32,8 +34,8 @@ public class MaxValidatorTest extends BaseValidatorTest<Max> {
 
   @Test
   public void testPositiveValue() {
-    map(10.0).to(constraint.value());
-    map(true).to(constraint.inclusive());
+    when(constraint.value()).thenReturn(10.0);
+    when(constraint.inclusive()).thenReturn(true);
 
     assertValid(null);
 
@@ -44,7 +46,7 @@ public class MaxValidatorTest extends BaseValidatorTest<Max> {
 
   @Test
   public void testNegativeValue() {
-    map(-10.0).to(constraint.value());
+    when(constraint.value()).thenReturn(-10.0);
 
     assertValid(-10);
     assertInvalid(9);
@@ -54,7 +56,7 @@ public class MaxValidatorTest extends BaseValidatorTest<Max> {
 
   @Test
   public void testTypes() {
-    map(2.0).to(constraint.value());
+    when(constraint.value()).thenReturn(2.0);
 
     Object[] validArray = new Object[2];
     Object[] invalidArray = new Object[3];
@@ -95,8 +97,8 @@ public class MaxValidatorTest extends BaseValidatorTest<Max> {
 
   @Test
   public void testDelta() {
-    map(2.0).to(constraint.value());
-    map(1.0).to(constraint.delta());
+    when(constraint.value()).thenReturn(2.0);
+    when(constraint.delta()).thenReturn(1.0);
 
     assertValid(new Object[3]);
     assertInvalid(new Object[4]);
@@ -104,8 +106,8 @@ public class MaxValidatorTest extends BaseValidatorTest<Max> {
 
   @Test
   public void testInclusive() {
-    map(2.0).to(constraint.value());
-    map(false).to(constraint.inclusive());
+    when(constraint.value()).thenReturn(2.0);
+    when(constraint.inclusive()).thenReturn(false);
 
     assertValid(new Object[1]);
     assertInvalid(new Object[2]);

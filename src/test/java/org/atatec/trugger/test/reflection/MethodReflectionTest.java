@@ -27,7 +27,9 @@ import static org.atatec.trugger.reflection.MethodPredicates.annotated;
 import static org.atatec.trugger.reflection.MethodPredicates.annotatedWith;
 import static org.atatec.trugger.reflection.Reflection.invoke;
 import static org.atatec.trugger.reflection.Reflection.method;
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * A class for testing method reflection by the {@link Reflector}.
@@ -49,20 +51,15 @@ public class MethodReflectionTest {
 
   @Test
   public void invokerTest() {
-    TestInterface obj = createMock(TestInterface.class);
-    obj.doIt();
-    expectLastCall().once();
-    replay(obj);
+    TestInterface obj = mock(TestInterface.class);
     invoke(method("doIt")).in(obj).withoutArgs();
-    verify(obj);
+    verify(obj).doIt();
   }
 
   @Test
   public void invokerExceptionHandlerTest() {
-    TestInterface obj = createMock(TestInterface.class);
-    obj.doIt();
-    expectLastCall().andThrow(new IllegalArgumentException());
-    replay(obj);
+    TestInterface obj = mock(TestInterface.class);
+    doThrow(new IllegalArgumentException()).when(obj).doIt();
     try {
       invoke(method("doIt")).in(obj).withoutArgs();
       throw new AssertionError();
@@ -70,15 +67,13 @@ public class MethodReflectionTest {
       assertTrue(IllegalArgumentException.class.equals(e.getCause().getClass()));
     }
 
-    verify(obj);
+    verify(obj).doIt();
   }
 
   @Test
   public void invokerForNoMethodTest() {
-    TestInterface obj = createMock(TestInterface.class);
-    replay(obj);
+    TestInterface obj = mock(TestInterface.class);
     invoke(method("notDeclared")).in(obj).withoutArgs();
-    verify(obj);
   }
 
   @Test

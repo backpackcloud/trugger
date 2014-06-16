@@ -30,9 +30,8 @@ import java.util.function.Predicate;
 
 import static org.atatec.trugger.element.ElementPredicates.*;
 import static org.atatec.trugger.test.TruggerTest.element;
-import static org.atatec.trugger.util.mock.Mock.mock;
-import static org.easymock.EasyMock.*;
 import static org.kodo.Spec.*;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -43,10 +42,9 @@ public class ElementSelectorTest {
   private Element element;
 
   public ElementSelectorTest() {
-    finder = createMock(Finder.class);
+    finder = mock(Finder.class);
     Result<Element, Object> result = target -> element;
-    expect(finder.find("name")).andReturn(result).anyTimes();
-    replay(finder);
+    when(finder.find("name")).thenReturn(result);
   }
 
   private ElementSelector selector() {
@@ -64,67 +62,68 @@ public class ElementSelectorTest {
         .the(inversedFiltered,
             should(be(NULL)));
 
-    verify(finder);
+    verify(finder, atLeastOnce()).find("name");
   }
 
   private void testFailPredicate(Predicate<? super Element> predicate) {
     TestScenario.given(selector())
         .the(selector -> selector.filter(predicate).in(this),
             should(be(NULL)));
-    verify(finder);
+
+    verify(finder, atLeastOnce()).find("name");
   }
 
   @Test
   public void testAnnotatedSelector() {
-    element = mock(element().annotatedWith(Flag.class));
+    element = element().annotatedWith(Flag.class).createMock();
     testPredicate(annotatedWith(Flag.class));
     testPredicate(annotated());
   }
 
   @Test
   public void testReadableSelector() {
-    element = mock(element().readable());
+    element = element().readable().createMock();
     testPredicate(readable());
   }
 
   @Test
   public void testSpecificSelector() {
-    element = mock(element().specific());
+    element = element().specific().createMock();
     testPredicate(specific());
   }
 
   @Test
   public void testWritableSelector() {
-    element = mock(element().writable());
+    element = element().writable().createMock();
     testPredicate(writable());
   }
 
   @Test
   public void testNonWritableSelector() {
-    element = mock(element().nonWritable());
+    element = element().nonWritable().createMock();
     testPredicate(writable().negate());
   }
 
   @Test
   public void testOfTypeSelector() {
-    element = mock(element().ofType(String.class));
+    element = element().ofType(String.class).createMock();
     testPredicate(ofType(String.class));
     testFailPredicate(ofType(Integer.class));
     testFailPredicate(ofType(CharSequence.class));
 
-    element = mock(element().ofType(int.class));
+    element = element().ofType(int.class).createMock();
     testPredicate(ofType(int.class));
     testFailPredicate(ofType(Integer.class));
   }
 
   @Test
   public void testAssignableToSelector() {
-    element = mock(element().ofType(String.class));
+    element = element().ofType(String.class).createMock();
     testPredicate(assignableTo(String.class));
     testPredicate(assignableTo(CharSequence.class));
     testFailPredicate(assignableTo(Integer.class));
 
-    element = mock(element().ofType(int.class));
+    element = element().ofType(int.class).createMock();
     testPredicate(assignableTo(Integer.class));
     testPredicate(assignableTo(int.class));
   }

@@ -26,8 +26,7 @@ import org.junit.Test;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static org.atatec.trugger.util.mock.Mock.annotation;
-import static org.atatec.trugger.util.mock.Mock.mock;
+import static org.atatec.trugger.test.AnnotationMock.mockAnnotation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -36,7 +35,7 @@ public class ComponentFactoryTest {
 
   @Test
   public void testCreate() {
-    ToString annotation = mock(annotation(ToString.class));
+    ToString annotation = mockAnnotation(ToString.class);
 
     ComponentFactory<ConverterClass, Converter> factory
         = new ComponentFactory<>(ConverterClass.class);
@@ -49,10 +48,10 @@ public class ComponentFactoryTest {
   @Test
   public void testListCreate() {
     Element element = new ElementMock()
-        .annotatedWith(mock(annotation(Flag.class)))
-        .annotatedWith(mock(annotation(ToNull.class)))
-        .annotatedWith(mock(annotation(Resource.class)))
-        .annotatedWith(mock(annotation(ToString.class)))
+        .annotatedWith(mockAnnotation(Flag.class))
+        .annotatedWith(mockAnnotation(ToNull.class))
+        .annotatedWith(mockAnnotation(Resource.class))
+        .annotatedWith(mockAnnotation(ToString.class))
         .createMock();
 
     ComponentFactory<ConverterClass, Converter> factory
@@ -65,10 +64,10 @@ public class ComponentFactoryTest {
   @Test
   public void testElementCreate() {
     Element element = new ElementMock()
-        .annotatedWith(mock(annotation(Resource.class)))
-        .annotatedWith(mock(annotation(ToString.class)))
-        .annotatedWith(mock(annotation(ToNull.class)))
-        .annotatedWith(mock(annotation(Flag.class)))
+        .annotatedWith(mockAnnotation(Resource.class))
+        .annotatedWith(mockAnnotation(ToString.class))
+        .annotatedWith(mockAnnotation(ToNull.class))
+        .annotatedWith(mockAnnotation(Flag.class))
         .createMock();
 
     ComponentFactory<ConverterClass, Converter> factory
@@ -78,8 +77,8 @@ public class ComponentFactoryTest {
     assertNotNull(converter);
 
     element = new ElementMock()
-        .annotatedWith(mock(annotation(Resource.class)))
-        .annotatedWith(mock(annotation(Flag.class)))
+        .annotatedWith(mockAnnotation(Resource.class))
+        .annotatedWith(mockAnnotation(Flag.class))
         .createMock();
 
     converter = factory.create(element);

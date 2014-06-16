@@ -31,8 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.atatec.trugger.util.mock.Mock.annotation;
-import static org.atatec.trugger.util.mock.Mock.mock;
+import static org.atatec.trugger.test.AnnotationMock.mockAnnotation;
 import static org.junit.Assert.*;
 
 import static org.atatec.trugger.element.ElementPredicates.ofType;
@@ -164,7 +163,7 @@ public class ValidationTest extends BaseValidatorTest {
   }
 
   private Validator validatorFor(Class<? extends Annotation> type) {
-    return Validation.factory().create(mock(annotation(type)));
+    return Validation.factory().create(mockAnnotation(type));
   }
 
   @Test

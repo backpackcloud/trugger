@@ -30,11 +30,14 @@ engine to help creating elegant validators with less code.
     null to indicate an unresolvable value.
   - Changed `ValueHandler#get` to `#value`
   - Renamed `ElementPredicates#type` to `ofType`
+  - AnnotationMock removed because its functionality can be achieved using
+    Mockito and a few lines of code.
 
 ### Minor Changes
 
   - Context Factories now sorts the constructors descending using their
     parameter counts
+  - EasyMock replaced with Mockito
 
 ## Version 5.0
 
