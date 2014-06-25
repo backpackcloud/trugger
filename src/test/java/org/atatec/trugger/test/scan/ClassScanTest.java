@@ -49,35 +49,35 @@ public class ClassScanTest {
     return packageName.startsWith(jarPackageName);
   };
 
-  private int interfaceTest(String packageName) {
+  private int countInterfaces(String packageName) {
     List<Class> interfaces = scan().classes().deep()
         .filter(ClassPredicates.interfaceType().and(declaring(PUBLIC)))
         .in(packageName);
     return interfaces.size();
   }
 
-  private int classesTest(String packageName) {
+  private int countClasses(String packageName) {
     List<Class> classes = scan().classes().deep()
         .filter(ClassPredicates.classType().and(declaring(PUBLIC)))
         .in(packageName);
     return classes.size();
   }
 
-  private int annotationsTest(String packageName) {
+  private int countAnnotations(String packageName) {
     List<Class> annotations = scan().classes().deep()
         .filter(ClassPredicates.annotationType().and(declaring(PUBLIC)))
         .in(packageName);
     return annotations.size();
   }
 
-  private int enumsTest(String packageName) {
+  private int countEnums(String packageName) {
     List<Class> enums = scan().classes().deep()
         .filter(ClassPredicates.enumType().and(declaring(PUBLIC)))
         .in(packageName);
     return enums.size();
   }
 
-  private int allTest(String packageName) {
+  private int countAll(String packageName) {
     List<Class> classes =  scan().
         classes().deep().filter(declaring(PUBLIC)).in(packageName);
     TruggerTest.assertMatch(classes, declaring(PUBLIC));
@@ -86,11 +86,11 @@ public class ClassScanTest {
   }
 
   private void scanTest(String packages) {
-    int classes = classesTest(packages);
-    int interfaces = interfaceTest(packages);
-    int annotations = annotationsTest(packages);
-    int enums = enumsTest(packages);
-    int all = allTest(packages);
+    int classes = countClasses(packages);
+    int interfaces = countInterfaces(packages);
+    int annotations = countAnnotations(packages);
+    int enums = countEnums(packages);
+    int all = countAll(packages);
     assertTrue(all == classes + interfaces + annotations + enums);
   }
 
