@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger.scan;
 
-import org.atatec.trugger.loader.ImplementationLoader;
+import org.atatec.trugger.util.ImplementationLoader;
 
 /**
  * A helper class for finding classes.

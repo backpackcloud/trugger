@@ -16,8 +16,8 @@
  */
 package org.atatec.trugger.scan.impl;
 
-import org.atatec.trugger.registry.MapRegistry;
-import org.atatec.trugger.registry.Registry;
+import org.atatec.trugger.util.registry.MapRegistry;
+import org.atatec.trugger.util.registry.Registry;
 import org.atatec.trugger.scan.ClassScanner;
 import org.atatec.trugger.scan.ClassScannerFactory;
 import org.atatec.trugger.scan.NoResourceFinderException;

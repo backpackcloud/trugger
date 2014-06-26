@@ -19,7 +19,7 @@ package org.atatec.trugger.element.impl;
 import org.atatec.trugger.Finder;
 import org.atatec.trugger.Result;
 import org.atatec.trugger.element.Element;
-import org.atatec.trugger.registry.Registry;
+import org.atatec.trugger.util.registry.Registry;
 import org.atatec.trugger.util.Utils;
 
 import java.util.List;

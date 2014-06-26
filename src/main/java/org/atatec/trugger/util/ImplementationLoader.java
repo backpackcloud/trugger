@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.loader;
+package org.atatec.trugger.util;
 
 import org.atatec.trugger.TruggerException;
 

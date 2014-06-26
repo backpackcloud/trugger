@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.registry;
+package org.atatec.trugger.util.registry;
 
 import java.util.HashMap;
 import java.util.HashSet;

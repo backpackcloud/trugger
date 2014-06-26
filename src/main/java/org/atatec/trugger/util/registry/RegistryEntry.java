@@ -14,28 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.test.general;
+package org.atatec.trugger.util.registry;
 
-import org.atatec.trugger.util.Null;
-import org.junit.Test;
-
-import java.lang.reflect.AnnotatedElement;
-
-import static org.junit.Assert.*;
+import org.atatec.trugger.util.registry.Registry.Entry;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * Represents an entry in a registry.
+ *
+ * @author Marcelo Guimarães
+ * @since 2.3
  */
-public class NullObjectsTest {
+public class RegistryEntry<K, V> implements Entry<K, V> {
 
-  @Test
-  public void nullAnnotatedElementTest() {
-    AnnotatedElement el = Null.NULL_ANNOTATED_ELEMENT;
+  private final K key;
+  private final V registry;
 
-    assertEquals(0, el.getAnnotations().length);
-    assertEquals(0, el.getDeclaredAnnotations().length);
-    assertFalse(el.isAnnotationPresent(null)); // annotation type doesn't matter
-    assertNull(null, el.getAnnotation(null)); // annotation type doesn't matter
+  public RegistryEntry(K key, V registry) {
+    this.key = key;
+    this.registry = registry;
+  }
+
+  public K key() {
+    return key;
+  }
+
+  public V value() {
+    return registry;
   }
 
 }

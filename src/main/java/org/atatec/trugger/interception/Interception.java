@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger.interception;
 
-import org.atatec.trugger.loader.ImplementationLoader;
+import org.atatec.trugger.util.ImplementationLoader;
 
 /**
  * A class for helping create proxy instances

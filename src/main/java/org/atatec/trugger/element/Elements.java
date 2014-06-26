@@ -17,8 +17,8 @@
 package org.atatec.trugger.element;
 
 import org.atatec.trugger.Finder;
-import org.atatec.trugger.loader.ImplementationLoader;
-import org.atatec.trugger.registry.Registry;
+import org.atatec.trugger.util.ImplementationLoader;
+import org.atatec.trugger.util.registry.Registry;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 

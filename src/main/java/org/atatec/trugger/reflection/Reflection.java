@@ -16,7 +16,7 @@
  */
 package org.atatec.trugger.reflection;
 
-import org.atatec.trugger.loader.ImplementationLoader;
+import org.atatec.trugger.util.ImplementationLoader;
 import org.atatec.trugger.reflection.impl.FieldSelectorHandler;
 import org.atatec.trugger.reflection.impl.MethodSelectorInvoker;
 import org.atatec.trugger.selector.*;

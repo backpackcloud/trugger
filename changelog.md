@@ -32,6 +32,7 @@ engine to help creating elegant validators with less code.
   - Renamed `ElementPredicates#type` to `ofType`
   - `AnnotationMock` removed because its functionality can be achieved using
     Mockito and a few lines of code.
+  - `Registry` and `ImplementationLoader` moved to package **util**
 
 ### Minor Changes
 

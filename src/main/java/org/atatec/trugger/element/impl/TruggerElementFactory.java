@@ -20,8 +20,8 @@ import org.atatec.trugger.Finder;
 import org.atatec.trugger.element.Element;
 import org.atatec.trugger.element.ElementCopier;
 import org.atatec.trugger.element.ElementFactory;
-import org.atatec.trugger.registry.MapRegistry;
-import org.atatec.trugger.registry.Registry;
+import org.atatec.trugger.util.registry.MapRegistry;
+import org.atatec.trugger.util.registry.Registry;
 import org.atatec.trugger.selector.ElementSelector;
 import org.atatec.trugger.selector.ElementsSelector;
 

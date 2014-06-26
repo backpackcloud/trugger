@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.atatec.trugger.test.general;
+package org.atatec.trugger.test.util;
 
 import org.atatec.trugger.test.Flag;
 import org.junit.Test;
