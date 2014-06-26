@@ -51,6 +51,8 @@ compileJava {
   options.compilerArgs << compilerArg
 }
 
+// I'm getting some errors when I try to compile test sources with -parameter
+// so do not use this parameter
 compileTestJava {
   options.encoding = encoding
 }
