@@ -34,19 +34,19 @@ import java.util.Map;
  * @author Marcelo Guimarães
  * @since 5.1
  */
-class InvalidElementImpl implements InvalidElement {
+public class InvalidElementImpl implements InvalidElement {
 
   private final Element element;
   private final Object invalidValue;
   private final Map<Class<? extends Annotation>, Annotation> violatedConstraints;
 
-  InvalidElementImpl(Element element, Object invalidValue) {
+  public InvalidElementImpl(Element element, Object invalidValue) {
     this.element = element;
     this.invalidValue = invalidValue;
     this.violatedConstraints = new HashMap<>();
   }
 
-  InvalidElementImpl(Element element, Object invalidValue,
+  public InvalidElementImpl(Element element, Object invalidValue,
                      Collection<Annotation> violatedConstraints) {
     this.element = element;
     this.invalidValue = invalidValue;
@@ -66,7 +66,7 @@ class InvalidElementImpl implements InvalidElement {
     return violatedConstraints.containsKey(constraint);
   }
 
-  void addViolatedConstraint(Class<? extends Annotation> constraint,
+  public void addViolatedConstraint(Class<? extends Annotation> constraint,
                              Annotation annotation) {
     violatedConstraints.put(constraint, annotation);
   }
