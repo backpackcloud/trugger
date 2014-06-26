@@ -35,10 +35,6 @@ public class MaxValidator implements Validator {
     );
   }
 
-  public MaxValidator(Max constraint) {
-    this(constraint.value(), constraint.inclusive(), constraint.delta());
-  }
-
   @Override
   public boolean isValid(Object value) {
     return sizeValidator.isValid(value);

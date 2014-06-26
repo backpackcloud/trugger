@@ -35,10 +35,6 @@ public class MinValidator implements Validator {
     );
   }
 
-  public MinValidator(Min constraint) {
-    this(constraint.value(), constraint.inclusive(), constraint.delta());
-  }
-
   @Override
   public boolean isValid(Object value) {
     return sizeValidator.isValid(value);

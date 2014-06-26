@@ -43,7 +43,17 @@ dependencies {
   testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
 }
 
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+def encoding = 'UTF-8'
+def compilerArg = '-parameters'
+
+compileJava {
+  options.encoding = encoding
+  options.compilerArgs << compilerArg
+}
+
+compileTestJava {
+  options.encoding = encoding
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
   classifier = 'sources'

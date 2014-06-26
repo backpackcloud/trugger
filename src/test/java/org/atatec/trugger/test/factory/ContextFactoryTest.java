@@ -20,11 +20,11 @@ package org.atatec.trugger.test.factory;
 import org.atatec.trugger.test.Flag;
 import org.atatec.trugger.util.factory.ContextFactory;
 import org.atatec.trugger.util.factory.CreateException;
+import org.atatec.trugger.validation.Validator;
+import org.atatec.trugger.validation.validator.PatternValidator;
 import org.junit.Test;
 
-import static org.atatec.trugger.reflection.ParameterPredicates.annotatedWith;
-import static org.atatec.trugger.reflection.ParameterPredicates.named;
-import static org.atatec.trugger.reflection.ParameterPredicates.type;
+import static org.atatec.trugger.reflection.ParameterPredicates.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -60,14 +60,10 @@ public class ContextFactoryTest {
   public void testNamedContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        // problems to build with "-parameters" in gradle
-        // problems to coverage in idea using "-parameters"
-        .use("a string").when(named("arg0"))
-        .use(10).when(named("arg1"));
-    TestObject obj = factory.create(TestObject.class);
+        .use("a string").when(named("pattern"))
+        .use(0).when(named("flags"));
+    Validator obj = factory.create(PatternValidator.class);
     assertNotNull(obj);
-    assertEquals("a string", obj.string);
-    assertEquals(10, obj.integer);
   }
 
   @Test

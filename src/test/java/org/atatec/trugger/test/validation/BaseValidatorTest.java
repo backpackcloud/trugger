@@ -78,7 +78,7 @@ public abstract class BaseValidatorTest<E extends Annotation> {
       assertTrue(result.isElementInvalid(invalidElement.name()));
       Element element = Elements.element(invalidElement.name()).in(result.target());
       assertNotNull(element);
-      assertSame(invalidElement.invalidValue(), element.value());
+      assertEquals(invalidElement.invalidValue(), element.value());
     }
   }
 
