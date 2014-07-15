@@ -38,4 +38,10 @@ public class ValidatorTest {
     assertValid(FALSE.or(TRUE));
   }
 
+  @Test
+  public void testNegateOperation() {
+    assertValid(FALSE.negate());
+    assertInvalid(TRUE.negate());
+  }
+
 }

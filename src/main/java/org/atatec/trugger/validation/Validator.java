@@ -35,27 +35,36 @@ public interface Validator<T> {
   boolean isValid(T value);
 
   /**
-   * Bind this validator and the given one using the boolean operation
-   * <code>and</code>.
+   * Returns a validator that represents a short-circuiting logical AND of this
+   * validator and another.
    *
-   * @param other the other validator
-   * @return a validator that returns <code>true</code> if this validator and
-   * the given one returns <code>true</code> for the given value.
+   * @param other the validator to compose
+   * @return a composed validator that represents the short-circuiting logical
+   * AND.
    */
   default Validator and(Validator other) {
     return obj -> this.isValid((T) obj) && other.isValid(obj);
   }
 
   /**
-   * * Bind this validator and the given one using the boolean operation
-   * <code>or</code>.
+   * Returns a validator that represents a short-circuiting logical OR of this
+   * validator and another.
    *
-   * @param other the other validator
-   * @return a validator that returns <code>true</code> if this validator or
-   * the given one returns <code>true</code> for the given value.
+   * @param other the validator to compose
+   * @return a composed validator that represents the short-circuiting logical
+   * OR.
    */
   default Validator or(Validator other) {
     return obj -> this.isValid((T) obj) || other.isValid(obj);
+  }
+
+  /**
+   * Returns a validator that represents the logical negation of this validator.
+   *
+   * @return a validator that represents the logical negation of this validator.
+   */
+  default Validator negate() {
+    return obj -> !this.isValid((T) obj);
   }
 
 }
