@@ -19,7 +19,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 configurations {
-  project.group = "org.atatec"
+  project.group = "tools.devnull"
   project.version = "5.1"
 
   project.description = "Trugger is a project that helps you write code that " +
@@ -38,7 +38,7 @@ repositories {
 dependencies {
   compile group: 'org.jboss', name: 'jboss-vfs', version: '3.1.0.Final'
 
-  testCompile group: 'org.kodo', name: 'kodo', version: '0.3'
+  testCompile group: 'tools.devnull', name: 'kodo', version: '0.4'
   testCompile group: 'junit', name: 'junit', version: '4.11'
   testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
 }
@@ -75,18 +75,14 @@ artifacts {
 task pom << {
   pom {
     project {
-      groupId 'org.atatec.trugger'
-      artifactId 'trugger'
+      groupId project.group
+      artifactId project.name
       packaging 'jar'
 
-      name 'trugger'
+      project.name
       description project.description
 
       url 'https://github.com/ataxexe/trugger'
-
-      scm {
-        url 'git@github.com:ataxexe/trugger.git'
-      }
 
       licenses {
         license {
@@ -95,8 +91,24 @@ task pom << {
           distribution 'repo'
         }
       }
+
+      developers {
+        developer {
+          id 'ataxexe'
+          name 'Marcelo Guimarães'
+          email 'ataxexe@devnull.tools'
+          organizationUrl 'http://devnull.tools'
+          url 'http://entra.la'
+        }
+      }
+
+      scm {
+        connection 'scm:git:git@github.com:ataxexe/trugger.git'
+        url 'https://github.com/ataxexe/trugger'
+      }
+
     }
-  }.writeTo("$buildDir/pom.xml")
+  }.writeTo("${buildDir}/pom.xml")
 }
 
 task pdf(type: Exec) {
@@ -106,10 +118,10 @@ task pdf(type: Exec) {
 }
 
 task dist(type: Zip,
-    dependsOn: [clean, jar, sourcesJar, javadocJar, test, pom, pdf]) {
+    dependsOn: [clean, pom, jar, sourcesJar, javadocJar, test, pdf]) {
   from "$buildDir/libs"
-  from "$buildDir/pom.xml"
   from "$buildDir/trugger.pdf"
+  from "$buildDir/pom.xml"
   from "changelog.md"
   from "README.md"
 }
