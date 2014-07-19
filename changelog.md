@@ -8,6 +8,10 @@ validation module now is a simple solution for manually validating objects
 nor a competitor but it includes features that I always wanted in a validation
 engine to help creating elegant validators with less code.
 
+Also this releases brings a new package name because `trugger` is now in the
+Maven Central Repository. You should replace your imports from `org.atatec.trugger`
+to `tools.devnull.trugger`.
+
 ### New Modules
 
   - Validation (completely from scratch and much better than the old and ugly
