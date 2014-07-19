@@ -31,13 +31,9 @@ public class PatternValidator implements Validator {
   private final String pattern;
   private final int flags;
 
-  public PatternValidator(String pattern, int flags) {
-    this.pattern = pattern;
+  public PatternValidator(String value, int flags) {
+    this.pattern = value;
     this.flags = flags;
-  }
-
-  public PatternValidator(Pattern constraint) {
-    this(constraint.value(), constraint.flags());
   }
 
   @Override

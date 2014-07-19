@@ -60,7 +60,7 @@ public class ContextFactoryTest {
   public void testNamedContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .use("a string").when(named("pattern"))
+        .use("a string").when(named("value"))
         .use(0).when(named("flags"));
     Validator obj = factory.create(PatternValidator.class);
     assertNotNull(obj);
