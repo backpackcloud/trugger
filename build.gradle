@@ -81,7 +81,7 @@ task pom << {
       artifactId project.name
       packaging 'jar'
 
-      project.name
+      name project.name
       description project.description
 
       url 'https://github.com/ataxexe/trugger'
