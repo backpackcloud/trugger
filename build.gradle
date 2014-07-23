@@ -23,6 +23,8 @@ configurations {
   project.group = "tools.devnull"
   project.version = "5.1"
 
+  project.ext["pomFile"] = "$buildDir/${project.name}-${project.version}.pom"
+
   project.description = "Trugger is a project that helps you write code that " +
       "anyone can read. It is focused on deliver fluent interfaces to deal " +
       "with reflection without the verbosity of the Java Reflection API."
@@ -110,7 +112,7 @@ task pom << {
       }
 
     }
-  }.writeTo("${buildDir}/pom.xml")
+  }.writeTo(project.pomFile)
 }
 
 task pdf(type: Exec) {
@@ -123,7 +125,7 @@ task dist(type: Zip,
     dependsOn: [clean, pom, jar, sourcesJar, javadocJar, test, pdf]) {
   from "$buildDir/libs"
   from "$buildDir/trugger.pdf"
-  from "$buildDir/pom.xml"
+  from project.pomFile
   from "changelog.md"
   from "README.md"
 }
