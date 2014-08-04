@@ -22,7 +22,12 @@ The special kick mentioned is the *Tatsumaki Senpuu Kyaku* and Ken says somethin
 
 ## How To Use
 
-Just put the jar file on your **classpath** and you're done. No dependencies are required by Trugger at runtime.
+Just put the jar file on your **classpath** and you're done. No dependencies are required by Trugger at runtime. If you prefer some build system like Gradle or Maven, trugger is in now in Maven Central repository:
+
+groupId
+  : tools.devnull
+artifactId
+  : trugger
 
 ## How To Build
 
@@ -34,10 +39,6 @@ Just make sure you have [Gradle][] and execute the `gradle dist` command. The ma
 ## How To Contribute
 
 Just fork the project, do some stuff and send me a pull request. You can also fire an issue or tell your friends to use Trugger.
-
-## About Maven Repository
-
-Trugger currently is not in the Maven Central Repository, but a pom is generated and distributed in the download so you can import it on your local repository.
 
 # Reflection
 
