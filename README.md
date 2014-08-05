@@ -25,6 +25,7 @@ The special kick mentioned is the *Tatsumaki Senpuu Kyaku* and Ken says somethin
 Just put the jar file on your **classpath** and you're done. No dependencies are required by Trugger at runtime. If you prefer some build system like Gradle or Maven, trugger is in now in Maven Central repository:
 
 **groupId**: `tools.devnull`
+
 **artifactId**: `trugger`
 
 ## How To Build
