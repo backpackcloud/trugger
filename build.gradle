@@ -21,7 +21,7 @@ apply plugin: 'signing'
 
 configurations {
   project.group = "tools.devnull"
-  project.version = "5.1"
+  project.version = "5.2-SNAPSHOT"
 
   project.ext["pomFile"] = "$buildDir/${project.name}-${project.version}.pom"
 
@@ -41,7 +41,7 @@ repositories {
 dependencies {
   compile group: 'org.jboss', name: 'jboss-vfs', version: '3.1.0.Final'
 
-  testCompile group: 'tools.devnull', name: 'kodo', version: '0.4.1'
+  testCompile group: 'tools.devnull', name: 'kodo', version: '1.0'
   testCompile group: 'junit', name: 'junit', version: '4.11'
   testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
 }
@@ -74,6 +74,7 @@ artifacts {
   archives jar
   archives sourcesJar
   archives javadocJar
+  archives file(project.pomFile)
 }
 
 task pom << {
