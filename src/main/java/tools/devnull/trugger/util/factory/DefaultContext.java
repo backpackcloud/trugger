@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 public class DefaultContext implements Context {
 
   private List<Entry> entries;
+  private Function<Parameter, Object> defaultFunction;
 
   public DefaultContext() {
     this.entries = new ArrayList<>();
@@ -46,9 +47,18 @@ public class DefaultContext implements Context {
 
   @Override
   public PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function) {
-    return (predicate) -> {
-      entries.add(new Entry(function, predicate));
-      return DefaultContext.this;
+    return new PredicateMapper<Parameter, Context>() {
+      @Override
+      public Context when(Predicate<Parameter> condition) {
+        entries.add(new Entry(function, condition));
+        return DefaultContext.this;
+      }
+
+      @Override
+      public Context byDefault() {
+        defaultFunction = function;
+        return DefaultContext.this;
+      }
     };
   }
 
@@ -58,6 +68,9 @@ public class DefaultContext implements Context {
       if (entry.predicate.test(parameter)) {
         return entry.function.apply(parameter);
       }
+    }
+    if (defaultFunction != null) {
+      return defaultFunction.apply(parameter);
     }
     throw new UnresolvableValueException();
   }
