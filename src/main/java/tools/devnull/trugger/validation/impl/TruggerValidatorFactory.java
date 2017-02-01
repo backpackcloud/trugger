@@ -53,12 +53,13 @@ public class TruggerValidatorFactory implements ValidatorFactory {
         new ComponentFactory<>(ValidatorClass.class);
     factory.toCreate(
         (constructor, args) -> {
-          ArgumentsValidator argumentsValidator = new ArgumentsValidator(this);
+          TruggerValidationEngine engine = new TruggerValidationEngine(this);
+          ArgumentsValidator argumentsValidator = new ArgumentsValidator(engine);
           if (argumentsValidator.isValid(constructor, args)) {
             Validator validator = invoke(constructor).withArgs(args);
             Validator proxy = Interception.intercept(Validator.class)
                 .on(validator)
-                .onCall(new ValidationInterceptionHandler(this)
+                .onCall(new ValidationInterceptionHandler(engine)
                     .onInvalid(context -> true))
                 .proxy();
             if (validator.getClass().isAnnotationPresent(Shared.class)) {
