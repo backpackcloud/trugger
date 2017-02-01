@@ -21,7 +21,7 @@ apply plugin: 'signing'
 
 configurations {
   project.group = "tools.devnull"
-  project.version = "5.2-SNAPSHOT"
+  project.version = "5.2"
 
   project.ext["pomFile"] = "$buildDir/${project.name}-${project.version}.pom"
 
@@ -41,7 +41,7 @@ repositories {
 dependencies {
   compile group: 'org.jboss', name: 'jboss-vfs', version: '3.1.0.Final'
 
-  testCompile group: 'tools.devnull', name: 'kodo', version: '1.0'
+  testCompile group: 'tools.devnull', name: 'kodo', version: '2.2'
   testCompile group: 'junit', name: 'junit', version: '4.11'
   testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
 }
@@ -87,7 +87,7 @@ task pom << {
       name project.name
       description project.description
 
-      url 'https://github.com/ataxexe/trugger'
+      url 'https://github.com/devnull-tools/trugger'
 
       licenses {
         license {
@@ -103,29 +103,22 @@ task pom << {
           name 'Marcelo Guimarães'
           email 'ataxexe@devnull.tools'
           organizationUrl 'http://devnull.tools'
-          url 'http://entra.la'
+          url 'http://www.unbelievableexception.com'
         }
       }
 
       scm {
-        connection 'scm:git:git@github.com:ataxexe/trugger.git'
-        url 'https://github.com/ataxexe/trugger'
+        connection 'scm:git:git@github.com:devnull-tools/trugger.git'
+        url 'https://github.com/devnull-tools/trugger'
       }
 
     }
   }.writeTo(project.pomFile)
 }
 
-task pdf(type: Exec) {
-  commandLine 'pandoc', '-S', '-s', '-o',
-      "$buildDir/trugger.pdf", '--highlight-style=kate', 'trugger.md',
-      'README.md', 'changelog.md'
-}
-
 task dist(type: Zip,
-    dependsOn: [clean, pom, jar, sourcesJar, javadocJar, test, pdf]) {
+    dependsOn: [clean, pom, jar, sourcesJar, javadocJar, test]) {
   from "$buildDir/libs"
-  from "$buildDir/trugger.pdf"
   from project.pomFile
   from "changelog.md"
   from "README.md"
