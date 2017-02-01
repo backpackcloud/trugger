@@ -1,6 +1,5 @@
 package tools.devnull.trugger;
 
-import org.mockito.stubbing.Answer;
 import tools.devnull.trugger.reflection.Reflection;
 
 import java.lang.annotation.Annotation;
@@ -15,21 +14,16 @@ import static org.mockito.Mockito.when;
  */
 public class AnnotationMock {
 
-  private static final Answer returnType(Class annotationType) {
-    return (i) -> annotationType;
-  }
-
   public static <T extends Annotation> T mockAnnotation(Class<T> annotationType) {
     T annotation = mock(annotationType);
-    when(annotation.annotationType()).then(returnType(annotationType));
+    when(annotation.annotationType()).then(invocation -> annotationType);
     List<Method> methods = Reflection.reflect().methods()
         .filter(method -> method.getDefaultValue() != null)
         .in(annotationType);
     // maps the methods with default value
-    for (Method method : methods) {
-      when(Reflection.invoke(method).in(annotation).withoutArgs())
-          .thenReturn(method.getDefaultValue());
-    }
+    methods.forEach(method ->
+        when(Reflection.invoke(method).in(annotation).withoutArgs())
+            .thenReturn(method.getDefaultValue()));
     return annotation;
   }
 
