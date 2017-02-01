@@ -53,4 +53,6 @@ public interface ValidationResult {
 
   boolean isInvalid();
 
+  boolean isValid();
+
 }

@@ -29,19 +29,32 @@ import java.util.Map;
 /**
  * @author Marcelo Guimarães
  */
-class ValidationResultImpl implements ValidationResult {
+public class ValidationResultImpl implements ValidationResult {
 
   private final Object target;
-  final Map<String, InvalidElement> invalidElements;
+  private final Map<String, InvalidElement> invalidElements;
 
-  ValidationResultImpl(Object target) {
+  public ValidationResultImpl(Object target) {
     this.target = target;
     this.invalidElements = new HashMap<>();
   }
 
+  public void addInvalidElement(InvalidElement element) {
+    this.invalidElements.put(element.name(), element);
+  }
+
+  public Map<String, InvalidElement> invalidElementsMap() {
+    return invalidElements;
+  }
+
   @Override
   public boolean isInvalid() {
-    return !invalidElements.isEmpty();
+    return !isValid();
+  }
+
+  @Override
+  public boolean isValid() {
+    return invalidElements.isEmpty();
   }
 
   @Override
