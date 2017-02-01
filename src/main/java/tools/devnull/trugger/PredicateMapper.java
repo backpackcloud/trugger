@@ -34,4 +34,12 @@ public interface PredicateMapper<T, R> {
    */
   R when(Predicate<T> condition);
 
+  /**
+   * Uses the mapped value as the default.
+   *
+   * @return a reference to the object for doing other mappings.
+   * @since 5.2
+   */
+  R byDefault();
+
 }
