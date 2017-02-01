@@ -20,18 +20,24 @@ import tools.devnull.trugger.Finder;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.element.ElementCopier;
 import tools.devnull.trugger.element.ElementFactory;
-import tools.devnull.trugger.util.registry.MapRegistry;
-import tools.devnull.trugger.util.registry.Registry;
+import tools.devnull.trugger.reflection.Execution;
 import tools.devnull.trugger.selector.ElementSelector;
 import tools.devnull.trugger.selector.ElementsSelector;
+import tools.devnull.trugger.util.registry.MapRegistry;
+import tools.devnull.trugger.util.registry.Registry;
 
 import java.lang.annotation.Annotation;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import static tools.devnull.trugger.reflection.ClassPredicates.arrayType;
 import static tools.devnull.trugger.reflection.ClassPredicates.assignableTo;
+import static tools.devnull.trugger.reflection.ClassPredicates.type;
 
 /**
  * A default implementation for ElementFactory.
@@ -59,6 +65,8 @@ public final class TruggerElementFactory implements ElementFactory {
         .to(arrayType());
     registry.register(new ListElementFinder())
         .to(assignableTo(List.class));
+    registry.register(new ExecutionElementFinder())
+        .to(type(Execution.class));
 
     finder = new TruggerElementFinder(new ObjectElementFinder(), registry);
   }
