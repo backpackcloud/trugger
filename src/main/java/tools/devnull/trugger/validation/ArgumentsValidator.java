@@ -17,35 +17,34 @@
 
 package tools.devnull.trugger.validation;
 
-import java.lang.annotation.Annotation;
+import tools.devnull.trugger.reflection.Execution;
+
 import java.lang.reflect.Executable;
-import java.lang.reflect.Parameter;
 
 /**
- * A class to help validating arguments of methods and constructors using a
- * {@link ValidatorFactory}.
+ * A class to help validating arguments of methods and constructors.
  *
  * @author Marcelo Guimarães
  * @since 5.1
  */
 public class ArgumentsValidator {
 
-  private final ValidatorFactory factory;
+  private final ValidationEngine engine;
 
   /**
    * Creates a new instance using the default factory.
    */
   public ArgumentsValidator() {
-    this(Validation.factory());
+    this(Validation.engine());
   }
 
   /**
    * Creates a new instance using the given validator factory.
    *
-   * @param factory the factory to create validators.
+   * @param engine the engine to use
    */
-  public ArgumentsValidator(ValidatorFactory factory) {
-    this.factory = factory;
+  public ArgumentsValidator(ValidationEngine engine) {
+    this.engine = engine;
   }
 
   /**
@@ -58,18 +57,20 @@ public class ArgumentsValidator {
    * parameters has constraints.
    */
   public boolean isValid(Executable executable, Object... args) {
-    int i = 0;
-    Validator validator;
-    for (Parameter parameter : executable.getParameters()) {
-      for (Annotation annotation : parameter.getAnnotations()) {
-        validator = factory.create(annotation);
-        if (validator != null && !validator.isValid(args[i])) {
-          return false;
-        }
-      }
-      i++;
-    }
-    return true;
+    return validate(executable, args).isValid();
+  }
+
+  /**
+   * Validates the given execution of an {@link Executable}.
+   *
+   * @param executable the executable object (a method or a constructor)
+   * @param args       the actual args that will be passed to the given executable
+   * @return the validation result
+   * @see Execution
+   * @since 5.2
+   */
+  public ValidationResult validate(Executable executable, Object... args) {
+    return engine.validate(new Execution(executable, args));
   }
 
 }

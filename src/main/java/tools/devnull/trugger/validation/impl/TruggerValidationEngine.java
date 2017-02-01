@@ -91,7 +91,7 @@ public class TruggerValidationEngine implements ValidationEngine {
         Class<? extends Annotation> type = annotation.annotationType();
         if (type.isAnnotationPresent(MergeElements.class)) {
           engine = new MergeValidationEngine(
-              this, result.invalidElements, element, filter, target
+              this, result.invalidElementsMap(), element, filter, target
           );
         } else {
           engine = this;
@@ -112,7 +112,7 @@ public class TruggerValidationEngine implements ValidationEngine {
         }
       }
       if (!valid) {
-        result.invalidElements.put(invalidElement.name(), invalidElement);
+        result.addInvalidElement(invalidElement);
       }
     }
     return result;

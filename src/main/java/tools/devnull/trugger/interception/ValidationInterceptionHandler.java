@@ -18,7 +18,9 @@
 package tools.devnull.trugger.interception;
 
 import tools.devnull.trugger.validation.ArgumentsValidator;
+import tools.devnull.trugger.validation.ValidationEngine;
 import tools.devnull.trugger.validation.ValidatorFactory;
+import tools.devnull.trugger.validation.impl.TruggerValidationEngine;
 import tools.devnull.trugger.validation.impl.TruggerValidatorFactory;
 
 /**
@@ -29,7 +31,7 @@ import tools.devnull.trugger.validation.impl.TruggerValidatorFactory;
  */
 public final class ValidationInterceptionHandler implements InterceptionHandler {
 
-  private final ValidatorFactory factory;
+  private final ValidationEngine engine;
   private final InterceptionHandler validHandler;
   private final InterceptionHandler inValidHandler;
   private final ArgumentsValidator argumentsValidator;
@@ -43,7 +45,7 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    * validator factory.
    */
   public ValidationInterceptionHandler() {
-    this(new TruggerValidatorFactory());
+    this(new TruggerValidationEngine(new TruggerValidatorFactory()));
   }
 
   /**
@@ -51,22 +53,22 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    * are valid and throws a <code>IllegalArgumentException</code> in case of
    * any invalid argument.
    *
-   * @param factory the factory to instantiate validators
+   * @param engine the engine to use
    */
-  public ValidationInterceptionHandler(ValidatorFactory factory) {
-    this.factory = factory;
-    this.argumentsValidator = new ArgumentsValidator(factory);
-    this.validHandler = (context) -> context.invoke();
+  public ValidationInterceptionHandler(ValidationEngine engine) {
+    this.engine = engine;
+    this.argumentsValidator = new ArgumentsValidator(engine);
+    this.validHandler = InterceptionContext::invoke;
     this.inValidHandler = (context) -> {
       throw new IllegalArgumentException();
     };
   }
 
-  private ValidationInterceptionHandler(ValidatorFactory factory,
+  private ValidationInterceptionHandler(ValidationEngine engine,
                                         ArgumentsValidator argumentsValidator,
                                         InterceptionHandler validHandler,
                                         InterceptionHandler inValidHandler) {
-    this.factory = factory;
+    this.engine = engine;
     this.argumentsValidator = argumentsValidator;
     this.validHandler = validHandler;
     this.inValidHandler = inValidHandler;
@@ -80,7 +82,7 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    */
   public ValidationInterceptionHandler onValid(InterceptionHandler handler) {
     return new ValidationInterceptionHandler(
-        factory, argumentsValidator, handler, inValidHandler);
+        engine, argumentsValidator, handler, inValidHandler);
   }
 
   /**
@@ -91,14 +93,14 @@ public final class ValidationInterceptionHandler implements InterceptionHandler 
    */
   public ValidationInterceptionHandler onInvalid(InterceptionHandler handler) {
     return new ValidationInterceptionHandler(
-        factory, argumentsValidator, validHandler, handler);
+        engine, argumentsValidator, validHandler, handler);
   }
 
   @Override
   public Object intercept(InterceptionContext context) throws Throwable {
     boolean valid = true;
     if (context.target() != null) {
-      valid &= argumentsValidator.isValid(context.targetMethod(), context.args());
+      valid = argumentsValidator.isValid(context.targetMethod(), context.args());
     }
     valid &= argumentsValidator.isValid(context.method(), context.args());
     return valid ? validHandler.intercept(context) :
