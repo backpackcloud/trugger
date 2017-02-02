@@ -3,3 +3,4 @@ trugger.iws
 .idea
 build
 gradle.properties
+out
