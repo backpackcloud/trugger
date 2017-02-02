@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 5.2
+
+### Major Changes
+
+- Added the `byDefaut` method in `PredicateMapper`
+- Added an element finder for constructor and methods invocation
+- Argument validation can now use references as object validation
+
+### Minor Changes
+
+- Code improvements
+- Added the `isValid` method in `ValidationResult`
+
 ## Version 5.1
 
 This release marks the reborn of **Validation** module in a different way. The
