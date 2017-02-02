@@ -18,7 +18,7 @@ package tools.devnull.trugger.element;
 
 import org.junit.Before;
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 import tools.devnull.trugger.TruggerException;
 
@@ -26,10 +26,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import static tools.devnull.kodo.Spec.*;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static tools.devnull.trugger.element.ElementPredicates.*;
+import static tools.devnull.kodo.Expectation.it;
+import static tools.devnull.kodo.Expectation.to;
+import static tools.devnull.trugger.element.ElementPredicates.readable;
+import static tools.devnull.trugger.element.ElementPredicates.specific;
+import static tools.devnull.trugger.element.ElementPredicates.writable;
 import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
@@ -65,12 +69,13 @@ public class ResultSetElementTest implements ElementSpecs {
 
   @Test
   public void testElements() {
-    TestScenario.given(elements().in(ResultSet.class))
-        .it(should(be(EMPTY)));
+    assertTrue(elements().in(ResultSet.class).isEmpty());
 
-    TestScenario.given(elements().in(resultSet))
-        .it(should(have(elementsNamed("name", "nickname", "age"))))
-        .each(should(be(specific())));
+    Spec.given(elements().in(resultSet))
+        .expect(it(), to().have(elementsNamed("name", "nickname", "age")))
+
+        .each(Element.class, spec -> spec
+            .expect(it(), to().be(specific())));
   }
 
   @Test(expected = TruggerException.class)
@@ -82,40 +87,40 @@ public class ResultSetElementTest implements ElementSpecs {
 
   @Test
   public void testNamedElement() throws SQLException {
-    TestScenario.given(element("name").in(ResultSet.class))
-        .it(should(notBe(specific())));
+    Spec.given(element("name").in(ResultSet.class))
+        .expect(it(), to().not().be(specific()));
 
-    TestScenario.given(element("name").in(resultSet))
-        .the(declaringClass(), should(be(ResultSet.class)))
-        .it(should(be(readable())))
-        .it(should(notBe(writable())))
-        .the(value(), should(be("John")))
+    Spec.given(element("name").in(resultSet))
+        .expect(Element::declaringClass, to().be(ResultSet.class))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().not().be(writable()))
+        .expect(Element::value, to().be("John"))
 
         .when(retrievingNextRow())
 
-        .the(value(), should(be("Justin")))
-        .then(attempToChangeValue(), should(raise(HandlingException.class)))
-        .then(gettingValueIn(new Object()), should(raise(HandlingException.class)))
-        .then(gettingValue(), should(raise(HandlingException.class)));
+        .expect(Element::value, to().be("Justin"))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class))
+        .expect(gettingValueIn(new Object()), to().raise(HandlingException.class))
+        .expect(gettingValue(), to().raise(HandlingException.class));
   }
 
   @Test
   public void testIndexedElement() throws SQLException {
-    TestScenario.given(element("1").in(ResultSet.class))
-        .it(should(notBe(specific())));
+    Spec.given(element("1").in(ResultSet.class))
+        .expect(it(), to().not().be(specific()));
 
-    TestScenario.given(element("1").in(resultSet))
-        .the(declaringClass(), should(be(ResultSet.class)))
-        .it(should(be(readable())))
-        .it(should(notBe(writable())))
-        .the(value(), should(be("John")))
+    Spec.given(element("1").in(resultSet))
+        .expect(Element::declaringClass, to().be(ResultSet.class))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().not().be(writable()))
+        .expect(Element::value, to().be("John"))
 
         .when(retrievingNextRow())
 
-        .the(value(), should(be("Justin")))
-        .then(attempToChangeValue(), should(raise(HandlingException.class)))
-        .then(gettingValueIn(new Object()), should(raise(HandlingException.class)))
-        .then(gettingValue(), should(raise(HandlingException.class)));
+        .expect(Element::value, to().be("Justin"))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class))
+        .expect(gettingValueIn(new Object()), to().raise(HandlingException.class))
+        .expect(gettingValue(), to().raise(HandlingException.class));
   }
 
   private Runnable retrievingNextRow() {

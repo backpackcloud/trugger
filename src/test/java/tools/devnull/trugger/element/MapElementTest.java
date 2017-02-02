@@ -17,14 +17,17 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Expectation;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static tools.devnull.kodo.Spec.*;
+import static org.junit.Assert.assertTrue;
+import static tools.devnull.kodo.Expectation.it;
+import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.TruggerTest.SIZE;
 import static tools.devnull.trugger.element.ElementPredicates.readable;
 import static tools.devnull.trugger.element.ElementPredicates.writable;
@@ -41,23 +44,22 @@ public class MapElementTest implements ElementSpecs {
     Map<String, Object> map = new HashMap<>();
     map.put("key", "some value");
 
-    TestScenario.given(element("key").in(map))
-        .it(should(be(readable())))
-        .it(should(be(writable())))
-        .the(type(), should(be(Object.class)))
-        .the(declaringClass(), should(be(Map.class)))
-        .the(value(), should(be("some value")))
+    Spec.given(element("key").in(map))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+        .expect(Element::type, to().be(Object.class))
+        .expect(Element::declaringClass, to().be(Map.class))
+        .expect(Element::value, to().be("some value"))
         .when(valueIsSetTo("other value"))
-        .the(value(), should(be("other value")));
+        .expect(Element::value, to().be("other value"));
 
     map.put("other key", "other value");
 
-    TestScenario.given(elements().in(map))
-        .the(SIZE, should(be(2)))
-        .it(should(have(elementsNamed("key", "other key"))));
+    Spec.given(elements().in(map))
+        .expect(SIZE, to().be(2))
+        .expect(it(), to().have(elementsNamed("key", "other key")));
 
-    TestScenario.given(elements().in(Map.class))
-        .it(should(be(EMPTY)));
+    assertTrue(elements().in(Map.class).isEmpty());
   }
 
   @Test
@@ -66,21 +68,21 @@ public class MapElementTest implements ElementSpecs {
     map.put("key", "value");
     map = Collections.unmodifiableMap(map);
 
-    TestScenario.given(element("none").in(map))
-        .then(attempToGetValue(), should(raise(HandlingException.class)))
-        .then(attempToChangeValue(), should(raise(HandlingException.class)))
-        .then(settingValueTo("value", "target"), should(raise(IllegalArgumentException.class)));
+    Spec.given(element("none").in(map))
+        .expect(attempToGetValue(), to().raise(HandlingException.class))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class))
+        .expect(settingValueTo("value", "target"), to().raise(IllegalArgumentException.class));
   }
 
   @Test
   public void testNonSpecificElements() {
     Map<String, String> map = new HashMap<>();
 
-    TestScenario.given(element("key").in(Map.class))
-        .it(should(notBe(NULL)))
-        .then(attempToGetValue(), should(raise(HandlingException.class)))
+    Spec.given(element("key").in(Map.class))
+        .expect(it(), to().not().be(null))
+        .expect(attempToGetValue(), to().raise(HandlingException.class))
         .when(valueIsSetTo("value", map))
-        .then(map.get("key"), should(be("value")));
+        .expect(Expectation.value(map.get("key")), to().be("value"));
   }
 
 

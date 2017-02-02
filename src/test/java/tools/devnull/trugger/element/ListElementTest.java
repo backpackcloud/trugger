@@ -19,12 +19,12 @@ package tools.devnull.trugger.element;
 
 import org.junit.Before;
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static tools.devnull.kodo.Spec.*;
+import static tools.devnull.kodo.Expectation.*;
 import static tools.devnull.trugger.TruggerTest.SIZE;
 import static tools.devnull.trugger.element.ElementPredicates.readable;
 import static tools.devnull.trugger.element.ElementPredicates.writable;
@@ -48,54 +48,54 @@ public class ListElementTest implements ElementSpecs {
 
   @Test
   public void testFindingAll() {
-    TestScenario.given(elements().in(ints))
-        .the(SIZE, should(be(4)))
-        .the(elementAt(0), should(be(0)))
-        .the(elementAt(1), should(be(10)))
-        .the(elementAt(2), should(be(12)))
-        .the(elementAt(3), should(be(33)));
+    Spec.given(elements().in(ints))
+        .expect(SIZE, to().be(4))
+        .expect(elementAt(0), to().be(0))
+        .expect(elementAt(1), to().be(10))
+        .expect(elementAt(2), to().be(12))
+        .expect(elementAt(3), to().be(33));
   }
 
   @Test
   public void testIndexElements() {
-    TestScenario.given(element("0").in(ints))
-        .it(should(be(readable())))
-        .it(should(be(writable())))
-        .the(type(), should(be(Object.class)))
-        .the(declaringClass(), should(be(List.class)))
-        .the(value(), should(be(0)))
+    Spec.given(element("0").in(ints))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+        .expect(Element::type, to().be(Object.class))
+        .expect(Element::declaringClass, to().be(List.class))
+        .expect(Element::value, to().be(0))
 
         .when(valueIsSetTo(15))
-        .the(value(), should(be(15)));
+        .expect(Element::value, to().be(15));
 
-    TestScenario.given(element("2").in(ints))
-        .the(type(), should(be(Object.class)))
-        .the(declaringClass(), should(be(List.class)))
-        .the(value(), should(be(12)));
+    Spec.given(element("2").in(ints))
+        .expect(Element::type, to().be(Object.class))
+        .expect(Element::declaringClass, to().be(List.class))
+        .expect(Element::value, to().be(12));
 
-    TestScenario.given(element("ints.1").in(this))
-        .the(type(), should(be(Object.class)))
-        .the(declaringClass(), should(be(ListElementTest.class)))
-        .the(value(), should(be(10)));
+    Spec.given(element("ints.1").in(this))
+        .expect(Element::type, to().be(Object.class))
+        .expect(Element::declaringClass, to().be(ListElementTest.class))
+        .expect(Element::value, to().be(10));
 
-    TestScenario.given(element("0").in(objects))
-        .the(type(), should(be(Object.class)))
-        .the(declaringClass(), should(be(List.class)))
-        .the(valueOf("name"), should(be("name")))
-        .the(valueOf("lastName"), should(be("lastname")));
+    Spec.given(element("0").in(objects))
+        .expect(Element::type, to().be(Object.class))
+        .expect(Element::declaringClass, to().be(List.class))
+        .expect(valueOf("name"), to().be("name"))
+        .expect(valueOf("lastName"), to().be("lastname"));
   }
 
   @Test
   public void testReferencedElements() {
-    TestScenario.given(element("first").in(ints))
-        .the(value(), should(be(0)));
+    Spec.given(element("first").in(ints))
+        .expect(Element::value, to().be(0));
 
-    TestScenario.given(element("last").in(ints))
-        .the(value(), should(be(33)));
+    Spec.given(element("last").in(ints))
+        .expect(Element::value, to().be(33));
 
     Object lastElementValue = element("last").in(objects).value();
-    TestScenario.given(element("first").in(objects))
-        .the(value(), should(be(lastElementValue)));
+    Spec.given(element("first").in(objects))
+        .expect(Element::value, to().be(lastElementValue));
   }
 
 }

@@ -18,7 +18,7 @@ package tools.devnull.trugger.element;
 
 import org.junit.Before;
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 
 import java.util.Properties;
 import java.util.function.Consumer;
@@ -26,7 +26,7 @@ import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static tools.devnull.kodo.Spec.*;
+import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.ElementPredicates.named;
 import static tools.devnull.trugger.element.Elements.copy;
 import static tools.devnull.trugger.element.Elements.elements;
@@ -99,29 +99,42 @@ public class ElementCopyTest {
 
   @Test
   public void testCopyToSame() {
-    TestScenario.given(new TestObject("Marcelo", "Guimaraes"))
+    Spec.given(new TestObject("Marcelo", "Guimaraes"))
         .when(weightIsSetTo(30.4)
             .andThen(nickNameIsSetTo("Nick"))
             .andThen(elementsAreCopiedFrom(testObject)))
-        .the(age(), should(be(testObject.getAge())).and(should(be(23))))
-        .the(height(), should(be(testObject.getHeight())).and(should(be(1.9))))
-        .the(weight(), should(be(testObject.getWeight())).and(should(be(80.2))))
-        .the(nickName(), should(notBe(testObject.getNickName()))
-            .and(should(be("Nick"))));
+
+        .expect(age(), to().be(testObject.getAge()))
+        .expect(age(), to().be(23))
+
+        .expect(height(), to().be(testObject.getHeight()))
+        .expect(height(), to().be(1.9))
+
+        .expect(weight(), to().be(testObject.getWeight()))
+        .expect(weight(), to().be(80.2))
+
+        .expect(nickName(), to().not().be(testObject.getNickName()))
+        .expect(nickName(), to().be("Nick"));
   }
 
   @Test
   public void testFilterCopy() {
-    TestScenario.given(new TestObject("Marcelo", "Guimaraes"))
+    Spec.given(new TestObject("Marcelo", "Guimaraes"))
         .when(weightIsSetTo(30.4)
             .andThen(nickNameIsSetTo("Nick"))
             .andThen(ageIsSetTo(25))
             .andThen(elementsButAgeAreCopiedFrom(testObject)))
-        .the(age(), should(notBe(testObject.getAge())).and(should(be(25))))
-        .the(height(), should(be(testObject.getHeight())).and(should(be(1.9))))
-        .the(weight(), should(be(testObject.getWeight())).and(should(be(80.2))))
-        .the(nickName(), should(notBe(testObject.getNickName()))
-            .and(should(be("Nick"))));
+        .expect(age(), to().not().be(testObject.getAge()))
+        .expect(age(), to().be(25))
+
+        .expect(height(), to().be(testObject.getHeight()))
+        .expect(height(), to().be(1.9))
+
+        .expect(weight(), to().be(testObject.getWeight()))
+        .expect(weight(), to().be(80.2))
+
+        .expect(nickName(), to().not().be(testObject.getNickName()))
+        .expect(nickName(), to().be("Nick"));
   }
 
   private static class ToStringTransformer
@@ -142,38 +155,38 @@ public class ElementCopyTest {
     Function<OtherTestObject, Object> weight = obj -> obj.getWeight();
     Function<OtherTestObject, Object> nickName = obj -> obj.getNickName();
 
-    TestScenario.given(new OtherTestObject())
+    Spec.given(new OtherTestObject())
         .when(nickNameIsChanged
             .andThen(weightIsChanged)
             .andThen(elementsAreCopiedFromTestObject))
 
-        .the(weight, should(be(testObject.getWeight())))
-        .the(nickName, should(be(testObject.getNickName())));
+        .expect(weight, to().be(testObject.getWeight()))
+        .expect(nickName, to().be(testObject.getNickName()));
 
-    TestScenario.given(new Properties())
+    Spec.given(new Properties())
         .when(props -> copy()
             .from(testObject)
             .notNull()
             .applying(new ToStringTransformer())
             .to(props))
-        .the(property("age"), should(be("23")))
-        .the(property("nickName"), should(be(NULL)))
-        .the(property("name"), should(be("Marcelo")))
-        .the(property("lastName"), should(be("Guimaraes")))
-        .the(property("height"), should(be("1.9")))
-        .the(property("weight"), should(be("80.2")));
+        .expect(property("age"), to().be("23"))
+        .expect(property("nickName"), to().be(null))
+        .expect(property("name"), to().be("Marcelo"))
+        .expect(property("lastName"), to().be("Guimaraes"))
+        .expect(property("height"), to().be("1.9"))
+        .expect(property("weight"), to().be("80.2"));
   }
 
   @Test
   public void testCopyWithSelector() {
-    TestScenario.given(new TestObject("John", "Smith"))
+    Spec.given(new TestObject("John", "Smith"))
         .when(o -> copy(elements().filter(e -> false)).from(testObject).to(o))
-        .the(name(), should(be("John")))
-        .the(lastName(), should(be("Smith")))
-        .the(nickName(), should(be(NULL)))
-        .the(age(), should(be(0)))
-        .the(height(), should(be(0.0)))
-        .the(weight(), should(be(0.0)));
+        .expect(name(), to().be("John"))
+        .expect(lastName(), to().be("Smith"))
+        .expect(nickName(), to().be(null))
+        .expect(age(), to().be(0))
+        .expect(height(), to().be(0.0))
+        .expect(weight(), to().be(0.0));
   }
 
   @Test

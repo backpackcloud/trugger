@@ -19,12 +19,13 @@ package tools.devnull.trugger.element;
 
 import org.junit.Before;
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 
 import java.util.List;
 import java.util.function.Function;
 
-import static tools.devnull.kodo.Spec.*;
+import static tools.devnull.kodo.Expectation.it;
+import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.ElementPredicates.readable;
 import static tools.devnull.trugger.element.ElementPredicates.writable;
 import static tools.devnull.trugger.element.Elements.element;
@@ -58,50 +59,51 @@ public class ArrayElementTest implements ElementSpecs {
 
   @Test
   public void testFindingAll() {
-    TestScenario.given(elements().in(ints))
-        .the(List::size, should(be(4)))
-        .the(first(), should(be(0)))
-        .the(next(), should(be(10)))
-        .the(next(), should(be(12)))
-        .the(next(), should(be(33)));
+    Spec.given(elements().in(ints))
+        .expect(List::size, to().be(4))
+        .expect(first(), to().be(0))
+        .expect(next(), to().be(10))
+        .expect(next(), to().be(12))
+        .expect(next(), to().be(33));
   }
 
   @Test
   public void testIndexElements() {
-    TestScenario.given(element("0").in(ints))
-        .thenIt(should(be(readable())))
-        .thenIt(should(be(writable())))
-        .the(type(), should(be(int.class)))
-        .the(declaringClass(), should(be(int[].class)))
-        .the(value(), should(be(0)))
+    Spec.given(element("0").in(ints))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+
+        .expect(Element::type, to().be(int.class))
+        .expect(Element::declaringClass, to().be(int[].class))
+        .expect(Element::value, to().be(0))
 
         .when(valueIsSetTo(15))
-        .the(value(), should(be(15)));
+        .expect(Element::value, to().be(15));
 
-    TestScenario.given(element("ints.1").in(this))
-        .thenIt(should(be(readable())))
-        .thenIt(should(be(writable())))
-        .the(type(), should(be(int.class)))
-        .the(declaringClass(), should(be(ArrayElementTest.class)))
-        .the(value(), should(be(10)))
+    Spec.given(element("ints.1").in(this))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+        .expect(Element::type, to().be(int.class))
+        .expect(Element::declaringClass, to().be(ArrayElementTest.class))
+        .expect(Element::value, to().be(10))
 
         .when(valueIsSetTo(15))
-        .the(value(), should(be(15)));
+        .expect(Element::value, to().be(15));
 
-    TestScenario.given(element("0").in(objects))
-        .thenIt(should(be(readable())))
-        .thenIt(should(be(writable())))
-        .the(type(), should(be(TestObject.class)))
-        .the(declaringClass(), should(be(TestObject[].class)));
+    Spec.given(element("0").in(objects))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+        .expect(Element::type, to().be(TestObject.class))
+        .expect(Element::declaringClass, to().be(TestObject[].class));
   }
 
   @Test
   public void testReferencedElements() {
-    TestScenario.given(element("first").in(ints))
-        .the(value(), should(be(0)));
+    Spec.given(element("first").in(ints))
+        .expect(Element::value, to().be(0));
 
-    TestScenario.given(element("last").in(ints))
-        .the(value(), should(be(33)));
+    Spec.given(element("last").in(ints))
+        .expect(Element::value, to().be(33));
   }
 
 }

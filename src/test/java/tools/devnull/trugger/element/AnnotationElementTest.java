@@ -17,13 +17,17 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
+import java.util.List;
 
-import static tools.devnull.kodo.Spec.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static tools.devnull.kodo.Expectation.*;
 import static org.mockito.Mockito.when;
 import static tools.devnull.trugger.AnnotationMock.mockAnnotation;
 import static tools.devnull.trugger.element.ElementPredicates.*;
@@ -46,48 +50,48 @@ public class AnnotationElementTest implements ElementSpecs {
 
   @Test
   public void testElementSpecs() {
-    TestScenario.given(element("name").in(annotation()))
-        .the(name(), should(be("name")))
-        .the(value(), should(be("some name")))
-        .the(stringRepresentation(), should(be("name : java.lang.String")))
-        .thenIt(should(be(NOT_NULL)))
-        .and(should(notBe(writable())))
-        .and(should(be(readable())))
-        .then(attempToChangeValue(), should(raise(HandlingException.class)));
+    Spec.given(element("name").in(annotation()))
+        .expect(Element::name, to().be("name"))
+        .expect(Element::value, to().be("some name"))
+        .expect(stringRepresentation(), to().be("name : java.lang.String"))
+        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().be(writable()))
+        .expect(it(), to().be(readable()))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    TestScenario.given(element("name").in(TestAnnotation.class))
-        .it(should(be(NOT_NULL)))
-        .and(should(notBe(writable())))
-        .and(should(be(readable())))
-        .then(attempToGetValue(), should(raise(NonSpecificElementException.class)));
+    Spec.given(element("name").in(TestAnnotation.class))
+        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().be(writable()))
+        .expect(it(), to().be(readable()))
 
-    TestScenario.given(element("bool").in(annotation()))
-        .the(type(), should(be(boolean.class)))
-        .the(value(), should(be(FALSE)))
-        .the(declaringClass(), should(be(TestAnnotation.class)))
-        .the(name(), should(be("bool")))
-        .it(should(be(specific())));
+        .expect(attempToGetValue(), to().raise(NonSpecificElementException.class));
+
+    Spec.given(element("bool").in(annotation()))
+        .expect(Element::type, to().be(boolean.class))
+        .expect(Element::value, to().be(false))
+        .expect(Element::declaringClass, to().be(TestAnnotation.class))
+        .expect(Element::name, to().be("bool"))
+        .expect(it(), to().be(specific()));
   }
 
   @Test
   public void testElements() {
-    TestScenario.given(elements().in(annotation()))
-        .thenIt(should(notBe(EMPTY)))
-        .each(should(notBe(writable())))
-        .each(should(be(readable())))
-        .each(should(have(aValue())));
+    List<Element> elements = elements().in(annotation());
+    assertFalse(elements.isEmpty());
+
+    for (Element element : elements) {
+      Spec.given(element)
+          .expect(it(), to().not().be(writable()))
+          .expect(it(), to().be(readable()))
+          .expect(it(), to().have(aValue()));
+    }
   }
 
   @Test
   public void testNoElementFound() {
-    TestScenario.given(element("non_existent").in(annotation()))
-        .it(should(be(NULL)));
-
-    TestScenario.given(element("non_existent").in(TestAnnotation.class))
-        .thenIt(should(be(NULL)));
-
-    TestScenario.given(elements().in(Documented.class))
-        .thenIt(should(be(EMPTY)));
+    assertNull(element("non_existent").in(annotation()));
+    assertNull(element("non_existent").in(TestAnnotation.class));
+    assertTrue(elements().in(Documented.class).isEmpty());
   }
 
   @Test
@@ -115,8 +119,8 @@ public class AnnotationElementTest implements ElementSpecs {
       }
     };
 
-    TestScenario.given(element("name").in(annotation))
-        .then(attempToGetValue(), should(raise(HandlingException.class)));
+    Spec.given(element("name").in(annotation))
+        .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 
 }

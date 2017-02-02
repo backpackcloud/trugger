@@ -17,12 +17,11 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 
 import java.util.Map;
 
-import static tools.devnull.kodo.Spec.raise;
-import static tools.devnull.kodo.Spec.should;
+import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.Elements.element;
 
 /**
@@ -35,14 +34,14 @@ public class NonSpecificElementTest implements ElementSpecs {
 
   @Test
   public void testRead() throws Exception {
-    TestScenario.given(nonSpecificElement)
-        .then(attempToGetValue(), should(raise(NonSpecificElementException.class)));
+    Spec.given(nonSpecificElement)
+        .expect(attempToGetValue(), to().raise(NonSpecificElementException.class));
   }
 
   @Test
   public void testWrite() throws Exception {
-    TestScenario.given(nonSpecificElement)
-        .then(attempToChangeValue(), should(raise(NonSpecificElementException.class)));
+    Spec.given(nonSpecificElement)
+        .expect(attempToChangeValue(), to().raise(NonSpecificElementException.class));
   }
 
 }

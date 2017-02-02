@@ -18,16 +18,17 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
 import tools.devnull.trugger.Finder;
 import tools.devnull.trugger.Result;
 import tools.devnull.trugger.reflection.ClassPredicates;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
-import static tools.devnull.kodo.Spec.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
@@ -54,19 +55,16 @@ public class ElementFinderTest {
     private String field;
   }
 
-  private Consumer<? super Class<Elements>> testFinderIsRegistered() {
-    return (elements) -> Elements.registry().register(new MyFinder())
-        .to(ClassPredicates.type(TestFinder.class));
-  }
-
   @Test
   public void testRegistry() {
-    TestScenario.given(Elements.class)
-        .the(element("field").in(TestFinder.class), should(notBe(NULL)))
-        .the(elements().in(TestFinder.class), should(notBe(EMPTY)))
-        .when(testFinderIsRegistered())
-        .the(element("field").in(TestFinder.class), should(be(NULL)))
-        .the(elements().in(TestFinder.class), should(be(EMPTY)));
+    assertNotNull(element("field").in(TestFinder.class));
+    assertFalse(elements().in(TestFinder.class).isEmpty());
+
+    Elements.registry().register(new MyFinder())
+        .to(ClassPredicates.type(TestFinder.class));
+
+    assertNull(element("field").in(TestFinder.class));
+    assertTrue(elements().in(TestFinder.class).isEmpty());
   }
 
 }

@@ -18,11 +18,11 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.Flag;
 import tools.devnull.trugger.HandlingException;
 
-import static tools.devnull.kodo.Spec.*;
+import static tools.devnull.kodo.Expectation.*;
 import static tools.devnull.trugger.element.ElementPredicates.*;
 import static tools.devnull.trugger.element.Elements.element;
 
@@ -44,15 +44,15 @@ public class ObjectElementTest implements ElementSpecs {
 
   @Test
   public void testHandlingExceptions() {
-    TestScenario.given(element("name").in(new HandlingTestObject()))
-        .it(should(notBe(readable())))
-        .then(attempToGetValue(), should(raise(UnreadableElementException.class)))
-        .and(attempToChangeValue(), should(raise(HandlingException.class)));
+    Spec.given(element("name").in(new HandlingTestObject()))
+        .expect(it(), to().not().be(readable()))
+        .expect(attempToGetValue(), to().raise(UnreadableElementException.class))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    TestScenario.given(element("info").in(new HandlingTestObject()))
-        .it(should(notBe(writable())))
-        .then(attempToChangeValue(), should(raise(UnwritableElementException.class)))
-        .and(attempToChangeValue(), should(raise(HandlingException.class)));
+    Spec.given(element("info").in(new HandlingTestObject()))
+        .expect(it(), to().not().be(writable()))
+        .expect(attempToChangeValue(), to().raise(UnwritableElementException.class))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class));
   }
 
   class AnnotationPrecedenceTest {
@@ -91,10 +91,10 @@ public class ObjectElementTest implements ElementSpecs {
 
   @Test
   public void testAnnotationPrecedence() {
-    TestScenario.given(AnnotationPrecedenceTest.class)
-        .the(elementNamed("name"), should(be(annotatedWith(Flag.class))))
-        .the(elementNamed("phone"), should(be(annotatedWith(Flag.class))))
-        .the(elementNamed("address"), should(be(annotatedWith(Flag.class))));
+    Spec.given(AnnotationPrecedenceTest.class)
+        .expect(elementNamed("name"), to().be(annotatedWith(Flag.class)))
+        .expect(elementNamed("phone"), to().be(annotatedWith(Flag.class)))
+        .expect(elementNamed("address"), to().be(annotatedWith(Flag.class)));
   }
 
   class TypeTest {
@@ -119,10 +119,10 @@ public class ObjectElementTest implements ElementSpecs {
 
   @Test
   public void testType() {
-    TestScenario.given(TypeTest.class)
-        .the(elementNamed("name"), should(be(ofType(String.class))))
-        .the(elementNamed("phone"), should(be(ofType(String.class))))
-        .the(elementNamed("address"), should(be(ofType(String.class))));
+    Spec.given(TypeTest.class)
+        .expect(elementNamed("name"), to().be(ofType(String.class)))
+        .expect(elementNamed("phone"), to().be(ofType(String.class)))
+        .expect(elementNamed("address"), to().be(ofType(String.class)));
   }
 
 }

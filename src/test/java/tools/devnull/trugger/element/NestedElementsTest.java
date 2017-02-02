@@ -18,12 +18,13 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 
 import java.util.Date;
 import java.util.Properties;
+import java.util.function.Function;
 
-import static tools.devnull.kodo.Spec.*;
+import static tools.devnull.kodo.Expectation.*;
 import static tools.devnull.trugger.element.ElementPredicates.*;
 import static tools.devnull.trugger.element.Elements.element;
 
@@ -59,26 +60,26 @@ public class NestedElementsTest implements ElementSpecs {
 
   @Test
   public void testNestedElementCreating() {
-    TestScenario.given(element("customer.phone").in(Ticket.class))
-        .it(should(notBe(NULL)))
-        .it(should(be(readable())))
-        .it(should(be(writable())))
-        .it(should(notBe(specific())));
+    Spec.given(element("customer.phone").in(Ticket.class))
+        .expect(it(), to().not().be(null))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+        .expect(it(), to().not().be(specific()));
 
-    TestScenario.given(element("customer.credential").in(Ticket.class))
-        .it(should(be(NULL)));
+    Spec.given(element("customer.credential").in(Ticket.class))
+        .expect(it(), to().be(null));
 
-    TestScenario.given(element("customer.info").in(new Ticket()))
-        .it(should(notBe(NULL)))
-        .it(should(notBe(readable())))
-        .it(should(be(writable())))
-        .it(should(notBe(specific())));
+    Spec.given(element("customer.info").in(new Ticket()))
+        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().be(readable()))
+        .expect(it(), to().be(writable()))
+        .expect(it(), to().not().be(specific()));
 
-    TestScenario.given(element("customer.info.properties").in(new Ticket()))
-        .it(should(notBe(NULL)))
-        .it(should(notBe(readable())))
-        .it(should(notBe(writable())))
-        .it(should(notBe(specific())));
+    Spec.given(element("customer.info.properties").in(new Ticket()))
+        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().be(readable()))
+        .expect(it(), to().not().be(writable()))
+        .expect(it(), to().not().be(specific()));
   }
 
   @Test
@@ -87,14 +88,14 @@ public class NestedElementsTest implements ElementSpecs {
     ticket.customer = new Customer();
     ticket.customer.address = new Address();
 
-    TestScenario.given(element("customer.address.line").in(ticket))
-        .it(should(be(readable())))
-        .it(should(be(writable())))
-        .it(should(be(specific())))
-        .the(value(), should(be(NULL)))
+    Spec.given(element("customer.address.line").in(ticket))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+        .expect(it(), to().be(specific()))
+        .expect((Function<? super Element, Object>) Element::value, to().equal(null))
 
         .when(valueIsSetTo("Address line"))
-        .the(value(), should(be("Address line")));
+        .expect(Element::value, to().be("Address line"));
   }
 
 }

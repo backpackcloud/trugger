@@ -41,24 +41,8 @@ public interface ElementSpecs {
     return (element) -> element.value();
   }
 
-  default Function<Element, ?> type() {
-    return (element) -> element.type();
-  }
-
-  default Function<Element, ?> name() {
-    return (element) -> element.name();
-  }
-
-  default Function<Element, ?> value() {
-    return (element) -> element.value();
-  }
-
   default Function<Element, ?> valueIn(Object target) {
     return (element) -> element.in(target).value();
-  }
-
-  default Function<Element, ?> declaringClass() {
-    return (element) -> element.declaringClass();
   }
 
   default Function<Element, ?> valueOf(String elementName) {

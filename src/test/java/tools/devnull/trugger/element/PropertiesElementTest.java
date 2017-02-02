@@ -17,12 +17,15 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Expectation;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
 import java.util.Properties;
 
-import static tools.devnull.kodo.Spec.*;
+import static junit.framework.TestCase.assertTrue;
+import static tools.devnull.kodo.Expectation.it;
+import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.ElementPredicates.readable;
 import static tools.devnull.trugger.element.ElementPredicates.writable;
 import static tools.devnull.trugger.element.Elements.element;
@@ -35,27 +38,30 @@ public class PropertiesElementTest implements ElementSpecs {
 
   @Test
   public void propertiesElementTest() {
+    assertTrue(elements().in(Properties.class).isEmpty());
+
     Properties properties = new Properties();
     properties.setProperty("login", "admin");
     properties.setProperty("password", "admin");
 
-    TestScenario.given(elements().in(properties))
-        .it(should(have(elementsNamed("login", "password"))));
+    Spec.given(elements().in(properties))
+        .expect(it(), to().have(elementsNamed("login", "password")));
 
-    TestScenario.given(elements().in(Properties.class))
-        .it(should(be(EMPTY)));
+    Spec.given(element("login").in(properties))
+        .expect(Element::type, to().be(String.class))
+        .expect(Element::name, to().be("login"))
+        .expect(Element::value, to().be("admin"))
+        .expect(Element::declaringClass, to().be(Properties.class))
 
-    TestScenario.given(element("login").in(properties))
-        .the(type(), should(be(String.class)))
-        .the(name(), should(be("login")))
-        .the(value(), should(be("admin")))
-        .the(declaringClass(), should(be(Properties.class)))
-        .it(should(be(readable())))
-        .it(should(be(writable())))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().be(writable()))
+
         .when(valueIsSetTo("guest"))
-        .the(value(), should(be("guest")))
-        .and(properties.getProperty("login"), should(be("guest")))
-        .then(settingValueTo(new Object()), should(raise(HandlingException.class)))
-        .and(settingValueTo("", new Object()), should(raise(IllegalArgumentException.class)));
+        .expect(Element::value, to().be("guest"))
+
+        .expect(Expectation.value(properties.getProperty("login")), to().be("guest"))
+
+        .expect(settingValueTo(new Object()), to().raise(HandlingException.class))
+        .expect(settingValueTo("", new Object()), to().raise(IllegalArgumentException.class));
   }
 }

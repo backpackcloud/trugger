@@ -17,10 +17,11 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Expectation;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
-import static tools.devnull.kodo.Spec.*;
+import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.Elements.element;
 
 /**
@@ -37,11 +38,11 @@ public class HandleTest implements ElementSpecs {
     TestObject obj = new TestObject();
     obj.string = "test";
 
-    TestScenario.given(element().in(obj))
-        .the(value(), should(be("test")))
+    Spec.given(element().in(obj))
+        .expect(Element::value, to().be("test"))
         .when(valueIsSetTo("other value"))
-        .the(value(), should(be("other value")))
-        .the(obj.string, should(be("other value")));
+        .expect(Element::value, to().be("other value"))
+        .expect(Expectation.value(obj.string), to().be("other value"));
   }
 
   @Test
@@ -49,18 +50,18 @@ public class HandleTest implements ElementSpecs {
     TestObject obj = new TestObject();
     obj.string = "test";
 
-    TestScenario.given(element().in(TestObject.class))
-        .the(valueIn(obj), should(be("test")))
+    Spec.given(element().in(TestObject.class))
+        .expect(valueIn(obj), to().be("test"))
         .when(valueIsSetTo("other value", obj))
-        .the(valueIn(obj), should(be("other value")))
-        .the(obj.string, should(be("other value")));
+        .expect(valueIn(obj), to().be("other value"))
+        .expect(Expectation.value(obj.string), to().be("other value"));
   }
 
   @Test
   public void testHandlingError() {
     TestObject obj = new TestObject();
-    TestScenario.given(element().in(obj))
-        .then(settingValueTo(10), should(raise(HandlingException.class)));
+    Spec.given(element().in(obj))
+        .expect(settingValueTo(10), to().raise(HandlingException.class));
   }
 
 }

@@ -17,12 +17,15 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
-import static tools.devnull.kodo.Spec.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static tools.devnull.kodo.Expectation.*;
 import static tools.devnull.trugger.element.ElementPredicates.*;
 import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
@@ -37,38 +40,37 @@ public class ResourceBundleElementTest implements ElementSpecs {
 
   @Test
   public void testElement() {
-    TestScenario.given(element("foo").in(bundle))
-        .the(name(), should(be("foo")))
-        .the(value(), should(be("bar")))
-        .the(declaringClass(), should(be(ResourceBundle.class)))
-        .it(should(be(readable())))
-        .it(should(notBe(writable())))
-        .it(should(be(specific())))
-        .then(attempToChangeValue(), should(raise(HandlingException.class)))
-        .then(gettingValueIn(new Object()),
-            should(raise(IllegalArgumentException.class)));
+    Spec.given(element("foo").in(bundle))
+        .expect(Element::name, to().be("foo"))
+        .expect(Element::value, to().be("bar"))
+        .expect(Element::declaringClass, to().be(ResourceBundle.class))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().not().be(writable()))
+        .expect(it(), to().be(specific()))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class))
+        .expect(gettingValueIn(new Object()),
+            to().raise(IllegalArgumentException.class));
 
-    TestScenario.given(element("foo").in(ResourceBundle.class))
-        .the(name(), should(be("foo")))
-        .the(declaringClass(), should(be(ResourceBundle.class)))
-        .it(should(be(readable())))
-        .it(should(notBe(writable())))
-        .it(should(notBe(specific())))
-        .then(attempToChangeValue(), should(raise(HandlingException.class)))
-        .then(gettingValue(), should(raise(HandlingException.class)));
+    Spec.given(element("foo").in(ResourceBundle.class))
+        .expect(Element::name, to().be("foo"))
+        .expect(Element::declaringClass, to().be(ResourceBundle.class))
+        .expect(it(), to().be(readable()))
+        .expect(it(), to().not().be(writable()))
+        .expect(it(), to().not().be(specific()))
+        .expect(attempToChangeValue(), to().raise(HandlingException.class))
+        .expect(gettingValue(), to().raise(HandlingException.class));
 
-    TestScenario.given(element("not-present").in(bundle))
-        .then(attempToGetValue(), should(raise(HandlingException.class)));
+    Spec.given(element("not-present").in(bundle))
+        .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 
   @Test
   public void testElements() {
-    TestScenario.given(elements().in(bundle))
-        .it(should(notBe(EMPTY)))
-        .it(should(have(elementsNamed("foo", "framework", "author"))));
+    List<Element> elements = elements().in(bundle);
+    assertFalse(elements.isEmpty());
+    assertTrue(elementsNamed("foo", "framework", "author").test(elements));
 
-    TestScenario.given(elements().in(ResourceBundle.class))
-        .it(should(be(EMPTY)));
+    assertTrue(elements().in(ResourceBundle.class).isEmpty());
   }
 
 }

@@ -17,20 +17,28 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
 import tools.devnull.trugger.Finder;
 import tools.devnull.trugger.Flag;
 import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.impl.TruggerElementSelector;
 import tools.devnull.trugger.selector.ElementSelector;
 
-import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static tools.devnull.kodo.Spec.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static tools.devnull.trugger.TruggerTest.element;
-import static tools.devnull.trugger.element.ElementPredicates.*;
+import static tools.devnull.trugger.element.ElementPredicates.annotated;
+import static tools.devnull.trugger.element.ElementPredicates.annotatedWith;
+import static tools.devnull.trugger.element.ElementPredicates.assignableTo;
+import static tools.devnull.trugger.element.ElementPredicates.ofType;
+import static tools.devnull.trugger.element.ElementPredicates.readable;
+import static tools.devnull.trugger.element.ElementPredicates.specific;
+import static tools.devnull.trugger.element.ElementPredicates.writable;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -51,23 +59,14 @@ public class ElementSelectorTest {
   }
 
   private void testPredicate(Predicate<? super Element> predicate) {
-    Function<ElementSelector, Object> filtered =
-        selector -> selector.filter(predicate).in(this);
-    Function<ElementSelector, Object> inversedFiltered =
-        selector -> selector.filter(predicate.negate()).in(this);
-
-    TestScenario.given(selector())
-        .the(filtered, should(be(element)))
-        .the(inversedFiltered,
-            should(be(NULL)));
+    assertSame(element, selector().filter(predicate).in(this));
+    assertNull(selector().filter(predicate.negate()).in(this));
 
     verify(finder, atLeastOnce()).find("name");
   }
 
   private void testFailPredicate(Predicate<? super Element> predicate) {
-    TestScenario.given(selector())
-        .the(selector -> selector.filter(predicate).in(this),
-            should(be(NULL)));
+    assertNull(selector().filter(predicate).in(this));
 
     verify(finder, atLeastOnce()).find("name");
   }

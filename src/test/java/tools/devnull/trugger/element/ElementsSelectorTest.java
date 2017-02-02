@@ -17,7 +17,6 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.TestScenario;
 import tools.devnull.trugger.Finder;
 import tools.devnull.trugger.Flag;
 import tools.devnull.trugger.element.impl.TruggerElementsSelector;
@@ -25,10 +24,16 @@ import tools.devnull.trugger.selector.ElementsSelector;
 
 import java.util.function.Predicate;
 
-import static tools.devnull.kodo.Spec.*;
+import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.TruggerTest.element;
 import static tools.devnull.trugger.TruggerTest.elementFinder;
-import static tools.devnull.trugger.element.ElementPredicates.*;
+import static tools.devnull.trugger.element.ElementPredicates.annotated;
+import static tools.devnull.trugger.element.ElementPredicates.annotatedWith;
+import static tools.devnull.trugger.element.ElementPredicates.assignableTo;
+import static tools.devnull.trugger.element.ElementPredicates.named;
+import static tools.devnull.trugger.element.ElementPredicates.readable;
+import static tools.devnull.trugger.element.ElementPredicates.specific;
+import static tools.devnull.trugger.element.ElementPredicates.writable;
 
 /**
  * @author Marcelo Varella Barca Guimarães
@@ -43,14 +48,11 @@ public class ElementsSelectorTest implements ElementSpecs {
 
   private void testPredicate(Predicate<? super Element> predicate,
                              String... names) {
-    TestScenario.given(selector().filter(predicate).in(this))
-        .it(should(have(elementsNamed(names))));
+    assertTrue(elementsNamed(names).test(selector().filter(predicate).in(this)));
   }
 
   private void testFailPredicate(Predicate<? super Element> predicate) {
-    TestScenario.given(selector())
-        .the(selector -> selector.filter(predicate).in(this),
-            should(be(EMPTY)));
+    assertTrue(selector().filter(predicate).in(this).isEmpty());
   }
 
   @Test
