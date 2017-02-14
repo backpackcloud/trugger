@@ -44,6 +44,30 @@ public class DefaultContextTest {
         .expect(value(functionB), to().be(used()));
   }
 
+  @Test
+  public void testDefaultFunction() {
+    Function<Parameter, Object> functionA = mock(Function.class);
+    Predicate<Parameter> conditionA = mock(Predicate.class);
+    Object resultA = new Object();
+    when(functionA.apply(any())).thenReturn(resultA);
+    when(conditionA.test(any())).thenReturn(false);
+
+    Function<Parameter, Object> functionB = mock(Function.class);
+    Object resultB = new Object();
+    when(functionB.apply(any())).thenReturn(resultB);
+
+    Spec.given(new DefaultContext())
+        .when(context -> context.use(functionA).when(conditionA).
+            use(functionB).byDefault())
+
+        // don't need an actual parameter since everything here is a mock
+        .expect(context -> context.resolve(null), to().be(resultB))
+
+        .expect(value(conditionA), to().be(tested()))
+        .expect(value(functionA), to().not().be(used()))
+        .expect(value(functionB), to().be(used()));
+  }
+
   private Predicate<Predicate> tested() {
     return predicate -> {
       try {
