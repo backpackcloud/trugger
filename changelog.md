@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 5.2.1
+
+- ComponentFactory will look up for parameter types after trying to match by type and name
+
 ## Version 5.2
 
 ### Major Changes

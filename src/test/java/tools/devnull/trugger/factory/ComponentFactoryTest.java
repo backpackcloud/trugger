@@ -17,6 +17,7 @@
 
 package tools.devnull.trugger.factory;
 
+import org.junit.Before;
 import org.junit.Test;
 import tools.devnull.trugger.ElementMock;
 import tools.devnull.trugger.Flag;
@@ -27,16 +28,21 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 import static tools.devnull.trugger.AnnotationMock.mockAnnotation;
 
 public class ComponentFactoryTest {
 
+  private ComponentFactory<ConverterClass, Converter> factory;
+
+  @Before
+  public void initialize() {
+    factory = new ComponentFactory<>(ConverterClass.class);
+  }
+
   @Test
   public void testCreate() {
     ToString annotation = mockAnnotation(ToString.class);
-
-    ComponentFactory<ConverterClass, Converter> factory
-        = new ComponentFactory<>(ConverterClass.class);
 
     Converter converter = factory.create(annotation);
     assertEquals("10", converter.convert(10));
@@ -52,9 +58,6 @@ public class ComponentFactoryTest {
         .annotatedWith(mockAnnotation(ToString.class))
         .createMock();
 
-    ComponentFactory<ConverterClass, Converter> factory
-        = new ComponentFactory<>(ConverterClass.class);
-
     List<Converter> converters = factory.createAll(element);
     assertEquals(2, converters.size());
   }
@@ -68,9 +71,6 @@ public class ComponentFactoryTest {
         .annotatedWith(mockAnnotation(Flag.class))
         .createMock();
 
-    ComponentFactory<ConverterClass, Converter> factory
-        = new ComponentFactory<>(ConverterClass.class);
-
     Converter converter = factory.create(element);
     assertNotNull(converter);
 
@@ -81,6 +81,19 @@ public class ComponentFactoryTest {
 
     converter = factory.create(element);
     assertNull(converter);
+  }
+
+  @Test
+  public void testTypeMatchingConstructor() {
+    Dummy annotation = mockAnnotation(Dummy.class);
+    when(annotation.value()).thenReturn("dummy");
+
+    Element element = new ElementMock()
+        .annotatedWith(annotation)
+        .createMock();
+
+    Converter converter = factory.create(element);
+    assertEquals("dummy", converter.convert(new Object()));
   }
 
 }

@@ -222,7 +222,10 @@ public class ComponentFactory<T extends Annotation, E> {
       context.use(annotation).when(type(annotation.annotationType()));
       List<Element> elements = Elements.elements().in(annotation);
       for (Element el : elements) {
-        context.use(() -> el.value()).when(named(el.name()).and(type(el.type())));
+        context.use(el::value).when(named(el.name()).and(type(el.type())));
+      }
+      for (Element el : elements) {
+        context.use(el::value).when(type(el.type()));
       }
     };
   }
