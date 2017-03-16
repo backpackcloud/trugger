@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 5.3.1
+
+### Major Changes
+
+- Validation module removed... again (I'm not in the mood to maintain it, let's keep this project simple)
+
 ## Version 5.2.1
 
 - ComponentFactory will look up for parameter types after trying to match by type and name
