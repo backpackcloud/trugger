@@ -27,7 +27,7 @@ public interface PredicateMappingFunction<T, R> extends Function<T, R> {
   }
 
   static <T, R> PredicateMappingFunction<T, R> byDefault(Function<? super T, ? extends R> function) {
-    return new PredicateMappingFunctionImpl<>(function, null, null);
+    return new PredicateMappingFunctionImpl<>(null, t -> true, function);
   }
 
   static <T, R> PredicateMappingFunction<T, R> begin() {
