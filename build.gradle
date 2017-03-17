@@ -54,10 +54,9 @@ compileJava {
   options.compilerArgs << compilerArg
 }
 
-// I'm getting some errors when I try to compile test sources with -parameter
-// so do not use this parameter
 compileTestJava {
   options.encoding = encoding
+  options.compilerArgs << compilerArg
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -122,9 +121,5 @@ task dist(type: Zip,
   from project.pomFile
   from "changelog.md"
   from "README.md"
-}
-
-signing {
-  sign configurations.archives
 }
 
