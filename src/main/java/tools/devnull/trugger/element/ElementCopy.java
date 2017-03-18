@@ -27,7 +27,7 @@ public interface ElementCopy {
   /**
    * @return the source element value.
    */
-  Object value();
+  <E> E value();
 
   /**
    * @return the source element.
