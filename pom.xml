@@ -6,6 +6,7 @@
   <groupId>tools.devnull</groupId>
   <artifactId>trugger</artifactId>
   <version>5.3.0</version>
+  <packaging>bundle</packaging>
 
   <description>
     Trugger is a project that helps you write code that anyone can read. It is focused on deliver fluent
@@ -66,12 +67,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss</groupId>
-      <artifactId>jboss-vfs</artifactId>
-      <version>${jboss-vfs.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>tools.devnull</groupId>
       <artifactId>kodo</artifactId>
       <version>${kodo.version}</version>
@@ -92,6 +87,20 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <version>${maven-bundle-plugin-version}</version>
         <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>
+              tools.devnull.trugger,
+              tools.devnull.trugger.element,
+              tools.devnull.trugger.interception,
+              tools.devnull.trugger.reflection,
+              tools.devnull.trugger.selector,
+              tools.devnull.trugger.util,
+              tools.devnull.trugger.util.factory,
+              tools.devnull.trugger.util.registry
+            </Export-Package>
+          </instructions>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
