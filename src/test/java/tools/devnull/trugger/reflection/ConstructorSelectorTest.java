@@ -20,8 +20,16 @@ import org.junit.Test;
 import tools.devnull.trugger.Flag;
 
 import java.lang.reflect.Constructor;
+import java.util.function.Predicate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
@@ -72,6 +80,18 @@ public class ConstructorSelectorTest {
     constructor = reflect().constructor().withParameters(long.class).in(ParameterSelectorTest.class);
     parameters = constructor.getParameterTypes();
     assertArrayEquals(new Class[]{long.class}, parameters);
+  }
+
+  @Test
+  public void testConstructorPredicate() {
+    Predicate<Constructor> predicate = mock(Predicate.class);
+
+    assertNull(reflect().constructor().filter(predicate).in(ParameterSelectorTest.class));
+    verify(predicate, atLeastOnce()).test(any(Constructor.class));
+
+    when(predicate.test(any(Constructor.class))).thenReturn(true);
+    assertNotNull(reflect().constructor().filter(predicate).in(ParameterSelectorTest.class));
+    verify(predicate, atLeastOnce()).test(any(Constructor.class));
   }
 
 }
