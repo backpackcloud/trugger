@@ -1,10 +1,15 @@
 # Changelog
 
-## Version 5.3.1
+## Version 5.3
 
 ### Major Changes
 
 - Validation module removed... again (I'm not in the mood to maintain it, let's keep this project simple)
+- Class Scan module removed (neither I use this anymore, so, one thing less to maintain)
+
+### Minor Changes
+
+- Trugger is now OSGi ready
 
 ## Version 5.2.1
 

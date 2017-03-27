@@ -73,7 +73,7 @@ public class TruggerConstructorSelector implements ConstructorSelector {
     if (predicate != null) {
       return constructors.stream()
           .filter(predicate)
-          .findAny().orElse(null);
+          .findFirst().orElse(null);
     } else if (constructors.size() > 1) {
       throw new ReflectionException("More than one constructor found for " +
           target.getClass());

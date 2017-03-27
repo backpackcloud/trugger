@@ -71,14 +71,14 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element is writable.
    */
-  public static final Predicate<Element> writable() {
+  public static Predicate<Element> writable() {
     return element -> element.isWritable();
   }
 
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
-  public static final Predicate<Element> readable() {
+  public static Predicate<Element> readable() {
     return element -> element.isReadable();
   }
 
@@ -94,7 +94,7 @@ public final class ElementPredicates {
    * A predicate that returns <code>true</code> if the element is
    * {@link Element#isSpecific() specific}.
    */
-  public static final Predicate<Element> specific() {
+  public static Predicate<Element> specific() {
     return element -> element.isSpecific();
   }
 
