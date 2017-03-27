@@ -1,4 +1,6 @@
-package tools.devnull.trugger.util;
+package tools.devnull.trugger.util.impl;
+
+import tools.devnull.trugger.util.PredicateMappingFunction;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -9,7 +11,7 @@ public class PredicateMappingFunctionImpl<T, R> implements PredicateMappingFunct
   private final Predicate<? super T> predicate;
   private final Function<? super T, ? extends R> function;
 
-  PredicateMappingFunctionImpl(Function<? super T, ? extends R> defaultFunction,
+  public PredicateMappingFunctionImpl(Function<? super T, ? extends R> defaultFunction,
                                Predicate<? super T> predicate,
                                Function<? super T, ? extends R> function) {
     this.defaultFunction = defaultFunction;

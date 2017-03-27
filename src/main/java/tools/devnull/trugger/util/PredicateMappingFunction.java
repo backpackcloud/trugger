@@ -1,5 +1,7 @@
 package tools.devnull.trugger.util;
 
+import tools.devnull.trugger.util.impl.PredicateMappingFunctionImpl;
+
 import java.util.function.Function;
 import java.util.function.Predicate;
 
