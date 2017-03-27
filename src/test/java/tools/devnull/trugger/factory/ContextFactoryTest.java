@@ -21,12 +21,12 @@ import org.junit.Test;
 import tools.devnull.trugger.Flag;
 import tools.devnull.trugger.util.factory.ContextFactory;
 import tools.devnull.trugger.util.factory.CreateException;
-import tools.devnull.trugger.validation.Validator;
-import tools.devnull.trugger.validation.validator.PatternValidator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static tools.devnull.trugger.reflection.ParameterPredicates.*;
+import static tools.devnull.trugger.reflection.ParameterPredicates.annotatedWith;
+import static tools.devnull.trugger.reflection.ParameterPredicates.named;
+import static tools.devnull.trugger.reflection.ParameterPredicates.type;
 
 public class ContextFactoryTest {
 
@@ -60,10 +60,12 @@ public class ContextFactoryTest {
   public void testNamedContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .use("a string").when(named("value"))
-        .use(0).when(named("flags"));
-    Validator obj = factory.create(PatternValidator.class);
+        .use("a string").when(named("string"))
+        .use(0).when(named("integer"));
+    TestObject obj = factory.create(TestObject.class);
     assertNotNull(obj);
+    assertEquals("a string", obj.string);
+    assertEquals(0, obj.integer);
   }
 
   @Test

@@ -141,7 +141,7 @@ public class ElementCopyTest {
       implements Function<ElementCopy, String> {
 
     public String apply(ElementCopy object) {
-      return String.valueOf(object.value());
+      return String.valueOf((Object) object.value());
     }
   }
 

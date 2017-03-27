@@ -115,7 +115,7 @@ public final class TruggerElementCopier implements ElementCopier,
     if (predicate.test(copy)) {
       if (value != null) {
         value = function.apply(copy);
-        if (Utils.areAssignable(destElement.type(), value.getClass())) {
+        if (value != null && Utils.areAssignable(destElement.type(), value.getClass())) {
           destElement.in(dest).set(value);
         }
       } else if (copyNull) {
