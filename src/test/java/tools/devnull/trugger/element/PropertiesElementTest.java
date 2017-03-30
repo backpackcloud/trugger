@@ -17,7 +17,6 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.Expectation;
 import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
@@ -25,6 +24,7 @@ import java.util.Properties;
 
 import static junit.framework.TestCase.assertTrue;
 import static tools.devnull.kodo.Expectation.it;
+import static tools.devnull.kodo.Expectation.the;
 import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.ElementPredicates.readable;
 import static tools.devnull.trugger.element.ElementPredicates.writable;
@@ -59,7 +59,7 @@ public class PropertiesElementTest implements ElementSpecs {
         .when(valueIsSetTo("guest"))
         .expect(Element::value, to().be("guest"))
 
-        .expect(Expectation.value(properties.getProperty("login")), to().be("guest"))
+        .expect(the(properties.getProperty("login")), to().be("guest"))
 
         .expect(settingValueTo(new Object()), to().raise(HandlingException.class))
         .expect(settingValueTo("", new Object()), to().raise(IllegalArgumentException.class));

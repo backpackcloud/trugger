@@ -170,7 +170,7 @@ public class ElementCopyTest {
             .applying(new ToStringTransformer())
             .to(props))
         .expect(property("age"), to().be("23"))
-        .expect(property("nickName"), to().be(null))
+        .expect(property("nickName"), to().beNull())
         .expect(property("name"), to().be("Marcelo"))
         .expect(property("lastName"), to().be("Guimaraes"))
         .expect(property("height"), to().be("1.9"))
@@ -183,7 +183,7 @@ public class ElementCopyTest {
         .when(o -> copy(elements().filter(e -> false)).from(testObject).to(o))
         .expect(name(), to().be("John"))
         .expect(lastName(), to().be("Smith"))
-        .expect(nickName(), to().be(null))
+        .expect(nickName(), to().beNull())
         .expect(age(), to().be(0))
         .expect(height(), to().be(0.0))
         .expect(weight(), to().be(0.0));
