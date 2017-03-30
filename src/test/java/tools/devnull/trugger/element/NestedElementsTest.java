@@ -61,22 +61,22 @@ public class NestedElementsTest implements ElementSpecs {
   @Test
   public void testNestedElementCreating() {
     Spec.given(element("customer.phone").in(Ticket.class))
-        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().beNull())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
     Spec.given(element("customer.credential").in(Ticket.class))
-        .expect(it(), to().be(null));
+        .expect(it(), to().beNull());
 
     Spec.given(element("customer.info").in(new Ticket()))
-        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
     Spec.given(element("customer.info.properties").in(new Ticket()))
-        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().not().be(specific()));

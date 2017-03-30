@@ -5,6 +5,7 @@
 ### Minor Changes
 
 - Fix the pom's project name /o\
+- Updated Kodo version
 
 ## Version 5.3
 

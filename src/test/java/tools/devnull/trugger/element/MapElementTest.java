@@ -17,7 +17,6 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.Expectation;
 import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
@@ -27,6 +26,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 import static tools.devnull.kodo.Expectation.it;
+import static tools.devnull.kodo.Expectation.the;
 import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.TruggerTest.SIZE;
 import static tools.devnull.trugger.element.ElementPredicates.readable;
@@ -79,10 +79,10 @@ public class MapElementTest implements ElementSpecs {
     Map<String, String> map = new HashMap<>();
 
     Spec.given(element("key").in(Map.class))
-        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().beNull())
         .expect(attempToGetValue(), to().raise(HandlingException.class))
         .when(valueIsSetTo("value", map))
-        .expect(Expectation.value(map.get("key")), to().be("value"));
+        .expect(the(map.get("key")), to().be("value"));
   }
 
 

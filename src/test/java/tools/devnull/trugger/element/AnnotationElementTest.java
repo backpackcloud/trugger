@@ -54,13 +54,13 @@ public class AnnotationElementTest implements ElementSpecs {
         .expect(Element::name, to().be("name"))
         .expect(Element::value, to().be("some name"))
         .expect(stringRepresentation(), to().be("name : java.lang.String"))
-        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
     Spec.given(element("name").in(TestAnnotation.class))
-        .expect(it(), to().not().be(null))
+        .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
 

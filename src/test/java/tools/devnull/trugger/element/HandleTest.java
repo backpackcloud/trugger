@@ -17,10 +17,10 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.kodo.Expectation;
 import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.HandlingException;
 
+import static tools.devnull.kodo.Expectation.the;
 import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.Elements.element;
 
@@ -42,7 +42,7 @@ public class HandleTest implements ElementSpecs {
         .expect(Element::value, to().be("test"))
         .when(valueIsSetTo("other value"))
         .expect(Element::value, to().be("other value"))
-        .expect(Expectation.value(obj.string), to().be("other value"));
+        .expect(the(obj.string), to().be("other value"));
   }
 
   @Test
@@ -54,7 +54,7 @@ public class HandleTest implements ElementSpecs {
         .expect(valueIn(obj), to().be("test"))
         .when(valueIsSetTo("other value", obj))
         .expect(valueIn(obj), to().be("other value"))
-        .expect(Expectation.value(obj.string), to().be("other value"));
+        .expect(the(obj.string), to().be("other value"));
   }
 
   @Test

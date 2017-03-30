@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static tools.devnull.kodo.Expectation.to;
-import static tools.devnull.kodo.Expectation.value;
+import static tools.devnull.kodo.Expectation.the;
 
 public class DefaultContextTest {
 
@@ -38,10 +38,10 @@ public class DefaultContextTest {
         // don't need an actual parameter since everything here is a mock
         .expect(context -> context.resolve(null), to().be(resultB))
 
-        .expect(value(conditionA), to().be(tested()))
-        .expect(value(conditionB), to().be(tested()))
-        .expect(value(functionA), to().not().be(used()))
-        .expect(value(functionB), to().be(used()));
+        .expect(the(conditionA), to().be(tested()))
+        .expect(the(conditionB), to().be(tested()))
+        .expect(the(functionA), to().not().be(used()))
+        .expect(the(functionB), to().be(used()));
   }
 
   @Test
@@ -63,9 +63,9 @@ public class DefaultContextTest {
         // don't need an actual parameter since everything here is a mock
         .expect(context -> context.resolve(null), to().be(resultB))
 
-        .expect(value(conditionA), to().be(tested()))
-        .expect(value(functionA), to().not().be(used()))
-        .expect(value(functionB), to().be(used()));
+        .expect(the(conditionA), to().be(tested()))
+        .expect(the(functionA), to().not().be(used()))
+        .expect(the(functionB), to().be(used()));
   }
 
   private Predicate<Predicate> tested() {
