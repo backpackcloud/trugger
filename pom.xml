@@ -5,9 +5,9 @@
 
   <groupId>tools.devnull</groupId>
   <artifactId>trugger</artifactId>
-  <version>5.3.0</version>
+  <version>5.3.1</version>
   <packaging>bundle</packaging>
-  <name>kodo</name>
+  <name>trugger</name>
 
   <description>
     Trugger is a project that helps you write code that anyone can read. It is focused on deliver fluent

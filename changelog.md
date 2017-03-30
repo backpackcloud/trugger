@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 5.3.1
+
+### Minor Changes
+
+- Fix the pom's project name /o\
+
 ## Version 5.3
 
 ### Major Changes
