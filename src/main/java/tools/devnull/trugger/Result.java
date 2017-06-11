@@ -22,13 +22,13 @@ package tools.devnull.trugger;
  * plus the target specified at this time.
  * 
  * @author Marcelo Guimarães
- * @param <Value>
+ * @param <V>
  *          the result object type
- * @param <Target>
+ * @param <T>
  *          the target type
  */
 @FunctionalInterface
-public interface Result<Value, Target> {
+public interface Result<V, T> {
   
   /**
    * Computes the request based on the given target and previous configurations.
@@ -37,6 +37,6 @@ public interface Result<Value, Target> {
    *          the target for compute the request.
    * @return the result.
    */
-  Value in(Target target);
+  V in(T target);
   
 }
