@@ -1,6 +1,6 @@
 # Overview
 
-Trugger is a framework that helps you write code that anyone can read. The idea is to provide a set of fluent interfaces to deal with operations related to reflection (such as creating proxies, reflecting members and scanning classes).
+Trugger is a framework that helps you write code that anyone can read. The idea is to provide a set of fluent interfaces to deal with operations related to reflection (such as creating proxies, reflecting members, instantiating objects).
 
 Trugger is intended to be a base for creating infrastructure code. While it is not an IoC container, for example, it could be a part of the core of an IoC container.
 
@@ -270,60 +270,6 @@ Repository<MyType> repo = new BaseRepository<MyType>(){};
 ~~~
 
 I think this is an ugly solution, but works.
-
-# Class Scanning
-
-Another cool feature Trugger has is the class scanning. Just give a package name and Trugger will scan it for finding classes. The class scanning feature starts at `ClassScan`.
-
-The scanning starts in the method `ClassScan#scan`, which returns a `ClassScanner` that allows changing the ClassLoader and defining the package.
-
-~~~java
-List<Class> classes = scan().classes().in("my.package");
-~~~
-
-This will return every class in the package `my.package`. To do a deep scan and also return the classes in subpackages, use the `deep` method:
-
-~~~java
-List<Class> classes = scan().classes().deep().in("my.package");
-~~~
-
-You can also filter the classes with the method `filter`:
-
-~~~java
-List<Class> classes = scan().classes()
-  .deep()
-  .filter(c -> c.isAnnotatedWith(Entity.class))
-  .in("my.package");
-~~~
-
-## Predicates
-
-In `ClassPredicates` is a set of useful predicates to deal with classes.
-
-~~~java
-List<Class> classes = scan().classes()
-  .deep()
-  .filter(annotatedWith(Entity.class)) //static import
-  .in("my.package");
-
-List<Class> classes = scan().classes()
-  .deep()
-  .filter(subtypeOf(Repository.class)) //static import
-  .in("my.package");
-~~~
-
-## Resource Finders for Protocols
-
-The search is performed based on protocols. The basic protocols are `file` and `jar` and are supported by Trugger. More specific protocols can be handled by creating a `ResourceFinder` and registering it with the method `ClassScan#register`. A `ResourceFinder` is responsible for finding any resources in a given package and it must support a protocol. Trugger has a couple of finders registered to the following protocols:
-
-- **jar** - for resources in a jar file
-- **file** - for resources in the filesystem
-- **vfs** - for resources in jar files deployed on a JBoss AS 7.x
-- **vfszip** - for resources in jar files deployed on a JBoss AS 5.x and 6.x
-- **vfsfile** - for resources in files deployed on a JBoss AS 5.x and 6.x
-
-Any finder registered to an already supported protocol will override the
-registered finder.
 
 # Proxy Creation
 
