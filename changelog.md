@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 5.4.0
+
+### Minor Changes
+
+- Added the `Optional` interface
+- Updated project's README
+- Updated Kodo version
+
 ## Version 5.3.1
 
 ### Minor Changes
