@@ -527,5 +527,4 @@ The factory interfaces that can be customized are listed bellow:
 
 - `ElementFactory`: used for reflecting elements
 - `ReflectionFactory`: used for reflection in general
-- `ClassScannerFactory`: used for class scanning
 - `InterceptorFactory`: used for method interception
