@@ -419,43 +419,6 @@ copy().from(resultSet).to(myEntity);
 
 # Utilities
 
-## Annotation Mock
-
-Annotations are interfaces and mocking it should be as easy as mocking an interface. The problem is the default values that can be omitted. Trugger has an utility module to help mocking and annotation by using the interception module.
-
-To create a mock, you should start by creating an anonymous class that extends `mock.AnnotationMock` and maps the elements in a block code inside the class using the methods `map` and `to`.
-
-~~~java
-Resource resource = new AnnotationMock<Resource>(){{
-    map("name").to(annotation.name());
-    map(false).to(annotation.shareable());
-}}.createMock();
-
-//returns "name"
-String name = resource.name();
-
-//return false
-boolean shareable = resource.shareable();
-
-//returns "" because it is the default value
-String mappedName = resource.mappedName();
-
-// returns javax.annotation.Resource class
-Class<? extends Annotation> type = resource.annotationType();
-~~~
-
-If you don't like the anonymous class style, you can still use the classic
-style.
-
-~~~java
-AnnotationMock<Resource> mock = new AnnotationMock<>(Resource.class);
-
-mock.map("name").to(annotation.name());
-mock.map(false).to(annotation.shareable());
-
-Resource resource = mock.createMock();
-~~~
-
 ## Context Factories
 
 If you need a lightweight component to invoke a constructor with a predicate based logic to resolve the parameter values, you can use the `ContextFactory`.
