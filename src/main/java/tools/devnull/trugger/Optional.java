@@ -39,7 +39,7 @@ public interface Optional<E> {
   E value();
 
   /**
-   * Filters this result by testing the value against the
+   * Filters this value by testing the value against the
    * given predicate.
    * <p>
    * If the predicate matches the value, then the same instance
@@ -68,7 +68,7 @@ public interface Optional<E> {
   /**
    * Invokes the given consumer passing the result.
    * <p>
-   * The consumer will be invoked only if this result
+   * The consumer will be invoked only if this value
    * contains a non-null value.
    *
    * @param consumer the consumer to use
@@ -83,10 +83,22 @@ public interface Optional<E> {
   }
 
   /**
+   * Invokes the given consumer passing the value.
+   * <p>
+   * The function will be invoked regardless the value.
+   *
+   * @param function the function to use
+   * @return an instance of this object.
+   */
+  default <T> T and(Function<E, T> function) {
+    return function.apply(value());
+  }
+
+  /**
    * Maps the value using the given function and return a new
    * result containing the new value.
    * <p>
-   * The function will be invoked only if this result
+   * The function will be invoked only if this value
    * contains a non-null value.
    *
    * @param function the function to map the value
@@ -101,18 +113,29 @@ public interface Optional<E> {
   }
 
   /**
-   * Executes the given action in case of no result from the REST invocation
+   * Executes the given action in case of a null value
    *
    * @param action the action to execute.
    */
-  default void orElse(Runnable action) {
+  default void orElseDo(Runnable action) {
     if (value() == null) {
       action.run();
     }
   }
 
   /**
-   * Uses the given supplier to return a value in case of no result from the REST invocation
+   * Returns the hold value or the given value in case of a null value.
+   *
+   * @param returnValue the value to return if the hold value is null
+   * @return this optional value or the given returnValue
+   */
+  default E orElse(E returnValue) {
+    E value = value();
+    return value != null ? value : returnValue;
+  }
+
+  /**
+   * Uses the given supplier to return a value in case of a null value
    *
    * @param supplier the supplier to use for retrieving the result
    * @return this optional value or the value returned by the supplier.
@@ -123,7 +146,7 @@ public interface Optional<E> {
   }
 
   /**
-   * Throws the supplied exception if case of no result from the REST invocation
+   * Throws the supplied exception if case of a null value
    *
    * @param exceptionSupplier the exception supplier
    * @return the result

@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -114,10 +115,10 @@ public class OptionalTest {
   }
 
   @Test
-  public void testMethodOrElse() {
+  public void testMethodOrElseDo() {
     Runnable action = mock(Runnable.class);
 
-    Optional.of(value).orElse(action);
+    Optional.of(value).orElseDo(action);
 
     verify(action, never()).run();
   }
@@ -126,7 +127,7 @@ public class OptionalTest {
   public void testMethodOrElseWithEmpty() {
     Runnable action = mock(Runnable.class);
 
-    Optional.empty().orElse(action);
+    Optional.empty().orElseDo(action);
 
     verify(action).run();
   }
@@ -180,6 +181,21 @@ public class OptionalTest {
     when(supplier.get()).thenReturn(exception);
 
     Optional.empty().orElseThrow(supplier);
+  }
+
+  @Test
+  public void testMethodAndWithFunction() {
+    Function function = mock(Function.class);
+    when(function.apply(value)).thenReturn("OK");
+
+    assertEquals("OK", Optional.of(value).and(function));
+    verify(function).apply(value);
+  }
+
+  @Test
+  public void testMethodOrElse() {
+    assertEquals(value, Optional.of(value).orElse(new Object()));
+    assertEquals(value, Optional.empty().orElse(value));
   }
 
 }
