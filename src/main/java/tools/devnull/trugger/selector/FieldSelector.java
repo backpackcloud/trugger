@@ -18,6 +18,7 @@
  */
 package tools.devnull.trugger.selector;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.Result;
 
 import java.lang.reflect.Field;
@@ -30,7 +31,7 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface FieldSelector extends PredicateSelector<Field>,
-    DeepSelector, Result<Field, Object> {
+    DeepSelector, Result<Optional<Field>, Object> {
 
   FieldSelector filter(Predicate<? super Field> predicate);
 

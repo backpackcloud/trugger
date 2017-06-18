@@ -18,6 +18,7 @@
  */
 package tools.devnull.trugger.reflection;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.Result;
 import tools.devnull.trugger.selector.*;
 
@@ -178,6 +179,6 @@ public interface Reflector {
    * @param bridgeMethod the bridge method.
    * @return the original method.
    */
-  Method bridgedMethodFor(Method bridgeMethod);
+  Optional<Method> bridgedMethodFor(Method bridgeMethod);
 
 }

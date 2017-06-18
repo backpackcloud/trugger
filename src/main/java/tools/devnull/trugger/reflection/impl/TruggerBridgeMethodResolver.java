@@ -81,16 +81,16 @@ final class TruggerBridgeMethodResolver {
     }
     // Gather all methods with matching name and parameter size.
     List<Method> candidateMethods = methods().deep()
-      .filter(new SimpleBridgeCandidatePredicate())
-      .in(bridgeMethod.getDeclaringClass());
+        .filter(new SimpleBridgeCandidatePredicate())
+        .in(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + '\'');
     } else if (candidateMethods.size() > 1) {
       Predicate bridgeCandidate = new BridgeCandidatePredicate();
       return (Method) candidateMethods.stream()
-        .filter(bridgeCandidate)
-        .findAny().orElse(null);
+          .filter(bridgeCandidate)
+          .findAny().orElse(null);
     }
     return candidateMethods.iterator().next();
   }
@@ -99,8 +99,8 @@ final class TruggerBridgeMethodResolver {
 
     public boolean test(Method candidateMethod) {
       return (!candidateMethod.isBridge() && !candidateMethod.equals(bridgeMethod)
-        && candidateMethod.getName().equals(bridgeMethod.getName()) && (candidateMethod.getParameterTypes().length == bridgeMethod
-        .getParameterTypes().length));
+          && candidateMethod.getName().equals(bridgeMethod.getName()) && (candidateMethod.getParameterTypes().length == bridgeMethod
+          .getParameterTypes().length));
     }
 
   }
@@ -128,8 +128,8 @@ final class TruggerBridgeMethodResolver {
           Type rawType = TruggerGenericTypeResolver.getRawType(genericParameter, typeParameterMap);
           if (rawType instanceof GenericArrayType) {
             if (!candidateParameter.getComponentType().equals(
-              TruggerGenericTypeResolver.resolveType(((GenericArrayType) rawType).getGenericComponentType(),
-                typeParameterMap)
+                TruggerGenericTypeResolver.resolveType(((GenericArrayType) rawType).getGenericComponentType(),
+                    typeParameterMap)
             )) {
               return false;
             }
@@ -179,8 +179,9 @@ final class TruggerBridgeMethodResolver {
      */
     private Method searchForMatch(Class type) {
       return method(bridgeMethod.getName())
-        .withParameters(bridgeMethod.getParameterTypes())
-        .in(type);
+          .withParameters(bridgeMethod.getParameterTypes())
+          .in(type)
+          .orElseReturn(() -> null);
     }
 
     public boolean test(Method candidateMethod) {

@@ -65,57 +65,57 @@ public class FieldReflectionTest {
   public void testPredicates() {
     assertTrue(
         type(String.class).test(
-            field("a").in(this)
+            field("a").in(this).value()
         )
     );
     assertTrue(
         assignableTo(String.class).test(
-            field("b").in(this)
+            field("b").in(this).value()
         )
     );
     assertTrue(
         assignableTo(CharSequence.class).test(
-            field("b").in(this)
+            field("b").in(this).value()
         )
     );
     assertFalse(
         assignableTo(String.class).test(
-            field("x").in(this)
+            field("x").in(this).value()
         )
     );
     assertTrue(
         type(int.class).test(
-            field("x").in(this)
+            field("x").in(this).value()
         )
     );
     assertTrue(
         type(Integer.class).test(
-            field("z").in(this)
+            field("z").in(this).value()
         )
     );
     assertFalse(
         type(Integer.class).test(
-            field("y").in(this)
+            field("y").in(this).value()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            field("a").in(this)
+            field("a").in(this).value()
         )
     );
     assertTrue(
         annotated().test(
-            field("a").in(this)
+            field("a").in(this).value()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            field("b").in(this)
+            field("b").in(this).value()
         )
     );
     assertFalse(
         annotated().test(
-            field("b").in(this)
+            field("b").in(this).value()
         )
     );
   }

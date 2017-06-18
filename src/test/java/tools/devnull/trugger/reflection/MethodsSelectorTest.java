@@ -34,12 +34,9 @@ public class MethodsSelectorTest {
     void foo() {
     }
 
-    ;
-
     void bar() {
     }
 
-    ;
   }
 
   @Test

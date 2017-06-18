@@ -18,9 +18,13 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.reflection.Reflection;
 import tools.devnull.trugger.selector.FieldSelector;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -32,36 +36,35 @@ public class TruggerFieldSelector implements FieldSelector {
 
   private final String name;
   private final MemberFindersRegistry registry;
-  private final boolean recursively;
   private final Predicate<? super Field> predicate;
+  private final Function<Class, Iterable<Class>> function;
 
   public TruggerFieldSelector(String name, MemberFindersRegistry registry) {
     this.name = name;
     this.registry = registry;
-    this.recursively = false;
+    this.function = Collections::singletonList;
     this.predicate = null;
   }
 
   public TruggerFieldSelector(String name, MemberFindersRegistry registry,
                               Predicate<? super Field> predicate,
-                              boolean recursively) {
+                              Function<Class, Iterable<Class>> function) {
     this.name = name;
     this.registry = registry;
-    this.recursively = recursively;
     this.predicate = predicate;
+    this.function = function;
   }
 
   public FieldSelector filter(Predicate<? super Field> predicate) {
-    return new TruggerFieldSelector(name, registry, predicate, recursively);
+    return new TruggerFieldSelector(this.name, this.registry, predicate, this.function);
   }
 
   public FieldSelector deep() {
-    return new TruggerFieldSelector(name, registry, predicate, true);
+    return new TruggerFieldSelector(this.name, this.registry, this.predicate, Reflection::hierarchyOf);
   }
 
-  public Field in(Object target) {
-    return new MemberSelector<>(
-        registry.fieldFinder(name), predicate, recursively).in(target);
+  public Optional<Field> in(Object target) {
+    return new MemberSelector<>(registry.fieldFinder(name), predicate, function).selectFrom(target);
   }
 
 }

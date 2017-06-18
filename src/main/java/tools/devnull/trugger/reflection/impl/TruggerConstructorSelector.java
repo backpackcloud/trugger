@@ -18,6 +18,7 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.reflection.ReflectionException;
 import tools.devnull.trugger.selector.ConstructorSelector;
 
@@ -64,23 +65,22 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   }
 
   @Override
-  public Constructor<?> in(Object target) throws ReflectionException {
+  public Optional<Constructor<?>> in(Object target) throws ReflectionException {
     if (parameterTypes != null) {
-      return (Constructor<?>)
-          new MemberSelector(registry.constructorFinder(parameterTypes),
-              predicate).in(target);
+      return new MemberSelector(registry.constructorFinder(parameterTypes), predicate).selectFrom(target);
     }
     List<Constructor<?>> constructors =
         new MembersSelector<>(registry.constructorsFinder()).in(target);
     if (predicate != null) {
-      return constructors.stream()
+      return Optional.of(constructors.stream()
           .filter(predicate)
-          .findFirst().orElse(null);
+          .findFirst()
+          .orElse(null));
     } else if (constructors.size() > 1) {
       throw new ReflectionException("More than one constructor found for " +
           target.getClass());
     } else {
-      return constructors.iterator().next();
+      return Optional.of(constructors.iterator().next());
     }
   }
 

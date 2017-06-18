@@ -61,9 +61,9 @@ public class FieldSetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = field("count").in(this);
-    fieldHits = field("hits").in(this);
-    fieldSize = field("size").in(this);
+    fieldCount = field("count").in(this).value();
+    fieldHits = field("hits").in(this).value();
+    fieldSize = field("size").in(this).value();
   }
 
   @Test

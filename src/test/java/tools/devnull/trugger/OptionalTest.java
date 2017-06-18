@@ -26,8 +26,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -139,6 +141,12 @@ public class OptionalTest {
 
     verify(supplier, never()).get();
     assertSame(value, object);
+  }
+
+  @Test
+  public void testMethodContainsValue() {
+    assertTrue(Optional.of(value).containsValue());
+    assertFalse(Optional.empty().containsValue());
   }
 
   @Test

@@ -18,6 +18,7 @@
  */
 package tools.devnull.trugger.selector;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.Result;
 
 import java.lang.reflect.Method;
@@ -29,8 +30,7 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface MethodSelector extends PredicateSelector<Method>,
-    DeepSelector, Result<Method, Object> {
+public interface MethodSelector extends PredicateSelector<Method>, DeepSelector, Result<Optional<Method>, Object> {
 
   MethodSelector filter(Predicate<? super Method> predicate);
 
@@ -45,6 +45,6 @@ public interface MethodSelector extends PredicateSelector<Method>,
    *
    * @since 2.1
    */
-  Method in(Object target);
+  Optional<Method> in(Object target);
 
 }

@@ -57,6 +57,15 @@ public interface Optional<E> {
   }
 
   /**
+   * Checks if this optional holds a non-null value.
+   *
+   * @return {@code true} if the value is not null
+   */
+  default boolean containsValue() {
+    return value() != null;
+  }
+
+  /**
    * Invokes the given consumer passing the result.
    * <p>
    * The consumer will be invoked only if this result

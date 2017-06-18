@@ -18,15 +18,26 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.Result;
 import tools.devnull.trugger.reflection.ReflectionException;
 import tools.devnull.trugger.reflection.Reflector;
-import tools.devnull.trugger.selector.*;
+import tools.devnull.trugger.selector.ConstructorSelector;
+import tools.devnull.trugger.selector.ConstructorsSelector;
+import tools.devnull.trugger.selector.FieldSelector;
+import tools.devnull.trugger.selector.FieldsSelector;
+import tools.devnull.trugger.selector.MethodSelector;
+import tools.devnull.trugger.selector.MethodsSelector;
 import tools.devnull.trugger.util.Utils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -130,8 +141,8 @@ public class TruggerReflector implements Reflector {
     };
   }
 
-  public Method bridgedMethodFor(Method bridgeMethod) {
-    return new TruggerBridgeMethodResolver(bridgeMethod).findBridgedMethod();
+  public Optional<Method> bridgedMethodFor(Method bridgeMethod) {
+    return Optional.of(new TruggerBridgeMethodResolver(bridgeMethod).findBridgedMethod());
   }
 
 }

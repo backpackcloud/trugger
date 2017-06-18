@@ -23,10 +23,12 @@ import tools.devnull.trugger.reflection.impl.TruggerFieldsSelector;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.TruggerTest.assertThrow;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
@@ -137,6 +139,36 @@ public class ReflectionTests {
     List<Class> interfaces =
         reflect().interfaces().in(TruggerFieldsSelector.class);
     assertEquals(4, interfaces.size());
+  }
+
+  @Test
+  public void testHierarchy() {
+    Iterable<Class> iterable = Reflection.hierarchyOf(IllegalArgumentException.class);
+    Iterator<Class> iterator = iterable.iterator();
+
+    assertTrue(iterator.hasNext());
+    assertEquals(IllegalArgumentException.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(RuntimeException.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Exception.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Throwable.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Object.class, iterator.next());
+
+    assertFalse(iterator.hasNext());
+
+    iterator = Reflection.hierarchyOf(Object.class).iterator();
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Object.class, iterator.next());
+
+    assertFalse(iterator.hasNext());
   }
 
 }

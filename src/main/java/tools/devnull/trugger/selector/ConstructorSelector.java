@@ -18,6 +18,7 @@
  */
 package tools.devnull.trugger.selector;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.Result;
 import tools.devnull.trugger.reflection.ReflectionException;
 
@@ -30,7 +31,7 @@ import java.util.function.Predicate;
  * @author Marcelo Guimarães
  */
 public interface ConstructorSelector extends PredicateSelector<Constructor<?>>,
-    Result<Constructor<?>, Object> {
+    Result<Optional<Constructor<?>>, Object> {
 
   ConstructorSelector filter(Predicate<? super Constructor<?>> predicate);
 
@@ -57,6 +58,6 @@ public interface ConstructorSelector extends PredicateSelector<Constructor<?>>,
    *
    * @since 2.1
    */
-  Constructor<?> in(Object target) throws ReflectionException;
+  Optional<Constructor<?>> in(Object target) throws ReflectionException;
 
 }

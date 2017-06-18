@@ -84,7 +84,7 @@ public final class ObjectElement extends AbstractElement {
       type = setter.getParameterTypes()[0];
       searchForGetter();
     }
-    field = reflect().field(name).in(declaringClass);
+    field = reflect().field(name).in(declaringClass).value();
     searchForAnnotatedElement();
   }
 

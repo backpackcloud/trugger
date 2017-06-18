@@ -44,13 +44,13 @@ public class FieldSelectorHandler implements FieldHandler {
 
   @Override
   public <E> E value() throws HandlingException {
-    Field field = selector.in(target);
+    Field field = selector.in(target).value();
     return Reflection.handle(field).in(target).value();
   }
 
   @Override
   public void set(Object value) throws HandlingException {
-    Field field = selector.in(target);
+    Field field = selector.in(target).value();
     Reflection.handle(field).in(target).set(value);
   }
 

@@ -23,11 +23,11 @@ import tools.devnull.trugger.util.Utils;
 
 import java.lang.reflect.Member;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static tools.devnull.trugger.reflection.Reflection.hierarchyOf;
 
 /**
  * A base class for selecting a set of {@link Member} objects.
@@ -40,38 +40,35 @@ public class MembersSelector<T extends Member>
 
   private final MembersFinder<T> finder;
   private final Predicate<? super T> predicate;
-  private final boolean useHierarchy;
+  private final Function<Class, Iterable<Class>> function;
 
   public MembersSelector(MembersFinder<T> finder) {
     this.finder = finder;
     this.predicate = null;
-    this.useHierarchy = false;
+    this.function = Collections::singletonList;
   }
 
   public MembersSelector(MembersFinder<T> finder,
                          Predicate<? super T> predicate) {
     this.predicate = predicate;
     this.finder = finder;
-    this.useHierarchy = false;
+    this.function = Collections::singletonList;
   }
 
-  public MembersSelector(MembersFinder<T> finder, Predicate<? super T> predicate,
-                         boolean useHierarchy) {
+  public MembersSelector(MembersFinder<T> finder,
+                         Predicate<? super T> predicate,
+                         Function<Class, Iterable<Class>> function) {
     this.finder = finder;
     this.predicate = predicate;
-    this.useHierarchy = useHierarchy;
+    this.function = function;
   }
 
   public final List<T> in(Object target) {
-    if (useHierarchy) {
-      final List<T> list = new ArrayList<>();
-      for (Class type : hierarchyOf(target)) {
-        list.addAll(finder.find(type));
-      }
-      return applySelection(list);
+    final List<T> list = new ArrayList<>();
+    for (Class type : function.apply(Utils.resolveType(target))) {
+      list.addAll(finder.find(type));
     }
-    Class<?> type = Utils.resolveType(target);
-    return applySelection(finder.find(type));
+    return applySelection(list);
   }
 
   private List<T> applySelection(final List<T> list) {

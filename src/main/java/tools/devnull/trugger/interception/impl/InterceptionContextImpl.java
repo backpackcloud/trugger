@@ -94,9 +94,10 @@ public class InterceptionContextImpl implements InterceptionContext {
         .method(name)
         .deep()
         .withParameters(parameterTypes)
-        .in(target);
+        .in(target)
+        .value();
     if (targetMethod.isBridge()) {
-      return reflect().bridgedMethodFor(targetMethod);
+      return reflect().bridgedMethodFor(targetMethod).value();
     }
     return targetMethod;
   }

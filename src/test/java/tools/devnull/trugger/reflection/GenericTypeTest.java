@@ -55,18 +55,18 @@ public class GenericTypeTest {
   @Test
   public void bridgedMethodTest() {
     MethodSelector method = reflect().method("doIt");
-    Method bridgedMethod = method.withParameters(Class.class, String.class).in(TestObject.class);
+    Method bridgedMethod = method.withParameters(Class.class, String.class).in(TestObject.class).value();
 
     assertNotNull(method);
     assertNotNull(bridgedMethod);
     assertFalse(bridgedMethod.isBridge());
     assertTrue(bridgedMethod.isAnnotationPresent(Flag.class));
 
-    Method bridgeMethod = method.withParameters(Object.class, Object.class).in(TestObject.class);
+    Method bridgeMethod = method.withParameters(Object.class, Object.class).in(TestObject.class).value();
     assertNotNull(bridgeMethod);
     assertTrue(bridgeMethod.isBridge());
 
-    assertEquals(bridgedMethod, reflect().bridgedMethodFor(bridgeMethod));
+    assertEquals(bridgedMethod, reflect().bridgedMethodFor(bridgeMethod).value());
   }
 
   @Test

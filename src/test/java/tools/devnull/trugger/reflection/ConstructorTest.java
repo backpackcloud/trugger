@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+import static tools.devnull.trugger.TruggerTest.assertNotEmpty;
 import static tools.devnull.trugger.TruggerTest.assertThrow;
 import static tools.devnull.trugger.reflection.Reflection.invoke;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
@@ -47,12 +48,12 @@ public class ConstructorTest {
 
   @Test
   public void testNotDeclaredConstructor() {
-    assertNotNull(
+    assertNotEmpty(
         reflect().constructor()
             .withoutParameters()
             .in(ClassWithNoDeclaredConstructor.class)
     );
-    assertNotNull(
+    assertNotEmpty(
         reflect().visible().constructor()
             .withoutParameters()
             .in(ClassWithNoDeclaredConstructor.class)
@@ -67,7 +68,8 @@ public class ConstructorTest {
   public void testInvoker() {
     Constructor<?> constructor = reflect().constructor()
         .withoutParameters()
-        .in(ArrayList.class);
+        .in(ArrayList.class)
+        .value();
     assertNotNull(constructor);
     Object object = invoke(constructor).withoutArgs();
     assertTrue(object instanceof ArrayList);
@@ -75,7 +77,7 @@ public class ConstructorTest {
 
   @Test
   public void testExceptionHandling() {
-    Constructor<?> constructor = reflect().constructor().in(TestObject.class);
+    Constructor<?> constructor = reflect().constructor().in(TestObject.class).value();
     assertThrow(ReflectionException.class,
         () -> invoke(constructor).withoutArgs()
     );

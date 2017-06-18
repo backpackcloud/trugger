@@ -78,22 +78,22 @@ public class MethodReflectionTest {
   public void predicatesTest() {
     assertFalse(
         annotated().test(
-            method("doIt").in(TestInterface.class)
+            method("doIt").in(TestInterface.class).value()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            method("doIt").in(TestInterface.class)
+            method("doIt").in(TestInterface.class).value()
         )
     );
     assertTrue(
         annotated().test(
-            method("bar").in(TestInterface.class)
+            method("bar").in(TestInterface.class).value()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            method("bar").in(TestInterface.class)
+            method("bar").in(TestInterface.class).value()
         )
     );
   }

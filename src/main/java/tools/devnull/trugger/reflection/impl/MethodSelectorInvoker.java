@@ -48,7 +48,7 @@ public class MethodSelectorInvoker implements MethodInvoker {
 
   @Override
   public <E> E withArgs(Object... args) {
-    Method method = selector.in(target);
+    Method method = selector.in(target).value();
     return Reflection.invoke(method).in(target).withArgs(args);
   }
 
