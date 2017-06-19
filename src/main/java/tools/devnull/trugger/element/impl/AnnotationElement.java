@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 /**
  * Class that represents an Annotation property.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class AnnotationElement extends AbstractElement implements Element {
 

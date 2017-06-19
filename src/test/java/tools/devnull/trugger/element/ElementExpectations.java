@@ -28,7 +28,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface ElementExpectations {
 

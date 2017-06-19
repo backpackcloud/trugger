@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class PropertiesElementFinder implements ElementFinder {
 

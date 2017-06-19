@@ -29,7 +29,7 @@ import java.lang.reflect.AnnotatedElement;
 /**
  * A common abstraction for an Element.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public abstract class AbstractElement implements Element {
 

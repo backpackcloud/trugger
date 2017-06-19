@@ -25,7 +25,7 @@ import tools.devnull.trugger.element.Element;
 import java.util.Map;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class MapElement extends AbstractElement implements Element {
 

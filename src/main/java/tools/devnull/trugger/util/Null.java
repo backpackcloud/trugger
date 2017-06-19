@@ -32,7 +32,7 @@ import java.lang.reflect.AnnotatedElement;
  * This class has a set of objects that should be used to eliminate the checks against
  * <code>null</code> objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class Null {
 

@@ -34,7 +34,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
 /**
  * A class for testing method reflection by the {@link Reflector}.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class MethodReflectionTest {
 

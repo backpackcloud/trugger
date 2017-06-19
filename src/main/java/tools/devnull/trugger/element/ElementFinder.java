@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Interface that defines a class capable of search a source for elements
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 6.0
  */
 public interface ElementFinder {

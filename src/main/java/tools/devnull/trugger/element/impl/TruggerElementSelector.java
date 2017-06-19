@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 /**
  * A default implementation for {@link ElementSelector}.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerElementSelector implements ElementSelector {
 

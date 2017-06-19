@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector for {@link Field} objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface FieldsSelector extends PredicateSelector<Field>, DeepSelector {
 

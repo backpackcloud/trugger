@@ -37,7 +37,7 @@ import java.util.List;
  * <i>single object selection</i> (for a <i>set</i> of them, an <strong>empty
  * collection</strong> is returned).
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface Reflector {
 

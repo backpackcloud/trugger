@@ -35,7 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ElementsSelectorTest implements ElementExpectations {
 

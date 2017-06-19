@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 /**
  * An iterator that uses a class hierarchy.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 4.0
  */
 public class ClassIterator implements Iterator<Class> {

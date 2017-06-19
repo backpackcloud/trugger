@@ -45,7 +45,7 @@ import static tools.devnull.trugger.reflection.Reflection.*;
  * <p>
  * For value manipulations (write and read), the methods are used all the time.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class ObjectElement extends AbstractElement {
 

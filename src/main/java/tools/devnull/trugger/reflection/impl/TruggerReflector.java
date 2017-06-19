@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 /**
  * An implementation of the reflection operations.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerReflector implements Reflector {
 

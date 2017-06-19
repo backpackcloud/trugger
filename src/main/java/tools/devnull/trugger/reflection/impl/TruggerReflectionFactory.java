@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 /**
  * A default factory for {@link Reflector} objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerReflectionFactory implements ReflectionFactory {
 

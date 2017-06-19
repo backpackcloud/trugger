@@ -29,7 +29,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
 /**
  * This class holds the parameters of a method interception.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 5.0
  */
 public class InterceptionContextImpl implements InterceptionContext {

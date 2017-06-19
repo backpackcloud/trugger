@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector for a single {@link Constructor} object.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface ConstructorSelector extends PredicateSelector<Constructor<?>> {
 

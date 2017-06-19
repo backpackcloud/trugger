@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.util.Utils.*;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 @Flag
 public class UtilsTest {

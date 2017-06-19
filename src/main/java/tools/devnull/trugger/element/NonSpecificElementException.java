@@ -24,7 +24,7 @@ import tools.devnull.trugger.HandlingException;
  * Exception thrown when a direct value handling is trying on a non-specific
  * element.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 2.0
  */
 public class NonSpecificElementException extends HandlingException {

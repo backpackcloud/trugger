@@ -26,7 +26,7 @@ import tools.devnull.trugger.element.Element;
 import java.util.List;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 5.1
  */
 public class ListElement extends AbstractElement implements Element {

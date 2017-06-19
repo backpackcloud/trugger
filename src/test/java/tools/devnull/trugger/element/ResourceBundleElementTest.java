@@ -33,7 +33,7 @@ import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ResourceBundleElementTest implements ElementExpectations {
 

@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class GenericTypeTest {
 

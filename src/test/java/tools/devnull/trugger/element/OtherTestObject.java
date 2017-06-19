@@ -19,7 +19,7 @@
 package tools.devnull.trugger.element;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class OtherTestObject {
   

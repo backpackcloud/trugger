@@ -23,7 +23,7 @@ import tools.devnull.trugger.util.registry.Registry.Entry;
 /**
  * Represents an entry in a registry.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 2.3
  */
 public class RegistryEntry<K, V> implements Entry<K, V> {

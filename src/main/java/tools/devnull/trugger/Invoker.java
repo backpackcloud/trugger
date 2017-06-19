@@ -22,7 +22,7 @@ package tools.devnull.trugger;
  * Interface that defines a class capable of invoking a object with the possibility of
  * passing arguments.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface Invoker {
 

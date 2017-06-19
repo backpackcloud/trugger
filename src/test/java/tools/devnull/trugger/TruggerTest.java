@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
  * This is the main test of the entire API. It includes all the separated tests and has a
  * common set of methods used by test classes.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerTest {
 

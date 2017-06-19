@@ -21,7 +21,7 @@ package tools.devnull.trugger;
 /**
  * Interface that defines a selector that allows deep operations.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 5.0
  */
 public interface DeepSelector {

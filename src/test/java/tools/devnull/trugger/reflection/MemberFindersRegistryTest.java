@@ -27,7 +27,7 @@ import tools.devnull.trugger.reflection.impl.VisibleMemberFindersRegistry;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-/** @author Marcelo Varella Barca Guimarães */
+/** @author Marcelo "Ataxexe" Guimarães */
 public class MemberFindersRegistryTest {
 
   static class TestClass {

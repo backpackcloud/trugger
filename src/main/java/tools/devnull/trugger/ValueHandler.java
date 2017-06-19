@@ -22,7 +22,7 @@ package tools.devnull.trugger;
  * Interface that defines a component for handling, modifying and/or accessing a
  * value according to the implementation behavior.
  * 
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface ValueHandler {
   

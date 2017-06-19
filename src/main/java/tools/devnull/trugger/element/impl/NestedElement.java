@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 /**
  * A class to handle a path of {@link tools.devnull.trugger.element.Element properties}.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class NestedElement extends AbstractElement implements Element {
 

@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * Interface that defines a registry.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @param <K>
  *          The key type.
  * @param <V>
@@ -74,7 +74,7 @@ public interface Registry<K, V> {
   /**
    * Interface that represents a registry entry.
    *
-   * @author Marcelo Guimarães
+   * @author Marcelo "Ataxexe" Guimarães
    * @param <K>
    *          The key type.
    * @param <V>
@@ -97,7 +97,7 @@ public interface Registry<K, V> {
   /**
    * Interface for mapping a registry to a key.
    *
-   * @author Marcelo Guimarães
+   * @author Marcelo "Ataxexe" Guimarães
    * @param <K>
    *          The key type.
    * @param <V>

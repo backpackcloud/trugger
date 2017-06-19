@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * A simple registry that uses a {@link Map} as the storage.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 2.3
  */
 public class MapRegistry<K, V> implements Registry<K, V> {

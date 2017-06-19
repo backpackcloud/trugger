@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector for {@link Method} objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface MethodsSelector extends PredicateSelector<Method>, DeepSelector {
 

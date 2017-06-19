@@ -36,7 +36,7 @@ import static tools.devnull.trugger.reflection.Reflection.setValue;
 /**
  * A class for testing field reflection by the {@link Reflector}.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class FieldReflectionTest {
 

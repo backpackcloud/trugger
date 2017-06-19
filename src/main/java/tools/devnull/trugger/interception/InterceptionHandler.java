@@ -22,7 +22,7 @@ package tools.devnull.trugger.interception;
 /**
  * Interface that defines an action while intercepting a method call.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 5.0
  */
 @FunctionalInterface

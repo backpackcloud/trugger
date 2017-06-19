@@ -30,7 +30,7 @@ import static tools.devnull.trugger.TruggerTest.assertThrow;
 
 public class InterceptionContextTest {
 
-  static interface Validator<T> {
+  interface Validator<T> {
 
     @Flag
     boolean validate(T arg);

@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ResultSetElementFinder implements ElementFinder {
 

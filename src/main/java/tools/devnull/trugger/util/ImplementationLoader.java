@@ -39,7 +39,7 @@ import java.util.ServiceLoader;
  * <li>org.atatec.trugger.validation.ValidationFactory</li>
  * </ul>
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ImplementationLoader {
 

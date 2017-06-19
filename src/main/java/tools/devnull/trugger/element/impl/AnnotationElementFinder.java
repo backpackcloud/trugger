@@ -36,7 +36,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
  * <p>
  * All methods declared on the annotation will be treat as a property.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class AnnotationElementFinder implements ElementFinder {
 

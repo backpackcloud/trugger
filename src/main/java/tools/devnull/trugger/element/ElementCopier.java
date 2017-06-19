@@ -27,7 +27,7 @@ package tools.devnull.trugger.element;
  * Only the {@link Element#isReadable() readable} elements are copied and only
  * the {@link Element#isWritable() writable} elements receives the value.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public interface ElementCopier {

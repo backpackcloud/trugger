@@ -24,7 +24,7 @@ import tools.devnull.trugger.TruggerException;
 /**
  * Exception thrown to indicate that the context cannot resolve a value.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 5.1
  */
 public class UnresolvableValueException extends TruggerException {

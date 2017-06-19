@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 /**
  * A finder for ResourceBundle elements.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ResourceBundleElementFinder implements ElementFinder {
 

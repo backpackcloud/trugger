@@ -27,7 +27,7 @@ import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.element.Elements.element;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class NonSpecificElementTest implements ElementExpectations {
 

@@ -29,7 +29,7 @@ import static tools.devnull.trugger.element.ElementPredicates.*;
 import static tools.devnull.trugger.element.Elements.element;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ElementTest {
 

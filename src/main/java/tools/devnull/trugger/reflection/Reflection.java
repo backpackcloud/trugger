@@ -42,7 +42,7 @@ import java.util.function.Consumer;
  * <p>
  * This class also uses a {@link ReflectionFactory} for some operations.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class Reflection {
 

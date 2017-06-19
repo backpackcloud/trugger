@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class MapElementFinder implements ElementFinder {
 

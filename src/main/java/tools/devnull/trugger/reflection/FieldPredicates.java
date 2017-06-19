@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 /**
  * A set of predicates to use with <code>Field</code> objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 4.1
  */
 public class FieldPredicates {

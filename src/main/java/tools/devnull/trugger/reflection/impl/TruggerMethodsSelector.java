@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 /**
  * A default implementation for the methods selector.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerMethodsSelector implements MethodsSelector {
 

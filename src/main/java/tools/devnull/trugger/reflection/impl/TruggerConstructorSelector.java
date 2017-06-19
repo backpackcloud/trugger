@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 /**
  * A default implementation for the constructor selector.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerConstructorSelector implements ConstructorSelector {
 

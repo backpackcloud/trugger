@@ -41,7 +41,7 @@ import static tools.devnull.trugger.reflection.ClassPredicates.assignableTo;
 /**
  * A default implementation for ElementFactory.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class TruggerElementFactory implements ElementFactory {
 

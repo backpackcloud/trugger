@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 /**
  * A set of predicates to use with <code>Method</code> objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 4.1
  */
 public class MethodPredicates {

@@ -23,7 +23,7 @@ import tools.devnull.trugger.HandlingException;
 /**
  * Exception thrown when a code tries to get the value of a write-only element.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public class UnreadableElementException extends HandlingException {

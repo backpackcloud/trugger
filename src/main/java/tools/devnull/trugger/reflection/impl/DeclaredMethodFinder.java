@@ -21,7 +21,7 @@ package tools.devnull.trugger.reflection.impl;
 import java.lang.reflect.Method;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class DeclaredMethodFinder implements MemberFinder<Method> {
 

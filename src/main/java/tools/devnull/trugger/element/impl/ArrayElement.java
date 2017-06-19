@@ -25,7 +25,7 @@ import tools.devnull.trugger.element.Element;
 
 import java.lang.reflect.Array;
 
-/** @author Marcelo Guimarães */
+/** @author Marcelo "Ataxexe" Guimarães */
 public class ArrayElement extends AbstractElement implements Element {
 
   private int index;

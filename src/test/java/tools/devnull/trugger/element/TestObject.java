@@ -21,7 +21,7 @@ package tools.devnull.trugger.element;
 import tools.devnull.trugger.Flag;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TestObject {
 

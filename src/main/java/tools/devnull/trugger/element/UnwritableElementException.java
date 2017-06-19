@@ -24,7 +24,7 @@ import tools.devnull.trugger.HandlingException;
  * Exception thrown when a code tries to change the value of a read-only
  * element.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public class UnwritableElementException extends HandlingException {

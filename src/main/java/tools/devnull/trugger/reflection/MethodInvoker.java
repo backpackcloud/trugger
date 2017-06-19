@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
  * MyType result = {@link Reflection#invoke(Method)}.on(instance).withArgs(arg1, arg2);
  * </pre>
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface MethodInvoker extends Invoker {
 

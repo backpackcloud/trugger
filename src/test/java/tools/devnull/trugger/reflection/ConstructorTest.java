@@ -31,7 +31,7 @@ import static tools.devnull.trugger.reflection.Reflection.invoke;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ConstructorTest {
 

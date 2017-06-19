@@ -27,7 +27,7 @@ import java.lang.annotation.Annotation;
 /**
  * A class that represents a {@link Element#isSpecific() specific} element.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class SpecificElement implements Element {
 

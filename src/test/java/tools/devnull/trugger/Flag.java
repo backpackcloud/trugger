@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * A tag interface for testing the selectors.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Flag {

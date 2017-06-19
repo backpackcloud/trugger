@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * A default implementation for {@link ElementsSelector}.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class TruggerElementsSelector implements ElementsSelector {
 

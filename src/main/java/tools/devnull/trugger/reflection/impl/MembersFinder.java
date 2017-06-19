@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Interface that defines a class capable of find {@link Member} objects.
  * 
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface MembersFinder<T extends Member> {
   

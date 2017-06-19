@@ -31,7 +31,7 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class RegistryTest {
 

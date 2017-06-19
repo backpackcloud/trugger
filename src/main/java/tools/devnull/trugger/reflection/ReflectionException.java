@@ -25,7 +25,7 @@ import tools.devnull.trugger.TruggerException;
  * <p>
  * This exception should be used only for encapsulation of another exceptions.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ReflectionException extends TruggerException {
 

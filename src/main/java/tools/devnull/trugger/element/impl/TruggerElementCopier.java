@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 /**
  * The default implementation for the property copy operation.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class TruggerElementCopier implements ElementCopier,
     CopyDestination {

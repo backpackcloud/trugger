@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 /**
  * A default implementation for invoking {@link Method} objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerMethodInvoker implements MethodInvoker {
 

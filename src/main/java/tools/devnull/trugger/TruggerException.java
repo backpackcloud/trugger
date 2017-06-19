@@ -21,7 +21,7 @@ package tools.devnull.trugger;
 /**
  * The root exception for the entire framework.
  *
- * @author Marcelo Guimarães.
+ * @author Marcelo "Ataxexe" Guimarães.
  */
 public class TruggerException extends RuntimeException {
 

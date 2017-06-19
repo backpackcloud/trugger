@@ -25,7 +25,7 @@ import tools.devnull.trugger.element.Element;
 import java.util.Properties;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class PropertiesElement extends AbstractElement implements Element {
 

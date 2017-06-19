@@ -49,7 +49,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
  *
  * @author Rob Harrop
  * @author Juergen Hoeller
- * @author Marcelo Guimarães (some code adaptations).
+ * @author Marcelo "Ataxexe" Guimarães (some code adaptations).
  */
 final class TruggerBridgeMethodResolver {
 

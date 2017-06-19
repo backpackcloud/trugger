@@ -21,7 +21,7 @@ package tools.devnull.trugger.element;
 /**
  * Interface that defines a copy of an {@link Element}.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public interface ElementCopy {

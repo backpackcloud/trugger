@@ -21,7 +21,7 @@ package tools.devnull.trugger.reflection.impl;
 import java.lang.reflect.Field;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class DeclaredFieldFinder implements MemberFinder<Field> {
 

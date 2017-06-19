@@ -25,7 +25,7 @@ import java.lang.annotation.Annotation;
 /**
  * A class with general utility methods.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public final class Utils {

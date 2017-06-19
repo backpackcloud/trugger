@@ -27,7 +27,7 @@ import java.util.function.Predicate;
  * An utility class for helping the use of {@link Predicate} object that involves
  * Reflection in general.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ReflectionPredicates {
 

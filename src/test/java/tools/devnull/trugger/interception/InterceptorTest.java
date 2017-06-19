@@ -31,7 +31,7 @@ import static tools.devnull.trugger.interception.Interception.intercept;
 import static tools.devnull.trugger.interception.InterceptionHandler.delegate;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class InterceptorTest {
 

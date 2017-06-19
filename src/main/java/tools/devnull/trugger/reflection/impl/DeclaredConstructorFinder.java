@@ -21,7 +21,7 @@ package tools.devnull.trugger.reflection.impl;
 import java.lang.reflect.Constructor;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class DeclaredConstructorFinder implements MemberFinder<Constructor<?>> {
 

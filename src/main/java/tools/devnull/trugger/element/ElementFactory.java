@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a factory for {@link Element} objects operations.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public interface ElementFactory {

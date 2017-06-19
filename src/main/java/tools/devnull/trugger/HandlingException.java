@@ -21,7 +21,7 @@ package tools.devnull.trugger;
 /**
  * Exception thrown when an error occurs while handling a value.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 2.0
  */
 public class HandlingException extends TruggerException {

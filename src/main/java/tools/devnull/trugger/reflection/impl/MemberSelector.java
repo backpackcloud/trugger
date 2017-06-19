@@ -31,7 +31,7 @@ import java.util.function.Predicate;
  * A base class for selecting a single {@link Member} object.
  *
  * @param <T> The member type.
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class MemberSelector<T extends Member> {
 

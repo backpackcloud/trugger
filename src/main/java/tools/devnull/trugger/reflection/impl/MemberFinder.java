@@ -23,7 +23,7 @@ import java.lang.reflect.Member;
 /**
  * Interface that defines a class capable of find {@link Member} objects.
  * 
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface MemberFinder<T extends Member> {
   

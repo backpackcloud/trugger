@@ -40,7 +40,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
 /**
  * A default class for finding properties in objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class ObjectElementFinder implements ElementFinder {
 

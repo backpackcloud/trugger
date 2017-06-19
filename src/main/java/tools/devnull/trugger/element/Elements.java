@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 /**
  * A class for helping {@link Element} selection.
  *
- * @author Marcelo Guimarães.
+ * @author Marcelo "Ataxexe" Guimarães.
  * @since 1.2
  */
 public class Elements {

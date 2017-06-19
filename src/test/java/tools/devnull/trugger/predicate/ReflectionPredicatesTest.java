@@ -36,7 +36,7 @@ import static tools.devnull.trugger.reflection.ReflectionPredicates.annotated;
 /**
  * A class for testing the reflection predicates.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ReflectionPredicatesTest {
 

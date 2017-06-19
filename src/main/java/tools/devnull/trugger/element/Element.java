@@ -26,7 +26,7 @@ import java.lang.reflect.AnnotatedElement;
 /**
  * Interface that defines an element of a class or an object.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public interface Element extends AnnotatedElement, ValueHandler {

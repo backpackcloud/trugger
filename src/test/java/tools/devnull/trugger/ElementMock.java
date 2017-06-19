@@ -33,7 +33,7 @@ import static tools.devnull.trugger.AnnotationMock.mockAnnotation;
 /**
  * A class for helping creation of simple {@link Element} mocks.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 2.0
  */
 public class ElementMock {

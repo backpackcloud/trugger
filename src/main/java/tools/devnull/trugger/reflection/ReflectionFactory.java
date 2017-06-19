@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 /**
  * Interface that defines a factory for objects using in the {@link Reflection} class.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface ReflectionFactory {
 

@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 /**
  * Interface for defining a destination to a copy.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 4.1
  */
 public interface CopyDestination extends PredicateSelector<ElementCopy> {

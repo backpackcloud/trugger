@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector that uses {@link Predicate} objects.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @param <T>
  *          The object type to select.
  * @since 1.1

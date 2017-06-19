@@ -31,7 +31,7 @@ import tools.devnull.trugger.Invoker;
  * MyType instance = {@link Reflection#invoke(Constructor)}.withArgs(argument1, argument2);
  * </pre>
  * 
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface ConstructorInvoker extends Invoker {
 

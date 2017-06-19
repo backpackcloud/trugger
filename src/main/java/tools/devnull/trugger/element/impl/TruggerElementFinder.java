@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 /**
  * A default implementation for an Element finder.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class TruggerElementFinder implements ElementFinder {
 
