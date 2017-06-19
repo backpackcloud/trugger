@@ -31,7 +31,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -178,29 +180,53 @@ public final class Reflection {
   }
 
   /**
-   * @return an iterable Class hierarchy for use in "foreach" loops.
+   * @return a list containing the hierarchy of the given target.
    * @see ClassIterator
-   * @since 4.0
+   * @since 6.0
    */
-  public static Iterable<Class> hierarchyOf(final Object target) {
-    return () -> new ClassIterator(target);
+  public static List<Class> hierarchyOf(Object target) {
+    List<Class> result = new ArrayList<>();
+    new ClassIterator(target).forEachRemaining(result::add);
+    return result;
   }
 
+  /**
+   * Returns a function that invokes a selected method.
+   *
+   * @param args the arguments for invoking the method
+   * @return a function that invokes a selected method
+   */
   public static <E> OptionalFunction<Selection<Method>, E> invoke(Object... args) {
     return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).on(selection.target()).withArgs(args));
   }
 
+  /**
+   * Returns a function that invokes a selected constructor.
+   *
+   * @param args the arguments for invoking the constructor
+   * @return a function that invokes a selected constructor
+   */
   public static <E> OptionalFunction<Selection<Constructor<?>>, E> instantiate(Object... args) {
     return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).withArgs(args));
   }
 
+  /**
+   * Returns a function that gets the value of a selected field.
+   *
+   * @return a function that gets the value of a selected field.
+   */
   public static <E> OptionalFunction<Selection<Field>, E> getValue() {
     return OptionalFunction.of(selection -> factory.createHandler(selection.result()).on(selection.target()).getValue());
   }
 
+  /**
+   * Returns a consumer that sets the value of a selected field.
+   *
+   * @param newValue the value to set
+   * @return a consumer that sets the value of a selected field.
+   */
   public static Consumer<Selection<Field>> setValue(Object newValue) {
     return selection -> factory.createHandler(selection.result()).on(selection.target()).setValue(newValue);
   }
 
 }
-

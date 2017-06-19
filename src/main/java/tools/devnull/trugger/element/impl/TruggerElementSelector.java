@@ -19,8 +19,8 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.SelectionResult;
-import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.ElementSelector;
 
 import java.util.function.Predicate;
@@ -54,10 +54,8 @@ public class TruggerElementSelector implements ElementSelector {
   }
 
   public SelectionResult<Element> from(Object target) {
-    return finder.find(name, target)
-        .filter(predicate)
-        .map(el -> new SelectionResult<>(target, el))
-        .orElseReturn(() -> new SelectionResult<>(target, null));
+    Element element = finder.find(name, target).filter(predicate).value();
+    return new SelectionResult<>(target, element);
   }
 
 }

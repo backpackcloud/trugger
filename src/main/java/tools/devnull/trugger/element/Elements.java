@@ -18,10 +18,13 @@
  */
 package tools.devnull.trugger.element;
 
+import tools.devnull.trugger.Selection;
 import tools.devnull.trugger.element.impl.TruggerElementSelection;
 import tools.devnull.trugger.util.ImplementationLoader;
+import tools.devnull.trugger.util.OptionalFunction;
 import tools.devnull.trugger.util.registry.Registry;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -86,6 +89,14 @@ public class Elements {
    */
   public static ElementCopier copy(ElementsSelector selector) {
     return factory.createElementCopier(selector);
+  }
+
+  public static <E> OptionalFunction<Selection<Element>, E> getValue() {
+    return OptionalFunction.of(selection -> selection.result().getValue());
+  }
+
+  public static Consumer<Selection<Element>> setValue(Object newValue) {
+    return selection -> selection.result().setValue(newValue);
   }
 
 }
