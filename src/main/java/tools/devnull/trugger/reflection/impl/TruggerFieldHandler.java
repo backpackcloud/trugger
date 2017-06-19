@@ -64,7 +64,7 @@ public class TruggerFieldHandler implements FieldHandler {
     this.instance = instance;
   }
   
-  public <E> E get() throws HandlingException {
+  public <E> E getValue() throws HandlingException {
     try {
       return (E) field.get(instance);
     } catch (Exception e) {
@@ -72,7 +72,7 @@ public class TruggerFieldHandler implements FieldHandler {
     }
   }
   
-  public void set(Object value) throws HandlingException {
+  public void setValue(Object value) throws HandlingException {
     try {
       field.set(instance, value);
     } catch (Exception e) {

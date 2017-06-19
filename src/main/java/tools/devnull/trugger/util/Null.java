@@ -94,12 +94,12 @@ public final class Null {
 
   public static final ValueHandler NULL_VALUE_HANDLER = new ValueHandler() {
     @Override
-    public <E> E get() throws HandlingException {
+    public <E> E getValue() throws HandlingException {
       return null;
     }
 
     @Override
-    public void set(Object value) throws HandlingException {
+    public void setValue(Object value) throws HandlingException {
 
     }
   };
@@ -107,12 +107,12 @@ public final class Null {
   public static final FieldHandler NULL_FIELD_HANDLER = new FieldHandler() {
 
     @Override
-    public <E> E get() throws HandlingException {
+    public <E> E getValue() throws HandlingException {
       return null;
     }
 
     @Override
-    public void set(Object value) throws HandlingException {
+    public void setValue(Object value) throws HandlingException {
     }
 
     @Override

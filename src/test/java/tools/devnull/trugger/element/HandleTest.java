@@ -40,10 +40,10 @@ public class HandleTest implements ElementExpectations {
     TestObject obj = new TestObject();
     obj.string = "test";
 
-    Spec.given(element().from(obj))
-        .expect(Element::get, to().be("test"))
+    Spec.given(element().from(obj).value())
+        .expect(Element::getValue, to().be("test"))
         .when(valueIsSetTo("other value"))
-        .expect(Element::get, to().be("other value"))
+        .expect(Element::getValue, to().be("other value"))
         .expect(the(obj.string), to().be("other value"));
   }
 
@@ -52,7 +52,7 @@ public class HandleTest implements ElementExpectations {
     TestObject obj = new TestObject();
     obj.string = "test";
 
-    Spec.given(element().from(TestObject.class))
+    Spec.given(element().from(TestObject.class).value())
         .expect(valueIn(obj), to().be("test"))
         .when(valueIsSetTo("other value", obj))
         .expect(valueIn(obj), to().be("other value"))
@@ -62,7 +62,7 @@ public class HandleTest implements ElementExpectations {
   @Test
   public void testHandlingError() {
     TestObject obj = new TestObject();
-    Spec.given(element().from(obj))
+    Spec.given(element().from(obj).value())
         .expect(settingValueTo(10), to().raise(HandlingException.class));
   }
 

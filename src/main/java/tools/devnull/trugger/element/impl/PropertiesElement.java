@@ -40,7 +40,7 @@ public class PropertiesElement extends AbstractElement implements Element {
       return new ValueHandler() {
 
         @Override
-        public void set(Object value) throws HandlingException {
+        public void setValue(Object value) throws HandlingException {
           if (value != null) {
             try {
               props.setProperty(name, (String) value);
@@ -51,7 +51,7 @@ public class PropertiesElement extends AbstractElement implements Element {
         }
 
         @Override
-        public <E> E get() throws HandlingException {
+        public <E> E getValue() throws HandlingException {
           return (E) props.getProperty(name);
         }
       };

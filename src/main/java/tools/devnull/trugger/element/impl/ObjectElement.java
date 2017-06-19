@@ -91,7 +91,7 @@ public final class ObjectElement extends AbstractElement {
   public ValueHandler on(final Object target) {
     return new ValueHandler() {
 
-      public <E> E get() throws HandlingException {
+      public <E> E getValue() throws HandlingException {
         if (!isReadable()) {
           throw new UnreadableElementException(name);
         }
@@ -99,14 +99,14 @@ public final class ObjectElement extends AbstractElement {
           if (getter != null) {
             return invoke(getter).on(target).withoutArgs();
           } else {
-            return handle(field).on(target).get();
+            return handle(field).on(target).getValue();
           }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());
         }
       }
 
-      public void set(Object value) throws HandlingException {
+      public void setValue(Object value) throws HandlingException {
         if (!isWritable()) {
           throw new UnwritableElementException(name);
         }
@@ -114,7 +114,7 @@ public final class ObjectElement extends AbstractElement {
           if (setter != null) {
             invoke(setter).on(target).withArgs(value);
           } else {
-            handle(field).on(target).set(value);
+            handle(field).on(target).setValue(value);
           }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());

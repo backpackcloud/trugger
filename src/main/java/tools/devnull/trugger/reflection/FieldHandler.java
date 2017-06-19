@@ -49,12 +49,12 @@ public interface FieldHandler extends ValueHandler {
   /**
    * Gets the value for a <i>static</i> {@link Field}.
    */
-  <E> E get() throws HandlingException;
+  <E> E getValue() throws HandlingException;
 
   /**
    * Sets the value for a <i>static</i> {@link Field}.
    */
-  void set(Object value) throws HandlingException;
+  void setValue(Object value) throws HandlingException;
 
   /**
    * Handles the value on a given instance (use this if the field is not

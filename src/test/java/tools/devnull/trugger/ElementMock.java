@@ -176,7 +176,7 @@ public class ElementMock {
    * @return a reference to this object.
    */
   public ElementMock withSpecificValue(Object value) {
-    when(element.get()).thenReturn(value);
+    when(element.getValue()).thenReturn(value);
     return specific();
   }
 

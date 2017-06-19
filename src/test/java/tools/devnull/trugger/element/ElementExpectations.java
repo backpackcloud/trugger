@@ -37,51 +37,51 @@ public interface ElementExpectations {
   }
 
   default Consumer<Element> valueIsSetTo(Object value) {
-    return (element) -> element.set(value);
+    return (element) -> element.setValue(value);
   }
 
   default Consumer<Element> valueIsSetTo(Object value, Object target) {
-    return (element) -> element.on(target).set(value);
+    return (element) -> element.on(target).setValue(value);
   }
 
   default Predicate<Element> aValue() {
-    return (element) -> element.get() != null;
+    return (element) -> element.getValue() != null;
   }
 
   default Consumer<Element> attempToChangeValue() {
-    return (element) -> element.set("a value");
+    return (element) -> element.setValue("a value");
   }
 
   default Consumer<Element> settingValueTo(Object value) {
-    return (element) -> element.set(value);
+    return (element) -> element.setValue(value);
   }
 
   default Consumer<Element> attempToGetValue() {
-    return (element) -> element.get();
+    return (element) -> element.getValue();
   }
 
   default Function<Element, ?> valueIn(Object target) {
-    return (element) -> element.on(target).get();
+    return (element) -> element.on(target).getValue();
   }
 
   default Function<Element, ?> valueOf(String elementName) {
-    return (element) -> Elements.element(elementName).from(element.get()).get();
+    return (element) -> Elements.element(elementName).from(element.getValue()).value().getValue();
   }
 
   default Function<List, ?> elementAt(int index) {
-    return list -> ((Element) list.get(index)).get();
+    return list -> ((Element) list.get(index)).getValue();
   }
 
   default Consumer<Element> settingValueTo(Object value, Object target) {
-    return (element) -> element.on(target).set(value);
+    return (element) -> element.on(target).setValue(value);
   }
 
   default Consumer<Element> gettingValue() {
-    return (element) -> element.get();
+    return (element) -> element.getValue();
   }
 
   default Consumer<Element> gettingValueIn(Object target) {
-    return (element) -> element.on(target).get();
+    return (element) -> element.on(target).getValue();
   }
 
   default Predicate<Collection<Element>> elementsNamed(String... names) {
@@ -103,7 +103,7 @@ public interface ElementExpectations {
   }
 
   default Function elementNamed(String name) {
-    return obj -> Elements.element(name).from(obj);
+    return obj -> Elements.element(name).from(obj).value();
   }
 
 }

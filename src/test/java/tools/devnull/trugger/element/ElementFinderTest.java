@@ -55,13 +55,13 @@ public class ElementFinderTest {
 
   @Test
   public void testRegistry() {
-    assertNotNull(element("field").from(TestFinder.class));
+    assertNotNull(element("field").from(TestFinder.class).value());
     assertFalse(elements().from(TestFinder.class).isEmpty());
 
     Elements.registry().register(new MyFinder())
         .to(ClassPredicates.type(TestFinder.class));
 
-    assertNull(element("field").from(TestFinder.class));
+    assertNull(element("field").from(TestFinder.class).value());
     assertTrue(elements().from(TestFinder.class).isEmpty());
   }
 

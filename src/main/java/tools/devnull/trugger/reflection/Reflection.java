@@ -195,11 +195,11 @@ public final class Reflection {
   }
 
   public static <E> OptionalFunction<Selection<Field>, E> getValue() {
-    return OptionalFunction.of(selection -> factory.createHandler(selection.result()).on(selection.target()).get());
+    return OptionalFunction.of(selection -> factory.createHandler(selection.result()).on(selection.target()).getValue());
   }
 
   public static Consumer<Selection<Field>> setValue(Object newValue) {
-    return selection -> factory.createHandler(selection.result()).on(selection.target()).set(newValue);
+    return selection -> factory.createHandler(selection.result()).on(selection.target()).setValue(newValue);
   }
 
 }

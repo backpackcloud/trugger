@@ -37,7 +37,8 @@ public class ElementTest {
   public void elementTest() {
     Element el = element("age")
         .filter(annotatedWith(Flag.class))
-        .from(TestObject.class);
+        .from(TestObject.class)
+        .value();
     assertNotNull(el);
     assertEquals(
         1,
@@ -57,16 +58,17 @@ public class ElementTest {
     assertNull(el.target());
 
     assertThrow(NonSpecificElementException.class,
-        () -> el.get());
+        () -> el.getValue());
     assertThrow(NonSpecificElementException.class,
-        () -> el.set(14));
+        () -> el.setValue(14));
   }
 
   @Test
   public void specificElementTest() {
     Element el = element("age")
         .filter(annotatedWith(Flag.class))
-        .from(new TestObject("", ""));
+        .from(new TestObject("", ""))
+        .value();
     assertNotNull(el);
     assertEquals(
         1,
@@ -85,41 +87,41 @@ public class ElementTest {
     assertTrue(el.isSpecific());
     assertNotNull(el.target());
 
-    el.set(14);
-    assertEquals(14, (int) el.get());
+    el.setValue(14);
+    assertEquals(14, (int) el.getValue());
   }
 
   @Test
   public void staticElementTest() {
-    Element el = element("staticValue").from(new TestObject("", ""));
+    Element el = element("staticValue").from(new TestObject("", "")).value();
     assertEquals("staticValue", el.name());
     assertTrue(el.isSpecific());
     assertTrue(el.isReadable());
     assertTrue(el.isWritable());
     TestObject.staticValue = 0.0;
 
-    assertEquals(0.0, el.get(), 0e-4);
-    el.set(1.5);
-    assertEquals(1.5, el.get(), 0e-4);
+    assertEquals(0.0, el.getValue(), 0e-4);
+    el.setValue(1.5);
+    assertEquals(1.5, el.getValue(), 0e-4);
   }
 
   @Test
   public void testNullSpecificElement() {
-    Element el = element("non_existent").from(new Object());
+    Element el = element("non_existent").from(new Object()).value();
     assertNull(el);
   }
 
   @Test
   public void testSingleSelection() {
     assertNotNull(
-        element().filter(ofType(int.class)).from(TestObject.class)
+        element().filter(ofType(int.class)).from(TestObject.class).value()
     );
     assertNull(
-        element().filter(ofType(Serializable.class)).from(TestObject.class)
+        element().filter(ofType(Serializable.class)).from(TestObject.class).value()
     );
     // should return the first element found, no matter what it is
     assertNotNull(
-        element().filter(assignableTo(Serializable.class)).from(TestObject.class)
+        element().filter(assignableTo(Serializable.class)).from(TestObject.class).value()
     );
   }
 
@@ -146,53 +148,53 @@ public class ElementTest {
   @Test
   public void testMergedElement() throws Exception {
     ForMergedTest o = new ForMergedTest();
-    Element element = element("i").from(ForMergedTest.class);
+    Element element = element("i").from(ForMergedTest.class).value();
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(5, (int) element.on(o).get());
-    element.on(o).set(5);
-    assertEquals(10, (int) element.on(o).get());
+    assertEquals(5, (int) element.on(o).getValue());
+    element.on(o).setValue(5);
+    assertEquals(10, (int) element.on(o).getValue());
 
-    element = element("i").from(o);
+    element = element("i").from(o).value();
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(10, (int) element.get());
-    element.set(10);
-    assertEquals(15, (int) element.get());
+    assertEquals(10, (int) element.getValue());
+    element.setValue(10);
+    assertEquals(15, (int) element.getValue());
 
     //------------------------------------------//
 
-    element = element("j").from(ForMergedTest.class);
+    element = element("j").from(ForMergedTest.class).value();
     assertFalse(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(20, (int) element.on(o).get());
+    assertEquals(20, (int) element.on(o).getValue());
 
-    element = element("j").from(o);
+    element = element("j").from(o).value();
     assertTrue(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(20, (int) element.get());
+    assertEquals(20, (int) element.getValue());
 
     //------------------------------------------//
 
-    element = element("k").from(ForMergedTest.class);
+    element = element("k").from(ForMergedTest.class).value();
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(0, (int) element.on(o).get());
-    element.on(o).set(15);
-    assertEquals(30, (int) element.on(o).get());
+    assertEquals(0, (int) element.on(o).getValue());
+    element.on(o).setValue(15);
+    assertEquals(30, (int) element.on(o).getValue());
 
-    element = element("k").from(o);
+    element = element("k").from(o).value();
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
-    assertEquals(30, (int) element.get());
-    element.set(40);
-    assertEquals(55, (int) element.get());
+    assertEquals(30, (int) element.getValue());
+    element.setValue(40);
+    assertEquals(55, (int) element.getValue());
   }
 
 }

@@ -89,18 +89,18 @@ public class ResultSetElementTest implements ElementExpectations {
 
   @Test
   public void testNamedElement() throws SQLException {
-    Spec.given(element("name").from(ResultSet.class))
+    Spec.given(element("name").from(ResultSet.class).value())
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("name").from(resultSet))
+    Spec.given(element("name").from(resultSet).value())
         .expect(Element::declaringClass, to().be(ResultSet.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))
-        .expect(Element::get, to().be("John"))
+        .expect(Element::getValue, to().be("John"))
 
         .when(retrievingNextRow())
 
-        .expect(Element::get, to().be("Justin"))
+        .expect(Element::getValue, to().be("Justin"))
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(gettingValueIn(new Object()), to().raise(HandlingException.class))
         .expect(gettingValue(), to().raise(HandlingException.class));
@@ -108,18 +108,18 @@ public class ResultSetElementTest implements ElementExpectations {
 
   @Test
   public void testIndexedElement() throws SQLException {
-    Spec.given(element("1").from(ResultSet.class))
+    Spec.given(element("1").from(ResultSet.class).value())
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("1").from(resultSet))
+    Spec.given(element("1").from(resultSet).value())
         .expect(Element::declaringClass, to().be(ResultSet.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))
-        .expect(Element::get, to().be("John"))
+        .expect(Element::getValue, to().be("John"))
 
         .when(retrievingNextRow())
 
-        .expect(Element::get, to().be("Justin"))
+        .expect(Element::getValue, to().be("Justin"))
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(gettingValueIn(new Object()), to().raise(HandlingException.class))
         .expect(gettingValue(), to().raise(HandlingException.class));

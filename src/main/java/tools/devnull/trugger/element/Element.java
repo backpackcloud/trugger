@@ -71,8 +71,8 @@ public interface Element extends AnnotatedElement, ValueHandler {
 
   /**
    * Checks if this element is specific for a target. If this method returns
-   * <code>true</code>, then the methods {@link #get()} and
-   * {@link #set(Object)} can be used.
+   * <code>true</code>, then the methods {@link #getValue()} and
+   * {@link #setValue(Object)} can be used.
    *
    * @return <code>true</code> if this element is specific for a target.
    * @since 2.0
@@ -92,12 +92,12 @@ public interface Element extends AnnotatedElement, ValueHandler {
    * Returns the value if this element is {@link #isSpecific() specific}.
    */
   @Override
-  <E> E get() throws HandlingException;
+  <E> E getValue() throws HandlingException;
 
   /**
    * Sets the value if this element is {@link #isSpecific() specific}.
    */
   @Override
-  void set(Object value) throws HandlingException;
+  void setValue(Object value) throws HandlingException;
 
 }

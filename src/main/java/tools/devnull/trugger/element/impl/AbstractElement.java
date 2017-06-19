@@ -91,18 +91,18 @@ public abstract class AbstractElement implements Element {
   }
 
   @Override
-  public void set(Object value) throws HandlingException {
+  public void setValue(Object value) throws HandlingException {
     if (isSpecific()) {
-      on(target()).set(value);
+      on(target()).setValue(value);
     } else {
       throw new NonSpecificElementException();
     }
   }
 
   @Override
-  public <E> E get() throws HandlingException {
+  public <E> E getValue() throws HandlingException {
     if (isSpecific()) {
-      return on(target()).get();
+      return on(target()).getValue();
     }
     throw new NonSpecificElementException();
   }

@@ -53,13 +53,13 @@ public class SpecificElement implements Element {
   }
 
   @Override
-  public Object get() throws HandlingException {
-    return on(target).get();
+  public Object getValue() throws HandlingException {
+    return on(target).getValue();
   }
 
   @Override
-  public void set(Object value) throws HandlingException {
-    on(target).set(value);
+  public void setValue(Object value) throws HandlingException {
+    on(target).setValue(value);
   }
 
   public Class declaringClass() {

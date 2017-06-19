@@ -44,12 +44,12 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
       return new ValueHandler() {
 
         @Override
-        public void set(Object value) throws HandlingException {
+        public void setValue(Object value) throws HandlingException {
           throw new UnwritableElementException("Cannot change a ResourceBundle property.");
         }
 
         @Override
-        public <E> E get() throws HandlingException {
+        public <E> E getValue() throws HandlingException {
           if (bundle.containsKey(name)) {
             return (E) bundle.getObject(name);
           }

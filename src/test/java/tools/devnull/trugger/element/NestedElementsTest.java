@@ -62,22 +62,22 @@ public class NestedElementsTest implements ElementExpectations {
 
   @Test
   public void testNestedElementCreating() {
-    Spec.given(element("customer.phone").from(Ticket.class))
+    Spec.given(element("customer.phone").from(Ticket.class).value())
         .expect(it(), to().not().beNull())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("customer.credential").from(Ticket.class))
+    Spec.given(element("customer.credential").from(Ticket.class).value())
         .expect(it(), to().beNull());
 
-    Spec.given(element("customer.info").from(new Ticket()))
+    Spec.given(element("customer.info").from(new Ticket()).value())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("customer.info.properties").from(new Ticket()))
+    Spec.given(element("customer.info.properties").from(new Ticket()).value())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().not().be(writable()))
@@ -90,14 +90,14 @@ public class NestedElementsTest implements ElementExpectations {
     ticket.customer = new Customer();
     ticket.customer.address = new Address();
 
-    Spec.given(element("customer.address.line").from(ticket))
+    Spec.given(element("customer.address.line").from(ticket).value())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().be(specific()))
-        .expect((Function<? super Element, Object>) Element::get, to().equal(null))
+        .expect((Function<? super Element, Object>) Element::getValue, to().equal(null))
 
         .when(valueIsSetTo("Address line"))
-        .expect(Element::get, to().be("Address line"));
+        .expect(Element::getValue, to().be("Address line"));
   }
 
 }

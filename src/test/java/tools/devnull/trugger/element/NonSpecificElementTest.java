@@ -32,7 +32,7 @@ import static tools.devnull.trugger.element.Elements.element;
 public class NonSpecificElementTest implements ElementExpectations {
 
   private Element nonSpecificElement =
-      element("nonSpecificElement").from(Map.class);
+      element("nonSpecificElement").from(Map.class).value();
 
   @Test
   public void testRead() throws Exception {

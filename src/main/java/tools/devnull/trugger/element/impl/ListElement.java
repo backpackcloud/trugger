@@ -75,7 +75,7 @@ public class ListElement extends AbstractElement implements Element {
   public ValueHandler on(final Object list) {
     return new ValueHandler() {
       @Override
-      public <E> E get() throws HandlingException {
+      public <E> E getValue() throws HandlingException {
         try {
           return (E) ((List) list).get(index);
         } catch (Exception e) {
@@ -84,7 +84,7 @@ public class ListElement extends AbstractElement implements Element {
       }
 
       @Override
-      public void set(Object value) throws HandlingException {
+      public void setValue(Object value) throws HandlingException {
         try {
           ((List) list).set(index, value);
         } catch (Exception e) {

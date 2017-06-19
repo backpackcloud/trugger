@@ -52,25 +52,25 @@ public class AnnotationElementTest implements ElementExpectations {
 
   @Test
   public void testElementSpecs() {
-    Spec.given(element("name").from(annotation()))
+    Spec.given(element("name").from(annotation()).value())
         .expect(Element::name, to().be("name"))
-        .expect(Element::get, to().be("some name"))
+        .expect(Element::getValue, to().be("some name"))
         .expect(stringRepresentation(), to().be("name : java.lang.String"))
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("name").from(TestAnnotation.class))
+    Spec.given(element("name").from(TestAnnotation.class).value())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
 
         .expect(attempToGetValue(), to().raise(NonSpecificElementException.class));
 
-    Spec.given(element("bool").from(annotation()))
+    Spec.given(element("bool").from(annotation()).value())
         .expect(Element::type, to().be(boolean.class))
-        .expect(Element::get, to().be(false))
+        .expect(Element::getValue, to().be(false))
         .expect(Element::declaringClass, to().be(TestAnnotation.class))
         .expect(Element::name, to().be("bool"))
         .expect(it(), to().be(specific()));
@@ -91,8 +91,8 @@ public class AnnotationElementTest implements ElementExpectations {
 
   @Test
   public void testNoElementFound() {
-    assertNull(element("non_existent").from(annotation()));
-    assertNull(element("non_existent").from(TestAnnotation.class));
+    assertNull(element("non_existent").from(annotation()).value());
+    assertNull(element("non_existent").from(TestAnnotation.class).value());
     assertTrue(elements().from(Documented.class).isEmpty());
   }
 
@@ -121,7 +121,7 @@ public class AnnotationElementTest implements ElementExpectations {
       }
     };
 
-    Spec.given(element("name").from(annotation))
+    Spec.given(element("name").from(annotation).value())
         .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 

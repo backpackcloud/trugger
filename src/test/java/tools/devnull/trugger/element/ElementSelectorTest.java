@@ -60,18 +60,18 @@ public class ElementSelectorTest {
 
   @Test
   public void testWithoutPredicate() {
-    Element result = selector.from(this);
+    Element result = selector.from(this).value();
     assertSame(element, result);
     verify(finder).find(elementName, this);
   }
 
   @Test
   public void testWithPredicate() {
-    Element result = selector.filter(all).from(this);
+    Element result = selector.filter(all).from(this).value();
     assertSame(element, result);
     verify(all).test(element);
 
-    result = selector.filter(none).from(this);
+    result = selector.filter(none).from(this).value();
     assertNull(result);
     verify(none).test(element);
   }

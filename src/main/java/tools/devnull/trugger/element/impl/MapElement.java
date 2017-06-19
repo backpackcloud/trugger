@@ -40,7 +40,7 @@ public class MapElement extends AbstractElement implements Element {
       return new ValueHandler() {
 
         @Override
-        public void set(Object value) throws HandlingException {
+        public void setValue(Object value) throws HandlingException {
           try {
             map.put(name, value);
           } catch (UnsupportedOperationException e) {
@@ -49,7 +49,7 @@ public class MapElement extends AbstractElement implements Element {
         }
 
         @Override
-        public <E> E get() throws HandlingException {
+        public <E> E getValue() throws HandlingException {
           if (map.containsKey(name)) {
             return (E) map.get(name);
           }

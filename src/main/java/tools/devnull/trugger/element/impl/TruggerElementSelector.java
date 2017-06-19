@@ -18,6 +18,7 @@
  */
 package tools.devnull.trugger.element.impl;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.element.ElementSelector;
@@ -52,10 +53,9 @@ public class TruggerElementSelector implements ElementSelector {
     return new TruggerElementSelector(name, finder, predicate);
   }
 
-  public Element from(Object target) {
+  public Optional<Element> from(Object target) {
     return finder.find(name, target)
-        .filter(predicate)
-        .orElseReturn(() -> null);
+        .filter(predicate);
   }
 
 }

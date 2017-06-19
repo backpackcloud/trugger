@@ -8,7 +8,7 @@
 - Added the `OptionalFunction` utility class
 - Removed shortcut methods in `Reflection`
 - Removed `Result` interface
-- Renamed `#value` to `#get` in `ValueHandler` class
+- Renamed `ValueHandler` methods to `getValue` and `setValue`
 - Removed `selector` package (interfaces moved to their regarding package)
 
 ## Version 5.4.0

@@ -89,23 +89,23 @@ public final class NestedElement extends AbstractElement implements Element {
   public ValueHandler on(final Object target) {
     return new ValueHandler(){
 
-      public <E> E get() throws HandlingException {
+      public <E> E getValue() throws HandlingException {
       Object value = target;
       for (Element property : getPath()) {
-        value = property.on(value).get();
+        value = property.on(value).getValue();
       }
       return (E) value;
     }
 
-    public void set(Object value) throws HandlingException {
+    public void setValue(Object value) throws HandlingException {
       Object _source = target;
       Element p;
       for (int i = 0 ; ;) {
         p = NestedElement.this.get(i);
         if (++i < getPath().size()) {
-          _source = p.on(_source).get();
+          _source = p.on(_source).getValue();
         } else {
-          p.on(_source).set(value);
+          p.on(_source).setValue(value);
           break;
         }
       }
@@ -153,12 +153,12 @@ public final class NestedElement extends AbstractElement implements Element {
     Element element;
     Object _source = source;
     for (String string : names) {
-      element = Elements.element(string).from(_source);
+      element = Elements.element(string).from(_source).value();
       if (element == null) {
         return null;
       }
       path.add(element);
-      _source = element.isSpecific() ? element.get() : element.type();
+      _source = element.isSpecific() ? element.getValue() : element.type();
       //if the next source is null, the element will no longer be specific
       if (_source == null) {
         _source = element.type(); //use the type instead of the value
