@@ -89,10 +89,10 @@ public class ResultSetElementTest implements ElementExpectations {
 
   @Test
   public void testNamedElement() throws SQLException {
-    Spec.given(element("name").from(ResultSet.class).value())
+    Spec.given(element("name").from(ResultSet.class).result())
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("name").from(resultSet).value())
+    Spec.given(element("name").from(resultSet).result())
         .expect(Element::declaringClass, to().be(ResultSet.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))
@@ -108,10 +108,10 @@ public class ResultSetElementTest implements ElementExpectations {
 
   @Test
   public void testIndexedElement() throws SQLException {
-    Spec.given(element("1").from(ResultSet.class).value())
+    Spec.given(element("1").from(ResultSet.class).result())
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("1").from(resultSet).value())
+    Spec.given(element("1").from(resultSet).result())
         .expect(Element::declaringClass, to().be(ResultSet.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))

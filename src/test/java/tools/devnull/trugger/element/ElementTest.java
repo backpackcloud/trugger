@@ -38,7 +38,7 @@ public class ElementTest {
     Element el = element("age")
         .filter(annotatedWith(Flag.class))
         .from(TestObject.class)
-        .value();
+        .result();
     assertNotNull(el);
     assertEquals(
         1,
@@ -68,7 +68,7 @@ public class ElementTest {
     Element el = element("age")
         .filter(annotatedWith(Flag.class))
         .from(new TestObject("", ""))
-        .value();
+        .result();
     assertNotNull(el);
     assertEquals(
         1,
@@ -93,7 +93,7 @@ public class ElementTest {
 
   @Test
   public void staticElementTest() {
-    Element el = element("staticValue").from(new TestObject("", "")).value();
+    Element el = element("staticValue").from(new TestObject("", "")).result();
     assertEquals("staticValue", el.name());
     assertTrue(el.isSpecific());
     assertTrue(el.isReadable());
@@ -107,21 +107,21 @@ public class ElementTest {
 
   @Test
   public void testNullSpecificElement() {
-    Element el = element("non_existent").from(new Object()).value();
+    Element el = element("non_existent").from(new Object()).result();
     assertNull(el);
   }
 
   @Test
   public void testSingleSelection() {
     assertNotNull(
-        element().filter(ofType(int.class)).from(TestObject.class).value()
+        element().filter(ofType(int.class)).from(TestObject.class).result()
     );
     assertNull(
-        element().filter(ofType(Serializable.class)).from(TestObject.class).value()
+        element().filter(ofType(Serializable.class)).from(TestObject.class).result()
     );
     // should return the first element found, no matter what it is
     assertNotNull(
-        element().filter(assignableTo(Serializable.class)).from(TestObject.class).value()
+        element().filter(assignableTo(Serializable.class)).from(TestObject.class).result()
     );
   }
 
@@ -148,7 +148,7 @@ public class ElementTest {
   @Test
   public void testMergedElement() throws Exception {
     ForMergedTest o = new ForMergedTest();
-    Element element = element("i").from(ForMergedTest.class).value();
+    Element element = element("i").from(ForMergedTest.class).result();
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
@@ -156,7 +156,7 @@ public class ElementTest {
     element.on(o).setValue(5);
     assertEquals(10, (int) element.on(o).getValue());
 
-    element = element("i").from(o).value();
+    element = element("i").from(o).result();
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
@@ -166,13 +166,13 @@ public class ElementTest {
 
     //------------------------------------------//
 
-    element = element("j").from(ForMergedTest.class).value();
+    element = element("j").from(ForMergedTest.class).result();
     assertFalse(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
     assertEquals(20, (int) element.on(o).getValue());
 
-    element = element("j").from(o).value();
+    element = element("j").from(o).result();
     assertTrue(element.isSpecific());
     assertFalse(element.isWritable());
     assertTrue(element.isReadable());
@@ -180,7 +180,7 @@ public class ElementTest {
 
     //------------------------------------------//
 
-    element = element("k").from(ForMergedTest.class).value();
+    element = element("k").from(ForMergedTest.class).result();
     assertFalse(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());
@@ -188,7 +188,7 @@ public class ElementTest {
     element.on(o).setValue(15);
     assertEquals(30, (int) element.on(o).getValue());
 
-    element = element("k").from(o).value();
+    element = element("k").from(o).result();
     assertTrue(element.isSpecific());
     assertTrue(element.isWritable());
     assertTrue(element.isReadable());

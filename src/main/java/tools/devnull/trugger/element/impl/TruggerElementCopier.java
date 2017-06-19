@@ -102,7 +102,7 @@ public final class TruggerElementCopier implements ElementCopier,
       if (src.getClass().equals(dest.getClass())) {
         destProperty = element.isWritable() ? element : null;
       } else {
-        destProperty = Elements.element(name).from(dest).value();
+        destProperty = Elements.element(name).from(dest).result();
       }
       if (destProperty != null && element.isReadable()
           && destProperty.isWritable()) {

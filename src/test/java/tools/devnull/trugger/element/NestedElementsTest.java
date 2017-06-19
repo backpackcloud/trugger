@@ -62,22 +62,22 @@ public class NestedElementsTest implements ElementExpectations {
 
   @Test
   public void testNestedElementCreating() {
-    Spec.given(element("customer.phone").from(Ticket.class).value())
+    Spec.given(element("customer.phone").from(Ticket.class).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("customer.credential").from(Ticket.class).value())
+    Spec.given(element("customer.credential").from(Ticket.class).result())
         .expect(it(), to().beNull());
 
-    Spec.given(element("customer.info").from(new Ticket()).value())
+    Spec.given(element("customer.info").from(new Ticket()).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("customer.info.properties").from(new Ticket()).value())
+    Spec.given(element("customer.info.properties").from(new Ticket()).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().not().be(writable()))
@@ -90,7 +90,7 @@ public class NestedElementsTest implements ElementExpectations {
     ticket.customer = new Customer();
     ticket.customer.address = new Address();
 
-    Spec.given(element("customer.address.line").from(ticket).value())
+    Spec.given(element("customer.address.line").from(ticket).result())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().be(specific()))

@@ -134,7 +134,7 @@ public class ComponentFactory<T extends Annotation, E> {
     Class<?> type = annotation.annotationType();
     if (type.isAnnotationPresent(annotationType)) {
       T classAnnotation = type.getAnnotation(annotationType);
-      Element element = Elements.element(classElement).from(classAnnotation).value();
+      Element element = Elements.element(classElement).from(classAnnotation).result();
       Class<? extends E> typeToCreate = element.getValue();
       return create(annotation, typeToCreate);
     }

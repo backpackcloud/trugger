@@ -153,7 +153,7 @@ public final class NestedElement extends AbstractElement implements Element {
     Element element;
     Object _source = source;
     for (String string : names) {
-      element = Elements.element(string).from(_source).value();
+      element = Elements.element(string).from(_source).result();
       if (element == null) {
         return null;
       }

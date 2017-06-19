@@ -46,7 +46,7 @@ public class MapElementTest implements ElementExpectations {
     Map<String, Object> map = new HashMap<>();
     map.put("key", "some value");
 
-    Spec.given(element("key").from(map).value())
+    Spec.given(element("key").from(map).result())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(Element::type, to().be(Object.class))
@@ -70,7 +70,7 @@ public class MapElementTest implements ElementExpectations {
     map.put("key", "value");
     map = Collections.unmodifiableMap(map);
 
-    Spec.given(element("none").from(map).value())
+    Spec.given(element("none").from(map).result())
         .expect(attempToGetValue(), to().raise(HandlingException.class))
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(settingValueTo("value", "target"), to().raise(IllegalArgumentException.class));
@@ -80,7 +80,7 @@ public class MapElementTest implements ElementExpectations {
   public void testNonSpecificElements() {
     Map<String, String> map = new HashMap<>();
 
-    Spec.given(element("key").from(Map.class).value())
+    Spec.given(element("key").from(Map.class).result())
         .expect(it(), to().not().beNull())
         .expect(attempToGetValue(), to().raise(HandlingException.class))
         .when(valueIsSetTo("value", map))

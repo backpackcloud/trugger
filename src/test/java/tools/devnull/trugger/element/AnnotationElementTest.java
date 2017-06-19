@@ -52,7 +52,7 @@ public class AnnotationElementTest implements ElementExpectations {
 
   @Test
   public void testElementSpecs() {
-    Spec.given(element("name").from(annotation()).value())
+    Spec.given(element("name").from(annotation()).result())
         .expect(Element::name, to().be("name"))
         .expect(Element::getValue, to().be("some name"))
         .expect(stringRepresentation(), to().be("name : java.lang.String"))
@@ -61,14 +61,14 @@ public class AnnotationElementTest implements ElementExpectations {
         .expect(it(), to().be(readable()))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("name").from(TestAnnotation.class).value())
+    Spec.given(element("name").from(TestAnnotation.class).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
 
         .expect(attempToGetValue(), to().raise(NonSpecificElementException.class));
 
-    Spec.given(element("bool").from(annotation()).value())
+    Spec.given(element("bool").from(annotation()).result())
         .expect(Element::type, to().be(boolean.class))
         .expect(Element::getValue, to().be(false))
         .expect(Element::declaringClass, to().be(TestAnnotation.class))
@@ -91,8 +91,8 @@ public class AnnotationElementTest implements ElementExpectations {
 
   @Test
   public void testNoElementFound() {
-    assertNull(element("non_existent").from(annotation()).value());
-    assertNull(element("non_existent").from(TestAnnotation.class).value());
+    assertNull(element("non_existent").from(annotation()).result());
+    assertNull(element("non_existent").from(TestAnnotation.class).result());
     assertTrue(elements().from(Documented.class).isEmpty());
   }
 
@@ -121,7 +121,7 @@ public class AnnotationElementTest implements ElementExpectations {
       }
     };
 
-    Spec.given(element("name").from(annotation).value())
+    Spec.given(element("name").from(annotation).result())
         .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 

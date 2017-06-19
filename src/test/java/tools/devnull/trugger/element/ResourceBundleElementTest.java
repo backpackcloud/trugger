@@ -42,7 +42,7 @@ public class ResourceBundleElementTest implements ElementExpectations {
 
   @Test
   public void testElement() {
-    Spec.given(element("foo").from(bundle).value())
+    Spec.given(element("foo").from(bundle).result())
         .expect(Element::name, to().be("foo"))
         .expect(Element::getValue, to().be("bar"))
         .expect(Element::declaringClass, to().be(ResourceBundle.class))
@@ -53,7 +53,7 @@ public class ResourceBundleElementTest implements ElementExpectations {
         .expect(gettingValueIn(new Object()),
             to().raise(IllegalArgumentException.class));
 
-    Spec.given(element("foo").from(ResourceBundle.class).value())
+    Spec.given(element("foo").from(ResourceBundle.class).result())
         .expect(Element::name, to().be("foo"))
         .expect(Element::declaringClass, to().be(ResourceBundle.class))
         .expect(it(), to().be(readable()))
@@ -62,7 +62,7 @@ public class ResourceBundleElementTest implements ElementExpectations {
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(gettingValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("not-present").from(bundle).value())
+    Spec.given(element("not-present").from(bundle).result())
         .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 

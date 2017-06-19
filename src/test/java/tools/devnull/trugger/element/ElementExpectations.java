@@ -65,7 +65,7 @@ public interface ElementExpectations {
   }
 
   default Function<Element, ?> valueOf(String elementName) {
-    return (element) -> Elements.element(elementName).from(element.getValue()).value().getValue();
+    return (element) -> Elements.element(elementName).from(element.getValue()).result().getValue();
   }
 
   default Function<List, ?> elementAt(int index) {
@@ -103,7 +103,7 @@ public interface ElementExpectations {
   }
 
   default Function elementNamed(String name) {
-    return obj -> Elements.element(name).from(obj).value();
+    return obj -> Elements.element(name).from(obj).result();
   }
 
 }

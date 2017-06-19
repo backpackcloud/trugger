@@ -49,7 +49,7 @@ public class PropertiesElementTest implements ElementExpectations {
     Spec.given(elements().from(properties))
         .expect(it(), to().have(elementsNamed("login", "password")));
 
-    Spec.given(element("login").from(properties).value())
+    Spec.given(element("login").from(properties).result())
         .expect(Element::type, to().be(String.class))
         .expect(Element::name, to().be("login"))
         .expect(Element::getValue, to().be("admin"))

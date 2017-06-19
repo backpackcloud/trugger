@@ -60,7 +60,7 @@ public class ListElementTest implements ElementExpectations {
 
   @Test
   public void testIndexElements() {
-    Spec.given(element("0").from(ints).value())
+    Spec.given(element("0").from(ints).result())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(Element::type, to().be(Object.class))
@@ -70,17 +70,17 @@ public class ListElementTest implements ElementExpectations {
         .when(valueIsSetTo(15))
         .expect(Element::getValue, to().be(15));
 
-    Spec.given(element("2").from(ints).value())
+    Spec.given(element("2").from(ints).result())
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(List.class))
         .expect(Element::getValue, to().be(12));
 
-    Spec.given(element("ints.1").from(this).value())
+    Spec.given(element("ints.1").from(this).result())
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(ListElementTest.class))
         .expect(Element::getValue, to().be(10));
 
-    Spec.given(element("0").from(objects).value())
+    Spec.given(element("0").from(objects).result())
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(List.class))
         .expect(valueOf("name"), to().be("name"))
@@ -89,14 +89,14 @@ public class ListElementTest implements ElementExpectations {
 
   @Test
   public void testReferencedElements() {
-    Spec.given(element("first").from(ints).value())
+    Spec.given(element("first").from(ints).result())
         .expect(Element::getValue, to().be(0));
 
-    Spec.given(element("last").from(ints).value())
+    Spec.given(element("last").from(ints).result())
         .expect(Element::getValue, to().be(33));
 
-    Object lastElementValue = element("last").from(objects).value().getValue();
-    Spec.given(element("first").from(objects).value())
+    Object lastElementValue = element("last").from(objects).result().getValue();
+    Spec.given(element("first").from(objects).result())
         .expect(Element::getValue, to().be(lastElementValue));
   }
 

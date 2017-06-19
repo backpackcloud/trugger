@@ -19,7 +19,7 @@
 
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.SelectionResult;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.element.ElementSelector;
 
@@ -51,8 +51,10 @@ class SingleElementSelector implements ElementSelector {
   }
 
   @Override
-  public Optional<Element> from(Object o) {
-    List<Element> elements = elements().filter(predicate).from(o);
-    return elements.isEmpty() ? Optional.empty() : Optional.of(elements.iterator().next());
+  public SelectionResult<Element> from(Object target) {
+    List<Element> elements = elements().filter(predicate).from(target);
+    return elements.isEmpty() ?
+        new SelectionResult<>(target, null) :
+        new SelectionResult<>(target, elements.iterator().next());
   }
 }

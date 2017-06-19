@@ -46,12 +46,12 @@ public class ObjectElementTest implements ElementExpectations {
 
   @Test
   public void testHandlingExceptions() {
-    Spec.given(element("name").from(new HandlingTestObject()).value())
+    Spec.given(element("name").from(new HandlingTestObject()).result())
         .expect(it(), to().not().be(readable()))
         .expect(attempToGetValue(), to().raise(UnreadableElementException.class))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("info").from(new HandlingTestObject()).value())
+    Spec.given(element("info").from(new HandlingTestObject()).result())
         .expect(it(), to().not().be(writable()))
         .expect(attempToChangeValue(), to().raise(UnwritableElementException.class))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
