@@ -51,8 +51,8 @@ public final class TruggerConstructorsSelector implements ConstructorsSelector {
     return new TruggerConstructorsSelector(finder, predicate);
   }
 
-  public List<Constructor<?>> in(Object target) {
-    return new MembersSelector<>(finder, predicate).in(target);
+  public List<Constructor<?>> from(Object target) {
+    return new MembersSelector<>(finder, predicate).selectFrom(target);
   }
 
 }

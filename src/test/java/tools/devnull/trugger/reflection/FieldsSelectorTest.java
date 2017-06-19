@@ -44,11 +44,11 @@ public class FieldsSelectorTest {
   public void test() {
     assertEquals(
         3,
-        reflect().fields().in(TestObject.class).size()
+        reflect().fields().from(TestObject.class).size()
     );
     assertEquals(
         0,
-        reflect().fields().in(this).size()
+        reflect().fields().from(this).size()
     );
   }
 
@@ -63,10 +63,10 @@ public class FieldsSelectorTest {
   @Test
   public void testRecursivelySelector() {
     assertTrue(
-        reflect().fields().in(ExtendedClassTest.class).isEmpty()
+        reflect().fields().from(ExtendedClassTest.class).isEmpty()
     );
     assertFalse(
-        reflect().fields().deep().in(ExtendedClassTest.class).isEmpty()
+        reflect().fields().deep().from(ExtendedClassTest.class).isEmpty()
     );
   }
 
@@ -75,13 +75,13 @@ public class FieldsSelectorTest {
     assertFalse(
         reflect().fields()
             .filter(el -> true)
-            .in(TestObject.class)
+            .from(TestObject.class)
             .isEmpty()
     );
     assertTrue(
         reflect().fields()
             .filter(el -> false)
-            .in(TestObject.class)
+            .from(TestObject.class)
             .isEmpty()
     );
   }

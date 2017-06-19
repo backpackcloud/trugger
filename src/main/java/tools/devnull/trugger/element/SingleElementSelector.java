@@ -49,8 +49,8 @@ class SingleElementSelector implements ElementSelector {
   }
 
   @Override
-  public Element in(Object o) {
-    List<Element> elements = elements().filter(predicate).in(o);
+  public Element from(Object o) {
+    List<Element> elements = elements().filter(predicate).from(o);
     return elements.isEmpty() ? null : elements.iterator().next();
   }
 }

@@ -18,7 +18,6 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.util.Utils;
 
 import java.lang.reflect.Member;
@@ -35,8 +34,7 @@ import java.util.stream.Collectors;
  * @param <T> The member type.
  * @author Marcelo Guimarães
  */
-public class MembersSelector<T extends Member>
-    implements Result<List<T>, Object> {
+public class MembersSelector<T extends Member> {
 
   private final MembersFinder<T> finder;
   private final Predicate<? super T> predicate;
@@ -63,7 +61,7 @@ public class MembersSelector<T extends Member>
     this.function = function;
   }
 
-  public final List<T> in(Object target) {
+  public final List<T> selectFrom(Object target) {
     final List<T> list = new ArrayList<>();
     for (Class type : function.apply(Utils.resolveType(target))) {
       list.addAll(finder.find(type));

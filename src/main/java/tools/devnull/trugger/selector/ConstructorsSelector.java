@@ -18,8 +18,6 @@
  */
 package tools.devnull.trugger.selector;
 
-import tools.devnull.trugger.Result;
-
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.function.Predicate;
@@ -29,9 +27,10 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface ConstructorsSelector extends PredicateSelector<Constructor<?>>,
-    Result<List<Constructor<?>>, Object> {
+public interface ConstructorsSelector extends PredicateSelector<Constructor<?>> {
 
   ConstructorsSelector filter(Predicate<? super Constructor<?>> predicate);
+
+  List<Constructor<?>> from(Object target);
 
 }

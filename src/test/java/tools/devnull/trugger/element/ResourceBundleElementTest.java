@@ -42,9 +42,9 @@ public class ResourceBundleElementTest implements ElementSpecs {
 
   @Test
   public void testElement() {
-    Spec.given(element("foo").in(bundle))
+    Spec.given(element("foo").from(bundle))
         .expect(Element::name, to().be("foo"))
-        .expect(Element::value, to().be("bar"))
+        .expect(Element::get, to().be("bar"))
         .expect(Element::declaringClass, to().be(ResourceBundle.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))
@@ -53,7 +53,7 @@ public class ResourceBundleElementTest implements ElementSpecs {
         .expect(gettingValueIn(new Object()),
             to().raise(IllegalArgumentException.class));
 
-    Spec.given(element("foo").in(ResourceBundle.class))
+    Spec.given(element("foo").from(ResourceBundle.class))
         .expect(Element::name, to().be("foo"))
         .expect(Element::declaringClass, to().be(ResourceBundle.class))
         .expect(it(), to().be(readable()))
@@ -62,17 +62,17 @@ public class ResourceBundleElementTest implements ElementSpecs {
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(gettingValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("not-present").in(bundle))
+    Spec.given(element("not-present").from(bundle))
         .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 
   @Test
   public void testElements() {
-    List<Element> elements = elements().in(bundle);
+    List<Element> elements = elements().from(bundle);
     assertFalse(elements.isEmpty());
     assertTrue(elementsNamed("foo", "framework", "author").test(elements));
 
-    assertTrue(elements().in(ResourceBundle.class).isEmpty());
+    assertTrue(elements().from(ResourceBundle.class).isEmpty());
   }
 
 }

@@ -19,41 +19,39 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Marcelo Guimarães
  */
 public class MapElementFinder implements Finder<Element> {
-  
+
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return Collections.emptyList();
+  public List<Element> findAll(Object target) {
+    if (target instanceof Class<?>) {
+      return Collections.emptyList();
+    }
+    List<Element> properties = new ArrayList<>();
+    Map map = (Map) target;
+    for (Object key : map.keySet()) {
+      if (key instanceof String) {
+        properties.add(new SpecificElement(new MapElement((String) key), map));
       }
-      List<Element> properties = new ArrayList<>();
-      Map map = (Map) target;
-      for (Object key : map.keySet()) {
-        if (key instanceof String) {
-          properties.add(new SpecificElement(new MapElement((String) key), map));
-        }
-      }
-      return properties;
-    };
+    }
+    return properties;
   }
-  
+
   @Override
-  public Result<Element, Object> find(final String name) {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return new MapElement(name);
-      }
-      return new SpecificElement(new MapElement(name), target);
-    };
+  public Element find(String name, Object target) {
+    if (target instanceof Class<?>) {
+      return new MapElement(name);
+    }
+    return new SpecificElement(new MapElement(name), target);
   }
-  
+
 }

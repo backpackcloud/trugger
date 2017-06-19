@@ -28,6 +28,7 @@ import java.util.List;
  * @author Marcelo Guimarães
  * @since 2.0
  */
+//TODO change to ElementFinder and receive the target type as generic object
 public interface Finder<T> {
 
   /**
@@ -36,16 +37,18 @@ public interface Finder<T> {
    * The result may return <code>null</code> if no object with the specified
    * name is found.
    *
-   * @param name the object name to find.
-   * @return the component for selecting the target.
+   * @param name   the object name to find.
+   * @param target the target to search
+   * @return the found object
    */
-  Result<T, Object> find(String name);
+  T find(String name, Object target);
 
   /**
    * Finds all objects in a target.
    *
-   * @return the component for selecting the target.
+   * @param target the target to search
+   * @return the found objects
    */
-  Result<List<T>, Object> findAll();
+  List<T> findAll(Object target);
 
 }

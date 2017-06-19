@@ -20,7 +20,6 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 
 import java.util.Arrays;
@@ -32,29 +31,25 @@ import java.util.List;
 public class ListElementFinder implements Finder<Element> {
 
   @Override
-  public Result<Element, Object> find(final String name) {
-    return object -> {
-      List list = (List) object;
-      if ("first".equals(name)) {
-        return new ListElement(list, 0);
-      } else if ("last".equals(name)) {
-        return new ListElement(list, list.size() - 1);
-      }
-      return new ListElement(list, Integer.parseInt(name));
-    };
+  public Element find(String name, Object target) {
+    List list = (List) target;
+    if ("first".equals(name)) {
+      return new ListElement(list, 0);
+    } else if ("last".equals(name)) {
+      return new ListElement(list, list.size() - 1);
+    }
+    return new ListElement(list, Integer.parseInt(name));
   }
 
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return object -> {
-      List list = (List) object;
-      int size = list.size();
-      Element[] result = new Element[size];
-      for (int i = 0; i < size; i++) {
-        result[i] = new ListElement(list, i);
-      }
-      return Arrays.asList(result);
-    };
+  public List<Element> findAll(Object target) {
+    List list = (List) target;
+    int size = list.size();
+    Element[] result = new Element[size];
+    for (int i = 0; i < size; i++) {
+      result[i] = new ListElement(list, i);
+    }
+    return Arrays.asList(result);
   }
 
 }

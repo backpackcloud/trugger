@@ -52,7 +52,7 @@ public class MethodReflectionTest {
   @Test
   public void invokerTest() {
     TestInterface obj = mock(TestInterface.class);
-    reflect().method("doIt").in(obj).and(invoke());
+    reflect().method("doIt").from(obj).and(invoke());
     verify(obj).doIt();
   }
 
@@ -61,7 +61,7 @@ public class MethodReflectionTest {
     TestInterface obj = mock(TestInterface.class);
     doThrow(new IllegalArgumentException()).when(obj).doIt();
     try {
-      reflect().method("doIt").in(obj).and(invoke());
+      reflect().method("doIt").from(obj).and(invoke());
       throw new AssertionError();
     } catch (ReflectionException e) {
       assertTrue(IllegalArgumentException.class.equals(e.getCause().getClass()));
@@ -73,29 +73,29 @@ public class MethodReflectionTest {
   @Test
   public void invokerForNoMethodTest() {
     TestInterface obj = mock(TestInterface.class);
-    reflect().method("notDeclared").in(obj).and(invoke());
+    reflect().method("notDeclared").from(obj).and(invoke());
   }
 
   @Test
   public void predicatesTest() {
     assertFalse(
         annotated().test(
-            reflect().method("doIt").in(TestInterface.class).result()
+            reflect().method("doIt").from(TestInterface.class).result()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            reflect().method("doIt").in(TestInterface.class).result()
+            reflect().method("doIt").from(TestInterface.class).result()
         )
     );
     assertTrue(
         annotated().test(
-            reflect().method("bar").in(TestInterface.class).result()
+            reflect().method("bar").from(TestInterface.class).result()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            reflect().method("bar").in(TestInterface.class).result()
+            reflect().method("bar").from(TestInterface.class).result()
         )
     );
   }

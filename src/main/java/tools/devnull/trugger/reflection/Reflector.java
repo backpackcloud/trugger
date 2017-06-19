@@ -19,8 +19,12 @@
 package tools.devnull.trugger.reflection;
 
 import tools.devnull.trugger.Optional;
-import tools.devnull.trugger.Result;
-import tools.devnull.trugger.selector.*;
+import tools.devnull.trugger.selector.ConstructorSelector;
+import tools.devnull.trugger.selector.ConstructorsSelector;
+import tools.devnull.trugger.selector.FieldSelector;
+import tools.devnull.trugger.selector.FieldsSelector;
+import tools.devnull.trugger.selector.MethodSelector;
+import tools.devnull.trugger.selector.MethodsSelector;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -129,9 +133,10 @@ public interface Reflector {
    * <i>For a set of the interfaces implemented only by the target in question, use the
    * {@link Class#getInterfaces()} method.</i>
    *
-   * @return the component used for selection.
+   * @param target the target to compute the interfaces
+   * @return the list containing all interfaces implemented by the given target.
    */
-  Result<List<Class>, Object> interfaces();
+  List<Class> interfacesOf(Object target);
 
   /**
    * Reflects the generic type parameter declared in a target.
@@ -152,24 +157,24 @@ public interface Reflector {
    * The code bellow will print <code>MyType</code>:
    * <p>
    * <pre>
-   * Class&lt;?&gt; genericType = {@link Reflection#reflect()}.genericType(&quot;E&quot;).in(MyExtendedClass.class);
+   * Class&lt;?&gt; genericType = {@link Reflection#reflect()}.genericType(&quot;E&quot;, MyExtendedClass.class);
    * System.out.print(genericType.getSimpleName());
    * </pre>
    *
    * @param parameterName the generic parameter name.
-   * @return the component used for selecting the target.
+   * @param target        the target to fetch the generic type
+   * @return the generic type of the given target.
    */
-  Result<Class, Object> genericType(String parameterName);
+  Class genericType(String parameterName, Object target);
 
   /**
    * Reflects the generic type parameter declared in a target.
    * <p>
    * This method should be used only if the target has only one generic parameter.
    *
-   * @return the component used for selecting the target.
-   * @see Reflector#genericType(String)
+   * @return the generic type of the given target
    */
-  Result<Class, Object> genericType();
+  Class genericTypeOf(Object target);
 
   /**
    * Reflects the bridged method of a given {@link Method#isBridge() bridge} method.

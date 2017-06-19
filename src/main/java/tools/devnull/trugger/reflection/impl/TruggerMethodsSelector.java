@@ -63,8 +63,8 @@ public class TruggerMethodsSelector implements MethodsSelector {
   }
 
   @Override
-  public List<Method> in(Object target) {
-    return new MembersSelector<>(finder, predicate, function).in(target);
+  public List<Method> from(Object target) {
+    return new MembersSelector<>(finder, predicate, function).selectFrom(target);
   }
 
 }

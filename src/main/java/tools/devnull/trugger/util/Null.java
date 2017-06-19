@@ -76,7 +76,7 @@ public final class Null {
   public static final MethodInvoker NULL_METHOD_INVOKER = new MethodInvoker() {
 
     @Override
-    public Invoker in(Object instance) {
+    public Invoker on(Object instance) {
       return NULL_INVOKER;
     }
 
@@ -94,7 +94,7 @@ public final class Null {
 
   public static final ValueHandler NULL_VALUE_HANDLER = new ValueHandler() {
     @Override
-    public <E> E value() throws HandlingException {
+    public <E> E get() throws HandlingException {
       return null;
     }
 
@@ -107,7 +107,7 @@ public final class Null {
   public static final FieldHandler NULL_FIELD_HANDLER = new FieldHandler() {
 
     @Override
-    public <E> E value() throws HandlingException {
+    public <E> E get() throws HandlingException {
       return null;
     }
 
@@ -116,7 +116,7 @@ public final class Null {
     }
 
     @Override
-    public ValueHandler in(Object source) {
+    public ValueHandler on(Object source) {
       return NULL_VALUE_HANDLER;
     }
 

@@ -52,8 +52,8 @@ public class TruggerElementSelector implements ElementSelector {
     return new TruggerElementSelector(name, finder, predicate);
   }
 
-  public Element in(Object target) {
-    Element element = finder.find(name).in(target);
+  public Element from(Object target) {
+    Element element = finder.find(name, target);
     if (element == null) {
       return null;
     }

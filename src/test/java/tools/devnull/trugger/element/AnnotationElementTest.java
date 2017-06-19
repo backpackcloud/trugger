@@ -52,25 +52,25 @@ public class AnnotationElementTest implements ElementSpecs {
 
   @Test
   public void testElementSpecs() {
-    Spec.given(element("name").in(annotation()))
+    Spec.given(element("name").from(annotation()))
         .expect(Element::name, to().be("name"))
-        .expect(Element::value, to().be("some name"))
+        .expect(Element::get, to().be("some name"))
         .expect(stringRepresentation(), to().be("name : java.lang.String"))
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("name").in(TestAnnotation.class))
+    Spec.given(element("name").from(TestAnnotation.class))
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
 
         .expect(attempToGetValue(), to().raise(NonSpecificElementException.class));
 
-    Spec.given(element("bool").in(annotation()))
+    Spec.given(element("bool").from(annotation()))
         .expect(Element::type, to().be(boolean.class))
-        .expect(Element::value, to().be(false))
+        .expect(Element::get, to().be(false))
         .expect(Element::declaringClass, to().be(TestAnnotation.class))
         .expect(Element::name, to().be("bool"))
         .expect(it(), to().be(specific()));
@@ -78,7 +78,7 @@ public class AnnotationElementTest implements ElementSpecs {
 
   @Test
   public void testElements() {
-    List<Element> elements = elements().in(annotation());
+    List<Element> elements = elements().from(annotation());
     assertFalse(elements.isEmpty());
 
     for (Element element : elements) {
@@ -91,9 +91,9 @@ public class AnnotationElementTest implements ElementSpecs {
 
   @Test
   public void testNoElementFound() {
-    assertNull(element("non_existent").in(annotation()));
-    assertNull(element("non_existent").in(TestAnnotation.class));
-    assertTrue(elements().in(Documented.class).isEmpty());
+    assertNull(element("non_existent").from(annotation()));
+    assertNull(element("non_existent").from(TestAnnotation.class));
+    assertTrue(elements().from(Documented.class).isEmpty());
   }
 
   @Test
@@ -121,7 +121,7 @@ public class AnnotationElementTest implements ElementSpecs {
       }
     };
 
-    Spec.given(element("name").in(annotation))
+    Spec.given(element("name").from(annotation))
         .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 

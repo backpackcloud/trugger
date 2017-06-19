@@ -50,11 +50,11 @@ public class ElementsSelectorTest implements ElementSpecs {
 
   private void testPredicate(Predicate<? super Element> predicate,
                              String... names) {
-    assertTrue(elementsNamed(names).test(selector().filter(predicate).in(this)));
+    assertTrue(elementsNamed(names).test(selector().filter(predicate).from(this)));
   }
 
   private void testFailPredicate(Predicate<? super Element> predicate) {
-    assertTrue(selector().filter(predicate).in(this).isEmpty());
+    assertTrue(selector().filter(predicate).from(this).isEmpty());
   }
 
   @Test

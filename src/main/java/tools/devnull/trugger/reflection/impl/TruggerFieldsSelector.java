@@ -62,8 +62,8 @@ public class TruggerFieldsSelector implements FieldsSelector {
     return new TruggerFieldsSelector(this.finder, this.predicate, Reflection::hierarchyOf);
   }
 
-  public List<Field> in(Object target) {
-    return new MembersSelector<>(finder, predicate, function).in(target);
+  public List<Field> from(Object target) {
+    return new MembersSelector<>(finder, predicate, function).selectFrom(target);
   }
 
 }

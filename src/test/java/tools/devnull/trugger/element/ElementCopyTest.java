@@ -207,7 +207,7 @@ public class ElementCopyTest {
   private void assertFilter(ElementCopy copy) {
     assertEquals("name", copy.src().name());
     assertEquals("name", copy.dest().name());
-    assertEquals("Marcelo", copy.src().value());
+    assertEquals("Marcelo", copy.src().get());
     assertEquals(String.class, copy.src().type());
     assertEquals(String.class, copy.dest().type());
   }

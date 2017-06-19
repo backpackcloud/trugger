@@ -52,10 +52,10 @@ public final class AnnotationElement extends AbstractElement implements Element 
     return method.getReturnType();
   }
 
-  public ValueHandler in(final Object target) {
+  public ValueHandler on(final Object target) {
     return new ValueHandler() {
 
-      public <E> E value() throws HandlingException {
+      public <E> E get() throws HandlingException {
         try {
           return (E) method.invoke(target);
         } catch (InvocationTargetException e) {

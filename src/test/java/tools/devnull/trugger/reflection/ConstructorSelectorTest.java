@@ -47,18 +47,18 @@ public class ConstructorSelectorTest {
 
 	@Test(expected = ReflectionException.class)
 	public void testInsufficientSelector() {
-	  reflect().constructor().in(TestObject.class);
+	  reflect().constructor().from(TestObject.class);
 	}
 
 	@Test
 	public void testVisibleSelector() {
-    assertNotNull(reflect().visible().constructor().in(TestObject.class).result());
+    assertNotNull(reflect().visible().constructor().from(TestObject.class).result());
 	}
 
   @Test
   public void testPredicateSelector() {
-    assertNotNull(reflect().constructor().filter((c) -> true).withoutParameters().in(Object.class).result());
-    assertNull(reflect().constructor().filter((c) -> false).withoutParameters().in(Object.class).result());
+    assertNotNull(reflect().constructor().filter((c) -> true).withoutParameters().from(Object.class).result());
+    assertNull(reflect().constructor().filter((c) -> false).withoutParameters().from(Object.class).result());
   }
 
   static class ParameterSelectorTest {
@@ -70,17 +70,17 @@ public class ConstructorSelectorTest {
 
   @Test
   public void testParameterSelector() {
-    assertNotNull(reflect().constructor().withParameters(String.class).in(ParameterSelectorTest.class).result());
-    assertNotNull(reflect().constructor().withParameters(int.class, int.class).in(ParameterSelectorTest.class).result());
-    assertNotNull(reflect().constructor().withParameters(double.class, double.class, double.class).in(ParameterSelectorTest.class).result());
-    assertNotNull(reflect().constructor().withParameters(long.class).in(ParameterSelectorTest.class).result());
+    assertNotNull(reflect().constructor().withParameters(String.class).from(ParameterSelectorTest.class).result());
+    assertNotNull(reflect().constructor().withParameters(int.class, int.class).from(ParameterSelectorTest.class).result());
+    assertNotNull(reflect().constructor().withParameters(double.class, double.class, double.class).from(ParameterSelectorTest.class).result());
+    assertNotNull(reflect().constructor().withParameters(long.class).from(ParameterSelectorTest.class).result());
 
-    Constructor<?> constructor = reflect().constructor().withParameters(String.class).in(ParameterSelectorTest.class)
+    Constructor<?> constructor = reflect().constructor().withParameters(String.class).from(ParameterSelectorTest.class)
         .result();
     Class[] parameters = constructor.getParameterTypes();
     assertArrayEquals(new Class[]{String.class}, parameters);
 
-    constructor = reflect().constructor().withParameters(long.class).in(ParameterSelectorTest.class).result();
+    constructor = reflect().constructor().withParameters(long.class).from(ParameterSelectorTest.class).result();
     parameters = constructor.getParameterTypes();
     assertArrayEquals(new Class[]{long.class}, parameters);
   }
@@ -89,11 +89,11 @@ public class ConstructorSelectorTest {
   public void testConstructorPredicate() {
     Predicate<Constructor> predicate = mock(Predicate.class);
 
-    assertNull(reflect().constructor().filter(predicate).in(ParameterSelectorTest.class).result());
+    assertNull(reflect().constructor().filter(predicate).from(ParameterSelectorTest.class).result());
     verify(predicate, atLeastOnce()).test(any(Constructor.class));
 
     when(predicate.test(any(Constructor.class))).thenReturn(true);
-    assertNotNull(reflect().constructor().filter(predicate).in(ParameterSelectorTest.class).result());
+    assertNotNull(reflect().constructor().filter(predicate).from(ParameterSelectorTest.class).result());
     verify(predicate, atLeastOnce()).test(any(Constructor.class));
   }
 

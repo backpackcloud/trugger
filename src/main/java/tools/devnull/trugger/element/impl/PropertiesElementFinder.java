@@ -19,41 +19,39 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Marcelo Guimarães
  */
 public class PropertiesElementFinder implements Finder<Element> {
-  
+
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return Collections.emptyList();
+  public List<Element> findAll(Object target) {
+    if (target instanceof Class<?>) {
+      return Collections.emptyList();
+    }
+    List<Element> elements = new ArrayList<>();
+    Properties props = (Properties) target;
+    for (Object key : props.keySet()) {
+      if (key instanceof String) {
+        elements.add(new SpecificElement(new PropertiesElement((String) key), props));
       }
-      List<Element> elements = new ArrayList<>();
-      Properties props = (Properties) target;
-      for (Object key : props.keySet()) {
-        if (key instanceof String) {
-          elements.add(new SpecificElement(new PropertiesElement((String) key), props));
-        }
-      }
-      return elements;
-    };
+    }
+    return elements;
   }
-  
+
   @Override
-  public Result<Element, Object> find(final String name) {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return new PropertiesElement(name);
-      }
-      return new SpecificElement(new PropertiesElement(name), target);
-    };
+  public Element find(String name, Object target) {
+    if (target instanceof Class<?>) {
+      return new PropertiesElement(name);
+    }
+    return new SpecificElement(new PropertiesElement(name), target);
   }
-  
+
 }

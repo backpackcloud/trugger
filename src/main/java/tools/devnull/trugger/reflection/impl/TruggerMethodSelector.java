@@ -78,12 +78,12 @@ public class TruggerMethodSelector implements MethodSelector {
     return new TruggerMethodSelector(name, registry, parameterTypes, predicate, function);
   }
 
-  public SelectionResult<Method> in(Object target) {
+  public SelectionResult<Method> from(Object target) {
     if (parameterTypes != null) {
       return new MemberSelector<>(registry.methodFinder(name, parameterTypes), predicate, function).selectFrom(target);
     }
     MembersSelector<Method> selector = new MembersSelector<>(registry.methodsFinder(), predicate, function);
-    return new SelectionResult<>(target, selector.in(target).stream()
+    return new SelectionResult<>(target, selector.selectFrom(target).stream()
         .filter(ReflectionPredicates.named(name))
         .findAny().orElse(null));
   }

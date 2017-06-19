@@ -45,11 +45,11 @@ public class ArrayElementTest implements ElementSpecs {
   private int index;
 
   private Function<List<Element>, ?> first() {
-    return (list) -> list.get(index).value();
+    return (list) -> list.get(index).get();
   }
 
   private Function<List<Element>, ?> next() {
-    return (list) -> list.get(++index).value();
+    return (list) -> list.get(++index).get();
   }
 
   @Before
@@ -61,7 +61,7 @@ public class ArrayElementTest implements ElementSpecs {
 
   @Test
   public void testFindingAll() {
-    Spec.given(elements().in(ints))
+    Spec.given(elements().from(ints))
         .expect(List::size, to().be(4))
         .expect(first(), to().be(0))
         .expect(next(), to().be(10))
@@ -71,28 +71,28 @@ public class ArrayElementTest implements ElementSpecs {
 
   @Test
   public void testIndexElements() {
-    Spec.given(element("0").in(ints))
+    Spec.given(element("0").from(ints))
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
 
         .expect(Element::type, to().be(int.class))
         .expect(Element::declaringClass, to().be(int[].class))
-        .expect(Element::value, to().be(0))
+        .expect(Element::get, to().be(0))
 
         .when(valueIsSetTo(15))
-        .expect(Element::value, to().be(15));
+        .expect(Element::get, to().be(15));
 
-    Spec.given(element("ints.1").in(this))
+    Spec.given(element("ints.1").from(this))
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(Element::type, to().be(int.class))
         .expect(Element::declaringClass, to().be(ArrayElementTest.class))
-        .expect(Element::value, to().be(10))
+        .expect(Element::get, to().be(10))
 
         .when(valueIsSetTo(15))
-        .expect(Element::value, to().be(15));
+        .expect(Element::get, to().be(15));
 
-    Spec.given(element("0").in(objects))
+    Spec.given(element("0").from(objects))
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(Element::type, to().be(TestObject.class))
@@ -101,11 +101,11 @@ public class ArrayElementTest implements ElementSpecs {
 
   @Test
   public void testReferencedElements() {
-    Spec.given(element("first").in(ints))
-        .expect(Element::value, to().be(0));
+    Spec.given(element("first").from(ints))
+        .expect(Element::get, to().be(0));
 
-    Spec.given(element("last").in(ints))
-        .expect(Element::value, to().be(33));
+    Spec.given(element("last").from(ints))
+        .expect(Element::get, to().be(33));
   }
 
 }

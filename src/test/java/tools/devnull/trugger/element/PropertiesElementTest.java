@@ -40,26 +40,26 @@ public class PropertiesElementTest implements ElementSpecs {
 
   @Test
   public void propertiesElementTest() {
-    assertTrue(elements().in(Properties.class).isEmpty());
+    assertTrue(elements().from(Properties.class).isEmpty());
 
     Properties properties = new Properties();
     properties.setProperty("login", "admin");
     properties.setProperty("password", "admin");
 
-    Spec.given(elements().in(properties))
+    Spec.given(elements().from(properties))
         .expect(it(), to().have(elementsNamed("login", "password")));
 
-    Spec.given(element("login").in(properties))
+    Spec.given(element("login").from(properties))
         .expect(Element::type, to().be(String.class))
         .expect(Element::name, to().be("login"))
-        .expect(Element::value, to().be("admin"))
+        .expect(Element::get, to().be("admin"))
         .expect(Element::declaringClass, to().be(Properties.class))
 
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
 
         .when(valueIsSetTo("guest"))
-        .expect(Element::value, to().be("guest"))
+        .expect(Element::get, to().be("guest"))
 
         .expect(the(properties.getProperty("login")), to().be("guest"))
 

@@ -95,14 +95,14 @@ public final class TruggerElementCopier implements ElementCopier,
   }
 
   private void startCopy(Object dest) {
-    List<Element> elements = selector.in(src);
+    List<Element> elements = selector.from(src);
     Element destProperty;
     for (Element element : elements) {
       String name = element.name();
       if (src.getClass().equals(dest.getClass())) {
         destProperty = element.isWritable() ? element : null;
       } else {
-        destProperty = Elements.element(name).in(dest);
+        destProperty = Elements.element(name).from(dest);
       }
       if (destProperty != null && element.isReadable()
           && destProperty.isWritable()) {
@@ -112,16 +112,16 @@ public final class TruggerElementCopier implements ElementCopier,
   }
 
   private void copy(Element destElement, Element srcElement, Object dest) {
-    Object value = srcElement.in(this.src).value();
+    Object value = srcElement.on(this.src).get();
     PropertyCopyImpl copy = new PropertyCopyImpl(srcElement, destElement, value);
     if (predicate.test(copy)) {
       if (value != null) {
         value = function.apply(copy);
         if (value != null && Utils.areAssignable(destElement.type(), value.getClass())) {
-          destElement.in(dest).set(value);
+          destElement.on(dest).set(value);
         }
       } else if (copyNull) {
-        destElement.in(dest).set(value);
+        destElement.on(dest).set(value);
       }
     }
   }

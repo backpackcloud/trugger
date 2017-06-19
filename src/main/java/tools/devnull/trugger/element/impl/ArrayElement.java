@@ -75,10 +75,10 @@ public class ArrayElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(final Object array) {
+  public ValueHandler on(final Object array) {
     return new ValueHandler() {
       @Override
-      public <E> E value() throws HandlingException {
+      public <E> E get() throws HandlingException {
         return (E) Array.get(array, index);
       }
 

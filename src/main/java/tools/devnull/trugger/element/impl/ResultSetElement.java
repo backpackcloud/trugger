@@ -44,7 +44,7 @@ public final class ResultSetElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(final Object target) {
+  public ValueHandler on(final Object target) {
     if (target instanceof ResultSet) {
       final ResultSet resultSet = (ResultSet) target;
       return new ValueHandler() {
@@ -54,7 +54,7 @@ public final class ResultSetElement extends AbstractElement implements Element {
               "Cannot write a value in a ResultSet");
         }
 
-        public <E> E value() throws HandlingException {
+        public <E> E get() throws HandlingException {
           try {
             //if the name is the column index
             if (DIGITS_PATTERN.matcher(name).matches()) {

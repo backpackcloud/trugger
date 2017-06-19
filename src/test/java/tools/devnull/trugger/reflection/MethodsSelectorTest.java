@@ -43,7 +43,7 @@ public class MethodsSelectorTest {
   public void testNoSelector() throws Exception {
     assertEquals(
         2,
-        reflect().methods().in(TestObject.class).size()
+        reflect().methods().from(TestObject.class).size()
     );
   }
 
@@ -53,7 +53,7 @@ public class MethodsSelectorTest {
         1,
         reflect().methods()
             .filter(method -> method.getName().equals("foo"))
-            .in(TestObject.class)
+            .from(TestObject.class)
             .size()
     );
   }

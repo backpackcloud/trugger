@@ -60,9 +60,9 @@ public class FieldSetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = reflect().field("count").in(this).result();
-    fieldHits = reflect().field("hits").in(this).result();
-    fieldSize = reflect().field("size").in(this).result();
+    fieldCount = reflect().field("count").from(this).result();
+    fieldHits = reflect().field("hits").from(this).result();
+    fieldSize = reflect().field("size").from(this).result();
   }
 
   @Test
@@ -70,25 +70,25 @@ public class FieldSetterMethodSelectorTest {
     assertFalse(
         reflect().methods()
             .filter(setterOf(fieldHits))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertFalse(
         reflect().methods()
             .filter(setterOf(fieldCount))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertTrue(
         reflect().methods()
             .filter(setterOf(fieldHits))
-            .in(Object.class)
+            .from(Object.class)
             .isEmpty()
     );
     assertTrue(
         reflect().methods()
             .filter(setterOf(fieldCount))
-            .in(Object.class)
+            .from(Object.class)
             .isEmpty()
     );
   }

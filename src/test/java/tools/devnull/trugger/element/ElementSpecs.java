@@ -41,11 +41,11 @@ public interface ElementSpecs {
   }
 
   default Consumer<Element> valueIsSetTo(Object value, Object target) {
-    return (element) -> element.in(target).set(value);
+    return (element) -> element.on(target).set(value);
   }
 
   default Predicate<Element> aValue() {
-    return (element) -> element.value() != null;
+    return (element) -> element.get() != null;
   }
 
   default Consumer<Element> attempToChangeValue() {
@@ -57,31 +57,31 @@ public interface ElementSpecs {
   }
 
   default Consumer<Element> attempToGetValue() {
-    return (element) -> element.value();
+    return (element) -> element.get();
   }
 
   default Function<Element, ?> valueIn(Object target) {
-    return (element) -> element.in(target).value();
+    return (element) -> element.on(target).get();
   }
 
   default Function<Element, ?> valueOf(String elementName) {
-    return (element) -> Elements.element(elementName).in(element.value()).value();
+    return (element) -> Elements.element(elementName).from(element.get()).get();
   }
 
   default Function<List, ?> elementAt(int index) {
-    return list -> ((Element) list.get(index)).value();
+    return list -> ((Element) list.get(index)).get();
   }
 
   default Consumer<Element> settingValueTo(Object value, Object target) {
-    return (element) -> element.in(target).set(value);
+    return (element) -> element.on(target).set(value);
   }
 
   default Consumer<Element> gettingValue() {
-    return (element) -> element.value();
+    return (element) -> element.get();
   }
 
   default Consumer<Element> gettingValueIn(Object target) {
-    return (element) -> element.in(target).value();
+    return (element) -> element.on(target).get();
   }
 
   default Predicate<Collection<Element>> elementsNamed(String... names) {
@@ -103,7 +103,7 @@ public interface ElementSpecs {
   }
 
   default Function elementNamed(String name) {
-    return obj -> Elements.element(name).in(obj);
+    return obj -> Elements.element(name).from(obj);
   }
 
 }

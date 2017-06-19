@@ -6,7 +6,9 @@
 
 - Single member selections now returns an optional result
 - Added the `OptionalFunction` utility class
-- Changed the way of `invoke` and `handle` methods works in `Reflection` class
+- Removed shortcut methods in `Reflection`
+- Removed `Result` interface
+- Renamed `#value` to `#get` in `ValueHandler` class
 
 ## Version 5.4.0
 

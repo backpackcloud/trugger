@@ -54,8 +54,8 @@ public class FieldGetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = reflect().field("count").in(this).result();
-    fieldHits = reflect().field("hits").in(this).result();
+    fieldCount = reflect().field("count").from(this).result();
+    fieldHits = reflect().field("hits").from(this).result();
   }
 
   @Test
@@ -63,37 +63,37 @@ public class FieldGetterMethodSelectorTest {
     assertFalse(
         reflect().methods()
             .filter(getterOf(fieldCount))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertFalse(
         reflect().methods()
             .filter(getterOf(fieldHits))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertFalse(
         reflect().methods()
             .filter(getterOf("count"))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertFalse(
         reflect().methods()
             .filter(getterOf("hits"))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertTrue(
         reflect().methods()
             .filter(getterOf(fieldCount))
-            .in(Object.class)
+            .from(Object.class)
             .isEmpty()
     );
     assertTrue(
         reflect().methods()
             .filter(getterOf(fieldHits))
-            .in(Object.class)
+            .from(Object.class)
             .isEmpty()
     );
   }

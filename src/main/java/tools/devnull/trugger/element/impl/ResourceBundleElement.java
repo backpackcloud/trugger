@@ -38,7 +38,7 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
   }
 
   @Override
-  public ValueHandler in(Object target) {
+  public ValueHandler on(Object target) {
     if (target instanceof ResourceBundle) {
       final ResourceBundle bundle = (ResourceBundle) target;
       return new ValueHandler() {
@@ -49,7 +49,7 @@ public final class ResourceBundleElement extends AbstractElement implements Elem
         }
 
         @Override
-        public <E> E value() throws HandlingException {
+        public <E> E get() throws HandlingException {
           if (bundle.containsKey(name)) {
             return (E) bundle.getObject(name);
           }

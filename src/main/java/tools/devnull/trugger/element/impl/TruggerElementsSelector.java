@@ -52,8 +52,8 @@ public final class TruggerElementsSelector implements ElementsSelector {
     return new TruggerElementsSelector(finder, predicate);
   }
 
-  public List<Element> in(Object target) {
-    List<Element> elements = finder.findAll().in(target);
+  public List<Element> from(Object target) {
+    List<Element> elements = finder.findAll(target);
     if (predicate != null) {
       return elements.stream().filter(predicate).collect(Collectors.toList());
     }

@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -43,8 +45,7 @@ public class ElementFinderMock {
   public ElementFinderMock() {
     finder = mock(Finder.class);
     elements = new HashMap<>();
-    when(finder.findAll())
-        .thenReturn(target -> new ArrayList<>(elements.values()));
+    when(finder.findAll(any())).thenReturn(new ArrayList<>(elements.values()));
   }
 
   /**
@@ -55,8 +56,7 @@ public class ElementFinderMock {
   public ElementFinderMock add(Element... elements) {
     for (Element element : elements) {
       this.elements.put(element.name(), element);
-      when(finder.find(element.name()))
-          .thenReturn(o -> element);
+      when(finder.find(eq(element.name()), any(Object.class))).thenReturn(element);
     }
     return this;
   }

@@ -71,20 +71,20 @@ public class ReflectionTests {
   public void testGenericTypeResolver() throws Exception {
     final Map<String, Integer> map = new HashMap<String, Integer>() {
     };
-    assertEquals(String.class, reflect().genericType("K").in(map));
-    assertEquals(Integer.class, reflect().genericType("V").in(map));
+    assertEquals(String.class, reflect().genericType("K", map));
+    assertEquals(Integer.class, reflect().genericType("V", map));
 
     GenericClass<String> genericClass = new GenericClass<String>() {
     };
-    assertEquals(String.class, reflect().genericType("E").in(genericClass));
-    assertEquals(String.class, reflect().genericType().in(genericClass));
+    assertEquals(String.class, reflect().genericType("E", genericClass));
+    assertEquals(String.class, reflect().genericTypeOf(genericClass));
 
     assertThrow(ReflectionException.class, () -> {
-      reflect().genericType().in(map);
+      reflect().genericTypeOf(map);
     });
 
     assertThrow(ReflectionException.class, () -> {
-      reflect().genericType().in(Object.class);
+      reflect().genericTypeOf(Object.class);
     });
   }
 
@@ -114,31 +114,31 @@ public class ReflectionTests {
   @Test
   public void testDeclared() {
     assertEquals(
-        1, reflect().visible().constructors().in(DeclaredTest.class).size()
+        1, reflect().visible().constructors().from(DeclaredTest.class).size()
     );
     assertEquals(
-        1, reflect().visible().fields().in(DeclaredTest.class).size()
+        1, reflect().visible().fields().from(DeclaredTest.class).size()
     );
     assertTrue(
-        reflect().visible().methods().in(DeclaredTest.class).size() > 1
+        reflect().visible().methods().from(DeclaredTest.class).size() > 1
     );
 
     assertEquals(
-        2, reflect().declared().constructors().in(DeclaredTest.class).size()
+        2, reflect().declared().constructors().from(DeclaredTest.class).size()
     );
     assertEquals(
-        2, reflect().declared().fields().in(DeclaredTest.class).size()
+        2, reflect().declared().fields().from(DeclaredTest.class).size()
     );
     assertEquals(
-        2, reflect().declared().methods().in(DeclaredTest.class).size()
+        2, reflect().declared().methods().from(DeclaredTest.class).size()
     );
   }
 
   @Test
   public void testInterfacesReflection() {
     List<Class> interfaces =
-        reflect().interfaces().in(TruggerFieldsSelector.class);
-    assertEquals(4, interfaces.size());
+        reflect().interfacesOf(TruggerFieldsSelector.class);
+    assertEquals(3, interfaces.size());
   }
 
   @Test

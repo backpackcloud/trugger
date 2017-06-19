@@ -59,66 +59,66 @@ public class FieldReflectionTest {
 
   @Test
   public void testHandler() {
-    reflect().field("a").in(this).and(setValue("string"));
+    reflect().field("a").from(this).and(setValue("string"));
     assertEquals("string", a);
-    assertEquals("string", reflect().field("a").in(this).and(getValue()));
+    assertEquals("string", reflect().field("a").from(this).and(getValue()));
   }
 
   @Test
   public void testPredicates() {
     assertTrue(
         type(String.class).test(
-            reflect().field("a").in(this).result()
+            reflect().field("a").from(this).result()
         )
     );
     assertTrue(
         assignableTo(String.class).test(
-            reflect().field("b").in(this).result()
+            reflect().field("b").from(this).result()
         )
     );
     assertTrue(
         assignableTo(CharSequence.class).test(
-            reflect().field("b").in(this).result()
+            reflect().field("b").from(this).result()
         )
     );
     assertFalse(
         assignableTo(String.class).test(
-            reflect().field("x").in(this).result()
+            reflect().field("x").from(this).result()
         )
     );
     assertTrue(
         type(int.class).test(
-            reflect().field("x").in(this).result()
+            reflect().field("x").from(this).result()
         )
     );
     assertTrue(
         type(Integer.class).test(
-            reflect().field("z").in(this).result()
+            reflect().field("z").from(this).result()
         )
     );
     assertFalse(
         type(Integer.class).test(
-            reflect().field("y").in(this).result()
+            reflect().field("y").from(this).result()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            reflect().field("a").in(this).result()
+            reflect().field("a").from(this).result()
         )
     );
     assertTrue(
         annotated().test(
-            reflect().field("a").in(this).result()
+            reflect().field("a").from(this).result()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            reflect().field("b").in(this).result()
+            reflect().field("b").from(this).result()
         )
     );
     assertFalse(
         annotated().test(
-            reflect().field("b").in(this).result()
+            reflect().field("b").from(this).result()
         )
     );
   }

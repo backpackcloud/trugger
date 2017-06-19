@@ -18,54 +18,52 @@
  */
 package tools.devnull.trugger.reflection;
 
-import java.lang.reflect.Field;
-
 import tools.devnull.trugger.HandlingException;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.ValueHandler;
+
+import java.lang.reflect.Field;
 
 /**
  * A handler for {@link Field} objects.
  * <p>
  * For handling a static field, you don't need to specify that instance:
- * 
+ * <p>
  * <pre>
  * FieldHandler handler = {@link Reflection#handle(Field)};
  * Object oldValue = handler.value();
  * handler.value(newValue);
  * </pre>
- * 
+ * <p>
  * For handling a non-static field, you must specify an instance:
- * 
+ * <p>
  * <pre>
  * FieldHandler handler = {@link Reflection#handle(Field)};
  * Object oldValue = handler.on(instance).get();
  * handler.on(instance).value(newValue);
  * </pre>
- * 
+ *
  * @author Marcelo Guimarães
  */
-public interface FieldHandler extends ValueHandler, Result<ValueHandler, Object> {
-  
+public interface FieldHandler extends ValueHandler {
+
   /**
    * Gets the value for a <i>static</i> {@link Field}.
    */
-  <E> E value() throws HandlingException;
-  
+  <E> E get() throws HandlingException;
+
   /**
    * Sets the value for a <i>static</i> {@link Field}.
    */
   void set(Object value) throws HandlingException;
-  
+
   /**
    * Handles the value on a given instance (use this if the field is not
    * <i>static</i>).
-   * 
-   * @param source
-   *          the instance. A <code>null</code> value or a {@link Class} may be
-   *          passed if the field is static.
+   *
+   * @param source the instance. A <code>null</code> value or a {@link Class} may be
+   *               passed if the field is static.
    * @return the component for handling the field on the given instance.
    */
-  ValueHandler in(Object source);
-  
+  ValueHandler on(Object source);
+
 }

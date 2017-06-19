@@ -18,8 +18,6 @@
  */
 package tools.devnull.trugger.selector;
 
-import tools.devnull.trugger.Result;
-
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Predicate;
@@ -29,11 +27,18 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface MethodsSelector extends PredicateSelector<Method>,
-    DeepSelector, Result<List<Method>, Object> {
+public interface MethodsSelector extends PredicateSelector<Method>, DeepSelector {
 
   MethodsSelector filter(Predicate<? super Method> predicate);
 
   MethodsSelector deep();
+
+  /**
+   * Applies the selection on the given target.
+   *
+   * @param target the target to apply the selection
+   * @return the result
+   */
+  List<Method> from(Object target);
 
 }

@@ -19,7 +19,6 @@
 package tools.devnull.trugger.element;
 
 import tools.devnull.trugger.HandlingException;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.ValueHandler;
 
 import java.lang.reflect.AnnotatedElement;
@@ -30,12 +29,11 @@ import java.lang.reflect.AnnotatedElement;
  * @author Marcelo Guimarães
  * @since 1.2
  */
-public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
-    ValueHandler {
+public interface Element extends AnnotatedElement, ValueHandler {
 
   /**
    * @return the Class object representing the class or interface that declares
-   *         the element.
+   * the element.
    */
   Class declaringClass();
 
@@ -65,16 +63,15 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
    * This method may throw exceptions in case of the element cannot be handled
    * or an error occurring while handling the element.
    *
-   * @param target
-   *          the target that contains this element.
+   * @param target the target that contains this element.
    * @return a component for handling the value of this element in the given
-   *         target.
+   * target.
    */
-  ValueHandler in(Object target);
+  ValueHandler on(Object target);
 
   /**
    * Checks if this element is specific for a target. If this method returns
-   * <code>true</code>, then the methods {@link #value()} and
+   * <code>true</code>, then the methods {@link #get()} and
    * {@link #set(Object)} can be used.
    *
    * @return <code>true</code> if this element is specific for a target.
@@ -87,7 +84,7 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
    * specific} one.
    *
    * @return the target for this element if it is {@link #isSpecific() specific}
-   *         or <code>null</code> if not.
+   * or <code>null</code> if not.
    */
   <E> E target();
 
@@ -95,7 +92,7 @@ public interface Element extends AnnotatedElement, Result<ValueHandler, Object>,
    * Returns the value if this element is {@link #isSpecific() specific}.
    */
   @Override
-  <E> E value() throws HandlingException;
+  <E> E get() throws HandlingException;
 
   /**
    * Sets the value if this element is {@link #isSpecific() specific}.

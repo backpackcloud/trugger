@@ -19,7 +19,6 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.TruggerException;
 import tools.devnull.trugger.element.Element;
 
@@ -36,36 +35,32 @@ import java.util.List;
 public class ResultSetElementFinder implements Finder<Element> {
 
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return Collections.emptyList();
+  public List<Element> findAll(Object target) {
+    if (target instanceof Class<?>) {
+      return Collections.emptyList();
+    }
+    List<Element> elements = new ArrayList<>();
+    ResultSet resultSet = (ResultSet) target;
+    try {
+      ResultSetMetaData metaData = resultSet.getMetaData();
+      for (int i = 1; i <= metaData.getColumnCount(); i++) {
+        elements.add(
+            new SpecificElement(
+                new ResultSetElement(metaData.getColumnName(i)), resultSet)
+        );
       }
-      List<Element> elements = new ArrayList<>();
-      ResultSet resultSet = (ResultSet) target;
-      try {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        for (int i = 1 ; i <= metaData.getColumnCount() ; i++) {
-          elements.add(
-              new SpecificElement(
-                  new ResultSetElement(metaData.getColumnName(i)), resultSet)
-          );
-        }
-      } catch (SQLException e) {
-        throw new TruggerException(e);
-      }
-      return elements;
-    };
+    } catch (SQLException e) {
+      throw new TruggerException(e);
+    }
+    return elements;
   }
 
   @Override
-  public Result<Element, Object> find(final String name) {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return new ResultSetElement(name);
-      }
-      return new SpecificElement(new ResultSetElement(name), target);
-    };
+  public Element find(String name, Object target) {
+    if (target instanceof Class<?>) {
+      return new ResultSetElement(name);
+    }
+    return new SpecificElement(new ResultSetElement(name), target);
   }
 
 }

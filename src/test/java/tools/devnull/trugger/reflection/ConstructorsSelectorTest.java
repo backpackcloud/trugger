@@ -47,11 +47,11 @@ public class ConstructorsSelectorTest {
   public void testNoSelector() {
     assertEquals(
         2,
-        reflect().constructors().in(TestObject.class).size()
+        reflect().constructors().from(TestObject.class).size()
     );
     assertEquals(
         1,
-        reflect().visible().constructors().in(TestObject.class).size()
+        reflect().visible().constructors().from(TestObject.class).size()
     );
   }
 
@@ -59,20 +59,20 @@ public class ConstructorsSelectorTest {
   public void testPredicateSelector() {
     assertEquals(
         2,
-        reflect().constructors().filter(ALL).in(TestObject.class).size()
+        reflect().constructors().filter(ALL).from(TestObject.class).size()
     );
     assertEquals(
         1,
-        reflect().visible().constructors().filter(ALL).in(TestObject.class)
+        reflect().visible().constructors().filter(ALL).from(TestObject.class)
             .size()
     );
     assertEquals(
         0,
-        reflect().constructors().filter(NONE).in(TestObject.class).size()
+        reflect().constructors().filter(NONE).from(TestObject.class).size()
     );
     assertEquals(
         0,
-        reflect().visible().constructors().filter(NONE).in(TestObject.class)
+        reflect().visible().constructors().filter(NONE).from(TestObject.class)
             .size()
     );
   }

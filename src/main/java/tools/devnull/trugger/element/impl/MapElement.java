@@ -34,7 +34,7 @@ public class MapElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(Object target) {
+  public ValueHandler on(Object target) {
     if (target instanceof Map<?, ?>) {
       final Map map = (Map) target;
       return new ValueHandler() {
@@ -49,7 +49,7 @@ public class MapElement extends AbstractElement implements Element {
         }
 
         @Override
-        public <E> E value() throws HandlingException {
+        public <E> E get() throws HandlingException {
           if (map.containsKey(name)) {
             return (E) map.get(name);
           }

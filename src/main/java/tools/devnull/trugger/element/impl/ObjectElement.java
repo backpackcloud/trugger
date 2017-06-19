@@ -84,22 +84,22 @@ public final class ObjectElement extends AbstractElement {
       type = setter.getParameterTypes()[0];
       searchForGetter();
     }
-    field = reflect().field(name).in(declaringClass).result();
+    field = reflect().field(name).from(declaringClass).result();
     searchForAnnotatedElement();
   }
 
-  public ValueHandler in(final Object target) {
+  public ValueHandler on(final Object target) {
     return new ValueHandler() {
 
-      public <E> E value() throws HandlingException {
+      public <E> E get() throws HandlingException {
         if (!isReadable()) {
           throw new UnreadableElementException(name);
         }
         try {
           if (getter != null) {
-            return invoke(getter).in(target).withoutArgs();
+            return invoke(getter).on(target).withoutArgs();
           } else {
-            return handle(field).in(target).value();
+            return handle(field).on(target).get();
           }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());
@@ -112,9 +112,9 @@ public final class ObjectElement extends AbstractElement {
         }
         try {
           if (setter != null) {
-            invoke(setter).in(target).withArgs(value);
+            invoke(setter).on(target).withArgs(value);
           } else {
-            handle(field).in(target).set(value);
+            handle(field).on(target).set(value);
           }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());
@@ -151,7 +151,7 @@ public final class ObjectElement extends AbstractElement {
 
   private Method searchMethod(Predicate<Method> predicate) {
     Collection<Method> candidates = reflect().methods().deep()
-        .filter(predicate).in(declaringClass);
+        .filter(predicate).from(declaringClass);
     return candidates.isEmpty() ? null : candidates.iterator().next();
   }
 

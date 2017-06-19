@@ -18,7 +18,6 @@
  */
 package tools.devnull.trugger.selector;
 
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 
 import java.util.List;
@@ -29,9 +28,16 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public interface ElementsSelector extends PredicateSelector<Element>,
-    Result<List<Element>, Object> {
+public interface ElementsSelector extends PredicateSelector<Element> {
 
   ElementsSelector filter(Predicate<? super Element> predicate);
+
+  /**
+   * Applies the selection using the given target
+   *
+   * @param target the target to apply the selection
+   * @return the selected elements
+   */
+  List<Element> from(Object target);
 
 }

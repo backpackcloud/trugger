@@ -19,7 +19,6 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 
 import java.lang.reflect.Method;
@@ -43,7 +42,7 @@ public final class AnnotationElementFinder implements Finder<Element> {
   private ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
-      List<Method> declaredMethods = reflect().methods().in(type);
+      List<Method> declaredMethods = reflect().methods().from(type);
       AnnotationElement prop;
       for (Method method : declaredMethods) {
         prop = new AnnotationElement(method);
@@ -52,28 +51,24 @@ public final class AnnotationElementFinder implements Finder<Element> {
     }
   };
 
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      Collection<Element> elements = cache.get(target);
-      if (target instanceof Class<?>) {
-        return new ArrayList<>(elements);
-      }
-      return elements.stream().map(
-          element -> new SpecificElement(element, target)
-      ).collect(Collectors.toList());
-    };
+  public List<Element> findAll(Object target) {
+    Collection<Element> elements = cache.get(target);
+    if (target instanceof Class<?>) {
+      return new ArrayList<>(elements);
+    }
+    return elements.stream().map(
+        element -> new SpecificElement(element, target)
+    ).collect(Collectors.toList());
   }
 
-  public final Result<Element, Object> find(final String propertyName) {
-    return target -> {
-      Element property = cache.get(target, propertyName);
-      if (target instanceof Class<?>) {
-        return property;
-      } else if (property != null) {
-        return new SpecificElement(property, target);
-      }
-      return null;
-    };
+  public final Element find(String propertyName, Object target) {
+    Element property = cache.get(target, propertyName);
+    if (target instanceof Class<?>) {
+      return property;
+    } else if (property != null) {
+      return new SpecificElement(property, target);
+    }
+    return null;
   }
 
 }

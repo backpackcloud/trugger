@@ -21,7 +21,6 @@ package tools.devnull.trugger.element;
 
 import org.junit.Test;
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.reflection.ClassPredicates;
 
 import java.util.Collections;
@@ -34,21 +33,18 @@ import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
-/**
- *
- */
 public class ElementFinderTest {
 
   public static class MyFinder implements Finder<Element> {
 
     @Override
-    public Result<Element, Object> find(String name) {
-      return o -> null;
+    public Element find(String name, Object target) {
+      return null;
     }
 
     @Override
-    public Result<List<Element>, Object> findAll() {
-      return o -> Collections.emptyList();
+    public List<Element> findAll(Object target) {
+      return Collections.emptyList();
     }
 
   }
@@ -59,14 +55,14 @@ public class ElementFinderTest {
 
   @Test
   public void testRegistry() {
-    assertNotNull(element("field").in(TestFinder.class));
-    assertFalse(elements().in(TestFinder.class).isEmpty());
+    assertNotNull(element("field").from(TestFinder.class));
+    assertFalse(elements().from(TestFinder.class).isEmpty());
 
     Elements.registry().register(new MyFinder())
         .to(ClassPredicates.type(TestFinder.class));
 
-    assertNull(element("field").in(TestFinder.class));
-    assertTrue(elements().in(TestFinder.class).isEmpty());
+    assertNull(element("field").from(TestFinder.class));
+    assertTrue(elements().from(TestFinder.class).isEmpty());
   }
 
 }

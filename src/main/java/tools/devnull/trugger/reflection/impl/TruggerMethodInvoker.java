@@ -48,7 +48,7 @@ public class TruggerMethodInvoker implements MethodInvoker {
     this.instance = instance;
   }
 
-  public MethodInvoker in(Object instance) {
+  public MethodInvoker on(Object instance) {
     return new TruggerMethodInvoker(method, instance);
   }
 

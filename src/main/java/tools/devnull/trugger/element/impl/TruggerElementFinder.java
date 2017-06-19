@@ -19,10 +19,9 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
-import tools.devnull.trugger.util.registry.Registry;
 import tools.devnull.trugger.util.Utils;
+import tools.devnull.trugger.util.registry.Registry;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -46,7 +45,7 @@ public final class TruggerElementFinder implements Finder<Element> {
   private Finder<Element> getFinder(Object target) {
     Class type = Utils.resolveType(target);
     for (Registry.Entry<Predicate<Class>, Finder<Element>> entry : registry.entries()) {
-      if(entry.key().test(type)) {
+      if (entry.key().test(type)) {
         return entry.value();
       }
     }
@@ -54,22 +53,18 @@ public final class TruggerElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Result<Element, Object> find(final String name) {
-    return target -> {
-      if (name.indexOf('.') > -1) {
-        return NestedElement.createNestedElement(target, name);
-      }
-      Finder<Element> finder = getFinder(target);
-      return finder.find(name).in(target);
-    };
+  public Element find(String name, Object target) {
+    if (name.indexOf('.') > -1) {
+      return NestedElement.createNestedElement(target, name);
+    }
+    Finder<Element> finder = getFinder(target);
+    return finder.find(name, target);
   }
 
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      Finder<Element> finder = getFinder(target);
-      return finder.findAll().in(target);
-    };
+  public List<Element> findAll(Object target) {
+    Finder<Element> finder = getFinder(target);
+    return finder.findAll(target);
   }
 
 }

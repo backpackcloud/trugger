@@ -134,8 +134,8 @@ public class ComponentFactory<T extends Annotation, E> {
     Class<?> type = annotation.annotationType();
     if (type.isAnnotationPresent(annotationType)) {
       T classAnnotation = type.getAnnotation(annotationType);
-      Element element = Elements.element(classElement).in(classAnnotation);
-      Class<? extends E> typeToCreate = element.value();
+      Element element = Elements.element(classElement).from(classAnnotation);
+      Class<? extends E> typeToCreate = element.get();
       return create(annotation, typeToCreate);
     }
     return null;
@@ -222,12 +222,12 @@ public class ComponentFactory<T extends Annotation, E> {
   public static BiConsumer<Context, Annotation> defaults() {
     return (context, annotation) -> {
       context.use(annotation).when(type(annotation.annotationType()));
-      List<Element> elements = Elements.elements().in(annotation);
+      List<Element> elements = Elements.elements().from(annotation);
       for (Element el : elements) {
-        context.use(el::value).when(named(el.name()).and(type(el.type())));
+        context.use(el::get).when(named(el.name()).and(type(el.type())));
       }
       for (Element el : elements) {
-        context.use(el::value).when(type(el.type()));
+        context.use(el::get).when(type(el.type()));
       }
     };
   }

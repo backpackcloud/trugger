@@ -52,18 +52,18 @@ public class ConstructorTest {
     assertNotNull(
         reflect().constructor()
             .withoutParameters()
-            .in(ClassWithNoDeclaredConstructor.class)
+            .from(ClassWithNoDeclaredConstructor.class)
             .result()
     );
     assertNotNull(
         reflect().visible().constructor()
             .withoutParameters()
-            .in(ClassWithNoDeclaredConstructor.class)
+            .from(ClassWithNoDeclaredConstructor.class)
             .result()
     );
     assertEquals(
         1,
-        reflect().constructors().in(ClassWithNoDeclaredConstructor.class).size()
+        reflect().constructors().from(ClassWithNoDeclaredConstructor.class).size()
     );
   }
 
@@ -71,7 +71,7 @@ public class ConstructorTest {
   public void testInvoker() {
     Constructor<?> constructor = reflect().constructor()
         .withoutParameters()
-        .in(ArrayList.class)
+        .from(ArrayList.class)
         .result();
     assertNotNull(constructor);
     Object object = invoke(constructor).withoutArgs();
@@ -80,7 +80,7 @@ public class ConstructorTest {
 
   @Test
   public void testExceptionHandling() {
-    Constructor<?> constructor = reflect().constructor().in(TestObject.class).result();
+    Constructor<?> constructor = reflect().constructor().from(TestObject.class).result();
     assertThrow(ReflectionException.class,
         () -> invoke(constructor).withoutArgs()
     );

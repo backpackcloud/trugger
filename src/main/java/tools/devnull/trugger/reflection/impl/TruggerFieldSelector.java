@@ -63,7 +63,7 @@ public class TruggerFieldSelector implements FieldSelector {
     return new TruggerFieldSelector(this.name, this.registry, this.predicate, Reflection::hierarchyOf);
   }
 
-  public SelectionResult<Field> in(Object target) {
+  public SelectionResult<Field> from(Object target) {
     return new MemberSelector<>(registry.fieldFinder(name), predicate, function).selectFrom(target);
   }
 

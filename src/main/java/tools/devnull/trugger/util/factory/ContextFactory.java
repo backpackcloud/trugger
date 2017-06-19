@@ -89,7 +89,7 @@ public class ContextFactory {
   public <E> E create(Class<E> type) {
     List<Constructor<?>> constructors = reflect().constructors()
         .filter(declaring(Modifier.PUBLIC))
-        .in(type);
+        .from(type);
     Collections.sort(constructors,
         (c1, c2) -> c2.getParameterCount() - c1.getParameterCount());
     E result;

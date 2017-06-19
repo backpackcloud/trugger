@@ -20,38 +20,35 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
-/** @author Marcelo Guimarães */
+/**
+ * @author Marcelo Guimarães
+ */
 public class ArrayElementFinder implements Finder<Element> {
 
   @Override
-  public Result<Element, Object> find(final String name) {
-    return array -> {
-      if ("first".equals(name)) {
-        return new ArrayElement(array, 0);
-      } else if ("last".equals(name)) {
-        return new ArrayElement(array, Array.getLength(array) - 1);
-      }
-      return new ArrayElement(array, Integer.parseInt(name));
-    };
+  public Element find(String name, Object array) {
+    if ("first".equals(name)) {
+      return new ArrayElement(array, 0);
+    } else if ("last".equals(name)) {
+      return new ArrayElement(array, Array.getLength(array) - 1);
+    }
+    return new ArrayElement(array, Integer.parseInt(name));
   }
 
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return array -> {
-      int size = Array.getLength(array);
-      Element[] result = new Element[size];
-      for (int i = 0; i < size; i++) {
-        result[i] = new ArrayElement(array,  i);
-      }
-      return Arrays.asList(result);
-    };
+  public List<Element> findAll(Object array) {
+    int size = Array.getLength(array);
+    Element[] result = new Element[size];
+    for (int i = 0; i < size; i++) {
+      result[i] = new ArrayElement(array, i);
+    }
+    return Arrays.asList(result);
   }
 
 }

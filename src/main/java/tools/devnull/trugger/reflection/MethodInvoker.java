@@ -19,8 +19,6 @@
 package tools.devnull.trugger.reflection;
 
 import tools.devnull.trugger.Invoker;
-import tools.devnull.trugger.Result;
-
 import java.lang.reflect.Method;
 
 /**
@@ -40,7 +38,7 @@ import java.lang.reflect.Method;
  *
  * @author Marcelo Guimarães
  */
-public interface MethodInvoker extends Invoker, Result<Invoker, Object> {
+public interface MethodInvoker extends Invoker {
 
   /**
    * Indicates the instance that the method must be invoked. If this method is not called
@@ -49,6 +47,6 @@ public interface MethodInvoker extends Invoker, Result<Invoker, Object> {
    * @param instance the instance for invocation.
    * @return the component for invoking the method on the given instance.
    */
-  Invoker in(Object instance);
+  Invoker on(Object instance);
 
 }

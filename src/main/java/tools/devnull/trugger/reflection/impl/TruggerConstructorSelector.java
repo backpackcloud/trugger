@@ -65,12 +65,12 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   }
 
   @Override
-  public SelectionResult<Constructor<?>> in(Object target) throws ReflectionException {
+  public SelectionResult<Constructor<?>> from(Object target) throws ReflectionException {
     if (parameterTypes != null) {
       return new MemberSelector(registry.constructorFinder(parameterTypes), predicate).selectFrom(target);
     }
     List<Constructor<?>> constructors =
-        new MembersSelector<>(registry.constructorsFinder()).in(target);
+        new MembersSelector<>(registry.constructorsFinder()).selectFrom(target);
     if (predicate != null) {
       return new SelectionResult(target, constructors.stream()
           .filter(predicate)

@@ -18,10 +18,10 @@
  */
 package tools.devnull.trugger.element;
 
+import org.junit.Before;
 import org.junit.Test;
 import tools.devnull.trugger.Finder;
 import tools.devnull.trugger.Flag;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.impl.TruggerElementSelector;
 import tools.devnull.trugger.selector.ElementSelector;
 
@@ -50,10 +50,10 @@ public class ElementSelectorTest {
   private Finder<Element> finder;
   private Element element;
 
-  public ElementSelectorTest() {
+  @Before
+  public void initialize() {
     finder = mock(Finder.class);
-    Result<Element, Object> result = target -> element;
-    when(finder.find("name")).thenReturn(result);
+    when(finder.find("name", this)).thenAnswer((invocation) -> element);
   }
 
   private ElementSelector selector() {
@@ -61,16 +61,16 @@ public class ElementSelectorTest {
   }
 
   private void testPredicate(Predicate<? super Element> predicate) {
-    assertSame(element, selector().filter(predicate).in(this));
-    assertNull(selector().filter(predicate.negate()).in(this));
+    assertSame(element, selector().filter(predicate).from(this));
+    assertNull(selector().filter(predicate.negate()).from(this));
 
-    verify(finder, atLeastOnce()).find("name");
+    verify(finder, atLeastOnce()).find("name", this);
   }
 
   private void testFailPredicate(Predicate<? super Element> predicate) {
-    assertNull(selector().filter(predicate).in(this));
+    assertNull(selector().filter(predicate).from(this));
 
-    verify(finder, atLeastOnce()).find("name");
+    verify(finder, atLeastOnce()).find("name", this);
   }
 
   @Test

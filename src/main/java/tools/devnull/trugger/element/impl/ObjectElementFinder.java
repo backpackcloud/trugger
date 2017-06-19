@@ -19,18 +19,22 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.reflection.Reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static tools.devnull.trugger.reflection.MethodPredicates.getter;
 import static tools.devnull.trugger.reflection.MethodPredicates.setter;
-import static tools.devnull.trugger.reflection.Reflection.*;
+import static tools.devnull.trugger.reflection.Reflection.hierarchyOf;
+import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
  * A default class for finding properties in objects.
@@ -47,7 +51,7 @@ public final class ObjectElementFinder implements Finder<Element> {
     }
 
     private void loadUsingFields(Class type, Map<String, Element> map) {
-      List<Field> fields = reflect().fields().in(type);
+      List<Field> fields = reflect().fields().from(type);
       for (Field field : fields) {
         if (!map.containsKey(field.getName())) {
           ObjectElement prop = new ObjectElement(field);
@@ -60,7 +64,7 @@ public final class ObjectElementFinder implements Finder<Element> {
       List<Method> declaredMethods = reflect().methods()
           .filter(
               getter().or(setter()))
-          .in(type);
+          .from(type);
       for (Method method : declaredMethods) {
         String name = Reflection.parsePropertyName(method);
         if (!map.containsKey(name)) {
@@ -71,39 +75,35 @@ public final class ObjectElementFinder implements Finder<Element> {
     }
   };
 
-  public final Result<Element, Object> find(final String propertyName) {
-    return target -> {
-      for (Class type : hierarchyOf(target)) {
-        Element element = cache.get(type, propertyName);
-        if (element != null) {
-          return target instanceof Class ?
-              element : new SpecificElement(element, target);
-        }
+  public final Element find(String propertyName, Object target) {
+    for (Class type : hierarchyOf(target)) {
+      Element element = cache.get(type, propertyName);
+      if (element != null) {
+        return target instanceof Class ?
+            element : new SpecificElement(element, target);
       }
-      return null;
-    };
+    }
+    return null;
   }
 
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      final Map<String, Element> map = new HashMap<String, Element>();
-      for (Class type : hierarchyOf(target)) {
-        Collection<Element> properties = cache.get(type);
-        for (Element property : properties) {
-          String name = property.name();
-          //used in case of a property override
-          if (!map.containsKey(name)) {
-            map.put(name, property);
-          }
+  public List<Element> findAll(Object target) {
+    final Map<String, Element> map = new HashMap<String, Element>();
+    for (Class type : hierarchyOf(target)) {
+      Collection<Element> properties = cache.get(type);
+      for (Element property : properties) {
+        String name = property.name();
+        //used in case of a property override
+        if (!map.containsKey(name)) {
+          map.put(name, property);
         }
       }
-      Collection<Element> elements = map.values();
-      if (target instanceof Class<?>) {
-        return new ArrayList<>(elements);
-      }
-      return elements.stream().map(
-          element -> new SpecificElement(element, target)
-      ).collect(Collectors.toList());
-    };
+    }
+    Collection<Element> elements = map.values();
+    if (target instanceof Class<?>) {
+      return new ArrayList<>(elements);
+    }
+    return elements.stream().map(
+        element -> new SpecificElement(element, target)
+    ).collect(Collectors.toList());
   }
 }

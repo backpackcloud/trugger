@@ -176,7 +176,7 @@ public class ElementMock {
    * @return a reference to this object.
    */
   public ElementMock withSpecificValue(Object value) {
-    when(element.value()).thenReturn(value);
+    when(element.get()).thenReturn(value);
     return specific();
   }
 
@@ -188,7 +188,7 @@ public class ElementMock {
    * @return a reference to this object.
    */
   public ElementMock withHandler(Object target, ValueHandler handler) {
-    when(element.in(target)).thenReturn(handler);
+    when(element.on(target)).thenReturn(handler);
     return this;
   }
 

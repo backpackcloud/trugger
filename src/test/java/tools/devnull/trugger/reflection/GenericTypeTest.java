@@ -47,22 +47,22 @@ public class GenericTypeTest {
 
   @Test
   public void genericTypeTest() {
-    assertEquals(String.class, reflect().genericType("E").in(TestObject.class));
-    assertEquals(Class.class, reflect().genericType("T").in(TestObject.class));
-    assertEquals(Boolean.class, reflect().genericType("V").in(TestObject.class));
+    assertEquals(String.class, reflect().genericType("E", TestObject.class));
+    assertEquals(Class.class, reflect().genericType("T", TestObject.class));
+    assertEquals(Boolean.class, reflect().genericType("V", TestObject.class));
   }
 
   @Test
   public void bridgedMethodTest() {
     MethodSelector method = reflect().method("doIt");
-    Method bridgedMethod = method.withParameters(Class.class, String.class).in(TestObject.class).result();
+    Method bridgedMethod = method.withParameters(Class.class, String.class).from(TestObject.class).result();
 
     assertNotNull(method);
     assertNotNull(bridgedMethod);
     assertFalse(bridgedMethod.isBridge());
     assertTrue(bridgedMethod.isAnnotationPresent(Flag.class));
 
-    Method bridgeMethod = method.withParameters(Object.class, Object.class).in(TestObject.class).result();
+    Method bridgeMethod = method.withParameters(Object.class, Object.class).from(TestObject.class).result();
     assertNotNull(bridgeMethod);
     assertTrue(bridgeMethod.isBridge());
 
@@ -71,7 +71,7 @@ public class GenericTypeTest {
 
   @Test
   public void interfaceReflectionTest() {
-    List<Class> interfaces = reflect().interfaces().in(MethodsSelector.class);
-    assertEquals(3, interfaces.size());
+    List<Class> interfaces = reflect().interfacesOf(MethodsSelector.class);
+    assertEquals(2, interfaces.size());
   }
 }

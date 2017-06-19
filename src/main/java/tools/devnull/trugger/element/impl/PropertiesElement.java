@@ -34,7 +34,7 @@ public class PropertiesElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(Object target) {
+  public ValueHandler on(Object target) {
     if (target instanceof Properties) {
       final Properties props = (Properties) target;
       return new ValueHandler() {
@@ -51,7 +51,7 @@ public class PropertiesElement extends AbstractElement implements Element {
         }
 
         @Override
-        public <E> E value() throws HandlingException {
+        public <E> E get() throws HandlingException {
           return (E) props.getProperty(name);
         }
       };

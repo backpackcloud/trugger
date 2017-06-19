@@ -71,9 +71,9 @@ public class ResultSetElementTest implements ElementSpecs {
 
   @Test
   public void testElements() {
-    assertTrue(elements().in(ResultSet.class).isEmpty());
+    assertTrue(elements().from(ResultSet.class).isEmpty());
 
-    Spec.given(elements().in(resultSet))
+    Spec.given(elements().from(resultSet))
         .expect(it(), to().have(elementsNamed("name", "nickname", "age")))
 
         .each(Element.class, spec -> spec
@@ -84,23 +84,23 @@ public class ResultSetElementTest implements ElementSpecs {
   public void testMetadataError() throws SQLException {
     when(resultSet.getMetaData()).thenThrow(new SQLException());
 
-    elements().in(resultSet);
+    elements().from(resultSet);
   }
 
   @Test
   public void testNamedElement() throws SQLException {
-    Spec.given(element("name").in(ResultSet.class))
+    Spec.given(element("name").from(ResultSet.class))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("name").in(resultSet))
+    Spec.given(element("name").from(resultSet))
         .expect(Element::declaringClass, to().be(ResultSet.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))
-        .expect(Element::value, to().be("John"))
+        .expect(Element::get, to().be("John"))
 
         .when(retrievingNextRow())
 
-        .expect(Element::value, to().be("Justin"))
+        .expect(Element::get, to().be("Justin"))
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(gettingValueIn(new Object()), to().raise(HandlingException.class))
         .expect(gettingValue(), to().raise(HandlingException.class));
@@ -108,18 +108,18 @@ public class ResultSetElementTest implements ElementSpecs {
 
   @Test
   public void testIndexedElement() throws SQLException {
-    Spec.given(element("1").in(ResultSet.class))
+    Spec.given(element("1").from(ResultSet.class))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("1").in(resultSet))
+    Spec.given(element("1").from(resultSet))
         .expect(Element::declaringClass, to().be(ResultSet.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))
-        .expect(Element::value, to().be("John"))
+        .expect(Element::get, to().be("John"))
 
         .when(retrievingNextRow())
 
-        .expect(Element::value, to().be("Justin"))
+        .expect(Element::get, to().be("Justin"))
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(gettingValueIn(new Object()), to().raise(HandlingException.class))
         .expect(gettingValue(), to().raise(HandlingException.class));

@@ -53,13 +53,13 @@ public class SpecificElement implements Element {
   }
 
   @Override
-  public Object value() throws HandlingException {
-    return in(target).value();
+  public Object get() throws HandlingException {
+    return on(target).get();
   }
 
   @Override
   public void set(Object value) throws HandlingException {
-    in(target).set(value);
+    on(target).set(value);
   }
 
   public Class declaringClass() {
@@ -91,8 +91,8 @@ public class SpecificElement implements Element {
   }
 
   @Override
-  public ValueHandler in(Object target) {
-    return element.in(target);
+  public ValueHandler on(Object target) {
+    return element.on(target);
   }
 
   public boolean isReadable() {

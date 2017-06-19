@@ -80,7 +80,7 @@ final class TruggerBridgeMethodResolver {
     // Gather all methods with matching name and parameter size.
     List<Method> candidateMethods = reflect().methods().deep()
         .filter(new SimpleBridgeCandidatePredicate())
-        .in(bridgeMethod.getDeclaringClass());
+        .from(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + '\'');
@@ -159,8 +159,7 @@ final class TruggerBridgeMethodResolver {
       // Search interfaces.
       // changed to use trugger api
       List<Class> interfaces = reflect()
-          .interfaces()
-          .in(bridgeMethod.getDeclaringClass());
+          .interfacesOf(bridgeMethod.getDeclaringClass());
       for (Class anInterface : interfaces) {
         Method method = searchForMatch(anInterface);
         if ((method != null) && !method.isBridge()) {
@@ -178,7 +177,7 @@ final class TruggerBridgeMethodResolver {
     private Method searchForMatch(Class type) {
       return reflect().method(bridgeMethod.getName())
           .withParameters(bridgeMethod.getParameterTypes())
-          .in(type)
+          .from(type)
           .orElseReturn(() -> null)
           .result();
     }

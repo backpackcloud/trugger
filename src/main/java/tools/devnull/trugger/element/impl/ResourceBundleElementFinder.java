@@ -19,10 +19,12 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
 import tools.devnull.trugger.element.Element;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * A finder for ResourceBundle elements.
@@ -30,30 +32,26 @@ import java.util.*;
  * @author Marcelo Guimarães
  */
 public class ResourceBundleElementFinder implements Finder<Element> {
-  
+
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return Collections.emptyList();
-      }
-      List<Element> properties = new ArrayList<>();
-      ResourceBundle bundle = (ResourceBundle) target;
-      for (String key : bundle.keySet()) {
-        properties.add(new SpecificElement(new ResourceBundleElement(key), bundle));
-      }
-      return properties;
-    };
+  public List<Element> findAll(Object target) {
+    if (target instanceof Class<?>) {
+      return Collections.emptyList();
+    }
+    List<Element> properties = new ArrayList<>();
+    ResourceBundle bundle = (ResourceBundle) target;
+    for (String key : bundle.keySet()) {
+      properties.add(new SpecificElement(new ResourceBundleElement(key), bundle));
+    }
+    return properties;
   }
-  
+
   @Override
-  public Result<Element, Object> find(final String name) {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return new ResourceBundleElement(name);
-      }
-      return new SpecificElement(new ResourceBundleElement(name), target);
-    };
+  public Element find(String name, Object target) {
+    if (target instanceof Class<?>) {
+      return new ResourceBundleElement(name);
+    }
+    return new SpecificElement(new ResourceBundleElement(name), target);
   }
-  
+
 }

@@ -187,7 +187,7 @@ public final class Reflection {
   }
 
   public static <E> OptionalFunction<Selection<Method>, E> invoke(Object... args) {
-    return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).in(selection.target()).withArgs(args));
+    return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).on(selection.target()).withArgs(args));
   }
 
   public static <E> OptionalFunction<Selection<Constructor<?>>, E> instantiate(Object... args) {
@@ -195,11 +195,11 @@ public final class Reflection {
   }
 
   public static <E> OptionalFunction<Selection<Field>, E> getValue() {
-    return OptionalFunction.of(selection -> factory.createHandler(selection.result()).in(selection.target()).value());
+    return OptionalFunction.of(selection -> factory.createHandler(selection.result()).on(selection.target()).get());
   }
 
   public static Consumer<Selection<Field>> setValue(Object newValue) {
-    return selection -> factory.createHandler(selection.result()).in(selection.target()).set(newValue);
+    return selection -> factory.createHandler(selection.result()).on(selection.target()).set(newValue);
   }
 
 }
