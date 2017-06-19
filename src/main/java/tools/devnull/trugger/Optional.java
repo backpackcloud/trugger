@@ -74,7 +74,7 @@ public interface Optional<E> {
    * @param consumer the consumer to use
    * @return an instance of this object.
    */
-  default Optional<E> and(Consumer<E> consumer) {
+  default Optional<E> and(Consumer<? super E> consumer) {
     E value = value();
     if (value != null) {
       consumer.accept(value);
@@ -90,7 +90,7 @@ public interface Optional<E> {
    * @param function the function to use
    * @return an instance of this object.
    */
-  default <T> T and(Function<E, T> function) {
+  default <T> T and(Function<? super E, ? extends T> function) {
     return function.apply(value());
   }
 

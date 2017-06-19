@@ -48,21 +48,40 @@ The base class of this module is `Reflection` and you will find a nice fluent in
 
 ### Single
 
-Reflecting a field is done with the code `reflect().field(field name)`. You can also apply a filter by using the method `filter` and the target class (or object) by using the method `in`. If you need a recursive search through the entire target class hierarchy, just use the method `deep`.
+Reflecting a field is done with the code `reflect().field(field name)`. You can also apply a filter by using the method `filter` and the target class (or object) by using the method `from`. If you need a recursive search through the entire target class hierarchy, just use the method `deep`.
 
 Here is some examples (assuming a `static import`):
 
 ```java
-Field value = reflect().field("value").in(String.class);
+Field value = reflect().field("value").from(String.class).result();
 
-Field name = reflect().field("name").deep().in(MyClass.class);
+Field name = reflect().field("name").deep().in(MyClass.class).result();
 
 Field id = reflect().field("id")
     .filter(field -> field.getType().equals(Long.class))
-    .in(someInstance);
+    .from(someInstance)
+    .result();
 ```
 
 The `filter` method receive a `java.util.function.Predicate` to stay in touch with Java 8.
+
+#### And what about the #result?
+
+The `.result()` is needed because the selection return allows to chain some actions:
+
+```java
+String value = reflect()
+  .field("aStringField")
+  .from(myInstance)
+  .and(getValue());
+
+reflect()
+  .field("aStringField")
+  .from(myInstance)
+  .and(setValue("OK"));
+```
+
+This allows more readability, at the cost of another method invocation.
 
 ### Multiple
 
@@ -72,13 +91,12 @@ If you need to reflect a set of fields, use the `reflect().fields()`. The same f
 List<Field> stringFields = reflect().fields()
     .filter(field -> field.getType().equals(String.class))
     .deep()
-    .in(MyClass.class);
+    .from(MyClass.class);
 ~~~
 
 ### Predicates
 
-There are some builtin predicates in the class
-`FieldPredicates`.
+There are some builtin predicates in the class `FieldPredicates`.
 
 ~~~java
 List<Field> stringFields = reflect().fields()
@@ -89,60 +107,60 @@ List<Field> stringFields = reflect().fields()
 
 ### Handling Values
 
-A field can have its value manipulated through the method `Reflection#handle`. It will create a handler to set and get the field's value without the verbosity of the Reflection API. To handle static fields, you can call the handler methods directly:
+A field can have its value manipulated through the method `Reflection#handle`. It will create a handler to set and get
+the field's value without the verbosity of the Reflection API. To handle static fields, you can call the handler methods
+directly:
 
 ~~~java
-String value = handle(field).value();
-handle(field).set("new value");
+String value = handle(field).getValue();
+handle(field).setValue("new value");
 ~~~
 
-For instance fields, just specify an instance using the method `in`:
+For instance fields, just specify an instance using the method `on`:
 
 ~~~java
-String value = handle(field).in(instance).value();
-handle(field).in(instance).set("new value");
-~~~
-
-You can also use a a `FieldSelector`:
-
-~~~java
-// static import Reflection#field
-String value = handle(field("name")).in(instance).value();
+String value = handle(field).on(instance).getValue();
+handle(field).on(instance).setValue("new value");
 ~~~
 
 ## Constructors
 
 ### Single
 
-To reflect a constructor, use `reflect().constructor()` and specify the parameter types and optionally a filter. If the class has only one constructor, it can be reflected without supplying the parameter types.
+To reflect a constructor, use `reflect().constructor()` and specify the parameter types and optionally a filter. If the
+class has only one constructor, it can be reflected without supplying the parameter types.
 
 ~~~java
 Constructor constructor = reflect()
-  .constructor().withParameters(String.class).in(MyClass.class);
+  .constructor().withParameters(String.class).from(MyClass.class).result();
 
 Constructor constructor = reflect().constructor()
-  .withoutParameters().in(MyClass.class);
+  .withoutParameters().from(MyClass.class).result();
 
 Constructor constructor = reflect().constructor()
   .filter(c -> c.isAnnotationPresent(SomeAnnotation.class))
-  .withParameters(String.class).in(MyClass.class);
+  .withParameters(String.class).from(MyClass.class).result();
 
-Constructor constructor = reflect().constructor().in(MyClass.class)
+Constructor constructor = reflect().constructor().from(MyClass.class).result();
+
+MyClass obj = reflect().constructor().from(MyClass.class).and(instantiate(parameter));
 ~~~
 
 ### Multiple
 
-A set of constructors can be reflected by using `reflect().constructors()`. As in fields, the features in single reflection are present in multiple reflection.
+A set of constructors can be reflected by using `reflect().constructors()`. As in fields, the features in single 
+reflection are present in multiple reflection.
 
 ~~~java
-List<Constructor> constructors = reflect().constructors().in(MyClass.class);
+List<Constructor> constructors = reflect().constructors().from(MyClass.class);
 
 List<Constructor> constructors = reflect().constructors()
   .filter(c -> c.getParameterCount() == 2)
-  .in(MyClass.class);
+  .from(MyClass.class);
 ~~~
 
-Note that in multiple selection you cannot specify the parameter types directly in the fluent interface (for obvious reasons).
+Note that in multiple selection you cannot specify the parameter types directly in the fluent interface (for obvious 
+reasons).
 
 ### Predicates
 
@@ -151,16 +169,17 @@ A few useful predicates are included in the class `ConstructorPredicates`.
 ~~~java
 List<Constructor> constructors = reflect().constructors()
   .filter(annotated()) // a static import
-  .in(MyClass.class);
+  .from(MyClass.class);
 ~~~
 
 ### Invocation
 
-To invoke a constructor you need an `Invoker`. The method `Reflection#invoke` returns a Invoker for a constructor. Specify the parameters and the constructor will be invoked.
+To invoke a constructor you need an `Invoker`. The method `Reflection#invoke` returns a Invoker for a constructor.
+Specify the parameters and the constructor will be invoked.
 
 ~~~java
 Constructor c = reflect().constructor()
-  .withParameters(String.class).in(String.class)
+  .withParameters(String.class).from(String.class)
 String name = invoke(c).withArgs("Trugger");
 ~~~
 
@@ -168,24 +187,27 @@ String name = invoke(c).withArgs("Trugger");
 
 ### Single
 
-To reflect a single method, just pass it name to `Reflection#method`. Filtering is allowed and you can specify parameter types too.
+To reflect a single method, just pass it name to `Reflection#method`. Filtering is allowed and you can specify parameter
+types too.
 
 ~~~java
-Method toString = reflect().method("toString").in(Object.class);
+Method toString = reflect().method("toString").from(Object.class).result();
 
 Method remove = reflect().method("remove")
   .withParameters(Object.class, Object.class)
-  .in(Map.class);
+  .from(Map.class).result();
 
 Method someMethod = reflect().method("foo")
   .filter(method -> method.isAnnotationPresent(PostConstruct.class))
-  .in(instance);
+  .from(instance).result();
+
+reflect().method("foo").from(instance).and(invoke());
 ~~~
 
 As in field reflection, you can do a deep search with `deep`.
 
 ~~~java
-Method toString = reflect().method("toString").deep().in(MyClass.class);
+Method toString = reflect().method("toString").deep().from(MyClass.class).result();
 ~~~
 
 ### Multiple
@@ -193,7 +215,7 @@ Method toString = reflect().method("toString").deep().in(MyClass.class);
 A set of methods can be reflected by using `Reflection#methods`:
 
 ~~~java
-List<Method> methods = reflect().methods().in(Object.class);
+List<Method> methods = reflect().methods().from(Object.class);
 ~~~
 
 Deep search and filtering are also supported:
@@ -202,7 +224,8 @@ Deep search and filtering are also supported:
 List<Method> methods = reflect().methods()
   .filter(method -> method.isAnnotationPresent(PostConstruct.class)
   .deep()
-  .in(MyClass.class);
+  .from(MyClass.class)
+  .result();
 ~~~
 
 ### Predicates
@@ -213,16 +236,18 @@ A set of predicates to deal with methods is in `MethodPredicates`:
 List<Method> methods = reflect().methods()
   .filter(annotatedWith(PostConstruct.class)) // a static import
   .deep()
-  .in(MyClass.class);
+  .from(MyClass.class)
+  .result();
 ~~~
 
 ### Invocation
 
-To invoke a method, use the Invoker returned by `Reflection#invoke`. Instance methods needs an instance provided using the method `in`:
+To invoke a method, use the Invoker returned by `Reflection#invoke`. Instance methods needs an instance provided 
+using the method `on`:
 
 ~~~java
-Method toString = reflect().method("toString").in(String.class);
-invoke(toString).in("A string").withoutArgs();
+Method toString = reflect().method("toString").on(String.class);
+invoke(toString).on("A string").withoutArgs();
 ~~~
 
 Static methods don't need it:
@@ -230,19 +255,21 @@ Static methods don't need it:
 ~~~java
 Method parseInt = reflect().method("parseInt")
   .withParameters(String.class)
-  .in(Integer.class);
+  .from(Integer.class)
+  .resul();
 int number = invoke(parseInt).withArgs("10");
-~~~
 
-Note that you can also use a `MethodSelector`:
-
-~~~java
-invoke(method("toString")).in("A string").withoutArgs();
+// alternatively
+int number = reflect().method("parseInt")
+  .withParameters(String.class)
+  .from(Integer.class)
+  .and(invoke("10"));
 ~~~
 
 ## Generic Type
 
-Generic declarations in a class are present in the bytecode. Trugger can reflect them by using the method `genericType`. Suppose we have this interface:
+Generic declarations in a class are present in the bytecode. Trugger can reflect them by using the method `genericType`.
+Suppose we have this interface:
 
 ~~~java
 public interface Repository<T> {
