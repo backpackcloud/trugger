@@ -16,29 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.devnull.trugger.selector;
-
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.function.Predicate;
+package tools.devnull.trugger;
 
 /**
- * Interface that defines a selector for {@link Method} objects.
+ * Interface that defines a selector that allows deep operations.
  *
  * @author Marcelo Guimarães
+ * @since 5.0
  */
-public interface MethodsSelector extends PredicateSelector<Method>, DeepSelector {
-
-  MethodsSelector filter(Predicate<? super Method> predicate);
-
-  MethodsSelector deep();
+public interface DeepSelector {
 
   /**
-   * Applies the selection on the given target.
+   * Selects using a deep operation. If the selection is for a single object
+   * and the deep operation founds more than one, the first one will be
+   * returned.
    *
-   * @param target the target to apply the selection
-   * @return the result
+   * @return a new selector with deep selection enabled
    */
-  List<Method> from(Object target);
+  DeepSelector deep();
 
 }

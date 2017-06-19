@@ -21,7 +21,7 @@ package tools.devnull.trugger.reflection.impl;
 import tools.devnull.trugger.SelectionResult;
 import tools.devnull.trugger.reflection.Reflection;
 import tools.devnull.trugger.reflection.ReflectionPredicates;
-import tools.devnull.trugger.selector.MethodSelector;
+import tools.devnull.trugger.reflection.MethodSelector;
 
 import java.lang.reflect.Method;
 import java.util.Collections;

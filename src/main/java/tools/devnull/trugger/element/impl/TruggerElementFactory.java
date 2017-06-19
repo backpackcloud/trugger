@@ -21,8 +21,8 @@ package tools.devnull.trugger.element.impl;
 import tools.devnull.trugger.element.ElementCopier;
 import tools.devnull.trugger.element.ElementFactory;
 import tools.devnull.trugger.element.ElementFinder;
-import tools.devnull.trugger.selector.ElementSelector;
-import tools.devnull.trugger.selector.ElementsSelector;
+import tools.devnull.trugger.element.ElementSelector;
+import tools.devnull.trugger.element.ElementsSelector;
 import tools.devnull.trugger.util.registry.MapRegistry;
 import tools.devnull.trugger.util.registry.Registry;
 

@@ -21,12 +21,12 @@ package tools.devnull.trugger.reflection.impl;
 import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.reflection.ReflectionException;
 import tools.devnull.trugger.reflection.Reflector;
-import tools.devnull.trugger.selector.ConstructorSelector;
-import tools.devnull.trugger.selector.ConstructorsSelector;
-import tools.devnull.trugger.selector.FieldSelector;
-import tools.devnull.trugger.selector.FieldsSelector;
-import tools.devnull.trugger.selector.MethodSelector;
-import tools.devnull.trugger.selector.MethodsSelector;
+import tools.devnull.trugger.reflection.ConstructorSelector;
+import tools.devnull.trugger.reflection.ConstructorsSelector;
+import tools.devnull.trugger.reflection.FieldSelector;
+import tools.devnull.trugger.reflection.FieldsSelector;
+import tools.devnull.trugger.reflection.MethodSelector;
+import tools.devnull.trugger.reflection.MethodsSelector;
 import tools.devnull.trugger.util.Utils;
 
 import java.lang.reflect.Method;

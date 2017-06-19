@@ -19,7 +19,7 @@
 package tools.devnull.trugger.reflection.impl;
 
 import tools.devnull.trugger.reflection.Reflection;
-import tools.devnull.trugger.selector.MethodsSelector;
+import tools.devnull.trugger.reflection.MethodsSelector;
 
 import java.lang.reflect.Method;
 import java.util.Collections;

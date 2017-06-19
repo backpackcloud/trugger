@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.element.impl.TruggerElementSelector;
-import tools.devnull.trugger.selector.ElementSelector;
 
 import java.util.function.Predicate;
 

@@ -20,8 +20,6 @@ package tools.devnull.trugger.element;
 
 import tools.devnull.trugger.util.ImplementationLoader;
 import tools.devnull.trugger.util.registry.Registry;
-import tools.devnull.trugger.selector.ElementSelector;
-import tools.devnull.trugger.selector.ElementsSelector;
 
 import java.util.function.Predicate;
 

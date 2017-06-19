@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.devnull.trugger.selector;
+package tools.devnull.trugger.reflection;
 
 import tools.devnull.trugger.SelectionResult;
-import tools.devnull.trugger.reflection.ReflectionException;
+import tools.devnull.trugger.PredicateSelector;
 
 import java.lang.reflect.Constructor;
 import java.util.function.Predicate;

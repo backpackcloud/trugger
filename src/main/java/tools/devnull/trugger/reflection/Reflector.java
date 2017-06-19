@@ -19,12 +19,6 @@
 package tools.devnull.trugger.reflection;
 
 import tools.devnull.trugger.Optional;
-import tools.devnull.trugger.selector.ConstructorSelector;
-import tools.devnull.trugger.selector.ConstructorsSelector;
-import tools.devnull.trugger.selector.FieldSelector;
-import tools.devnull.trugger.selector.FieldsSelector;
-import tools.devnull.trugger.selector.MethodSelector;
-import tools.devnull.trugger.selector.MethodsSelector;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

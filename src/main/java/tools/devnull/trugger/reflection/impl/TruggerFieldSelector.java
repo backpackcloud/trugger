@@ -20,7 +20,7 @@ package tools.devnull.trugger.reflection.impl;
 
 import tools.devnull.trugger.SelectionResult;
 import tools.devnull.trugger.reflection.Reflection;
-import tools.devnull.trugger.selector.FieldSelector;
+import tools.devnull.trugger.reflection.FieldSelector;
 
 import java.lang.reflect.Field;
 import java.util.Collections;

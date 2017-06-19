@@ -19,7 +19,6 @@
 package tools.devnull.trugger.reflection;
 
 import org.junit.Test;
-import tools.devnull.trugger.selector.FieldSelector;
 
 import java.lang.reflect.Field;
 

@@ -21,7 +21,6 @@ package tools.devnull.trugger.element;
 import org.junit.Before;
 import org.junit.Test;
 import tools.devnull.trugger.element.impl.TruggerElementsSelector;
-import tools.devnull.trugger.selector.ElementsSelector;
 
 import java.util.ArrayList;
 import java.util.List;

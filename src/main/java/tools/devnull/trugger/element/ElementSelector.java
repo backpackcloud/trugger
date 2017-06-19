@@ -16,29 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.devnull.trugger.selector;
+package tools.devnull.trugger.element;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import tools.devnull.trugger.PredicateSelector;
+
 import java.util.function.Predicate;
 
 /**
- * Interface that defines a selector for {@link Field} objects.
- *
+ * Interface that defines a selector for {@link Element} objects.
+ * 
  * @author Marcelo Guimarães
  */
-public interface FieldsSelector extends PredicateSelector<Field>, DeepSelector {
+public interface ElementSelector extends PredicateSelector<Element> {
+  
+  ElementSelector filter(Predicate<? super Element> predicate);
 
-  FieldsSelector filter(Predicate<? super Field> predicate);
-
-  FieldsSelector deep();
-
-  /**
-   * Applies the selection on the given target
-   *
-   * @param target the target to apply the selection
-   * @return the result
-   */
-  List<Field> from(Object target);
-
+  Element from(Object target);
+  
 }

@@ -16,31 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.devnull.trugger.selector;
+package tools.devnull.trugger.reflection;
 
 import tools.devnull.trugger.SelectionResult;
+import tools.devnull.trugger.DeepSelector;
+import tools.devnull.trugger.PredicateSelector;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
 /**
- * Interface that defines a selector for a single {@link Field} object assuming
- * that the name was specified before.
+ * Interface that defines a selector for a single {@link Method} object assuming that the
+ * name was specified before.
  *
  * @author Marcelo Guimarães
  */
-public interface FieldSelector extends PredicateSelector<Field>, DeepSelector {
+public interface MethodSelector extends PredicateSelector<Method>, DeepSelector {
 
-  FieldSelector filter(Predicate<? super Field> predicate);
+  MethodSelector filter(Predicate<? super Method> predicate);
 
-  FieldSelector deep();
+  MethodSelector deep();
+
+  MethodSelector withParameters(Class<?>... parameterTypes);
+
+  MethodSelector withoutParameters();
 
   /**
-   * Applies the selection on the given target
+   * Applies the selection on the given target.
    *
    * @param target the target to apply the selection
    * @return the result
    */
-  SelectionResult<Field> from(Object target);
+  SelectionResult<Method> from(Object target);
 
 }

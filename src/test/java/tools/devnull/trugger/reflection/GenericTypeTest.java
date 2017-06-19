@@ -20,8 +20,6 @@ package tools.devnull.trugger.reflection;
 
 import org.junit.Test;
 import tools.devnull.trugger.Flag;
-import tools.devnull.trugger.selector.MethodSelector;
-import tools.devnull.trugger.selector.MethodsSelector;
 
 import java.lang.reflect.Method;
 import java.util.List;

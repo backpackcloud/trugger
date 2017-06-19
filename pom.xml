@@ -140,7 +140,6 @@
               tools.devnull.trugger.element,
               tools.devnull.trugger.interception,
               tools.devnull.trugger.reflection,
-              tools.devnull.trugger.selector,
               tools.devnull.trugger.util,
               tools.devnull.trugger.util.factory,
               tools.devnull.trugger.util.registry

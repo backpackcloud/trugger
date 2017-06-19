@@ -20,7 +20,7 @@ package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
-import tools.devnull.trugger.selector.ElementSelector;
+import tools.devnull.trugger.element.ElementSelector;
 
 import java.util.function.Predicate;
 

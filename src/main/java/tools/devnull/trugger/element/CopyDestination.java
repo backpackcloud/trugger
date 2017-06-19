@@ -19,7 +19,7 @@
 
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.selector.PredicateSelector;
+import tools.devnull.trugger.PredicateSelector;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

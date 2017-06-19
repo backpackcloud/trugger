@@ -19,8 +19,6 @@
 
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.selector.ElementSelector;
-
 import java.util.List;
 import java.util.function.Predicate;
 

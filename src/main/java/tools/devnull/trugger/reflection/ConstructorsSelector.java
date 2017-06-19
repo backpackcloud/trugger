@@ -16,23 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.devnull.trugger.selector;
+package tools.devnull.trugger.reflection;
+
+import tools.devnull.trugger.PredicateSelector;
+
+import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
- * Interface that defines a selector that allows deep operations.
+ * Interface that defines a selector for {@link Constructor} objects.
  *
  * @author Marcelo Guimarães
- * @since 5.0
  */
-public interface DeepSelector {
+public interface ConstructorsSelector extends PredicateSelector<Constructor<?>> {
 
-  /**
-   * Selects using a deep operation. If the selection is for a single object
-   * and the deep operation founds more than one, the first one will be
-   * returned.
-   *
-   * @return a new selector with deep selection enabled
-   */
-  DeepSelector deep();
+  ConstructorsSelector filter(Predicate<? super Constructor<?>> predicate);
+
+  List<Constructor<?>> from(Object target);
 
 }

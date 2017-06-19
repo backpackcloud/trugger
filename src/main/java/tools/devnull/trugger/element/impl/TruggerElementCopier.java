@@ -19,7 +19,7 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.element.*;
-import tools.devnull.trugger.selector.ElementsSelector;
+import tools.devnull.trugger.element.ElementsSelector;
 import tools.devnull.trugger.util.Utils;
 
 import java.util.List;

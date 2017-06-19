@@ -20,7 +20,7 @@ package tools.devnull.trugger.reflection.impl;
 
 import tools.devnull.trugger.reflection.ReflectionException;
 import tools.devnull.trugger.SelectionResult;
-import tools.devnull.trugger.selector.ConstructorSelector;
+import tools.devnull.trugger.reflection.ConstructorSelector;
 
 import java.lang.reflect.Constructor;
 import java.util.List;

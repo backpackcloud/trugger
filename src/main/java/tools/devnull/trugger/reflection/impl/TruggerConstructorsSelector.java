@@ -18,7 +18,7 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.selector.ConstructorsSelector;
+import tools.devnull.trugger.reflection.ConstructorsSelector;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
