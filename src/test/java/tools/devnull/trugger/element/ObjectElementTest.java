@@ -31,7 +31,7 @@ import static tools.devnull.trugger.element.Elements.element;
 /**
  *
  */
-public class ObjectElementTest implements ElementSpecs {
+public class ObjectElementTest implements ElementExpectations {
 
   class HandlingTestObject {
 

@@ -29,7 +29,7 @@ import static tools.devnull.trugger.element.Elements.element;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class HandleTest implements ElementSpecs {
+public class HandleTest implements ElementExpectations {
 
   public static class TestObject {
     String string;

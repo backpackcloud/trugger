@@ -18,7 +18,8 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.reflection.Reflection;
 
@@ -41,7 +42,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
  *
  * @author Marcelo Guimarães
  */
-public final class ObjectElementFinder implements Finder<Element> {
+public final class ObjectElementFinder implements ElementFinder {
 
   private final ClassElementsCache cache = new ClassElementsCache() {
     @Override
@@ -75,15 +76,14 @@ public final class ObjectElementFinder implements Finder<Element> {
     }
   };
 
-  public final Element find(String propertyName, Object target) {
+  public final Optional<Element> find(String propertyName, Object target) {
     for (Class type : hierarchyOf(target)) {
       Element element = cache.get(type, propertyName);
       if (element != null) {
-        return target instanceof Class ?
-            element : new SpecificElement(element, target);
+        return Optional.of(target instanceof Class ? element : new SpecificElement(element, target));
       }
     }
-    return null;
+    return Optional.empty();
   }
 
   public List<Element> findAll(Object target) {

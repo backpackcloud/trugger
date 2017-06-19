@@ -18,7 +18,6 @@
  */
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.Finder;
 import tools.devnull.trugger.util.ImplementationLoader;
 import tools.devnull.trugger.util.registry.Registry;
 import tools.devnull.trugger.selector.ElementSelector;
@@ -47,7 +46,7 @@ public class Elements {
    * @return the registry.
    * @since 2.3
    */
-  public static Registry<Predicate<Class>, Finder<Element>> registry() {
+  public static Registry<Predicate<Class>, ElementFinder> registry() {
     return factory.registry();
   }
 

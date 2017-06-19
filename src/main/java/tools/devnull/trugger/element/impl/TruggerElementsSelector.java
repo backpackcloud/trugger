@@ -18,7 +18,7 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.selector.ElementsSelector;
 
@@ -34,14 +34,14 @@ import java.util.stream.Collectors;
 public final class TruggerElementsSelector implements ElementsSelector {
 
   private final Predicate<? super Element> predicate;
-  private final Finder<Element> finder;
+  private final ElementFinder finder;
 
-  public TruggerElementsSelector(Finder<Element> finder) {
+  public TruggerElementsSelector(ElementFinder finder) {
     this.finder = finder;
     this.predicate = null;
   }
 
-  public TruggerElementsSelector(Finder<Element> finder,
+  public TruggerElementsSelector(ElementFinder finder,
                                  Predicate<? super Element> predicate) {
     this.predicate = predicate;
     this.finder = finder;

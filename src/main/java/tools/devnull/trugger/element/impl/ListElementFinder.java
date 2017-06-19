@@ -19,8 +19,9 @@
 
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.element.Element;
+import tools.devnull.trugger.element.ElementFinder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,17 +29,20 @@ import java.util.List;
 /**
  * @author Marcelo Guimarães
  */
-public class ListElementFinder implements Finder<Element> {
+public class ListElementFinder implements ElementFinder {
 
   @Override
-  public Element find(String name, Object target) {
+  public Optional<Element> find(String name, Object target) {
     List list = (List) target;
+    Element result;
     if ("first".equals(name)) {
-      return new ListElement(list, 0);
+      result = new ListElement(list, 0);
     } else if ("last".equals(name)) {
-      return new ListElement(list, list.size() - 1);
+      result = new ListElement(list, list.size() - 1);
+    } else {
+      result = new ListElement(list, Integer.parseInt(name));
     }
-    return new ListElement(list, Integer.parseInt(name));
+    return Optional.of(result);
   }
 
   @Override

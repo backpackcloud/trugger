@@ -16,32 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.devnull.trugger;
+package tools.devnull.trugger.element;
+
+import tools.devnull.trugger.Optional;
 
 import java.util.List;
 
 /**
- * Interface that defines a class capable of search a source for specific
- * objects.
+ * Interface that defines a class capable of search a source for elements
  *
- * @param <T> the result type
  * @author Marcelo Guimarães
- * @since 2.0
+ * @since 6.0
  */
-//TODO change to ElementFinder and receive the target type as generic object
-public interface Finder<T> {
+public interface ElementFinder {
 
   /**
-   * Finds the object with the specified name in a target.
-   * <p>
-   * The result may return <code>null</code> if no object with the specified
-   * name is found.
+   * Finds the element with the specified name in a target.
    *
    * @param name   the object name to find.
    * @param target the target to search
    * @return the found object
    */
-  T find(String name, Object target);
+  Optional<Element> find(String name, Object target);
 
   /**
    * Finds all objects in a target.
@@ -49,6 +45,6 @@ public interface Finder<T> {
    * @param target the target to search
    * @return the found objects
    */
-  List<T> findAll(Object target);
+  List<Element> findAll(Object target);
 
 }

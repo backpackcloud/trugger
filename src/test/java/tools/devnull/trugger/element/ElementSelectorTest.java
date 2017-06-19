@@ -20,8 +20,7 @@ package tools.devnull.trugger.element;
 
 import org.junit.Before;
 import org.junit.Test;
-import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Flag;
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.element.impl.TruggerElementSelector;
 import tools.devnull.trugger.selector.ElementSelector;
 
@@ -29,103 +28,53 @@ import java.util.function.Predicate;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static tools.devnull.trugger.TruggerTest.element;
-import static tools.devnull.trugger.element.ElementPredicates.annotated;
-import static tools.devnull.trugger.element.ElementPredicates.annotatedWith;
-import static tools.devnull.trugger.element.ElementPredicates.assignableTo;
-import static tools.devnull.trugger.element.ElementPredicates.ofType;
-import static tools.devnull.trugger.element.ElementPredicates.readable;
-import static tools.devnull.trugger.element.ElementPredicates.specific;
-import static tools.devnull.trugger.element.ElementPredicates.writable;
 
 /**
  * @author Marcelo Varella Barca Guimarães
  */
 public class ElementSelectorTest {
 
-  private Finder<Element> finder;
+  private ElementFinder finder;
+  private ElementSelector selector;
   private Element element;
+  private Predicate<Element> all;
+  private Predicate<Element> none;
+  private String elementName;
 
   @Before
   public void initialize() {
-    finder = mock(Finder.class);
-    when(finder.find("name", this)).thenAnswer((invocation) -> element);
-  }
+    finder = mock(ElementFinder.class);
+    element = mock(Element.class);
+    all = mock(Predicate.class);
+    none = mock(Predicate.class);
+    elementName = "name";
 
-  private ElementSelector selector() {
-    return new TruggerElementSelector("name", finder);
-  }
-
-  private void testPredicate(Predicate<? super Element> predicate) {
-    assertSame(element, selector().filter(predicate).from(this));
-    assertNull(selector().filter(predicate.negate()).from(this));
-
-    verify(finder, atLeastOnce()).find("name", this);
-  }
-
-  private void testFailPredicate(Predicate<? super Element> predicate) {
-    assertNull(selector().filter(predicate).from(this));
-
-    verify(finder, atLeastOnce()).find("name", this);
+    when(finder.find(elementName, this)).thenReturn(Optional.of(element));
+    when(all.test(any(Element.class))).thenReturn(true);
+    when(none.test(any(Element.class))).thenReturn(false);
+    selector = new TruggerElementSelector(elementName, finder);
   }
 
   @Test
-  public void testAnnotatedSelector() {
-    element = element().annotatedWith(Flag.class).createMock();
-    testPredicate(annotatedWith(Flag.class));
-    testPredicate(annotated());
+  public void testWithoutPredicate() {
+    Element result = selector.from(this);
+    assertSame(element, result);
+    verify(finder).find(elementName, this);
   }
 
   @Test
-  public void testReadableSelector() {
-    element = element().readable().createMock();
-    testPredicate(readable());
-  }
+  public void testWithPredicate() {
+    Element result = selector.filter(all).from(this);
+    assertSame(element, result);
+    verify(all).test(element);
 
-  @Test
-  public void testSpecificSelector() {
-    element = element().specific().createMock();
-    testPredicate(specific());
-  }
-
-  @Test
-  public void testWritableSelector() {
-    element = element().writable().createMock();
-    testPredicate(writable());
-  }
-
-  @Test
-  public void testNonWritableSelector() {
-    element = element().nonWritable().createMock();
-    testPredicate(writable().negate());
-  }
-
-  @Test
-  public void testOfTypeSelector() {
-    element = element().ofType(String.class).createMock();
-    testPredicate(ofType(String.class));
-    testFailPredicate(ofType(Integer.class));
-    testFailPredicate(ofType(CharSequence.class));
-
-    element = element().ofType(int.class).createMock();
-    testPredicate(ofType(int.class));
-    testFailPredicate(ofType(Integer.class));
-  }
-
-  @Test
-  public void testAssignableToSelector() {
-    element = element().ofType(String.class).createMock();
-    testPredicate(assignableTo(String.class));
-    testPredicate(assignableTo(CharSequence.class));
-    testFailPredicate(assignableTo(Integer.class));
-
-    element = element().ofType(int.class).createMock();
-    testPredicate(assignableTo(Integer.class));
-    testPredicate(assignableTo(int.class));
+    result = selector.filter(none).from(this);
+    assertNull(result);
+    verify(none).test(element);
   }
 
 }

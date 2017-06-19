@@ -18,7 +18,8 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 
 import java.lang.reflect.Method;
@@ -37,7 +38,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
  *
  * @author Marcelo Guimarães
  */
-public final class AnnotationElementFinder implements Finder<Element> {
+public final class AnnotationElementFinder implements ElementFinder {
 
   private ClassElementsCache cache = new ClassElementsCache() {
     @Override
@@ -61,14 +62,15 @@ public final class AnnotationElementFinder implements Finder<Element> {
     ).collect(Collectors.toList());
   }
 
-  public final Element find(String propertyName, Object target) {
+  @Override
+  public final Optional<Element> find(String propertyName, Object target) {
     Element property = cache.get(target, propertyName);
     if (target instanceof Class<?>) {
-      return property;
+      return Optional.of(property);
     } else if (property != null) {
-      return new SpecificElement(property, target);
+      return Optional.of(new SpecificElement(property, target));
     }
-    return null;
+    return Optional.empty();
   }
 
 }

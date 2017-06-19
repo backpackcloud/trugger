@@ -36,7 +36,7 @@ import static tools.devnull.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class PropertiesElementTest implements ElementSpecs {
+public class PropertiesElementTest implements ElementExpectations {
 
   @Test
   public void propertiesElementTest() {

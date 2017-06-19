@@ -18,7 +18,8 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.TruggerException;
 import tools.devnull.trugger.element.Element;
 
@@ -32,7 +33,7 @@ import java.util.List;
 /**
  * @author Marcelo Guimarães
  */
-public class ResultSetElementFinder implements Finder<Element> {
+public class ResultSetElementFinder implements ElementFinder {
 
   @Override
   public List<Element> findAll(Object target) {
@@ -56,11 +57,11 @@ public class ResultSetElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Element find(String name, Object target) {
+  public Optional<Element> find(String name, Object target) {
     if (target instanceof Class<?>) {
-      return new ResultSetElement(name);
+      return Optional.of(new ResultSetElement(name));
     }
-    return new SpecificElement(new ResultSetElement(name), target);
+    return Optional.of(new SpecificElement(new ResultSetElement(name), target));
   }
 
 }

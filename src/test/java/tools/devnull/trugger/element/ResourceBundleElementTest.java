@@ -35,7 +35,7 @@ import static tools.devnull.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ResourceBundleElementTest implements ElementSpecs {
+public class ResourceBundleElementTest implements ElementExpectations {
 
   private ResourceBundle bundle =
       ResourceBundle.getBundle("tools.devnull.trugger.element.bundle");

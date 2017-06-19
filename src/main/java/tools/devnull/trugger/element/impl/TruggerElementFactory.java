@@ -18,10 +18,9 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.element.ElementCopier;
 import tools.devnull.trugger.element.ElementFactory;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.selector.ElementSelector;
 import tools.devnull.trugger.selector.ElementsSelector;
 import tools.devnull.trugger.util.registry.MapRegistry;
@@ -46,11 +45,11 @@ import static tools.devnull.trugger.reflection.ClassPredicates.assignableTo;
  */
 public final class TruggerElementFactory implements ElementFactory {
 
-  private Finder<Element> finder;
-  private final MapRegistry<Predicate<Class>, Finder<Element>> registry;
+  private ElementFinder finder;
+  private final MapRegistry<Predicate<Class>, ElementFinder> registry;
 
   public TruggerElementFactory() {
-    registry = new MapRegistry<Predicate<Class>, Finder<Element>>(new LinkedHashMap());
+    registry = new MapRegistry<Predicate<Class>, ElementFinder>(new LinkedHashMap());
     registry.register(new AnnotationElementFinder())
         .to(assignableTo(Annotation.class));
     registry.register(new PropertiesElementFinder())
@@ -68,7 +67,7 @@ public final class TruggerElementFactory implements ElementFactory {
     finder = new TruggerElementFinder(new ObjectElementFinder(), registry);
   }
 
-  public Registry<Predicate<Class>, Finder<Element>> registry() {
+  public Registry<Predicate<Class>, ElementFinder> registry() {
     return registry;
   }
 

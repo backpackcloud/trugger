@@ -42,7 +42,7 @@ import static tools.devnull.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ResultSetElementTest implements ElementSpecs {
+public class ResultSetElementTest implements ElementExpectations {
 
   private ResultSet resultSet;
 

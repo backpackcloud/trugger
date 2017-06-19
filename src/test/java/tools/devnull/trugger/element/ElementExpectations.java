@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 /**
  * @author Marcelo Guimarães
  */
-public interface ElementSpecs {
+public interface ElementExpectations {
 
   default Function<Element, String> stringRepresentation() {
     return el -> el.toString();

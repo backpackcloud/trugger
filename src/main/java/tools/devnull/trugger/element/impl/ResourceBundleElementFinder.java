@@ -18,7 +18,8 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import java.util.ResourceBundle;
  *
  * @author Marcelo Guimarães
  */
-public class ResourceBundleElementFinder implements Finder<Element> {
+public class ResourceBundleElementFinder implements ElementFinder {
 
   @Override
   public List<Element> findAll(Object target) {
@@ -47,11 +48,11 @@ public class ResourceBundleElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Element find(String name, Object target) {
+  public Optional<Element> find(String name, Object target) {
     if (target instanceof Class<?>) {
-      return new ResourceBundleElement(name);
+      return Optional.of(new ResourceBundleElement(name));
     }
-    return new SpecificElement(new ResourceBundleElement(name), target);
+    return Optional.of(new SpecificElement(new ResourceBundleElement(name), target));
   }
 
 }

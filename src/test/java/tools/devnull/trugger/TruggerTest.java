@@ -120,8 +120,4 @@ public class TruggerTest {
     return new ElementMock();
   }
 
-  public static ElementFinderMock elementFinder() {
-    return new ElementFinderMock();
-  }
-
 }

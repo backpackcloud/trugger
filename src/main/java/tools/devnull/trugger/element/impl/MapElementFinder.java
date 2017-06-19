@@ -18,7 +18,8 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.Map;
 /**
  * @author Marcelo Guimarães
  */
-public class MapElementFinder implements Finder<Element> {
+public class MapElementFinder implements ElementFinder {
 
   @Override
   public List<Element> findAll(Object target) {
@@ -47,11 +48,11 @@ public class MapElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Element find(String name, Object target) {
+  public Optional<Element> find(String name, Object target) {
     if (target instanceof Class<?>) {
-      return new MapElement(name);
+      return Optional.of(new MapElement(name));
     }
-    return new SpecificElement(new MapElement(name), target);
+    return Optional.of(new SpecificElement(new MapElement(name), target));
   }
 
 }

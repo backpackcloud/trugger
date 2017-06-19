@@ -29,7 +29,7 @@ import static tools.devnull.trugger.element.Elements.element;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class NonSpecificElementTest implements ElementSpecs {
+public class NonSpecificElementTest implements ElementExpectations {
 
   private Element nonSpecificElement =
       element("nonSpecificElement").from(Map.class);

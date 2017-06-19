@@ -18,7 +18,7 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.selector.ElementSelector;
 
@@ -32,16 +32,16 @@ import java.util.function.Predicate;
 public class TruggerElementSelector implements ElementSelector {
 
   private final Predicate<? super Element> predicate;
-  private final Finder<Element> finder;
+  private final ElementFinder finder;
   private final String name;
 
-  public TruggerElementSelector(String name, Finder<Element> finder) {
+  public TruggerElementSelector(String name, ElementFinder finder) {
     this.name = name;
     this.finder = finder;
-    this.predicate = null;
+    this.predicate = e -> true;
   }
 
-  public TruggerElementSelector(String name, Finder<Element> finder,
+  public TruggerElementSelector(String name, ElementFinder finder,
                                 Predicate<? super Element> predicate) {
     this.predicate = predicate;
     this.finder = finder;
@@ -53,14 +53,9 @@ public class TruggerElementSelector implements ElementSelector {
   }
 
   public Element from(Object target) {
-    Element element = finder.find(name, target);
-    if (element == null) {
-      return null;
-    }
-    if (predicate != null) {
-      return predicate.test(element) ? element : null;
-    }
-    return element;
+    return finder.find(name, target)
+        .filter(predicate)
+        .orElseReturn(() -> null);
   }
 
 }

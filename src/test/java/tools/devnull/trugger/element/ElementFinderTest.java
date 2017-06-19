@@ -20,7 +20,7 @@
 package tools.devnull.trugger.element;
 
 import org.junit.Test;
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.reflection.ClassPredicates;
 
 import java.util.Collections;
@@ -35,11 +35,11 @@ import static tools.devnull.trugger.element.Elements.elements;
 
 public class ElementFinderTest {
 
-  public static class MyFinder implements Finder<Element> {
+  public static class MyFinder implements ElementFinder {
 
     @Override
-    public Element find(String name, Object target) {
-      return null;
+    public Optional<Element> find(String name, Object target) {
+      return Optional.empty();
     }
 
     @Override

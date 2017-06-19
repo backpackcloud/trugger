@@ -39,7 +39,7 @@ import static tools.devnull.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class MapElementTest implements ElementSpecs {
+public class MapElementTest implements ElementExpectations {
 
   @Test
   public void mapElementTest() {

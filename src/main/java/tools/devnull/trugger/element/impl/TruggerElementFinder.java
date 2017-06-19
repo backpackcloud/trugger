@@ -18,7 +18,8 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.util.Utils;
 import tools.devnull.trugger.util.registry.Registry;
@@ -31,20 +32,20 @@ import java.util.function.Predicate;
  *
  * @author Marcelo Guimarães
  */
-public final class TruggerElementFinder implements Finder<Element> {
+public final class TruggerElementFinder implements ElementFinder {
 
-  private final Registry<Predicate<Class>, Finder<Element>> registry;
-  private final Finder<Element> defaultFinder;
+  private final Registry<Predicate<Class>, ElementFinder> registry;
+  private final ElementFinder defaultFinder;
 
-  public TruggerElementFinder(Finder<Element> defaultFinder,
-                              Registry<Predicate<Class>, Finder<Element>> registry) {
+  public TruggerElementFinder(ElementFinder defaultFinder,
+                              Registry<Predicate<Class>, ElementFinder> registry) {
     this.registry = registry;
     this.defaultFinder = defaultFinder;
   }
 
-  private Finder<Element> getFinder(Object target) {
+  private ElementFinder getFinder(Object target) {
     Class type = Utils.resolveType(target);
-    for (Registry.Entry<Predicate<Class>, Finder<Element>> entry : registry.entries()) {
+    for (Registry.Entry<Predicate<Class>, ElementFinder> entry : registry.entries()) {
       if (entry.key().test(type)) {
         return entry.value();
       }
@@ -53,17 +54,17 @@ public final class TruggerElementFinder implements Finder<Element> {
   }
 
   @Override
-  public Element find(String name, Object target) {
+  public Optional<Element> find(String name, Object target) {
     if (name.indexOf('.') > -1) {
-      return NestedElement.createNestedElement(target, name);
+      return Optional.of(NestedElement.createNestedElement(target, name));
     }
-    Finder<Element> finder = getFinder(target);
+    ElementFinder finder = getFinder(target);
     return finder.find(name, target);
   }
 
   @Override
   public List<Element> findAll(Object target) {
-    Finder<Element> finder = getFinder(target);
+    ElementFinder finder = getFinder(target);
     return finder.findAll(target);
   }
 

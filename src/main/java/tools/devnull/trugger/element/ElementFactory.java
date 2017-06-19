@@ -18,7 +18,6 @@
  */
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.Finder;
 import tools.devnull.trugger.util.registry.Registry;
 import tools.devnull.trugger.selector.ElementSelector;
 import tools.devnull.trugger.selector.ElementsSelector;
@@ -40,7 +39,7 @@ public interface ElementFactory {
    *
    * @since 2.3
    */
-  Registry<Predicate<Class>, Finder<Element>> registry();
+  Registry<Predicate<Class>, ElementFinder> registry();
 
   /**
    * Creates a selector for an {@link Element} object.

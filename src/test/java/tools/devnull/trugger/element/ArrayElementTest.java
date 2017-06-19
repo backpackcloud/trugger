@@ -36,7 +36,7 @@ import static tools.devnull.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class ArrayElementTest implements ElementSpecs {
+public class ArrayElementTest implements ElementExpectations {
 
   private int[] ints;
 

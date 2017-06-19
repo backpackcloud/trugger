@@ -30,7 +30,7 @@ import static tools.devnull.kodo.Expectation.*;
 import static tools.devnull.trugger.element.ElementPredicates.*;
 import static tools.devnull.trugger.element.Elements.element;
 
-public class NestedElementsTest implements ElementSpecs {
+public class NestedElementsTest implements ElementExpectations {
 
   class Ticket {
     private Customer customer;

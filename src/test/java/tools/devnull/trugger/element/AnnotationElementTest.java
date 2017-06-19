@@ -39,7 +39,7 @@ import static tools.devnull.trugger.element.Elements.elements;
 /**
  * @author Marcelo Varella Barca Guimarães
  */
-public class AnnotationElementTest implements ElementSpecs {
+public class AnnotationElementTest implements ElementExpectations {
 
   private Annotation annotation() {
     // @TestAnnotation(bool = false, name = "some name", number = 1)
