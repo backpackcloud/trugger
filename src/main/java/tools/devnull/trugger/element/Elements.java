@@ -91,10 +91,21 @@ public class Elements {
     return factory.createElementCopier(selector);
   }
 
+  /**
+   * Returns a function that gets the value of a selected element.
+   *
+   * @return a function that gets the value of a selected element.
+   */
   public static <E> OptionalFunction<Selection<Element>, E> getValue() {
     return OptionalFunction.of(selection -> selection.result().getValue());
   }
 
+  /**
+   * Returns a function that sets the value of a selected element.
+   *
+   * @param newValue the value to set
+   * @return a function that sets the value of a selected element.
+   */
   public static Consumer<Selection<Element>> setValue(Object newValue) {
     return selection -> selection.result().setValue(newValue);
   }
