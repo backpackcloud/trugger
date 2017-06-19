@@ -38,7 +38,7 @@ public interface CopyDestination extends PredicateSelector<ElementCopy> {
    * @param function the function to use.
    * @return a new object that uses the given function
    */
-  CopyDestination applying(Function<ElementCopy, ?> function);
+  CopyDestination map(Function<ElementCopy, ?> function);
 
   /**
    * Filter the elements to copy by testing with the given predicate.

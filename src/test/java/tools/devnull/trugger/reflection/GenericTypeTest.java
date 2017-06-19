@@ -45,9 +45,9 @@ public class GenericTypeTest {
 
   @Test
   public void genericTypeTest() {
-    assertEquals(String.class, reflect().genericType("E", TestObject.class));
-    assertEquals(Class.class, reflect().genericType("T", TestObject.class));
-    assertEquals(Boolean.class, reflect().genericType("V", TestObject.class));
+    assertEquals(String.class, reflect().genericType("E").of(TestObject.class));
+    assertEquals(Class.class, reflect().genericType("T").of(TestObject.class));
+    assertEquals(Boolean.class, reflect().genericType("V").of(TestObject.class));
   }
 
   @Test

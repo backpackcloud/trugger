@@ -156,10 +156,9 @@ public interface Reflector {
    * </pre>
    *
    * @param parameterName the generic parameter name.
-   * @param target        the target to fetch the generic type
-   * @return the generic type of the given target.
+   * @return a component to select the target
    */
-  Class genericType(String parameterName, Object target);
+  GenericTypeSelector genericType(String parameterName);
 
   /**
    * Reflects the generic type parameter declared in a target.

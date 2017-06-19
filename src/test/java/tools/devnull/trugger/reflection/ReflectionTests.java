@@ -71,12 +71,12 @@ public class ReflectionTests {
   public void testGenericTypeResolver() throws Exception {
     final Map<String, Integer> map = new HashMap<String, Integer>() {
     };
-    assertEquals(String.class, reflect().genericType("K", map));
-    assertEquals(Integer.class, reflect().genericType("V", map));
+    assertEquals(String.class, reflect().genericType("K").of(map));
+    assertEquals(Integer.class, reflect().genericType("V").of(map));
 
     GenericClass<String> genericClass = new GenericClass<String>() {
     };
-    assertEquals(String.class, reflect().genericType("E", genericClass));
+    assertEquals(String.class, reflect().genericType("E").of(genericClass));
     assertEquals(String.class, reflect().genericTypeOf(genericClass));
 
     assertThrow(ReflectionException.class, () -> {

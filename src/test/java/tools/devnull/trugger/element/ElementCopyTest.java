@@ -169,7 +169,7 @@ public class ElementCopyTest {
         .when(props -> copy()
             .from(testObject)
             .notNull()
-            .applying(new ToStringTransformer())
+            .map(new ToStringTransformer())
             .to(props))
         .expect(property("age"), to().be("23"))
         .expect(property("nickName"), to().beNull())

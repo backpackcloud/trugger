@@ -19,6 +19,7 @@
 package tools.devnull.trugger.reflection.impl;
 
 import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.reflection.GenericTypeSelector;
 import tools.devnull.trugger.reflection.ReflectionException;
 import tools.devnull.trugger.reflection.Reflector;
 import tools.devnull.trugger.reflection.ConstructorSelector;
@@ -66,30 +67,37 @@ public class TruggerReflector implements Reflector {
     return new TruggerReflector(new DeclaredMemberFindersRegistry());
   }
 
+  @Override
   public ConstructorSelector constructor() {
     return new TruggerConstructorSelector(registry);
   }
 
+  @Override
   public ConstructorsSelector constructors() {
     return new TruggerConstructorsSelector(registry.constructorsFinder());
   }
 
+  @Override
   public FieldSelector field(String name) {
     return new TruggerFieldSelector(name, registry);
   }
 
+  @Override
   public FieldsSelector fields() {
     return new TruggerFieldsSelector(registry.fieldsFinder());
   }
 
+  @Override
   public MethodSelector method(String name) {
     return new TruggerMethodSelector(name, registry);
   }
 
+  @Override
   public MethodsSelector methods() {
     return new TruggerMethodsSelector(registry.methodsFinder());
   }
 
+  @Override
   public List<Class> interfacesOf(Object target) {
     Class<?> objectClass = Utils.resolveType(target);
     Set<Class> set = new HashSet<>(30);
@@ -110,10 +118,12 @@ public class TruggerReflector implements Reflector {
     }
   }
 
-  public Class genericType(String parameterName, Object target) {
-    return TruggerGenericTypeResolver.resolveParameterName(parameterName, Utils.resolveType(target));
+  @Override
+  public GenericTypeSelector genericType(String parameterName) {
+    return target -> TruggerGenericTypeResolver.resolveParameterName(parameterName, Utils.resolveType(target));
   }
 
+  @Override
   public Class genericTypeOf(Object target) {
     Map<Type, Type> typeVariableMap =
         TruggerGenericTypeResolver.getTypeVariableMap(Utils.resolveType(target));
@@ -129,9 +139,10 @@ public class TruggerReflector implements Reflector {
       throw new ReflectionException("More than one generic type found.");
     }
     String name = paramNames.iterator().next();
-    return genericType(name, target);
+    return genericType(name).of(target);
   }
 
+  @Override
   public Optional<Method> bridgedMethodFor(Method bridgeMethod) {
     return Optional.of(new TruggerBridgeMethodResolver(bridgeMethod).findBridgedMethod());
   }

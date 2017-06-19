@@ -85,7 +85,7 @@ public final class TruggerElementCopier implements ElementCopier,
   }
 
   @Override
-  public CopyDestination applying(Function function) {
+  public CopyDestination map(Function function) {
     return new TruggerElementCopier(selector, function, predicate, copyNull,
         src);
   }

@@ -285,27 +285,31 @@ public class BaseRepository<T> {
   private final Class<T> type;
 
   protected BaseRepository() {
-    this.type = reflect().genericType("T").in(this);
+    this.type = reflect().genericType("T").of(this);
   }
 }
 ~~~
 
-The constructor was declared `protected` to warn that this will only work for subclasses (it is a Java limitation). A workaround to use this trick in a variable-like way is by declaring an anonymous class:
+The constructor was declared `protected` to warn that this will only work for subclasses (it is a Java limitation). A 
+workaround to use this trick in a variable-like way is by declaring an anonymous class:
 
 ~~~java
 Repository<MyType> repo = new BaseRepository<MyType>(){};
 ~~~
 
-I think this is an ugly solution, but works.
+This is an ugly solution, but works. You can also use a subclass as well, it's not too ugly, but can lead to a tons of
+subclasses in your application.
 
 # Proxy Creation
 
-A proxy object is created using a interception handler and optionally a fail handler. The DSL exposed starts at `Interception` with the method `intercept` and lets you define one or more interfaces to intercept. Additionally, you can set a target and its interfaces will be used. After the behaviour specification, use the method `proxy` to create the proxy instance.
+A proxy object is created using a interception handler and optionally a fail handler. The DSL exposed starts at 
+`Interception` with the method `intercept` and lets you define one or more interfaces to intercept. Additionally, you
+can set a target and its interfaces will be used. After the behaviour specification, use the method `proxy` to create
+the proxy instance.
 
 ~~~java
 SomeInterface proxy = Interception.intercept(SomeInterface.class)
-  .onCall(context -> logger.info("method intercepted: "
-    + context.method())
+  .onCall(context -> logger.info("method intercepted: " + context.method())
   .proxy();
 
 proxy.doSomething();
@@ -353,20 +357,22 @@ A basic element in Trugger is a Property or a Field. Trugger tries to find a get
 An element is obtained using the method `element` in `Elements`. The same features of a field reflection is here with the addition of getting an element without specifying a name. A set of predicates are present in `ElementPredicates`.
 
 ~~~java
-Element value = element("value").in(MyClass.class);
+Element value = element("value").from(MyClass.class).result();
 
 Element id = element()
   .filter(annotatedWith(Id.class)) // static import
-  .in(MyClass.class);
+  .from(MyClass.class)
+  .result();
 
 List<Element> strings = elements()
   .filter(type(String.class) // static import
-  .in(MyClass.class);
+  .from(MyClass.class);
 ~~~
 
 ## Copying Elements
 
-The elements of an object can be copied to another object, even if they are from different types. The DSL starts at the method `copy`:
+The elements of an object can be copied to another object, even if they are from different types. The DSL starts at the
+method `copy`:
 
 ~~~java
 copy().from(object).to(anotherObject);
@@ -378,11 +384,12 @@ This will copy every element. To restrict the copy to non null values, use the `
 copy().from(object).notNull().to(anotherObject);
 ~~~
 
-You can also apply a function to transform the values before assigning them to the target object (useful when copying values to a different type of object).
+You can also apply a function to transform the values before assigning them to the target object (useful when copying
+values to a different type of object).
 
 ~~~java
 copy().from(object)
-  .applying(copy -> copy.value().toString())
+  .map(copy -> copy.value().toString())
   .to(anotherObject);
 ~~~
 
@@ -408,22 +415,24 @@ copy(elements().filter(annotatedWith(MyAnnotation.class)))
 Nested elements are supported using a **"."** to separate the elements:
 
 ~~~java
-Element element = element("address.street").in(Customer.class);
+Element element = element("address.street").from(Customer.class).result();
 
-value = element.in(customer).value();
+value = element.from(customer).getValue();
 ~~~
 
 You can use any level of nesting:
 
 ~~~java
-Element element = element("customer.address.street").in(Response.class);
+Element element = element("customer.address.street").from(Response.class).result();
 
-value = element.in(response).value();
+value = element.from(response).getValue();
 ~~~
 
 ## Custom Elements
 
-Some classes have a custom definition of elements. A `Map` has their keys as elements, an `Array` has their indexes as elements an so on. Elements are found by an element finder (a class that implements `Finder<Element>`) and you can write a custom element finder and register it using the registry available through the method `Elements#registry`.
+Some classes have a custom definition of elements. A `Map` has their keys as elements, an `Array` has their indexes as 
+elements an so on. Elements are found by an element finder (a class that implements `Finder<Element>`) and you can write
+a custom element finder and register it using the registry available through the method `Elements#registry`.
 
 Trugger has custom element finders for a set of java core classes:
 
@@ -433,9 +442,11 @@ Trugger has custom element finders for a set of java core classes:
 - `ResultSet`: the column names are used as the elements
 - `Annotation`: the methods as used as elements
 - `List`: indexes are used as the elements (and also two special names, *first* and *last*)
-- Arrays: indexes are used as the elements (and also two special names, *first* and *last*)
+- `Arrays`: indexes are used as the elements (and also two special names, *first* and *last*)
 
-It is important to have clear that since this elements are instance specific, the elements should be queried by passing an instance instead of a class for the method `in` or an empty list will be returned. For a single elements, you may pass a class or an instance but using an instance is better because you can call the handling methods directly.
+It is important to have clear that since this elements are instance specific, the elements should be queried by passing
+an instance instead of a class for the method `from` or an empty list will be returned. For a single elements, you may
+pass a class or an instance but using an instance is better because you can call the handling methods directly.
 
 You can also use this custom element finders to copy elements easily:
 
@@ -448,9 +459,12 @@ copy().from(resultSet).to(myEntity);
 
 ## Context Factories
 
-If you need a lightweight component to invoke a constructor with a predicate based logic to resolve the parameter values, you can use the `ContextFactory`.
+If you need a lightweight component to invoke a constructor with a predicate based logic to resolve the parameter
+values, you can use the `ContextFactory`.
 
-A `ContextFactory` is a factory that maps a predicate that evaluates parameters to an object or supplier. After creating a `ContextFactory`, you can manipulate the context through the `#context` method and create an object with the `create` method. A set of predicates can be found in `ParameterPredicates` class.
+A `ContextFactory` is a factory that maps a predicate that evaluates parameters to an object or supplier. After creating
+a `ContextFactory`, you can manipulate the context through the `#context` method and create an object with the `create`
+method. A set of predicates can be found in `ParameterPredicates` class.
 
 ~~~java
 ContextFactory factory = new ContextFactory();
@@ -501,14 +515,19 @@ public @interface MyComponent {
 private String aField;
 ~~~
 
-The annotation in `aField` can be used to create an instance of `MyComponentImplementation`. The context used to create any components are:
+The annotation in `aField` can be used to create an instance of `MyComponentImplementation`. The context used to create
+any components are:
 
-1. Every property of the annotation with their specific types (in that case, the property `name` with the value *"myName"* to a parameter named `name` and of type `String`)
+1. Every property of the annotation with their specific types (in that case, the property `name` with the value
+*"myName"* to a parameter named `name` and of type `String`)
 2. The annotation itself with its type (in that case, the `MyComponent` annotation to the type `MyComponent`)
 
-Since the annotation is used as the context, you can have a constructor in the component implementation that receives the annotation instead of its properties. This is useful if you don't want to compile your code with `-parameters` parameter.
+Since the annotation is used as the context, you can have a constructor in the component implementation that receives
+the annotation instead of its properties. This is useful if you don't want to compile your code with `-parameters`
+parameter.
 
-This behaviour is completely replaceable by using the method `configureContextWith`. To add behaviour to the default one, compose the `ComponentFactory#defaults` with your behaviour:
+This behaviour is completely replaceable by using the method `configureContextWith`. To add behaviour to the default
+one, compose the `ComponentFactory#defaults` with your behaviour:
 
 ~~~java
 factory.configureContextWith(
@@ -548,10 +567,13 @@ Component component = factory.create(element);
 
 ## How To Implement the Fluent Interfaces
 
-The fluent interfaces are always defined through java interfaces and may be customized by your own implementation. Trugger uses a `ServiceLoader` to load a factory that knows the implementations to instantiate, so you can override the implementation of any fluent interface by defining a file in your **META-INF/services** directory with the factory implementation.
+The fluent interfaces are always defined through java interfaces and may be customized by your own implementation.
+Trugger uses a `ServiceLoader` to load a factory that knows the implementations to instantiate, so you can override the
+implementation of any fluent interface by defining a file in your **META-INF/services** directory with the factory
+implementation.
 
 The factory interfaces that can be customized are listed bellow:
 
-- `ElementFactory`: used for reflecting elements
+- `ElementFactory`: used for selecting elements
 - `ReflectionFactory`: used for reflection in general
 - `InterceptorFactory`: used for method interception
