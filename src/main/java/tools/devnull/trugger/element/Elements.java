@@ -18,6 +18,7 @@
  */
 package tools.devnull.trugger.element;
 
+import tools.devnull.trugger.element.impl.TruggerElementSelection;
 import tools.devnull.trugger.util.ImplementationLoader;
 import tools.devnull.trugger.util.registry.Registry;
 
@@ -48,32 +49,29 @@ public class Elements {
     return factory.registry();
   }
 
+  public static ElementSelection select() {
+    return new TruggerElementSelection(factory);
+  }
+
   /**
-   * Selects an element.
-   *
-   * @param name the element name.
-   * @return a component for selecting the element.
+   * Short for {@code select().element(name)}
    */
   public static ElementSelector element(String name) {
-    return factory.createElementSelector(name);
+    return select().element(name);
   }
 
   /**
-   * Selects a set of elements.
-   *
-   * @return a component for selecting the elements.
+   * Short for {@code select().elements()}
    */
   public static ElementsSelector elements() {
-    return factory.createElementsSelector();
+    return select().elements();
   }
 
   /**
-   * Selects a single element.
-   *
-   * @return a component for selecting the element.
+   * Short for {@code select().element()}
    */
   public static ElementSelector element() {
-    return new SingleElementSelector();
+    return select().element();
   }
 
   /**

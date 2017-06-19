@@ -17,7 +17,10 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.element;
+package tools.devnull.trugger.element.impl;
+
+import tools.devnull.trugger.element.Element;
+import tools.devnull.trugger.element.ElementSelector;
 
 import java.util.List;
 import java.util.function.Predicate;
