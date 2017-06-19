@@ -18,7 +18,7 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.SelectionResult;
 import tools.devnull.trugger.reflection.Reflection;
 import tools.devnull.trugger.selector.FieldSelector;
 
@@ -63,7 +63,7 @@ public class TruggerFieldSelector implements FieldSelector {
     return new TruggerFieldSelector(this.name, this.registry, this.predicate, Reflection::hierarchyOf);
   }
 
-  public Optional<Field> in(Object target) {
+  public SelectionResult<Field> in(Object target) {
     return new MemberSelector<>(registry.fieldFinder(name), predicate, function).selectFrom(target);
   }
 

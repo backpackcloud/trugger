@@ -34,7 +34,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
  */
 public class GenericTypeTest {
 
-  static interface TestInterface<E, T, V> {
+  interface TestInterface<E, T, V> {
     V doIt(T t, E v);
   }
 
@@ -55,14 +55,14 @@ public class GenericTypeTest {
   @Test
   public void bridgedMethodTest() {
     MethodSelector method = reflect().method("doIt");
-    Method bridgedMethod = method.withParameters(Class.class, String.class).in(TestObject.class).value();
+    Method bridgedMethod = method.withParameters(Class.class, String.class).in(TestObject.class).result();
 
     assertNotNull(method);
     assertNotNull(bridgedMethod);
     assertFalse(bridgedMethod.isBridge());
     assertTrue(bridgedMethod.isAnnotationPresent(Flag.class));
 
-    Method bridgeMethod = method.withParameters(Object.class, Object.class).in(TestObject.class).value();
+    Method bridgeMethod = method.withParameters(Object.class, Object.class).in(TestObject.class).result();
     assertNotNull(bridgeMethod);
     assertTrue(bridgeMethod.isBridge());
 

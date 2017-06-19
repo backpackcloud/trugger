@@ -16,29 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tools.devnull.trugger.selector;
 
-import tools.devnull.trugger.Result;
-import tools.devnull.trugger.SelectionResult;
-
-import java.lang.reflect.Method;
-import java.util.function.Predicate;
+package tools.devnull.trugger;
 
 /**
- * Interface that defines a selector for a single {@link Method} object assuming that the
- * name was specified before.
+ * Interface that represents a selection.
  *
- * @author Marcelo Guimarães
+ * @param <T> the type of the selected object
+ * @since 6.0
  */
-public interface MethodSelector extends PredicateSelector<Method>, DeepSelector,
-    Result<SelectionResult<Method>, Object> {
+public interface Selection<T> {
 
-  MethodSelector filter(Predicate<? super Method> predicate);
-
-  MethodSelector deep();
-
-  MethodSelector withParameters(Class<?>... parameterTypes);
-
-  MethodSelector withoutParameters();
+  T result();
+  Object target();
 
 }

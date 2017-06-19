@@ -18,7 +18,7 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.SelectionResult;
 import tools.devnull.trugger.reflection.ReflectionException;
 import tools.devnull.trugger.util.Utils;
 
@@ -51,7 +51,7 @@ public class MemberSelector<T extends Member> {
     this(finder, predicate, Collections::singletonList);
   }
 
-  private Optional<T> findMember(Class<?> type) {
+  private T findMember(Class<?> type) {
     T element;
     try {
       element = finder.find(type);
@@ -61,21 +61,21 @@ public class MemberSelector<T extends Member> {
         }
       }
     } catch (NoSuchMethodException | NoSuchFieldException e) {
-      return Optional.empty();
+      return null;
     } catch (Exception e) {
       throw new ReflectionException(e);
     }
-    return Optional.of(element);
+    return element;
   }
 
-  public final Optional<T> selectFrom(Object target) {
+  public final SelectionResult<T> selectFrom(Object target) {
     for (Class type : function.apply(Utils.resolveType(target))) {
-      Optional<T> member = findMember(type);
-      if (member.containsValue()) {
-        return member;
+      T member = findMember(type);
+      if (member != null) {
+        return new SelectionResult<>(target, member);
       }
     }
-    return Optional.empty();
+    return new SelectionResult<>(target, null);
   }
 
 }

@@ -43,10 +43,10 @@ public class MethodSelectorTest {
   @Test
   public void testNoSelector() {
     assertNotNull(
-        reflect().method("foo").withoutParameters().in(TestObject.class).value()
+        reflect().method("foo").withoutParameters().in(TestObject.class).result()
     );
     assertNotNull(
-        reflect().method("bar").in(TestObject.class).value()
+        reflect().method("bar").in(TestObject.class).result()
     );
   }
 
@@ -54,17 +54,17 @@ public class MethodSelectorTest {
   public void testRecursivelySelector() {
     Object obj = new Object() {
     }; // anonymous class
-    assertNull(reflect().method("toString").in(obj).value());
-    assertNotNull(reflect().method("toString").deep().in(obj).value());
+    assertNull(reflect().method("toString").in(obj).result());
+    assertNotNull(reflect().method("toString").deep().in(obj).result());
   }
 
   @Test
   public void testPredicateSelector() {
     assertNotNull(
-        reflect().method("toString").filter(el -> true).in(Object.class).value()
+        reflect().method("toString").filter(el -> true).in(Object.class).result()
     );
     assertNull(
-        reflect().method("toString").filter(el -> false).in(Object.class).value()
+        reflect().method("toString").filter(el -> false).in(Object.class).result()
     );
   }
 
@@ -84,13 +84,13 @@ public class MethodSelectorTest {
     Method method = reflect().method("foo")
         .withParameters(boolean.class)
         .in(obj)
-        .value();
+        .result();
     assertNotNull(method);
     assertArrayEquals(new Class[]{boolean.class}, method.getParameterTypes());
     method = reflect().method("foo2")
         .withParameters(Boolean.class)
         .in(obj)
-        .value();
+        .result();
     assertNotNull(method);
     assertArrayEquals(new Class[]{Boolean.class}, method.getParameterTypes());
 
@@ -98,13 +98,13 @@ public class MethodSelectorTest {
         reflect().method("foo2")
             .withParameters(boolean.class)
             .in(obj)
-            .value()
+            .result()
     );
 
     method = reflect().method("bar")
         .withParameters(boolean.class, boolean.class)
         .in(obj)
-        .value();
+        .result();
     assertNotNull(method);
     assertArrayEquals(new Class[]{boolean.class, boolean.class}, method.getParameterTypes());
   }
@@ -118,8 +118,8 @@ public class MethodSelectorTest {
 
       ;
     };
-    Method method1 = reflect().method("toString").in(Object.class).value();
-    Method method2 = reflect().method("toString").in(o).value();
+    Method method1 = reflect().method("toString").in(Object.class).result();
+    Method method2 = reflect().method("toString").in(o).result();
 
     assertNotNull(method1);
     assertNotNull(method2);

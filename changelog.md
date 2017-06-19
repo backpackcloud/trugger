@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 6.0.0
+
+### Major Changes
+
+- Single member selections now returns an optional result
+- Added the `OptionalFunction` utility class
+- Changed the way of `invoke` and `handle` methods works in `Reflection` class
+
 ## Version 5.4.0
 
 ### Minor Changes

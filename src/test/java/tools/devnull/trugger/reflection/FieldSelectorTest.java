@@ -41,8 +41,8 @@ public class FieldSelectorTest {
 
   @Test
   public void testRecursivelySelector() {
-    assertNull(reflect().field("i").in(RecursivelySelectorTest.class).value());
-    assertNotNull(reflect().field("i").deep().in(RecursivelySelectorTest.class).value());
+    assertNull(reflect().field("i").in(RecursivelySelectorTest.class).result());
+    assertNotNull(reflect().field("i").deep().in(RecursivelySelectorTest.class).result());
   }
 
   @Test
@@ -52,7 +52,7 @@ public class FieldSelectorTest {
             .deep()
             .filter(f -> false)
             .in(RecursivelySelectorTest.class)
-            .value()
+            .result()
     );
   }
 
@@ -63,8 +63,8 @@ public class FieldSelectorTest {
   @Test
   public void testPrecedence() {
     FieldSelector reflector = reflect().field("i");
-    Field field1 = reflector.in(BaseClassTest.class).value();
-    Field field2 = reflector.deep().in(PrecedenceTest.class).value();
+    Field field1 = reflector.in(BaseClassTest.class).result();
+    Field field2 = reflector.deep().in(PrecedenceTest.class).result();
 
     assertNotNull(field1);
     assertNotNull(field2);

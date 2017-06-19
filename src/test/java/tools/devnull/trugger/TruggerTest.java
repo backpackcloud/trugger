@@ -79,14 +79,6 @@ public class TruggerTest {
     assertFalse(predicate.test(element));
   }
 
-  public static void assertNotEmpty(Optional optional) {
-    assertTrue(optional.containsValue());
-  }
-
-  public static void assertEmpty(Optional optional) {
-    assertFalse(optional.containsValue());
-  }
-
   /**
    * Tests if the given command throws anyThat of the specified exceptions.
    */

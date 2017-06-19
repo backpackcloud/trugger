@@ -54,8 +54,8 @@ public class FieldGetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = reflect().field("count").in(this).value();
-    fieldHits = reflect().field("hits").in(this).value();
+    fieldCount = reflect().field("count").in(this).result();
+    fieldHits = reflect().field("hits").in(this).result();
   }
 
   @Test

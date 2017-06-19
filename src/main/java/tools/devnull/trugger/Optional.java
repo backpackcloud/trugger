@@ -25,16 +25,16 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Holds a value, that may be or not a null-value.
+ * Holds a value that may be or not a null-value.
  *
  * @param <E> the value's type
  */
 public interface Optional<E> {
 
   /**
-   * Returns the result of the rest invocation.
+   * Returns the value being held by this optional.
    *
-   * @return the result of the rest invocation.
+   * @return the value being held by this optional.
    */
   E value();
 
@@ -61,7 +61,7 @@ public interface Optional<E> {
    *
    * @return {@code true} if the value is not null
    */
-  default boolean containsValue() {
+  default boolean exists() {
     return value() != null;
   }
 

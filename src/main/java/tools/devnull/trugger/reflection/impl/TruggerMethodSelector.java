@@ -18,7 +18,7 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.SelectionResult;
 import tools.devnull.trugger.reflection.Reflection;
 import tools.devnull.trugger.reflection.ReflectionPredicates;
 import tools.devnull.trugger.selector.MethodSelector;
@@ -78,12 +78,12 @@ public class TruggerMethodSelector implements MethodSelector {
     return new TruggerMethodSelector(name, registry, parameterTypes, predicate, function);
   }
 
-  public Optional<Method> in(Object target) {
+  public SelectionResult<Method> in(Object target) {
     if (parameterTypes != null) {
       return new MemberSelector<>(registry.methodFinder(name, parameterTypes), predicate, function).selectFrom(target);
     }
     MembersSelector<Method> selector = new MembersSelector<>(registry.methodsFinder(), predicate, function);
-    return Optional.of(selector.in(target).stream()
+    return new SelectionResult<>(target, selector.in(target).stream()
         .filter(ReflectionPredicates.named(name))
         .findAny().orElse(null));
   }

@@ -18,13 +18,23 @@
  */
 package tools.devnull.trugger.reflection;
 
-import tools.devnull.trugger.util.ImplementationLoader;
-import tools.devnull.trugger.reflection.impl.FieldSelectorHandler;
-import tools.devnull.trugger.reflection.impl.MethodSelectorInvoker;
-import tools.devnull.trugger.selector.*;
+import tools.devnull.trugger.Selection;
+import tools.devnull.trugger.selector.ConstructorSelector;
+import tools.devnull.trugger.selector.ConstructorsSelector;
+import tools.devnull.trugger.selector.FieldSelector;
+import tools.devnull.trugger.selector.FieldsSelector;
+import tools.devnull.trugger.selector.MethodSelector;
+import tools.devnull.trugger.selector.MethodsSelector;
 import tools.devnull.trugger.util.ClassIterator;
+import tools.devnull.trugger.util.ImplementationLoader;
+import tools.devnull.trugger.util.OptionalFunction;
 
-import java.lang.reflect.*;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.HashMap;
@@ -209,17 +219,6 @@ public final class Reflection {
   }
 
   /**
-   * Handles the field selected by the given selector.
-   *
-   * @param selector the selector for getting the field.
-   * @return the handler.
-   * @since 2.8
-   */
-  public static FieldHandler handle(FieldSelector selector) {
-    return new FieldSelectorHandler(selector);
-  }
-
-  /**
    * The same as <code>reflect().method(String)</code>
    *
    * @since 2.8
@@ -238,23 +237,20 @@ public final class Reflection {
   }
 
   /**
-   * Invokes the method selected by the given selector.
-   *
-   * @param selector the selector for getting the method.
-   * @return the invoker
-   * @since 2.8
-   */
-  public static MethodInvoker invoke(MethodSelector selector) {
-    return new MethodSelectorInvoker(selector);
-  }
-
-  /**
    * @return an iterable Class hierarchy for use in "foreach" loops.
    * @see ClassIterator
    * @since 4.0
    */
   public static Iterable<Class> hierarchyOf(final Object target) {
     return () -> new ClassIterator(target);
+  }
+
+  public static <E> OptionalFunction<Selection<Method>, E> invoke(Object... args) {
+    return OptionalFunction.of(selection -> invoke(selection.result()).in(selection.target()).withArgs(args));
+  }
+
+  public static <E> OptionalFunction<Selection<Constructor<?>>, E> instantiate(Object... args) {
+    return OptionalFunction.of(selection -> invoke(selection.result()).withArgs(args));
   }
 
 }

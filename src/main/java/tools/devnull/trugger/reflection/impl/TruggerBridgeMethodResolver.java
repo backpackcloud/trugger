@@ -181,7 +181,8 @@ final class TruggerBridgeMethodResolver {
       return method(bridgeMethod.getName())
           .withParameters(bridgeMethod.getParameterTypes())
           .in(type)
-          .orElseReturn(() -> null);
+          .orElseReturn(() -> null)
+          .result();
     }
 
     public boolean test(Method candidateMethod) {
