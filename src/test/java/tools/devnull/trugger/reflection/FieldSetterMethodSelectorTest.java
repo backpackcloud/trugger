@@ -28,7 +28,6 @@ import java.lang.reflect.Field;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.reflection.MethodPredicates.setterOf;
-import static tools.devnull.trugger.reflection.Reflection.field;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
@@ -61,9 +60,9 @@ public class FieldSetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = field("count").in(this).result();
-    fieldHits = field("hits").in(this).result();
-    fieldSize = field("size").in(this).result();
+    fieldCount = reflect().field("count").in(this).result();
+    fieldHits = reflect().field("hits").in(this).result();
+    fieldSize = reflect().field("size").in(this).result();
   }
 
   @Test

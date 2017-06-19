@@ -22,13 +22,16 @@ import org.junit.Before;
 import org.junit.Test;
 import tools.devnull.trugger.Flag;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.reflection.FieldPredicates.annotated;
 import static tools.devnull.trugger.reflection.FieldPredicates.annotatedWith;
 import static tools.devnull.trugger.reflection.FieldPredicates.assignableTo;
 import static tools.devnull.trugger.reflection.FieldPredicates.type;
-import static tools.devnull.trugger.reflection.Reflection.field;
+import static tools.devnull.trugger.reflection.Reflection.getValue;
+import static tools.devnull.trugger.reflection.Reflection.reflect;
+import static tools.devnull.trugger.reflection.Reflection.setValue;
 
 /**
  * A class for testing field reflection by the {@link Reflector}.
@@ -56,68 +59,66 @@ public class FieldReflectionTest {
 
   @Test
   public void testHandler() {
-    /*ValueHandler handler = handle(field("a")).in(this);
-    assertNull(handler.value());
-    handler.set("string");
+    reflect().field("a").in(this).and(setValue("string"));
     assertEquals("string", a);
-    assertEquals("string", handler.value());*/
+    assertEquals("string", reflect().field("a").in(this).and(getValue()));
   }
 
   @Test
   public void testPredicates() {
     assertTrue(
         type(String.class).test(
-            field("a").in(this).result()
+            reflect().field("a").in(this).result()
         )
     );
     assertTrue(
         assignableTo(String.class).test(
-            field("b").in(this).result()
+            reflect().field("b").in(this).result()
         )
     );
     assertTrue(
         assignableTo(CharSequence.class).test(
-            field("b").in(this).result()
+            reflect().field("b").in(this).result()
         )
     );
     assertFalse(
         assignableTo(String.class).test(
-            field("x").in(this).result()
+            reflect().field("x").in(this).result()
         )
     );
     assertTrue(
         type(int.class).test(
-            field("x").in(this).result()
+            reflect().field("x").in(this).result()
         )
     );
     assertTrue(
         type(Integer.class).test(
-            field("z").in(this).result()
+            reflect().field("z").in(this).result()
         )
     );
     assertFalse(
         type(Integer.class).test(
-            field("y").in(this).result()
+            reflect().field("y").in(this).result()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            field("a").in(this).result()
+            reflect().field("a").in(this).result()
         )
     );
     assertTrue(
         annotated().test(
-            field("a").in(this).result()
+            reflect().field("a").in(this).result()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            field("b").in(this).result()
+            reflect().field("b").in(this).result()
         )
     );
     assertFalse(
         annotated().test(
-            field("b").in(this).result()
+            reflect().field("b").in(this).result()
         )
     );
   }

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static tools.devnull.trugger.reflection.MethodPredicates.annotated;
 import static tools.devnull.trugger.reflection.MethodPredicates.annotatedWith;
 import static tools.devnull.trugger.reflection.Reflection.invoke;
-import static tools.devnull.trugger.reflection.Reflection.method;
+import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
  * A class for testing method reflection by the {@link Reflector}.
@@ -52,7 +52,7 @@ public class MethodReflectionTest {
   @Test
   public void invokerTest() {
     TestInterface obj = mock(TestInterface.class);
-    method("doIt").in(obj).and(invoke());
+    reflect().method("doIt").in(obj).and(invoke());
     verify(obj).doIt();
   }
 
@@ -61,7 +61,7 @@ public class MethodReflectionTest {
     TestInterface obj = mock(TestInterface.class);
     doThrow(new IllegalArgumentException()).when(obj).doIt();
     try {
-      method("doIt").in(obj).and(invoke());
+      reflect().method("doIt").in(obj).and(invoke());
       throw new AssertionError();
     } catch (ReflectionException e) {
       assertTrue(IllegalArgumentException.class.equals(e.getCause().getClass()));
@@ -73,29 +73,29 @@ public class MethodReflectionTest {
   @Test
   public void invokerForNoMethodTest() {
     TestInterface obj = mock(TestInterface.class);
-    method("notDeclared").in(obj).and(invoke());
+    reflect().method("notDeclared").in(obj).and(invoke());
   }
 
   @Test
   public void predicatesTest() {
     assertFalse(
         annotated().test(
-            method("doIt").in(TestInterface.class).result()
+            reflect().method("doIt").in(TestInterface.class).result()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            method("doIt").in(TestInterface.class).result()
+            reflect().method("doIt").in(TestInterface.class).result()
         )
     );
     assertTrue(
         annotated().test(
-            method("bar").in(TestInterface.class).result()
+            reflect().method("bar").in(TestInterface.class).result()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            method("bar").in(TestInterface.class).result()
+            reflect().method("bar").in(TestInterface.class).result()
         )
     );
   }

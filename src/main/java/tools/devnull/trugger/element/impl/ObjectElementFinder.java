@@ -47,7 +47,7 @@ public final class ObjectElementFinder implements Finder<Element> {
     }
 
     private void loadUsingFields(Class type, Map<String, Element> map) {
-      List<Field> fields = fields().in(type);
+      List<Field> fields = reflect().fields().in(type);
       for (Field field : fields) {
         if (!map.containsKey(field.getName())) {
           ObjectElement prop = new ObjectElement(field);
@@ -57,7 +57,7 @@ public final class ObjectElementFinder implements Finder<Element> {
     }
 
     private void loadUsingMethods(Class type, Map<String, Element> map) {
-      List<Method> declaredMethods = methods()
+      List<Method> declaredMethods = reflect().methods()
           .filter(
               getter().or(setter()))
           .in(type);

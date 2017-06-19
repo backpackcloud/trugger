@@ -19,12 +19,6 @@
 package tools.devnull.trugger.reflection;
 
 import tools.devnull.trugger.Selection;
-import tools.devnull.trugger.selector.ConstructorSelector;
-import tools.devnull.trugger.selector.ConstructorsSelector;
-import tools.devnull.trugger.selector.FieldSelector;
-import tools.devnull.trugger.selector.FieldsSelector;
-import tools.devnull.trugger.selector.MethodSelector;
-import tools.devnull.trugger.selector.MethodsSelector;
 import tools.devnull.trugger.util.ClassIterator;
 import tools.devnull.trugger.util.ImplementationLoader;
 import tools.devnull.trugger.util.OptionalFunction;
@@ -39,6 +33,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * An utility class for help the use of Reflection.
@@ -162,24 +157,6 @@ public final class Reflection {
   }
 
   /**
-   * The same as <code>reflect().constructor()</code>
-   *
-   * @since 2.8
-   */
-  public static ConstructorSelector constructor() {
-    return reflect().constructor();
-  }
-
-  /**
-   * The same as <code>reflect().constructors()</code>
-   *
-   * @since 2.8
-   */
-  public static ConstructorsSelector constructors() {
-    return reflect().constructors();
-  }
-
-  /**
    * Uses the {@link ReflectionFactory} for creating a {@link ConstructorInvoker}
    * instance.
    *
@@ -201,42 +178,6 @@ public final class Reflection {
   }
 
   /**
-   * The same as <code>reflect().field(String)</code>
-   *
-   * @since 2.8
-   */
-  public static FieldSelector field(String name) {
-    return reflect().field(name);
-  }
-
-  /**
-   * The same as <code>reflect().fields()</code>
-   *
-   * @since 2.8
-   */
-  public static FieldsSelector fields() {
-    return reflect().fields();
-  }
-
-  /**
-   * The same as <code>reflect().method(String)</code>
-   *
-   * @since 2.8
-   */
-  public static MethodSelector method(String name) {
-    return reflect().method(name);
-  }
-
-  /**
-   * The same as <code>reflect().methods()</code>
-   *
-   * @since 2.8
-   */
-  public static MethodsSelector methods() {
-    return reflect().methods();
-  }
-
-  /**
    * @return an iterable Class hierarchy for use in "foreach" loops.
    * @see ClassIterator
    * @since 4.0
@@ -246,11 +187,19 @@ public final class Reflection {
   }
 
   public static <E> OptionalFunction<Selection<Method>, E> invoke(Object... args) {
-    return OptionalFunction.of(selection -> invoke(selection.result()).in(selection.target()).withArgs(args));
+    return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).in(selection.target()).withArgs(args));
   }
 
   public static <E> OptionalFunction<Selection<Constructor<?>>, E> instantiate(Object... args) {
-    return OptionalFunction.of(selection -> invoke(selection.result()).withArgs(args));
+    return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).withArgs(args));
+  }
+
+  public static <E> OptionalFunction<Selection<Field>, E> getValue() {
+    return OptionalFunction.of(selection -> factory.createHandler(selection.result()).in(selection.target()).value());
+  }
+
+  public static Consumer<Selection<Field>> setValue(Object newValue) {
+    return selection -> factory.createHandler(selection.result()).in(selection.target()).set(newValue);
   }
 
 }

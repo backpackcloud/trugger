@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static tools.devnull.trugger.reflection.Reflection.methods;
+import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
  * A default class for finding properties in annotations.
@@ -43,7 +43,7 @@ public final class AnnotationElementFinder implements Finder<Element> {
   private ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
-      List<Method> declaredMethods = methods().in(type);
+      List<Method> declaredMethods = reflect().methods().in(type);
       AnnotationElement prop;
       for (Method method : declaredMethods) {
         prop = new AnnotationElement(method);

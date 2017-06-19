@@ -18,7 +18,6 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.reflection.Reflection;
 import tools.devnull.trugger.reflection.ReflectionException;
 
 import java.lang.reflect.GenericArrayType;
@@ -29,8 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static tools.devnull.trugger.reflection.Reflection.method;
-import static tools.devnull.trugger.reflection.Reflection.methods;
+import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
  * Helper for resolving synthetic {@link Method#isBridge bridge Methods} to the
@@ -80,7 +78,7 @@ final class TruggerBridgeMethodResolver {
       return bridgeMethod;
     }
     // Gather all methods with matching name and parameter size.
-    List<Method> candidateMethods = methods().deep()
+    List<Method> candidateMethods = reflect().methods().deep()
         .filter(new SimpleBridgeCandidatePredicate())
         .in(bridgeMethod.getDeclaringClass());
 
@@ -160,7 +158,7 @@ final class TruggerBridgeMethodResolver {
       }
       // Search interfaces.
       // changed to use trugger api
-      List<Class> interfaces = Reflection.reflect()
+      List<Class> interfaces = reflect()
           .interfaces()
           .in(bridgeMethod.getDeclaringClass());
       for (Class anInterface : interfaces) {
@@ -178,7 +176,7 @@ final class TruggerBridgeMethodResolver {
      * {@link Method} is returned, otherwise <code>null</code> is returned.
      */
     private Method searchForMatch(Class type) {
-      return method(bridgeMethod.getName())
+      return reflect().method(bridgeMethod.getName())
           .withParameters(bridgeMethod.getParameterTypes())
           .in(type)
           .orElseReturn(() -> null)
