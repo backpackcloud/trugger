@@ -34,9 +34,15 @@ public class SelectionResult<E> implements Optional<Selection<E>> {
     this.value = value;
   }
 
+  /**
+   * Returns the selection object only if the result is a non-null value. A {@code null}
+   * value will be returned if this selection's result is {@code null}.
+   *
+   * @return the selection object.
+   */
   @Override
   public Selection<E> value() {
-    return new Selection<E>() {
+    return value == null ? null : new Selection<E>() {
       @Override
       public E result() {
         return value;
@@ -49,6 +55,11 @@ public class SelectionResult<E> implements Optional<Selection<E>> {
     };
   }
 
+  /**
+   * Returns the result of the selection.
+   *
+   * @return the result of the selection.
+   */
   public E result() {
     return value;
   }
