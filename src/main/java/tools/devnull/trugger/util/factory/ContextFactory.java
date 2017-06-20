@@ -101,11 +101,11 @@ public class ContextFactory {
     List<Constructor<?>> constructors = reflect().constructors()
         .filter(declaring(Modifier.PUBLIC))
         .from(type);
+    Optional created;
     for (Constructor<?> constructor : constructors) {
-      try {
-        return tryCreate(constructor);
-      } catch (UnresolvableValueException e) {
-        continue;
+      created = tryCreate(constructor);
+      if (created.exists()) {
+        return created;
       }
     }
     return Optional.empty();
@@ -115,10 +115,14 @@ public class ContextFactory {
   private Optional tryCreate(Constructor<?> constructor) {
     Object[] args = new Object[constructor.getParameterCount()];
     Object arg;
+    Optional<Object> resolved;
     int i = 0;
     for (Parameter parameter : constructor.getParameters()) {
-      arg = context.resolve(parameter)
-          .orElseThrow(UnresolvableValueException::new);
+      resolved = context.resolve(parameter);
+      if (!resolved.exists()) {
+        return Optional.empty();
+      }
+      arg = resolved.value();
       args[i++] = arg;
     }
     return Optional.of(createFunction.apply(constructor, args));
