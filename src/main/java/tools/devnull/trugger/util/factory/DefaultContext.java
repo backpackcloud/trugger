@@ -38,16 +38,6 @@ public class DefaultContext implements Context {
   }
 
   @Override
-  public PredicateMapper<Parameter, Context> use(Object object) {
-    return use((parameter) -> object);
-  }
-
-  @Override
-  public PredicateMapper<Parameter, Context> use(Supplier supplier) {
-    return use(parameter -> supplier.get());
-  }
-
-  @Override
   public PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function) {
     return new PredicateMapper<Parameter, Context>() {
       @Override

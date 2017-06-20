@@ -39,7 +39,9 @@ public interface Context {
    * @param object the object to add
    * @return a component to select the condition
    */
-  PredicateMapper<Parameter, Context> use(Object object);
+  default PredicateMapper<Parameter, Context> use(Object object) {
+    return use((parameter) -> object);
+  }
 
   /**
    * Adds the object supplied by the given supplier by binding it to the given
@@ -48,7 +50,9 @@ public interface Context {
    * @param supplier the supplier to create the object
    * @return a component to select the condition
    */
-  PredicateMapper<Parameter, Context> use(Supplier supplier);
+  default PredicateMapper<Parameter, Context> use(Supplier supplier) {
+    return use(parameter -> supplier.get());
+  }
 
   /**
    * Adds the object returned by the given function by binding it to the given
