@@ -61,7 +61,7 @@ public class FieldReflectionTest {
   public void testHandler() {
     reflect().field("a").from(this).and(setValue("string"));
     assertEquals("string", a);
-    assertEquals("string", reflect().field("a").from(this).and(getValue()));
+    assertEquals("string", reflect().field("a").from(this).then(getValue()));
   }
 
   @Test

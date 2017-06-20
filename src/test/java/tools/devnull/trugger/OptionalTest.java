@@ -184,12 +184,16 @@ public class OptionalTest {
   }
 
   @Test
-  public void testMethodAndWithFunction() {
+  public void testMethodThen() {
     Function function = mock(Function.class);
     when(function.apply(value)).thenReturn("OK");
+    when(function.apply(null)).thenReturn("ERROR");
 
-    assertEquals("OK", Optional.of(value).and(function));
+    assertEquals("OK", Optional.of(value).then(function));
     verify(function).apply(value);
+
+    assertEquals("ERROR", Optional.empty().then(function));
+    verify(function).apply(null);
   }
 
   @Test

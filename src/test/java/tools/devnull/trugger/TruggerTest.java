@@ -120,4 +120,8 @@ public class TruggerTest {
     return new ElementMock();
   }
 
+  public static <E> Predicate<Optional<E>> contain(E value) {
+    return optional -> optional.exists() && optional.value().equals(value);
+  }
+
 }

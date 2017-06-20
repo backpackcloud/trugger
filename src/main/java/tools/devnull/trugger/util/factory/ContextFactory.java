@@ -19,10 +19,11 @@
 
 package tools.devnull.trugger.util.factory;
 
+import tools.devnull.trugger.Optional;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -38,7 +39,7 @@ import static tools.devnull.trugger.reflection.ReflectionPredicates.declaring;
 public class ContextFactory {
 
   private final Context context;
-  private BiFunction<Constructor, Object[], Object> createFunction;
+  private final BiFunction<Constructor, Object[], Object> createFunction;
 
   /**
    * Creates a new instance using a default context implementation
@@ -48,13 +49,26 @@ public class ContextFactory {
   }
 
   /**
-   * Creates a new instance using the given context implementation
+   * Creates a new instance using the given context implementation. The function to
+   * instantiate the objects will be the default one, which is just call the constructor.
    *
    * @param context the context to use
    */
   public ContextFactory(Context context) {
     this.context = context;
-    toCreate(defaults());
+    this.createFunction = (constructor, args) -> invoke(constructor).withArgs(args);
+  }
+
+  /**
+   * Creates a new instance using the given context implementation plus the function to
+   * instantiate the objects.
+   *
+   * @param context        the context to use
+   * @param createFunction the function to create the objects
+   */
+  public ContextFactory(Context context, BiFunction<Constructor, Object[], Object> createFunction) {
+    this.context = context;
+    this.createFunction = createFunction;
   }
 
   /**
@@ -70,12 +84,10 @@ public class ContextFactory {
    * Changes the way the objects are created by using the given function.
    *
    * @param function the function to use for creating the objects.
-   * @return a reference to this object
+   * @return a new ContextFactory that uses the given function and this context
    */
-  public ContextFactory toCreate(
-      BiFunction<Constructor, Object[], Object> function) {
-    this.createFunction = function;
-    return this;
+  public ContextFactory toCreate(BiFunction<Constructor, Object[], Object> function) {
+    return new ContextFactory(this.context, function);
   }
 
   /**
@@ -84,48 +96,32 @@ public class ContextFactory {
    *
    * @param type the type of the object to create.
    * @return the created object
-   * @throws CreateException if the object cannot be created
    */
-  public <E> E create(Class<E> type) {
+  public <E> Optional<E> create(Class<E> type) {
     List<Constructor<?>> constructors = reflect().constructors()
         .filter(declaring(Modifier.PUBLIC))
         .from(type);
-    Collections.sort(constructors,
-        (c1, c2) -> c2.getParameterCount() - c1.getParameterCount());
-    E result;
     for (Constructor<?> constructor : constructors) {
-      result = tryCreate(constructor);
-      if (result != null) {
-        return result;
+      try {
+        return tryCreate(constructor);
+      } catch (UnresolvableValueException e) {
+        continue;
       }
     }
-    throw new CreateException("Unable to create a " + type);
+    return Optional.empty();
   }
 
   // tries to create the object using the given constructor
-  private <E> E tryCreate(Constructor<?> constructor) {
+  private Optional tryCreate(Constructor<?> constructor) {
     Object[] args = new Object[constructor.getParameterCount()];
     Object arg;
     int i = 0;
     for (Parameter parameter : constructor.getParameters()) {
-      try {
-        arg = context.resolve(parameter);
-        args[i++] = arg;
-      } catch (UnresolvableValueException e) {
-        return null;
-      }
+      arg = context.resolve(parameter)
+          .orElseThrow(UnresolvableValueException::new);
+      args[i++] = arg;
     }
-    return (E) createFunction.apply(constructor, args);
-  }
-
-  /**
-   * The default function to create objects. This function basically invokes
-   * the constructor with the given arguments.
-   *
-   * @return the default function used to create objects.
-   */
-  public static BiFunction<Constructor, Object[], Object> defaults() {
-    return (constructor, args) -> invoke(constructor).withArgs(args);
+    return Optional.of(createFunction.apply(constructor, args));
   }
 
 }

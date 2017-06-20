@@ -52,7 +52,7 @@ public class MethodReflectionTest {
   @Test
   public void invokerTest() {
     TestInterface obj = mock(TestInterface.class);
-    reflect().method("doIt").from(obj).and(invoke());
+    reflect().method("doIt").from(obj).then(invoke());
     verify(obj).doIt();
   }
 
@@ -61,7 +61,7 @@ public class MethodReflectionTest {
     TestInterface obj = mock(TestInterface.class);
     doThrow(new IllegalArgumentException()).when(obj).doIt();
     try {
-      reflect().method("doIt").from(obj).and(invoke());
+      reflect().method("doIt").from(obj).then(invoke());
       throw new AssertionError();
     } catch (ReflectionException e) {
       assertTrue(IllegalArgumentException.class.equals(e.getCause().getClass()));
@@ -73,7 +73,7 @@ public class MethodReflectionTest {
   @Test
   public void invokerForNoMethodTest() {
     TestInterface obj = mock(TestInterface.class);
-    reflect().method("notDeclared").from(obj).and(invoke());
+    reflect().method("notDeclared").from(obj).then(invoke());
   }
 
   @Test

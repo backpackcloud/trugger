@@ -85,12 +85,13 @@ public interface Optional<E> {
   /**
    * Invokes the given consumer passing the value.
    * <p>
-   * The function will be invoked regardless the value.
+   * The function will be invoked regardless the value. To restrict
+   * null values, use an {@link tools.devnull.trugger.util.OptionalFunction}.
    *
    * @param function the function to use
    * @return an instance of this object.
    */
-  default <T> T and(Function<? super E, ? extends T> function) {
+  default <T> T then(Function<? super E, ? extends T> function) {
     return function.apply(value());
   }
 

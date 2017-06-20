@@ -19,6 +19,7 @@
 
 package tools.devnull.trugger.util.factory;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.PredicateMapper;
 
 import java.lang.reflect.Parameter;
@@ -26,12 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class DefaultContext implements Context {
 
   private List<Entry> entries;
-  private Function<Parameter, Object> defaultFunction;
+  private Function<Parameter, Object> defaultFunction = parameter -> null;
 
   public DefaultContext() {
     this.entries = new ArrayList<>();
@@ -55,16 +55,13 @@ public class DefaultContext implements Context {
   }
 
   @Override
-  public Object resolve(Parameter parameter) {
+  public Optional<Object> resolve(Parameter parameter) {
     for (Entry entry : entries) {
       if (entry.predicate.test(parameter)) {
-        return entry.function.apply(parameter);
+        return Optional.of(entry.function.apply(parameter));
       }
     }
-    if (defaultFunction != null) {
-      return defaultFunction.apply(parameter);
-    }
-    throw new UnresolvableValueException();
+    return Optional.of(defaultFunction.apply(parameter));
   }
 
   private static class Entry {

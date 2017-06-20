@@ -31,8 +31,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.kodo.Expectation.the;
+import static tools.devnull.kodo.Expectation.to;
+import static tools.devnull.trugger.TruggerTest.contain;
 
 public class DefaultContextTest {
 
@@ -55,7 +56,7 @@ public class DefaultContextTest {
             use(functionB).when(conditionB))
 
         // don't need an actual parameter since everything here is a mock
-        .expect(context -> context.resolve(null), to().be(resultB))
+        .expect(context -> context.resolve(null), to(contain(resultB)))
 
         .expect(the(conditionA), to().be(tested()))
         .expect(the(conditionB), to().be(tested()))
@@ -80,7 +81,7 @@ public class DefaultContextTest {
             use(functionB).byDefault())
 
         // don't need an actual parameter since everything here is a mock
-        .expect(context -> context.resolve(null), to().be(resultB))
+        .expect(context -> context.resolve(null), to(contain(resultB)))
 
         .expect(the(conditionA), to().be(tested()))
         .expect(the(functionA), to().not().be(used()))

@@ -19,6 +19,7 @@
 
 package tools.devnull.trugger.util.factory;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.PredicateMapper;
 
 import java.lang.reflect.Parameter;
@@ -69,8 +70,7 @@ public interface Context {
    *
    * @param parameter the parameter to resolve the value
    * @return the resolved value.
-   * @throws UnresolvableValueException if the value cannot be resolved
    */
-  Object resolve(Parameter parameter) throws UnresolvableValueException;
+  Optional<Object> resolve(Parameter parameter);
 
 }

@@ -46,7 +46,7 @@ public class ComponentFactoryTest {
   public void testCreate() {
     ToString annotation = mockAnnotation(ToString.class);
 
-    Converter converter = factory.create(annotation);
+    Converter converter = factory.create(annotation).value();
     assertEquals("10", converter.convert(10));
     assertEquals("null", converter.convert(null));
   }
@@ -73,7 +73,7 @@ public class ComponentFactoryTest {
         .annotatedWith(mockAnnotation(Flag.class))
         .createMock();
 
-    Converter converter = factory.create(element);
+    Converter converter = factory.create(element).value();
     assertNotNull(converter);
 
     element = new ElementMock()
@@ -81,7 +81,7 @@ public class ComponentFactoryTest {
         .annotatedWith(mockAnnotation(Flag.class))
         .createMock();
 
-    converter = factory.create(element);
+    converter = factory.create(element).value();
     assertNull(converter);
   }
 
@@ -94,7 +94,7 @@ public class ComponentFactoryTest {
         .annotatedWith(annotation)
         .createMock();
 
-    Converter converter = factory.create(element);
+    Converter converter = factory.create(element).value();
     assertEquals("dummy", converter.convert(new Object()));
   }
 
