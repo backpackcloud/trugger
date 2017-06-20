@@ -552,14 +552,14 @@ Alternatively, you can get a list of components by passing an `AnnotatedElement`
 to the method `#createAll`:
 
 ~~~java
-Element = Elements.element("aField").in(myObject);
+Element = Elements.element("aField").from(myObject).result();
 List<Component> components = factory.createAll(element);
 ~~~
 
 Or creating a single one by passing an `AnnotatedElement` to the method `#create`:
 
 ~~~java
-Element = Elements.element("aField").in(myObject);
+Element = Elements.element("aField").from(myObject).result();
 Component component = factory.create(element);
 ~~~
 
