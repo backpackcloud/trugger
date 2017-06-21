@@ -33,6 +33,12 @@ public interface ConstructorsSelector extends PredicateSelector<Constructor<?>> 
 
   ConstructorsSelector filter(Predicate<? super Constructor<?>> predicate);
 
+  /**
+   * Applies the selection on the given target
+   *
+   * @param target the target to apply the selection
+   * @return the result
+   */
   List<Constructor<?>> from(Object target);
 
 }
