@@ -22,7 +22,6 @@ import tools.devnull.trugger.Selection;
 import tools.devnull.trugger.element.impl.TruggerElementSelection;
 import tools.devnull.trugger.util.ImplementationLoader;
 import tools.devnull.trugger.util.OptionalFunction;
-import tools.devnull.trugger.util.registry.Registry;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -45,11 +44,12 @@ public class Elements {
   }
 
   /**
-   * @return the registry.
-   * @since 2.3
+   * Registers the given finder
+   *
+   * @see ElementFactory#register(ElementFinder, Predicate)
    */
-  public static Registry<Predicate<Class>, ElementFinder> registry() {
-    return factory.registry();
+  public static void register(ElementFinder finder, Predicate<Class> predicate) {
+    factory.register(finder, predicate);
   }
 
   public static ElementSelection select() {

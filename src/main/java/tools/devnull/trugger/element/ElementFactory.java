@@ -18,8 +18,6 @@
  */
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.util.registry.Registry;
-
 import java.util.function.Predicate;
 
 /**
@@ -31,13 +29,12 @@ import java.util.function.Predicate;
 public interface ElementFactory {
 
   /**
-   * Returns the registry that associates classes to finders.
+   * Registers the given finder to use when the type matches the given predicate
    *
-   * @return the registry.
-   *
-   * @since 2.3
+   * @param finder    the finder to register
+   * @param predicate the predicate that tells when to use the given finder
    */
-  Registry<Predicate<Class>, ElementFinder> registry();
+  void register(ElementFinder finder, Predicate<Class> predicate);
 
   /**
    * Creates a selector for an {@link Element} object.

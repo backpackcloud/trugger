@@ -58,8 +58,7 @@ public class ElementFinderTest {
     assertNotNull(element("field").from(TestFinder.class).result());
     assertFalse(elements().from(TestFinder.class).isEmpty());
 
-    Elements.registry().register(new MyFinder())
-        .to(ClassPredicates.type(TestFinder.class));
+    Elements.register(new MyFinder(), ClassPredicates.type(TestFinder.class));
 
     assertNull(element("field").from(TestFinder.class).result());
     assertTrue(elements().from(TestFinder.class).isEmpty());

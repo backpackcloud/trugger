@@ -22,9 +22,9 @@ import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.util.Utils;
-import tools.devnull.trugger.util.registry.Registry;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -34,20 +34,20 @@ import java.util.function.Predicate;
  */
 public final class TruggerElementFinder implements ElementFinder {
 
-  private final Registry<Predicate<Class>, ElementFinder> registry;
+  private final Map<Predicate<Class>, ElementFinder> registry;
   private final ElementFinder defaultFinder;
 
   public TruggerElementFinder(ElementFinder defaultFinder,
-                              Registry<Predicate<Class>, ElementFinder> registry) {
+                              Map<Predicate<Class>, ElementFinder> registry) {
     this.registry = registry;
     this.defaultFinder = defaultFinder;
   }
 
   private ElementFinder getFinder(Object target) {
     Class type = Utils.resolveType(target);
-    for (Registry.Entry<Predicate<Class>, ElementFinder> entry : registry.entries()) {
-      if (entry.key().test(type)) {
-        return entry.value();
+    for (Map.Entry<Predicate<Class>, ElementFinder> entry : registry.entrySet()) {
+      if (entry.getKey().test(type)) {
+        return entry.getValue();
       }
     }
     return defaultFinder;
