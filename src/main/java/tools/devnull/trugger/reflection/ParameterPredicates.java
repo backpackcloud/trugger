@@ -28,15 +28,12 @@ import java.util.function.Predicate;
  *
  * @since 5.0
  */
-public final class ParameterPredicates {
-
-  private ParameterPredicates() {
-  }
+public interface ParameterPredicates {
 
   /**
    * Returns a predicate that accepts parameters of the given type.
    */
-  public static Predicate<Parameter> type(Class type) {
+  static Predicate<Parameter> type(Class type) {
     return parameter -> parameter.getType().equals(type);
   }
 
@@ -45,7 +42,7 @@ public final class ParameterPredicates {
    *
    * @since 5.1
    */
-  public static Predicate<Parameter> assignableTo(Class type) {
+  static Predicate<Parameter> assignableTo(Class type) {
     return parameter -> type.isAssignableFrom(parameter.getType());
   }
 
@@ -55,7 +52,7 @@ public final class ParameterPredicates {
    * Note that the code must be compiled with <code>-parameters</code> or
    * the parameter names will be in a argX format.
    */
-  public static Predicate<Parameter> named(String name) {
+  static Predicate<Parameter> named(String name) {
     return parameter -> parameter.getName().equals(name);
   }
 
@@ -63,7 +60,7 @@ public final class ParameterPredicates {
    * Returns a predicate that accepts parameters annotated with the given
    * annotation type.
    */
-  public static Predicate<Parameter> annotatedWith(Class<? extends Annotation> type) {
+  static Predicate<Parameter> annotatedWith(Class<? extends Annotation> type) {
     return parameter -> parameter.isAnnotationPresent(type);
   }
 

@@ -17,15 +17,13 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-@ConverterClass(ToStringConverter.class)
-public @interface ToString {
-
-  String ifNull() default "null";
+@ConverterClass(ToNullConverter.class)
+public @interface ToNull {
 
 }

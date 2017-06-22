@@ -29,13 +29,13 @@ import java.util.function.Predicate;
  *
  * @author Marcelo "Ataxexe" Guimarães
  */
-public class ReflectionPredicates {
+public interface ReflectionPredicates {
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated element is
    * annotated with the specified Annotation.
    */
-  public static <T extends AnnotatedElement> Predicate<T> annotatedWith(
+  static <T extends AnnotatedElement> Predicate<T> annotatedWith(
       final Class<? extends Annotation> annotationType) {
     return element -> element.isAnnotationPresent(annotationType);
   }
@@ -43,7 +43,7 @@ public class ReflectionPredicates {
   /**
    * A predicate that returns <code>true</code> if the element has annotations.
    */
-  public static final Predicate<AnnotatedElement> annotated() {
+  static Predicate<AnnotatedElement> annotated() {
     return element -> element.getDeclaredAnnotations().length > 0;
   }
 
@@ -51,7 +51,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element has a
    * name that with the given one.
    */
-  public static <T extends Member> Predicate<T> named(final String name) {
+  static <T extends Member> Predicate<T> named(final String name) {
     return element -> element.getName().equals(name);
   }
 
@@ -59,7 +59,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element has the
    * specified modifiers.
    */
-  public static <T extends Member> Predicate<T> declaring(int... modifiers) {
+  static <T extends Member> Predicate<T> declaring(int... modifiers) {
     return element -> {
       int elModifiers = element.getModifiers();
       for (int mod : modifiers) {

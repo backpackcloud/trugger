@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
 import org.junit.Test;
 import tools.devnull.kodo.Spec;
-import tools.devnull.trugger.util.factory.DefaultContext;
 
 import java.lang.reflect.Parameter;
 import java.util.function.Function;

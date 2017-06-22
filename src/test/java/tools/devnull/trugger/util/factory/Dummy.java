@@ -17,19 +17,15 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
-public class DummyConverter implements Converter {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-  private final String returnValue;
+@Retention(RetentionPolicy.RUNTIME)
+@ConverterClass(DummyConverter.class)
+public @interface Dummy {
 
-  public DummyConverter(String returnValue) {
-    this.returnValue = returnValue;
-  }
-
-  @Override
-  public Object convert(Object object) {
-    return returnValue;
-  }
+  String value();
 
 }

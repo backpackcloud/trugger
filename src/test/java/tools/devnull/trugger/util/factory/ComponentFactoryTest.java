@@ -17,19 +17,27 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
 import org.junit.Before;
 import org.junit.Test;
 import tools.devnull.trugger.ElementMock;
 import tools.devnull.trugger.Flag;
 import tools.devnull.trugger.element.Element;
-import tools.devnull.trugger.util.factory.ComponentFactory;
+import tools.devnull.trugger.util.Null;
 
 import javax.annotation.Resource;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static tools.devnull.trugger.AnnotationMock.mockAnnotation;
 
@@ -96,6 +104,37 @@ public class ComponentFactoryTest {
 
     Converter converter = factory.create(element).value();
     assertEquals("dummy", converter.convert(new Object()));
+  }
+
+  @Test
+  public void testConfiguration() {
+    BiConsumer<Context, Annotation> biconsumer = mock(BiConsumer.class);
+    Dummy annotation = mockAnnotation(Dummy.class);
+    when(annotation.value()).thenReturn("dummy");
+
+    Element element = new ElementMock()
+        .annotatedWith(annotation)
+        .createMock();
+
+    factory.toConfigure(biconsumer).create(element);
+    verify(biconsumer).accept(any(Context.class), eq(annotation));
+  }
+
+  @Test
+  public void testInstantiation() {
+    BiFunction<Constructor, Object[], Object> bifunction = mock(BiFunction.class);
+    Dummy annotation = mockAnnotation(Dummy.class);
+    Converter converter = new DummyConverter("");
+
+    when(bifunction.apply(any(Constructor.class), any(Object[].class))).thenReturn(converter);
+    when(annotation.value()).thenReturn("dummy");
+
+    Element element = new ElementMock()
+        .annotatedWith(annotation)
+        .createMock();
+
+    assertSame(converter, factory.toCreate(bifunction).create(element).value());
+    verify(bifunction).apply(any(Constructor.class), any(Object[].class));
   }
 
 }

@@ -202,4 +202,13 @@ public class OptionalTest {
     assertEquals(value, Optional.empty().orElse(value));
   }
 
+  @Test
+  public void testWithSupplier() {
+    Supplier supplier = mock(Supplier.class);
+    when(supplier.get()).thenReturn(value);
+
+    assertEquals(value, Optional.of(supplier).value());
+    verify(supplier).get();
+  }
+
 }

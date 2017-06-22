@@ -19,28 +19,9 @@
 
 package tools.devnull.trugger.util.factory;
 
-import tools.devnull.trugger.TruggerException;
-
-/**
- * Exception thrown to indicate that the context cannot resolve a value.
- *
- * @author Marcelo "Ataxexe" Guimarães
- * @since 5.1
- */
-public class UnresolvableValueException extends TruggerException {
-
-  public UnresolvableValueException() {
-  }
-
-  public UnresolvableValueException(String message) {
-    super(message);
-  }
-
-  public UnresolvableValueException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public UnresolvableValueException(Throwable cause) {
-    super(cause);
+public class ToNullConverter implements Converter {
+  @Override
+  public Object convert(Object object) {
+    return null;
   }
 }

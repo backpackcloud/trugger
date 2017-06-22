@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
 import org.junit.Test;
 import tools.devnull.trugger.Flag;
-import tools.devnull.trugger.util.factory.ContextFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

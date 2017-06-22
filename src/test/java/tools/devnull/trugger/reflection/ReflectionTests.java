@@ -19,17 +19,17 @@
 package tools.devnull.trugger.reflection;
 
 import org.junit.Test;
+import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.reflection.impl.TruggerFieldsSelector;
+import tools.devnull.trugger.util.ClassIterator;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static tools.devnull.kodo.Expectation.doing;
+import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.TruggerTest.assertThrow;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 import static tools.devnull.trugger.reflection.Reflection.wrapperFor;
@@ -169,6 +169,18 @@ public class ReflectionTests {
     assertEquals(Object.class, iterator.next());
 
     assertFalse(iterator.hasNext());
+  }
+
+  @Test(expected = NoSuchElementException.class)
+  public void testClassIteratorNext() {
+    ClassIterator iterator = new ClassIterator(Object.class);
+    iterator.next();
+    iterator.next();
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void testClassIteratorRemove() {
+    new ClassIterator(Object.class).remove();
   }
 
 }

@@ -28,9 +28,7 @@ import java.lang.annotation.Annotation;
  * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
-public final class Utils {
-
-  private Utils() {}
+public interface Utils {
 
   /**
    * Resolves the target type.
@@ -45,7 +43,7 @@ public final class Utils {
    *          the target to resolve the type
    * @return the type of the given target.
    */
-  public static Class<?> resolveType(Object target) {
+  static Class<?> resolveType(Object target) {
     if (target instanceof Annotation) {
       return ((Annotation) target).annotationType();
     }
@@ -65,7 +63,7 @@ public final class Utils {
    * @return the wrapper class if the object class is a primitive or the class
    *         itself otherwise.
    */
-  public static Class<?> objectClass(Object object) {
+  static Class<?> objectClass(Object object) {
     Class<?> c = resolveType(object);
     if (c.isPrimitive()) {
       return Reflection.wrapperFor(c);
@@ -80,7 +78,7 @@ public final class Utils {
    * @return <code>true</code> if both classes are compatible (even if an
    *         autoboxing is necessary).
    */
-  public static boolean areAssignable(Class to, Class from) {
+  static boolean areAssignable(Class to, Class from) {
     if (to.isPrimitive() || from.isPrimitive()) {
       return objectClass(to).isAssignableFrom(objectClass(from));
     }

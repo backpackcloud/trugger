@@ -17,23 +17,15 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
-public class ToStringConverter implements Converter<Object, String> {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-  private final String ifNull;
+@Retention(RetentionPolicy.RUNTIME)
+@ConverterClass(ToStringConverter.class)
+public @interface ToString {
 
-  public ToStringConverter(String ifNull) {
-    this.ifNull = ifNull;
-  }
-
-  public ToStringConverter(ToString annotation) {
-    this(annotation.ifNull());
-  }
-
-  @Override
-  public String convert(Object object) {
-    return object == null ? ifNull : object.toString();
-  }
+  String ifNull() default "null";
 
 }
