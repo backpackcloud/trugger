@@ -134,4 +134,21 @@ public interface ClassPredicates {
     return element -> clazz.isAssignableFrom(element);
   }
 
+  static Predicate<Class> fromPackage(Package p) {
+    return fromPackage(p.getName());
+  }
+
+  static Predicate<Class> fromPackage(String packageName) {
+    return c -> c.getPackage().getName().equals(packageName);
+  }
+
+  static Predicate<Class> fromBasePackage(Package basePackage) {
+    return fromBasePackage(basePackage.getName());
+  }
+
+  static Predicate<Class> fromBasePackage(String basePackageName) {
+    return c -> c.getPackage().getName()
+        .matches("^" + basePackageName.replace(".", "\\.") + "(\\..+)?$");
+  }
+
 }
