@@ -12,6 +12,7 @@
 - Removed `selector` package (interfaces moved to their regarding package)
 - Hierarchy reflection now returns a List
 - Removed the Selector mix-ins
+- Predicates are now Interfaces instead of Classes with private constructor
 
 ## Version 5.4.0
 
