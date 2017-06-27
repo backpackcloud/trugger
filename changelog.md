@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 6.0.0
+## Version 6.0
 
 ### Major Changes
 
@@ -17,7 +17,7 @@
 
 - Predicates are now Interfaces instead of Classes with private constructor
 
-## Version 5.4.0
+## Version 5.4
 
 ### Minor Changes
 
