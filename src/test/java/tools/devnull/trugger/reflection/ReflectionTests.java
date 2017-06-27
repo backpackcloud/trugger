@@ -19,17 +19,19 @@
 package tools.devnull.trugger.reflection;
 
 import org.junit.Test;
-import tools.devnull.kodo.Spec;
 import tools.devnull.trugger.reflection.impl.TruggerFieldsSelector;
 import tools.devnull.trugger.util.ClassIterator;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static tools.devnull.kodo.Expectation.doing;
-import static tools.devnull.kodo.Expectation.to;
 import static tools.devnull.trugger.TruggerTest.assertThrow;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 import static tools.devnull.trugger.reflection.Reflection.wrapperFor;
@@ -136,9 +138,8 @@ public class ReflectionTests {
 
   @Test
   public void testInterfacesReflection() {
-    List<Class> interfaces =
-        reflect().interfacesOf(TruggerFieldsSelector.class);
-    assertEquals(3, interfaces.size());
+    List<Class> interfaces = reflect().interfacesOf(TruggerFieldsSelector.class);
+    assertEquals(1, interfaces.size());
   }
 
   @Test

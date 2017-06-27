@@ -20,6 +20,7 @@ package tools.devnull.trugger.reflection;
 
 import org.junit.Test;
 import tools.devnull.trugger.Flag;
+import tools.devnull.trugger.SelectionResult;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -69,7 +70,10 @@ public class GenericTypeTest {
 
   @Test
   public void interfaceReflectionTest() {
-    List<Class> interfaces = reflect().interfacesOf(MethodsSelector.class);
-    assertEquals(2, interfaces.size());
+    List<Class> interfaces = reflect().interfacesOf(MethodInvoker.class);
+    assertEquals(1, interfaces.size());
+
+    interfaces = reflect().interfacesOf(SelectionResult.class);
+    assertEquals(1, interfaces.size());
   }
 }
