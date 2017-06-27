@@ -38,6 +38,6 @@ public interface ElementCopier {
    * @param src
    *          the source object.
    */
-  CopyDestination from(Object src);
+  CopyDestinationMapper from(Object src);
 
 }

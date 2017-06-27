@@ -31,8 +31,7 @@ import java.util.function.Predicate;
  *
  * @author Marcelo "Ataxexe" Guimarães
  */
-public final class TruggerElementCopier implements ElementCopier,
-    CopyDestination {
+public final class TruggerElementCopier implements ElementCopier, CopyDestinationMapper {
 
   private final ElementsSelector selector;
   private final Function<ElementCopy, Object> function;
@@ -43,7 +42,7 @@ public final class TruggerElementCopier implements ElementCopier,
 
   public TruggerElementCopier() {
     this.selector = Elements.elements();
-    this.function = copy -> copy.value();
+    this.function = ElementCopy::value;
     this.copyNull = true;
     this.predicate = copy -> true;
     this.src = null;
@@ -51,7 +50,7 @@ public final class TruggerElementCopier implements ElementCopier,
 
   public TruggerElementCopier(ElementsSelector selector) {
     this.selector = selector;
-    this.function = copy -> copy.value();
+    this.function = ElementCopy::value;
     this.copyNull = true;
     this.predicate = copy -> true;
     this.src = null;
@@ -69,23 +68,23 @@ public final class TruggerElementCopier implements ElementCopier,
     this.src = src;
   }
 
-  public CopyDestination notNull() {
+  public CopyDestinationMapper notNull() {
     return new TruggerElementCopier(selector, function, predicate, false, src);
   }
 
-  public CopyDestination from(Object src) {
+  public CopyDestinationMapper from(Object src) {
     return
         new TruggerElementCopier(selector, function, predicate, copyNull, src);
   }
 
   @Override
-  public CopyDestination filter(Predicate<? super ElementCopy> predicate) {
+  public CopyDestinationMapper filter(Predicate<? super ElementCopy> predicate) {
     return
         new TruggerElementCopier(selector, function, predicate, copyNull, src);
   }
 
   @Override
-  public CopyDestination map(Function function) {
+  public CopyDestinationMapper map(Function function) {
     return new TruggerElementCopier(selector, function, predicate, copyNull,
         src);
   }
