@@ -18,8 +18,6 @@
  */
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.PredicateSelector;
-
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -28,8 +26,15 @@ import java.util.function.Predicate;
  *
  * @author Marcelo "Ataxexe" Guimarães
  */
-public interface ElementsSelector extends PredicateSelector<Element> {
+public interface ElementsSelector {
 
+  /**
+   * Selects the elements that matches with the given predicate.
+   *
+   * @param predicate
+   *          the predicate to match.
+   * @return a new selector with the given filter
+   */
   ElementsSelector filter(Predicate<? super Element> predicate);
 
   /**

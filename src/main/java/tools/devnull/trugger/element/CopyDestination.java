@@ -19,8 +19,6 @@
 
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.PredicateSelector;
-
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -30,7 +28,7 @@ import java.util.function.Predicate;
  * @author Marcelo "Ataxexe" Guimarães
  * @since 4.1
  */
-public interface CopyDestination extends PredicateSelector<ElementCopy> {
+public interface CopyDestination {
 
   /**
    * Executes the given function to transform the elements before the copy.

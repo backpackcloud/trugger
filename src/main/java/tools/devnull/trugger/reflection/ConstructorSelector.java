@@ -19,7 +19,6 @@
 package tools.devnull.trugger.reflection;
 
 import tools.devnull.trugger.SelectionResult;
-import tools.devnull.trugger.PredicateSelector;
 
 import java.lang.reflect.Constructor;
 import java.util.function.Predicate;
@@ -29,8 +28,15 @@ import java.util.function.Predicate;
  *
  * @author Marcelo "Ataxexe" Guimarães
  */
-public interface ConstructorSelector extends PredicateSelector<Constructor<?>> {
+public interface ConstructorSelector {
 
+  /**
+   * Selects the elements that matches with the given predicate.
+   *
+   * @param predicate
+   *          the predicate to match.
+   * @return a new selector with the given filter
+   */
   ConstructorSelector filter(Predicate<? super Constructor<?>> predicate);
 
   /**
