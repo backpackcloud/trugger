@@ -45,12 +45,12 @@ public interface CopyDestinationMapper {
    *          the predicate to match.
    * @return
    */
-  CopyDestinationMapper filter(Predicate<? super ElementCopy> predicate);
+  CopyDestinationMapper filter(Predicate<ElementCopy> predicate);
 
   /**
    * Copies only the elements that are not <code>null</code>.
    *
-   * @return a new object that don't copy null values
+   * @return a new mapper that doesn't copy null values
    */
   CopyDestinationMapper notNull();
 

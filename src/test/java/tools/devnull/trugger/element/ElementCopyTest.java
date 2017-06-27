@@ -154,8 +154,8 @@ public class ElementCopyTest {
     Consumer<OtherTestObject> elementsAreCopiedFromTestObject =
         obj -> copy().from(testObject).to(obj);
 
-    Function<OtherTestObject, Object> weight = obj -> obj.getWeight();
-    Function<OtherTestObject, Object> nickName = obj -> obj.getNickName();
+    Function<OtherTestObject, Object> weight = OtherTestObject::getWeight;
+    Function<OtherTestObject, Object> nickName = OtherTestObject::getNickName;
 
     Spec.given(new OtherTestObject())
         .when(nickNameIsChanged

@@ -35,15 +35,12 @@ public final class TruggerElementCopier implements ElementCopier, CopyDestinatio
 
   private final ElementsSelector selector;
   private final Function<ElementCopy, Object> function;
-  private final Predicate<? super ElementCopy> predicate;
-  private final boolean copyNull;
-
+  private final Predicate<ElementCopy> predicate;
   private final Object src;
 
   public TruggerElementCopier() {
     this.selector = Elements.elements();
     this.function = ElementCopy::value;
-    this.copyNull = true;
     this.predicate = copy -> true;
     this.src = null;
   }
@@ -51,42 +48,36 @@ public final class TruggerElementCopier implements ElementCopier, CopyDestinatio
   public TruggerElementCopier(ElementsSelector selector) {
     this.selector = selector;
     this.function = ElementCopy::value;
-    this.copyNull = true;
     this.predicate = copy -> true;
     this.src = null;
   }
 
   private TruggerElementCopier(ElementsSelector selector,
                                Function<ElementCopy, Object> function,
-                               Predicate<? super ElementCopy> predicate,
-                               boolean copyNull,
+                               Predicate<ElementCopy> predicate,
                                Object src) {
     this.selector = selector;
     this.function = function;
     this.predicate = predicate;
-    this.copyNull = copyNull;
     this.src = src;
   }
 
   public CopyDestinationMapper notNull() {
-    return new TruggerElementCopier(selector, function, predicate, false, src);
+    return new TruggerElementCopier(selector, function, predicate.and(o -> o.src().getValue() != null), src);
   }
 
   public CopyDestinationMapper from(Object src) {
-    return
-        new TruggerElementCopier(selector, function, predicate, copyNull, src);
+    return new TruggerElementCopier(selector, function, predicate, src);
   }
 
   @Override
-  public CopyDestinationMapper filter(Predicate<? super ElementCopy> predicate) {
-    return
-        new TruggerElementCopier(selector, function, predicate, copyNull, src);
+  public CopyDestinationMapper filter(Predicate<ElementCopy> predicate) {
+    return new TruggerElementCopier(this.selector, this.function, this.predicate.and(predicate), this.src);
   }
 
   @Override
   public CopyDestinationMapper map(Function function) {
-    return new TruggerElementCopier(selector, function, predicate, copyNull,
-        src);
+    return new TruggerElementCopier(selector, function, predicate, src);
   }
 
   public void to(Object object) {
@@ -103,8 +94,7 @@ public final class TruggerElementCopier implements ElementCopier, CopyDestinatio
       } else {
         destProperty = Elements.element(name).from(dest).result();
       }
-      if (destProperty != null && element.isReadable()
-          && destProperty.isWritable()) {
+      if (destProperty != null && element.isReadable() && destProperty.isWritable()) {
         copy(destProperty, element, dest);
       }
     }
@@ -114,12 +104,8 @@ public final class TruggerElementCopier implements ElementCopier, CopyDestinatio
     Object value = srcElement.on(this.src).getValue();
     PropertyCopyImpl copy = new PropertyCopyImpl(srcElement, destElement, value);
     if (predicate.test(copy)) {
-      if (value != null) {
-        value = function.apply(copy);
-        if (value != null && Utils.areAssignable(destElement.type(), value.getClass())) {
-          destElement.on(dest).setValue(value);
-        }
-      } else if (copyNull) {
+      value = function.apply(copy);
+      if (value == null || Utils.areAssignable(destElement.type(), value.getClass())) {
         destElement.on(dest).setValue(value);
       }
     }
