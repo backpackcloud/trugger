@@ -26,9 +26,7 @@ import tools.devnull.trugger.util.OptionalFunction;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -77,38 +75,6 @@ public final class Reflection {
   }
 
   /**
-   * @return <code>true</code> if the specified member has the <code>public</code>
-   * modifier
-   */
-  public static boolean isPublic(Member member) {
-    return Modifier.isPublic(member.getModifiers());
-  }
-
-  /**
-   * @return <code>true</code> if the specified member has the <code>private</code>
-   * modifier
-   */
-  public static boolean isPrivate(Member member) {
-    return Modifier.isPrivate(member.getModifiers());
-  }
-
-  /**
-   * @return <code>true</code> if the specified member has the <code>final</code>
-   * modifier
-   */
-  public static boolean isFinal(Member member) {
-    return Modifier.isFinal(member.getModifiers());
-  }
-
-  /**
-   * @return <code>true</code> if the specified member has the <code>static</code>
-   * modifier
-   */
-  public static boolean isStatic(Member member) {
-    return Modifier.isStatic(member.getModifiers());
-  }
-
-  /**
    * Sets the accessible flag of the given objects to <code>true</code> using a {@link
    * PrivilegedAction}.
    *
@@ -136,7 +102,7 @@ public final class Reflection {
     } else if (name.startsWith("is")) {
       i = 2;
     }
-    return i > 0 ? Character.toLowerCase(name.charAt(i)) + name.substring(i + 1) : name;
+    return Character.toLowerCase(name.charAt(i)) + name.substring(i + 1);
   }
 
   /**

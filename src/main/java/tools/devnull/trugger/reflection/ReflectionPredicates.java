@@ -35,8 +35,7 @@ public interface ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element is
    * annotated with the specified Annotation.
    */
-  static <T extends AnnotatedElement> Predicate<T> annotatedWith(
-      final Class<? extends Annotation> annotationType) {
+  static <T extends AnnotatedElement> Predicate<T> annotatedWith(Class<? extends Annotation> annotationType) {
     return element -> element.isAnnotationPresent(annotationType);
   }
 
@@ -51,7 +50,7 @@ public interface ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element has a
    * name that with the given one.
    */
-  static <T extends Member> Predicate<T> named(final String name) {
+  static <T extends Member> Predicate<T> named(String name) {
     return element -> element.getName().equals(name);
   }
 
@@ -59,7 +58,7 @@ public interface ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element has the
    * specified modifiers.
    */
-  static <T extends Member> Predicate<T> declaring(int... modifiers) {
+  static <T extends Member> Predicate<T> declared(int... modifiers) {
     return element -> {
       int elModifiers = element.getModifiers();
       for (int mod : modifiers) {

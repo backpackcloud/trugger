@@ -55,7 +55,7 @@ public interface MethodPredicates {
       }
       String name = method.getName();
       Class<?> returnType = method.getReturnType();
-      if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
+      if ((method.getParameterTypes().length != 0) || Modifier.isStatic(method.getModifiers()) ||
           (returnType == null || returnType.equals(void.class) ||
               returnType.equals(Void.class))) {
         return false;

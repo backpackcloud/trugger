@@ -75,27 +75,25 @@ public interface ClassPredicates {
    * and is not an <i>annotation</i>.
    */
   static Predicate<Class> interfaceType() {
-    return declaring(Modifier.INTERFACE)
-        .and(assignableTo(Annotation.class).negate());
+    return declared(Modifier.INTERFACE).and(assignableTo(Annotation.class).negate());
   }
 
   /**
    * Predicate that returns <code>true</code> if a class is an <i>enum</i>.
    */
   static Predicate<Class> enumType() {
-    return element -> element.isEnum();
+    return Class::isEnum;
   }
 
   /**
    * Predicate that returns <code>true</code> if a class is an <i>annotation</i>.
    */
   static Predicate<Class> annotationType() {
-    return declaring(Modifier.INTERFACE).and(assignableTo(Annotation.class));
+    return declared(Modifier.INTERFACE).and(assignableTo(Annotation.class));
   }
 
   /**
-   * Predicate that returns <code>true</code> if a class is not an <i>interface</i> and is
-   * not an <i>enum</i>.
+   * Predicate that returns <code>true</code> if a class has the class keyword in its declaration.
    */
   static Predicate<Class> classType() {
     return interfaceType().or(enumType()).or(annotationType()).negate();
@@ -107,14 +105,14 @@ public interface ClassPredicates {
    * @since 4.1
    */
   static Predicate<Class> arrayType() {
-    return type -> type.isArray();
+    return Class::isArray;
   }
 
   /**
    * @return a predicate that returns <code>false</code> if the evaluated class has the
    * specified modifiers.
    */
-  static Predicate<Class> declaring(final int... modifiers) {
+  static Predicate<Class> declared(final int... modifiers) {
     return element -> {
       int elModifiers = element.getModifiers();
       for (int mod : modifiers) {
@@ -132,23 +130,6 @@ public interface ClassPredicates {
    */
   static Predicate<Class> assignableTo(Class clazz) {
     return element -> clazz.isAssignableFrom(element);
-  }
-
-  static Predicate<Class> fromPackage(Package p) {
-    return fromPackage(p.getName());
-  }
-
-  static Predicate<Class> fromPackage(String packageName) {
-    return c -> c.getPackage().getName().equals(packageName);
-  }
-
-  static Predicate<Class> fromBasePackage(Package basePackage) {
-    return fromBasePackage(basePackage.getName());
-  }
-
-  static Predicate<Class> fromBasePackage(String basePackageName) {
-    return c -> c.getPackage().getName()
-        .matches("^" + basePackageName.replace(".", "\\.") + "(\\..+)?$");
   }
 
 }

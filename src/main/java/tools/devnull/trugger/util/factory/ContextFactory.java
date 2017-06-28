@@ -29,7 +29,7 @@ import java.util.function.BiFunction;
 
 import static tools.devnull.trugger.reflection.Reflection.invoke;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
-import static tools.devnull.trugger.reflection.ReflectionPredicates.declaring;
+import static tools.devnull.trugger.reflection.ReflectionPredicates.declared;
 
 /**
  * A class that can create objects based on a {@link Context}.
@@ -99,7 +99,7 @@ public class ContextFactory {
    */
   public <E> Optional<E> create(Class<E> type) {
     List<Constructor<?>> constructors = reflect().constructors()
-        .filter(declaring(Modifier.PUBLIC))
+        .filter(declared(Modifier.PUBLIC))
         .from(type);
     Optional created;
     for (Constructor<?> constructor : constructors) {
