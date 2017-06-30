@@ -43,7 +43,7 @@ public interface CopyDestinationMapper {
    *
    * @param predicate
    *          the predicate to match.
-   * @return
+   * @return a new mapper that uses the given predicate
    */
   CopyDestinationMapper filter(Predicate<ElementCopy> predicate);
 

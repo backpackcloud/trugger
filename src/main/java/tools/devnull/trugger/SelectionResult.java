@@ -20,7 +20,7 @@
 package tools.devnull.trugger;
 
 /**
- * A class that represents the result of a query.
+ * A class that represents the result of a selection.
  *
  * @since 6.0
  */
@@ -29,6 +29,12 @@ public class SelectionResult<E> implements Optional<Selection<E>> {
   private final Object target;
   private final E value;
 
+  /**
+   * Creates a new selection result with the given parameters.
+   *
+   * @param target the target in which the selection was done
+   * @param value  the result of the selection
+   */
   public SelectionResult(Object target, E value) {
     this.target = target;
     this.value = value;

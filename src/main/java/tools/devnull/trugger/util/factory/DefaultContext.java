@@ -20,7 +20,6 @@
 package tools.devnull.trugger.util.factory;
 
 import tools.devnull.trugger.Optional;
-import tools.devnull.trugger.PredicateMapper;
 
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -38,10 +37,10 @@ public class DefaultContext implements Context {
   }
 
   @Override
-  public PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function) {
-    return new PredicateMapper<Parameter, Context>() {
+  public Mapper use(Function<Parameter, Object> function) {
+    return new Mapper() {
       @Override
-      public Context when(Predicate<Parameter> condition) {
+      public Context when(Predicate<? super Parameter> condition) {
         entries.add(new Entry(function, condition));
         return DefaultContext.this;
       }
@@ -67,10 +66,10 @@ public class DefaultContext implements Context {
   private static class Entry {
 
     private final Function<Parameter, Object> function;
-    private final Predicate<Parameter> predicate;
+    private final Predicate<? super Parameter> predicate;
 
     private Entry(Function<Parameter, Object> supplier,
-                  Predicate<Parameter> predicate) {
+                  Predicate<? super Parameter> predicate) {
       this.function = supplier;
       this.predicate = predicate;
     }

@@ -28,14 +28,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * A class to cache elements.
+ *
  * @author Marcelo "Ataxexe" Guimarães
  * @since 4.0
  */
-public abstract class ClassElementsCache {
+abstract class ClassElementsCache {
 
   private SoftReference<Map<Class, Map<String, Element>>> ref;
 
-  public ClassElementsCache() {
+  ClassElementsCache() {
     this.ref = new SoftReference<>(new ConcurrentHashMap<>(50));
   }
 

@@ -33,6 +33,11 @@ import java.util.Properties;
 public class PropertiesElementFinder implements ElementFinder {
 
   @Override
+  public boolean canFind(Class type) {
+    return Properties.class.isAssignableFrom(type);
+  }
+
+  @Override
   public List<Element> findAll(Object target) {
     if (target instanceof Class<?>) {
       return Collections.emptyList();

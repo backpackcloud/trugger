@@ -20,10 +20,10 @@
 package tools.devnull.trugger.util.factory;
 
 import tools.devnull.trugger.Optional;
-import tools.devnull.trugger.PredicateMapper;
 
 import java.lang.reflect.Parameter;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -40,7 +40,7 @@ public interface Context {
    * @param object the object to add
    * @return a component to select the condition
    */
-  default PredicateMapper<Parameter, Context> use(Object object) {
+  default Mapper use(Object object) {
     return use((parameter) -> object);
   }
 
@@ -51,7 +51,7 @@ public interface Context {
    * @param supplier the supplier to create the object
    * @return a component to select the condition
    */
-  default PredicateMapper<Parameter, Context> use(Supplier supplier) {
+  default Mapper use(Supplier supplier) {
     return use(parameter -> supplier.get());
   }
 
@@ -62,7 +62,7 @@ public interface Context {
    * @param function the function to use
    * @return a component to select the condition
    */
-  PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function);
+  Mapper use(Function<Parameter, Object> function);
 
   /**
    * Tries to resolve the given parameter to a object using the predicates
@@ -72,5 +72,27 @@ public interface Context {
    * @return the resolved value.
    */
   Optional<Object> resolve(Parameter parameter);
+
+  /**
+   * Interface for mapping the context value to a predicate.
+   */
+  interface Mapper {
+
+    /**
+     * Use the given condition to map the value.
+     *
+     * @param condition the condition to use
+     * @return a reference to the object for doing other mappings.
+     */
+    Context when(Predicate<? super Parameter> condition);
+
+    /**
+     * Uses the mapped value as the default.
+     *
+     * @return a reference to the object for doing other mappings.
+     */
+    Context byDefault();
+
+  }
 
 }

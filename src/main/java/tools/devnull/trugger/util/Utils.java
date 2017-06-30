@@ -39,8 +39,7 @@ public interface Utils {
    * <p>
    * If none of the above, its {@link Object#getClass() class} will be returned.
    *
-   * @param target
-   *          the target to resolve the type
+   * @param target the target to resolve the type
    * @return the type of the given target.
    */
   static Class<?> resolveType(Object target) {
@@ -58,10 +57,9 @@ public interface Utils {
    * This method should be used if the type could not be a primitive (in cases
    * of autoboxing for example). Otherwise, use the {@link #resolveType(Object)}.
    *
-   * @param object
-   *          the object to analyse.
+   * @param object the object to analyse.
    * @return the wrapper class if the object class is a primitive or the class
-   *         itself otherwise.
+   * itself otherwise.
    */
   static Class<?> objectClass(Object object) {
     Class<?> c = resolveType(object);
@@ -76,7 +74,7 @@ public interface Utils {
    * a primitive class.
    *
    * @return <code>true</code> if both classes are compatible (even if an
-   *         autoboxing is necessary).
+   * autoboxing is necessary).
    */
   static boolean areAssignable(Class to, Class from) {
     if (to.isPrimitive() || from.isPrimitive()) {

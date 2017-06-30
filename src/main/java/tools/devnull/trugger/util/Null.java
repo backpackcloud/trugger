@@ -36,7 +36,9 @@ import java.lang.reflect.AnnotatedElement;
  */
 public interface Null {
 
-  /** An <code>AnnotatedElement</code> that has no annotation. */
+  /**
+   * An {@code AnnotatedElement} that doesn't have annotations.
+   */
   AnnotatedElement NULL_ANNOTATED_ELEMENT = new AnnotatedElement() {
 
     public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
@@ -57,6 +59,9 @@ public interface Null {
 
   };
 
+  /**
+   * An {@code Invoker} that doesn't do anything.
+   */
   Invoker NULL_INVOKER = new Invoker() {
     @Override
     public <E> E withArgs(Object... args) {
@@ -70,6 +75,9 @@ public interface Null {
 
   };
 
+  /**
+   * A {@code MethodInvoker} that doesn't do anything.
+   */
   MethodInvoker NULL_METHOD_INVOKER = new MethodInvoker() {
 
     @Override
@@ -89,6 +97,9 @@ public interface Null {
 
   };
 
+  /**
+   * A {@code ValueHandler} that doesn't do anything.
+   */
   ValueHandler NULL_VALUE_HANDLER = new ValueHandler() {
     @Override
     public <E> E getValue() throws HandlingException {
@@ -101,6 +112,9 @@ public interface Null {
     }
   };
 
+  /**
+   * A {@code FieldHandler} that doesn't do anything.
+   */
   FieldHandler NULL_FIELD_HANDLER = new FieldHandler() {
 
     @Override
@@ -119,6 +133,9 @@ public interface Null {
 
   };
 
+  /**
+   * A {@code ConstructorInvoker} that doesn't do anything.
+   */
   ConstructorInvoker NULL_CONSTRUCTOR_INVOKER = new ConstructorInvoker() {
     @Override
     public <E> E withArgs(Object... args) {

@@ -40,6 +40,11 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
  */
 public final class AnnotationElementFinder implements ElementFinder {
 
+  @Override
+  public boolean canFind(Class type) {
+    return type.isAnnotation();
+  }
+
   private ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {

@@ -36,6 +36,11 @@ import java.util.List;
 public class ResultSetElementFinder implements ElementFinder {
 
   @Override
+  public boolean canFind(Class type) {
+    return ResultSet.class.isAssignableFrom(type);
+  }
+
+  @Override
   public List<Element> findAll(Object target) {
     if (target instanceof Class<?>) {
       return Collections.emptyList();

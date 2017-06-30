@@ -76,6 +76,11 @@ public final class ObjectElementFinder implements ElementFinder {
     }
   };
 
+  @Override
+  public boolean canFind(Class type) {
+    return true;
+  }
+
   public final Optional<Element> find(String propertyName, Object target) {
     for (Class type : hierarchyOf(target)) {
       Element element = cache.get(type, propertyName);

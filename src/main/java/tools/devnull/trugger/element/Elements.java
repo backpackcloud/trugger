@@ -24,7 +24,6 @@ import tools.devnull.trugger.util.ImplementationLoader;
 import tools.devnull.trugger.util.OptionalFunction;
 
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 /**
  * A class for helping {@link Element} selection.
@@ -46,10 +45,10 @@ public class Elements {
   /**
    * Registers the given finder
    *
-   * @see ElementFactory#register(ElementFinder, Predicate)
+   * @see ElementFactory#register(ElementFinder)
    */
-  public static void register(ElementFinder finder, Predicate<Class> predicate) {
-    factory.register(finder, predicate);
+  public static void register(ElementFinder finder) {
+    factory.register(finder);
   }
 
   public static ElementSelection select() {

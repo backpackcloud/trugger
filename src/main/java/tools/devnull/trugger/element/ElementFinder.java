@@ -31,7 +31,15 @@ import java.util.List;
 public interface ElementFinder {
 
   /**
-   * Finds the element with the specified name in a target.
+   * Checks if this finder can search for elements of the given type.
+   *
+   * @param type the type to test
+   * @return {@code true} if this finder can be used against the given type
+   */
+  boolean canFind(Class type);
+
+  /**
+   * Finds the element with the specified name on the given target.
    *
    * @param name   the object name to find.
    * @param target the target to search
@@ -40,7 +48,7 @@ public interface ElementFinder {
   Optional<Element> find(String name, Object target);
 
   /**
-   * Finds all objects in a target.
+   * Finds all objects on the given target.
    *
    * @param target the target to search
    * @return the found objects

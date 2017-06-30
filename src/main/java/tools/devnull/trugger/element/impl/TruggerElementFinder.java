@@ -19,13 +19,12 @@
 package tools.devnull.trugger.element.impl;
 
 import tools.devnull.trugger.Optional;
-import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.util.Utils;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
+import java.util.Set;
 
 /**
  * A default implementation for an Element finder.
@@ -34,23 +33,18 @@ import java.util.function.Predicate;
  */
 public final class TruggerElementFinder implements ElementFinder {
 
-  private final Map<Predicate<Class>, ElementFinder> registry;
+  private final Set<ElementFinder> registry;
   private final ElementFinder defaultFinder;
 
-  public TruggerElementFinder(ElementFinder defaultFinder,
-                              Map<Predicate<Class>, ElementFinder> registry) {
+  TruggerElementFinder(ElementFinder defaultFinder,
+                              Set<ElementFinder> registry) {
     this.registry = registry;
     this.defaultFinder = defaultFinder;
   }
 
-  private ElementFinder getFinder(Object target) {
-    Class type = Utils.resolveType(target);
-    for (Map.Entry<Predicate<Class>, ElementFinder> entry : registry.entrySet()) {
-      if (entry.getKey().test(type)) {
-        return entry.getValue();
-      }
-    }
-    return defaultFinder;
+  @Override
+  public boolean canFind(Class type) {
+    return true;
   }
 
   @Override
@@ -58,14 +52,22 @@ public final class TruggerElementFinder implements ElementFinder {
     if (name.indexOf('.') > -1) {
       return Optional.of(NestedElement.createNestedElement(target, name));
     }
-    ElementFinder finder = getFinder(target);
-    return finder.find(name, target);
+    Class type = Utils.resolveType(target);
+    return registry.stream()
+        .filter(finder -> finder.canFind(type))
+        .findFirst()
+        .orElse(defaultFinder)
+        .find(name, target);
   }
 
   @Override
   public List<Element> findAll(Object target) {
-    ElementFinder finder = getFinder(target);
-    return finder.findAll(target);
+    Class type = Utils.resolveType(target);
+    return registry.stream()
+        .filter(finder -> finder.canFind(type))
+        .findFirst()
+        .orElse(defaultFinder)
+        .findAll(target);
   }
 
 }

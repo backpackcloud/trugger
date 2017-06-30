@@ -97,10 +97,10 @@ public class PredicateMappingFunctionTest {
   }
 
   private PredicateMappingFunction initialize(PredicateMappingFunction instance) {
-    return instance.use(functionA).when(predicateA)
-        .use(functionB).when(predicateB)
-        .use(functionC).when(predicateC)
-        .use(functionD).when(predicateD);
+    return instance.when(predicateA).then(functionA)
+        .when(predicateB).then(functionB)
+        .when(predicateC).then(functionC)
+        .when(predicateD).then(functionD);
   }
 
 }

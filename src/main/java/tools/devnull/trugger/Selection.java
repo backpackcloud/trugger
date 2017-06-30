@@ -27,7 +27,18 @@ package tools.devnull.trugger;
  */
 public interface Selection<T> {
 
+  /**
+   * Returns the result of the selection.
+   *
+   * @return the result of the selection.
+   */
   T result();
+
+  /**
+   * Returns the target in which the selection was done.
+   *
+   * @return the target in which the selection was done.
+   */
   Object target();
 
 }

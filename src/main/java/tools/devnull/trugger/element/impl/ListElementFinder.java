@@ -32,6 +32,11 @@ import java.util.List;
 public class ListElementFinder implements ElementFinder {
 
   @Override
+  public boolean canFind(Class type) {
+    return List.class.isAssignableFrom(type);
+  }
+
+  @Override
   public Optional<Element> find(String name, Object target) {
     List list = (List) target;
     Element result;
