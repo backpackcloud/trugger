@@ -17,10 +17,23 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
-public interface Converter<From, To> {
+public class ToStringConverter implements Converter<Object, String> {
 
-  To convert(From object);
+  private final String ifNull;
+
+  public ToStringConverter(String ifNull) {
+    this.ifNull = ifNull;
+  }
+
+  public ToStringConverter(ToString annotation) {
+    this(annotation.ifNull());
+  }
+
+  @Override
+  public String convert(Object object) {
+    return object == null ? ifNull : object.toString();
+  }
 
 }

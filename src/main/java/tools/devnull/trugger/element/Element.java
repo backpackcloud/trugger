@@ -90,14 +90,29 @@ public interface Element extends AnnotatedElement, ValueHandler {
 
   /**
    * Returns the value if this element is {@link #isSpecific() specific}.
+   *
+   * @throws NonSpecificElementException if the element is not specific
    */
   @Override
-  <E> E getValue() throws HandlingException;
+  default <E> E getValue() throws HandlingException {
+    if (isSpecific()) {
+      return on(target()).getValue();
+    }
+    throw new NonSpecificElementException();
+  }
 
   /**
    * Sets the value if this element is {@link #isSpecific() specific}.
+   *
+   * @throws NonSpecificElementException if the element is not specific
    */
   @Override
-  void setValue(Object value) throws HandlingException;
+  default void setValue(Object value) throws HandlingException {
+    if (isSpecific()) {
+      on(target()).setValue(value);
+    } else {
+      throw new NonSpecificElementException();
+    }
+  }
 
 }

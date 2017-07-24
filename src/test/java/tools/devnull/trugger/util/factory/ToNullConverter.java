@@ -17,15 +17,11 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Retention(RetentionPolicy.RUNTIME)
-@ConverterClass(DummyConverter.class)
-public @interface Dummy {
-
-  String value();
-
+public class ToNullConverter implements Converter {
+  @Override
+  public Object convert(Object object) {
+    return null;
+  }
 }

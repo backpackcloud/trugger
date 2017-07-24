@@ -17,21 +17,13 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger;
+package tools.devnull.trugger.util.factory;
 
-/**
- * Interface that maps two things inside a fluent interface.
- *
- * @since 5.0
- */
-public interface ObjectMapper<T, R> {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-  /**
-   * Maps to the given object.
-   *
-   * @param value the value to map
-   * @return a reference to the object for doing other mappings.
-   */
-  R to(T value);
+@Retention(RetentionPolicy.RUNTIME)
+@ConverterClass(ToNullConverter.class)
+public @interface ToNull {
 
 }

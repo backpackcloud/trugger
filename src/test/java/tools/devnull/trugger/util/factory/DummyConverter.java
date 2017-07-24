@@ -19,28 +19,17 @@
 
 package tools.devnull.trugger.util.factory;
 
-import tools.devnull.trugger.TruggerException;
+public class DummyConverter implements Converter {
 
-/**
- * Exception thrown to indicate that the context cannot resolve a value.
- *
- * @author Marcelo "Ataxexe" Guimarães
- * @since 5.1
- */
-public class UnresolvableValueException extends TruggerException {
+  private final String returnValue;
 
-  public UnresolvableValueException() {
+  public DummyConverter(String returnValue) {
+    this.returnValue = returnValue;
   }
 
-  public UnresolvableValueException(String message) {
-    super(message);
+  @Override
+  public Object convert(Object object) {
+    return returnValue;
   }
 
-  public UnresolvableValueException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public UnresolvableValueException(Throwable cause) {
-    super(cause);
-  }
 }

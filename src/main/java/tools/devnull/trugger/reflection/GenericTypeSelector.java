@@ -17,11 +17,22 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.reflection;
 
-public class ToNullConverter implements Converter {
-  @Override
-  public Object convert(Object object) {
-    return null;
-  }
+/**
+ * Interface for selecting the generic type.
+ *
+ * @author Marcelo "Ataxexe" Guimarães
+ * @since 6.0
+ */
+public interface GenericTypeSelector {
+
+  /**
+   * Sets the target for selecting the generic type
+   *
+   * @param target the target to use
+   * @return the generic type on the given target.
+   */
+  Class of(Object target);
+
 }

@@ -26,11 +26,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Marcelo "Ataxexe" Guimarães
  */
 public class MapElementFinder implements ElementFinder {
+
+  @Override
+  public boolean canFind(Class type) {
+    return Map.class.isAssignableFrom(type) && !Properties.class.isAssignableFrom(type);
+  }
 
   @Override
   public List<Element> findAll(Object target) {

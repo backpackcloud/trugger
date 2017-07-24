@@ -33,15 +33,12 @@ import java.util.regex.Pattern;
  * @author Marcelo "Ataxexe" Guimarães
  * @since 4.1
  */
-public class MethodPredicates {
+public interface MethodPredicates {
 
-  private MethodPredicates() {
-  }
-
-  private static final Pattern TO_PATTERN = Pattern.compile("to[A-Z].*");
-  private static final Pattern GET_PATTERN = Pattern.compile("get[A-Z].*");
-  private static final Pattern SET_PATTERN = Pattern.compile("set[A-Z].*");
-  private static final Pattern IS_PATTERN = Pattern.compile("is[A-Z].*");
+  Pattern TO_PATTERN = Pattern.compile("to[A-Z].*");
+  Pattern GET_PATTERN = Pattern.compile("get[A-Z].*");
+  Pattern SET_PATTERN = Pattern.compile("set[A-Z].*");
+  Pattern IS_PATTERN = Pattern.compile("is[A-Z].*");
 
   /**
    * A predicate that returns <code>true</code> if the evaluated method is a getter
@@ -51,14 +48,14 @@ public class MethodPredicates {
    * return an object. If the method has the prefix "is", then it must return a boolean
    * value.
    */
-  public static final Predicate<Method> getter() {
+  static Predicate<Method> getter() {
     return method -> {
       if (!Modifier.isPublic(method.getModifiers())) {
         return false;
       }
       String name = method.getName();
       Class<?> returnType = method.getReturnType();
-      if ((method.getParameterTypes().length != 0) || Reflection.isStatic(method) ||
+      if ((method.getParameterTypes().length != 0) || Modifier.isStatic(method.getModifiers()) ||
           (returnType == null || returnType.equals(void.class) ||
               returnType.equals(Void.class))) {
         return false;
@@ -84,7 +81,7 @@ public class MethodPredicates {
    * The method must have the "set" prefix, take one parameter and return no
    * value (a void method).
    */
-  public static final Predicate<Method> setter() {
+  static Predicate<Method> setter() {
     return method -> {
       if (!Modifier.isPublic(method.getModifiers())) {
         return false;
@@ -103,7 +100,7 @@ public class MethodPredicates {
    * @return a predicate that returns <code>true</code> if a method is a getter
    * method for the specified property name.
    */
-  public static Predicate<Method> getterOf(String propertyName) {
+  static Predicate<Method> getterOf(String propertyName) {
     return getter().and(
         method -> Reflection.parsePropertyName(method).equals(propertyName));
   }
@@ -112,16 +109,16 @@ public class MethodPredicates {
    * @return a predicate that returns <code>true</code> if a method is a setter
    * method for the specified property name.
    */
-  public static Predicate<Method> setterOf(String propertyName) {
+  static Predicate<Method> setterOf(String propertyName) {
     return setter().and(
         method -> Reflection.parsePropertyName(method).equals(propertyName));
   }
 
-  public static Predicate<Method> getterOf(Field field) {
+  static Predicate<Method> getterOf(Field field) {
     return getterOf(field.getName()).and(returns(field.getType()));
   }
 
-  public static Predicate<Method> setterOf(Field field) {
+  static Predicate<Method> setterOf(Field field) {
     return setterOf(field.getName()).and(withParameters(field.getType()));
   }
 
@@ -133,7 +130,7 @@ public class MethodPredicates {
    * @return a predicate to evaluate the parameter types.
    * @since 5.0
    */
-  public static Predicate<Method> withParameters(Class... parameterTypes) {
+  static Predicate<Method> withParameters(Class... parameterTypes) {
     return method -> Arrays.equals(method.getParameterTypes(), parameterTypes);
   }
 
@@ -144,7 +141,7 @@ public class MethodPredicates {
    * @return a predicate to evaluate the method.
    * @since 5.0
    */
-  public static Predicate<Method> withoutParameters() {
+  static Predicate<Method> withoutParameters() {
     return method -> method.getParameterTypes().length == 0;
   }
 
@@ -152,7 +149,7 @@ public class MethodPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated method
    * has the specified type as the return type.
    */
-  public static Predicate<Method> returns(Class returnType) {
+  static Predicate<Method> returns(Class returnType) {
     return method -> method.getReturnType().equals(returnType);
   }
 
@@ -160,7 +157,7 @@ public class MethodPredicates {
    * @return a predicate that returns <code>true</code> if the method has
    * annotations.
    */
-  public static final Predicate<Method> annotated() {
+  static Predicate<Method> annotated() {
     return method -> method.getDeclaredAnnotations().length > 0;
   }
 
@@ -168,7 +165,7 @@ public class MethodPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element
    * is annotated with the specified Annotation.
    */
-  public static Predicate<Method> annotatedWith(
+  static Predicate<Method> annotatedWith(
       final Class<? extends Annotation> annotationType) {
     return method -> method.isAnnotationPresent(annotationType);
   }

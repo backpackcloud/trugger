@@ -18,9 +18,7 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.HandlingException;
 import tools.devnull.trugger.element.Element;
-import tools.devnull.trugger.element.NonSpecificElementException;
 import tools.devnull.trugger.util.Null;
 
 import java.lang.annotation.Annotation;
@@ -88,23 +86,6 @@ public abstract class AbstractElement implements Element {
   @Override
   public <E> E target() {
     return null;
-  }
-
-  @Override
-  public void setValue(Object value) throws HandlingException {
-    if (isSpecific()) {
-      on(target()).setValue(value);
-    } else {
-      throw new NonSpecificElementException();
-    }
-  }
-
-  @Override
-  public <E> E getValue() throws HandlingException {
-    if (isSpecific()) {
-      return on(target()).getValue();
-    }
-    throw new NonSpecificElementException();
   }
 
   @Override

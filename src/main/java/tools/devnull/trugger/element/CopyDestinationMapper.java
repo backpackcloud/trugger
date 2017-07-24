@@ -19,8 +19,6 @@
 
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.PredicateSelector;
-
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -30,7 +28,7 @@ import java.util.function.Predicate;
  * @author Marcelo "Ataxexe" Guimarães
  * @since 4.1
  */
-public interface CopyDestination extends PredicateSelector<ElementCopy> {
+public interface CopyDestinationMapper {
 
   /**
    * Executes the given function to transform the elements before the copy.
@@ -38,23 +36,23 @@ public interface CopyDestination extends PredicateSelector<ElementCopy> {
    * @param function the function to use.
    * @return a new object that uses the given function
    */
-  CopyDestination applying(Function<ElementCopy, ?> function);
+  CopyDestinationMapper map(Function<ElementCopy, ?> function);
 
   /**
    * Filter the elements to copy by testing with the given predicate.
    *
    * @param predicate
    *          the predicate to match.
-   * @return
+   * @return a new mapper that uses the given predicate
    */
-  CopyDestination filter(Predicate<? super ElementCopy> predicate);
+  CopyDestinationMapper filter(Predicate<ElementCopy> predicate);
 
   /**
    * Copies only the elements that are not <code>null</code>.
    *
-   * @return a new object that don't copy null values
+   * @return a new mapper that doesn't copy null values
    */
-  CopyDestination notNull();
+  CopyDestinationMapper notNull();
 
   /**
    * Copy the elements to the given object.

@@ -21,7 +21,6 @@ package tools.devnull.trugger.element;
 
 import org.junit.Test;
 import tools.devnull.trugger.Optional;
-import tools.devnull.trugger.reflection.ClassPredicates;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +35,11 @@ import static tools.devnull.trugger.element.Elements.elements;
 public class ElementFinderTest {
 
   public static class MyFinder implements ElementFinder {
+
+    @Override
+    public boolean canFind(Class type) {
+      return TestFinder.class.equals(type);
+    }
 
     @Override
     public Optional<Element> find(String name, Object target) {
@@ -58,8 +62,7 @@ public class ElementFinderTest {
     assertNotNull(element("field").from(TestFinder.class).result());
     assertFalse(elements().from(TestFinder.class).isEmpty());
 
-    Elements.registry().register(new MyFinder())
-        .to(ClassPredicates.type(TestFinder.class));
+    Elements.register(new MyFinder());
 
     assertNull(element("field").from(TestFinder.class).result());
     assertTrue(elements().from(TestFinder.class).isEmpty());

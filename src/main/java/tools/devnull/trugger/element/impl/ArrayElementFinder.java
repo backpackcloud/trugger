@@ -33,6 +33,11 @@ import java.util.List;
 public class ArrayElementFinder implements ElementFinder {
 
   @Override
+  public boolean canFind(Class type) {
+    return type.isArray();
+  }
+
+  @Override
   public Optional<Element> find(String name, Object array) {
     Element result;
     if ("first".equals(name)) {

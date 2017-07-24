@@ -22,7 +22,7 @@ package tools.devnull.trugger.util;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -97,10 +97,10 @@ public class PredicateMappingFunctionTest {
   }
 
   private PredicateMappingFunction initialize(PredicateMappingFunction instance) {
-    return instance.use(functionA).when(predicateA)
-        .use(functionB).when(predicateB)
-        .use(functionC).when(predicateC)
-        .use(functionD).when(predicateD);
+    return instance.when(predicateA).then(functionA)
+        .when(predicateB).then(functionB)
+        .when(predicateC).then(functionC)
+        .when(predicateD).then(functionD);
   }
 
 }

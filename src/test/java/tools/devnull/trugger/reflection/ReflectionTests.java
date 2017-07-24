@@ -20,12 +20,14 @@ package tools.devnull.trugger.reflection;
 
 import org.junit.Test;
 import tools.devnull.trugger.reflection.impl.TruggerFieldsSelector;
+import tools.devnull.trugger.util.ClassIterator;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -71,12 +73,12 @@ public class ReflectionTests {
   public void testGenericTypeResolver() throws Exception {
     final Map<String, Integer> map = new HashMap<String, Integer>() {
     };
-    assertEquals(String.class, reflect().genericType("K", map));
-    assertEquals(Integer.class, reflect().genericType("V", map));
+    assertEquals(String.class, reflect().genericType("K").of(map));
+    assertEquals(Integer.class, reflect().genericType("V").of(map));
 
     GenericClass<String> genericClass = new GenericClass<String>() {
     };
-    assertEquals(String.class, reflect().genericType("E", genericClass));
+    assertEquals(String.class, reflect().genericType("E").of(genericClass));
     assertEquals(String.class, reflect().genericTypeOf(genericClass));
 
     assertThrow(ReflectionException.class, () -> {
@@ -136,9 +138,8 @@ public class ReflectionTests {
 
   @Test
   public void testInterfacesReflection() {
-    List<Class> interfaces =
-        reflect().interfacesOf(TruggerFieldsSelector.class);
-    assertEquals(3, interfaces.size());
+    List<Class> interfaces = reflect().interfacesOf(TruggerFieldsSelector.class);
+    assertEquals(1, interfaces.size());
   }
 
   @Test
@@ -169,6 +170,18 @@ public class ReflectionTests {
     assertEquals(Object.class, iterator.next());
 
     assertFalse(iterator.hasNext());
+  }
+
+  @Test(expected = NoSuchElementException.class)
+  public void testClassIteratorNext() {
+    ClassIterator iterator = new ClassIterator(Object.class);
+    iterator.next();
+    iterator.next();
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void testClassIteratorRemove() {
+    new ClassIterator(Object.class).remove();
   }
 
 }

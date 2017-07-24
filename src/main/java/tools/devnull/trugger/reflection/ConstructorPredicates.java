@@ -29,10 +29,7 @@ import java.util.function.Predicate;
  * @author Marcelo "Ataxexe" Guimarães
  * @since 4.1
  */
-public class ConstructorPredicates {
-
-  private ConstructorPredicates() {
-  }
+public interface ConstructorPredicates {
 
   /**
    * @return a predicate that returns <code>true</code> if the method has
@@ -40,7 +37,7 @@ public class ConstructorPredicates {
    *
    * @since 5.0
    */
-  public static final Predicate<Constructor> annotated() {
+  static Predicate<Constructor> annotated() {
     return c -> c.getDeclaredAnnotations().length > 0;
   }
 
@@ -50,7 +47,7 @@ public class ConstructorPredicates {
    *
    * @since 5.0
    */
-  public static Predicate<Constructor> annotatedWith(
+  static Predicate<Constructor> annotatedWith(
       Class<? extends Annotation> annotationType) {
     return c -> c.isAnnotationPresent(annotationType);
   }

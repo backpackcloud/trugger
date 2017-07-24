@@ -50,18 +50,18 @@ public class ReflectionPredicatesTest {
   public void memberPredicatesTest() throws Exception {
     Field field = getClass().getDeclaredField("privateField");
     assertTrue(annotated().test(field));
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC));
+    assertMatch(field, ReflectionPredicates.declared(Modifier.STATIC));
 
     field = getClass().getDeclaredField("defaultField");
     assertFalse(annotated().test(field));
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.FINAL).negate());
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC).negate());
+    assertMatch(field, ReflectionPredicates.declared(Modifier.FINAL).negate());
+    assertMatch(field, ReflectionPredicates.declared(Modifier.STATIC).negate());
 
     field = getClass().getDeclaredField("protectedField");
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC));
+    assertMatch(field, ReflectionPredicates.declared(Modifier.STATIC));
 
     field = getClass().getDeclaredField("publicField");
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.FINAL));
+    assertMatch(field, ReflectionPredicates.declared(Modifier.FINAL));
   }
 
   private final class PrivateClass {
@@ -78,22 +78,22 @@ public class ReflectionPredicatesTest {
 
   @Test
   public void classPredicatesTest() throws Exception {
-    assertMatch(PrivateClass.class, ClassPredicates.declaring(Modifier.FINAL));
-    assertMatch(PrivateClass.class, ClassPredicates.declaring(Modifier.STATIC)
+    assertMatch(PrivateClass.class, ClassPredicates.declared(Modifier.FINAL));
+    assertMatch(PrivateClass.class, ClassPredicates.declared(Modifier.STATIC)
         .negate());
 
-    assertMatch(DefaultClass.class, ClassPredicates.declaring(Modifier.FINAL)
+    assertMatch(DefaultClass.class, ClassPredicates.declared(Modifier.FINAL)
         .negate());
-    assertMatch(DefaultClass.class, ClassPredicates.declaring(Modifier.STATIC));
+    assertMatch(DefaultClass.class, ClassPredicates.declared(Modifier.STATIC));
 
-    assertMatch(ProtectedClass.class, ClassPredicates.declaring(Modifier.FINAL)
+    assertMatch(ProtectedClass.class, ClassPredicates.declared(Modifier.FINAL)
         .negate());
-    assertMatch(ProtectedClass.class, ClassPredicates.declaring(Modifier.STATIC)
+    assertMatch(ProtectedClass.class, ClassPredicates.declared(Modifier.STATIC)
         .negate());
 
-    assertMatch(PublicClass.class, ClassPredicates.declaring(Modifier.FINAL)
+    assertMatch(PublicClass.class, ClassPredicates.declared(Modifier.FINAL)
         .negate());
-    assertMatch(PublicClass.class, ClassPredicates.declaring(Modifier.STATIC)
+    assertMatch(PublicClass.class, ClassPredicates.declared(Modifier.STATIC)
         .negate());
   }
 

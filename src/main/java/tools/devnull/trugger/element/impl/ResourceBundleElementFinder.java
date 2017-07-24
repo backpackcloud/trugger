@@ -35,6 +35,11 @@ import java.util.ResourceBundle;
 public class ResourceBundleElementFinder implements ElementFinder {
 
   @Override
+  public boolean canFind(Class type) {
+    return ResourceBundle.class.isAssignableFrom(type);
+  }
+
+  @Override
   public List<Element> findAll(Object target) {
     if (target instanceof Class<?>) {
       return Collections.emptyList();

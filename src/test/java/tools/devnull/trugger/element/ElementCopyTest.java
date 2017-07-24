@@ -154,8 +154,8 @@ public class ElementCopyTest {
     Consumer<OtherTestObject> elementsAreCopiedFromTestObject =
         obj -> copy().from(testObject).to(obj);
 
-    Function<OtherTestObject, Object> weight = obj -> obj.getWeight();
-    Function<OtherTestObject, Object> nickName = obj -> obj.getNickName();
+    Function<OtherTestObject, Object> weight = OtherTestObject::getWeight;
+    Function<OtherTestObject, Object> nickName = OtherTestObject::getNickName;
 
     Spec.given(new OtherTestObject())
         .when(nickNameIsChanged
@@ -169,7 +169,7 @@ public class ElementCopyTest {
         .when(props -> copy()
             .from(testObject)
             .notNull()
-            .applying(new ToStringTransformer())
+            .map(new ToStringTransformer())
             .to(props))
         .expect(property("age"), to().be("23"))
         .expect(property("nickName"), to().beNull())

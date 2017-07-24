@@ -32,11 +32,9 @@ import java.util.ServiceLoader;
  * directory. The implementations that can be customized are:
  * <p>
  * <ul>
- * <li>org.atatec.trugger.element.ElementFactory</li>
- * <li>org.atatec.trugger.reflection.ReflectionFactory</li>
- * <li>org.atatec.trugger.scan.ClassScannerFactory</li>
- * <li>org.atatec.trugger.interception.InterceptorFactory</li>
- * <li>org.atatec.trugger.validation.ValidationFactory</li>
+ * <li>{@link tools.devnull.trugger.element.ElementFactory}</li>
+ * <li>{@link tools.devnull.trugger.reflection.ReflectionFactory}</li>
+ * <li>{@link tools.devnull.trugger.interception.InterceptorFactory}</li>
  * </ul>
  *
  * @author Marcelo "Ataxexe" Guimarães

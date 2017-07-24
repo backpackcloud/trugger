@@ -17,31 +17,8 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger;
+package tools.devnull.trugger.reflection;
 
-import java.util.function.Predicate;
-
-/**
- * Interface that maps something to a predicate inside a fluent interface.
- *
- * @since 5.0
- */
-public interface PredicateMapper<T, R> {
-
-  /**
-   * Use the given condition to map the value.
-   *
-   * @param condition the condition to use
-   * @return a reference to the object for doing other mappings.
-   */
-  R when(Predicate<T> condition);
-
-  /**
-   * Uses the mapped value as the default.
-   *
-   * @return a reference to the object for doing other mappings.
-   * @since 5.2
-   */
-  R byDefault();
+public class ClassPredicatesTest {
 
 }

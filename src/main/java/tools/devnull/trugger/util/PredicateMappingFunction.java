@@ -35,26 +35,43 @@ public interface PredicateMappingFunction<T, R> extends Function<T, R> {
   /**
    * Maps a function to a predicate.
    *
-   * @param function the function to map
-   * @return a component to define the predicate
+   * @param condition the condition to test the input
+   * @return a component to define the function
    */
-  Mapper<T, R> use(Function<? super T, ? extends R> function);
+  Mapper<T, R> when(Predicate<? super T> condition);
 
   /**
    * Interface that maps a function to a predicate.
    */
   interface Mapper<T, R> {
-    PredicateMappingFunction<T, R> when(Predicate<? super T> condition);
+
+    /**
+     * Maps the function to execute when the given predicate matches the input.
+     *
+     * @param function the function to map
+     * @return a new PredicateMappingFunction
+     */
+    PredicateMappingFunction<T, R> then(Function<? super T, ? extends R> function);
+
   }
 
+  /**
+   * Creates a new PredicateMappingFunction that executes the given one as default.
+   *
+   * @param function the default function to use
+   * @return a new PredicateMappingFunction that uses the given function as default
+   */
   static <T, R> PredicateMappingFunction<T, R> byDefault(Function<? super T, ? extends R> function) {
-    return new PredicateMappingFunctionImpl<>(null, t -> true, function);
+    return new PredicateMappingFunctionImpl<>(function);
   }
 
+  /**
+   * Creates a new PredicateMappingFunction without a default function.
+   *
+   * @return a new PredicateMappingFunction without a default function.
+   */
   static <T, R> PredicateMappingFunction<T, R> begin() {
-    return new PredicateMappingFunctionImpl<>(o -> {
-      throw new IllegalArgumentException();
-    }, t -> false, null);
+    return new PredicateMappingFunctionImpl<>();
   }
 
 }

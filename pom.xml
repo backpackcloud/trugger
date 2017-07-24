@@ -24,7 +24,7 @@
 
   <groupId>tools.devnull</groupId>
   <artifactId>trugger</artifactId>
-  <version>6.0.0-SNAPSHOT</version>
+  <version>6.0.0</version>
   <packaging>bundle</packaging>
   <name>trugger</name>
 
@@ -141,8 +141,7 @@
               tools.devnull.trugger.interception,
               tools.devnull.trugger.reflection,
               tools.devnull.trugger.util,
-              tools.devnull.trugger.util.factory,
-              tools.devnull.trugger.util.registry
+              tools.devnull.trugger.util.factory
             </Export-Package>
           </instructions>
         </configuration>

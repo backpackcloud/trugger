@@ -37,7 +37,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class OptionalTest {
+public class OptionalObjectTest {
 
   private Object value = new Object();
 
@@ -184,18 +184,31 @@ public class OptionalTest {
   }
 
   @Test
-  public void testMethodAndWithFunction() {
+  public void testMethodThen() {
     Function function = mock(Function.class);
     when(function.apply(value)).thenReturn("OK");
+    when(function.apply(null)).thenReturn("ERROR");
 
-    assertEquals("OK", Optional.of(value).and(function));
+    assertEquals("OK", Optional.of(value).then(function));
     verify(function).apply(value);
+
+    assertEquals("ERROR", Optional.empty().then(function));
+    verify(function).apply(null);
   }
 
   @Test
   public void testMethodOrElse() {
     assertEquals(value, Optional.of(value).orElse(new Object()));
     assertEquals(value, Optional.empty().orElse(value));
+  }
+
+  @Test
+  public void testWithSupplier() {
+    Supplier supplier = mock(Supplier.class);
+    when(supplier.get()).thenReturn(value);
+
+    assertEquals(value, Optional.of(supplier).value());
+    verify(supplier).get();
   }
 
 }

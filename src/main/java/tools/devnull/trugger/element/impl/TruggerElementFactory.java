@@ -23,20 +23,9 @@ import tools.devnull.trugger.element.ElementFactory;
 import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.ElementSelector;
 import tools.devnull.trugger.element.ElementsSelector;
-import tools.devnull.trugger.util.registry.MapRegistry;
-import tools.devnull.trugger.util.registry.Registry;
 
-import java.lang.annotation.Annotation;
-import java.sql.ResultSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.function.Predicate;
-
-import static tools.devnull.trugger.reflection.ClassPredicates.arrayType;
-import static tools.devnull.trugger.reflection.ClassPredicates.assignableTo;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A default implementation for ElementFactory.
@@ -46,29 +35,23 @@ import static tools.devnull.trugger.reflection.ClassPredicates.assignableTo;
 public final class TruggerElementFactory implements ElementFactory {
 
   private ElementFinder finder;
-  private final MapRegistry<Predicate<Class>, ElementFinder> registry;
+  private final Set<ElementFinder> registry;
 
   public TruggerElementFactory() {
-    registry = new MapRegistry<Predicate<Class>, ElementFinder>(new LinkedHashMap());
-    registry.register(new AnnotationElementFinder())
-        .to(assignableTo(Annotation.class));
-    registry.register(new PropertiesElementFinder())
-        .to(assignableTo(Properties.class));
-    registry.register(new ResourceBundleElementFinder())
-        .to(assignableTo(ResourceBundle.class));
-    registry.register(new ResultSetElementFinder())
-        .to(assignableTo(ResultSet.class));
-    registry.register(new MapElementFinder())
-        .to(assignableTo(Map.class).and(assignableTo(Properties.class).negate()));
-    registry.register(new ArrayElementFinder())
-        .to(arrayType());
-    registry.register(new ListElementFinder())
-        .to(assignableTo(List.class));
+    registry = new HashSet<>();
+    registry.add(new AnnotationElementFinder());
+    registry.add(new PropertiesElementFinder());
+    registry.add(new ResourceBundleElementFinder());
+    registry.add(new ResultSetElementFinder());
+    registry.add(new MapElementFinder());
+    registry.add(new ArrayElementFinder());
+    registry.add(new ListElementFinder());
     finder = new TruggerElementFinder(new ObjectElementFinder(), registry);
   }
 
-  public Registry<Predicate<Class>, ElementFinder> registry() {
-    return registry;
+  @Override
+  public void register(ElementFinder finder) {
+    this.registry.add(finder);
   }
 
   /**

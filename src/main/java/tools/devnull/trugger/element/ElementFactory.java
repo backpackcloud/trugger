@@ -18,10 +18,6 @@
  */
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.util.registry.Registry;
-
-import java.util.function.Predicate;
-
 /**
  * Interface that defines a factory for {@link Element} objects operations.
  *
@@ -31,19 +27,16 @@ import java.util.function.Predicate;
 public interface ElementFactory {
 
   /**
-   * Returns the registry that associates classes to finders.
+   * Registers the given finder to use with element finding operations
    *
-   * @return the registry.
-   *
-   * @since 2.3
+   * @param finder the finder to register
    */
-  Registry<Predicate<Class>, ElementFinder> registry();
+  void register(ElementFinder finder);
 
   /**
    * Creates a selector for an {@link Element} object.
    *
    * @param name the element name.
-   *
    * @return the selector.
    */
   ElementSelector createElementSelector(String name);
@@ -55,10 +48,14 @@ public interface ElementFactory {
    */
   ElementsSelector createElementsSelector();
 
-  /** Creates a new ElementCopier for all elements. */
+  /**
+   * Creates a new ElementCopier for all elements.
+   */
   ElementCopier createElementCopier();
 
-  /** Creates a new ElementCopier for the elements returned by the given selector */
+  /**
+   * Creates a new ElementCopier for the elements returned by the given selector
+   */
   ElementCopier createElementCopier(ElementsSelector selector);
 
 }

@@ -17,15 +17,14 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger.factory;
+package tools.devnull.trugger.util.factory;
 
 import org.junit.Test;
 import tools.devnull.trugger.Flag;
-import tools.devnull.trugger.util.factory.ContextFactory;
-import tools.devnull.trugger.util.factory.CreateException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static tools.devnull.trugger.reflection.ParameterPredicates.annotatedWith;
 import static tools.devnull.trugger.reflection.ParameterPredicates.named;
 import static tools.devnull.trugger.reflection.ParameterPredicates.type;
@@ -52,7 +51,7 @@ public class ContextFactoryTest {
         .use("a string").when(type(String.class))
         .use(15).when(type(Integer.class))
         .use(() -> 10).when(type(int.class));
-    TestObject obj = factory.create(TestObject.class);
+    TestObject obj = factory.create(TestObject.class).value();
     assertNotNull(obj);
     assertEquals("a string", obj.string);
     assertEquals(10, obj.integer);
@@ -64,7 +63,7 @@ public class ContextFactoryTest {
     factory.context()
         .use("a string").when(named("string"))
         .use(0).when(named("integer"));
-    TestObject obj = factory.create(TestObject.class);
+    TestObject obj = factory.create(TestObject.class).value();
     assertNotNull(obj);
     assertEquals("a string", obj.string);
     assertEquals(0, obj.integer);
@@ -76,22 +75,19 @@ public class ContextFactoryTest {
     factory.context()
         .use("a string").when(annotatedWith(Flag.class).negate())
         .use(10).when(annotatedWith(Flag.class));
-    TestObject obj = factory.create(TestObject.class);
+    TestObject obj = factory.create(TestObject.class).value();
     assertNotNull(obj);
     assertEquals("a string", obj.string);
     assertEquals(10, obj.integer);
   }
 
-  @Test(expected = CreateException.class)
+  @Test
   public void testInsufficientContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
         .use("a string").when(type(Integer.class))
         .use(10).when(annotatedWith(Flag.class));
-    TestObject obj = factory.create(TestObject.class);
-    assertNotNull(obj);
-    assertEquals("a string", obj.string);
-    assertEquals(10, obj.integer);
+    assertNull(factory.create(TestObject.class).value());
   }
 
 }

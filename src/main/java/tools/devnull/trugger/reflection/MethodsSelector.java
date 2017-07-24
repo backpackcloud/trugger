@@ -18,9 +18,6 @@
  */
 package tools.devnull.trugger.reflection;
 
-import tools.devnull.trugger.DeepSelector;
-import tools.devnull.trugger.PredicateSelector;
-
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Predicate;
@@ -30,10 +27,24 @@ import java.util.function.Predicate;
  *
  * @author Marcelo "Ataxexe" Guimarães
  */
-public interface MethodsSelector extends PredicateSelector<Method>, DeepSelector {
+public interface MethodsSelector {
 
+  /**
+   * Selects the elements that matches with the given predicate.
+   *
+   * @param predicate
+   *          the predicate to match.
+   * @return a new selector with the given filter
+   */
   MethodsSelector filter(Predicate<? super Method> predicate);
 
+  /**
+   * Selects using a deep operation through the target's inheritance. If
+   * the selection is for a single object and the deep operation founds
+   * more than one, the first one will be returned.
+   *
+   * @return a new selector with deep selection enabled
+   */
   MethodsSelector deep();
 
   /**
