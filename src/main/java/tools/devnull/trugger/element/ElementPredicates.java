@@ -32,24 +32,21 @@ import java.util.function.Predicate;
  * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
-public final class ElementPredicates {
-
-  private ElementPredicates() {
-  }
+public interface ElementPredicates {
 
   /**
    * @return a predicate that returns <code>true</code> if an element is of the
    * given type.
    * @since 2.0
    */
-  public static Predicate<Element> ofType(Class<?> type) {
+  static Predicate<Element> ofType(Class<?> type) {
     return element -> type.equals(element.type());
   }
 
   /**
    * @see ReflectionPredicates#annotatedWith(Class)
    */
-  public static Predicate<Element> annotatedWith(
+  static Predicate<Element> annotatedWith(
       Class<? extends Annotation> annotationType) {
     return ReflectionPredicates.annotatedWith(annotationType);
   }
@@ -57,7 +54,7 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element has annotations.
    */
-  public static Predicate<Element> annotated() {
+  static Predicate<Element> annotated() {
     return element -> element.getDeclaredAnnotations().length > 0;
   }
 
@@ -65,7 +62,7 @@ public final class ElementPredicates {
    * @return a predicate that returns <code>true</code> if the element name
    * equals one of the specified names.
    */
-  public static Predicate<Element> named(String... elementNames) {
+  static Predicate<Element> named(String... elementNames) {
     Arrays.sort(elementNames);
     return element -> Arrays.binarySearch(elementNames, element.name()) >= 0;
   }
@@ -73,14 +70,14 @@ public final class ElementPredicates {
   /**
    * A predicate that returns <code>true</code> if the element is writable.
    */
-  public static Predicate<Element> writable() {
+  static Predicate<Element> writable() {
     return element -> element.isWritable();
   }
 
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
-  public static Predicate<Element> readable() {
+  static Predicate<Element> readable() {
     return element -> element.isReadable();
   }
 
@@ -88,7 +85,7 @@ public final class ElementPredicates {
    * @return a predicate that return <code>true</code> if the element is
    * assignable to the given type.
    */
-  public static Predicate<Element> assignableTo(Class<?> type) {
+  static Predicate<Element> assignableTo(Class<?> type) {
     return element -> Utils.areAssignable(type, element.type());
   }
 
@@ -96,7 +93,7 @@ public final class ElementPredicates {
    * A predicate that returns <code>true</code> if the element is
    * {@link Element#isSpecific() specific}.
    */
-  public static Predicate<Element> specific() {
+  static Predicate<Element> specific() {
     return element -> element.isSpecific();
   }
 
