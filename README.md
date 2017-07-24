@@ -81,7 +81,7 @@ reflect()
   .and(setValue("OK"));
 ```
 
-This allows more readability, at the cost of another method invocation.
+This allows more readability, at the cost of one more method invocation.
 
 ### Multiple
 
