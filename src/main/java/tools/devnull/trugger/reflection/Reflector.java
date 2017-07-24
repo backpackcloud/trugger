@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,8 +18,7 @@
  */
 package tools.devnull.trugger.reflection;
 
-import tools.devnull.trugger.Result;
-import tools.devnull.trugger.selector.*;
+import tools.devnull.trugger.Optional;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -36,7 +37,7 @@ import java.util.List;
  * <i>single object selection</i> (for a <i>set</i> of them, an <strong>empty
  * collection</strong> is returned).
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public interface Reflector {
 
@@ -126,9 +127,10 @@ public interface Reflector {
    * <i>For a set of the interfaces implemented only by the target in question, use the
    * {@link Class#getInterfaces()} method.</i>
    *
-   * @return the component used for selection.
+   * @param target the target to compute the interfaces
+   * @return the list containing all interfaces implemented by the given target.
    */
-  Result<List<Class>, Object> interfaces();
+  List<Class> interfacesOf(Object target);
 
   /**
    * Reflects the generic type parameter declared in a target.
@@ -149,24 +151,23 @@ public interface Reflector {
    * The code bellow will print <code>MyType</code>:
    * <p>
    * <pre>
-   * Class&lt;?&gt; genericType = {@link Reflection#reflect()}.genericType(&quot;E&quot;).in(MyExtendedClass.class);
+   * Class&lt;?&gt; genericType = {@link Reflection#reflect()}.genericType(&quot;E&quot;, MyExtendedClass.class);
    * System.out.print(genericType.getSimpleName());
    * </pre>
    *
    * @param parameterName the generic parameter name.
-   * @return the component used for selecting the target.
+   * @return a component to select the target
    */
-  Result<Class, Object> genericType(String parameterName);
+  GenericTypeSelector genericType(String parameterName);
 
   /**
    * Reflects the generic type parameter declared in a target.
    * <p>
    * This method should be used only if the target has only one generic parameter.
    *
-   * @return the component used for selecting the target.
-   * @see Reflector#genericType(String)
+   * @return the generic type of the given target
    */
-  Result<Class, Object> genericType();
+  Class genericTypeOf(Object target);
 
   /**
    * Reflects the bridged method of a given {@link Method#isBridge() bridge} method.
@@ -176,6 +177,6 @@ public interface Reflector {
    * @param bridgeMethod the bridge method.
    * @return the original method.
    */
-  Method bridgedMethodFor(Method bridgeMethod);
+  Optional<Method> bridgedMethodFor(Method bridgeMethod);
 
 }

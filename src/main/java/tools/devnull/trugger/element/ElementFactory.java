@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,35 +18,25 @@
  */
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.util.registry.Registry;
-import tools.devnull.trugger.selector.ElementSelector;
-import tools.devnull.trugger.selector.ElementsSelector;
-
-import java.util.function.Predicate;
-
 /**
  * Interface that defines a factory for {@link Element} objects operations.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
 public interface ElementFactory {
 
   /**
-   * Returns the registry that associates classes to finders.
+   * Registers the given finder to use with element finding operations
    *
-   * @return the registry.
-   *
-   * @since 2.3
+   * @param finder the finder to register
    */
-  Registry<Predicate<Class>, Finder<Element>> registry();
+  void register(ElementFinder finder);
 
   /**
    * Creates a selector for an {@link Element} object.
    *
    * @param name the element name.
-   *
    * @return the selector.
    */
   ElementSelector createElementSelector(String name);
@@ -56,10 +48,14 @@ public interface ElementFactory {
    */
   ElementsSelector createElementsSelector();
 
-  /** Creates a new ElementCopier for all elements. */
+  /**
+   * Creates a new ElementCopier for all elements.
+   */
   ElementCopier createElementCopier();
 
-  /** Creates a new ElementCopier for the elements returned by the given selector */
+  /**
+   * Creates a new ElementCopier for the elements returned by the given selector
+   */
   ElementCopier createElementCopier(ElementsSelector selector);
 
 }

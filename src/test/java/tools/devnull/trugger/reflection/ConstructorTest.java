@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,13 +23,15 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.TruggerTest.assertThrow;
 import static tools.devnull.trugger.reflection.Reflection.invoke;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ConstructorTest {
 
@@ -48,16 +52,18 @@ public class ConstructorTest {
     assertNotNull(
         reflect().constructor()
             .withoutParameters()
-            .in(ClassWithNoDeclaredConstructor.class)
+            .from(ClassWithNoDeclaredConstructor.class)
+            .result()
     );
     assertNotNull(
         reflect().visible().constructor()
             .withoutParameters()
-            .in(ClassWithNoDeclaredConstructor.class)
+            .from(ClassWithNoDeclaredConstructor.class)
+            .result()
     );
     assertEquals(
         1,
-        reflect().constructors().in(ClassWithNoDeclaredConstructor.class).size()
+        reflect().constructors().from(ClassWithNoDeclaredConstructor.class).size()
     );
   }
 
@@ -65,7 +71,8 @@ public class ConstructorTest {
   public void testInvoker() {
     Constructor<?> constructor = reflect().constructor()
         .withoutParameters()
-        .in(ArrayList.class);
+        .from(ArrayList.class)
+        .result();
     assertNotNull(constructor);
     Object object = invoke(constructor).withoutArgs();
     assertTrue(object instanceof ArrayList);
@@ -73,7 +80,7 @@ public class ConstructorTest {
 
   @Test
   public void testExceptionHandling() {
-    Constructor<?> constructor = reflect().constructor().in(TestObject.class);
+    Constructor<?> constructor = reflect().constructor().from(TestObject.class).result();
     assertThrow(ReflectionException.class,
         () -> invoke(constructor).withoutArgs()
     );

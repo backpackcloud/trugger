@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,20 +20,24 @@ package tools.devnull.trugger.reflection;
 
 import org.junit.Test;
 import tools.devnull.trugger.reflection.impl.TruggerFieldsSelector;
+import tools.devnull.trugger.util.ClassIterator;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.TruggerTest.assertThrow;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 import static tools.devnull.trugger.reflection.Reflection.wrapperFor;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ReflectionTests {
 
@@ -67,20 +73,20 @@ public class ReflectionTests {
   public void testGenericTypeResolver() throws Exception {
     final Map<String, Integer> map = new HashMap<String, Integer>() {
     };
-    assertEquals(String.class, reflect().genericType("K").in(map));
-    assertEquals(Integer.class, reflect().genericType("V").in(map));
+    assertEquals(String.class, reflect().genericType("K").of(map));
+    assertEquals(Integer.class, reflect().genericType("V").of(map));
 
     GenericClass<String> genericClass = new GenericClass<String>() {
     };
-    assertEquals(String.class, reflect().genericType("E").in(genericClass));
-    assertEquals(String.class, reflect().genericType().in(genericClass));
+    assertEquals(String.class, reflect().genericType("E").of(genericClass));
+    assertEquals(String.class, reflect().genericTypeOf(genericClass));
 
     assertThrow(ReflectionException.class, () -> {
-      reflect().genericType().in(map);
+      reflect().genericTypeOf(map);
     });
 
     assertThrow(ReflectionException.class, () -> {
-      reflect().genericType().in(Object.class);
+      reflect().genericTypeOf(Object.class);
     });
   }
 
@@ -110,31 +116,72 @@ public class ReflectionTests {
   @Test
   public void testDeclared() {
     assertEquals(
-        1, reflect().visible().constructors().in(DeclaredTest.class).size()
+        1, reflect().visible().constructors().from(DeclaredTest.class).size()
     );
     assertEquals(
-        1, reflect().visible().fields().in(DeclaredTest.class).size()
+        1, reflect().visible().fields().from(DeclaredTest.class).size()
     );
     assertTrue(
-        reflect().visible().methods().in(DeclaredTest.class).size() > 1
+        reflect().visible().methods().from(DeclaredTest.class).size() > 1
     );
 
     assertEquals(
-        2, reflect().declared().constructors().in(DeclaredTest.class).size()
+        2, reflect().declared().constructors().from(DeclaredTest.class).size()
     );
     assertEquals(
-        2, reflect().declared().fields().in(DeclaredTest.class).size()
+        2, reflect().declared().fields().from(DeclaredTest.class).size()
     );
     assertEquals(
-        2, reflect().declared().methods().in(DeclaredTest.class).size()
+        2, reflect().declared().methods().from(DeclaredTest.class).size()
     );
   }
 
   @Test
   public void testInterfacesReflection() {
-    List<Class> interfaces =
-        reflect().interfaces().in(TruggerFieldsSelector.class);
-    assertEquals(4, interfaces.size());
+    List<Class> interfaces = reflect().interfacesOf(TruggerFieldsSelector.class);
+    assertEquals(1, interfaces.size());
+  }
+
+  @Test
+  public void testHierarchy() {
+    Iterable<Class> iterable = Reflection.hierarchyOf(IllegalArgumentException.class);
+    Iterator<Class> iterator = iterable.iterator();
+
+    assertTrue(iterator.hasNext());
+    assertEquals(IllegalArgumentException.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(RuntimeException.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Exception.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Throwable.class, iterator.next());
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Object.class, iterator.next());
+
+    assertFalse(iterator.hasNext());
+
+    iterator = Reflection.hierarchyOf(Object.class).iterator();
+
+    assertTrue(iterator.hasNext());
+    assertEquals(Object.class, iterator.next());
+
+    assertFalse(iterator.hasNext());
+  }
+
+  @Test(expected = NoSuchElementException.class)
+  public void testClassIteratorNext() {
+    ClassIterator iterator = new ClassIterator(Object.class);
+    iterator.next();
+    iterator.next();
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void testClassIteratorRemove() {
+    new ClassIterator(Object.class).remove();
   }
 
 }

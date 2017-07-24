@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +27,7 @@ import static org.junit.Assert.*;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class MethodSelectorTest {
 
@@ -41,10 +43,10 @@ public class MethodSelectorTest {
   @Test
   public void testNoSelector() {
     assertNotNull(
-        reflect().method("foo").withoutParameters().in(TestObject.class)
+        reflect().method("foo").withoutParameters().from(TestObject.class).result()
     );
     assertNotNull(
-        reflect().method("bar").in(TestObject.class)
+        reflect().method("bar").from(TestObject.class).result()
     );
   }
 
@@ -52,17 +54,17 @@ public class MethodSelectorTest {
   public void testRecursivelySelector() {
     Object obj = new Object() {
     }; // anonymous class
-    assertNull(reflect().method("toString").in(obj));
-    assertNotNull(reflect().method("toString").deep().in(obj));
+    assertNull(reflect().method("toString").from(obj).result());
+    assertNotNull(reflect().method("toString").deep().from(obj).result());
   }
 
   @Test
   public void testPredicateSelector() {
     assertNotNull(
-        reflect().method("toString").filter(el -> true).in(Object.class)
+        reflect().method("toString").filter(el -> true).from(Object.class).result()
     );
     assertNull(
-        reflect().method("toString").filter(el -> false).in(Object.class)
+        reflect().method("toString").filter(el -> false).from(Object.class).result()
     );
   }
 
@@ -81,24 +83,28 @@ public class MethodSelectorTest {
 
     Method method = reflect().method("foo")
         .withParameters(boolean.class)
-        .in(obj);
+        .from(obj)
+        .result();
     assertNotNull(method);
     assertArrayEquals(new Class[]{boolean.class}, method.getParameterTypes());
     method = reflect().method("foo2")
         .withParameters(Boolean.class)
-        .in(obj);
+        .from(obj)
+        .result();
     assertNotNull(method);
     assertArrayEquals(new Class[]{Boolean.class}, method.getParameterTypes());
 
     assertNull(
         reflect().method("foo2")
             .withParameters(boolean.class)
-            .in(obj)
+            .from(obj)
+            .result()
     );
 
     method = reflect().method("bar")
         .withParameters(boolean.class, boolean.class)
-        .in(obj);
+        .from(obj)
+        .result();
     assertNotNull(method);
     assertArrayEquals(new Class[]{boolean.class, boolean.class}, method.getParameterTypes());
   }
@@ -112,8 +118,8 @@ public class MethodSelectorTest {
 
       ;
     };
-    Method method1 = reflect().method("toString").in(Object.class);
-    Method method2 = reflect().method("toString").in(o);
+    Method method1 = reflect().method("toString").from(Object.class).result();
+    Method method2 = reflect().method("toString").from(o).result();
 
     assertNotNull(method1);
     assertNotNull(method2);

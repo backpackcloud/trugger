@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,17 +21,22 @@ package tools.devnull.trugger.reflection;
 import org.junit.Before;
 import org.junit.Test;
 import tools.devnull.trugger.Flag;
-import tools.devnull.trugger.ValueHandler;
 
-import static org.junit.Assert.*;
-import static tools.devnull.trugger.reflection.FieldPredicates.*;
-import static tools.devnull.trugger.reflection.Reflection.field;
-import static tools.devnull.trugger.reflection.Reflection.handle;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static tools.devnull.trugger.reflection.FieldPredicates.annotated;
+import static tools.devnull.trugger.reflection.FieldPredicates.annotatedWith;
+import static tools.devnull.trugger.reflection.FieldPredicates.assignableTo;
+import static tools.devnull.trugger.reflection.FieldPredicates.type;
+import static tools.devnull.trugger.reflection.Reflection.getValue;
+import static tools.devnull.trugger.reflection.Reflection.reflect;
+import static tools.devnull.trugger.reflection.Reflection.setValue;
 
 /**
  * A class for testing field reflection by the {@link Reflector}.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class FieldReflectionTest {
 
@@ -52,68 +59,66 @@ public class FieldReflectionTest {
 
   @Test
   public void testHandler() {
-    ValueHandler handler = handle(field("a")).in(this);
-    assertNull(handler.value());
-    handler.set("string");
+    reflect().field("a").from(this).and(setValue("string"));
     assertEquals("string", a);
-    assertEquals("string", handler.value());
+    assertEquals("string", reflect().field("a").from(this).then(getValue()));
   }
 
   @Test
   public void testPredicates() {
     assertTrue(
         type(String.class).test(
-            field("a").in(this)
+            reflect().field("a").from(this).result()
         )
     );
     assertTrue(
         assignableTo(String.class).test(
-            field("b").in(this)
+            reflect().field("b").from(this).result()
         )
     );
     assertTrue(
         assignableTo(CharSequence.class).test(
-            field("b").in(this)
+            reflect().field("b").from(this).result()
         )
     );
     assertFalse(
         assignableTo(String.class).test(
-            field("x").in(this)
+            reflect().field("x").from(this).result()
         )
     );
     assertTrue(
         type(int.class).test(
-            field("x").in(this)
+            reflect().field("x").from(this).result()
         )
     );
     assertTrue(
         type(Integer.class).test(
-            field("z").in(this)
+            reflect().field("z").from(this).result()
         )
     );
     assertFalse(
         type(Integer.class).test(
-            field("y").in(this)
+            reflect().field("y").from(this).result()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            field("a").in(this)
+            reflect().field("a").from(this).result()
         )
     );
     assertTrue(
         annotated().test(
-            field("a").in(this)
+            reflect().field("a").from(this).result()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            field("b").in(this)
+            reflect().field("b").from(this).result()
         )
     );
     assertFalse(
         annotated().test(
-            field("b").in(this)
+            reflect().field("b").from(this).result()
         )
     );
   }

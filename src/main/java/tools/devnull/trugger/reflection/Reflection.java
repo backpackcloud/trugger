@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,24 +18,29 @@
  */
 package tools.devnull.trugger.reflection;
 
-import tools.devnull.trugger.util.ImplementationLoader;
-import tools.devnull.trugger.reflection.impl.FieldSelectorHandler;
-import tools.devnull.trugger.reflection.impl.MethodSelectorInvoker;
-import tools.devnull.trugger.selector.*;
+import tools.devnull.trugger.Selection;
 import tools.devnull.trugger.util.ClassIterator;
+import tools.devnull.trugger.util.ImplementationLoader;
+import tools.devnull.trugger.util.OptionalFunction;
 
-import java.lang.reflect.*;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * An utility class for help the use of Reflection.
  * <p>
  * This class also uses a {@link ReflectionFactory} for some operations.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class Reflection {
 
@@ -68,38 +75,6 @@ public final class Reflection {
   }
 
   /**
-   * @return <code>true</code> if the specified member has the <code>public</code>
-   * modifier
-   */
-  public static boolean isPublic(Member member) {
-    return Modifier.isPublic(member.getModifiers());
-  }
-
-  /**
-   * @return <code>true</code> if the specified member has the <code>private</code>
-   * modifier
-   */
-  public static boolean isPrivate(Member member) {
-    return Modifier.isPrivate(member.getModifiers());
-  }
-
-  /**
-   * @return <code>true</code> if the specified member has the <code>final</code>
-   * modifier
-   */
-  public static boolean isFinal(Member member) {
-    return Modifier.isFinal(member.getModifiers());
-  }
-
-  /**
-   * @return <code>true</code> if the specified member has the <code>static</code>
-   * modifier
-   */
-  public static boolean isStatic(Member member) {
-    return Modifier.isStatic(member.getModifiers());
-  }
-
-  /**
    * Sets the accessible flag of the given objects to <code>true</code> using a {@link
    * PrivilegedAction}.
    *
@@ -127,7 +102,7 @@ public final class Reflection {
     } else if (name.startsWith("is")) {
       i = 2;
     }
-    return i > 0 ? Character.toLowerCase(name.charAt(i)) + name.substring(i + 1) : name;
+    return Character.toLowerCase(name.charAt(i)) + name.substring(i + 1);
   }
 
   /**
@@ -147,24 +122,6 @@ public final class Reflection {
    */
   public static MethodInvoker invoke(Method method) {
     return factory.createInvoker(method);
-  }
-
-  /**
-   * The same as <code>reflect().constructor()</code>
-   *
-   * @since 2.8
-   */
-  public static ConstructorSelector constructor() {
-    return reflect().constructor();
-  }
-
-  /**
-   * The same as <code>reflect().constructors()</code>
-   *
-   * @since 2.8
-   */
-  public static ConstructorsSelector constructors() {
-    return reflect().constructors();
   }
 
   /**
@@ -189,71 +146,53 @@ public final class Reflection {
   }
 
   /**
-   * The same as <code>reflect().field(String)</code>
-   *
-   * @since 2.8
-   */
-  public static FieldSelector field(String name) {
-    return reflect().field(name);
-  }
-
-  /**
-   * The same as <code>reflect().fields()</code>
-   *
-   * @since 2.8
-   */
-  public static FieldsSelector fields() {
-    return reflect().fields();
-  }
-
-  /**
-   * Handles the field selected by the given selector.
-   *
-   * @param selector the selector for getting the field.
-   * @return the handler.
-   * @since 2.8
-   */
-  public static FieldHandler handle(FieldSelector selector) {
-    return new FieldSelectorHandler(selector);
-  }
-
-  /**
-   * The same as <code>reflect().method(String)</code>
-   *
-   * @since 2.8
-   */
-  public static MethodSelector method(String name) {
-    return reflect().method(name);
-  }
-
-  /**
-   * The same as <code>reflect().methods()</code>
-   *
-   * @since 2.8
-   */
-  public static MethodsSelector methods() {
-    return reflect().methods();
-  }
-
-  /**
-   * Invokes the method selected by the given selector.
-   *
-   * @param selector the selector for getting the method.
-   * @return the invoker
-   * @since 2.8
-   */
-  public static MethodInvoker invoke(MethodSelector selector) {
-    return new MethodSelectorInvoker(selector);
-  }
-
-  /**
-   * @return an iterable Class hierarchy for use in "foreach" loops.
+   * @return a list containing the hierarchy of the given target.
    * @see ClassIterator
-   * @since 4.0
+   * @since 6.0
    */
-  public static Iterable<Class> hierarchyOf(final Object target) {
-    return () -> new ClassIterator(target);
+  public static List<Class> hierarchyOf(Object target) {
+    List<Class> result = new ArrayList<>();
+    new ClassIterator(target).forEachRemaining(result::add);
+    return result;
+  }
+
+  /**
+   * Returns a function that invokes a selected method.
+   *
+   * @param args the arguments for invoking the method
+   * @return a function that invokes a selected method
+   */
+  public static <E> OptionalFunction<Selection<Method>, E> invoke(Object... args) {
+    return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).on(selection.target()).withArgs(args));
+  }
+
+  /**
+   * Returns a function that invokes a selected constructor.
+   *
+   * @param args the arguments for invoking the constructor
+   * @return a function that invokes a selected constructor
+   */
+  public static <E> OptionalFunction<Selection<Constructor<?>>, E> instantiate(Object... args) {
+    return OptionalFunction.of(selection -> factory.createInvoker(selection.result()).withArgs(args));
+  }
+
+  /**
+   * Returns a function that gets the value of a selected field.
+   *
+   * @return a function that gets the value of a selected field.
+   */
+  public static <E> OptionalFunction<Selection<Field>, E> getValue() {
+    return OptionalFunction.of(selection -> factory.createHandler(selection.result()).on(selection.target()).getValue());
+  }
+
+  /**
+   * Returns a consumer that sets the value of a selected field.
+   *
+   * @param newValue the value to set
+   * @return a consumer that sets the value of a selected field.
+   */
+  public static Consumer<Selection<Field>> setValue(Object newValue) {
+    return selection -> factory.createHandler(selection.result()).on(selection.target()).setValue(newValue);
   }
 
 }
-

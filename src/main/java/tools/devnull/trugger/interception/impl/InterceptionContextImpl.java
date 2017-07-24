@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +29,7 @@ import static tools.devnull.trugger.reflection.Reflection.reflect;
 /**
  * This class holds the parameters of a method interception.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 5.0
  */
 public class InterceptionContextImpl implements InterceptionContext {
@@ -92,9 +94,10 @@ public class InterceptionContextImpl implements InterceptionContext {
         .method(name)
         .deep()
         .withParameters(parameterTypes)
-        .in(target);
+        .from(target)
+        .result();
     if (targetMethod.isBridge()) {
-      return reflect().bridgedMethodFor(targetMethod);
+      return reflect().bridgedMethodFor(targetMethod).value();
     }
     return targetMethod;
   }

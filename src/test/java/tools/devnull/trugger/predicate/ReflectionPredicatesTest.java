@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +36,7 @@ import static tools.devnull.trugger.reflection.ReflectionPredicates.annotated;
 /**
  * A class for testing the reflection predicates.
  *
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ReflectionPredicatesTest {
 
@@ -48,18 +50,18 @@ public class ReflectionPredicatesTest {
   public void memberPredicatesTest() throws Exception {
     Field field = getClass().getDeclaredField("privateField");
     assertTrue(annotated().test(field));
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC));
+    assertMatch(field, ReflectionPredicates.declared(Modifier.STATIC));
 
     field = getClass().getDeclaredField("defaultField");
     assertFalse(annotated().test(field));
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.FINAL).negate());
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC).negate());
+    assertMatch(field, ReflectionPredicates.declared(Modifier.FINAL).negate());
+    assertMatch(field, ReflectionPredicates.declared(Modifier.STATIC).negate());
 
     field = getClass().getDeclaredField("protectedField");
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.STATIC));
+    assertMatch(field, ReflectionPredicates.declared(Modifier.STATIC));
 
     field = getClass().getDeclaredField("publicField");
-    assertMatch(field, ReflectionPredicates.declaring(Modifier.FINAL));
+    assertMatch(field, ReflectionPredicates.declared(Modifier.FINAL));
   }
 
   private final class PrivateClass {
@@ -76,22 +78,22 @@ public class ReflectionPredicatesTest {
 
   @Test
   public void classPredicatesTest() throws Exception {
-    assertMatch(PrivateClass.class, ClassPredicates.declaring(Modifier.FINAL));
-    assertMatch(PrivateClass.class, ClassPredicates.declaring(Modifier.STATIC)
+    assertMatch(PrivateClass.class, ClassPredicates.declared(Modifier.FINAL));
+    assertMatch(PrivateClass.class, ClassPredicates.declared(Modifier.STATIC)
         .negate());
 
-    assertMatch(DefaultClass.class, ClassPredicates.declaring(Modifier.FINAL)
+    assertMatch(DefaultClass.class, ClassPredicates.declared(Modifier.FINAL)
         .negate());
-    assertMatch(DefaultClass.class, ClassPredicates.declaring(Modifier.STATIC));
+    assertMatch(DefaultClass.class, ClassPredicates.declared(Modifier.STATIC));
 
-    assertMatch(ProtectedClass.class, ClassPredicates.declaring(Modifier.FINAL)
+    assertMatch(ProtectedClass.class, ClassPredicates.declared(Modifier.FINAL)
         .negate());
-    assertMatch(ProtectedClass.class, ClassPredicates.declaring(Modifier.STATIC)
+    assertMatch(ProtectedClass.class, ClassPredicates.declared(Modifier.STATIC)
         .negate());
 
-    assertMatch(PublicClass.class, ClassPredicates.declaring(Modifier.FINAL)
+    assertMatch(PublicClass.class, ClassPredicates.declared(Modifier.FINAL)
         .negate());
-    assertMatch(PublicClass.class, ClassPredicates.declaring(Modifier.STATIC)
+    assertMatch(PublicClass.class, ClassPredicates.declared(Modifier.STATIC)
         .negate());
   }
 

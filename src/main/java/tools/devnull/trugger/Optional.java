@@ -1,3 +1,22 @@
+/*
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package tools.devnull.trugger;
 
 import java.util.function.Consumer;
@@ -6,21 +25,21 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Holds a value, that may be or not a null-value.
+ * Holds a value that may be or not a null-value.
  *
  * @param <E> the value's type
  */
 public interface Optional<E> {
 
   /**
-   * Returns the result of the rest invocation.
+   * Returns the value being held by this optional.
    *
-   * @return the result of the rest invocation.
+   * @return the value being held by this optional.
    */
   E value();
 
   /**
-   * Filters this result by testing the value against the
+   * Filters this value by testing the value against the
    * given predicate.
    * <p>
    * If the predicate matches the value, then the same instance
@@ -38,15 +57,24 @@ public interface Optional<E> {
   }
 
   /**
+   * Checks if this optional holds a non-null value.
+   *
+   * @return {@code true} if the value is not null
+   */
+  default boolean exists() {
+    return value() != null;
+  }
+
+  /**
    * Invokes the given consumer passing the result.
    * <p>
-   * The consumer will be invoked only if this result
+   * The consumer will be invoked only if this value
    * contains a non-null value.
    *
    * @param consumer the consumer to use
    * @return an instance of this object.
    */
-  default Optional<E> and(Consumer<E> consumer) {
+  default Optional<E> and(Consumer<? super E> consumer) {
     E value = value();
     if (value != null) {
       consumer.accept(value);
@@ -55,10 +83,23 @@ public interface Optional<E> {
   }
 
   /**
+   * Invokes the given consumer passing the value.
+   * <p>
+   * The function will be invoked regardless the value. To restrict
+   * null values, use an {@link tools.devnull.trugger.util.OptionalFunction}.
+   *
+   * @param function the function to use
+   * @return an instance of this object.
+   */
+  default <T> T then(Function<? super E, ? extends T> function) {
+    return function.apply(value());
+  }
+
+  /**
    * Maps the value using the given function and return a new
    * result containing the new value.
    * <p>
-   * The function will be invoked only if this result
+   * The function will be invoked only if this value
    * contains a non-null value.
    *
    * @param function the function to map the value
@@ -73,18 +114,29 @@ public interface Optional<E> {
   }
 
   /**
-   * Executes the given action in case of no result from the REST invocation
+   * Executes the given action in case of a null value
    *
    * @param action the action to execute.
    */
-  default void orElse(Runnable action) {
+  default void orElseDo(Runnable action) {
     if (value() == null) {
       action.run();
     }
   }
 
   /**
-   * Uses the given supplier to return a value in case of no result from the REST invocation
+   * Returns the hold value or the given value in case of a null value.
+   *
+   * @param returnValue the value to return if the hold value is null
+   * @return this optional value or the given returnValue
+   */
+  default E orElse(E returnValue) {
+    E value = value();
+    return value != null ? value : returnValue;
+  }
+
+  /**
+   * Uses the given supplier to return a value in case of a null value
    *
    * @param supplier the supplier to use for retrieving the result
    * @return this optional value or the value returned by the supplier.
@@ -95,7 +147,7 @@ public interface Optional<E> {
   }
 
   /**
-   * Throws the supplied exception if case of no result from the REST invocation
+   * Throws the supplied exception if case of a null value
    *
    * @param exceptionSupplier the exception supplier
    * @return the result

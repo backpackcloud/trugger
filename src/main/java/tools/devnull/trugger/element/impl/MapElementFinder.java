@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,42 +18,47 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.element.Element;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class MapElementFinder implements Finder<Element> {
-  
+public class MapElementFinder implements ElementFinder {
+
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return Collections.emptyList();
-      }
-      List<Element> properties = new ArrayList<>();
-      Map map = (Map) target;
-      for (Object key : map.keySet()) {
-        if (key instanceof String) {
-          properties.add(new SpecificElement(new MapElement((String) key), map));
-        }
-      }
-      return properties;
-    };
+  public boolean canFind(Class type) {
+    return Map.class.isAssignableFrom(type) && !Properties.class.isAssignableFrom(type);
   }
-  
+
   @Override
-  public Result<Element, Object> find(final String name) {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return new MapElement(name);
+  public List<Element> findAll(Object target) {
+    if (target instanceof Class<?>) {
+      return Collections.emptyList();
+    }
+    List<Element> properties = new ArrayList<>();
+    Map map = (Map) target;
+    for (Object key : map.keySet()) {
+      if (key instanceof String) {
+        properties.add(new SpecificElement(new MapElement((String) key), map));
       }
-      return new SpecificElement(new MapElement(name), target);
-    };
+    }
+    return properties;
   }
-  
+
+  @Override
+  public Optional<Element> find(String name, Object target) {
+    if (target instanceof Class<?>) {
+      return Optional.of(new MapElement(name));
+    }
+    return Optional.of(new SpecificElement(new MapElement(name), target));
+  }
+
 }

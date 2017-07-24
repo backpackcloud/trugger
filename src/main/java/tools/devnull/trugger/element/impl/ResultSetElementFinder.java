@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,8 +18,8 @@
  */
 package tools.devnull.trugger.element.impl;
 
-import tools.devnull.trugger.Finder;
-import tools.devnull.trugger.Result;
+import tools.devnull.trugger.Optional;
+import tools.devnull.trugger.element.ElementFinder;
 import tools.devnull.trugger.TruggerException;
 import tools.devnull.trugger.element.Element;
 
@@ -29,41 +31,42 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class ResultSetElementFinder implements Finder<Element> {
+public class ResultSetElementFinder implements ElementFinder {
 
   @Override
-  public Result<List<Element>, Object> findAll() {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return Collections.emptyList();
-      }
-      List<Element> elements = new ArrayList<>();
-      ResultSet resultSet = (ResultSet) target;
-      try {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        for (int i = 1 ; i <= metaData.getColumnCount() ; i++) {
-          elements.add(
-              new SpecificElement(
-                  new ResultSetElement(metaData.getColumnName(i)), resultSet)
-          );
-        }
-      } catch (SQLException e) {
-        throw new TruggerException(e);
-      }
-      return elements;
-    };
+  public boolean canFind(Class type) {
+    return ResultSet.class.isAssignableFrom(type);
   }
 
   @Override
-  public Result<Element, Object> find(final String name) {
-    return target -> {
-      if (target instanceof Class<?>) {
-        return new ResultSetElement(name);
+  public List<Element> findAll(Object target) {
+    if (target instanceof Class<?>) {
+      return Collections.emptyList();
+    }
+    List<Element> elements = new ArrayList<>();
+    ResultSet resultSet = (ResultSet) target;
+    try {
+      ResultSetMetaData metaData = resultSet.getMetaData();
+      for (int i = 1; i <= metaData.getColumnCount(); i++) {
+        elements.add(
+            new SpecificElement(
+                new ResultSetElement(metaData.getColumnName(i)), resultSet)
+        );
       }
-      return new SpecificElement(new ResultSetElement(name), target);
-    };
+    } catch (SQLException e) {
+      throw new TruggerException(e);
+    }
+    return elements;
+  }
+
+  @Override
+  public Optional<Element> find(String name, Object target) {
+    if (target instanceof Class<?>) {
+      return Optional.of(new ResultSetElement(name));
+    }
+    return Optional.of(new SpecificElement(new ResultSetElement(name), target));
   }
 
 }

@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,15 +28,12 @@ import java.util.function.Predicate;
  *
  * @since 5.0
  */
-public final class ParameterPredicates {
-
-  private ParameterPredicates() {
-  }
+public interface ParameterPredicates {
 
   /**
    * Returns a predicate that accepts parameters of the given type.
    */
-  public static Predicate<Parameter> type(Class type) {
+  static Predicate<Parameter> type(Class type) {
     return parameter -> parameter.getType().equals(type);
   }
 
@@ -43,7 +42,7 @@ public final class ParameterPredicates {
    *
    * @since 5.1
    */
-  public static Predicate<Parameter> assignableTo(Class type) {
+  static Predicate<Parameter> assignableTo(Class type) {
     return parameter -> type.isAssignableFrom(parameter.getType());
   }
 
@@ -53,7 +52,7 @@ public final class ParameterPredicates {
    * Note that the code must be compiled with <code>-parameters</code> or
    * the parameter names will be in a argX format.
    */
-  public static Predicate<Parameter> named(String name) {
+  static Predicate<Parameter> named(String name) {
     return parameter -> parameter.getName().equals(name);
   }
 
@@ -61,7 +60,7 @@ public final class ParameterPredicates {
    * Returns a predicate that accepts parameters annotated with the given
    * annotation type.
    */
-  public static Predicate<Parameter> annotatedWith(Class<? extends Annotation> type) {
+  static Predicate<Parameter> annotatedWith(Class<? extends Annotation> type) {
     return parameter -> parameter.isAnnotationPresent(type);
   }
 

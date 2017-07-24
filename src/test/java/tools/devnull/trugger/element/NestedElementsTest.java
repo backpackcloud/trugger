@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +30,7 @@ import static tools.devnull.kodo.Expectation.*;
 import static tools.devnull.trugger.element.ElementPredicates.*;
 import static tools.devnull.trugger.element.Elements.element;
 
-public class NestedElementsTest implements ElementSpecs {
+public class NestedElementsTest implements ElementExpectations {
 
   class Ticket {
     private Customer customer;
@@ -60,22 +62,22 @@ public class NestedElementsTest implements ElementSpecs {
 
   @Test
   public void testNestedElementCreating() {
-    Spec.given(element("customer.phone").in(Ticket.class))
+    Spec.given(element("customer.phone").from(Ticket.class).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("customer.credential").in(Ticket.class))
+    Spec.given(element("customer.credential").from(Ticket.class).result())
         .expect(it(), to().beNull());
 
-    Spec.given(element("customer.info").in(new Ticket()))
+    Spec.given(element("customer.info").from(new Ticket()).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().not().be(specific()));
 
-    Spec.given(element("customer.info.properties").in(new Ticket()))
+    Spec.given(element("customer.info.properties").from(new Ticket()).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(readable()))
         .expect(it(), to().not().be(writable()))
@@ -88,14 +90,14 @@ public class NestedElementsTest implements ElementSpecs {
     ticket.customer = new Customer();
     ticket.customer.address = new Address();
 
-    Spec.given(element("customer.address.line").in(ticket))
+    Spec.given(element("customer.address.line").from(ticket).result())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().be(specific()))
-        .expect((Function<? super Element, Object>) Element::value, to().equal(null))
+        .expect((Function<? super Element, Object>) Element::getValue, to().equal(null))
 
         .when(valueIsSetTo("Address line"))
-        .expect(Element::value, to().be("Address line"));
+        .expect(Element::getValue, to().be("Address line"));
   }
 
 }

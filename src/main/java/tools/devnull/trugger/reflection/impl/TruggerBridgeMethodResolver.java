@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +18,6 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.reflection.Reflection;
 import tools.devnull.trugger.reflection.ReflectionException;
 
 import java.lang.reflect.GenericArrayType;
@@ -27,8 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static tools.devnull.trugger.reflection.Reflection.method;
-import static tools.devnull.trugger.reflection.Reflection.methods;
+import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
  * Helper for resolving synthetic {@link Method#isBridge bridge Methods} to the
@@ -49,7 +49,7 @@ import static tools.devnull.trugger.reflection.Reflection.methods;
  *
  * @author Rob Harrop
  * @author Juergen Hoeller
- * @author Marcelo Guimarães (some code adaptations).
+ * @author Marcelo "Ataxexe" Guimarães (some code adaptations).
  */
 final class TruggerBridgeMethodResolver {
 
@@ -78,17 +78,17 @@ final class TruggerBridgeMethodResolver {
       return bridgeMethod;
     }
     // Gather all methods with matching name and parameter size.
-    List<Method> candidateMethods = methods().deep()
-      .filter(new SimpleBridgeCandidatePredicate())
-      .in(bridgeMethod.getDeclaringClass());
+    List<Method> candidateMethods = reflect().methods().deep()
+        .filter(new SimpleBridgeCandidatePredicate())
+        .from(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + '\'');
     } else if (candidateMethods.size() > 1) {
       Predicate bridgeCandidate = new BridgeCandidatePredicate();
       return (Method) candidateMethods.stream()
-        .filter(bridgeCandidate)
-        .findAny().orElse(null);
+          .filter(bridgeCandidate)
+          .findAny().orElse(null);
     }
     return candidateMethods.iterator().next();
   }
@@ -97,8 +97,8 @@ final class TruggerBridgeMethodResolver {
 
     public boolean test(Method candidateMethod) {
       return (!candidateMethod.isBridge() && !candidateMethod.equals(bridgeMethod)
-        && candidateMethod.getName().equals(bridgeMethod.getName()) && (candidateMethod.getParameterTypes().length == bridgeMethod
-        .getParameterTypes().length));
+          && candidateMethod.getName().equals(bridgeMethod.getName()) && (candidateMethod.getParameterTypes().length == bridgeMethod
+          .getParameterTypes().length));
     }
 
   }
@@ -126,8 +126,8 @@ final class TruggerBridgeMethodResolver {
           Type rawType = TruggerGenericTypeResolver.getRawType(genericParameter, typeParameterMap);
           if (rawType instanceof GenericArrayType) {
             if (!candidateParameter.getComponentType().equals(
-              TruggerGenericTypeResolver.resolveType(((GenericArrayType) rawType).getGenericComponentType(),
-                typeParameterMap)
+                TruggerGenericTypeResolver.resolveType(((GenericArrayType) rawType).getGenericComponentType(),
+                    typeParameterMap)
             )) {
               return false;
             }
@@ -158,9 +158,8 @@ final class TruggerBridgeMethodResolver {
       }
       // Search interfaces.
       // changed to use trugger api
-      List<Class> interfaces = Reflection.reflect()
-          .interfaces()
-          .in(bridgeMethod.getDeclaringClass());
+      List<Class> interfaces = reflect()
+          .interfacesOf(bridgeMethod.getDeclaringClass());
       for (Class anInterface : interfaces) {
         Method method = searchForMatch(anInterface);
         if ((method != null) && !method.isBridge()) {
@@ -176,9 +175,11 @@ final class TruggerBridgeMethodResolver {
      * {@link Method} is returned, otherwise <code>null</code> is returned.
      */
     private Method searchForMatch(Class type) {
-      return method(bridgeMethod.getName())
-        .withParameters(bridgeMethod.getParameterTypes())
-        .in(type);
+      return reflect().method(bridgeMethod.getName())
+          .withParameters(bridgeMethod.getParameterTypes())
+          .from(type)
+          .orElseReturn(() -> null)
+          .result();
     }
 
     public boolean test(Method candidateMethod) {

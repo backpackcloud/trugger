@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +29,7 @@ import java.lang.reflect.Method;
 /**
  * Class that represents an Annotation property.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class AnnotationElement extends AbstractElement implements Element {
 
@@ -50,10 +52,10 @@ public final class AnnotationElement extends AbstractElement implements Element 
     return method.getReturnType();
   }
 
-  public ValueHandler in(final Object target) {
+  public ValueHandler on(final Object target) {
     return new ValueHandler() {
 
-      public <E> E value() throws HandlingException {
+      public <E> E getValue() throws HandlingException {
         try {
           return (E) method.invoke(target);
         } catch (InvocationTargetException e) {
@@ -63,7 +65,7 @@ public final class AnnotationElement extends AbstractElement implements Element 
         }
       }
 
-      public void set(Object value) throws HandlingException {
+      public void setValue(Object value) throws HandlingException {
         throw new UnwritableElementException(name());
       }
 

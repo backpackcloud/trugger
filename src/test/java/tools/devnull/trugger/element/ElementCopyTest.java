@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +34,7 @@ import static tools.devnull.trugger.element.Elements.copy;
 import static tools.devnull.trugger.element.Elements.elements;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class ElementCopyTest {
 
@@ -152,8 +154,8 @@ public class ElementCopyTest {
     Consumer<OtherTestObject> elementsAreCopiedFromTestObject =
         obj -> copy().from(testObject).to(obj);
 
-    Function<OtherTestObject, Object> weight = obj -> obj.getWeight();
-    Function<OtherTestObject, Object> nickName = obj -> obj.getNickName();
+    Function<OtherTestObject, Object> weight = OtherTestObject::getWeight;
+    Function<OtherTestObject, Object> nickName = OtherTestObject::getNickName;
 
     Spec.given(new OtherTestObject())
         .when(nickNameIsChanged
@@ -167,7 +169,7 @@ public class ElementCopyTest {
         .when(props -> copy()
             .from(testObject)
             .notNull()
-            .applying(new ToStringTransformer())
+            .map(new ToStringTransformer())
             .to(props))
         .expect(property("age"), to().be("23"))
         .expect(property("nickName"), to().beNull())
@@ -205,7 +207,7 @@ public class ElementCopyTest {
   private void assertFilter(ElementCopy copy) {
     assertEquals("name", copy.src().name());
     assertEquals("name", copy.dest().name());
-    assertEquals("Marcelo", copy.src().value());
+    assertEquals("Marcelo", copy.src().getValue());
     assertEquals(String.class, copy.src().type());
     assertEquals(String.class, copy.dest().type());
   }

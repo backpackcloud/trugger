@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +28,7 @@ import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class ResultSetElement extends AbstractElement implements Element {
 
@@ -42,17 +44,17 @@ public final class ResultSetElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(final Object target) {
+  public ValueHandler on(final Object target) {
     if (target instanceof ResultSet) {
       final ResultSet resultSet = (ResultSet) target;
       return new ValueHandler() {
 
-        public void set(Object value) throws HandlingException {
+        public void setValue(Object value) throws HandlingException {
           throw new UnwritableElementException(
               "Cannot write a value in a ResultSet");
         }
 
-        public <E> E value() throws HandlingException {
+        public <E> E getValue() throws HandlingException {
           try {
             //if the name is the column index
             if (DIGITS_PATTERN.matcher(name).matches()) {

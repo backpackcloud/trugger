@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,31 +37,31 @@ import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class MapElementTest implements ElementSpecs {
+public class MapElementTest implements ElementExpectations {
 
   @Test
   public void mapElementTest() {
     Map<String, Object> map = new HashMap<>();
     map.put("key", "some value");
 
-    Spec.given(element("key").in(map))
+    Spec.given(element("key").from(map).result())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(Map.class))
-        .expect(Element::value, to().be("some value"))
+        .expect(Element::getValue, to().be("some value"))
         .when(valueIsSetTo("other value"))
-        .expect(Element::value, to().be("other value"));
+        .expect(Element::getValue, to().be("other value"));
 
     map.put("other key", "other value");
 
-    Spec.given(elements().in(map))
+    Spec.given(elements().from(map))
         .expect(SIZE, to().be(2))
         .expect(it(), to().have(elementsNamed("key", "other key")));
 
-    assertTrue(elements().in(Map.class).isEmpty());
+    assertTrue(elements().from(Map.class).isEmpty());
   }
 
   @Test
@@ -68,7 +70,7 @@ public class MapElementTest implements ElementSpecs {
     map.put("key", "value");
     map = Collections.unmodifiableMap(map);
 
-    Spec.given(element("none").in(map))
+    Spec.given(element("none").from(map).result())
         .expect(attempToGetValue(), to().raise(HandlingException.class))
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(settingValueTo("value", "target"), to().raise(IllegalArgumentException.class));
@@ -78,7 +80,7 @@ public class MapElementTest implements ElementSpecs {
   public void testNonSpecificElements() {
     Map<String, String> map = new HashMap<>();
 
-    Spec.given(element("key").in(Map.class))
+    Spec.given(element("key").from(Map.class).result())
         .expect(it(), to().not().beNull())
         .expect(attempToGetValue(), to().raise(HandlingException.class))
         .when(valueIsSetTo("value", map))

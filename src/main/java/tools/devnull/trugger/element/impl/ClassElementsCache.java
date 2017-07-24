@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,14 +28,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Marcelo Guimarães
+ * A class to cache elements.
+ *
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 4.0
  */
-public abstract class ClassElementsCache {
+abstract class ClassElementsCache {
 
   private SoftReference<Map<Class, Map<String, Element>>> ref;
 
-  public ClassElementsCache() {
+  ClassElementsCache() {
     this.ref = new SoftReference<>(new ConcurrentHashMap<>(50));
   }
 

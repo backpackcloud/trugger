@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,39 +19,28 @@
 
 package tools.devnull.trugger.util.factory;
 
-import tools.devnull.trugger.PredicateMapper;
+import tools.devnull.trugger.Optional;
 
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class DefaultContext implements Context {
 
   private List<Entry> entries;
-  private Function<Parameter, Object> defaultFunction;
+  private Function<Parameter, Object> defaultFunction = parameter -> null;
 
   public DefaultContext() {
     this.entries = new ArrayList<>();
   }
 
   @Override
-  public PredicateMapper<Parameter, Context> use(Object object) {
-    return use((parameter) -> object);
-  }
-
-  @Override
-  public PredicateMapper<Parameter, Context> use(Supplier supplier) {
-    return use(parameter -> supplier.get());
-  }
-
-  @Override
-  public PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function) {
-    return new PredicateMapper<Parameter, Context>() {
+  public Mapper use(Function<Parameter, Object> function) {
+    return new Mapper() {
       @Override
-      public Context when(Predicate<Parameter> condition) {
+      public Context when(Predicate<? super Parameter> condition) {
         entries.add(new Entry(function, condition));
         return DefaultContext.this;
       }
@@ -63,25 +54,22 @@ public class DefaultContext implements Context {
   }
 
   @Override
-  public Object resolve(Parameter parameter) {
+  public Optional<Object> resolve(Parameter parameter) {
     for (Entry entry : entries) {
       if (entry.predicate.test(parameter)) {
-        return entry.function.apply(parameter);
+        return Optional.of(entry.function.apply(parameter));
       }
     }
-    if (defaultFunction != null) {
-      return defaultFunction.apply(parameter);
-    }
-    throw new UnresolvableValueException();
+    return Optional.of(defaultFunction.apply(parameter));
   }
 
   private static class Entry {
 
     private final Function<Parameter, Object> function;
-    private final Predicate<Parameter> predicate;
+    private final Predicate<? super Parameter> predicate;
 
     private Entry(Function<Parameter, Object> supplier,
-                  Predicate<Parameter> predicate) {
+                  Predicate<? super Parameter> predicate) {
       this.function = supplier;
       this.predicate = predicate;
     }

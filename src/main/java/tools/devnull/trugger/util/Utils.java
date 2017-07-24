@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,12 +25,10 @@ import java.lang.annotation.Annotation;
 /**
  * A class with general utility methods.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 1.2
  */
-public final class Utils {
-
-  private Utils() {}
+public interface Utils {
 
   /**
    * Resolves the target type.
@@ -39,11 +39,10 @@ public final class Utils {
    * <p>
    * If none of the above, its {@link Object#getClass() class} will be returned.
    *
-   * @param target
-   *          the target to resolve the type
+   * @param target the target to resolve the type
    * @return the type of the given target.
    */
-  public static Class<?> resolveType(Object target) {
+  static Class<?> resolveType(Object target) {
     if (target instanceof Annotation) {
       return ((Annotation) target).annotationType();
     }
@@ -58,12 +57,11 @@ public final class Utils {
    * This method should be used if the type could not be a primitive (in cases
    * of autoboxing for example). Otherwise, use the {@link #resolveType(Object)}.
    *
-   * @param object
-   *          the object to analyse.
+   * @param object the object to analyse.
    * @return the wrapper class if the object class is a primitive or the class
-   *         itself otherwise.
+   * itself otherwise.
    */
-  public static Class<?> objectClass(Object object) {
+  static Class<?> objectClass(Object object) {
     Class<?> c = resolveType(object);
     if (c.isPrimitive()) {
       return Reflection.wrapperFor(c);
@@ -76,9 +74,9 @@ public final class Utils {
    * a primitive class.
    *
    * @return <code>true</code> if both classes are compatible (even if an
-   *         autoboxing is necessary).
+   * autoboxing is necessary).
    */
-  public static boolean areAssignable(Class to, Class from) {
+  static boolean areAssignable(Class to, Class from) {
     if (to.isPrimitive() || from.isPrimitive()) {
       return objectClass(to).isAssignableFrom(objectClass(from));
     }

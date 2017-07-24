@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,10 +19,11 @@
 
 package tools.devnull.trugger.util.factory;
 
-import tools.devnull.trugger.PredicateMapper;
+import tools.devnull.trugger.Optional;
 
 import java.lang.reflect.Parameter;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -37,7 +40,9 @@ public interface Context {
    * @param object the object to add
    * @return a component to select the condition
    */
-  PredicateMapper<Parameter, Context> use(Object object);
+  default Mapper use(Object object) {
+    return use((parameter) -> object);
+  }
 
   /**
    * Adds the object supplied by the given supplier by binding it to the given
@@ -46,7 +51,9 @@ public interface Context {
    * @param supplier the supplier to create the object
    * @return a component to select the condition
    */
-  PredicateMapper<Parameter, Context> use(Supplier supplier);
+  default Mapper use(Supplier supplier) {
+    return use(parameter -> supplier.get());
+  }
 
   /**
    * Adds the object returned by the given function by binding it to the given
@@ -55,7 +62,7 @@ public interface Context {
    * @param function the function to use
    * @return a component to select the condition
    */
-  PredicateMapper<Parameter, Context> use(Function<Parameter, Object> function);
+  Mapper use(Function<Parameter, Object> function);
 
   /**
    * Tries to resolve the given parameter to a object using the predicates
@@ -63,8 +70,29 @@ public interface Context {
    *
    * @param parameter the parameter to resolve the value
    * @return the resolved value.
-   * @throws UnresolvableValueException if the value cannot be resolved
    */
-  Object resolve(Parameter parameter) throws UnresolvableValueException;
+  Optional<Object> resolve(Parameter parameter);
+
+  /**
+   * Interface for mapping the context value to a predicate.
+   */
+  interface Mapper {
+
+    /**
+     * Use the given condition to map the value.
+     *
+     * @param condition the condition to use
+     * @return a reference to the object for doing other mappings.
+     */
+    Context when(Predicate<? super Parameter> condition);
+
+    /**
+     * Uses the mapped value as the default.
+     *
+     * @return a reference to the object for doing other mappings.
+     */
+    Context byDefault();
+
+  }
 
 }

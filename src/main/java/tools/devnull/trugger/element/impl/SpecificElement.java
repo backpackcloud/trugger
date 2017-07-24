@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +27,7 @@ import java.lang.annotation.Annotation;
 /**
  * A class that represents a {@link Element#isSpecific() specific} element.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class SpecificElement implements Element {
 
@@ -51,13 +53,13 @@ public class SpecificElement implements Element {
   }
 
   @Override
-  public Object value() throws HandlingException {
-    return in(target).value();
+  public Object getValue() throws HandlingException {
+    return on(target).getValue();
   }
 
   @Override
-  public void set(Object value) throws HandlingException {
-    in(target).set(value);
+  public void setValue(Object value) throws HandlingException {
+    on(target).setValue(value);
   }
 
   public Class declaringClass() {
@@ -89,8 +91,8 @@ public class SpecificElement implements Element {
   }
 
   @Override
-  public ValueHandler in(Object target) {
-    return element.in(target);
+  public ValueHandler on(Object target) {
+    return element.on(target);
   }
 
   public boolean isReadable() {

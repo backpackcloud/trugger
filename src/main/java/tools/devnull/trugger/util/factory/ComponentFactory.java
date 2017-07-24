@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +19,7 @@
 
 package tools.devnull.trugger.util.factory;
 
+import tools.devnull.trugger.Optional;
 import tools.devnull.trugger.element.Element;
 import tools.devnull.trugger.element.Elements;
 
@@ -30,22 +33,36 @@ import java.util.function.BiFunction;
 
 import static tools.devnull.trugger.reflection.ParameterPredicates.named;
 import static tools.devnull.trugger.reflection.ParameterPredicates.type;
+import static tools.devnull.trugger.reflection.Reflection.invoke;
 
 /**
- * A factory to create components specified by annotations.
+ * A factory to create components specified by annotations. This factory relies on
+ * a {@link Context} object to create the components.
  * <p>
- * Given the example below:
+ * The context for creating the component is composed by the elements of the
+ * annotation and the annotation itself. For example:
  * <p>
  * <pre>
- *  &#64;ValidatorClass(NotNullValidator.class)
- *  public &#64;interface NotNull {
+ *   &#64;ComponentClass(MyComponent.class)
+ *   public &#64;interface MyAnnotation {
+ *     boolean check();
+ *     String name();
+ *   }
  *
- *  }
+ *   &#64;MyAnnotation(check = false, name = "someName")
+ *   private String someField;
  * </pre>
  * <p>
- * An instance of a <code>NotNullValidator</code> can be created using something
- * annotated with the <code>NotNull</code> annotation just by passing the
- * annotated element to this factory.
+ * A context to create the component will have:
+ * <p>
+ * <ul>
+ * <li>the value <code>false</code> mapped to a boolean parameter named
+ * "check"</li>
+ * <li>the value <code>someName</code> mapped to a String parameter named
+ * "name"</li>
+ * <li>the annotation <code>MyAnnotation</code> itself mapped to a parameter
+ * of the same type</li>
+ * </ul>
  *
  * @param <T> The type of the annotation
  * @param <E> The type of the component
@@ -55,8 +72,8 @@ public class ComponentFactory<T extends Annotation, E> {
 
   private final Class<T> annotationType;
   private final String classElement;
-  private BiConsumer<Context, Annotation> contextConsumer;
-  private BiFunction<Constructor, Object[], Object> createFunction;
+  private final BiConsumer<Context, Annotation> contextConsumer;
+  private final BiFunction<Constructor, Object[], Object> createFunction;
 
   /**
    * Creates a new factory that searches for the implementation by looking at
@@ -76,46 +93,43 @@ public class ComponentFactory<T extends Annotation, E> {
    * @param classElement   the property name that contains the implementation
    */
   public ComponentFactory(Class<T> annotationType, String classElement) {
+    this(annotationType,
+        classElement,
+        (context, annotation) -> {
+        },
+        (constructor, args) -> invoke(constructor).withArgs(args));
+  }
+
+  public ComponentFactory(Class<T> annotationType,
+                          String classElement,
+                          BiConsumer<Context, Annotation> contextConsumer,
+                          BiFunction<Constructor, Object[], Object> createFunction) {
     this.annotationType = annotationType;
     this.classElement = classElement;
-    toConfigure(defaults());
-    toCreate(ContextFactory.defaults());
+    this.contextConsumer = contextConsumer;
+    this.createFunction = createFunction;
   }
 
   /**
    * Sets the function used to create the objects.
    *
    * @param createFunction the function to use
-   * @return a reference to this object.
+   * @return a new ComponentFactory
    */
-  public ComponentFactory toCreate(BiFunction<Constructor, Object[], Object>
-                                       createFunction) {
-    this.createFunction = createFunction;
-    return this;
+  public ComponentFactory<T, E> toCreate(BiFunction<Constructor, Object[], Object>
+                                             createFunction) {
+    return new ComponentFactory<>(this.annotationType, this.classElement, this.contextConsumer, createFunction);
   }
 
   /**
-   * Changes the way the context is configured by replacing the consumer.
-   * <p>
-   * You can add behaviour by composing the default consumer:
-   * <p>
-   * <pre>
-   *   factory.toConfigure(
-   *     defaults().andThen(
-   *       (context, annotation) -&gt; yourConfigurations
-   *     )
-   *   );
-   * </pre>
+   * Adds more rules to the context by passing a consumer that will be invoked before creating the
+   * component.
    *
-   * @param consumer the consumer to use for configuring the context to create
-   *                 the components.
-   * @return a reference to this object
-   * @see #defaults()
+   * @param consumer the consumer to configure the context
+   * @return a new ComponentFactory
    */
-  public ComponentFactory toConfigure(
-      BiConsumer<Context, Annotation> consumer) {
-    this.contextConsumer = consumer;
-    return this;
+  public ComponentFactory<T, E> toConfigure(BiConsumer<Context, Annotation> consumer) {
+    return new ComponentFactory<>(this.annotationType, this.classElement, consumer, this.createFunction);
   }
 
   /**
@@ -125,18 +139,17 @@ public class ComponentFactory<T extends Annotation, E> {
    * then the implementation defined will be instantiated.
    *
    * @param annotation the annotation to check if the component can be created.
-   * @return the created component or <code>null</code> if the annotation is not
-   * annotated with the required annotation.
+   * @return the created component if the annotation is not annotated with the required annotation.
    */
-  public E create(Annotation annotation) {
+  public Optional<E> create(Annotation annotation) {
     Class<?> type = annotation.annotationType();
     if (type.isAnnotationPresent(annotationType)) {
       T classAnnotation = type.getAnnotation(annotationType);
-      Element element = Elements.element(classElement).in(classAnnotation);
-      Class<? extends E> typeToCreate = element.value();
+      Element element = Elements.element(classElement).from(classAnnotation).result();
+      Class<E> typeToCreate = element.getValue();
       return create(annotation, typeToCreate);
     }
-    return null;
+    return Optional.empty();
   }
 
   /**
@@ -148,15 +161,15 @@ public class ComponentFactory<T extends Annotation, E> {
    * @return the created component or <code>null</code> if no annotations in the
    * element could create a component.
    */
-  public E create(AnnotatedElement element) {
-    E component;
+  public Optional<E> create(AnnotatedElement element) {
+    Optional<E> component;
     for (Annotation annotation : element.getAnnotations()) {
       component = create(annotation);
-      if (component != null) {
+      if (component.exists()) {
         return component;
       }
     }
-    return null;
+    return Optional.empty();
   }
 
   /**
@@ -168,66 +181,26 @@ public class ComponentFactory<T extends Annotation, E> {
    * @see #create(java.lang.annotation.Annotation)
    */
   public List<E> createAll(AnnotatedElement element) {
-    List result = new ArrayList<>();
-    E component;
+    List<E> result = new ArrayList<>();
     for (Annotation annotation : element.getAnnotations()) {
-      component = create(annotation);
-      if (component != null) {
-        result.add(component);
-      }
+      create(annotation).and(result::add);
     }
     return result;
   }
 
-  private E create(Annotation annotation, Class<? extends E> classToCreate) {
+  private Optional<E> create(Annotation annotation, Class<E> classToCreate) {
     ContextFactory factory = new ContextFactory();
     Context context = factory.context();
+    context.use(annotation).when(type(annotation.annotationType()));
+    List<Element> elements = Elements.elements().from(annotation);
+    for (Element el : elements) {
+      context.use(el::getValue).when(named(el.name()).and(type(el.type())));
+    }
+    for (Element el : elements) {
+      context.use(el::getValue).when(type(el.type()));
+    }
     contextConsumer.accept(context, annotation);
     return factory.toCreate(createFunction).create(classToCreate);
-  }
-
-  /**
-   * Returns the default consumer to configure the context for creating
-   * components.
-   * <p>
-   * The context for creating the component is composed by the elements of the
-   * annotation and the annotation itself. For example:
-   * <p>
-   * <pre>
-   *   &#64;ComponentClass(MyComponent.class)
-   *   public &#64;interface MyAnnotation {
-   *     boolean check();
-   *     String name();
-   *   }
-   *
-   *   &#64;MyAnnotation(check = false, name = "someName")
-   *   private String someField;
-   * </pre>
-   * <p>
-   * A context to create the component will have:
-   * <p>
-   * <ul>
-   * <li>the value <code>false</code> mapped to a boolean parameter named
-   * "check"</li>
-   * <li>the value <code>someName</code> mapped to a String parameter named
-   * "name"</li>
-   * <li>the annotation <code>MyAnnotation</code> itself mapped to a parameter
-   * of the same type</li>
-   * </ul>
-   *
-   * @return the default consumer to configure the context
-   */
-  public static BiConsumer<Context, Annotation> defaults() {
-    return (context, annotation) -> {
-      context.use(annotation).when(type(annotation.annotationType()));
-      List<Element> elements = Elements.elements().in(annotation);
-      for (Element el : elements) {
-        context.use(el::value).when(named(el.name()).and(type(el.type())));
-      }
-      for (Element el : elements) {
-        context.use(el::value).when(type(el.type()));
-      }
-    };
   }
 
 }

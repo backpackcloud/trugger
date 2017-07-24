@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,7 +45,7 @@ import static tools.devnull.trugger.reflection.Reflection.*;
  * <p>
  * For value manipulations (write and read), the methods are used all the time.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class ObjectElement extends AbstractElement {
 
@@ -82,37 +84,37 @@ public final class ObjectElement extends AbstractElement {
       type = setter.getParameterTypes()[0];
       searchForGetter();
     }
-    field = reflect().field(name).in(declaringClass);
+    field = reflect().field(name).from(declaringClass).result();
     searchForAnnotatedElement();
   }
 
-  public ValueHandler in(final Object target) {
+  public ValueHandler on(final Object target) {
     return new ValueHandler() {
 
-      public <E> E value() throws HandlingException {
+      public <E> E getValue() throws HandlingException {
         if (!isReadable()) {
           throw new UnreadableElementException(name);
         }
         try {
           if (getter != null) {
-            return invoke(getter).in(target).withoutArgs();
+            return invoke(getter).on(target).withoutArgs();
           } else {
-            return handle(field).in(target).value();
+            return handle(field).on(target).getValue();
           }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());
         }
       }
 
-      public void set(Object value) throws HandlingException {
+      public void setValue(Object value) throws HandlingException {
         if (!isWritable()) {
           throw new UnwritableElementException(name);
         }
         try {
           if (setter != null) {
-            invoke(setter).in(target).withArgs(value);
+            invoke(setter).on(target).withArgs(value);
           } else {
-            handle(field).in(target).set(value);
+            handle(field).on(target).setValue(value);
           }
         } catch (ReflectionException e) {
           throw new HandlingException(e.getCause());
@@ -149,7 +151,7 @@ public final class ObjectElement extends AbstractElement {
 
   private Method searchMethod(Predicate<Method> predicate) {
     Collection<Method> candidates = reflect().methods().deep()
-        .filter(predicate).in(declaringClass);
+        .filter(predicate).from(declaringClass);
     return candidates.isEmpty() ? null : candidates.iterator().next();
   }
 

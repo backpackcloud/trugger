@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,11 +28,10 @@ import java.lang.reflect.Field;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.reflection.MethodPredicates.setterOf;
-import static tools.devnull.trugger.reflection.Reflection.field;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class FieldSetterMethodSelectorTest {
 
@@ -59,9 +60,9 @@ public class FieldSetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = field("count").in(this);
-    fieldHits = field("hits").in(this);
-    fieldSize = field("size").in(this);
+    fieldCount = reflect().field("count").from(this).result();
+    fieldHits = reflect().field("hits").from(this).result();
+    fieldSize = reflect().field("size").from(this).result();
   }
 
   @Test
@@ -69,25 +70,25 @@ public class FieldSetterMethodSelectorTest {
     assertFalse(
         reflect().methods()
             .filter(setterOf(fieldHits))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertFalse(
         reflect().methods()
             .filter(setterOf(fieldCount))
-            .in(this)
+            .from(this)
             .isEmpty()
     );
     assertTrue(
         reflect().methods()
             .filter(setterOf(fieldHits))
-            .in(Object.class)
+            .from(Object.class)
             .isEmpty()
     );
     assertTrue(
         reflect().methods()
             .filter(setterOf(fieldCount))
-            .in(Object.class)
+            .from(Object.class)
             .isEmpty()
     );
   }

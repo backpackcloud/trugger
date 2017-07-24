@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,18 +18,17 @@
  */
 package tools.devnull.trugger.element;
 
-import tools.devnull.trugger.Finder;
+import tools.devnull.trugger.Selection;
+import tools.devnull.trugger.element.impl.TruggerElementSelection;
 import tools.devnull.trugger.util.ImplementationLoader;
-import tools.devnull.trugger.util.registry.Registry;
-import tools.devnull.trugger.selector.ElementSelector;
-import tools.devnull.trugger.selector.ElementsSelector;
+import tools.devnull.trugger.util.OptionalFunction;
 
-import java.util.function.Predicate;
+import java.util.function.Consumer;
 
 /**
  * A class for helping {@link Element} selection.
  *
- * @author Marcelo Guimarães.
+ * @author Marcelo "Ataxexe" Guimarães.
  * @since 1.2
  */
 public class Elements {
@@ -42,39 +43,37 @@ public class Elements {
   }
 
   /**
-   * @return the registry.
-   * @since 2.3
+   * Registers the given finder
+   *
+   * @see ElementFactory#register(ElementFinder)
    */
-  public static Registry<Predicate<Class>, Finder<Element>> registry() {
-    return factory.registry();
+  public static void register(ElementFinder finder) {
+    factory.register(finder);
+  }
+
+  public static ElementSelection select() {
+    return new TruggerElementSelection(factory);
   }
 
   /**
-   * Selects an element.
-   *
-   * @param name the element name.
-   * @return a component for selecting the element.
+   * Short for {@code select().element(name)}
    */
   public static ElementSelector element(String name) {
-    return factory.createElementSelector(name);
+    return select().element(name);
   }
 
   /**
-   * Selects a set of elements.
-   *
-   * @return a component for selecting the elements.
+   * Short for {@code select().elements()}
    */
   public static ElementsSelector elements() {
-    return factory.createElementsSelector();
+    return select().elements();
   }
 
   /**
-   * Selects a single element.
-   *
-   * @return a component for selecting the element.
+   * Short for {@code select().element()}
    */
   public static ElementSelector element() {
-    return new SingleElementSelector();
+    return select().element();
   }
 
   /**
@@ -89,6 +88,25 @@ public class Elements {
    */
   public static ElementCopier copy(ElementsSelector selector) {
     return factory.createElementCopier(selector);
+  }
+
+  /**
+   * Returns a function that gets the value of a selected element.
+   *
+   * @return a function that gets the value of a selected element.
+   */
+  public static <E> OptionalFunction<Selection<Element>, E> getValue() {
+    return OptionalFunction.of(selection -> selection.result().getValue());
+  }
+
+  /**
+   * Returns a function that sets the value of a selected element.
+   *
+   * @param newValue the value to set
+   * @return a function that sets the value of a selected element.
+   */
+  public static Consumer<Selection<Element>> setValue(Object newValue) {
+    return selection -> selection.result().setValue(newValue);
   }
 
 }

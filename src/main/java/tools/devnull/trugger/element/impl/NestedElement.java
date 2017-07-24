@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +30,7 @@ import java.util.regex.Pattern;
 /**
  * A class to handle a path of {@link tools.devnull.trugger.element.Element properties}.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public final class NestedElement extends AbstractElement implements Element {
 
@@ -84,26 +86,26 @@ public final class NestedElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(final Object target) {
+  public ValueHandler on(final Object target) {
     return new ValueHandler(){
 
-      public <E> E value() throws HandlingException {
+      public <E> E getValue() throws HandlingException {
       Object value = target;
       for (Element property : getPath()) {
-        value = property.in(value).value();
+        value = property.on(value).getValue();
       }
       return (E) value;
     }
 
-    public void set(Object value) throws HandlingException {
+    public void setValue(Object value) throws HandlingException {
       Object _source = target;
       Element p;
       for (int i = 0 ; ;) {
         p = NestedElement.this.get(i);
         if (++i < getPath().size()) {
-          _source = p.in(_source).value();
+          _source = p.on(_source).getValue();
         } else {
-          p.in(_source).set(value);
+          p.on(_source).setValue(value);
           break;
         }
       }
@@ -151,12 +153,12 @@ public final class NestedElement extends AbstractElement implements Element {
     Element element;
     Object _source = source;
     for (String string : names) {
-      element = Elements.element(string).in(_source);
+      element = Elements.element(string).from(_source).result();
       if (element == null) {
         return null;
       }
       path.add(element);
-      _source = element.isSpecific() ? element.value() : element.type();
+      _source = element.isSpecific() ? element.getValue() : element.type();
       //if the next source is null, the element will no longer be specific
       if (_source == null) {
         _source = element.type(); //use the type instead of the value

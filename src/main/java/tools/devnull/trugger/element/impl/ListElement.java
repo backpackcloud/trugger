@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +26,7 @@ import tools.devnull.trugger.element.Element;
 import java.util.List;
 
 /**
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  * @since 5.1
  */
 public class ListElement extends AbstractElement implements Element {
@@ -70,10 +72,10 @@ public class ListElement extends AbstractElement implements Element {
   }
 
   @Override
-  public ValueHandler in(final Object list) {
+  public ValueHandler on(final Object list) {
     return new ValueHandler() {
       @Override
-      public <E> E value() throws HandlingException {
+      public <E> E getValue() throws HandlingException {
         try {
           return (E) ((List) list).get(index);
         } catch (Exception e) {
@@ -82,7 +84,7 @@ public class ListElement extends AbstractElement implements Element {
       }
 
       @Override
-      public void set(Object value) throws HandlingException {
+      public void setValue(Object value) throws HandlingException {
         try {
           ((List) list).set(index, value);
         } catch (Exception e) {

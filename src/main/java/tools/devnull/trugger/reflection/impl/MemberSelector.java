@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,69 +18,64 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.Result;
-import tools.devnull.trugger.reflection.Reflection;
+import tools.devnull.trugger.SelectionResult;
 import tools.devnull.trugger.reflection.ReflectionException;
 import tools.devnull.trugger.util.Utils;
 
 import java.lang.reflect.Member;
+import java.util.Collections;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
  * A base class for selecting a single {@link Member} object.
  *
  * @param <T> The member type.
- *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class MemberSelector<T extends Member> implements Result<T,Object> {
+public class MemberSelector<T extends Member> {
 
   private final MemberFinder<T> finder;
   private final Predicate<? super T> predicate;
-  private final boolean useHierarchy;
+  private final Function<Class, Iterable<Class>> function;
 
-  public MemberSelector(MemberFinder<T> finder, Predicate<? super T> predicate,
-                        boolean useHierarchy) {
+  public MemberSelector(MemberFinder<T> finder,
+                        Predicate<? super T> predicate,
+                        Function<Class, Iterable<Class>> function) {
     this.finder = finder;
     this.predicate = predicate;
-    this.useHierarchy = useHierarchy;
+    this.function = function;
   }
 
   public MemberSelector(MemberFinder<T> finder, Predicate<? super T> predicate) {
-    this(finder, predicate, false);
+    this(finder, predicate, Collections::singletonList);
   }
 
   private T findMember(Class<?> type) {
+    T element;
     try {
-      T element = finder.find(type);
+      element = finder.find(type);
       if (element != null) {
         if (predicate != null) {
-          return predicate.test(element) ? element : null;
+          element = predicate.test(element) ? element : null;
         }
-        return element;
       }
-      return null;
-    } catch (NoSuchMethodException e) {
-      return null;
-    } catch (NoSuchFieldException e) {
+    } catch (NoSuchMethodException | NoSuchFieldException e) {
       return null;
     } catch (Exception e) {
       throw new ReflectionException(e);
     }
+    return element;
   }
 
-  public final T in(Object target) {
-    if (useHierarchy) {
-      for (Class type : Reflection.hierarchyOf(target)) {
-        T member = findMember(type);
-        if (member != null) {
-          return member;
-        }
+  public final SelectionResult<T> selectFrom(Object target) {
+    for (Class type : function.apply(Utils.resolveType(target))) {
+      T member = findMember(type);
+      if (member != null) {
+        return new SelectionResult<>(target, member);
       }
-      return null;
     }
-    Class<?> type = Utils.resolveType(target);
-    return findMember(type);
+    return new SelectionResult<>(target, null);
   }
 
 }

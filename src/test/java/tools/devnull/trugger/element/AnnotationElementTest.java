@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,9 +37,9 @@ import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class AnnotationElementTest implements ElementSpecs {
+public class AnnotationElementTest implements ElementExpectations {
 
   private Annotation annotation() {
     // @TestAnnotation(bool = false, name = "some name", number = 1)
@@ -50,25 +52,25 @@ public class AnnotationElementTest implements ElementSpecs {
 
   @Test
   public void testElementSpecs() {
-    Spec.given(element("name").in(annotation()))
+    Spec.given(element("name").from(annotation()).result())
         .expect(Element::name, to().be("name"))
-        .expect(Element::value, to().be("some name"))
+        .expect(Element::getValue, to().be("some name"))
         .expect(stringRepresentation(), to().be("name : java.lang.String"))
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("name").in(TestAnnotation.class))
+    Spec.given(element("name").from(TestAnnotation.class).result())
         .expect(it(), to().not().beNull())
         .expect(it(), to().not().be(writable()))
         .expect(it(), to().be(readable()))
 
         .expect(attempToGetValue(), to().raise(NonSpecificElementException.class));
 
-    Spec.given(element("bool").in(annotation()))
+    Spec.given(element("bool").from(annotation()).result())
         .expect(Element::type, to().be(boolean.class))
-        .expect(Element::value, to().be(false))
+        .expect(Element::getValue, to().be(false))
         .expect(Element::declaringClass, to().be(TestAnnotation.class))
         .expect(Element::name, to().be("bool"))
         .expect(it(), to().be(specific()));
@@ -76,7 +78,7 @@ public class AnnotationElementTest implements ElementSpecs {
 
   @Test
   public void testElements() {
-    List<Element> elements = elements().in(annotation());
+    List<Element> elements = elements().from(annotation());
     assertFalse(elements.isEmpty());
 
     for (Element element : elements) {
@@ -89,9 +91,9 @@ public class AnnotationElementTest implements ElementSpecs {
 
   @Test
   public void testNoElementFound() {
-    assertNull(element("non_existent").in(annotation()));
-    assertNull(element("non_existent").in(TestAnnotation.class));
-    assertTrue(elements().in(Documented.class).isEmpty());
+    assertNull(element("non_existent").from(annotation()).result());
+    assertNull(element("non_existent").from(TestAnnotation.class).result());
+    assertTrue(elements().from(Documented.class).isEmpty());
   }
 
   @Test
@@ -119,7 +121,7 @@ public class AnnotationElementTest implements ElementSpecs {
       }
     };
 
-    Spec.given(element("name").in(annotation))
+    Spec.given(element("name").from(annotation).result())
         .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 

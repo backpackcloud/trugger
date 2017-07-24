@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,49 +18,53 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.selector.MethodsSelector;
+import tools.devnull.trugger.reflection.Reflection;
+import tools.devnull.trugger.reflection.MethodsSelector;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
  * A default implementation for the methods selector.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerMethodsSelector implements MethodsSelector {
 
   private final MembersFinder<Method> finder;
   private final Predicate<? super Method> predicate;
-  private final boolean recursively;
+  private final Function<Class, Iterable<Class>> function;
 
   public TruggerMethodsSelector(MembersFinder<Method> finder) {
     this.finder = finder;
     this.predicate = null;
-    this.recursively = false;
+    this.function = Collections::singletonList;
   }
 
   public TruggerMethodsSelector(MembersFinder<Method> finder,
                                 Predicate<? super Method> predicate,
-                                boolean recursively) {
+                                Function<Class, Iterable<Class>> function) {
     this.finder = finder;
     this.predicate = predicate;
-    this.recursively = recursively;
+    this.function = function;
   }
 
   @Override
   public MethodsSelector filter(Predicate<? super Method> predicate) {
-    return new TruggerMethodsSelector(finder, predicate, recursively);
+    return new TruggerMethodsSelector(this.finder, predicate, this.function);
   }
 
   @Override
   public MethodsSelector deep() {
-    return new TruggerMethodsSelector(finder, predicate, true);
+    return new TruggerMethodsSelector(finder, predicate, Reflection::hierarchyOf);
   }
 
   @Override
-  public List<Method> in(Object target) {
-    return new MembersSelector<>(finder, predicate, recursively).in(target);
+  public List<Method> from(Object target) {
+    return new MembersSelector<>(finder, predicate, function).selectFrom(target);
   }
+
 }

@@ -1,6 +1,29 @@
 # Changelog
 
-## Version 5.4.0
+## Version 6.0
+
+And the API has changed... again... But it's much more elegant now and with more functional sauce! Pay special 
+attention to the new `SelectionResult` class, the single selection chain now returns an instance of `SelectionResult`.
+
+Methods for getting and setting values changed to `getValue` and `setValue` (way better than previous names).
+
+### Major Changes
+
+- Single member selections now returns an optional result (the `SelectionResult` class)
+  * To migrate, just add a .result() at the end of your method chain (`reflect().method("foo").from(o).result()`)
+- Added the `OptionalFunction` utility class
+- Removed shortcut methods in `Reflection`
+- Removed `Result` interface
+- Renamed `ValueHandler` methods to `getValue` and `setValue`
+- Removed `selector` package (interfaces moved to their related packages)
+- Hierarchy reflection now returns a List
+- Removed the Selector mix-ins
+
+### Minor Changes
+
+- Predicates are now Interfaces instead of Classes with private constructor
+
+## Version 5.4
 
 ### Minor Changes
 

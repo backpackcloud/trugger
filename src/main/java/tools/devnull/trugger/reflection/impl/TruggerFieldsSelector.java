@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,49 +18,52 @@
  */
 package tools.devnull.trugger.reflection.impl;
 
-import tools.devnull.trugger.selector.FieldsSelector;
+import tools.devnull.trugger.reflection.Reflection;
+import tools.devnull.trugger.reflection.FieldsSelector;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
  * A default implementation for the fields selector.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerFieldsSelector implements FieldsSelector {
 
   private final MembersFinder<Field> finder;
   private final Predicate<? super Field> predicate;
-  private final boolean recursively;
+  private final Function<Class, Iterable<Class>> function;
 
   public TruggerFieldsSelector(MembersFinder<Field> finder) {
     this.finder = finder;
     this.predicate = null;
-    this.recursively = false;
+    this.function = Collections::singletonList;
   }
 
   public TruggerFieldsSelector(MembersFinder<Field> finder,
                                Predicate<? super Field> predicate,
-                               boolean recursively) {
+                               Function<Class, Iterable<Class>> function) {
     this.finder = finder;
     this.predicate = predicate;
-    this.recursively = recursively;
+    this.function = function;
   }
 
   @Override
   public FieldsSelector filter(Predicate<? super Field> predicate) {
-    return new TruggerFieldsSelector(finder, predicate, recursively);
+    return new TruggerFieldsSelector(this.finder, predicate, this.function);
   }
 
   @Override
   public FieldsSelector deep() {
-    return new TruggerFieldsSelector(finder, predicate, true);
+    return new TruggerFieldsSelector(this.finder, this.predicate, Reflection::hierarchyOf);
   }
 
-  public List<Field> in(Object target) {
-    return new MembersSelector<>(finder, predicate, recursively).in(target);
+  public List<Field> from(Object target) {
+    return new MembersSelector<>(finder, predicate, function).selectFrom(target);
   }
 
 }

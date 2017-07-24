@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +19,8 @@
 package tools.devnull.trugger.reflection.impl;
 
 import tools.devnull.trugger.reflection.ReflectionException;
-import tools.devnull.trugger.selector.ConstructorSelector;
+import tools.devnull.trugger.SelectionResult;
+import tools.devnull.trugger.reflection.ConstructorSelector;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -26,7 +29,7 @@ import java.util.function.Predicate;
 /**
  * A default implementation for the constructor selector.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
 public class TruggerConstructorSelector implements ConstructorSelector {
 
@@ -62,23 +65,22 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   }
 
   @Override
-  public Constructor<?> in(Object target) throws ReflectionException {
+  public SelectionResult<Constructor<?>> from(Object target) throws ReflectionException {
     if (parameterTypes != null) {
-      return (Constructor<?>)
-          new MemberSelector(registry.constructorFinder(parameterTypes),
-              predicate).in(target);
+      return new MemberSelector(registry.constructorFinder(parameterTypes), predicate).selectFrom(target);
     }
     List<Constructor<?>> constructors =
-        new MembersSelector<>(registry.constructorsFinder()).in(target);
+        new MembersSelector<>(registry.constructorsFinder()).selectFrom(target);
     if (predicate != null) {
-      return constructors.stream()
+      return new SelectionResult(target, constructors.stream()
           .filter(predicate)
-          .findFirst().orElse(null);
+          .findFirst()
+          .orElse(null));
     } else if (constructors.size() > 1) {
       throw new ReflectionException("More than one constructor found for " +
           target.getClass());
     } else {
-      return constructors.iterator().next();
+      return new SelectionResult(target, constructors.iterator().next());
     }
   }
 

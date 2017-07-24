@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,18 +33,18 @@ import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class ResourceBundleElementTest implements ElementSpecs {
+public class ResourceBundleElementTest implements ElementExpectations {
 
   private ResourceBundle bundle =
       ResourceBundle.getBundle("tools.devnull.trugger.element.bundle");
 
   @Test
   public void testElement() {
-    Spec.given(element("foo").in(bundle))
+    Spec.given(element("foo").from(bundle).result())
         .expect(Element::name, to().be("foo"))
-        .expect(Element::value, to().be("bar"))
+        .expect(Element::getValue, to().be("bar"))
         .expect(Element::declaringClass, to().be(ResourceBundle.class))
         .expect(it(), to().be(readable()))
         .expect(it(), to().not().be(writable()))
@@ -51,7 +53,7 @@ public class ResourceBundleElementTest implements ElementSpecs {
         .expect(gettingValueIn(new Object()),
             to().raise(IllegalArgumentException.class));
 
-    Spec.given(element("foo").in(ResourceBundle.class))
+    Spec.given(element("foo").from(ResourceBundle.class).result())
         .expect(Element::name, to().be("foo"))
         .expect(Element::declaringClass, to().be(ResourceBundle.class))
         .expect(it(), to().be(readable()))
@@ -60,17 +62,17 @@ public class ResourceBundleElementTest implements ElementSpecs {
         .expect(attempToChangeValue(), to().raise(HandlingException.class))
         .expect(gettingValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("not-present").in(bundle))
+    Spec.given(element("not-present").from(bundle).result())
         .expect(attempToGetValue(), to().raise(HandlingException.class));
   }
 
   @Test
   public void testElements() {
-    List<Element> elements = elements().in(bundle);
+    List<Element> elements = elements().from(bundle);
     assertFalse(elements.isEmpty());
     assertTrue(elementsNamed("foo", "framework", "author").test(elements));
 
-    assertTrue(elements().in(ResourceBundle.class).isEmpty());
+    assertTrue(elements().from(ResourceBundle.class).isEmpty());
   }
 
 }

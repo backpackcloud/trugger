@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,23 +27,22 @@ import java.util.function.Predicate;
  * An utility class for helping the use of {@link Predicate} object that involves
  * Reflection in general.
  *
- * @author Marcelo Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class ReflectionPredicates {
+public interface ReflectionPredicates {
 
   /**
    * @return a predicate that returns <code>true</code> if the evaluated element is
    * annotated with the specified Annotation.
    */
-  public static <T extends AnnotatedElement> Predicate<T> annotatedWith(
-      final Class<? extends Annotation> annotationType) {
+  static <T extends AnnotatedElement> Predicate<T> annotatedWith(Class<? extends Annotation> annotationType) {
     return element -> element.isAnnotationPresent(annotationType);
   }
 
   /**
    * A predicate that returns <code>true</code> if the element has annotations.
    */
-  public static final Predicate<AnnotatedElement> annotated() {
+  static Predicate<AnnotatedElement> annotated() {
     return element -> element.getDeclaredAnnotations().length > 0;
   }
 
@@ -49,7 +50,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element has a
    * name that with the given one.
    */
-  public static <T extends Member> Predicate<T> named(final String name) {
+  static <T extends Member> Predicate<T> named(String name) {
     return element -> element.getName().equals(name);
   }
 
@@ -57,7 +58,7 @@ public class ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element has the
    * specified modifiers.
    */
-  public static <T extends Member> Predicate<T> declaring(int... modifiers) {
+  static <T extends Member> Predicate<T> declared(int... modifiers) {
     return element -> {
       int elModifiers = element.getModifiers();
       for (int mod : modifiers) {

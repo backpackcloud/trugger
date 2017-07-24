@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +31,7 @@ import static tools.devnull.trugger.element.Elements.element;
 /**
  *
  */
-public class ObjectElementTest implements ElementSpecs {
+public class ObjectElementTest implements ElementExpectations {
 
   class HandlingTestObject {
 
@@ -44,12 +46,12 @@ public class ObjectElementTest implements ElementSpecs {
 
   @Test
   public void testHandlingExceptions() {
-    Spec.given(element("name").in(new HandlingTestObject()))
+    Spec.given(element("name").from(new HandlingTestObject()).result())
         .expect(it(), to().not().be(readable()))
         .expect(attempToGetValue(), to().raise(UnreadableElementException.class))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));
 
-    Spec.given(element("info").in(new HandlingTestObject()))
+    Spec.given(element("info").from(new HandlingTestObject()).result())
         .expect(it(), to().not().be(writable()))
         .expect(attempToChangeValue(), to().raise(UnwritableElementException.class))
         .expect(attempToChangeValue(), to().raise(HandlingException.class));

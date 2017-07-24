@@ -1,12 +1,14 @@
 /*
- * Copyright 2009-2014 Marcelo Guimarães
+ * The Apache License
+ *
+ * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *           http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,9 +34,9 @@ import static tools.devnull.trugger.element.Elements.element;
 import static tools.devnull.trugger.element.Elements.elements;
 
 /**
- * @author Marcelo Varella Barca Guimarães
+ * @author Marcelo "Ataxexe" Guimarães
  */
-public class ListElementTest implements ElementSpecs {
+public class ListElementTest implements ElementExpectations {
 
   private List<Integer> ints;
 
@@ -48,7 +50,7 @@ public class ListElementTest implements ElementSpecs {
 
   @Test
   public void testFindingAll() {
-    Spec.given(elements().in(ints))
+    Spec.given(elements().from(ints))
         .expect(SIZE, to().be(4))
         .expect(elementAt(0), to().be(0))
         .expect(elementAt(1), to().be(10))
@@ -58,27 +60,27 @@ public class ListElementTest implements ElementSpecs {
 
   @Test
   public void testIndexElements() {
-    Spec.given(element("0").in(ints))
+    Spec.given(element("0").from(ints).result())
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(List.class))
-        .expect(Element::value, to().be(0))
+        .expect(Element::getValue, to().be(0))
 
         .when(valueIsSetTo(15))
-        .expect(Element::value, to().be(15));
+        .expect(Element::getValue, to().be(15));
 
-    Spec.given(element("2").in(ints))
+    Spec.given(element("2").from(ints).result())
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(List.class))
-        .expect(Element::value, to().be(12));
+        .expect(Element::getValue, to().be(12));
 
-    Spec.given(element("ints.1").in(this))
+    Spec.given(element("ints.1").from(this).result())
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(ListElementTest.class))
-        .expect(Element::value, to().be(10));
+        .expect(Element::getValue, to().be(10));
 
-    Spec.given(element("0").in(objects))
+    Spec.given(element("0").from(objects).result())
         .expect(Element::type, to().be(Object.class))
         .expect(Element::declaringClass, to().be(List.class))
         .expect(valueOf("name"), to().be("name"))
@@ -87,15 +89,15 @@ public class ListElementTest implements ElementSpecs {
 
   @Test
   public void testReferencedElements() {
-    Spec.given(element("first").in(ints))
-        .expect(Element::value, to().be(0));
+    Spec.given(element("first").from(ints).result())
+        .expect(Element::getValue, to().be(0));
 
-    Spec.given(element("last").in(ints))
-        .expect(Element::value, to().be(33));
+    Spec.given(element("last").from(ints).result())
+        .expect(Element::getValue, to().be(33));
 
-    Object lastElementValue = element("last").in(objects).value();
-    Spec.given(element("first").in(objects))
-        .expect(Element::value, to().be(lastElementValue));
+    Object lastElementValue = element("last").from(objects).result().getValue();
+    Spec.given(element("first").from(objects).result())
+        .expect(Element::getValue, to().be(lastElementValue));
   }
 
 }
