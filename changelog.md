@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 6.1
+
+### Major Changes
+
+- Changed `OptionalFunction#orElse` in order to receive a supplier
+
 ## Version 6.0
 
 And the API has changed... again... But it's much more elegant now and with more functional sauce! Pay special 
@@ -22,7 +28,7 @@ Methods for getting and setting values changed to `getValue` and `setValue` (way
 ### Minor Changes
 
 - Predicates are now Interfaces instead of Classes with private constructor
-
+ 
 ## Version 5.4
 
 ### Minor Changes
