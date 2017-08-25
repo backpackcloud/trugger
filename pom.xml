@@ -29,10 +29,6 @@
   <packaging>bundle</packaging>
   <name>trugger</name>
 
-  <description>
-    Trugger is a project that helps you write code that anyone can read. It is focused on deliver fluent
-    interfaces to deal with reflection without the verbosity of the Java Reflection API.
-  </description>
 
   <url>https://github.com/devnull-tools/trugger</url>
 
