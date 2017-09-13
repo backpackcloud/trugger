@@ -4,7 +4,7 @@ Trugger is a framework that helps you write code that anyone can read. The idea 
 
 Trugger is intended to be a base for creating infrastructure code. While it is not an IoC container, for example, it could be a part of the core of an IoC container.
 
-Trugger is proudly supported by:
+Trugger is developed using Open Source Licenses of:
 
 - [JetBrains IntellijIDEA](https://www.jetbrains.com/idea)
 - [ej-technologies JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
