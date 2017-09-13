@@ -6,8 +6,8 @@ Trugger is intended to be a base for creating infrastructure code. While it is n
 
 Trugger is proudly supported by:
 
-- [JetBrains](https://www.jetbrains.com/idea)
-- [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
+- [JetBrains IntellijIDEA](https://www.jetbrains.com/idea)
+- [ej-technologies JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
 
 ## What a hell does the name trugger mean?
 
