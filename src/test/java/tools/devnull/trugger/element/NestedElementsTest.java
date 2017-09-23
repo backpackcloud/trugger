@@ -94,7 +94,7 @@ public class NestedElementsTest implements ElementExpectations {
         .expect(it(), to().be(readable()))
         .expect(it(), to().be(writable()))
         .expect(it(), to().be(specific()))
-        .expect((Function<? super Element, Object>) Element::getValue, to().equal(null))
+        .expect((Function<? super Element, Object>) Element::getValue, to().eq(null))
 
         .when(valueIsSetTo("Address line"))
         .expect(Element::getValue, to().be("Address line"));
