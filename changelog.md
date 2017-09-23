@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 6.1.1
+
+- Using parent pom
+
 ## Version 6.1
 
 ### Major Changes
