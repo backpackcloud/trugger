@@ -53,16 +53,15 @@ public final class Reflection {
 
   static {
     factory = ImplementationLoader.get(ReflectionFactory.class);
-    wrappers = new HashMap<Class<?>, Class<?>>() {{
-      put(byte.class, Byte.class);
-      put(short.class, Short.class);
-      put(int.class, Integer.class);
-      put(long.class, Long.class);
-      put(char.class, Character.class);
-      put(float.class, Float.class);
-      put(double.class, Double.class);
-      put(boolean.class, Boolean.class);
-    }};
+    wrappers = new HashMap<>();
+    wrappers.put(byte.class, Byte.class);
+    wrappers.put(short.class, Short.class);
+    wrappers.put(int.class, Integer.class);
+    wrappers.put(long.class, Long.class);
+    wrappers.put(char.class, Character.class);
+    wrappers.put(float.class, Float.class);
+    wrappers.put(double.class, Double.class);
+    wrappers.put(boolean.class, Boolean.class);
   }
 
   /**

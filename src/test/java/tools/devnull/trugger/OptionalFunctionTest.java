@@ -35,8 +35,8 @@ import static org.mockito.Mockito.when;
 
 public class OptionalFunctionTest {
 
-  private Function mainFunction;
-  private Function alternativeFunction;
+  private Function function;
+  private Supplier supplier;
 
   private Object mainReturn;
   private Object mainObject;
@@ -45,49 +45,49 @@ public class OptionalFunctionTest {
 
   @Before
   public void initialize() {
-    mainFunction = mock(Function.class);
-    alternativeFunction = mock(Function.class);
+    function = mock(Function.class);
+    supplier = mock(Supplier.class);
 
     mainReturn = new Object();
     alternativeReturn = new Object();
     mainObject = new Object();
     alternativeObject = null;
 
-    when(mainFunction.apply(mainObject)).thenReturn(mainReturn);
-    when(alternativeFunction.apply(alternativeObject)).thenReturn(alternativeReturn);
+    when(function.apply(mainObject)).thenReturn(mainReturn);
+    when(supplier.get()).thenReturn(alternativeReturn);
   }
 
   @Test
   public void testSingleFunctionBehaviour() {
-    when(mainFunction.apply(alternativeObject)).thenReturn(alternativeReturn);
+    when(function.apply(alternativeObject)).thenReturn(alternativeReturn);
 
-    assertEquals(mainReturn, OptionalFunction.of(mainFunction).apply(mainObject));
-    verify(mainFunction).apply(mainObject);
+    assertEquals(mainReturn, OptionalFunction.of(function).apply(mainObject));
+    verify(function).apply(mainObject);
 
-    assertNull(OptionalFunction.of(mainFunction).apply(alternativeObject));
-    verify(mainFunction, never()).apply(alternativeObject);
+    assertNull(OptionalFunction.of(function).apply(alternativeObject));
+    verify(function, never()).apply(alternativeObject);
   }
 
   @Test
   public void testOptionalFunctionBehaviour() {
-    OptionalFunction function = OptionalFunction.of(mainFunction).orElse(alternativeFunction);
+    OptionalFunction function = OptionalFunction.of(this.function).orElse(supplier);
 
     assertEquals(mainReturn, function.apply(mainObject));
-    verify(mainFunction).apply(mainObject);
+    verify(this.function).apply(mainObject);
 
     assertEquals(alternativeReturn, function.apply(alternativeObject));
-    verify(alternativeFunction).apply(alternativeObject);
+    verify(supplier).get();
   }
 
   @Test
   public void testReturnBehaviour() {
-    OptionalFunction function = OptionalFunction.of(mainFunction).orElseReturn("OK");
+    OptionalFunction function = OptionalFunction.of(this.function).orElseReturn("OK");
 
     assertEquals(mainReturn, function.apply(mainObject));
-    verify(mainFunction).apply(mainObject);
+    verify(this.function).apply(mainObject);
 
     assertEquals("OK", function.apply(alternativeObject));
-    verify(alternativeFunction, never()).apply(alternativeObject);
+    verify(supplier, never()).get();
   }
 
   @Test(expected = TruggerException.class)
@@ -95,10 +95,10 @@ public class OptionalFunctionTest {
     Supplier exception = mock(Supplier.class);
     when(exception.get()).thenReturn(new TruggerException());
     try {
-      OptionalFunction function = OptionalFunction.of(mainFunction).orElseThrow(exception);
+      OptionalFunction function = OptionalFunction.of(this.function).orElseThrow(exception);
 
       assertEquals(mainReturn, function.apply(mainObject));
-      verify(mainFunction).apply(mainObject);
+      verify(this.function).apply(mainObject);
 
       function.apply(alternativeObject);
     } finally {

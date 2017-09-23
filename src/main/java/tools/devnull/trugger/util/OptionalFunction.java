@@ -29,28 +29,28 @@ import java.util.function.Supplier;
  */
 public class OptionalFunction<T, R> implements Function<T, R> {
 
-  private final Function<T, R> mainFunction;
-  private final Function<T, R> alternativeFunction;
+  private final Function<T, R> function;
+  private final Supplier<R> supplier;
 
   /**
    * Creates a new OptionalFunction based on the given functions.
    *
-   * @param mainFunction        the function to use for non-null values
-   * @param alternativeFunction the function to use for null values
+   * @param function the function to use for non-null values
+   * @param supplier the supplier to use for null values
    */
-  public OptionalFunction(Function<T, R> mainFunction, Function<T, R> alternativeFunction) {
-    this.mainFunction = mainFunction;
-    this.alternativeFunction = alternativeFunction;
+  public OptionalFunction(Function<T, R> function, Supplier<R> supplier) {
+    this.function = function;
+    this.supplier = supplier;
   }
 
   /**
    * Creates a new OptionalFunction that will use the given function for null values.
    *
-   * @param alternativeFunction the function to use for null values.
+   * @param supplier the supplier to use for null values.
    * @return a new OptionalFunction
    */
-  public OptionalFunction<T, R> orElse(Function<T, R> alternativeFunction) {
-    return new OptionalFunction<>(mainFunction, alternativeFunction);
+  public OptionalFunction<T, R> orElse(Supplier<R> supplier) {
+    return new OptionalFunction<>(function, supplier);
   }
 
   /**
@@ -61,7 +61,7 @@ public class OptionalFunction<T, R> implements Function<T, R> {
    * @return a new OptionalFunction
    */
   public OptionalFunction<T, R> orElseReturn(R value) {
-    return new OptionalFunction<>(mainFunction, t -> value);
+    return new OptionalFunction<>(this.function, () -> value);
   }
 
   /**
@@ -72,20 +72,19 @@ public class OptionalFunction<T, R> implements Function<T, R> {
    * @return a new OptionalFunction
    */
   public OptionalFunction<T, R> orElseThrow(Supplier<? extends RuntimeException> exceptionSupplier) {
-    return new OptionalFunction<>(mainFunction, t -> {
+    return new OptionalFunction<>(this.function, () -> {
       throw exceptionSupplier.get();
     });
   }
 
   @Override
   public R apply(T t) {
-    Function<T, R> function = t != null ? mainFunction : alternativeFunction;
-    return function.apply(t);
+    return t != null ? function.apply(t) : supplier.get();
   }
 
   /**
-   * Creates a new OptionalFunction in a fluent way. To define the alternative function,
-   * use the method {@link #orElse(Function)}.
+   * Creates a new OptionalFunction in a fluent way. To define the alternative behavior,
+   * use one of the orElse* methods.
    * <p>
    * The returned function will return {@code null} as the alternative behaviour.
    *
@@ -95,7 +94,7 @@ public class OptionalFunction<T, R> implements Function<T, R> {
    * @return a new OptionalFunction
    */
   public static <T, R> OptionalFunction<T, R> of(Function<T, R> function) {
-    return new OptionalFunction<>(function, object -> null);
+    return new OptionalFunction<>(function, () -> null);
   }
 
 }
