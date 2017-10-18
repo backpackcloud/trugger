@@ -121,7 +121,7 @@ public class TruggerTest {
   }
 
   public static <E> Predicate<Optional<E>> contain(E value) {
-    return optional -> optional.exists() && optional.value().equals(value);
+    return optional -> optional.isPresent() && optional.value().equals(value);
   }
 
 }

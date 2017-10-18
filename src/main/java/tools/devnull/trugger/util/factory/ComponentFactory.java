@@ -165,7 +165,7 @@ public class ComponentFactory<T extends Annotation, E> {
     Optional<E> component;
     for (Annotation annotation : element.getAnnotations()) {
       component = create(annotation);
-      if (component.exists()) {
+      if (component.isPresent()) {
         return component;
       }
     }
@@ -183,7 +183,7 @@ public class ComponentFactory<T extends Annotation, E> {
   public List<E> createAll(AnnotatedElement element) {
     List<E> result = new ArrayList<>();
     for (Annotation annotation : element.getAnnotations()) {
-      create(annotation).and(result::add);
+      create(annotation).ifPresent(result::add);
     }
     return result;
   }
