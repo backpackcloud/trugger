@@ -146,8 +146,8 @@ public class OptionalObjectTest {
 
   @Test
   public void testMethodContainsValue() {
-    assertTrue(Optional.of(value).exists());
-    assertFalse(Optional.empty().exists());
+    assertTrue(Optional.of(value).isPresent());
+    assertFalse(Optional.empty().isPresent());
   }
 
   @Test

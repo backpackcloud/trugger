@@ -104,7 +104,7 @@ public class ContextFactory {
     Optional created;
     for (Constructor<?> constructor : constructors) {
       created = tryCreate(constructor);
-      if (created.exists()) {
+      if (created.isPresent()) {
         return created;
       }
     }
@@ -119,7 +119,7 @@ public class ContextFactory {
     int i = 0;
     for (Parameter parameter : constructor.getParameters()) {
       resolved = context.resolve(parameter);
-      if (!resolved.exists()) {
+      if (!resolved.isPresent()) {
         return Optional.empty();
       }
       arg = resolved.value();

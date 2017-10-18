@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 6.2
+
+### Major Changes
+
+- Refactor of interface `Optional`
+
 ## Version 6.1.1
 
 - Using parent pom
