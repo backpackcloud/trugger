@@ -51,7 +51,7 @@
 
   <properties>
     <junit.version>4.11</junit.version>
-    <kodo.version>3.5.1</kodo.version>
+    <kodo.version>3.5.2</kodo.version>
     <mockito-core.version>2.7.13</mockito-core.version>
   </properties>
 
