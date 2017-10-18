@@ -30,7 +30,7 @@
   </parent>
 
   <artifactId>trugger</artifactId>
-  <version>6.2.0-SNAPSHOT</version>
+  <version>6.2.0</version>
   <packaging>bundle</packaging>
   <name>trugger</name>
 
