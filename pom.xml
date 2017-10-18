@@ -30,7 +30,7 @@
   </parent>
 
   <artifactId>trugger</artifactId>
-  <version>6.1.1</version>
+  <version>6.2.0</version>
   <packaging>bundle</packaging>
   <name>trugger</name>
 
@@ -51,7 +51,7 @@
 
   <properties>
     <junit.version>4.11</junit.version>
-    <kodo.version>3.5.1</kodo.version>
+    <kodo.version>3.5.2</kodo.version>
     <mockito-core.version>2.7.13</mockito-core.version>
   </properties>
 

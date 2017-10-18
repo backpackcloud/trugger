@@ -32,6 +32,11 @@ import java.util.function.Supplier;
 public interface Optional<E> {
 
   /**
+   * Represents an Optional that holds a {@code null} value.
+   */
+  Optional EMPTY = () -> null;
+
+  /**
    * Returns the value being held by this optional.
    *
    * @return the value being held by this optional.
@@ -61,7 +66,7 @@ public interface Optional<E> {
    *
    * @return {@code true} if the value is not null
    */
-  default boolean exists() {
+  default boolean isPresent() {
     return value() != null;
   }
 
@@ -74,12 +79,26 @@ public interface Optional<E> {
    * @param consumer the consumer to use
    * @return an instance of this object.
    */
-  default Optional<E> and(Consumer<? super E> consumer) {
+  default Optional<E> ifPresent(Consumer<? super E> consumer) {
     E value = value();
     if (value != null) {
       consumer.accept(value);
     }
     return this;
+  }
+
+  /**
+   * Invokes the given consumer passing the result.
+   * <p>
+   * The consumer will be invoked only if this value
+   * contains a non-null value.
+   *
+   * @param consumer the consumer to use
+   * @return an instance of this object.
+   * @see #ifPresent(Consumer)
+   */
+  default Optional<E> and(Consumer<? super E> consumer) {
+    return ifPresent(consumer);
   }
 
   /**
@@ -167,7 +186,7 @@ public interface Optional<E> {
    * @return a result object that holds the given value
    */
   static <E> Optional<E> of(E value) {
-    return () -> value;
+    return value == null ? empty() : () -> value;
   }
 
   /**
@@ -181,22 +200,22 @@ public interface Optional<E> {
   }
 
   /**
-   * Creates a result of a null value.
+   * Returns the {@link #EMPTY} object.
    *
-   * @return a result of a null value.
+   * @return the {@link #EMPTY} object.
    */
   static <E> Optional<E> empty() {
-    return () -> null;
+    return EMPTY;
   }
 
   /**
-   * Creates a result of a null value
+   * Returns the {@link #EMPTY} object.
    *
    * @param type the type of the value
-   * @return a result of a null value
+   * @return the {@link #EMPTY} object.
    */
   static <E> Optional<E> empty(Class<E> type) {
-    return () -> null;
+    return EMPTY;
   }
 
 }
