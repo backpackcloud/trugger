@@ -1,0 +1,12 @@
+stages:
+  - compile
+
+mvn:test:
+  stage: compile
+  image: devnull-tools/maven
+  script:
+    - mvn test
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - target/*
