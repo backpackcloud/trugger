@@ -33,7 +33,7 @@ public interface ParameterPredicates {
   /**
    * Returns a predicate that accepts parameters of the given type.
    */
-  static Predicate<Parameter> type(Class type) {
+  static Predicate<Parameter> ofType(Class type) {
     return parameter -> parameter.getType().equals(type);
   }
 
@@ -52,7 +52,7 @@ public interface ParameterPredicates {
    * Note that the code must be compiled with <code>-parameters</code> or
    * the parameter names will be in a argX format.
    */
-  static Predicate<Parameter> named(String name) {
+  static Predicate<Parameter> ofName(String name) {
     return parameter -> parameter.getName().equals(name);
   }
 

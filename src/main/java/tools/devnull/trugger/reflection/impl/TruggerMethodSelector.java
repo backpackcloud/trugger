@@ -84,7 +84,7 @@ public class TruggerMethodSelector implements MethodSelector {
     }
     MembersSelector<Method> selector = new MembersSelector<>(registry.methodsFinder(), predicate, function);
     return new SelectionResult<>(target, selector.selectFrom(target).stream()
-        .filter(ReflectionPredicates.named(name))
+        .filter(ReflectionPredicates.ofName(name))
         .findAny().orElse(null));
   }
 

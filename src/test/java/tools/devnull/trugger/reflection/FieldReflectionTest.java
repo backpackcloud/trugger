@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 import static tools.devnull.trugger.reflection.FieldPredicates.annotated;
 import static tools.devnull.trugger.reflection.FieldPredicates.annotatedWith;
 import static tools.devnull.trugger.reflection.FieldPredicates.assignableTo;
-import static tools.devnull.trugger.reflection.FieldPredicates.type;
+import static tools.devnull.trugger.reflection.FieldPredicates.ofType;
 import static tools.devnull.trugger.reflection.Reflection.getValue;
 import static tools.devnull.trugger.reflection.Reflection.reflect;
 import static tools.devnull.trugger.reflection.Reflection.setValue;
@@ -67,7 +67,7 @@ public class FieldReflectionTest {
   @Test
   public void testPredicates() {
     assertTrue(
-        type(String.class).test(
+        ofType(String.class).test(
             reflect().field("a").from(this).result()
         )
     );
@@ -87,17 +87,17 @@ public class FieldReflectionTest {
         )
     );
     assertTrue(
-        type(int.class).test(
+        ofType(int.class).test(
             reflect().field("x").from(this).result()
         )
     );
     assertTrue(
-        type(Integer.class).test(
+        ofType(Integer.class).test(
             reflect().field("z").from(this).result()
         )
     );
     assertFalse(
-        type(Integer.class).test(
+        ofType(Integer.class).test(
             reflect().field("y").from(this).result()
         )
     );

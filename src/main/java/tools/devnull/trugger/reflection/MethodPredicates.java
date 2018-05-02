@@ -115,7 +115,7 @@ public interface MethodPredicates {
   }
 
   static Predicate<Method> getterOf(Field field) {
-    return getterOf(field.getName()).and(returns(field.getType()));
+    return getterOf(field.getName()).and(returning(field.getType()));
   }
 
   static Predicate<Method> setterOf(Field field) {
@@ -149,7 +149,7 @@ public interface MethodPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated method
    * has the specified type as the return type.
    */
-  static Predicate<Method> returns(Class returnType) {
+  static Predicate<Method> returning(Class returnType) {
     return method -> method.getReturnType().equals(returnType);
   }
 

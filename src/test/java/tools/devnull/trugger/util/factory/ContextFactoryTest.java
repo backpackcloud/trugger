@@ -26,8 +26,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static tools.devnull.trugger.reflection.ParameterPredicates.annotatedWith;
-import static tools.devnull.trugger.reflection.ParameterPredicates.named;
-import static tools.devnull.trugger.reflection.ParameterPredicates.type;
+import static tools.devnull.trugger.reflection.ParameterPredicates.ofName;
+import static tools.devnull.trugger.reflection.ParameterPredicates.ofType;
 
 public class ContextFactoryTest {
 
@@ -47,10 +47,10 @@ public class ContextFactoryTest {
   public void testTypeContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .use("none").when(type(CharSequence.class))
-        .use("a string").when(type(String.class))
-        .use(15).when(type(Integer.class))
-        .use(() -> 10).when(type(int.class));
+        .use("none").when(ofType(CharSequence.class))
+        .use("a string").when(ofType(String.class))
+        .use(15).when(ofType(Integer.class))
+        .use(() -> 10).when(ofType(int.class));
     TestObject obj = factory.create(TestObject.class).value();
     assertNotNull(obj);
     assertEquals("a string", obj.string);
@@ -61,8 +61,8 @@ public class ContextFactoryTest {
   public void testNamedContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .use("a string").when(named("string"))
-        .use(0).when(named("integer"));
+        .use("a string").when(ofName("string"))
+        .use(0).when(ofName("integer"));
     TestObject obj = factory.create(TestObject.class).value();
     assertNotNull(obj);
     assertEquals("a string", obj.string);
@@ -85,7 +85,7 @@ public class ContextFactoryTest {
   public void testInsufficientContext() {
     ContextFactory factory = new ContextFactory();
     factory.context()
-        .use("a string").when(type(Integer.class))
+        .use("a string").when(ofType(Integer.class))
         .use(10).when(annotatedWith(Flag.class));
     assertNull(factory.create(TestObject.class).value());
   }

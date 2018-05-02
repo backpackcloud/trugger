@@ -34,7 +34,7 @@ public interface ClassPredicates {
   /**
    * Returns a predicate that checks if a class is of the given type.
    */
-  static Predicate<Class> type(Class type) {
+  static Predicate<Class> ofType(Class type) {
     return c -> c.equals(type);
   }
 
@@ -44,14 +44,14 @@ public interface ClassPredicates {
    * @since 5.1
    */
   static Predicate<Class> primitiveType() {
-    return type(int.class)
-        .or(type(double.class))
-        .or(type(boolean.class))
-        .or(type(char.class))
-        .or(type(long.class))
-        .or(type(float.class))
-        .or(type(short.class))
-        .or(type(byte.class));
+    return ofType(int.class)
+        .or(ofType(double.class))
+        .or(ofType(boolean.class))
+        .or(ofType(char.class))
+        .or(ofType(long.class))
+        .or(ofType(float.class))
+        .or(ofType(short.class))
+        .or(ofType(byte.class));
   }
 
   /**

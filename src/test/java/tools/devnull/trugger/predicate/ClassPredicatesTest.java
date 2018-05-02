@@ -24,7 +24,7 @@ import org.junit.Test;
 import static tools.devnull.trugger.TruggerTest.assertMatch;
 import static tools.devnull.trugger.TruggerTest.assertNotMatch;
 import static tools.devnull.trugger.reflection.ClassPredicates.subtypeOf;
-import static tools.devnull.trugger.reflection.ClassPredicates.type;
+import static tools.devnull.trugger.reflection.ClassPredicates.ofType;
 
 public class ClassPredicatesTest {
 
@@ -37,9 +37,9 @@ public class ClassPredicatesTest {
 
   @Test
   public void testTypePredicate() {
-    assertNotMatch(Exception.class, type(Throwable.class));
-    assertNotMatch(Throwable.class, type(Exception.class));
-    assertMatch(Throwable.class, type(Throwable.class));
+    assertNotMatch(Exception.class, ofType(Throwable.class));
+    assertNotMatch(Throwable.class, ofType(Exception.class));
+    assertMatch(Throwable.class, ofType(Throwable.class));
   }
 
 }
