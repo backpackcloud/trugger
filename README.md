@@ -478,12 +478,12 @@ factory.context()
   .use(myImplementation)
     .when(type(MyInterface.class))
   .use(someObject)
-    .when(named("component"))
+    .when(ofName("component"))
   .use(parameter ->
       resolve(parameter.getAnnotation(MyAnnotation.class)))
     .when(annotatedWith(MyAnnotation.class))
   .use(() -> availableWorker())
-    .when(type(MyWorker.class));
+    .when(ofType(MyWorker.class));
 ~~~
 
 The above factory will:
