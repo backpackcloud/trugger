@@ -71,14 +71,14 @@ public interface ElementPredicates {
    * A predicate that returns <code>true</code> if the element is writable.
    */
   static Predicate<Element> writable() {
-    return element -> element.isWritable();
+    return Element::isWritable;
   }
 
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
   static Predicate<Element> readable() {
-    return element -> element.isReadable();
+    return Element::isReadable;
   }
 
   /**
@@ -94,7 +94,7 @@ public interface ElementPredicates {
    * {@link Element#isSpecific() specific}.
    */
   static Predicate<Element> specific() {
-    return element -> element.isSpecific();
+    return Element::isSpecific;
   }
 
 }
