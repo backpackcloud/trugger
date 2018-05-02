@@ -50,7 +50,7 @@ public interface ReflectionPredicates {
    * @return a predicate that returns <code>true</code> if the evaluated element has a
    * name that with the given one.
    */
-  static <T extends Member> Predicate<T> named(String name) {
+  static <T extends Member> Predicate<T> ofName(String name) {
     return element -> element.getName().equals(name);
   }
 

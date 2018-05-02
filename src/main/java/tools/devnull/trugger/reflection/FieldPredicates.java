@@ -37,7 +37,7 @@ public interface FieldPredicates {
    * @return a predicate that returns <code>true</code> if a field is of the
    * given type.
    */
-  static Predicate<Field> type(Class type) {
+  static Predicate<Field> ofType(Class type) {
     return field -> type.equals(field.getType());
   }
 

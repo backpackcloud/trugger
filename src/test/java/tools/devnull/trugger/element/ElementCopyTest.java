@@ -29,7 +29,7 @@ import java.util.function.Function;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static tools.devnull.kodo.Expectation.to;
-import static tools.devnull.trugger.element.ElementPredicates.named;
+import static tools.devnull.trugger.element.ElementPredicates.ofName;
 import static tools.devnull.trugger.element.Elements.copy;
 import static tools.devnull.trugger.element.Elements.elements;
 
@@ -193,12 +193,12 @@ public class ElementCopyTest {
 
   @Test
   public void testFilter() {
-    copy(elements().filter(named("name")))
+    copy(elements().filter(ofName("name")))
         .from(testObject)
         .filter(copy -> assertFilterForDifferentType(copy))
         .to(new Properties());
 
-    copy(elements().filter(named("name")))
+    copy(elements().filter(ofName("name")))
         .from(testObject)
         .filter(copy -> assertFilterForSameType(copy))
         .to(new TestObject(null, null));
