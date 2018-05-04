@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import static tools.devnull.trugger.reflection.ParameterPredicates.named;
-import static tools.devnull.trugger.reflection.ParameterPredicates.type;
+import static tools.devnull.trugger.reflection.ParameterPredicates.ofName;
+import static tools.devnull.trugger.reflection.ParameterPredicates.ofType;
 import static tools.devnull.trugger.reflection.Reflection.invoke;
 
 /**
@@ -191,13 +191,13 @@ public class ComponentFactory<T extends Annotation, E> {
   private Optional<E> create(Annotation annotation, Class<E> classToCreate) {
     ContextFactory factory = new ContextFactory();
     Context context = factory.context();
-    context.use(annotation).when(type(annotation.annotationType()));
+    context.use(annotation).when(ofType(annotation.annotationType()));
     List<Element> elements = Elements.elements().from(annotation);
     for (Element el : elements) {
-      context.use(el::getValue).when(named(el.name()).and(type(el.type())));
+      context.use(el::getValue).when(ofName(el.name()).and(ofType(el.type())));
     }
     for (Element el : elements) {
-      context.use(el::getValue).when(type(el.type()));
+      context.use(el::getValue).when(ofType(el.type()));
     }
     contextConsumer.accept(context, annotation);
     return factory.toCreate(createFunction).create(classToCreate);

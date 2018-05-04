@@ -146,7 +146,7 @@ public final class ObjectElement extends AbstractElement {
   }
 
   private void searchForGetter() {
-    getter = searchMethod(getterOf(name).and(returns(type)));
+    getter = searchMethod(getterOf(name).and(returning(type)));
   }
 
   private Method searchMethod(Predicate<Method> predicate) {

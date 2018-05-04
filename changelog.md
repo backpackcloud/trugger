@@ -1,5 +1,12 @@
 # Changelog
 
+## Version
+
+### Major Changes
+
+- Renamed methods `type` and `named` from Predicates to `ofType` and `ofName`
+- Renamed `MethodPredicates#returns` to `#returning`
+
 ## Version 6.2
 
 ### Major Changes

@@ -62,7 +62,7 @@ public interface ElementPredicates {
    * @return a predicate that returns <code>true</code> if the element name
    * equals one of the specified names.
    */
-  static Predicate<Element> named(String... elementNames) {
+  static Predicate<Element> ofName(String... elementNames) {
     Arrays.sort(elementNames);
     return element -> Arrays.binarySearch(elementNames, element.name()) >= 0;
   }
@@ -71,14 +71,14 @@ public interface ElementPredicates {
    * A predicate that returns <code>true</code> if the element is writable.
    */
   static Predicate<Element> writable() {
-    return element -> element.isWritable();
+    return Element::isWritable;
   }
 
   /**
    * A predicate that returns <code>true</code> if the element is readable.
    */
   static Predicate<Element> readable() {
-    return element -> element.isReadable();
+    return Element::isReadable;
   }
 
   /**
@@ -94,7 +94,7 @@ public interface ElementPredicates {
    * {@link Element#isSpecific() specific}.
    */
   static Predicate<Element> specific() {
-    return element -> element.isSpecific();
+    return Element::isSpecific;
   }
 
 }
