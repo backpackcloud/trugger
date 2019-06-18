@@ -1,7 +1,7 @@
 /*
  * The Apache License
  *
- * Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
+ * Copyright 2009 Marcelo Guimaraes <ataxexe@backpackcloud.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-package tools.devnull.trugger;
+package io.backpackcloud.trugger;
 
+import io.backpackcloud.trugger.util.NullableArgFunction;
 import org.junit.Before;
 import org.junit.Test;
-import tools.devnull.trugger.util.OptionalFunction;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class OptionalFunctionTest {
+public class NullableArgFunctionTest {
 
   private Function function;
   private Supplier supplier;
@@ -61,16 +61,16 @@ public class OptionalFunctionTest {
   public void testSingleFunctionBehaviour() {
     when(function.apply(alternativeObject)).thenReturn(alternativeReturn);
 
-    assertEquals(mainReturn, OptionalFunction.of(function).apply(mainObject));
+    assertEquals(mainReturn, NullableArgFunction.of(function).apply(mainObject));
     verify(function).apply(mainObject);
 
-    assertNull(OptionalFunction.of(function).apply(alternativeObject));
+    assertNull(NullableArgFunction.of(function).apply(alternativeObject));
     verify(function, never()).apply(alternativeObject);
   }
 
   @Test
   public void testOptionalFunctionBehaviour() {
-    OptionalFunction function = OptionalFunction.of(this.function).orElse(supplier);
+    NullableArgFunction function = NullableArgFunction.of(this.function).orElse(supplier);
 
     assertEquals(mainReturn, function.apply(mainObject));
     verify(this.function).apply(mainObject);
@@ -81,7 +81,7 @@ public class OptionalFunctionTest {
 
   @Test
   public void testReturnBehaviour() {
-    OptionalFunction function = OptionalFunction.of(this.function).orElseReturn("OK");
+    NullableArgFunction function = NullableArgFunction.of(this.function).orElseReturn("OK");
 
     assertEquals(mainReturn, function.apply(mainObject));
     verify(this.function).apply(mainObject);
@@ -95,7 +95,7 @@ public class OptionalFunctionTest {
     Supplier exception = mock(Supplier.class);
     when(exception.get()).thenReturn(new TruggerException());
     try {
-      OptionalFunction function = OptionalFunction.of(this.function).orElseThrow(exception);
+      NullableArgFunction function = NullableArgFunction.of(this.function).orElseThrow(exception);
 
       assertEquals(mainReturn, function.apply(mainObject));
       verify(this.function).apply(mainObject);

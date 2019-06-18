@@ -23,56 +23,56 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * An utility function that behaves different if the supplied value is {@code null}.
+ * An utility function that behaves differently if the supplied value is {@code null}.
  *
- * @since 6.0
+ * @since 7.0
  */
-public class OptionalFunction<T, R> implements Function<T, R> {
+public class NullableArgFunction<T, R> implements Function<T, R> {
 
   private final Function<T, R> function;
   private final Supplier<R> supplier;
 
   /**
-   * Creates a new OptionalFunction based on the given functions.
+   * Creates a new NullableArgFunction based on the given functions.
    *
    * @param function the function to use for non-null values
    * @param supplier the supplier to use for null values
    */
-  public OptionalFunction(Function<T, R> function, Supplier<R> supplier) {
+  public NullableArgFunction(Function<T, R> function, Supplier<R> supplier) {
     this.function = function;
     this.supplier = supplier;
   }
 
   /**
-   * Creates a new OptionalFunction that will use the given function for null values.
+   * Creates a new NullableArgFunction that will use the given function for null values.
    *
    * @param supplier the supplier to use for null values.
-   * @return a new OptionalFunction
+   * @return a new NullableArgFunction
    */
-  public OptionalFunction<T, R> orElse(Supplier<R> supplier) {
-    return new OptionalFunction<>(function, supplier);
+  public NullableArgFunction<T, R> orElse(Supplier<R> supplier) {
+    return new NullableArgFunction<>(function, supplier);
   }
 
   /**
-   * Creates a new OptionalFunction that will use the given object as the return value
+   * Creates a new NullableArgFunction that will use the given object as the return value
    * for null values.
    *
    * @param value the value to return when this function is called with a null value
-   * @return a new OptionalFunction
+   * @return a new NullableArgFunction
    */
-  public OptionalFunction<T, R> orElseReturn(R value) {
-    return new OptionalFunction<>(this.function, () -> value);
+  public NullableArgFunction<T, R> orElseReturn(R value) {
+    return new NullableArgFunction<>(this.function, () -> value);
   }
 
   /**
-   * Creates a new OptionalFunction that will throw the exception supplied by the given
+   * Creates a new NullableArgFunction that will throw the exception supplied by the given
    * supplier for null values.
    *
    * @param exceptionSupplier the supplier to use when this function is called with a null value
-   * @return a new OptionalFunction
+   * @return a new NullableArgFunction
    */
-  public OptionalFunction<T, R> orElseThrow(Supplier<? extends RuntimeException> exceptionSupplier) {
-    return new OptionalFunction<>(this.function, () -> {
+  public NullableArgFunction<T, R> orElseThrow(Supplier<? extends RuntimeException> exceptionSupplier) {
+    return new NullableArgFunction<>(this.function, () -> {
       throw exceptionSupplier.get();
     });
   }
@@ -83,7 +83,7 @@ public class OptionalFunction<T, R> implements Function<T, R> {
   }
 
   /**
-   * Creates a new OptionalFunction in a fluent way. To define the alternative behavior,
+   * Creates a new NullableArgFunction in a fluent way. To define the alternative behavior,
    * use one of the orElse* methods.
    * <p>
    * The returned function will return {@code null} as the alternative behaviour.
@@ -91,10 +91,10 @@ public class OptionalFunction<T, R> implements Function<T, R> {
    * @param function the main function to use for non-null values.
    * @param <T>      the type of the input
    * @param <R>      the type of the result
-   * @return a new OptionalFunction
+   * @return a new NullableArgFunction
    */
-  public static <T, R> OptionalFunction<T, R> of(Function<T, R> function) {
-    return new OptionalFunction<>(function, () -> null);
+  public static <T, R> NullableArgFunction<T, R> of(Function<T, R> function) {
+    return new NullableArgFunction<>(function, () -> null);
   }
 
 }
