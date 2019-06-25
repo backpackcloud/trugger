@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector for {@link Element} objects.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface ElementsSelector {
 

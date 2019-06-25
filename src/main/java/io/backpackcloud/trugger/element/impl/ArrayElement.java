@@ -25,7 +25,7 @@ import io.backpackcloud.trugger.element.Element;
 
 import java.lang.reflect.Array;
 
-/** @author Marcelo "Ataxexe" Guimarães */
+/** @author Marcelo Guimaraes */
 public class ArrayElement extends AbstractElement implements Element {
 
   private int index;

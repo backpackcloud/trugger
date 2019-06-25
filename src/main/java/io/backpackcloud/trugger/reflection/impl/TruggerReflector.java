@@ -18,16 +18,15 @@
  */
 package io.backpackcloud.trugger.reflection.impl;
 
-import io.backpackcloud.trugger.Optional;
-import io.backpackcloud.trugger.reflection.GenericTypeSelector;
-import io.backpackcloud.trugger.reflection.ReflectionException;
-import io.backpackcloud.trugger.reflection.Reflector;
 import io.backpackcloud.trugger.reflection.ConstructorSelector;
 import io.backpackcloud.trugger.reflection.ConstructorsSelector;
 import io.backpackcloud.trugger.reflection.FieldSelector;
 import io.backpackcloud.trugger.reflection.FieldsSelector;
+import io.backpackcloud.trugger.reflection.GenericTypeSelector;
 import io.backpackcloud.trugger.reflection.MethodSelector;
 import io.backpackcloud.trugger.reflection.MethodsSelector;
+import io.backpackcloud.trugger.reflection.ReflectionException;
+import io.backpackcloud.trugger.reflection.Reflector;
 import io.backpackcloud.trugger.util.Utils;
 
 import java.lang.reflect.Method;
@@ -37,13 +36,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * An implementation of the reflection operations.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerReflector implements Reflector {
 

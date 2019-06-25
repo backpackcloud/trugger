@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * A default implementation for ElementFactory.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class TruggerElementFactory implements ElementFactory {
 

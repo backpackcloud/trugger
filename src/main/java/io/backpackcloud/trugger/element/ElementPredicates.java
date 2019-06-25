@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  * An utility class for helping the use of {@link Predicate predicates} for
  * {@link Element elements}.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 1.2
  */
 public interface ElementPredicates {

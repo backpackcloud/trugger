@@ -21,7 +21,7 @@ package io.backpackcloud.trugger.element;
 /**
  * Interface that defines a factory for {@link Element} objects operations.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 1.2
  */
 public interface ElementFactory {

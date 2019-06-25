@@ -19,22 +19,21 @@
 
 package io.backpackcloud.trugger.util.factory;
 
-import io.backpackcloud.trugger.reflection.Reflection;
-import io.backpackcloud.trugger.Optional;
 import io.backpackcloud.trugger.element.Element;
 import io.backpackcloud.trugger.element.Elements;
+import io.backpackcloud.trugger.reflection.Reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import static io.backpackcloud.trugger.reflection.ParameterPredicates.ofName;
 import static io.backpackcloud.trugger.reflection.ParameterPredicates.ofType;
-import static io.backpackcloud.trugger.reflection.Reflection.invoke;
 
 /**
  * A factory to create components specified by annotations. This factory relies on
@@ -146,7 +145,7 @@ public class ComponentFactory<T extends Annotation, E> {
     Class<?> type = annotation.annotationType();
     if (type.isAnnotationPresent(annotationType)) {
       T classAnnotation = type.getAnnotation(annotationType);
-      Element element = Elements.element(classElement).from(classAnnotation).result();
+      Element element = Elements.element(classElement).from(classAnnotation).get();
       Class<E> typeToCreate = element.getValue();
       return create(annotation, typeToCreate);
     }

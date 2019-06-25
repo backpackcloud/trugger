@@ -22,7 +22,7 @@ package io.backpackcloud.trugger;
  * Interface that defines a component for handling, modifying and/or accessing a
  * value according to the implementation behavior.
  * 
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface ValueHandler {
   

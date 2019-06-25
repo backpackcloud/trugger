@@ -18,7 +18,7 @@
  */
 package io.backpackcloud.trugger.interception;
 
-import io.backpackcloud.trugger.util.ImplementationLoader;
+import io.backpackcloud.trugger.interception.impl.TruggerInterceptorFactory;
 
 /**
  * A class for helping create proxy instances
@@ -30,7 +30,7 @@ public final class Interception {
   private static final InterceptorFactory factory;
 
   static {
-    factory = ImplementationLoader.get(InterceptorFactory.class);
+    factory = new TruggerInterceptorFactory();
   }
 
   private Interception() {

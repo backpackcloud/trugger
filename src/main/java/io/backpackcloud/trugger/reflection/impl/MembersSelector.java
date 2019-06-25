@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * A base class for selecting a set of {@link Member} objects.
  *
  * @param <T> The member type.
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class MembersSelector<T extends Member> {
 

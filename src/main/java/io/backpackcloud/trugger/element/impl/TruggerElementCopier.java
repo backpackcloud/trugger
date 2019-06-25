@@ -25,7 +25,6 @@ import io.backpackcloud.trugger.element.ElementCopy;
 import io.backpackcloud.trugger.element.Elements;
 import io.backpackcloud.trugger.element.ElementsSelector;
 import io.backpackcloud.trugger.util.Utils;
-import tools.devnull.trugger.element.*;
 
 import java.util.List;
 import java.util.function.Function;
@@ -34,7 +33,7 @@ import java.util.function.Predicate;
 /**
  * The default implementation for the property copy operation.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class TruggerElementCopier implements ElementCopier, CopyDestinationMapper {
 
@@ -97,7 +96,7 @@ public final class TruggerElementCopier implements ElementCopier, CopyDestinatio
       if (src.getClass().equals(dest.getClass())) {
         destProperty = element.isWritable() ? element : null;
       } else {
-        destProperty = Elements.element(name).from(dest).result();
+        destProperty = Elements.element(name).from(dest).orElse(null);
       }
       if (destProperty != null && element.isReadable() && destProperty.isWritable()) {
         copy(destProperty, element, dest);

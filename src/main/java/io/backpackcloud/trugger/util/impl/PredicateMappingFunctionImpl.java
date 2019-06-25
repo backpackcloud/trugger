@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 /**
  * An implementation of a PredicateMappingFunction
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class PredicateMappingFunctionImpl<T, R> implements PredicateMappingFunction<T, R> {
 

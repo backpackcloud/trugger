@@ -19,6 +19,7 @@
 package io.backpackcloud.trugger.reflection.impl;
 
 import io.backpackcloud.trugger.reflection.MethodsSelector;
+import io.backpackcloud.trugger.reflection.ReflectedMethod;
 import io.backpackcloud.trugger.reflection.Reflection;
 
 import java.lang.reflect.Method;
@@ -26,11 +27,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A default implementation for the methods selector.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerMethodsSelector implements MethodsSelector {
 
@@ -63,8 +65,12 @@ public class TruggerMethodsSelector implements MethodsSelector {
   }
 
   @Override
-  public List<Method> from(Object target) {
-    return new MembersSelector<>(finder, predicate, function).selectFrom(target);
+  public List<ReflectedMethod> from(Object target) {
+    return new MembersSelector<>(finder, predicate, function)
+        .selectFrom(target)
+        .stream()
+        .map(method -> new ReflectedMethod(method, target))
+        .collect(Collectors.toList());
   }
 
 }

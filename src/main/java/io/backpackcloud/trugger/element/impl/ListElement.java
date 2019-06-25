@@ -26,7 +26,7 @@ import io.backpackcloud.trugger.element.Element;
 import java.util.List;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 5.1
  */
 public class ListElement extends AbstractElement implements Element {

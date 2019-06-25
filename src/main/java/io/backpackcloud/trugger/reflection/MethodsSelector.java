@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector for {@link Method} objects.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface MethodsSelector {
 
@@ -53,6 +53,6 @@ public interface MethodsSelector {
    * @param target the target to apply the selection
    * @return the result
    */
-  List<Method> from(Object target);
+  List<ReflectedMethod> from(Object target);
 
 }

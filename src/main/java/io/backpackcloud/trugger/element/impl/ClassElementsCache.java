@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A class to cache elements.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 4.0
  */
 abstract class ClassElementsCache {

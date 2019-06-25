@@ -18,17 +18,17 @@
  */
 package io.backpackcloud.trugger.element.impl;
 
-import io.backpackcloud.trugger.SelectionResult;
 import io.backpackcloud.trugger.element.Element;
 import io.backpackcloud.trugger.element.ElementFinder;
 import io.backpackcloud.trugger.element.ElementSelector;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * A default implementation for {@link ElementSelector}.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerElementSelector implements ElementSelector {
 
@@ -53,9 +53,8 @@ public class TruggerElementSelector implements ElementSelector {
     return new TruggerElementSelector(name, finder, predicate);
   }
 
-  public SelectionResult<Element> from(Object target) {
-    Element element = finder.find(name, target).filter(predicate).value();
-    return new SelectionResult<>(target, element);
+  public Optional<Element> from(Object target) {
+    return finder.find(name, target).filter(predicate);
   }
 
 }

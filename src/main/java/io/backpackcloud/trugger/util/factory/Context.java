@@ -19,9 +19,8 @@
 
 package io.backpackcloud.trugger.util.factory;
 
-import io.backpackcloud.trugger.Optional;
-
 import java.lang.reflect.Parameter;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;

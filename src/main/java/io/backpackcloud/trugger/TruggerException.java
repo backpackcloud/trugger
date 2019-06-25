@@ -21,7 +21,7 @@ package io.backpackcloud.trugger;
 /**
  * The root exception for the entire framework.
  *
- * @author Marcelo "Ataxexe" Guimarães.
+ * @author Marcelo Guimaraes.
  */
 public class TruggerException extends RuntimeException {
 

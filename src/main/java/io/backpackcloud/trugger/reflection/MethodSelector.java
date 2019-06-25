@@ -18,16 +18,15 @@
  */
 package io.backpackcloud.trugger.reflection;
 
-import io.backpackcloud.trugger.SelectionResult;
-
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for a single {@link Method} object assuming that the
  * name was specified before.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface MethodSelector {
 
@@ -59,6 +58,6 @@ public interface MethodSelector {
    * @param target the target to apply the selection
    * @return the result
    */
-  SelectionResult<Method> from(Object target);
+  Optional<ReflectedMethod> from(Object target);
 
 }

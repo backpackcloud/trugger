@@ -22,7 +22,7 @@ package io.backpackcloud.trugger;
  * Interface that defines a class capable of invoking a object with the possibility of
  * passing arguments.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface Invoker {
 

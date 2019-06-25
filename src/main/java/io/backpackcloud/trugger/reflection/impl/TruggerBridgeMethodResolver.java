@@ -18,6 +18,7 @@
  */
 package io.backpackcloud.trugger.reflection.impl;
 
+import io.backpackcloud.trugger.reflection.ReflectedMethod;
 import io.backpackcloud.trugger.reflection.Reflection;
 import io.backpackcloud.trugger.reflection.ReflectionException;
 
@@ -48,7 +49,7 @@ import java.util.function.Predicate;
  *
  * @author Rob Harrop
  * @author Juergen Hoeller
- * @author Marcelo "Ataxexe" Guimarães (some code adaptations).
+ * @author Marcelo Guimaraes (some code adaptations).
  */
 final class TruggerBridgeMethodResolver {
 
@@ -77,19 +78,21 @@ final class TruggerBridgeMethodResolver {
       return bridgeMethod;
     }
     // Gather all methods with matching name and parameter size.
-    List<Method> candidateMethods = Reflection.reflect().methods().deep()
+    List<ReflectedMethod> candidateMethods = Reflection.reflect().methods().deep()
         .filter(new SimpleBridgeCandidatePredicate())
         .from(bridgeMethod.getDeclaringClass());
 
     if (candidateMethods.isEmpty()) {
       throw new ReflectionException("Unable to locate bridged method for bridge method '" + bridgeMethod + '\'');
     } else if (candidateMethods.size() > 1) {
-      Predicate bridgeCandidate = new BridgeCandidatePredicate();
-      return (Method) candidateMethods.stream()
+      Predicate<ReflectedMethod> bridgeCandidate = new BridgeCandidatePredicate();
+      return candidateMethods.stream()
           .filter(bridgeCandidate)
-          .findAny().orElse(null);
+          .findAny()
+          .map(ReflectedMethod::actualMethod)
+          .orElse(null);
     }
-    return candidateMethods.iterator().next();
+    return candidateMethods.iterator().next().actualMethod();
   }
 
   private class SimpleBridgeCandidatePredicate implements Predicate<Method> {
@@ -102,7 +105,7 @@ final class TruggerBridgeMethodResolver {
 
   }
 
-  private class BridgeCandidatePredicate implements Predicate<Method> {
+  private class BridgeCandidatePredicate implements Predicate<ReflectedMethod> {
 
     /**
      * Returns <code>true if the {@link Type} signature of both the supplied
@@ -177,16 +180,16 @@ final class TruggerBridgeMethodResolver {
       return Reflection.reflect().method(bridgeMethod.getName())
           .withParameters(bridgeMethod.getParameterTypes())
           .from(type)
-          .orElseReturn(() -> null)
-          .result();
+          .map(ReflectedMethod::actualMethod)
+          .orElse(null);
     }
 
-    public boolean test(Method candidateMethod) {
-      if (isResolvedTypeMatch(candidateMethod, bridgeMethod)) {
+    public boolean test(ReflectedMethod candidateMethod) {
+      if (isResolvedTypeMatch(candidateMethod.actualMethod(), bridgeMethod)) {
         return true;
       }
       Method method = findGenericDeclaration();
-      return ((method != null) && isResolvedTypeMatch(method, candidateMethod));
+      return ((method != null) && isResolvedTypeMatch(method, candidateMethod.actualMethod()));
     }
   }
 }

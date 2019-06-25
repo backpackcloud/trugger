@@ -18,16 +18,16 @@
  */
 package io.backpackcloud.trugger.element.impl;
 
-import io.backpackcloud.trugger.Optional;
 import io.backpackcloud.trugger.element.Element;
 import io.backpackcloud.trugger.element.ElementFinder;
+import io.backpackcloud.trugger.reflection.ReflectedMethod;
 import io.backpackcloud.trugger.reflection.Reflection;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * <p>
  * All methods declared on the annotation will be treat as a property.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class AnnotationElementFinder implements ElementFinder {
 
@@ -47,12 +47,13 @@ public final class AnnotationElementFinder implements ElementFinder {
   private ClassElementsCache cache = new ClassElementsCache() {
     @Override
     protected void loadElements(Class type, Map<String, Element> map) {
-      List<Method> declaredMethods = Reflection.reflect().methods().from(type);
-      AnnotationElement prop;
-      for (Method method : declaredMethods) {
-        prop = new AnnotationElement(method);
-        map.put(prop.name(), prop);
-      }
+      Reflection.reflect()
+          .methods()
+          .from(type)
+          .stream()
+          .map(ReflectedMethod::actualMethod)
+          .map(AnnotationElement::new)
+          .forEach(prop -> map.put(prop.name(), prop));
     }
   };
 
@@ -70,7 +71,7 @@ public final class AnnotationElementFinder implements ElementFinder {
   public final Optional<Element> find(String propertyName, Object target) {
     Element property = cache.get(target, propertyName);
     if (target instanceof Class<?>) {
-      return Optional.of(property);
+      return Optional.ofNullable(property);
     } else if (property != null) {
       return Optional.of(new SpecificElement(property, target));
     }

@@ -18,7 +18,6 @@
  */
 package io.backpackcloud.trugger.element.impl;
 
-import io.backpackcloud.trugger.Optional;
 import io.backpackcloud.trugger.TruggerException;
 import io.backpackcloud.trugger.element.Element;
 import io.backpackcloud.trugger.element.ElementFinder;
@@ -29,9 +28,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class ResultSetElementFinder implements ElementFinder {
 

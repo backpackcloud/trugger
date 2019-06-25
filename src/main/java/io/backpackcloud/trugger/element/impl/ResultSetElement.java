@@ -28,7 +28,7 @@ import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class ResultSetElement extends AbstractElement implements Element {
 

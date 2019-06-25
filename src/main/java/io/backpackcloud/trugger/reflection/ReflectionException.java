@@ -25,7 +25,7 @@ import io.backpackcloud.trugger.TruggerException;
  * <p>
  * This exception should be used only for encapsulation of another exceptions.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class ReflectionException extends TruggerException {
 

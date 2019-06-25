@@ -18,18 +18,18 @@
  */
 package io.backpackcloud.trugger.element.impl;
 
-import io.backpackcloud.trugger.Optional;
 import io.backpackcloud.trugger.element.Element;
 import io.backpackcloud.trugger.element.ElementFinder;
 import io.backpackcloud.trugger.util.Utils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
  * A default implementation for an Element finder.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class TruggerElementFinder implements ElementFinder {
 
@@ -50,7 +50,7 @@ public final class TruggerElementFinder implements ElementFinder {
   @Override
   public Optional<Element> find(String name, Object target) {
     if (name.indexOf('.') > -1) {
-      return Optional.of(NestedElement.createNestedElement(target, name));
+      return Optional.ofNullable(NestedElement.createNestedElement(target, name));
     }
     Class type = Utils.resolveType(target);
     return registry.stream()

@@ -567,18 +567,3 @@ Or creating a single one by passing an `AnnotatedElement` to the method `#create
 Element = Elements.element("aField").from(myObject).result();
 Component component = factory.create(element);
 ~~~
-
-# Extending
-
-## How To Implement the Fluent Interfaces
-
-The fluent interfaces are always defined through java interfaces and may be customized by your own implementation.
-Trugger uses a `ServiceLoader` to load a factory that knows the implementations to instantiate, so you can override the
-implementation of any fluent interface by defining a file in your **META-INF/services** directory with the factory
-implementation.
-
-The factory interfaces that can be customized are listed bellow:
-
-- `ElementFactory`: used for selecting elements
-- `ReflectionFactory`: used for reflection in general
-- `InterceptorFactory`: used for method interception

@@ -23,14 +23,19 @@ import io.backpackcloud.trugger.ValueHandler;
 import io.backpackcloud.trugger.element.UnreadableElementException;
 import io.backpackcloud.trugger.element.UnwritableElementException;
 import io.backpackcloud.trugger.reflection.MethodPredicates;
+import io.backpackcloud.trugger.reflection.ReflectedField;
+import io.backpackcloud.trugger.reflection.ReflectedMethod;
 import io.backpackcloud.trugger.reflection.Reflection;
 import io.backpackcloud.trugger.reflection.ReflectionException;
 
-import java.lang.reflect.*;
-import java.util.Collection;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
-import static io.backpackcloud.trugger.reflection.MethodPredicates.*;
+import static io.backpackcloud.trugger.reflection.MethodPredicates.getterOf;
+import static io.backpackcloud.trugger.reflection.MethodPredicates.setterOf;
 
 /**
  * This class represents an object property.
@@ -46,7 +51,7 @@ import static io.backpackcloud.trugger.reflection.MethodPredicates.*;
  * <p>
  * For value manipulations (write and read), the methods are used all the time.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class ObjectElement extends AbstractElement {
 
@@ -85,7 +90,11 @@ public final class ObjectElement extends AbstractElement {
       type = setter.getParameterTypes()[0];
       searchForGetter();
     }
-    field = Reflection.reflect().field(name).from(declaringClass).result();
+    field = Reflection.reflect()
+        .field(name)
+        .from(declaringClass)
+        .map(ReflectedField::actualField)
+        .orElse(null);
     searchForAnnotatedElement();
   }
 
@@ -151,9 +160,15 @@ public final class ObjectElement extends AbstractElement {
   }
 
   private Method searchMethod(Predicate<Method> predicate) {
-    Collection<Method> candidates = Reflection.reflect().methods().deep()
-        .filter(predicate).from(declaringClass);
-    return candidates.isEmpty() ? null : candidates.iterator().next();
+    return Reflection.reflect()
+        .methods()
+        .deep()
+        .filter(predicate)
+        .from(declaringClass)
+        .stream()
+        .findFirst()
+        .map(ReflectedMethod::actualMethod)
+        .orElse(null);
   }
 
   private void searchForAnnotatedElement() {

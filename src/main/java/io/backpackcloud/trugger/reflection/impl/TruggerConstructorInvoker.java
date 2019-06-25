@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * A default implementation for invoking {@link Constructor} objects.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerConstructorInvoker implements ConstructorInvoker {
 

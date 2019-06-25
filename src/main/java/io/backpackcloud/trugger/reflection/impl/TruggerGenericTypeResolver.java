@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
- * @author Marcelo "Ataxexe" Guimarães (method {@link #resolveParameterName(String,
+ * @author Marcelo Guimaraes (method {@link #resolveParameterName(String,
  *         Class)} and default visibility to public methods).
  */
 final class TruggerGenericTypeResolver {

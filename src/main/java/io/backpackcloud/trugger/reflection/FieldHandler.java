@@ -42,7 +42,7 @@ import java.lang.reflect.Field;
  * handler.on(instance).value(newValue);
  * </pre>
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface FieldHandler extends ValueHandler {
 

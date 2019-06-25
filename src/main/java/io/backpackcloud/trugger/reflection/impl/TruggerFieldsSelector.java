@@ -19,6 +19,7 @@
 package io.backpackcloud.trugger.reflection.impl;
 
 import io.backpackcloud.trugger.reflection.FieldsSelector;
+import io.backpackcloud.trugger.reflection.ReflectedField;
 import io.backpackcloud.trugger.reflection.Reflection;
 
 import java.lang.reflect.Field;
@@ -26,11 +27,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A default implementation for the fields selector.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerFieldsSelector implements FieldsSelector {
 
@@ -62,8 +64,12 @@ public class TruggerFieldsSelector implements FieldsSelector {
     return new TruggerFieldsSelector(this.finder, this.predicate, Reflection::hierarchyOf);
   }
 
-  public List<Field> from(Object target) {
-    return new MembersSelector<>(finder, predicate, function).selectFrom(target);
+  public List<ReflectedField> from(Object target) {
+    return new MembersSelector<>(finder, predicate, function)
+        .selectFrom(target)
+        .stream()
+        .map(field -> new ReflectedField(field, target))
+        .collect(Collectors.toList());
   }
 
 }

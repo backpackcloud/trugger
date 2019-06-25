@@ -1,11 +1,13 @@
 # Changelog
 
-## Version
+## Version 7.0.0
 
 ### Major Changes
 
+- Renamed groupId to `io.backpackcloud`
 - Renamed methods `type` and `named` from Predicates to `ofType` and `ofName`
 - Renamed `MethodPredicates#returns` to `#returning`
+- Dropped OSGi support
 
 ## Version 6.2
 

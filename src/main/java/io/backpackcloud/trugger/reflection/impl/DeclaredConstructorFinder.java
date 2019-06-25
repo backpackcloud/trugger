@@ -21,7 +21,7 @@ package io.backpackcloud.trugger.reflection.impl;
 import java.lang.reflect.Constructor;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class DeclaredConstructorFinder implements MemberFinder<Constructor<?>> {
 

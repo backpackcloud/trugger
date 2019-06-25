@@ -19,15 +19,17 @@
 package io.backpackcloud.trugger.reflection.impl;
 
 import io.backpackcloud.trugger.reflection.ConstructorsSelector;
+import io.backpackcloud.trugger.reflection.ReflectedConstructor;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A default implementation for the constructors selector.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class TruggerConstructorsSelector implements ConstructorsSelector {
 
@@ -51,8 +53,12 @@ public final class TruggerConstructorsSelector implements ConstructorsSelector {
     return new TruggerConstructorsSelector(finder, predicate);
   }
 
-  public List<Constructor<?>> from(Object target) {
-    return new MembersSelector<>(finder, predicate).selectFrom(target);
+  public List<ReflectedConstructor> from(Object target) {
+    return new MembersSelector<>(finder, predicate)
+        .selectFrom(target)
+        .stream()
+        .map(ReflectedConstructor::new)
+        .collect(Collectors.toList());
   }
 
 }

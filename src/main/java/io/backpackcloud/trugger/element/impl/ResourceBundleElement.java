@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
  * A class that represents a ResourceBundle element. It uses the mapped keys
  * as the elements.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class ResourceBundleElement extends AbstractElement implements Element {
 

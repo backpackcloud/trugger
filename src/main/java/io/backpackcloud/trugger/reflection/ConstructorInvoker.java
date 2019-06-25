@@ -31,7 +31,7 @@ import io.backpackcloud.trugger.Invoker;
  * MyType instance = {@link Reflection#invoke(Constructor)}.withArgs(argument1, argument2);
  * </pre>
  * 
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface ConstructorInvoker extends Invoker {
 

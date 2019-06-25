@@ -18,14 +18,13 @@
  */
 package io.backpackcloud.trugger.element;
 
-import io.backpackcloud.trugger.Optional;
-
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface that defines a class capable of search a source for elements
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 6.0
  */
 public interface ElementFinder {

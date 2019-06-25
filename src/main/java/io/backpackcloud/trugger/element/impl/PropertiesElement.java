@@ -25,7 +25,7 @@ import io.backpackcloud.trugger.element.Element;
 import java.util.Properties;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class PropertiesElement extends AbstractElement implements Element {
 

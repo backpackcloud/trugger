@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 /**
  * A class to handle a path of {@link Element properties}.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class NestedElement extends AbstractElement implements Element {
 
@@ -153,7 +153,7 @@ public final class NestedElement extends AbstractElement implements Element {
     Element element;
     Object _source = source;
     for (String string : names) {
-      element = Elements.element(string).from(_source).result();
+      element = Elements.element(string).from(_source).orElse(null);
       if (element == null) {
         return null;
       }

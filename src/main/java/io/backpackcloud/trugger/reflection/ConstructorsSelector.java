@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector for {@link Constructor} objects.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface ConstructorsSelector {
 
@@ -44,6 +44,6 @@ public interface ConstructorsSelector {
    * @param target the target to apply the selection
    * @return the result
    */
-  List<Constructor<?>> from(Object target);
+  List<ReflectedConstructor> from(Object target);
 
 }

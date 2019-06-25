@@ -27,7 +27,7 @@ import java.lang.reflect.AnnotatedElement;
 /**
  * A common abstraction for an Element.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public abstract class AbstractElement implements Element {
 

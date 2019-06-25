@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * Interface for defining a destination to a copy.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 4.1
  */
 public interface CopyDestinationMapper {

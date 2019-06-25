@@ -18,12 +18,12 @@
  */
 package io.backpackcloud.trugger.reflection.impl;
 
-import io.backpackcloud.trugger.SelectionResult;
 import io.backpackcloud.trugger.reflection.ReflectionException;
 import io.backpackcloud.trugger.util.Utils;
 
 import java.lang.reflect.Member;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -31,7 +31,7 @@ import java.util.function.Predicate;
  * A base class for selecting a single {@link Member} object.
  *
  * @param <T> The member type.
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class MemberSelector<T extends Member> {
 
@@ -68,14 +68,14 @@ public class MemberSelector<T extends Member> {
     return element;
   }
 
-  public final SelectionResult<T> selectFrom(Object target) {
+  public final Optional<T> selectFrom(Object target) {
     for (Class type : function.apply(Utils.resolveType(target))) {
       T member = findMember(type);
       if (member != null) {
-        return new SelectionResult<>(target, member);
+        return Optional.of(member);
       }
     }
-    return new SelectionResult<>(target, null);
+    return Optional.empty();
   }
 
 }

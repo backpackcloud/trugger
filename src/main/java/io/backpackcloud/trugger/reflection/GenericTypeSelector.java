@@ -22,7 +22,7 @@ package io.backpackcloud.trugger.reflection;
 /**
  * Interface for selecting the generic type.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 6.0
  */
 public interface GenericTypeSelector {

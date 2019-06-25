@@ -18,18 +18,19 @@
  */
 package io.backpackcloud.trugger.reflection.impl;
 
-import io.backpackcloud.trugger.SelectionResult;
 import io.backpackcloud.trugger.reflection.ConstructorSelector;
+import io.backpackcloud.trugger.reflection.ReflectedConstructor;
 import io.backpackcloud.trugger.reflection.ReflectionException;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * A default implementation for the constructor selector.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerConstructorSelector implements ConstructorSelector {
 
@@ -65,22 +66,25 @@ public class TruggerConstructorSelector implements ConstructorSelector {
   }
 
   @Override
-  public SelectionResult<Constructor<?>> from(Object target) throws ReflectionException {
+  public Optional<ReflectedConstructor> from(Object target) throws ReflectionException {
     if (parameterTypes != null) {
-      return new MemberSelector(registry.constructorFinder(parameterTypes), predicate).selectFrom(target);
+      return new MemberSelector<>(registry.constructorFinder(parameterTypes), predicate)
+          .selectFrom(target)
+          .map(ReflectedConstructor::new);
     }
     List<Constructor<?>> constructors =
         new MembersSelector<>(registry.constructorsFinder()).selectFrom(target);
     if (predicate != null) {
-      return new SelectionResult(target, constructors.stream()
+      return constructors.stream()
           .filter(predicate)
           .findFirst()
-          .orElse(null));
+          .map(ReflectedConstructor::new);
     } else if (constructors.size() > 1) {
       throw new ReflectionException("More than one constructor found for " +
           target.getClass());
     } else {
-      return new SelectionResult(target, constructors.iterator().next());
+      return Optional.of(constructors.iterator().next())
+          .map(ReflectedConstructor::new);
     }
   }
 

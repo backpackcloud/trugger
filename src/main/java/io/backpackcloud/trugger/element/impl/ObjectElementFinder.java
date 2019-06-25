@@ -18,25 +18,27 @@
  */
 package io.backpackcloud.trugger.element.impl;
 
-import io.backpackcloud.trugger.Optional;
 import io.backpackcloud.trugger.element.Element;
 import io.backpackcloud.trugger.element.ElementFinder;
-import io.backpackcloud.trugger.reflection.MethodPredicates;
+import io.backpackcloud.trugger.reflection.ReflectedField;
+import io.backpackcloud.trugger.reflection.ReflectedMethod;
 import io.backpackcloud.trugger.reflection.Reflection;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static io.backpackcloud.trugger.reflection.MethodPredicates.getter;
+import static io.backpackcloud.trugger.reflection.MethodPredicates.setter;
 
 /**
  * A default class for finding properties in objects.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public final class ObjectElementFinder implements ElementFinder {
 
@@ -48,27 +50,32 @@ public final class ObjectElementFinder implements ElementFinder {
     }
 
     private void loadUsingFields(Class type, Map<String, Element> map) {
-      List<Field> fields = Reflection.reflect().fields().from(type);
-      for (Field field : fields) {
-        if (!map.containsKey(field.getName())) {
-          ObjectElement prop = new ObjectElement(field);
-          map.put(prop.name(), prop);
-        }
-      }
+      Reflection.reflect()
+          .fields()
+          .from(type)
+          .stream()
+          .map(ReflectedField::actualField)
+          .forEach(field -> {
+            if (!map.containsKey(field.getName())) {
+              ObjectElement prop = new ObjectElement(field);
+              map.put(prop.name(), prop);
+            }
+          });
     }
 
     private void loadUsingMethods(Class type, Map<String, Element> map) {
-      List<Method> declaredMethods = Reflection.reflect().methods()
-          .filter(
-              MethodPredicates.getter().or(MethodPredicates.setter()))
-          .from(type);
-      for (Method method : declaredMethods) {
-        String name = Reflection.parsePropertyName(method);
-        if (!map.containsKey(name)) {
-          ObjectElement prop = new ObjectElement(method, name);
-          map.put(prop.name(), prop);
-        }
-      }
+      Reflection.reflect().methods()
+          .filter(getter().or(setter()))
+          .from(type)
+          .stream()
+          .map(ReflectedMethod::actualMethod)
+          .forEach(method -> {
+            String name = Reflection.parsePropertyName(method);
+            if (!map.containsKey(name)) {
+              ObjectElement prop = new ObjectElement(method, name);
+              map.put(prop.name(), prop);
+            }
+          });
     }
   };
 
@@ -81,7 +88,8 @@ public final class ObjectElementFinder implements ElementFinder {
     for (Class type : Reflection.hierarchyOf(target)) {
       Element element = cache.get(type, propertyName);
       if (element != null) {
-        return Optional.of(target instanceof Class ? element : new SpecificElement(element, target));
+        return Optional.of(target instanceof Class ?
+            element : new SpecificElement(element, target));
       }
     }
     return Optional.empty();

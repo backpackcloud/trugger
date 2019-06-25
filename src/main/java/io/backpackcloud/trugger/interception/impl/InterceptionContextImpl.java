@@ -18,7 +18,9 @@
  */
 package io.backpackcloud.trugger.interception.impl;
 
+import io.backpackcloud.trugger.TruggerException;
 import io.backpackcloud.trugger.interception.InterceptionContext;
+import io.backpackcloud.trugger.reflection.ReflectedMethod;
 import io.backpackcloud.trugger.reflection.Reflection;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +29,7 @@ import java.lang.reflect.Method;
 /**
  * This class holds the parameters of a method interception.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 5.0
  */
 public class InterceptionContextImpl implements InterceptionContext {
@@ -93,9 +95,12 @@ public class InterceptionContextImpl implements InterceptionContext {
         .deep()
         .withParameters(parameterTypes)
         .from(target)
-        .result();
+        .map(ReflectedMethod::actualMethod)
+        .orElseThrow(TruggerException::new);
     if (targetMethod.isBridge()) {
-      return Reflection.reflect().bridgedMethodFor(targetMethod).value();
+      return Reflection.reflect()
+          .bridgedMethodFor(targetMethod)
+          .orElseThrow(TruggerException::new);
     }
     return targetMethod;
   }

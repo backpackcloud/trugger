@@ -18,16 +18,15 @@
  */
 package io.backpackcloud.trugger.reflection;
 
-import io.backpackcloud.trugger.SelectionResult;
-
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for a single {@link Field} object assuming
  * that the name was specified before.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface FieldSelector {
 
@@ -55,6 +54,6 @@ public interface FieldSelector {
    * @param target the target to apply the selection
    * @return the result
    */
-  SelectionResult<Field> from(Object target);
+  Optional<ReflectedField> from(Object target);
 
 }

@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
 /**
  * Implementation for the FieldHandler interface.
  * 
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerFieldHandler implements FieldHandler {
   

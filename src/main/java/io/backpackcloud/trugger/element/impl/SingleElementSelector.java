@@ -19,12 +19,12 @@
 
 package io.backpackcloud.trugger.element.impl;
 
-import io.backpackcloud.trugger.SelectionResult;
 import io.backpackcloud.trugger.element.Element;
 import io.backpackcloud.trugger.element.ElementSelector;
 import io.backpackcloud.trugger.element.Elements;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -50,10 +50,10 @@ class SingleElementSelector implements ElementSelector {
   }
 
   @Override
-  public SelectionResult<Element> from(Object target) {
+  public Optional<Element> from(Object target) {
     List<Element> elements = Elements.elements().filter(predicate).from(target);
     return elements.isEmpty() ?
-        new SelectionResult<>(target, null) :
-        new SelectionResult<>(target, elements.iterator().next());
+        Optional.empty() :
+        Optional.of(elements.iterator().next());
   }
 }

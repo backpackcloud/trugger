@@ -19,8 +19,8 @@
 package io.backpackcloud.trugger.element;
 
 import io.backpackcloud.trugger.Selection;
-import io.backpackcloud.trugger.util.ImplementationLoader;
-import io.backpackcloud.trugger.util.OptionalFunction;
+import io.backpackcloud.trugger.element.impl.TruggerElementFactory;
+import io.backpackcloud.trugger.util.NullableArgFunction;
 import io.backpackcloud.trugger.element.impl.TruggerElementSelection;
 
 import java.util.function.Consumer;
@@ -28,10 +28,10 @@ import java.util.function.Consumer;
 /**
  * A class for helping {@link Element} selection.
  *
- * @author Marcelo "Ataxexe" Guimarães.
+ * @author Marcelo Guimaraes.
  * @since 1.2
  */
-public class Elements {
+public final class Elements {
 
   private static final ElementFactory factory;
 
@@ -39,7 +39,7 @@ public class Elements {
   }
 
   static {
-    factory = ImplementationLoader.get(ElementFactory.class);
+    factory = new TruggerElementFactory();
   }
 
   /**
@@ -95,8 +95,8 @@ public class Elements {
    *
    * @return a function that gets the value of a selected element.
    */
-  public static <E> OptionalFunction<Selection<Element>, E> getValue() {
-    return OptionalFunction.of(selection -> selection.result().getValue());
+  public static <E> NullableArgFunction<Selection<Element>, E> getValue() {
+    return NullableArgFunction.of(selection -> selection.result().getValue());
   }
 
   /**

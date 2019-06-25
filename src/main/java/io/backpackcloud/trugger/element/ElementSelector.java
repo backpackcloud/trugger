@@ -18,14 +18,13 @@
  */
 package io.backpackcloud.trugger.element;
 
-import io.backpackcloud.trugger.SelectionResult;
-
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for {@link Element} objects.
  * 
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface ElementSelector {
 
@@ -38,6 +37,6 @@ public interface ElementSelector {
    */
   ElementSelector filter(Predicate<? super Element> predicate);
 
-  SelectionResult<Element> from(Object target);
+  Optional<Element> from(Object target);
   
 }

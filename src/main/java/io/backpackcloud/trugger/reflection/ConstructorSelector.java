@@ -18,15 +18,14 @@
  */
 package io.backpackcloud.trugger.reflection;
 
-import io.backpackcloud.trugger.SelectionResult;
-
 import java.lang.reflect.Constructor;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * Interface that defines a selector for a single {@link Constructor} object.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface ConstructorSelector {
 
@@ -62,6 +61,6 @@ public interface ConstructorSelector {
    *
    * @since 2.1
    */
-  SelectionResult<Constructor<?>> from(Object target) throws ReflectionException;
+  Optional<ReflectedConstructor> from(Object target) throws ReflectionException;
 
 }

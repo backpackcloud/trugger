@@ -24,7 +24,7 @@ import io.backpackcloud.trugger.HandlingException;
  * Exception thrown when a direct value handling is trying on a non-specific
  * element.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 2.0
  */
 public class NonSpecificElementException extends HandlingException {

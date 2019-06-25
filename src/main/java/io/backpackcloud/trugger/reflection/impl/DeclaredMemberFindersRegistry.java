@@ -23,7 +23,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/** @author Marcelo "Ataxexe" Guimarães */
+/** @author Marcelo Guimaraes */
 public class DeclaredMemberFindersRegistry implements MemberFindersRegistry {
 
   @Override

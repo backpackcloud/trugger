@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * Interface that defines a selector for {@link Field} objects.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public interface FieldsSelector {
 
@@ -53,6 +53,6 @@ public interface FieldsSelector {
    * @param target the target to apply the selection
    * @return the result
    */
-  List<Field> from(Object target);
+  List<ReflectedField> from(Object target);
 
 }

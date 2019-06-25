@@ -25,7 +25,7 @@ import io.backpackcloud.trugger.element.Element;
 import java.util.Map;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class MapElement extends AbstractElement implements Element {
 

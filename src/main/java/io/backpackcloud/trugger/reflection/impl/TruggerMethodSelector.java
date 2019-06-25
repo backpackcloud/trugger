@@ -18,20 +18,21 @@
  */
 package io.backpackcloud.trugger.reflection.impl;
 
-import io.backpackcloud.trugger.SelectionResult;
 import io.backpackcloud.trugger.reflection.MethodSelector;
+import io.backpackcloud.trugger.reflection.ReflectedMethod;
 import io.backpackcloud.trugger.reflection.Reflection;
 import io.backpackcloud.trugger.reflection.ReflectionPredicates;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
  * A default implementation for the method selector.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class TruggerMethodSelector implements MethodSelector {
 
@@ -78,14 +79,17 @@ public class TruggerMethodSelector implements MethodSelector {
     return new TruggerMethodSelector(name, registry, parameterTypes, predicate, function);
   }
 
-  public SelectionResult<Method> from(Object target) {
+  public Optional<ReflectedMethod> from(Object target) {
     if (parameterTypes != null) {
-      return new MemberSelector<>(registry.methodFinder(name, parameterTypes), predicate, function).selectFrom(target);
+      return new MemberSelector<>(registry.methodFinder(name, parameterTypes), predicate, function)
+          .selectFrom(target)
+          .map(method -> new ReflectedMethod(method, target));
     }
     MembersSelector<Method> selector = new MembersSelector<>(registry.methodsFinder(), predicate, function);
-    return new SelectionResult<>(target, selector.selectFrom(target).stream()
+    return selector.selectFrom(target).stream()
         .filter(ReflectionPredicates.ofName(name))
-        .findAny().orElse(null));
+        .findAny()
+        .map(method -> new ReflectedMethod(method, target));
   }
 
 }

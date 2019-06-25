@@ -22,7 +22,7 @@ package io.backpackcloud.trugger.interception;
 /**
  * Interface that defines an action while intercepting a method call.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 5.0
  */
 @FunctionalInterface

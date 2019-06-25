@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class ConstructorsFinder implements MembersFinder<Constructor<?>> {
   

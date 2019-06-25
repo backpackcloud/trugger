@@ -19,11 +19,10 @@
 
 package io.backpackcloud.trugger.util.factory;
 
-import io.backpackcloud.trugger.Optional;
-
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -57,10 +56,10 @@ public class DefaultContext implements Context {
   public Optional<Object> resolve(Parameter parameter) {
     for (Entry entry : entries) {
       if (entry.predicate.test(parameter)) {
-        return Optional.of(entry.function.apply(parameter));
+        return Optional.ofNullable(entry.function.apply(parameter));
       }
     }
-    return Optional.of(defaultFunction.apply(parameter));
+    return Optional.ofNullable(defaultFunction.apply(parameter));
   }
 
   private static class Entry {

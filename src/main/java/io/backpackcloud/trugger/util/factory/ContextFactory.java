@@ -19,7 +19,7 @@
 
 package io.backpackcloud.trugger.util.factory;
 
-import io.backpackcloud.trugger.Optional;
+import io.backpackcloud.trugger.reflection.ReflectedConstructor;
 import io.backpackcloud.trugger.reflection.Reflection;
 import io.backpackcloud.trugger.reflection.ReflectionPredicates;
 
@@ -27,9 +27,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
-
-import static io.backpackcloud.trugger.reflection.Reflection.invoke;
 
 /**
  * A class that can create objects based on a {@link Context}.
@@ -98,11 +97,11 @@ public class ContextFactory {
    * @return the created object
    */
   public <E> Optional<E> create(Class<E> type) {
-    List<Constructor<?>> constructors = Reflection.reflect().constructors()
+    List<ReflectedConstructor> constructors = Reflection.reflect().constructors()
         .filter(ReflectionPredicates.declared(Modifier.PUBLIC))
         .from(type);
-    Optional created;
-    for (Constructor<?> constructor : constructors) {
+    Optional<E> created;
+    for (ReflectedConstructor constructor : constructors) {
       created = tryCreate(constructor);
       if (created.isPresent()) {
         return created;
@@ -112,7 +111,7 @@ public class ContextFactory {
   }
 
   // tries to create the object using the given constructor
-  private Optional tryCreate(Constructor<?> constructor) {
+  private Optional tryCreate(ReflectedConstructor constructor) {
     Object[] args = new Object[constructor.getParameterCount()];
     Object arg;
     Optional<Object> resolved;
@@ -122,10 +121,10 @@ public class ContextFactory {
       if (!resolved.isPresent()) {
         return Optional.empty();
       }
-      arg = resolved.value();
+      arg = resolved.get();
       args[i++] = arg;
     }
-    return Optional.of(createFunction.apply(constructor, args));
+    return Optional.of(createFunction.apply(constructor.actualConstructor(), args));
   }
 
 }

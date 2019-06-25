@@ -21,7 +21,7 @@ package io.backpackcloud.trugger;
 /**
  * Exception thrown when an error occurs while handling a value.
  *
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  * @since 2.0
  */
 public class HandlingException extends TruggerException {

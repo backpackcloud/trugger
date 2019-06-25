@@ -21,7 +21,7 @@ package io.backpackcloud.trugger.reflection.impl;
 import java.lang.reflect.Method;
 
 /**
- * @author Marcelo "Ataxexe" Guimarães
+ * @author Marcelo Guimaraes
  */
 public class MethodFinder implements MemberFinder<Method> {
   
