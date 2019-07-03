@@ -9,6 +9,7 @@
 - Renamed `MethodPredicates#returns` to `#returning`
 - Dropped OSGi support
 - Removed `Optional` interface
+- New wrapper classes for reflected members (methods, fields and constructors)
 
 ## Version 6.2
 
