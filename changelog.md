@@ -8,6 +8,7 @@
 - Renamed methods `type` and `named` from Predicates to `ofType` and `ofName`
 - Renamed `MethodPredicates#returns` to `#returning`
 - Dropped OSGi support
+- Removed `Optional` interface
 
 ## Version 6.2
 
