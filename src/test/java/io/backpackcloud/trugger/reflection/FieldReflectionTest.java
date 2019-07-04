@@ -58,7 +58,7 @@ public class FieldReflectionTest {
 
   @Test
   public void testHandler() {
-    Field field = Reflection.reflect().field("a").from(this).map(ReflectedField::actualField).get();
+    Field field = Reflection.reflect().field("a").from(this).map(ReflectedField::unwrap).get();
     Reflection.handle(field).on(this).setValue("string");
     assertEquals("string", this.a);
     assertEquals("string", Reflection.handle(field).on(this).getValue());
@@ -68,57 +68,57 @@ public class FieldReflectionTest {
   public void testPredicates() {
     assertTrue(
         ofType(String.class).test(
-            Reflection.reflect().field("a").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("a").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertTrue(
         assignableTo(String.class).test(
-            Reflection.reflect().field("b").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("b").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertTrue(
         assignableTo(CharSequence.class).test(
-            Reflection.reflect().field("b").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("b").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertFalse(
         assignableTo(String.class).test(
-            Reflection.reflect().field("x").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("x").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertTrue(
         ofType(int.class).test(
-            Reflection.reflect().field("x").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("x").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertTrue(
         ofType(Integer.class).test(
-            Reflection.reflect().field("z").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("z").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertFalse(
         ofType(Integer.class).test(
-            Reflection.reflect().field("y").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("y").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            Reflection.reflect().field("a").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("a").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertTrue(
         annotated().test(
-            Reflection.reflect().field("a").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("a").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            Reflection.reflect().field("b").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("b").from(this).map(ReflectedField::unwrap).get()
         )
     );
     assertFalse(
         annotated().test(
-            Reflection.reflect().field("b").from(this).map(ReflectedField::actualField).get()
+            Reflection.reflect().field("b").from(this).map(ReflectedField::unwrap).get()
         )
     );
   }

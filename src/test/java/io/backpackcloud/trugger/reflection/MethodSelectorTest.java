@@ -107,7 +107,7 @@ public class MethodSelectorTest {
     Method method = Reflection.reflect().method("foo")
         .withParameters(boolean.class)
         .from(obj)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
 
     assertNotNull(method);
@@ -115,7 +115,7 @@ public class MethodSelectorTest {
     method = Reflection.reflect().method("foo2")
         .withParameters(Boolean.class)
         .from(obj)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
 
     assertNotNull(method);
@@ -131,7 +131,7 @@ public class MethodSelectorTest {
     method = Reflection.reflect().method("bar")
         .withParameters(boolean.class, boolean.class)
         .from(obj)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
 
     assertNotNull(method);
@@ -150,13 +150,13 @@ public class MethodSelectorTest {
     Method method1 = Reflection.reflect()
         .method("toString")
         .from(Object.class)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
 
     Method method2 = Reflection.reflect()
         .method("toString")
         .from(o)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
 
     assertNotNull(method1);

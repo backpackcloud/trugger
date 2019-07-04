@@ -18,10 +18,13 @@
  */
 package io.backpackcloud.trugger.reflection;
 
+import io.backpackcloud.trugger.reflection.impl.TruggerFieldsSelector;
 import io.backpackcloud.trugger.util.ClassIterator;
 import org.junit.Assert;
 import org.junit.Test;
-import io.backpackcloud.trugger.reflection.impl.TruggerFieldsSelector;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,14 +33,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static io.backpackcloud.trugger.TruggerTest.assertThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static io.backpackcloud.trugger.TruggerTest.assertThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Marcelo Guimaraes
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ReflectionTests {
 
   @Test
@@ -181,6 +187,27 @@ public class ReflectionTests {
   @Test(expected = UnsupportedOperationException.class)
   public void testClassIteratorRemove() {
     new ClassIterator(Object.class).remove();
+  }
+
+  @Mock
+  ReflectedField field;
+
+  @Mock
+  ReflectedMethod method;
+
+  @Test
+  public void testFieldSetConsumer() {
+    Reflection.setValue("value").accept(field);
+
+    verify(field, times(1)).setValue("value");
+  }
+
+  @Test
+  public void testMethodInvokeConsumer() {
+    Object[] args = new Object[]{1, 2, 3, 4};
+    Reflection.invoke(args).accept(method);
+
+    verify(method, times(1)).invoke(args);
   }
 
 }

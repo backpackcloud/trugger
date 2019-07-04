@@ -89,10 +89,10 @@ final class TruggerBridgeMethodResolver {
       return candidateMethods.stream()
           .filter(bridgeCandidate)
           .findAny()
-          .map(ReflectedMethod::actualMethod)
+          .map(ReflectedMethod::unwrap)
           .orElse(null);
     }
-    return candidateMethods.iterator().next().actualMethod();
+    return candidateMethods.iterator().next().unwrap();
   }
 
   private class SimpleBridgeCandidatePredicate implements Predicate<Method> {
@@ -180,16 +180,16 @@ final class TruggerBridgeMethodResolver {
       return Reflection.reflect().method(bridgeMethod.getName())
           .withParameters(bridgeMethod.getParameterTypes())
           .from(type)
-          .map(ReflectedMethod::actualMethod)
+          .map(ReflectedMethod::unwrap)
           .orElse(null);
     }
 
     public boolean test(ReflectedMethod candidateMethod) {
-      if (isResolvedTypeMatch(candidateMethod.actualMethod(), bridgeMethod)) {
+      if (isResolvedTypeMatch(candidateMethod.unwrap(), bridgeMethod)) {
         return true;
       }
       Method method = findGenericDeclaration();
-      return ((method != null) && isResolvedTypeMatch(method, candidateMethod.actualMethod()));
+      return ((method != null) && isResolvedTypeMatch(method, candidateMethod.unwrap()));
     }
   }
 }

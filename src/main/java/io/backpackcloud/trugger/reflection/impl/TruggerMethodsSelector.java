@@ -69,7 +69,7 @@ public class TruggerMethodsSelector implements MethodsSelector {
     return new MembersSelector<>(finder, predicate, function)
         .selectFrom(target)
         .stream()
-        .map(method -> new ReflectedMethod(method, target))
+        .map(method -> new TruggerReflectedMethod(method, target))
         .collect(Collectors.toList());
   }
 

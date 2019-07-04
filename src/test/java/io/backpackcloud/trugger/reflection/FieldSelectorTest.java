@@ -70,8 +70,8 @@ public class FieldSelectorTest {
   @Test
   public void testPrecedence() {
     FieldSelector reflector = Reflection.reflect().field("i");
-    Field field1 = reflector.from(BaseClassTest.class).map(ReflectedField::actualField).orElse(null);
-    Field field2 = reflector.deep().from(PrecedenceTest.class).map(ReflectedField::actualField).orElse(null);
+    Field field1 = reflector.from(BaseClassTest.class).map(ReflectedField::unwrap).orElse(null);
+    Field field2 = reflector.deep().from(PrecedenceTest.class).map(ReflectedField::unwrap).orElse(null);
 
     assertNotNull(field1);
     assertNotNull(field2);

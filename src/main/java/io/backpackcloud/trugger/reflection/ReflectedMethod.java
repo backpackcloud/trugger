@@ -19,98 +19,100 @@
 
 package io.backpackcloud.trugger.reflection;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
-public class ReflectedMethod extends ReflectedObject {
+/**
+ * Interface that defines a method reflected with the use of this framework.
+ *
+ * @since 7.0
+ */
+public interface ReflectedMethod extends ReflectedObject<Method> {
 
-  private final Method method;
-  private final Object target;
+  /**
+   * Invokes the reflected method passing the given args.
+   *
+   * @param args the args to pass
+   * @return the result of the method call
+   */
+  <E> E invoke(Object... args);
 
-  public ReflectedMethod(Method method, Object target) {
-    super(method);
-    this.method = method;
-    this.target = target;
-  }
+  /**
+   * @see Method#getTypeParameters()
+   */
+  TypeVariable<Method>[] getTypeParameters();
 
-  public Method actualMethod() {
-    return this.method;
-  }
+  /**
+   * @see Method#getReturnType()
+   */
+  Class<?> getReturnType();
 
-  public <E> E invoke(Object... args) {
-    return Reflection.invoke(method).on(target).withArgs(args);
-  }
+  /**
+   * @see Method#getGenericReturnType()
+   */
+  Type getGenericReturnType();
 
-  public TypeVariable<Method>[] getTypeParameters() {
-    return method.getTypeParameters();
-  }
+  /**
+   * @see Method#getParameterTypes()
+   */
+  Class<?>[] getParameterTypes();
 
-  public Class<?> getReturnType() {
-    return method.getReturnType();
-  }
+  /**
+   * @see Method#getParameterCount()
+   */
+  int getParameterCount();
 
-  public Type getGenericReturnType() {
-    return method.getGenericReturnType();
-  }
+  /**
+   * @see Method#getGenericParameterTypes()
+   */
+  Type[] getGenericParameterTypes();
 
-  public Class<?>[] getParameterTypes() {
-    return method.getParameterTypes();
-  }
+  /**
+   * @see Method#getExceptionTypes()
+   */
+  Class<?>[] getExceptionTypes();
 
-  public int getParameterCount() {
-    return method.getParameterCount();
-  }
+  /**
+   * @see Method#getGenericExceptionTypes()
+   */
+  Type[] getGenericExceptionTypes();
 
-  public Type[] getGenericParameterTypes() {
-    return method.getGenericParameterTypes();
-  }
+  /**
+   * @see Method#isBridge()
+   */
+  boolean isBridge();
 
-  public Class<?>[] getExceptionTypes() {
-    return method.getExceptionTypes();
-  }
+  /**
+   * @see Method#isVarArgs()
+   */
+  boolean isVarArgs();
 
-  public Type[] getGenericExceptionTypes() {
-    return method.getGenericExceptionTypes();
-  }
+  /**
+   * @see Method#isDefault()
+   */
+  boolean isDefault();
 
-  public boolean isBridge() {
-    return method.isBridge();
-  }
+  /**
+   * @see Method#getDefaultValue()
+   */
+  Object getDefaultValue();
 
-  public boolean isVarArgs() {
-    return method.isVarArgs();
-  }
+  /**
+   * @see Method#getParameters()
+   */
+  Parameter[] getParameters();
 
-  public boolean isDefault() {
-    return method.isDefault();
-  }
+  /**
+   * @see Method#getAnnotatedReceiverType()
+   */
+  AnnotatedType getAnnotatedReceiverType();
 
-  public Object getDefaultValue() {
-    return method.getDefaultValue();
-  }
+  /**
+   * @see Method#getAnnotatedParameterTypes()
+   */
+  AnnotatedType[] getAnnotatedParameterTypes();
 
-  public Parameter[] getParameters() {
-    return method.getParameters();
-  }
-
-  @Override
-  public <T extends Annotation> T[] getAnnotationsByType(Class<T> annotationClass) {
-    return method.getAnnotationsByType(annotationClass);
-  }
-
-  public AnnotatedType getAnnotatedReceiverType() {
-    return method.getAnnotatedReceiverType();
-  }
-
-  public AnnotatedType[] getAnnotatedParameterTypes() {
-    return method.getAnnotatedParameterTypes();
-  }
-
-  public AnnotatedType[] getAnnotatedExceptionTypes() {
-    return method.getAnnotatedExceptionTypes();
-  }
 }

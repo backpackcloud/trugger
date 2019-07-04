@@ -57,7 +57,7 @@ public final class TruggerConstructorsSelector implements ConstructorsSelector {
     return new MembersSelector<>(finder, predicate)
         .selectFrom(target)
         .stream()
-        .map(ReflectedConstructor::new)
+        .map(TruggerReflectedConstructor::new)
         .collect(Collectors.toList());
   }
 

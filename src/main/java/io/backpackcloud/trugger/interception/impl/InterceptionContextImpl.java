@@ -95,7 +95,7 @@ public class InterceptionContextImpl implements InterceptionContext {
         .deep()
         .withParameters(parameterTypes)
         .from(target)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElseThrow(TruggerException::new);
     if (targetMethod.isBridge()) {
       return Reflection.reflect()

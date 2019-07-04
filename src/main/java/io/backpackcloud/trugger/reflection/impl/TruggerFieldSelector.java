@@ -67,7 +67,7 @@ public class TruggerFieldSelector implements FieldSelector {
   public Optional<ReflectedField> from(Object target) {
     return new MemberSelector<>(registry.fieldFinder(name), predicate, function)
         .selectFrom(target)
-        .map(field -> new ReflectedField(field, target));
+        .map(field -> new TruggerReflectedField(field, target));
   }
 
 }

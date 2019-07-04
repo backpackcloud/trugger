@@ -39,7 +39,7 @@ public class AnnotationMock {
         .filter(method -> method.getDefaultValue() != null)
         .from(annotationType)
         .stream()
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .forEach(method ->
             when(Reflection.invoke(method).on(annotation).withoutArgs())
                 .thenReturn(method.getDefaultValue()));

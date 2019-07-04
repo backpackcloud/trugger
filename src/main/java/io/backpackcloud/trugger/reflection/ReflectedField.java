@@ -23,84 +23,39 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 /**
- * A class that holds a reflected field
+ * Interface that defines a field reflected with the use of this framework.
  *
  * @since 7.0
  */
-public class ReflectedField extends ReflectedObject {
-
-  private final Field field;
-  private final Object target;
-
-  /**
-   * Creates a new instance of this class
-   *
-   * @param field  the reflected field
-   * @param target the target from which the field was reflected
-   */
-  public ReflectedField(Field field, Object target) {
-    super(field);
-    this.field = field;
-    this.target = target;
-  }
+public interface ReflectedField extends ReflectedObject<Field> {
 
   /**
    * Gets the value of the field on the target instance
    *
    * @return the value of the field on the target instance
    */
-  public <E> E getValue() {
-    return Reflection.handle(field).on(target).getValue();
-  }
+  <E> E getValue();
 
   /**
    * Sets this field value
    *
    * @param newValue
    */
-  public void setValue(Object newValue) {
-    Reflection.handle(field).on(target).setValue(newValue);
-  }
-
-  /**
-   * Returns the enclosed field
-   *
-   * @return the enclosed field
-   */
-  public Field actualField() {
-    return this.field;
-  }
-
-  /**
-   * Returns the target in which this field was reflected from
-   *
-   * @return the target in which this field was reflected from
-   */
-  public Object target() {
-    return target;
-  }
-
-  // Delegated methods
+  void setValue(Object newValue);
 
   /**
    * @see Field#isEnumConstant()
    */
-  public boolean isEnumConstant() {
-    return field.isEnumConstant();
-  }
+  boolean isEnumConstant();
 
   /**
    * @see Field#getType()
    */
-  public Class<?> getType() {
-    return field.getType();
-  }
+  Class<?> getType();
 
   /**
    * @see Field#getGenericType()
    */
-  public Type getGenericType() {
-    return field.getGenericType();
-  }
+  Type getGenericType();
 
 }

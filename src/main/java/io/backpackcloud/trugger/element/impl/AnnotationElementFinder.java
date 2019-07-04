@@ -51,7 +51,7 @@ public final class AnnotationElementFinder implements ElementFinder {
           .methods()
           .from(type)
           .stream()
-          .map(ReflectedMethod::actualMethod)
+          .map(ReflectedMethod::unwrap)
           .map(AnnotationElement::new)
           .forEach(prop -> map.put(prop.name(), prop));
     }
