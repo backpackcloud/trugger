@@ -70,7 +70,7 @@ public class TruggerConstructorSelector implements ConstructorSelector {
     if (parameterTypes != null) {
       return new MemberSelector<>(registry.constructorFinder(parameterTypes), predicate)
           .selectFrom(target)
-          .map(ReflectedConstructor::new);
+          .map(TruggerReflectedConstructor::new);
     }
     List<Constructor<?>> constructors =
         new MembersSelector<>(registry.constructorsFinder()).selectFrom(target);
@@ -78,13 +78,13 @@ public class TruggerConstructorSelector implements ConstructorSelector {
       return constructors.stream()
           .filter(predicate)
           .findFirst()
-          .map(ReflectedConstructor::new);
+          .map(TruggerReflectedConstructor::new);
     } else if (constructors.size() > 1) {
       throw new ReflectionException("More than one constructor found for " +
           target.getClass());
     } else {
       return Optional.of(constructors.iterator().next())
-          .map(ReflectedConstructor::new);
+          .map(TruggerReflectedConstructor::new);
     }
   }
 

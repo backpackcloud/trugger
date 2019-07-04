@@ -59,9 +59,9 @@ public class FieldSetterMethodSelectorTest {
 
   @Before
   public void initialize() {
-    fieldCount = Reflection.reflect().field("count").from(this).map(ReflectedField::actualField).get();
-    fieldHits = Reflection.reflect().field("hits").from(this).map(ReflectedField::actualField).get();
-    fieldSize = Reflection.reflect().field("size").from(this).map(ReflectedField::actualField).get();
+    fieldCount = Reflection.reflect().field("count").from(this).map(ReflectedField::unwrap).get();
+    fieldHits = Reflection.reflect().field("hits").from(this).map(ReflectedField::unwrap).get();
+    fieldSize = Reflection.reflect().field("size").from(this).map(ReflectedField::unwrap).get();
   }
 
   @Test

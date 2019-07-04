@@ -83,13 +83,13 @@ public class TruggerMethodSelector implements MethodSelector {
     if (parameterTypes != null) {
       return new MemberSelector<>(registry.methodFinder(name, parameterTypes), predicate, function)
           .selectFrom(target)
-          .map(method -> new ReflectedMethod(method, target));
+          .map(method -> new TruggerReflectedMethod(method, target));
     }
     MembersSelector<Method> selector = new MembersSelector<>(registry.methodsFinder(), predicate, function);
     return selector.selectFrom(target).stream()
         .filter(ReflectionPredicates.ofName(name))
         .findAny()
-        .map(method -> new ReflectedMethod(method, target));
+        .map(method -> new TruggerReflectedMethod(method, target));
   }
 
 }

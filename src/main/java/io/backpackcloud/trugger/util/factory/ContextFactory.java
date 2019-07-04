@@ -124,7 +124,7 @@ public class ContextFactory {
       arg = resolved.get();
       args[i++] = arg;
     }
-    return Optional.of(createFunction.apply(constructor.actualConstructor(), args));
+    return Optional.of(createFunction.apply(constructor.unwrap(), args));
   }
 
 }

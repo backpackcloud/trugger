@@ -93,7 +93,7 @@ public final class ObjectElement extends AbstractElement {
     field = Reflection.reflect()
         .field(name)
         .from(declaringClass)
-        .map(ReflectedField::actualField)
+        .map(ReflectedField::unwrap)
         .orElse(null);
     searchForAnnotatedElement();
   }
@@ -167,7 +167,7 @@ public final class ObjectElement extends AbstractElement {
         .from(declaringClass)
         .stream()
         .findFirst()
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
   }
 

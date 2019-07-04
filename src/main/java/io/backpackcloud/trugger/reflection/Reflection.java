@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * An utility class for help the use of Reflection.
@@ -150,6 +151,28 @@ public final class Reflection {
     List<Class> result = new ArrayList<>();
     new ClassIterator(target).forEachRemaining(result::add);
     return result;
+  }
+
+  /**
+   * Returns a consumer for setting a value to a ReflectedField
+   *
+   * @param newValue the value to set
+   * @return a consumer for setting a value to a ReflectedField
+   * @since 7.0
+   */
+  public static Consumer<ReflectedField> setValue(Object newValue) {
+    return reflectedField -> reflectedField.setValue(newValue);
+  }
+
+  /**
+   * Returns a consumer for invoking a ReflectedMethod
+   *
+   * @param args the arguments to pass
+   * @return a consumer for invoking a ReflectedMethod
+   * @since 7.0
+   */
+  public static Consumer<ReflectedMethod> invoke(Object... args) {
+    return reflectedMethod -> reflectedMethod.invoke(args);
   }
 
 }

@@ -54,7 +54,7 @@ public final class ObjectElementFinder implements ElementFinder {
           .fields()
           .from(type)
           .stream()
-          .map(ReflectedField::actualField)
+          .map(ReflectedField::unwrap)
           .forEach(field -> {
             if (!map.containsKey(field.getName())) {
               ObjectElement prop = new ObjectElement(field);
@@ -68,7 +68,7 @@ public final class ObjectElementFinder implements ElementFinder {
           .filter(getter().or(setter()))
           .from(type)
           .stream()
-          .map(ReflectedMethod::actualMethod)
+          .map(ReflectedMethod::unwrap)
           .forEach(method -> {
             String name = Reflection.parsePropertyName(method);
             if (!map.containsKey(name)) {

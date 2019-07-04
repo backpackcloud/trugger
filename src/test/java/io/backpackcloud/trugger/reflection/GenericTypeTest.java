@@ -55,7 +55,7 @@ public class GenericTypeTest {
     Method bridgedMethod = method
         .withParameters(Class.class, String.class)
         .from(TestObject.class)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
 
     assertNotNull(method);
@@ -66,7 +66,7 @@ public class GenericTypeTest {
     Method bridgeMethod = method
         .withParameters(Object.class, Object.class)
         .from(TestObject.class)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
 
     assertNotNull(bridgeMethod);

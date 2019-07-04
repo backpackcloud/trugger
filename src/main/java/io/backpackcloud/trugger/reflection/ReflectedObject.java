@@ -19,58 +19,29 @@
 
 package io.backpackcloud.trugger.reflection;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Member;
 
 /**
- * Base class for all objects reflected through this framework.
+ * Interface that defines an object reflected from a target.
  *
+ * @param <E> the type of the object
  * @since 7.0
  */
-public abstract class ReflectedObject implements AnnotatedElement, Member {
+public interface ReflectedObject<E extends Member> extends AnnotatedElement, Member {
 
-  private final AnnotatedElement object;
-  private final Member member;
+  /**
+   * Returns the enclosed object
+   *
+   * @return the enclosed object
+   */
+  E unwrap();
 
-  ReflectedObject(AnnotatedElement object) {
-    this.object = object;
-    this.member = (Member) object;
-  }
-
-  @Override
-  public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-    return this.object.getAnnotation(annotationClass);
-  }
-
-  @Override
-  public Annotation[] getAnnotations() {
-    return this.object.getAnnotations();
-  }
-
-  @Override
-  public Annotation[] getDeclaredAnnotations() {
-    return this.object.getDeclaredAnnotations();
-  }
-
-  @Override
-  public Class<?> getDeclaringClass() {
-    return member.getDeclaringClass();
-  }
-
-  @Override
-  public String getName() {
-    return member.getName();
-  }
-
-  @Override
-  public int getModifiers() {
-    return member.getModifiers();
-  }
-
-  @Override
-  public boolean isSynthetic() {
-    return member.isSynthetic();
-  }
+  /**
+   * Returns the target in which this object was reflected from
+   *
+   * @return the target in which this object was reflected from
+   */
+  Object target();
 
 }

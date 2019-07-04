@@ -70,7 +70,7 @@ public class ConstructorTest {
     Constructor<?> constructor = Reflection.reflect().constructor()
         .withoutParameters()
         .from(ArrayList.class)
-        .map(ReflectedConstructor::actualConstructor)
+        .map(ReflectedConstructor::unwrap)
         .orElse(null);
     assertNotNull(constructor);
     Object object = Reflection.invoke(constructor).withoutArgs();
@@ -82,7 +82,7 @@ public class ConstructorTest {
     Constructor<?> constructor = Reflection.reflect()
         .constructor()
         .from(TestObject.class)
-        .map(ReflectedConstructor::actualConstructor)
+        .map(ReflectedConstructor::unwrap)
         .orElse(null);
     assertThrow(ReflectionException.class,
         () -> Reflection.invoke(constructor).withoutArgs()

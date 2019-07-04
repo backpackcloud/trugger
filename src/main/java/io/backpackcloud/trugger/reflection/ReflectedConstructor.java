@@ -27,32 +27,11 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 /**
- * A class that holds a reflected constructor
+ * Interface that defines a constructor reflected with the use of this framework.
  *
  * @since 7.0
  */
-public class ReflectedConstructor extends ReflectedObject {
-
-  private final Constructor<?> constructor;
-
-  /**
-   * Creates a new instance of this class
-   *
-   * @param constructor the reflected constructor
-   */
-  public ReflectedConstructor(Constructor<?> constructor) {
-    super(constructor);
-    this.constructor = constructor;
-  }
-
-  /**
-   * Returns the enclosed constructor
-   *
-   * @return the enclosed constructor
-   */
-  public Constructor<?> actualConstructor() {
-    return this.constructor;
-  }
+public interface ReflectedConstructor extends ReflectedObject<Constructor<?>> {
 
   /**
    * Invokes the constructor passing the given arguments.
@@ -61,87 +40,61 @@ public class ReflectedConstructor extends ReflectedObject {
    * @return the created instance
    * @see Reflection#invoke(Constructor)
    */
-  public <E> E invoke(Object... args) {
-    return Reflection.invoke(constructor).withArgs(args);
-  }
-
-  // Delegated method
+  <E> E invoke(Object... args);
 
   /**
    * @see Constructor#getTypeParameters()
    */
-  public TypeVariable<? extends Constructor<?>>[] getTypeParameters() {
-    return constructor.getTypeParameters();
-  }
+  TypeVariable<? extends Constructor<?>>[] getTypeParameters();
 
   /**
    * @see Constructor#getParameterTypes()
    */
-  public Class<?>[] getParameterTypes() {
-    return constructor.getParameterTypes();
-  }
+  Class<?>[] getParameterTypes();
 
   /**
    * @see Constructor#getParameterCount()
    */
-  public int getParameterCount() {
-    return constructor.getParameterCount();
-  }
+  int getParameterCount();
 
   /**
    * @see Constructor#getGenericParameterTypes()
    */
-  public Type[] getGenericParameterTypes() {
-    return constructor.getGenericParameterTypes();
-  }
+  Type[] getGenericParameterTypes();
 
   /**
    * @see Constructor#getExceptionTypes()
    */
-  public Class<?>[] getExceptionTypes() {
-    return constructor.getExceptionTypes();
-  }
+  Class<?>[] getExceptionTypes();
 
   /**
    * @see Constructor#getGenericExceptionTypes()
    */
-  public Type[] getGenericExceptionTypes() {
-    return constructor.getGenericExceptionTypes();
-  }
+  Type[] getGenericExceptionTypes();
 
   /**
    * @see Constructor#newInstance(Object...)
    */
-  public Object newInstance(Object... initargs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-    return constructor.newInstance(initargs);
-  }
+  Object newInstance(Object... initargs) throws InstantiationException, IllegalAccessException,
+      IllegalArgumentException, InvocationTargetException;
 
   /**
    * @see Constructor#isVarArgs()
    */
-  public boolean isVarArgs() {
-    return constructor.isVarArgs();
-  }
+  boolean isVarArgs();
 
   /**
    * @see Constructor#getParameters()
    */
-  public Parameter[] getParameters() {
-    return constructor.getParameters();
-  }
+  Parameter[] getParameters();
 
   /**
    * @see Constructor#getAnnotatedParameterTypes()
    */
-  public AnnotatedType[] getAnnotatedParameterTypes() {
-    return constructor.getAnnotatedParameterTypes();
-  }
+  AnnotatedType[] getAnnotatedParameterTypes();
 
   /**
    * @see Constructor#getAnnotatedExceptionTypes()
    */
-  public AnnotatedType[] getAnnotatedExceptionTypes() {
-    return constructor.getAnnotatedExceptionTypes();
-  }
-
+  AnnotatedType[] getAnnotatedExceptionTypes();
 }

@@ -68,7 +68,7 @@ public class TruggerFieldsSelector implements FieldsSelector {
     return new MembersSelector<>(finder, predicate, function)
         .selectFrom(target)
         .stream()
-        .map(field -> new ReflectedField(field, target))
+        .map(field -> new TruggerReflectedField(field, target))
         .collect(Collectors.toList());
   }
 

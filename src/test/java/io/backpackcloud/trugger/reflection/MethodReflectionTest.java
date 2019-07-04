@@ -53,7 +53,7 @@ public class MethodReflectionTest {
   @Test
   public void invokerTest() {
     TestInterface obj = mock(TestInterface.class);
-    Method method = Reflection.reflect().method("doIt").from(obj).map(ReflectedMethod::actualMethod).get();
+    Method method = Reflection.reflect().method("doIt").from(obj).map(ReflectedMethod::unwrap).get();
     Reflection.invoke(method).on(obj).withoutArgs();
     verify(obj).doIt();
   }
@@ -63,7 +63,7 @@ public class MethodReflectionTest {
     TestInterface obj = mock(TestInterface.class);
     doThrow(new IllegalArgumentException()).when(obj).doIt();
     try {
-      Method method = Reflection.reflect().method("doIt").from(obj).map(ReflectedMethod::actualMethod).get();
+      Method method = Reflection.reflect().method("doIt").from(obj).map(ReflectedMethod::unwrap).get();
       Reflection.invoke(method).on(obj).withoutArgs();
       throw new AssertionError();
     } catch (ReflectionException e) {
@@ -79,7 +79,7 @@ public class MethodReflectionTest {
     Method notDeclared = Reflection.reflect()
         .method("notDeclared")
         .from(obj)
-        .map(ReflectedMethod::actualMethod)
+        .map(ReflectedMethod::unwrap)
         .orElse(null);
     Reflection.invoke(notDeclared).on(obj);
   }
@@ -88,22 +88,22 @@ public class MethodReflectionTest {
   public void predicatesTest() {
     assertFalse(
         annotated().test(
-            Reflection.reflect().method("doIt").from(TestInterface.class).map(ReflectedMethod::actualMethod).get()
+            Reflection.reflect().method("doIt").from(TestInterface.class).map(ReflectedMethod::unwrap).get()
         )
     );
     assertFalse(
         annotatedWith(Flag.class).test(
-            Reflection.reflect().method("doIt").from(TestInterface.class).map(ReflectedMethod::actualMethod).get()
+            Reflection.reflect().method("doIt").from(TestInterface.class).map(ReflectedMethod::unwrap).get()
         )
     );
     assertTrue(
         annotated().test(
-            Reflection.reflect().method("bar").from(TestInterface.class).map(ReflectedMethod::actualMethod).get()
+            Reflection.reflect().method("bar").from(TestInterface.class).map(ReflectedMethod::unwrap).get()
         )
     );
     assertTrue(
         annotatedWith(Flag.class).test(
-            Reflection.reflect().method("bar").from(TestInterface.class).map(ReflectedMethod::actualMethod).get()
+            Reflection.reflect().method("bar").from(TestInterface.class).map(ReflectedMethod::unwrap).get()
         )
     );
   }
