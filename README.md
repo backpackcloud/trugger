@@ -29,7 +29,7 @@ The special kick mentioned is the *Tatsumaki Senpuu Kyaku* and Ken says somethin
 
 Just put the jar file on your **classpath** and you're done. No dependencies are required by Trugger at runtime. If you prefer some build system like Gradle or Maven, trugger is in now in Maven Central repository:
 
-**groupId**: `tools.devnull`
+**groupId**: `io.backpackcloud`
 
 **artifactId**: `trugger`
 
@@ -58,42 +58,25 @@ Reflecting a field is done with the code `reflect().field(field name)`. You can 
 Here is some examples (assuming a `static import`):
 
 ```java
-Field value = reflect().field("value").from(String.class).result();
+reflect().field("value").from(String.class);
 
-Field name = reflect().field("name").deep().in(MyClass.class).result();
+reflect().field("name").deep().from(MyClass.class);
 
-Field id = reflect().field("id")
+reflect().field("id")
     .filter(field -> field.getType().equals(Long.class))
-    .from(someInstance)
-    .result();
+    .from(someInstance);
 ```
 
-The `filter` method receive a `java.util.function.Predicate` to stay in touch with Java 8.
-
-#### And what about the #result?
-
-The `.result()` is needed because the selection return allows to chain some actions:
-
-```java
-String value = reflect()
-  .field("aStringField")
-  .from(myInstance)
-  .and(getValue());
-
-reflect()
-  .field("aStringField")
-  .from(myInstance)
-  .and(setValue("OK"));
-```
-
-This allows more readability, at the cost of one more method invocation.
+The `filter` method receive a `java.util.function.Predicate` to stay in touch with Java 8. Also, the `Field` is wrapped
+in a `ReflectedField` class to help further operations.
 
 ### Multiple
 
-If you need to reflect a set of fields, use the `reflect().fields()`. The same features of a single reflect is available here.
+If you need to reflect a set of fields, use the `reflect().fields()`. The same features of a single reflect are
+available here.
 
 ~~~java
-List<Field> stringFields = reflect().fields()
+reflect().fields()
     .filter(field -> field.getType().equals(String.class))
     .deep()
     .from(MyClass.class);
@@ -104,8 +87,8 @@ List<Field> stringFields = reflect().fields()
 There are some builtin predicates in the class `FieldPredicates`.
 
 ~~~java
-List<Field> stringFields = reflect().fields()
-    .filter(type(String.class)) // a static import
+reflect().fields()
+    .filter(ofType(String.class)) // a static import
     .deep()
     .in(MyClass.class);
 ~~~
@@ -136,19 +119,20 @@ To reflect a constructor, use `reflect().constructor()` and specify the paramete
 class has only one constructor, it can be reflected without supplying the parameter types.
 
 ~~~java
-Constructor constructor = reflect()
-  .constructor().withParameters(String.class).from(MyClass.class).result();
+reflect().constructor()
+  .withParameters(String.class)
+  .from(MyClass.class);
 
-Constructor constructor = reflect().constructor()
-  .withoutParameters().from(MyClass.class).result();
+reflect().constructor()
+  .withoutParameters()
+  .from(MyClass.class);
 
-Constructor constructor = reflect().constructor()
+reflect().constructor()
   .filter(c -> c.isAnnotationPresent(SomeAnnotation.class))
-  .withParameters(String.class).from(MyClass.class).result();
+  .withParameters(String.class)
+  .from(MyClass.class);
 
-Constructor constructor = reflect().constructor().from(MyClass.class).result();
-
-MyClass obj = reflect().constructor().from(MyClass.class).and(instantiate(parameter));
+reflect().constructor().from(MyClass.class);
 ~~~
 
 ### Multiple
@@ -157,9 +141,9 @@ A set of constructors can be reflected by using `reflect().constructors()`. As i
 reflection are present in multiple reflection.
 
 ~~~java
-List<Constructor> constructors = reflect().constructors().from(MyClass.class);
+reflect().constructors().from(MyClass.class);
 
-List<Constructor> constructors = reflect().constructors()
+reflect().constructors()
   .filter(c -> c.getParameterCount() == 2)
   .from(MyClass.class);
 ~~~
@@ -172,20 +156,9 @@ reasons).
 A few useful predicates are included in the class `ConstructorPredicates`.
 
 ~~~java
-List<Constructor> constructors = reflect().constructors()
+reflect().constructors()
   .filter(annotated()) // a static import
   .from(MyClass.class);
-~~~
-
-### Invocation
-
-To invoke a constructor you need an `Invoker`. The method `Reflection#invoke` returns a Invoker for a constructor.
-Specify the parameters and the constructor will be invoked.
-
-~~~java
-Constructor c = reflect().constructor()
-  .withParameters(String.class).from(String.class)
-String name = invoke(c).withArgs("Trugger");
 ~~~
 
 ## Methods
@@ -196,23 +169,21 @@ To reflect a single method, just pass it name to `Reflection#method`. Filtering 
 types too.
 
 ~~~java
-Method toString = reflect().method("toString").from(Object.class).result();
+reflect().method("toString").from(Object.class);
 
-Method remove = reflect().method("remove")
+reflect().method("remove")
   .withParameters(Object.class, Object.class)
-  .from(Map.class).result();
+  .from(Map.class);
 
-Method someMethod = reflect().method("foo")
+reflect().method("foo")
   .filter(method -> method.isAnnotationPresent(PostConstruct.class))
-  .from(instance).result();
-
-reflect().method("foo").from(instance).and(invoke());
+  .from(instance);
 ~~~
 
 As in field reflection, you can do a deep search with `deep`.
 
 ~~~java
-Method toString = reflect().method("toString").deep().from(MyClass.class).result();
+reflect().method("toString").deep().from(MyClass.class);
 ~~~
 
 ### Multiple
@@ -220,17 +191,16 @@ Method toString = reflect().method("toString").deep().from(MyClass.class).result
 A set of methods can be reflected by using `Reflection#methods`:
 
 ~~~java
-List<Method> methods = reflect().methods().from(Object.class);
+reflect().methods().from(Object.class);
 ~~~
 
 Deep search and filtering are also supported:
 
 ~~~java
-List<Method> methods = reflect().methods()
+reflect().methods()
   .filter(method -> method.isAnnotationPresent(PostConstruct.class)
   .deep()
-  .from(MyClass.class)
-  .result();
+  .from(MyClass.class);
 ~~~
 
 ### Predicates
@@ -238,37 +208,10 @@ List<Method> methods = reflect().methods()
 A set of predicates to deal with methods is in `MethodPredicates`:
 
 ~~~java
-List<Method> methods = reflect().methods()
+reflect().methods()
   .filter(annotatedWith(PostConstruct.class)) // a static import
   .deep()
-  .from(MyClass.class)
-  .result();
-~~~
-
-### Invocation
-
-To invoke a method, use the Invoker returned by `Reflection#invoke`. Instance methods needs an instance provided 
-using the method `on`:
-
-~~~java
-Method toString = reflect().method("toString").on(String.class);
-invoke(toString).on("A string").withoutArgs();
-~~~
-
-Static methods don't need it:
-
-~~~java
-Method parseInt = reflect().method("parseInt")
-  .withParameters(String.class)
-  .from(Integer.class)
-  .resul();
-int number = invoke(parseInt).withArgs("10");
-
-// alternatively
-int number = reflect().method("parseInt")
-  .withParameters(String.class)
-  .from(Integer.class)
-  .and(invoke("10"));
+  .from(MyClass.class);
 ~~~
 
 ## Generic Type
@@ -362,14 +305,13 @@ A basic element in Trugger is a Property or a Field. Trugger tries to find a get
 An element is obtained using the method `element` in `Elements`. The same features of a field reflection is here with the addition of getting an element without specifying a name. A set of predicates are present in `ElementPredicates`.
 
 ~~~java
-Element value = element("value").from(MyClass.class).result();
+element("value").from(MyClass.class);
 
-Element id = element()
+element()
   .filter(annotatedWith(Id.class)) // static import
-  .from(MyClass.class)
-  .result();
+  .from(MyClass.class);
 
-List<Element> strings = elements()
+elements()
   .filter(type(String.class) // static import
   .from(MyClass.class);
 ~~~
@@ -420,17 +362,13 @@ copy(elements().filter(annotatedWith(MyAnnotation.class)))
 Nested elements are supported using a **"."** to separate the elements:
 
 ~~~java
-Element element = element("address.street").from(Customer.class).result();
-
-value = element.from(customer).getValue();
+element("address.street").from(Customer.class);
 ~~~
 
 You can use any level of nesting:
 
 ~~~java
-Element element = element("customer.address.street").from(Response.class).result();
-
-value = element.from(response).getValue();
+element("customer.address.street").from(Response.class);
 ~~~
 
 ## Custom Elements
@@ -557,28 +495,13 @@ Alternatively, you can get a list of components by passing an `AnnotatedElement`
 to the method `#createAll`:
 
 ~~~java
-Element = Elements.element("aField").from(myObject).result();
+Element = Elements.element("aField").from(myObject).orElseThrow(MyException::new);
 List<Component> components = factory.createAll(element);
 ~~~
 
 Or creating a single one by passing an `AnnotatedElement` to the method `#create`:
 
 ~~~java
-Element = Elements.element("aField").from(myObject).result();
+Element = Elements.element("aField").from(myObject).orElseThrow(MyException::new);
 Component component = factory.create(element);
 ~~~
-
-# Extending
-
-## How To Implement the Fluent Interfaces
-
-The fluent interfaces are always defined through java interfaces and may be customized by your own implementation.
-Trugger uses a `ServiceLoader` to load a factory that knows the implementations to instantiate, so you can override the
-implementation of any fluent interface by defining a file in your **META-INF/services** directory with the factory
-implementation.
-
-The factory interfaces that can be customized are listed bellow:
-
-- `ElementFactory`: used for selecting elements
-- `ReflectionFactory`: used for reflection in general
-- `InterceptorFactory`: used for method interception

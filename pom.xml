@@ -2,7 +2,7 @@
 <!--
   ~ The Apache License
   ~
-  ~ Copyright 2009 Marcelo "Ataxexe" Guimarães <ataxexe@devnull.tools>
+  ~ Copyright 2009 Marcelo Guimaraes <ataxexe@backpackcloud.com>
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~
@@ -24,14 +24,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>tools.devnull</groupId>
-    <artifactId>parent</artifactId>
-    <version>1.2.2</version>
+    <groupId>io.backpackcloud</groupId>
+    <artifactId>pom-parent</artifactId>
+    <version>1.0.2</version>
   </parent>
 
   <artifactId>trugger</artifactId>
-  <version>6.3.0</version>
-  <packaging>bundle</packaging>
+  <version>7.0.0</version>
+  <packaging>jar</packaging>
   <name>trugger</name>
 
   <description>
@@ -39,7 +39,7 @@
     interfaces to deal with reflection without the verbosity of the Java Reflection API.
   </description>
 
-  <url>https://github.com/devnull-tools/trugger</url>
+  <url>https://github.com/backpackcloud/trugger</url>
 
   <licenses>
     <license>
@@ -51,22 +51,22 @@
 
   <properties>
     <junit.version>4.11</junit.version>
-    <kodo.version>3.5.2</kodo.version>
+    <kodo.version>4.0.0</kodo.version>
     <mockito-core.version>2.7.13</mockito-core.version>
   </properties>
 
   <developers>
     <developer>
       <id>ataxexe</id>
-      <name>Marcelo "Ataxexe" Guimarães</name>
-      <email>ataxexe@devnull.tools</email>
-      <url>http://www.unbelievableexception.com</url>
-      <organizationUrl>https://github.com/devnull-tools</organizationUrl>
+      <name>Marcelo Guimarães</name>
+      <email>ataxexe@backpackcloud.com</email>
+      <url>https://www.backpackcloud.com</url>
+      <organizationUrl>https://github.com/backpackcloud</organizationUrl>
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git@github.com:devnull-tools/trugger.git</connection>
-    <url>https://github.com/devnull-tools/trugger</url>
+    <connection>scm:git:git@github.com:backpackcloud/trugger.git</connection>
+    <url>https://github.com/backpackcloud/trugger</url>
   </scm>
   <dependencies>
     <dependency>
@@ -76,7 +76,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>tools.devnull</groupId>
+      <groupId>io.backpackcloud</groupId>
       <artifactId>kodo</artifactId>
       <version>${kodo.version}</version>
       <scope>test</scope>
@@ -88,27 +88,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Export-Package>
-              tools.devnull.trugger,
-              tools.devnull.trugger.element,
-              tools.devnull.trugger.interception,
-              tools.devnull.trugger.reflection,
-              tools.devnull.trugger.util,
-              tools.devnull.trugger.util.factory
-            </Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>
