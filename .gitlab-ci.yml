@@ -1,4 +1,4 @@
-image: devnull-tools/maven
+image: registry.backpackcloud.com:5000/backpackcloud/maven
 
 stages:
   - build
