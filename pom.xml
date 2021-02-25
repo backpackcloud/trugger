@@ -21,72 +21,77 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.backpackcloud</groupId>
-    <artifactId>pom-parent</artifactId>
-    <version>1.0.2</version>
-  </parent>
+    <parent>
+        <groupId>com.backpackcloud</groupId>
+        <artifactId>pom-parent</artifactId>
+        <version>2.0.0</version>
+    </parent>
 
-  <artifactId>trugger</artifactId>
-  <version>7.0.0</version>
-  <packaging>jar</packaging>
-  <name>trugger</name>
+    <artifactId>trugger</artifactId>
+    <version>7.0.0</version>
+    <packaging>jar</packaging>
+    <name>trugger</name>
 
-  <description>
-    Trugger is a project that helps you write code that anyone can read. It is focused on deliver fluent
-    interfaces to deal with reflection without the verbosity of the Java Reflection API.
-  </description>
+    <description>
+        Trugger is a project that helps you write code that anyone can read. It is focused on deliver fluent
+        interfaces to deal with reflection without the verbosity of the Java Reflection API.
+    </description>
 
-  <url>https://github.com/backpackcloud/trugger</url>
-
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-
-  <properties>
-    <junit.version>4.11</junit.version>
-    <kodo.version>4.0.0</kodo.version>
-    <mockito-core.version>2.7.13</mockito-core.version>
-  </properties>
-
-  <developers>
-    <developer>
-      <id>ataxexe</id>
-      <name>Marcelo Guimarães</name>
-      <email>ataxexe@backpackcloud.com</email>
-      <url>https://www.backpackcloud.com</url>
-      <organizationUrl>https://github.com/backpackcloud</organizationUrl>
-    </developer>
-  </developers>
-  <scm>
-    <connection>scm:git:git@github.com:backpackcloud/trugger.git</connection>
     <url>https://github.com/backpackcloud/trugger</url>
-  </scm>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.backpackcloud</groupId>
-      <artifactId>kodo</artifactId>
-      <version>${kodo.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito-core.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <junit.version>4.11</junit.version>
+        <kodo.version>4.0.0</kodo.version>
+        <mockito-core.version>3.2.4</mockito-core.version>
+    </properties>
+
+    <developers>
+        <developer>
+            <id>ataxexe</id>
+            <name>Marcelo Guimarães</name>
+            <email>ataxexe@backpackcloud.com</email>
+            <url>https://www.backpackcloud.com</url>
+            <organizationUrl>https://github.com/backpackcloud</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git@github.com:backpackcloud/trugger.git</connection>
+        <url>https://github.com/backpackcloud/trugger</url>
+    </scm>
+    <dependencies>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.backpackcloud</groupId>
+            <artifactId>kodo</artifactId>
+            <version>${kodo.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>
